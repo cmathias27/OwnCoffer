@@ -16,6 +16,7 @@ import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
 import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
 import 'package:owncoffer_server/src/generated/csv_columns.dart' as _iytxq8gu;
+import 'package:owncoffer_server/src/generated/frequency.dart' as _iugtcrzz;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/rule_direction.dart'
     as _ini8nmtb;
@@ -35,6 +36,7 @@ import '../endpoints/group_endpoint.dart' as _iknqvl2r;
 import '../endpoints/import_endpoint.dart' as _i51ek8od;
 import '../endpoints/invitation_endpoint.dart' as _iipval89;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
+import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
 import '../endpoints/two_factor_endpoint.dart' as _ivxdn6q3;
 
@@ -94,6 +96,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'rule',
+          null,
+        ),
+      'scheduled': _ip6habnq.ScheduledEndpoint()
+        ..initialize(
+          server,
+          'scheduled',
           null,
         ),
       'setup': _i5xhv8r1.SetupEndpoint()
@@ -1198,6 +1206,277 @@ class Endpoints extends _is.EndpointDispatch {
                 session,
                 params['ruleId'],
               ),
+        ),
+      },
+    );
+    connectors['scheduled'] = _is.EndpointConnector(
+      name: 'scheduled',
+      endpoint: endpoints['scheduled']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint).list(
+                    session,
+                    params['accountId'],
+                  ),
+        ),
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'label': _is.ParameterDescription(
+              name: 'label',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'frequency': _is.ParameterDescription(
+              name: 'frequency',
+              type: _is.getType<_iugtcrzz.ScheduleFrequency>(),
+              nullable: false,
+            ),
+            'startDate': _is.ParameterDescription(
+              name: 'startDate',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'interval': _is.ParameterDescription(
+              name: 'interval',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'endDate': _is.ParameterDescription(
+              name: 'endDate',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'occurrenceCount': _is.ParameterDescription(
+              name: 'occurrenceCount',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'matchPattern': _is.ParameterDescription(
+              name: 'matchPattern',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'dateToleranceDays': _is.ParameterDescription(
+              name: 'dateToleranceDays',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'amountTolerancePercent': _is.ParameterDescription(
+              name: 'amountTolerancePercent',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .create(
+                    session,
+                    params['accountId'],
+                    params['amountCents'],
+                    params['label'],
+                    params['frequency'],
+                    params['startDate'],
+                    interval: params['interval'],
+                    endDate: params['endDate'],
+                    occurrenceCount: params['occurrenceCount'],
+                    categoryId: params['categoryId'],
+                    matchPattern: params['matchPattern'],
+                    dateToleranceDays: params['dateToleranceDays'],
+                    amountTolerancePercent: params['amountTolerancePercent'],
+                  ),
+        ),
+        'update': _is.MethodConnector(
+          name: 'update',
+          params: {
+            'scheduledId': _is.ParameterDescription(
+              name: 'scheduledId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'label': _is.ParameterDescription(
+              name: 'label',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'endDate': _is.ParameterDescription(
+              name: 'endDate',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'matchPattern': _is.ParameterDescription(
+              name: 'matchPattern',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'dateToleranceDays': _is.ParameterDescription(
+              name: 'dateToleranceDays',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'amountTolerancePercent': _is.ParameterDescription(
+              name: 'amountTolerancePercent',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .update(
+                    session,
+                    params['scheduledId'],
+                    amountCents: params['amountCents'],
+                    label: params['label'],
+                    categoryId: params['categoryId'],
+                    endDate: params['endDate'],
+                    matchPattern: params['matchPattern'],
+                    dateToleranceDays: params['dateToleranceDays'],
+                    amountTolerancePercent: params['amountTolerancePercent'],
+                  ),
+        ),
+        'delete': _is.MethodConnector(
+          name: 'delete',
+          params: {
+            'scheduledId': _is.ParameterDescription(
+              name: 'scheduledId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .delete(
+                    session,
+                    params['scheduledId'],
+                  ),
+        ),
+        'skipNext': _is.MethodConnector(
+          name: 'skipNext',
+          params: {
+            'scheduledId': _is.ParameterDescription(
+              name: 'scheduledId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .skipNext(
+                    session,
+                    params['scheduledId'],
+                  ),
+        ),
+        'forecast': _is.MethodConnector(
+          name: 'forecast',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'today': _is.ParameterDescription(
+              name: 'today',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'horizonDays': _is.ParameterDescription(
+              name: 'horizonDays',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .forecast(
+                    session,
+                    params['accountId'],
+                    params['today'],
+                    horizonDays: params['horizonDays'],
+                  ),
+        ),
+        'confirmMatch': _is.MethodConnector(
+          name: 'confirmMatch',
+          params: {
+            'scheduledId': _is.ParameterDescription(
+              name: 'scheduledId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'dueDate': _is.ParameterDescription(
+              name: 'dueDate',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .confirmMatch(
+                    session,
+                    params['scheduledId'],
+                    params['dueDate'],
+                    params['transactionId'],
+                  ),
         ),
       },
     );

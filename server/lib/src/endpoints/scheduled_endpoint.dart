@@ -1,0 +1,258 @@
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
+import 'package:serverpod/serverpod.dart';
+
+import '../core/dates.dart';
+import '../finance/forecast_service.dart';
+import '../generated/protocol.dart';
+import '../security/access.dart';
+import '../security/audit.dart';
+import '../security/scopes.dart';
+
+/// Planned operations (rent, salary, subscriptions…) and the forecast.
+class ScheduledEndpoint extends Endpoint {
+  @override
+  bool get requireLogin => true;
+
+  @override
+  Set<Scope> get requiredScopes => {accessScope};
+
+  Future<List<ScheduledTransaction>> list(
+    Session session,
+    int accountId,
+  ) async {
+    await Access.requireAccount(session, accountId);
+    return ScheduledTransaction.db.find(
+      session,
+      where: (s) => s.accountId.equals(accountId) & s.deletedAt.equals(null),
+      orderBy: (s) => s.startDate,
+    );
+  }
+
+  Future<ScheduledTransaction> create(
+    Session session,
+    int accountId,
+    int amountCents,
+    String label,
+    ScheduleFrequency frequency,
+    DateTime startDate, {
+    int? interval,
+    DateTime? endDate,
+    int? occurrenceCount,
+    int? categoryId,
+    String? matchPattern,
+    int? dateToleranceDays,
+    int? amountTolerancePercent,
+  }) async {
+    final account = await Access.requireAccount(
+      session,
+      accountId,
+      write: true,
+    );
+    if (categoryId != null) {
+      await _ownCategory(session, account.groupId, categoryId);
+    }
+    final row = _validated(
+      ScheduledTransaction(
+        accountId: accountId,
+        amountCents: amountCents,
+        label: label.trim(),
+        categoryId: categoryId,
+        frequency: frequency,
+        interval: interval ?? 1,
+        startDate: _day(startDate),
+        endDate: endDate == null ? null : _day(endDate),
+        occurrenceCount: occurrenceCount,
+        matchPattern: core.normalizeForMatch(matchPattern ?? ''),
+        dateToleranceDays: dateToleranceDays ?? 5,
+        amountTolerancePercent: amountTolerancePercent ?? 0,
+      ),
+    );
+    final saved = await ScheduledTransaction.db.insertRow(session, row);
+    await Audit.log(
+      session,
+      groupId: account.groupId,
+      action: 'create',
+      entity: 'scheduled',
+      rowId: saved.id,
+      after: saved,
+    );
+    return saved;
+  }
+
+  Future<ScheduledTransaction> update(
+    Session session,
+    int scheduledId, {
+    int? amountCents,
+    String? label,
+    int? categoryId,
+    DateTime? endDate,
+    String? matchPattern,
+    int? dateToleranceDays,
+    int? amountTolerancePercent,
+  }) async {
+    final (current, account) = await _find(session, scheduledId);
+    if (categoryId != null) {
+      await _ownCategory(session, account.groupId, categoryId);
+    }
+    final next = _validated(
+      current.copyWith(
+        amountCents: amountCents,
+        label: label?.trim(),
+        categoryId: categoryId,
+        endDate: endDate == null ? null : _day(endDate),
+        matchPattern: matchPattern == null
+            ? null
+            : core.normalizeForMatch(matchPattern),
+        dateToleranceDays: dateToleranceDays,
+        amountTolerancePercent: amountTolerancePercent,
+      ),
+    );
+    final saved = await ScheduledTransaction.db.updateRow(session, next);
+    await Audit.log(
+      session,
+      groupId: account.groupId,
+      action: 'update',
+      entity: 'scheduled',
+      rowId: scheduledId,
+      before: current,
+      after: saved,
+    );
+    return saved;
+  }
+
+  Future<void> delete(Session session, int scheduledId) async {
+    final (current, account) = await _find(session, scheduledId);
+    await ScheduledTransaction.db.updateRow(
+      session,
+      current.copyWith(deletedAt: DateTime.now().toUtc()),
+    );
+    await Audit.log(
+      session,
+      groupId: account.groupId,
+      action: 'delete',
+      entity: 'scheduled',
+      rowId: scheduledId,
+      before: current,
+    );
+  }
+
+  /// The next occurrence will not happen (or was paid otherwise): skip it.
+  Future<ScheduledTransaction> skipNext(
+    Session session,
+    int scheduledId,
+  ) async {
+    final (current, _) = await _find(session, scheduledId);
+    final recurrence = ForecastService.recurrenceOf(current);
+    final from = current.nextDue?.toLocalDate() ?? recurrence.start;
+    final due = recurrence.between(from, from.addDays(400)).firstOrNull;
+    if (due == null) return current;
+    final next = recurrence.nextAfter(due) ?? due.addDays(1);
+    return ScheduledTransaction.db.updateRow(
+      session,
+      current.copyWith(nextDue: next.toDb()),
+    );
+  }
+
+  /// Forecast of the account from the user's [today] (calendar date of the
+  /// device; must be within a day of the server's date).
+  Future<ForecastResult> forecast(
+    Session session,
+    int accountId,
+    DateTime today, {
+    int? horizonDays,
+  }) async {
+    final account = await Access.requireAccount(session, accountId);
+    final t = today.toUtc();
+    final day = core.LocalDate(t.year, t.month, t.day);
+    final server = core.LocalDate.fromDateTime(DateTime.now().toUtc());
+    if (day.daysUntil(server).abs() > 1) {
+      throw InvalidInputException(code: 'invalid_date', field: 'today');
+    }
+    final horizon = horizonDays ?? 30;
+    if (horizon < 1 || horizon > 366) {
+      throw InvalidInputException(code: 'invalid_horizon');
+    }
+    return ForecastService.compute(session, account, day, horizonDays: horizon);
+  }
+
+  /// Confirms a reconciliation proposal.
+  Future<void> confirmMatch(
+    Session session,
+    int scheduledId,
+    DateTime dueDate,
+    int transactionId,
+  ) async {
+    final (scheduled, account) = await _find(session, scheduledId);
+    final t = await BankTransaction.db.findById(session, transactionId);
+    if (t == null || t.accountId != account.id || t.deletedAt != null) {
+      throw AccessDeniedException(code: 'account_access_denied');
+    }
+    final due = _day(dueDate).toLocalDate();
+    if (!ForecastService.recurrenceOf(
+      scheduled,
+    ).between(due, due).contains(due)) {
+      throw InvalidInputException(code: 'invalid_date', field: 'dueDate');
+    }
+    await ForecastService.link(session, scheduled, due, t);
+  }
+
+  static DateTime _day(DateTime d) {
+    final u = d.toUtc();
+    return DateTime.utc(u.year, u.month, u.day);
+  }
+
+  static ScheduledTransaction _validated(ScheduledTransaction s) {
+    if (s.label.isEmpty || s.label.length > 80) {
+      throw InvalidInputException(code: 'invalid_name', field: 'label');
+    }
+    if (s.amountCents == 0 || s.amountCents.abs() > 100000000000000) {
+      throw InvalidInputException(code: 'amount_out_of_range');
+    }
+    if (s.interval < 1 || s.interval > 120) {
+      throw InvalidInputException(code: 'invalid_interval');
+    }
+    if (s.dateToleranceDays < 0 ||
+        s.dateToleranceDays > 31 ||
+        s.amountTolerancePercent < 0 ||
+        s.amountTolerancePercent > 100) {
+      throw InvalidInputException(code: 'invalid_tolerance');
+    }
+    try {
+      ForecastService.recurrenceOf(s);
+    } on ArgumentError {
+      throw InvalidInputException(code: 'invalid_recurrence');
+    }
+    return s;
+  }
+
+  static Future<(ScheduledTransaction, Account)> _find(
+    Session session,
+    int id,
+  ) async {
+    final s = await ScheduledTransaction.db.findById(session, id);
+    if (s == null || s.deletedAt != null) {
+      throw AccessDeniedException(code: 'scheduled_access_denied');
+    }
+    try {
+      final account = await Access.requireAccount(
+        session,
+        s.accountId,
+        write: true,
+      );
+      return (s, account);
+    } on AccessDeniedException {
+      throw AccessDeniedException(code: 'scheduled_access_denied');
+    }
+  }
+
+  static Future<void> _ownCategory(
+    Session session,
+    int groupId,
+    int categoryId,
+  ) async {
+    final c = await Category.db.findById(session, categoryId);
+    if (c == null || c.groupId != groupId || c.deletedAt != null) {
+      throw AccessDeniedException(code: 'category_access_denied');
+    }
+  }
+}

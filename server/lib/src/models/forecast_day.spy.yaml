@@ -1,0 +1,4 @@
+class: ForecastDay
+fields:
+  date: DateTime
+  balanceCents: int

@@ -22,6 +22,9 @@ import 'package:owncoffer_server/src/generated/category.dart' as _iemw1gpx;
 import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
 import 'package:owncoffer_server/src/generated/csv_columns.dart' as _iytxq8gu;
 import 'package:owncoffer_server/src/generated/finance_group.dart' as _i6lqurfp;
+import 'package:owncoffer_server/src/generated/forecast_result.dart'
+    as _isjvyxsm;
+import 'package:owncoffer_server/src/generated/frequency.dart' as _iugtcrzz;
 import 'package:owncoffer_server/src/generated/group_member.dart' as _iep4djhw;
 import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
@@ -37,6 +40,8 @@ import 'package:owncoffer_server/src/generated/rule_direction.dart'
     as _ini8nmtb;
 import 'package:owncoffer_server/src/generated/rule_match_type.dart'
     as _ijwgwf7y;
+import 'package:owncoffer_server/src/generated/scheduled_transaction.dart'
+    as _inu9ydal;
 import 'package:owncoffer_server/src/generated/setup_status.dart' as _i7xpdhgz;
 import 'package:owncoffer_server/src/generated/statement_import.dart'
     as _igipv995;
@@ -199,6 +204,8 @@ class TestEndpoints {
 
   late final _RuleEndpoint rule;
 
+  late final _ScheduledEndpoint scheduled;
+
   late final _SetupEndpoint setup;
 
   late final _TwoFactorEndpoint twoFactor;
@@ -244,6 +251,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     rule = _RuleEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    scheduled = _ScheduledEndpoint(
       endpoints,
       serializationManager,
     );
@@ -1664,6 +1675,286 @@ class _RuleEndpoint {
           endpointPath: 'rule',
           methodName: 'delete',
           parameters: _ist.testObjectToJson({'ruleId': ruleId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _ScheduledEndpoint {
+  _ScheduledEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<List<_inu9ydal.ScheduledTransaction>> list(
+    _ist.TestSessionBuilder sessionBuilder,
+    int accountId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'list',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'list',
+          parameters: _ist.testObjectToJson({'accountId': accountId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_inu9ydal.ScheduledTransaction>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_inu9ydal.ScheduledTransaction> create(
+    _ist.TestSessionBuilder sessionBuilder,
+    int accountId,
+    int amountCents,
+    String label,
+    _iugtcrzz.ScheduleFrequency frequency,
+    DateTime startDate, {
+    int? interval,
+    DateTime? endDate,
+    int? occurrenceCount,
+    int? categoryId,
+    String? matchPattern,
+    int? dateToleranceDays,
+    int? amountTolerancePercent,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'create',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'create',
+          parameters: _ist.testObjectToJson({
+            'accountId': accountId,
+            'amountCents': amountCents,
+            'label': label,
+            'frequency': frequency,
+            'startDate': startDate,
+            'interval': interval,
+            'endDate': endDate,
+            'occurrenceCount': occurrenceCount,
+            'categoryId': categoryId,
+            'matchPattern': matchPattern,
+            'dateToleranceDays': dateToleranceDays,
+            'amountTolerancePercent': amountTolerancePercent,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_inu9ydal.ScheduledTransaction>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_inu9ydal.ScheduledTransaction> update(
+    _ist.TestSessionBuilder sessionBuilder,
+    int scheduledId, {
+    int? amountCents,
+    String? label,
+    int? categoryId,
+    DateTime? endDate,
+    String? matchPattern,
+    int? dateToleranceDays,
+    int? amountTolerancePercent,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'update',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'update',
+          parameters: _ist.testObjectToJson({
+            'scheduledId': scheduledId,
+            'amountCents': amountCents,
+            'label': label,
+            'categoryId': categoryId,
+            'endDate': endDate,
+            'matchPattern': matchPattern,
+            'dateToleranceDays': dateToleranceDays,
+            'amountTolerancePercent': amountTolerancePercent,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_inu9ydal.ScheduledTransaction>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> delete(
+    _ist.TestSessionBuilder sessionBuilder,
+    int scheduledId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'delete',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'delete',
+          parameters: _ist.testObjectToJson({'scheduledId': scheduledId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_inu9ydal.ScheduledTransaction> skipNext(
+    _ist.TestSessionBuilder sessionBuilder,
+    int scheduledId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'skipNext',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'skipNext',
+          parameters: _ist.testObjectToJson({'scheduledId': scheduledId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_inu9ydal.ScheduledTransaction>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_isjvyxsm.ForecastResult> forecast(
+    _ist.TestSessionBuilder sessionBuilder,
+    int accountId,
+    DateTime today, {
+    int? horizonDays,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'forecast',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'forecast',
+          parameters: _ist.testObjectToJson({
+            'accountId': accountId,
+            'today': today,
+            'horizonDays': horizonDays,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_isjvyxsm.ForecastResult>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> confirmMatch(
+    _ist.TestSessionBuilder sessionBuilder,
+    int scheduledId,
+    DateTime dueDate,
+    int transactionId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'confirmMatch',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'confirmMatch',
+          parameters: _ist.testObjectToJson({
+            'scheduledId': scheduledId,
+            'dueDate': dueDate,
+            'transactionId': transactionId,
+          }),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =

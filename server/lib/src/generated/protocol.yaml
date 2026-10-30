@@ -45,6 +45,14 @@ rule:
   - create:
   - update:
   - delete:
+scheduled:
+  - list:
+  - create:
+  - update:
+  - delete:
+  - skipNext:
+  - forecast:
+  - confirmMatch:
 setup:
   - status:
   - start:

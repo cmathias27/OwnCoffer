@@ -20,6 +20,8 @@ import 'package:owncoffer_client/src/protocol/invitation_info.dart'
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
+import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
+    as _ibpr6881;
 import 'package:owncoffer_client/src/protocol/statement_import.dart'
     as _i5x9swls;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
@@ -39,6 +41,9 @@ import 'category_source.dart' as _idpjit5g;
 import 'community_rule.dart' as _igloa2c5;
 import 'csv_columns.dart' as _iq9wp9wq;
 import 'finance_group.dart' as _iqh5irlt;
+import 'forecast_day.dart' as _ids0ngao;
+import 'forecast_event_info.dart' as _iuscnr1n;
+import 'forecast_result.dart' as _idemr8ki;
 import 'frequency.dart' as _ixycnzxw;
 import 'group_member.dart' as _igiek2ee;
 import 'group_membership.dart' as _i54nduyh;
@@ -50,6 +55,8 @@ import 'invitation_info.dart' as _i9hwipt6;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'member_info.dart' as _i2slp771;
 import 'member_role.dart' as _insyygng;
+import 'missed_occurrence_info.dart' as _ifjtpr6l;
+import 'reconciliation_proposal.dart' as _i7qmkh8w;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
@@ -70,6 +77,9 @@ export 'category_source.dart';
 export 'community_rule.dart';
 export 'csv_columns.dart';
 export 'finance_group.dart';
+export 'forecast_day.dart';
+export 'forecast_event_info.dart';
+export 'forecast_result.dart';
 export 'frequency.dart';
 export 'group_member.dart';
 export 'group_membership.dart';
@@ -81,6 +91,8 @@ export 'invitation_info.dart';
 export 'ip_ban_info.dart';
 export 'member_info.dart';
 export 'member_role.dart';
+export 'missed_occurrence_info.dart';
+export 'reconciliation_proposal.dart';
 export 'rule.dart';
 export 'rule_direction.dart';
 export 'rule_match_type.dart';
@@ -161,6 +173,15 @@ class Protocol extends _isc.SerializationManager {
     if (t == _iqh5irlt.FinanceGroup) {
       return _iqh5irlt.FinanceGroup.fromJson(data) as T;
     }
+    if (t == _ids0ngao.ForecastDay) {
+      return _ids0ngao.ForecastDay.fromJson(data) as T;
+    }
+    if (t == _iuscnr1n.ForecastEventInfo) {
+      return _iuscnr1n.ForecastEventInfo.fromJson(data) as T;
+    }
+    if (t == _idemr8ki.ForecastResult) {
+      return _idemr8ki.ForecastResult.fromJson(data) as T;
+    }
     if (t == _ixycnzxw.ScheduleFrequency) {
       return _ixycnzxw.ScheduleFrequency.fromJson(data) as T;
     }
@@ -193,6 +214,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _insyygng.MemberRole) {
       return _insyygng.MemberRole.fromJson(data) as T;
+    }
+    if (t == _ifjtpr6l.MissedOccurrenceInfo) {
+      return _ifjtpr6l.MissedOccurrenceInfo.fromJson(data) as T;
+    }
+    if (t == _i7qmkh8w.ReconciliationProposal) {
+      return _i7qmkh8w.ReconciliationProposal.fromJson(data) as T;
     }
     if (t == _ivw87pdb.Rule) {
       return _ivw87pdb.Rule.fromJson(data) as T;
@@ -262,6 +289,17 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_iqh5irlt.FinanceGroup?>()) {
       return (data != null ? _iqh5irlt.FinanceGroup.fromJson(data) : null) as T;
     }
+    if (t == _isc.getType<_ids0ngao.ForecastDay?>()) {
+      return (data != null ? _ids0ngao.ForecastDay.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iuscnr1n.ForecastEventInfo?>()) {
+      return (data != null ? _iuscnr1n.ForecastEventInfo.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_idemr8ki.ForecastResult?>()) {
+      return (data != null ? _idemr8ki.ForecastResult.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_ixycnzxw.ScheduleFrequency?>()) {
       return (data != null ? _ixycnzxw.ScheduleFrequency.fromJson(data) : null)
           as T;
@@ -304,6 +342,18 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_insyygng.MemberRole?>()) {
       return (data != null ? _insyygng.MemberRole.fromJson(data) : null) as T;
     }
+    if (t == _isc.getType<_ifjtpr6l.MissedOccurrenceInfo?>()) {
+      return (data != null
+              ? _ifjtpr6l.MissedOccurrenceInfo.fromJson(data)
+              : null)
+          as T;
+    }
+    if (t == _isc.getType<_i7qmkh8w.ReconciliationProposal?>()) {
+      return (data != null
+              ? _i7qmkh8w.ReconciliationProposal.fromJson(data)
+              : null)
+          as T;
+    }
     if (t == _isc.getType<_ivw87pdb.Rule?>()) {
       return (data != null ? _ivw87pdb.Rule.fromJson(data) : null) as T;
     }
@@ -334,6 +384,30 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_igcslm1n.TwoFactorStatus?>()) {
       return (data != null ? _igcslm1n.TwoFactorStatus.fromJson(data) : null)
+          as T;
+    }
+    if (t == List<_ids0ngao.ForecastDay>) {
+      return (data as List)
+              .map((e) => deserialize<_ids0ngao.ForecastDay>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iuscnr1n.ForecastEventInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iuscnr1n.ForecastEventInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ifjtpr6l.MissedOccurrenceInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_ifjtpr6l.MissedOccurrenceInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i7qmkh8w.ReconciliationProposal>) {
+      return (data as List)
+              .map((e) => deserialize<_i7qmkh8w.ReconciliationProposal>(e))
+              .toList()
           as T;
     }
     if (t == List<_iso7nf03.ImportIssueInfo>) {
@@ -403,6 +477,12 @@ class Protocol extends _isc.SerializationManager {
       return (data as List).map((e) => deserialize<_i0jtaw5e.Rule>(e)).toList()
           as T;
     }
+    if (t == List<_ibpr6881.ScheduledTransaction>) {
+      return (data as List)
+              .map((e) => deserialize<_ibpr6881.ScheduledTransaction>(e))
+              .toList()
+          as T;
+    }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
@@ -429,6 +509,9 @@ class Protocol extends _isc.SerializationManager {
       _igloa2c5.CommunityRule => 'CommunityRule',
       _iq9wp9wq.CsvColumns => 'CsvColumns',
       _iqh5irlt.FinanceGroup => 'FinanceGroup',
+      _ids0ngao.ForecastDay => 'ForecastDay',
+      _iuscnr1n.ForecastEventInfo => 'ForecastEventInfo',
+      _idemr8ki.ForecastResult => 'ForecastResult',
       _ixycnzxw.ScheduleFrequency => 'ScheduleFrequency',
       _igiek2ee.GroupMember => 'GroupMember',
       _i54nduyh.GroupMembership => 'GroupMembership',
@@ -440,6 +523,8 @@ class Protocol extends _isc.SerializationManager {
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _i2slp771.MemberInfo => 'MemberInfo',
       _insyygng.MemberRole => 'MemberRole',
+      _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
+      _i7qmkh8w.ReconciliationProposal => 'ReconciliationProposal',
       _ivw87pdb.Rule => 'Rule',
       _i13yq1r7.RuleDirection => 'RuleDirection',
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
@@ -486,6 +571,12 @@ class Protocol extends _isc.SerializationManager {
         return 'CsvColumns';
       case _iqh5irlt.FinanceGroup():
         return 'FinanceGroup';
+      case _ids0ngao.ForecastDay():
+        return 'ForecastDay';
+      case _iuscnr1n.ForecastEventInfo():
+        return 'ForecastEventInfo';
+      case _idemr8ki.ForecastResult():
+        return 'ForecastResult';
       case _ixycnzxw.ScheduleFrequency():
         return 'ScheduleFrequency';
       case _igiek2ee.GroupMember():
@@ -508,6 +599,10 @@ class Protocol extends _isc.SerializationManager {
         return 'MemberInfo';
       case _insyygng.MemberRole():
         return 'MemberRole';
+      case _ifjtpr6l.MissedOccurrenceInfo():
+        return 'MissedOccurrenceInfo';
+      case _i7qmkh8w.ReconciliationProposal():
+        return 'ReconciliationProposal';
       case _ivw87pdb.Rule():
         return 'Rule';
       case _i13yq1r7.RuleDirection():
@@ -582,6 +677,15 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'FinanceGroup') {
       return deserialize<_iqh5irlt.FinanceGroup>(data['data']);
     }
+    if (dataClassName == 'ForecastDay') {
+      return deserialize<_ids0ngao.ForecastDay>(data['data']);
+    }
+    if (dataClassName == 'ForecastEventInfo') {
+      return deserialize<_iuscnr1n.ForecastEventInfo>(data['data']);
+    }
+    if (dataClassName == 'ForecastResult') {
+      return deserialize<_idemr8ki.ForecastResult>(data['data']);
+    }
     if (dataClassName == 'ScheduleFrequency') {
       return deserialize<_ixycnzxw.ScheduleFrequency>(data['data']);
     }
@@ -614,6 +718,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'MemberRole') {
       return deserialize<_insyygng.MemberRole>(data['data']);
+    }
+    if (dataClassName == 'MissedOccurrenceInfo') {
+      return deserialize<_ifjtpr6l.MissedOccurrenceInfo>(data['data']);
+    }
+    if (dataClassName == 'ReconciliationProposal') {
+      return deserialize<_i7qmkh8w.ReconciliationProposal>(data['data']);
     }
     if (dataClassName == 'Rule') {
       return deserialize<_ivw87pdb.Rule>(data['data']);

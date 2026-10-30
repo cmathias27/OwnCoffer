@@ -1,0 +1,7 @@
+### A planned operation that never arrived (more than 10 days late).
+class: MissedOccurrenceInfo
+fields:
+  scheduledId: int
+  label: String
+  dueDate: DateTime
+  amountCents: int

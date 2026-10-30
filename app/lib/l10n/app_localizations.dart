@@ -847,6 +847,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cet import n\'existe pas ou vous n\'y avez pas accès.'**
   String get error_import_access_denied;
+
+  /// No description provided for @error_scheduled_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette opération prévue n\'existe pas ou vous n\'y avez pas accès.'**
+  String get error_scheduled_access_denied;
+
+  /// No description provided for @error_invalid_interval.
+  ///
+  /// In fr, this message translates to:
+  /// **'La périodicité doit être comprise entre 1 et 120.'**
+  String get error_invalid_interval;
+
+  /// No description provided for @error_invalid_tolerance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tolérance invalide (0 à 31 jours, 0 à 100 %).'**
+  String get error_invalid_tolerance;
+
+  /// No description provided for @error_invalid_recurrence.
+  ///
+  /// In fr, this message translates to:
+  /// **'La date de fin est avant la date de début.'**
+  String get error_invalid_recurrence;
+
+  /// No description provided for @error_invalid_date.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date invalide.'**
+  String get error_invalid_date;
+
+  /// No description provided for @error_invalid_horizon.
+  ///
+  /// In fr, this message translates to:
+  /// **'La durée de prévision doit être comprise entre 1 et 366 jours.'**
+  String get error_invalid_horizon;
 }
 
 class _AppLocalizationsDelegate
