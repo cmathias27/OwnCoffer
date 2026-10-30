@@ -40,6 +40,11 @@ invitation:
   - list:
   - revoke:
   - accept:
+notification:
+  - list:
+  - unreadCount:
+  - markRead:
+  - markAllRead:
 rule:
   - list:
   - create:

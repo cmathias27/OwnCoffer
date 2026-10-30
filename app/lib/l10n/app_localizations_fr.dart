@@ -488,4 +488,8 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_already_imported_again =>
       'Cette opération a été réimportée entre-temps : elle est déjà dans le compte.';
+
+  @override
+  String get error_notification_access_denied =>
+      'Cette notification n\'existe pas.';
 }

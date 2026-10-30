@@ -482,4 +482,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_already_imported_again =>
       'This operation was imported again in the meantime: it is already in the account.';
+
+  @override
+  String get error_notification_access_denied =>
+      'This notification does not exist.';
 }

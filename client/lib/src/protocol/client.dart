@@ -35,6 +35,7 @@ import 'package:owncoffer_client/src/protocol/invitation_info.dart'
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
+import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
 import 'package:owncoffer_client/src/protocol/rule_application.dart'
     as _i0d2e7ql;
@@ -577,6 +578,41 @@ class EndpointInvitation extends _isc.EndpointRef {
       );
 }
 
+/// The current user's notifications.
+/// {@category Endpoint}
+class EndpointNotification extends _isc.EndpointRef {
+  EndpointNotification(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'notification';
+
+  _ida.Future<List<_igwx4n0s.AppNotification>> list({bool? unreadOnly}) =>
+      caller.callServerEndpoint<List<_igwx4n0s.AppNotification>>(
+        'notification',
+        'list',
+        {'unreadOnly': unreadOnly},
+      );
+
+  _ida.Future<int> unreadCount() => caller.callServerEndpoint<int>(
+    'notification',
+    'unreadCount',
+    {},
+  );
+
+  _ida.Future<void> markRead(int notificationId) =>
+      caller.callServerEndpoint<void>(
+        'notification',
+        'markRead',
+        {'notificationId': notificationId},
+      );
+
+  _ida.Future<void> markAllRead() => caller.callServerEndpoint<void>(
+    'notification',
+    'markAllRead',
+    {},
+  );
+}
+
 /// Classification rules of a group (cahier des charges, Classement).
 /// {@category Endpoint}
 class EndpointRule extends _isc.EndpointRef {
@@ -1035,6 +1071,7 @@ class Client extends _isc.ServerpodClientShared {
     group = EndpointGroup(this);
     import = EndpointImport(this);
     invitation = EndpointInvitation(this);
+    notification = EndpointNotification(this);
     rule = EndpointRule(this);
     scheduled = EndpointScheduled(this);
     setup = EndpointSetup(this);
@@ -1059,6 +1096,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointInvitation invitation;
 
+  late final EndpointNotification notification;
+
   late final EndpointRule rule;
 
   late final EndpointScheduled scheduled;
@@ -1081,6 +1120,7 @@ class Client extends _isc.ServerpodClientShared {
     'group': group,
     'import': import,
     'invitation': invitation,
+    'notification': notification,
     'rule': rule,
     'scheduled': scheduled,
     'setup': setup,

@@ -901,6 +901,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cette opération a été réimportée entre-temps : elle est déjà dans le compte.'**
   String get error_already_imported_again;
+
+  /// No description provided for @error_notification_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette notification n\'existe pas.'**
+  String get error_notification_access_denied;
 }
 
 class _AppLocalizationsDelegate

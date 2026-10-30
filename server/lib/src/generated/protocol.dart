@@ -19,6 +19,7 @@ import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
+import 'package:owncoffer_server/src/generated/notification.dart' as _ieap9unx;
 import 'package:owncoffer_server/src/generated/rule.dart' as _inhqt802;
 import 'package:owncoffer_server/src/generated/scheduled_transaction.dart'
     as _inu9ydal;
@@ -61,6 +62,7 @@ import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'member_info.dart' as _i2slp771;
 import 'member_role.dart' as _insyygng;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
+import 'notification.dart' as _irt10kca;
 import 'reconciliation_proposal.dart' as _i7qmkh8w;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_application.dart' as _ie66uvh9;
@@ -104,6 +106,7 @@ export 'ip_ban_info.dart';
 export 'member_info.dart';
 export 'member_role.dart';
 export 'missed_occurrence_info.dart';
+export 'notification.dart';
 export 'reconciliation_proposal.dart';
 export 'rule.dart';
 export 'rule_application.dart';
@@ -1058,6 +1061,125 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'notifications',
+      dartName: 'AppNotification',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'accountId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'type',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'data',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'dedupKey',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+        _isp.ColumnDefinition(
+          name: 'readAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'emailedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'notifications_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'notifications_user_key_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'dedupKey',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'notifications_user_created_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'createdAt',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'rules',
       dartName: 'Rule',
       schema: 'public',
@@ -1857,6 +1979,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ifjtpr6l.MissedOccurrenceInfo) {
       return _ifjtpr6l.MissedOccurrenceInfo.fromJson(data) as T;
     }
+    if (t == _irt10kca.AppNotification) {
+      return _irt10kca.AppNotification.fromJson(data) as T;
+    }
     if (t == _i7qmkh8w.ReconciliationProposal) {
       return _i7qmkh8w.ReconciliationProposal.fromJson(data) as T;
     }
@@ -2008,6 +2133,10 @@ class Protocol extends _is.DatabaseSerializationManager {
               : null)
           as T;
     }
+    if (t == _is.getType<_irt10kca.AppNotification?>()) {
+      return (data != null ? _irt10kca.AppNotification.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_i7qmkh8w.ReconciliationProposal?>()) {
       return (data != null
               ? _i7qmkh8w.ReconciliationProposal.fromJson(data)
@@ -2150,6 +2279,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ieap9unx.AppNotification>) {
+      return (data as List)
+              .map((e) => deserialize<_ieap9unx.AppNotification>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_inhqt802.Rule>) {
       return (data as List).map((e) => deserialize<_inhqt802.Rule>(e)).toList()
           as T;
@@ -2208,6 +2343,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i2slp771.MemberInfo => 'MemberInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
+      _irt10kca.AppNotification => 'AppNotification',
       _i7qmkh8w.ReconciliationProposal => 'ReconciliationProposal',
       _ivw87pdb.Rule => 'Rule',
       _ie66uvh9.RuleApplication => 'RuleApplication',
@@ -2296,6 +2432,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'MemberRole';
       case _ifjtpr6l.MissedOccurrenceInfo():
         return 'MissedOccurrenceInfo';
+      case _irt10kca.AppNotification():
+        return 'AppNotification';
       case _i7qmkh8w.ReconciliationProposal():
         return 'ReconciliationProposal';
       case _ivw87pdb.Rule():
@@ -2439,6 +2577,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'MissedOccurrenceInfo') {
       return deserialize<_ifjtpr6l.MissedOccurrenceInfo>(data['data']);
     }
+    if (dataClassName == 'AppNotification') {
+      return deserialize<_irt10kca.AppNotification>(data['data']);
+    }
     if (dataClassName == 'ReconciliationProposal') {
       return deserialize<_i7qmkh8w.ReconciliationProposal>(data['data']);
     }
@@ -2538,6 +2679,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _ix00wubs.Invitation.t;
       case _i88cvd1d.IpBan:
         return _i88cvd1d.IpBan.t;
+      case _irt10kca.AppNotification:
+        return _irt10kca.AppNotification.t;
       case _ivw87pdb.Rule:
         return _ivw87pdb.Rule.t;
       case _ifol8nrg.ScheduledTransaction:

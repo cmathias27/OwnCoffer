@@ -4,6 +4,7 @@ import 'package:serverpod_auth_idp_server/core.dart';
 
 import 'src/auth/email_config.dart';
 import 'src/cache_busting.dart';
+import 'src/finance/alert_service.dart';
 import 'src/generated/serverpod.dart';
 import 'src/onboarding/onboarding.dart';
 import 'src/security/ip_guard.dart';
@@ -115,4 +116,7 @@ void run(List<String> args) async {
   } finally {
     await session.close();
   }
+
+  // Overdraft alerts: hourly check of every account's forecast.
+  AlertService.start(pod);
 }

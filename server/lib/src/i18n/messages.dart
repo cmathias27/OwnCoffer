@@ -11,6 +11,12 @@ abstract final class Messages {
     'reset.body':
         'Votre code pour choisir un nouveau mot de passe : {code}\n'
         'Il est valable 15 minutes. Si vous n\'avez rien demandé, ignorez ce message.',
+    'overdraft.subject': 'OwnCoffer — découvert prévu sur « {account} »',
+    'overdraft.body':
+        'D\'après les opérations prévues, le solde du compte « {account} » '
+        'passera sous {threshold} le {date} (point bas : {lowest} le '
+        '{lowestDate}).\n'
+        'Ouvrez OwnCoffer pour voir le détail : {link}',
     'invitation.subject': 'OwnCoffer — invitation à rejoindre « {group} »',
     'invitation.body':
         'Vous êtes invité à rejoindre le groupe « {group} » sur OwnCoffer.\n'
@@ -26,6 +32,12 @@ abstract final class Messages {
     'reset.body':
         'Your code to choose a new password: {code}\n'
         'It is valid for 15 minutes. If you did not ask for it, ignore this message.',
+    'overdraft.subject': 'OwnCoffer — overdraft expected on "{account}"',
+    'overdraft.body':
+        'According to the planned operations, the balance of "{account}" '
+        'will go below {threshold} on {date} (lowest: {lowest} on '
+        '{lowestDate}).\n'
+        'Open OwnCoffer to see the details: {link}',
     'invitation.subject': 'OwnCoffer — invitation to join "{group}"',
     'invitation.body':
         'You are invited to join the group "{group}" on OwnCoffer.\n'
