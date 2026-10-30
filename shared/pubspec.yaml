@@ -1,0 +1,12 @@
+name: owncoffer_shared
+description: OwnCoffer pure Dart core — money, bank file parsing, classification and forecasting.
+publish_to: none
+
+environment:
+  sdk: '^3.12.2'
+
+resolution: workspace
+
+dev_dependencies:
+  lints: '>=3.0.0 <7.0.0'
+  test: ^1.25.5
