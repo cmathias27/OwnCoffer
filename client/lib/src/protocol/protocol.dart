@@ -19,6 +19,7 @@ import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
+import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
 import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
     as _ibpr6881;
@@ -56,6 +57,7 @@ import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'member_info.dart' as _i2slp771;
 import 'member_role.dart' as _insyygng;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
+import 'notification.dart' as _irt10kca;
 import 'reconciliation_proposal.dart' as _i7qmkh8w;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_direction.dart' as _i13yq1r7;
@@ -92,6 +94,7 @@ export 'ip_ban_info.dart';
 export 'member_info.dart';
 export 'member_role.dart';
 export 'missed_occurrence_info.dart';
+export 'notification.dart';
 export 'reconciliation_proposal.dart';
 export 'rule.dart';
 export 'rule_direction.dart';
@@ -217,6 +220,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ifjtpr6l.MissedOccurrenceInfo) {
       return _ifjtpr6l.MissedOccurrenceInfo.fromJson(data) as T;
+    }
+    if (t == _irt10kca.AppNotification) {
+      return _irt10kca.AppNotification.fromJson(data) as T;
     }
     if (t == _i7qmkh8w.ReconciliationProposal) {
       return _i7qmkh8w.ReconciliationProposal.fromJson(data) as T;
@@ -348,6 +354,10 @@ class Protocol extends _isc.SerializationManager {
               : null)
           as T;
     }
+    if (t == _isc.getType<_irt10kca.AppNotification?>()) {
+      return (data != null ? _irt10kca.AppNotification.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_i7qmkh8w.ReconciliationProposal?>()) {
       return (data != null
               ? _i7qmkh8w.ReconciliationProposal.fromJson(data)
@@ -473,6 +483,12 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_igwx4n0s.AppNotification>) {
+      return (data as List)
+              .map((e) => deserialize<_igwx4n0s.AppNotification>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_i0jtaw5e.Rule>) {
       return (data as List).map((e) => deserialize<_i0jtaw5e.Rule>(e)).toList()
           as T;
@@ -524,6 +540,7 @@ class Protocol extends _isc.SerializationManager {
       _i2slp771.MemberInfo => 'MemberInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
+      _irt10kca.AppNotification => 'AppNotification',
       _i7qmkh8w.ReconciliationProposal => 'ReconciliationProposal',
       _ivw87pdb.Rule => 'Rule',
       _i13yq1r7.RuleDirection => 'RuleDirection',
@@ -601,6 +618,8 @@ class Protocol extends _isc.SerializationManager {
         return 'MemberRole';
       case _ifjtpr6l.MissedOccurrenceInfo():
         return 'MissedOccurrenceInfo';
+      case _irt10kca.AppNotification():
+        return 'AppNotification';
       case _i7qmkh8w.ReconciliationProposal():
         return 'ReconciliationProposal';
       case _ivw87pdb.Rule():
@@ -721,6 +740,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'MissedOccurrenceInfo') {
       return deserialize<_ifjtpr6l.MissedOccurrenceInfo>(data['data']);
+    }
+    if (dataClassName == 'AppNotification') {
+      return deserialize<_irt10kca.AppNotification>(data['data']);
     }
     if (dataClassName == 'ReconciliationProposal') {
       return deserialize<_i7qmkh8w.ReconciliationProposal>(data['data']);

@@ -235,5 +235,6 @@
   "error_invalid_tolerance": "Tolérance invalide (0 à 31 jours, 0 à 100 %).",
   "error_invalid_recurrence": "La date de fin est avant la date de début.",
   "error_invalid_date": "Date invalide.",
-  "error_invalid_horizon": "La durée de prévision doit être comprise entre 1 et 366 jours."
+  "error_invalid_horizon": "La durée de prévision doit être comprise entre 1 et 366 jours.",
+  "error_notification_access_denied": "Cette notification n'existe pas."
 }

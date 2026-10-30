@@ -476,4 +476,8 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_invalid_horizon =>
       'La durée de prévision doit être comprise entre 1 et 366 jours.';
+
+  @override
+  String get error_notification_access_denied =>
+      'Cette notification n\'existe pas.';
 }

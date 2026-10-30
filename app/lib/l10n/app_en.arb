@@ -130,5 +130,6 @@
   "error_invalid_tolerance": "Invalid tolerance (0 to 31 days, 0 to 100 %).",
   "error_invalid_recurrence": "The end date is before the start date.",
   "error_invalid_date": "Invalid date.",
-  "error_invalid_horizon": "The forecast length must be between 1 and 366 days."
+  "error_invalid_horizon": "The forecast length must be between 1 and 366 days.",
+  "error_notification_access_denied": "This notification does not exist."
 }

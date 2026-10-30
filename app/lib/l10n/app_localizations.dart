@@ -883,6 +883,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'La durée de prévision doit être comprise entre 1 et 366 jours.'**
   String get error_invalid_horizon;
+
+  /// No description provided for @error_notification_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette notification n\'existe pas.'**
+  String get error_notification_access_denied;
 }
 
 class _AppLocalizationsDelegate

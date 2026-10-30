@@ -1,0 +1,22 @@
+### Notification shown in the app (and sent by email when relevant).
+### `data` holds the figures as JSON; texts are built by the app from `type`.
+class: AppNotification
+table: notifications
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  groupId: int?
+  accountId: int?
+  type: String
+  data: String
+  ### One notification per user and event (e.g. overdraft of an account on a
+  ### given date), however often the forecast is recomputed.
+  dedupKey: String
+  createdAt: DateTime, default=now
+  readAt: DateTime?
+  emailedAt: DateTime?
+indexes:
+  notifications_user_key_idx:
+    fields: authUserId, dedupKey
+    unique: true
+  notifications_user_created_idx:
+    fields: authUserId, createdAt
