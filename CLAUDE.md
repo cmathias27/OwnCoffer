@@ -10,12 +10,14 @@ OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de 
 
 **Phase actuelle : 0 (préparation).** Ne pas créer de code applicatif tant que l'utilisateur ne l'a pas demandé explicitement.
 
+**Objectif prioritaire : l'alpha minimale (décision 0010)** — import Caisse d'Épargne, opérations, classement par règles, solde prévu, alerte de découvert. Ne rien ajouter au-delà avant que l'alpha soit utilisée un mois.
+
 ## Pile technique décidée
 
 - Serveur : **Serverpod** (Dart) — décision 0001. Voir son point de vigilance licence.
 - Base : **PostgreSQL**, migrations Serverpod, Row Level Security en seconde barrière.
-- Interface : **Flutter** (web d'abord ; Windows et Android en phase 6) — décision 0005 (proposée).
-- Déploiement : `docker compose` sur un serveur Docker existant, exposé sur Internet derrière HTTPS — décision 0002.
+- Interface : **Flutter web**, installable sur téléphone (PWA, sans cache de données financières) ; Windows et Android natifs en phase 6 — décisions 0005 et 0011.
+- Déploiement : `docker compose` sur un serveur Docker existant, exposé par une redirection **Cloudflare** (HTTPS géré par Cloudflare) ; conteneur en `network_mode: host`, **un seul port** configurable pour l'app web et l'API, PostgreSQL et ports internes sur `127.0.0.1` uniquement ; IP réelle via `CF-Connecting-IP` seulement si la requête vient de Cloudflare ou du connecteur local — décisions 0002 et 0012.
 - CI : GitHub Actions ; image `ghcr.io/cmathias27/owncoffer`.
 
 ## Organisation prévue du dépôt (phase 1)
@@ -41,7 +43,7 @@ docs/     cahier des charges, roadbook, décisions
 - **Passerelle IA** (décision 0008) : tout appel à une IA passe par la passerelle ; jamais d'appel direct à un fournisseur, jamais de basculement automatique vers un modèle externe ; l'IA lit les données uniquement via les fonctions de contexte en lecture seule.
 - **Modifications** (décision 0009) : l'IA et le conseiller produisent des propositions structurées ; seul le service de commandes financières écrit, après validation explicite revérifiée côté serveur, de façon idempotente, en refusant toute proposition dont les données ont changé ; tout est journalisé. Jamais d'opération bancaire réelle.
 - **Licences** : toute dépendance ajoutée doit être compatible AGPL-3.0.
-- Une seule banque est prise en charge au départ (décision 0003) ; isoler ses particularités dans un module dédié.
+- Une seule banque au départ : **Caisse d'Épargne** (décision 0003) ; isoler ses particularités dans un module dédié.
 
 ## Façon de travailler
 

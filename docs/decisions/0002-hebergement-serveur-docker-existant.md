@@ -1,6 +1,6 @@
 # 0002 — Hébergement : serveur Docker existant, accessible depuis l'extérieur
 
-**Statut** : Décidé (30 octobre 2026)
+**Statut** : Décidé (30 octobre 2026) — précisé par la décision 0012 (Cloudflare, réseau de l'hôte, un seul port)
 
 ## Contexte
 

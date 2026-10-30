@@ -1,12 +1,12 @@
 # 0005 — Interface web en Flutter web
 
-**Statut** : Proposé — à confirmer
+**Statut** : Décidé (30 octobre 2026)
 
 ## Contexte
 
 L'application web est la première interface livrée ; les apps Windows et Android suivront. Deux options : Flutter web, ou un framework web classique (par exemple React) avec Flutter seulement pour les apps.
 
-## Proposition
+## Décision
 
 Écrire l'interface web en **Flutter web**.
 

@@ -1,9 +1,9 @@
 # OwnCoffer — Roadbook serveur et application web
 
-Le serveur et l'application web passent en premier, avec l'IA disponible dès la phase 3 — en option : chaque utilisateur décide de la connecter ou non, et l'application est aussi complète sans elle (décision 0006) ; les applications Windows et Android viendront ensuite, sur le même serveur.
+Le serveur et l'application web (installable sur téléphone) passent en premier ; l'alpha est volontairement minimale, puis l'IA arrive en phase 4 — en option : chaque utilisateur décide de la connecter ou non, et l'application est aussi complète sans elle (décision 0006) ; les applications Windows et Android viendront ensuite, sur le même serveur.
 
 - **Six phases jusqu'à la 1.0**, chacune terminée par une validation concrète avant de passer à la suivante.
-- **Une version utilisable tôt** : dès la fin de la phase 3, on importe ses vrais relevés (version alpha 0.1).
+- **Une version utilisable tôt** : dès la fin de la phase 3, on importe ses vrais relevés Caisse d'Épargne et on voit son solde prévu (version alpha 0.1).
 - **Suivi** : chaque phase a son *milestone* GitHub ; les tâches des phases 0 et 1 sont des *issues*. Les cases ci-dessous se cochent au fil de l'avancement.
 - **Référence fonctionnelle** : [CAHIER_DES_CHARGES.md](CAHIER_DES_CHARGES.md). **Décisions** : [decisions/](decisions/).
 
@@ -14,8 +14,8 @@ flowchart TD
   P0["Phase 0 · Préparation et décisions (en cours)"] -->|Décisions écrites, dépôt prêt| P1
   P1["Phase 1 · Fondations techniques"] -->|Le serveur démarre en une commande| P2
   P2["Phase 2 · Utilisateurs et sécurité"] -->|Aucun accès possible d'un groupe à l'autre| P3
-  P3["Phase 3 · Comptes, import, classement et IA"] -->|"Alpha 0.1 : vrais relevés importés et classés"| P4
-  P4["Phase 4 · Prévoir et piloter, documents lus par l'IA"] -->|"Bêta 0.5 : un mois géré par quelques testeurs"| P5
+  P3["Phase 3 · Alpha : import, classement, solde prévu"] -->|"Alpha 0.1 : utilisée un mois"| P4
+  P4["Phase 4 · Prévoir, piloter et IA"] -->|"Bêta 0.5 : un mois géré par quelques testeurs"| P5
   P5["Phase 5 · Exploitation"] -->|"Version 1.0 serveur + web"| P6
   P6["Phase 6 · Applications Windows et Android"]
 ```
@@ -25,14 +25,17 @@ flowchart TD
 | # | Décision | Statut |
 | --- | --- | --- |
 | [0001](decisions/0001-framework-serveur-serverpod.md) | Framework du serveur : **Serverpod** | Décidé |
-| [0002](decisions/0002-hebergement-serveur-docker-existant.md) | Serveur Docker existant, **accessible depuis l'extérieur** | Décidé |
-| [0003](decisions/0003-une-seule-banque-au-depart.md) | **Une seule banque** prise en charge au départ | Décidé |
+| [0002](decisions/0002-hebergement-serveur-docker-existant.md) | Serveur Docker existant, **accessible depuis l'extérieur** | Décidé, précisé par 0012 |
+| [0003](decisions/0003-une-seule-banque-au-depart.md) | **Une seule banque** au départ : **Caisse d'Épargne** | Décidé |
 | [0004](decisions/0004-licence-agpl.md) | Licence **AGPL-3.0**, gratuit, financé par les dons | Décidé |
-| [0005](decisions/0005-interface-flutter-web.md) | Interface web en **Flutter web** | Proposé |
+| [0005](decisions/0005-interface-flutter-web.md) | Interface web en **Flutter web** | Décidé |
 | [0006](decisions/0006-ia-optionnelle.md) | **IA optionnelle** : l'application est aussi complète sans elle | Décidé |
 | [0007](decisions/0007-espace-mon-conseiller.md) | Espace **Mon conseiller** : analyses et recommandations suivies | Décidé |
 | [0008](decisions/0008-ia-hybride-passerelle.md) | **IA hybride** (locale ou externe) derrière une **passerelle IA** | Décidé |
 | [0009](decisions/0009-actions-proposees-validees.md) | **Modifications proposées**, validées par l'utilisateur, exécutées par le moteur | Décidé |
+| [0010](decisions/0010-perimetre-alpha.md) | **Alpha minimale** : import, classement, solde prévu, alerte de découvert | Décidé |
+| [0011](decisions/0011-application-web-installable-pwa.md) | Application web **installable sur téléphone** (PWA) | Décidé |
+| [0012](decisions/0012-exposition-cloudflare-reseau-hote.md) | Exposition par **Cloudflare**, conteneur sur le **réseau de l'hôte**, **un seul port** | Décidé |
 
 ## Phase 0 — Préparation et décisions *(en cours)*
 
@@ -42,9 +45,11 @@ Objectif : tout décider et tout organiser avant la première ligne de code.
 
 - [x] Framework du serveur : Serverpod
 - [x] Machine de test : serveur Docker existant, accessible depuis l'extérieur
-- [x] Périmètre de départ : une seule banque
-- [ ] Interface web : confirmer Flutter web (décision 0005)
-- [ ] Nom de domaine et certificat HTTPS pour l'accès extérieur
+- [x] Périmètre de départ : une seule banque, la Caisse d'Épargne (décision 0003)
+- [x] Contenu de l'alpha (décision 0010) et application installable PWA (décision 0011)
+- [x] Licence Serverpod : accepter le risque pour l'usage personnel, trancher avant d'ouvrir à d'autres (décision 0001)
+- [x] Interface web : Flutter web (décision 0005)
+- [x] Accès extérieur : redirection Cloudflare, réseau de l'hôte, un seul port (décision 0012)
 - [ ] Licence de la base de règles communautaires (CC0 ou ODbL)
 - [ ] Cible de classement automatique pour l'alpha (proposition : 70 % des opérations classées sans intervention)
 
@@ -60,7 +65,7 @@ Objectif : tout décider et tout organiser avant la première ligne de code.
 
 **Données et maquettes**
 
-- [ ] Exports anonymisés de la banque choisie (QIF, OFX et CSV si disponibles), sur un à trois mois, noms de fichiers neutres
+- [ ] Exports anonymisés Caisse d'Épargne (QIF, OFX et CSV si disponibles), sur un à trois mois, noms de fichiers neutres
 - [ ] Maquettes web manquantes : connexion, assistant de premier lancement, liste des opérations, import, catégories et règles, réglages, administration
 - [ ] Liste des catégories standard (environ 15 catégories et 60 sous-catégories, en français et en anglais)
 - [ ] Avis recueillis grâce à la présentation du projet, cahier des charges ajusté
@@ -72,13 +77,14 @@ Objectif : tout décider et tout organiser avant la première ligne de code.
 Objectif : un serveur vide mais complet, qui se lance en une commande et se teste automatiquement à chaque modification.
 
 - [ ] Organisation du code en un seul dépôt : `server/` (Serverpod), `app/` (Flutter, web pour l'instant), `shared/` (modèles et lecture des fichiers bancaires), `docker/`, `docs/`
-- [ ] `docker-compose.yml` : serveur + PostgreSQL + volume de données, `.env.example` commenté, démarrage par `docker compose up -d`
+- [ ] `docker-compose.yml` : conteneur OwnCoffer sur le **réseau de l'hôte** (`network_mode: host`), **un seul port** configurable servant l'app web et l'API ; PostgreSQL écoutant uniquement sur `127.0.0.1` ; volume de données ; `.env.example` commenté ; démarrage par `docker compose up -d` (décision 0012)
 - [ ] Base de données v1 avec migrations : utilisateurs, sessions, groupes, membres, comptes, opérations, catégories, catégories standard, règles, imports, journal d'audit
 - [ ] Montants en centimes (entiers) partout, dates d'opération sans fuseau
 - [ ] Intégration continue GitHub Actions : analyse, formatage, tests, image Docker `ghcr.io/cmathias27/owncoffer:edge`
 - [ ] Sécurité automatique : Dependabot, CodeQL, vérification des licences des dépendances
 - [ ] Page d'état minimale : version, connexion à la base, espace disque
 - [ ] Bilingue dès le départ : textes de l'interface dans des fichiers de traduction FR et EN
+- [ ] Application web installable (PWA) : manifeste, icônes, écran d'accueil Android ; aucune donnée financière mise en cache sur l'appareil (décision 0011)
 
 **Validation** : sur le serveur, `docker compose up -d` affiche la page d'accueil web et une page d'état au vert ; la CI est verte sur `main`.
 
@@ -93,48 +99,54 @@ Objectif : se connecter en sécurité, créer des groupes, inviter des membres ;
 - [ ] Groupes, rôles (admin, user, lecteur) et invitations par lien expirant
 - [ ] Permissions à deux niveaux : serveur puis PostgreSQL (RLS)
 - [ ] Journal d'audit des actions sensibles
-- [ ] HTTPS : guide d'installation avec reverse proxy (Caddy) et Let's Encrypt, adapté au serveur existant ; alternative documentée : accès par VPN (WireGuard, Tailscale) sans exposition directe
+- [ ] Accès extérieur par Cloudflare (HTTPS géré par Cloudflare) : vraie adresse IP lue dans `CF-Connecting-IP` uniquement si la requête vient de Cloudflare ou du connecteur local, pour que le blocage des IP fonctionne ; option Cloudflare Access en protection supplémentaire (décision 0012)
 
 **Validation** : des tests automatiques prouvent qu'un utilisateur ne peut jamais lire ni modifier les données d'un autre groupe ; une tentative de force brute est bloquée.
 
-## Phase 3 — Comptes, import, classement et IA
+## Phase 3 — Alpha : import, classement et solde prévu
 
-Objectif : importer ses vrais relevés et voir ses opérations classées, avec l'IA en appoint. Fin de phase = **alpha 0.1**.
+Objectif : la plus petite version utile, pour votre usage personnel (décision 0010). Fin de phase = **alpha 0.1**, utilisée un mois avant d'ajouter quoi que ce soit.
 
 - [ ] Comptes bancaires : création, solde initial, visibilité
-- [ ] Lecture des fichiers de la banque choisie (QIF, puis OFX et CSV) dans `shared/`, testée sur les relevés anonymisés et sur des fichiers mal formés
-- [ ] Écran d'import : aperçu, compte reconnu, doublons écartés par empreinte, historique, annulation, import groupé
-- [ ] Liste des opérations : recherche, filtres, saisie manuelle, pointage, ventilation, corbeille
+- [ ] Lecture des exports **Caisse d'Épargne** (format « Money » QIF d'abord, puis OFX et CSV si proposés) dans un module dédié de `shared/`, testée sur les relevés anonymisés et sur des fichiers mal formés (accents, virgule décimale, dates françaises)
+- [ ] Écran d'import : aperçu, compte reconnu, doublons écartés par empreinte, historique, annulation
+- [ ] Liste des opérations : recherche, filtres, saisie manuelle, pointage
 - [ ] Libellés nettoyés (« PRLV SEPA EDF SA REF… » devient « EDF »)
-- [ ] Classement : catégories reliées au catalogue standard, règles du groupe, historique, testeur de règles, source de la catégorie affichée
-- [ ] Règles communautaires v0 : dépôt séparé `owncoffer-rules`, premières règles pour les grandes enseignes françaises
+- [ ] Classement : catégories reliées au catalogue standard, règles du groupe, historique, source de la catégorie affichée
+- [ ] Règles communautaires v0 : dépôt séparé `owncoffer-rules`, premières règles pour les libellés Caisse d'Épargne des grandes enseignes
+- [ ] Opérations prévues récurrentes (loyer, salaire, abonnements) et **solde prévu** à 30 jours
+- [ ] **Alerte de découvert prévu**, dans l'app et par email
+
+**Validation** : trois mois de relevés Caisse d'Épargne importés sans doublon ni erreur de montant ; la cible de classement automatique est atteinte ; l'alpha est utilisée un mois.
+
+## Phase 4 — Prévoir, piloter et IA
+
+Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'IA en option. Fin de phase = **bêta 0.5**.
+
+**Compléments du cœur**
+
+- [ ] Import groupé, ventilation, corbeille, testeur de règles
 - [ ] Solde de contrôle et détection des frais bancaires
-- [ ] Passerelle IA (décision 0008) : interface commune, choix du fournisseur et du modèle par utilisateur, capacités par modèle, aucun basculement automatique vers l'externe, affichage de ce qui quitte le serveur ; clé chiffrée, plafond mensuel
-- [ ] Premiers connecteurs : un externe (compatible API OpenAI) et un local (Ollama)
-- [ ] Fonctions de contexte financier en lecture seule pour l'IA (`get_account_overview`, `get_transactions`, `get_budget_status`, `get_upcoming_expenses`, `get_cashflow_forecast`, `get_financial_goals`), limitées aux comptes visibles
-- [ ] Catégorisation d'appoint par l'IA pour les opérations restées non classées, avec la règle suggérée
-- [ ] Lecture de tickets de caisse : sans IA, saisie assistée avec montant et date lus sur l'appareil ; avec IA, ventilation automatique ligne par ligne, validée par l'utilisateur
-
-**Validation** : trois mois de relevés réels importés sans doublon ni erreur de montant ; la cible de classement automatique est atteinte.
-
-## Phase 4 — Prévoir et piloter, documents lus par l'IA
-
-Objectif : voir l'avenir de ses comptes et être prévenu à temps. Fin de phase = **bêta 0.5**.
-
-- [ ] Opérations prévues ponctuelles et récurrentes, rapprochement automatique
-- [ ] Moteur de prévision : solde futur, reste à vivre, dépenses variables, calendrier des échéances
-- [ ] Moteur de simulation (sans IA) : simulateur d'achat (solde à une date choisie, point bas, comptant / en plusieurs fois / plus tard) et scénarios comparés côte à côte (« +300 €/mois », « −100 € de loisirs »)
-- [ ] Analyses calculées (sans IA) : évolutions par catégorie, hausses et anomalies expliquées par l'écart chiffré, objectifs suggérés d'après les 3 à 6 derniers mois, fiabilité des prévisions affichée
-- [ ] Objectifs par catégorie, alertes à 80 %, 100 % et anticipée
-- [ ] Notifications dans l'app web et par email
+- [ ] Rapprochement automatique des opérations prévues, reste à vivre, dépenses variables, calendrier des échéances
+- [ ] Moteur de simulation (sans IA) : simulateur d'achat (solde à une date choisie, point bas, comptant / en plusieurs fois / plus tard) et scénarios comparés côte à côte
+- [ ] Analyses calculées (sans IA) : évolutions par catégorie, hausses et anomalies chiffrées, objectifs suggérés d'après les 3 à 6 derniers mois, fiabilité des prévisions affichée
+- [ ] Objectifs par catégorie, alertes à 80 %, 100 % et anticipée ; réglages des notifications
 - [ ] Tableau de bord et graphiques
 - [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois
-- [ ] Lecture par l'IA des offres de prêt (→ crédit et tableau d'amortissement, recalculé pour contrôle) et des confirmations de paiement fractionné (→ échéancier)
-- [ ] Circuit des modifications proposées (décision 0009) : service de propositions, service de validation, service de commandes financières ; idempotence, refus des propositions périmées, journal d'audit, annulation possible
-- [ ] Espace **Mon conseiller** (sans IA) : cartes surveiller / anticiper / conseiller / accompagner calculées par le moteur, acceptées, refusées ou ignorées, suivies dans le temps, chacune justifiée par ses données
-- [ ] Assistant IA (en option) : il interroge le moteur financier, explique les résultats et pose les scénarios en langage naturel ; il ne calcule ni ne modifie rien ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable
 - [ ] Revue de fin de mois et détection d'anomalies
 - [ ] Onglet Feedback
+
+**Conseiller et IA**
+
+- [ ] Circuit des modifications proposées (décision 0009) : service de propositions, service de validation, service de commandes financières ; idempotence, refus des propositions périmées, journal d'audit, annulation possible
+- [ ] Espace **Mon conseiller** (sans IA) : cartes surveiller / anticiper / conseiller / accompagner calculées par le moteur, acceptées, refusées ou ignorées, suivies et justifiées
+- [ ] Passerelle IA (décision 0008) : interface commune, choix du fournisseur et du modèle par utilisateur, capacités par modèle, aucun basculement automatique vers l'externe, affichage de ce qui quitte le serveur ; clé chiffrée, plafond mensuel
+- [ ] Premiers connecteurs : un externe (compatible API OpenAI) et un local (Ollama)
+- [ ] Fonctions de contexte financier en lecture seule (`get_account_overview`, `get_transactions`, `get_budget_status`, `get_upcoming_expenses`, `get_cashflow_forecast`, `get_financial_goals`), limitées aux comptes visibles
+- [ ] Catégorisation d'appoint par l'IA, avec la règle suggérée
+- [ ] Lecture de documents : tickets (sans IA : saisie assistée ; avec IA : ventilation ligne par ligne), offres de prêt et confirmations de paiement fractionné (avec IA)
+- [ ] Assistant IA (en option) : interroge le moteur, explique, pose les scénarios en langage naturel ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable
+- [ ] Licence Serverpod clarifiée avant d'ouvrir la bêta à d'autres personnes (décision 0001)
 
 **Validation** : un mois complet géré dans OwnCoffer par deux ou trois testeurs, dont au moins un **sans IA** ; les prévisions à 30 jours restent proches du solde réel.
 
@@ -155,6 +167,6 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 
 ## Ensuite
 
-**Phase 6 — Applications Windows et Android** : même code Flutter connecté au serveur, hors-ligne et synchronisation, page « Télécharger », mises à jour automatiques, puis version autonome sans serveur.
+**Phase 6 — Applications Windows et Android natives** (Android est déjà couvert entre-temps par l'application web installable) : même code Flutter connecté au serveur, hors-ligne et synchronisation, page « Télécharger », mises à jour automatiques, puis version autonome sans serveur.
 
 Les autres fonctionnalités du cahier des charges marquées « Après 1.0 » s'ajouteront une par une, selon les avis des utilisateurs.

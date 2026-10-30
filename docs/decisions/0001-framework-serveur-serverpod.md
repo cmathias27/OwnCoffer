@@ -16,3 +16,4 @@ Le serveur est écrit en Dart avec **Serverpod**.
 - ORM, migrations, authentification, flux temps réel et base locale côté client fournis par le framework.
 - Déploiement Docker auto-hébergé, sans dépendance à un service cloud.
 - **Point de vigilance licence** : les paquets Serverpod sont sous BSD-3, sauf le paquet principal `serverpod` sous SSPL. Avant la première publication, vérifier que distribuer OwnCoffer (AGPL-3.0) avec ce paquet ne pose pas de problème ; en cas de doute, prévoir l'option Dart Frog. Ne pas proposer OwnCoffer comme service cloud hébergé tant que ce point n'est pas éclairci.
+- **Choix retenu (30 octobre 2026)** : le risque est accepté pour l'usage personnel ; la question est posée à l'équipe Serverpod en parallèle et doit être tranchée **avant d'ouvrir la bêta à d'autres personnes** (phase 4).
