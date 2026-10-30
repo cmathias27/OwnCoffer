@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: '3.47.9'
+  SERVERPOD_VERSION: '4.0.4'
+
+jobs:
+  shared:
+    name: Cœur (shared)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - name: Formatage
+        run: dart format --output=none --set-exit-if-changed shared
+      - name: Analyse
+        run: dart analyze --fatal-infos shared
+      - name: Tests
+        working-directory: shared
+        run: dart test
+
+  server:
+    name: Serveur
+    runs-on: ubuntu-latest
+    services:
+      postgres_test:
+        image: ghcr.io/serverpod/postgres:16
+        ports:
+          - 9090:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: owncoffer_test
+          POSTGRES_PASSWORD: owncoffer_test
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      # Throw-away values for the CI test database only.
+      SERVERPOD_PASSWORD_database: owncoffer_test
+      SERVERPOD_PASSWORD_serviceSecret: ci-service-secret-not-used-elsewhere
+      SERVERPOD_PASSWORD_emailSecretHashPepper: ci-pepper-not-used-elsewhere-000
+      SERVERPOD_PASSWORD_jwtHmacSha512PrivateKey: ci-jwt-key-not-used-elsewhere-00
+      SERVERPOD_PASSWORD_jwtRefreshTokenHashPepper: ci-refresh-not-used-elsewhere-00
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - name: Serverpod CLI
+        run: |
+          dart pub global activate serverpod_cli $SERVERPOD_VERSION
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+      - name: Code généré à jour
+        working-directory: server
+        run: |
+          serverpod generate
+          git diff --exit-code -- . ../client
+      - name: Formatage
+        run: dart format --output=none --set-exit-if-changed server/lib server/test server/bin
+      - name: Analyse
+        run: dart analyze server client
+      - name: Tests
+        working-directory: server
+        run: dart test
+
+  app:
+    name: Application web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - name: Analyse
+        working-directory: app
+        run: flutter analyze
+      - name: Tests
+        working-directory: app
+        run: |
+          if compgen -G "test/**/*_test.dart" > /dev/null || compgen -G "test/*_test.dart" > /dev/null; then
+            flutter test
+          else
+            echo "Pas encore de test de l'application."
+          fi
+      - name: Compilation web
+        working-directory: app
+        run: flutter build web --release
