@@ -87,7 +87,7 @@ Objectif : un serveur vide mais complet, qui se lance en une commande et se test
 - [ ] Sécurité automatique : Dependabot, CodeQL, vérification des licences des dépendances
 - [ ] Page d'état minimale : version, connexion à la base, espace disque
 - [ ] Bilingue dès le départ : textes de l'interface dans des fichiers de traduction FR et EN
-- [ ] Application web installable (PWA) : manifeste, icônes, écran d'accueil Android ; aucune donnée financière mise en cache sur l'appareil (décision 0011)
+- [x] Application web installable (PWA) : manifeste, icônes, écran d'accueil Android ; aucune donnée financière mise en cache sur l'appareil (décision 0011)
 
 **Validation** : sur le serveur, `docker compose up -d` affiche la page d'accueil web et une page d'état au vert ; la CI est verte sur `main`.
 

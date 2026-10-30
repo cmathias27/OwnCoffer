@@ -19,6 +19,10 @@
 	}
 
 	handle_path /api/* {
+		# Financial data is never cached, neither by the browser nor by any
+		# intermediate proxy (decision 0011).
+		header Cache-Control "no-store"
+		header Pragma "no-cache"
 		reverse_proxy owncoffer:8080
 	}
 
