@@ -1,0 +1,10 @@
+### Where an operation's category comes from (shown to the user).
+enum: CategorySource
+serialized: byName
+values:
+  - manual
+  - groupRule
+  - communityRule
+  - history
+  - ai
+  - none

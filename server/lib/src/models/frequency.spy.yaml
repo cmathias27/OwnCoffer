@@ -1,0 +1,7 @@
+enum: ScheduleFrequency
+serialized: byName
+values:
+  - once
+  - weekly
+  - monthly
+  - yearly

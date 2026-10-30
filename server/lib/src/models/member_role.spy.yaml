@@ -1,0 +1,7 @@
+### Role of a member in a group.
+enum: MemberRole
+serialized: byName
+values:
+  - admin
+  - user
+  - reader

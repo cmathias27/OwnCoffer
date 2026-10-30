@@ -1,0 +1,17 @@
+### A category of a group, optionally linked to a standard category so that
+### community rules keep working after renaming or splitting.
+class: Category
+table: categories
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  parentId: int?, relation(parent=categories, onDelete=SetNull)
+  name: String
+  kind: CategoryKind
+  standardCode: String?
+  icon: String?
+  color: String?
+  createdAt: DateTime, default=now
+  deletedAt: DateTime?
+indexes:
+  categories_group_idx:
+    fields: groupId

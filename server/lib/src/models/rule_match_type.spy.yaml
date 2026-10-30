@@ -1,0 +1,6 @@
+enum: RuleMatchType
+serialized: byName
+values:
+  - contains
+  - startsWith
+  - equals

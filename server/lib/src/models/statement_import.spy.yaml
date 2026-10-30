@@ -1,0 +1,22 @@
+### One imported bank file. Cancelling an import soft-deletes its operations.
+class: StatementImport
+table: imports
+fields:
+  accountId: int, relation(parent=accounts, onDelete=Cascade)
+  format: String
+  fileName: String
+  ### SHA-256 of the file, to warn when the same file is imported twice.
+  fileHash: String
+  encoding: String
+  readCount: int
+  addedCount: int
+  duplicateCount: int
+  possibleDuplicateCount: int
+  errorCount: int
+  classifiedCount: int
+  authorId: UuidValue
+  createdAt: DateTime, default=now
+  cancelledAt: DateTime?
+indexes:
+  imports_account_idx:
+    fields: accountId

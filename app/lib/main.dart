@@ -1,61 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 import 'client.dart';
-import 'screens/greetings_screen.dart';
+import 'screens/sign_in_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeClient();
-  runApp(const MyApp());
+  runApp(const OwnCofferApp());
 }
 
-/// Builds a theme for the given [brightness].
-ThemeData _buildTheme(Brightness brightness) {
-  return ThemeData(
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.blue,
-      brightness: brightness,
-    ),
-  );
-}
+/// Indigo main colour (docs/MAQUETTES.md).
+const _brand = Color(0xFF3346C8);
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+ThemeData _buildTheme(Brightness brightness) => ThemeData(
+  colorScheme: ColorScheme.fromSeed(seedColor: _brand, brightness: brightness),
+);
+
+class OwnCofferApp extends StatelessWidget {
+  const OwnCofferApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Serverpod Demo',
+      title: 'OwnCoffer',
       theme: _buildTheme(Brightness.light),
       darkTheme: _buildTheme(Brightness.dark),
       themeMode: ThemeMode.system,
-      home: const MyHomePage(title: 'Serverpod Example'),
+      home: SignInScreen(child: const _Home()),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+/// Placeholder until the operations screens (phase 3).
+class _Home extends StatelessWidget {
+  const _Home();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: const GreetingsScreen(),
-      // To test authentication in this example app, uncomment the line below
-      // and comment out the line above. This wraps the GreetingsScreen with a
-      // SignInScreen, which automatically shows a sign-in UI when the user is
-      // not authenticated and displays the GreetingsScreen once they sign in.
-      //
-      // body: SignInScreen(
-      //   child: GreetingsScreen(
-      //     onSignOut: () async {
-      //       await client.auth.signOutDevice();
-      //     },
-      //   ),
-      // ),
+      appBar: AppBar(
+        title: const Text('OwnCoffer'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => client.auth.signOutDevice(),
+          ),
+        ],
+      ),
     );
   }
 }

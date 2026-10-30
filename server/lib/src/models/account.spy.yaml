@@ -1,0 +1,22 @@
+### A bank account. Amounts are integer cents.
+class: Account
+table: accounts
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  name: String
+  kind: AccountKind
+  bank: String?
+  currency: String, default='EUR'
+  initialBalanceCents: int, default=0
+  ### Date of the initial balance (UTC midnight, see LocalDate conversion).
+  initialBalanceDate: DateTime?
+  ### Alert when the forecast goes below this balance (0 = any overdraft;
+  ### negative = authorised overdraft).
+  alertThresholdCents: int, default=0
+  visibility: AccountVisibility, default=shared
+  color: String?
+  createdAt: DateTime, default=now
+  deletedAt: DateTime?
+indexes:
+  accounts_group_idx:
+    fields: groupId

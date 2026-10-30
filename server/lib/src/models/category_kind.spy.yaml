@@ -1,0 +1,7 @@
+enum: CategoryKind
+serialized: byName
+values:
+  - income
+  - expense
+  - savings
+  - transfer

@@ -1,0 +1,7 @@
+### `shared`: every member of the group; `restricted`: only users listed in
+### AccountAccess (and group admins).
+enum: AccountVisibility
+serialized: byName
+values:
+  - shared
+  - restricted

@@ -1,0 +1,7 @@
+enum: AccountKind
+serialized: byName
+values:
+  - checking
+  - savings
+  - deferredCard
+  - cash

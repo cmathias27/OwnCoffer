@@ -1,0 +1,6 @@
+enum: RuleDirection
+serialized: byName
+values:
+  - any
+  - debit
+  - credit

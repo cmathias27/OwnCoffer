@@ -1,0 +1,23 @@
+### A planned operation (rent, salary, subscription…).
+class: ScheduledTransaction
+table: scheduled_transactions
+fields:
+  accountId: int, relation(parent=accounts, onDelete=Cascade)
+  amountCents: int
+  label: String
+  categoryId: int?, relation(parent=categories, onDelete=SetNull)
+  frequency: ScheduleFrequency
+  interval: int, default=1
+  startDate: DateTime
+  endDate: DateTime?
+  occurrenceCount: int?
+  ### First occurrence not yet realised; null = from startDate.
+  nextDue: DateTime?
+  matchPattern: String, default=''
+  dateToleranceDays: int, default=5
+  amountTolerancePercent: int, default=0
+  createdAt: DateTime, default=now
+  deletedAt: DateTime?
+indexes:
+  scheduled_account_idx:
+    fields: accountId

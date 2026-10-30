@@ -1,0 +1,17 @@
+### Audit log of sensitive changes. `before` / `after` are JSON snapshots
+### and never contain secrets.
+class: AuditEntry
+table: audit_log
+serverOnly: true
+fields:
+  groupId: int?
+  authUserId: UuidValue?
+  action: String
+  entity: String
+  rowId: String?
+  before: String?
+  after: String?
+  createdAt: DateTime, default=now
+indexes:
+  audit_log_group_created_idx:
+    fields: groupId, createdAt
