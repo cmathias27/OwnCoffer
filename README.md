@@ -33,6 +33,7 @@
 | [Roadbook](docs/ROADBOOK.md) | Les phases du projet, étape par étape |
 | [Cahier des charges](docs/CAHIER_DES_CHARGES.md) | Toutes les fonctionnalités, l'architecture, le modèle de données |
 | [Décisions](docs/decisions/) | Les choix d'architecture et leurs raisons |
+| [Maquettes](docs/MAQUETTES.md) | Les écrans dessinés et le style retenu |
 
 ## Technologies prévues
 
