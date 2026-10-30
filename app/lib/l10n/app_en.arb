@@ -121,5 +121,8 @@
   "error_rule_access_denied": "This rule does not exist or you cannot access it.",
   "error_unknown_standard_category": "Unknown standard category.",
   "error_invalid_pattern": "The pattern must be 1 to 100 characters (letters or digits).",
-  "error_invalid_amount_range": "The minimum amount is above the maximum amount."
+  "error_invalid_amount_range": "The minimum amount is above the maximum amount.",
+  "error_import_file_too_large": "File too large (4 MB maximum).",
+  "error_import_nothing_readable": "No readable operation in this file.",
+  "error_import_access_denied": "This import does not exist or you cannot access it."
 }

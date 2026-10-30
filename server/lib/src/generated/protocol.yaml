@@ -30,6 +30,11 @@ group:
   - members:
   - setRole:
   - removeMember:
+import:
+  - preview:
+  - commit:
+  - history:
+  - cancel:
 invitation:
   - create:
   - list:

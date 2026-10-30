@@ -59,6 +59,13 @@ void main() {
     expect(issues, isNotEmpty);
     expect(formats, isNotEmpty);
     for (final l in locales) {
+      for (final code in formats) {
+        expect(
+          serverErrorText(l, 'import_$code'),
+          importFormatText(l, code),
+          reason: 'server sends import_$code',
+        );
+      }
       for (final code in issues) {
         expect(importIssueText(l, code, 3), contains('3'), reason: code);
       }

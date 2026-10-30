@@ -29,6 +29,11 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'unknown_standard_category' => l.error_unknown_standard_category,
   'invalid_pattern' => l.error_invalid_pattern,
   'invalid_amount_range' => l.error_invalid_amount_range,
+  'import_file_too_large' => l.error_import_file_too_large,
+  'import_nothing_readable' => l.error_import_nothing_readable,
+  'import_access_denied' => l.error_import_access_denied,
+  // File format errors of shared/ come prefixed with `import_`.
+  _ when code.startsWith('import_') => importFormatText(l, code.substring(7)),
   _ => l.error_generic,
 };
 
