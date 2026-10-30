@@ -23,6 +23,8 @@ import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
 import '../endpoints/account_endpoint.dart' as _iaho7ul5;
 import '../endpoints/group_endpoint.dart' as _iknqvl2r;
+import '../endpoints/invitation_endpoint.dart' as _iipval89;
+import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
 
 class Endpoints extends _is.EndpointDispatch {
   @override
@@ -52,11 +54,42 @@ class Endpoints extends _is.EndpointDispatch {
           'group',
           null,
         ),
+      'invitation': _iipval89.InvitationEndpoint()
+        ..initialize(
+          server,
+          'invitation',
+          null,
+        ),
+      'setup': _i5xhv8r1.SetupEndpoint()
+        ..initialize(
+          server,
+          'setup',
+          null,
+        ),
     };
     connectors['emailIdp'] = _is.EndpointConnector(
       name: 'emailIdp',
       endpoint: endpoints['emailIdp']!,
       methodConnectors: {
+        'startRegistration': _is.MethodConnector(
+          name: 'startRegistration',
+          params: {
+            'email': _is.ParameterDescription(
+              name: 'email',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['emailIdp'] as _iuc1hd5t.EmailIdpEndpoint)
+                  .startRegistration(
+                    session,
+                    email: params['email'],
+                  ),
+        ),
         'login': _is.MethodConnector(
           name: 'login',
           params: {
@@ -80,25 +113,6 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     email: params['email'],
                     password: params['password'],
-                  ),
-        ),
-        'startRegistration': _is.MethodConnector(
-          name: 'startRegistration',
-          params: {
-            'email': _is.ParameterDescription(
-              name: 'email',
-              type: _is.getType<String>(),
-              nullable: false,
-            ),
-          },
-          call:
-              (
-                _is.Session session,
-                Map<String, dynamic> params,
-              ) async => (endpoints['emailIdp'] as _iuc1hd5t.EmailIdpEndpoint)
-                  .startRegistration(
-                    session,
-                    email: params['email'],
                   ),
         ),
         'verifyRegistrationCode': _is.MethodConnector(
@@ -470,6 +484,24 @@ class Endpoints extends _is.EndpointDispatch {
               ) async => (endpoints['group'] as _iknqvl2r.GroupEndpoint)
                   .myGroups(session),
         ),
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['group'] as _iknqvl2r.GroupEndpoint).create(
+                session,
+                params['name'],
+              ),
+        ),
         'rename': _is.MethodConnector(
           name: 'rename',
           params: {
@@ -568,6 +600,145 @@ class Endpoints extends _is.EndpointDispatch {
                     params['groupId'],
                     params['memberUserId'],
                   ),
+        ),
+      },
+    );
+    connectors['invitation'] = _is.EndpointConnector(
+      name: 'invitation',
+      endpoint: endpoints['invitation']!,
+      methodConnectors: {
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'email': _is.ParameterDescription(
+              name: 'email',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'role': _is.ParameterDescription(
+              name: 'role',
+              type: _is.getType<_is2flj8o.MemberRole>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invitation'] as _iipval89.InvitationEndpoint)
+                      .create(
+                        session,
+                        params['groupId'],
+                        params['email'],
+                        params['role'],
+                      ),
+        ),
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invitation'] as _iipval89.InvitationEndpoint)
+                      .list(
+                        session,
+                        params['groupId'],
+                      ),
+        ),
+        'revoke': _is.MethodConnector(
+          name: 'revoke',
+          params: {
+            'invitationId': _is.ParameterDescription(
+              name: 'invitationId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invitation'] as _iipval89.InvitationEndpoint)
+                      .revoke(
+                        session,
+                        params['invitationId'],
+                      ),
+        ),
+        'accept': _is.MethodConnector(
+          name: 'accept',
+          params: {
+            'token': _is.ParameterDescription(
+              name: 'token',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invitation'] as _iipval89.InvitationEndpoint)
+                      .accept(
+                        session,
+                        params['token'],
+                      ),
+        ),
+      },
+    );
+    connectors['setup'] = _is.EndpointConnector(
+      name: 'setup',
+      endpoint: endpoints['setup']!,
+      methodConnectors: {
+        'status': _is.MethodConnector(
+          name: 'status',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['setup'] as _i5xhv8r1.SetupEndpoint).status(
+                session,
+              ),
+        ),
+        'start': _is.MethodConnector(
+          name: 'start',
+          params: {
+            'setupCode': _is.ParameterDescription(
+              name: 'setupCode',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'email': _is.ParameterDescription(
+              name: 'email',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['setup'] as _i5xhv8r1.SetupEndpoint).start(
+                session,
+                params['setupCode'],
+                params['email'],
+              ),
         ),
       },
     );

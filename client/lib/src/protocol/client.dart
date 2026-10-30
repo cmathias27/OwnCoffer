@@ -20,7 +20,10 @@ import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
 import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
+import 'package:owncoffer_client/src/protocol/invitation_info.dart'
+    as _i2judacm;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
+import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -28,15 +31,22 @@ import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'protocol.dart' as _il2as5qe;
 
-/// By extending [EmailIdpBaseEndpoint], the email identity provider endpoints
-/// are made available on the server and enable the corresponding sign-in widget
-/// on the client.
+/// Email sign-in. Registration is closed except for emails with a pending
+/// invitation (or the first launch setup).
 /// {@category Endpoint}
 class EndpointEmailIdp extends _iaic.EndpointEmailIdpBase {
   EndpointEmailIdp(_isc.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'emailIdp';
+
+  @override
+  _ida.Future<_isc.UuidValue> startRegistration({required String email}) =>
+      caller.callServerEndpoint<_isc.UuidValue>(
+        'emailIdp',
+        'startRegistration',
+        {'email': email},
+      );
 
   /// Logs in the user and returns a new session.
   ///
@@ -59,24 +69,6 @@ class EndpointEmailIdp extends _iaic.EndpointEmailIdpBase {
       'password': password,
     },
   );
-
-  /// Starts the registration for a new user account with an email-based login
-  /// associated to it.
-  ///
-  /// Upon successful completion of this method, an email will have been
-  /// sent to [email] with a verification link, which the user must open to
-  /// complete the registration.
-  ///
-  /// Always returns a account request ID, which can be used to complete the
-  /// registration. If the email is already registered, the returned ID will not
-  /// be valid.
-  @override
-  _ida.Future<_isc.UuidValue> startRegistration({required String email}) =>
-      caller.callServerEndpoint<_isc.UuidValue>(
-        'emailIdp',
-        'startRegistration',
-        {'email': email},
-      );
 
   /// Verifies an account request code and returns a token
   /// that can be used to complete the account creation.
@@ -355,6 +347,15 @@ class EndpointGroup extends _isc.EndpointRef {
         {},
       );
 
+  /// Creates a group whose administrator is the current user. Only the
+  /// server administrator creates groups; others join by invitation.
+  _ida.Future<_itelwlzo.GroupMembership> create(String name) =>
+      caller.callServerEndpoint<_itelwlzo.GroupMembership>(
+        'group',
+        'create',
+        {'name': name},
+      );
+
   _ida.Future<_izr9v441.FinanceGroup> rename(
     int groupId,
     String name,
@@ -404,6 +405,83 @@ class EndpointGroup extends _isc.EndpointRef {
   );
 }
 
+/// Invitations to join a group (group admins), and acceptance by users who
+/// already have an account.
+/// {@category Endpoint}
+class EndpointInvitation extends _isc.EndpointRef {
+  EndpointInvitation(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'invitation';
+
+  _ida.Future<_i2judacm.InvitationInfo> create(
+    int groupId,
+    String email,
+    _ibbiwcdo.MemberRole role,
+  ) => caller.callServerEndpoint<_i2judacm.InvitationInfo>(
+    'invitation',
+    'create',
+    {
+      'groupId': groupId,
+      'email': email,
+      'role': role,
+    },
+  );
+
+  /// Pending invitations of the group.
+  _ida.Future<List<_i2judacm.InvitationInfo>> list(int groupId) =>
+      caller.callServerEndpoint<List<_i2judacm.InvitationInfo>>(
+        'invitation',
+        'list',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<void> revoke(int invitationId) => caller.callServerEndpoint<void>(
+    'invitation',
+    'revoke',
+    {'invitationId': invitationId},
+  );
+
+  /// Accepts an invitation link while signed in. The invitation must have
+  /// been sent to the email of the signed-in account.
+  _ida.Future<_itelwlzo.GroupMembership> accept(String token) =>
+      caller.callServerEndpoint<_itelwlzo.GroupMembership>(
+        'invitation',
+        'accept',
+        {'token': token},
+      );
+}
+
+/// First launch wizard (no login: no account exists yet).
+/// {@category Endpoint}
+class EndpointSetup extends _isc.EndpointRef {
+  EndpointSetup(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'setup';
+
+  _ida.Future<_iayy8tg9.SetupStatus> status() =>
+      caller.callServerEndpoint<_iayy8tg9.SetupStatus>(
+        'setup',
+        'status',
+        {},
+      );
+
+  /// Checks the setup code from the server log and allows [email] to
+  /// register as server administrator (then: emailIdp.startRegistration).
+  _ida.Future<void> start(
+    String setupCode,
+    String email,
+  ) => caller.callServerEndpoint<void>(
+    'setup',
+    'start',
+    {
+      'setupCode': setupCode,
+      'email': email,
+    },
+  );
+}
+
 class Modules {
   Modules(Client client) {
     serverpod_auth_idp = _iaic.Caller(client);
@@ -446,6 +524,8 @@ class Client extends _isc.ServerpodClientShared {
     jwtRefresh = EndpointJwtRefresh(this);
     account = EndpointAccount(this);
     group = EndpointGroup(this);
+    invitation = EndpointInvitation(this);
+    setup = EndpointSetup(this);
     modules = Modules(this);
   }
 
@@ -457,6 +537,10 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointGroup group;
 
+  late final EndpointInvitation invitation;
+
+  late final EndpointSetup setup;
+
   late final Modules modules;
 
   @override
@@ -465,6 +549,8 @@ class Client extends _isc.ServerpodClientShared {
     'jwtRefresh': jwtRefresh,
     'account': account,
     'group': group,
+    'invitation': invitation,
+    'setup': setup,
   };
 
   @override

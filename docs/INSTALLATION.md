@@ -12,6 +12,17 @@ docker compose -f docker/compose.yaml up -d
 
 L'application répond sur `http://127.0.0.1:8080` (port et adresse réglables dans `docker/.env`). Faites pointer le connecteur Cloudflare vers cette adresse : Cloudflare gère le HTTPS.
 
+## Premier lancement
+
+1. Récupérez le **code d'installation** à 8 chiffres affiché par le serveur :
+   ```sh
+   docker compose -f docker/compose.yaml logs owncoffer | grep "setup code"
+   ```
+2. Ouvrez l'application, saisissez ce code et votre email : vous devenez **administrateur du serveur**. Le code de vérification de l'email arrive par email si le SMTP est réglé dans `docker/.env`, sinon il s'affiche dans ces mêmes journaux.
+3. Créez votre groupe (foyer), puis invitez les autres membres : **personne ne peut s'inscrire sans invitation**.
+
+Ce code n'est valable que tant qu'aucun compte n'existe. Il change après 5 essais faux et à chaque redémarrage, ce qui empêche un inconnu de prendre la main sur un serveur fraîchement installé.
+
 ## Ce qui tourne
 
 | Conteneur | Rôle | Visible depuis l'hôte |

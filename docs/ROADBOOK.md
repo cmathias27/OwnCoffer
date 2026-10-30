@@ -95,13 +95,13 @@ Objectif : un serveur vide mais complet, qui se lance en une commande et se test
 
 Objectif : se connecter en sécurité, créer des groupes, inviter des membres ; personne ne voit les données d'un autre groupe.
 
-- [ ] Assistant de premier lancement : compte administrateur du serveur et premier groupe
+- [x] Assistant de premier lancement : compte administrateur du serveur et premier groupe (côté serveur ; écrans à venir)
 - [ ] Connexion email et mot de passe (Argon2), sessions, déconnexion de tous les appareils
 - [ ] Double authentification TOTP, avec codes de secours
 - [ ] Blocage automatique des IP (5 échecs en 15 minutes, durée doublée à chaque récidive) et limite de requêtes
-- [ ] Groupes, rôles (admin, user, lecteur) et invitations par lien expirant
+- [x] Groupes, rôles (admin, user, lecteur) et invitations par lien expirant (côté serveur ; écrans à venir)
 - [ ] Permissions à deux niveaux : serveur (fait, testé) puis PostgreSQL (RLS)
-- [ ] Journal d'audit des actions sensibles
+- [x] Journal d'audit des actions sensibles (écriture ; consultation à venir)
 - [ ] Accès extérieur par Cloudflare (HTTPS géré par Cloudflare) : vraie adresse IP lue dans `CF-Connecting-IP` uniquement si la requête vient de Cloudflare ou du connecteur local, pour que le blocage des IP fonctionne ; option Cloudflare Access en protection supplémentaire (décision 0012)
 
 **Validation** : des tests automatiques prouvent qu'un utilisateur ne peut jamais lire ni modifier les données d'un autre groupe ; une tentative de force brute est bloquée.
