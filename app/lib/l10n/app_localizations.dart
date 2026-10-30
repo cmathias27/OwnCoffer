@@ -319,6 +319,486 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Format non reconnu. Formats acceptés : QIF, OFX, CSV.'**
   String get import_format_unknown_format;
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get continueLabel;
+
+  /// No description provided for @back.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour'**
+  String get back;
+
+  /// No description provided for @cancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get cancel;
+
+  /// No description provided for @close.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get close;
+
+  /// No description provided for @save.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get save;
+
+  /// No description provided for @retry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get retry;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse email'**
+  String get emailLabel;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe'**
+  String get passwordLabel;
+
+  /// No description provided for @passwordConfirmLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer le mot de passe'**
+  String get passwordConfirmLabel;
+
+  /// No description provided for @passwordHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'8 caractères au minimum.'**
+  String get passwordHelp;
+
+  /// No description provided for @passwordsDiffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les deux mots de passe sont différents.'**
+  String get passwordsDiffer;
+
+  /// No description provided for @verificationCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code reçu par email'**
+  String get verificationCodeLabel;
+
+  /// No description provided for @verificationCodeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans serveur d\'envoi configuré, le code s\'affiche dans le journal du serveur.'**
+  String get verificationCodeHelp;
+
+  /// No description provided for @setupTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Installation d\'OwnCoffer'**
+  String get setupTitle;
+
+  /// No description provided for @setupIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bienvenue ! Créez le compte administrateur de ce serveur.'**
+  String get setupIntro;
+
+  /// No description provided for @setupCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'installation'**
+  String get setupCodeLabel;
+
+  /// No description provided for @setupCodeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code à 8 chiffres affiché dans le journal du serveur : docker compose logs owncoffer | grep \"setup code\"'**
+  String get setupCodeHelp;
+
+  /// No description provided for @setupStepAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Administrateur'**
+  String get setupStepAdmin;
+
+  /// No description provided for @setupStepVerify.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification'**
+  String get setupStepVerify;
+
+  /// No description provided for @setupStepPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe'**
+  String get setupStepPassword;
+
+  /// No description provided for @setupStepGroup.
+  ///
+  /// In fr, this message translates to:
+  /// **'Groupe'**
+  String get setupStepGroup;
+
+  /// No description provided for @verifyIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un code a été envoyé à {email}.'**
+  String verifyIntro(String email);
+
+  /// No description provided for @groupNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom du groupe'**
+  String get groupNameLabel;
+
+  /// No description provided for @groupNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par exemple : Notre foyer'**
+  String get groupNameHint;
+
+  /// No description provided for @groupIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un groupe réunit les personnes qui partagent des comptes (un foyer, une association…).'**
+  String get groupIntro;
+
+  /// No description provided for @signInTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion'**
+  String get signInTitle;
+
+  /// No description provided for @signIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter'**
+  String get signIn;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe oublié ?'**
+  String get forgotPassword;
+
+  /// No description provided for @haveInvitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai reçu une invitation'**
+  String get haveInvitation;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer mon compte'**
+  String get registerTitle;
+
+  /// No description provided for @registerIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez l\'adresse email à laquelle l\'invitation a été envoyée.'**
+  String get registerIntro;
+
+  /// No description provided for @resetTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau mot de passe'**
+  String get resetTitle;
+
+  /// No description provided for @resetIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez votre adresse email : un code vous sera envoyé.'**
+  String get resetIntro;
+
+  /// No description provided for @resetDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe changé. Vous pouvez vous connecter.'**
+  String get resetDone;
+
+  /// No description provided for @totpTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification'**
+  String get totpTitle;
+
+  /// No description provided for @totpIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez le code à 6 chiffres de votre application d\'authentification, ou un code de secours.'**
+  String get totpIntro;
+
+  /// No description provided for @totpCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code'**
+  String get totpCodeLabel;
+
+  /// No description provided for @verify.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider'**
+  String get verify;
+
+  /// No description provided for @homeNoGroup.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous ne faites encore partie d\'aucun groupe. Demandez une invitation à un administrateur.'**
+  String get homeNoGroup;
+
+  /// No description provided for @groupLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Groupe'**
+  String get groupLabel;
+
+  /// No description provided for @menuSecurity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sécurité'**
+  String get menuSecurity;
+
+  /// No description provided for @menuMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membres'**
+  String get menuMembers;
+
+  /// No description provided for @accountsComingSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos comptes et opérations arrivent bientôt ici.'**
+  String get accountsComingSoon;
+
+  /// No description provided for @securityTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sécurité'**
+  String get securityTitle;
+
+  /// No description provided for @twoFactorTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification (TOTP)'**
+  String get twoFactorTitle;
+
+  /// No description provided for @twoFactorOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivée. Recommandée, surtout pour les administrateurs.'**
+  String get twoFactorOff;
+
+  /// No description provided for @twoFactorOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activée — {count} codes de secours restants.'**
+  String twoFactorOn(int count);
+
+  /// No description provided for @twoFactorEnable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer'**
+  String get twoFactorEnable;
+
+  /// No description provided for @twoFactorScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scannez ce QR code avec votre application d\'authentification (Aegis, FreeOTP, Google Authenticator…), puis saisissez le code affiché.'**
+  String get twoFactorScan;
+
+  /// No description provided for @twoFactorSecretManual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ou saisissez cette clé à la main :'**
+  String get twoFactorSecretManual;
+
+  /// No description provided for @backupCodesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Codes de secours'**
+  String get backupCodesTitle;
+
+  /// No description provided for @backupCodesIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notez-les et gardez-les en lieu sûr : chacun permet une connexion si vous perdez votre téléphone. Ils ne seront plus affichés.'**
+  String get backupCodesIntro;
+
+  /// No description provided for @backupCodesDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai noté mes codes'**
+  String get backupCodesDone;
+
+  /// No description provided for @twoFactorDisable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactiver'**
+  String get twoFactorDisable;
+
+  /// No description provided for @twoFactorDisableIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un code pour désactiver la double authentification.'**
+  String get twoFactorDisableIntro;
+
+  /// No description provided for @twoFactorRenew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveaux codes de secours'**
+  String get twoFactorRenew;
+
+  /// No description provided for @membersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membres'**
+  String get membersTitle;
+
+  /// No description provided for @invitationsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitations en attente'**
+  String get invitationsTitle;
+
+  /// No description provided for @noInvitations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune invitation en attente.'**
+  String get noInvitations;
+
+  /// No description provided for @invite.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter'**
+  String get invite;
+
+  /// No description provided for @inviteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter une personne'**
+  String get inviteTitle;
+
+  /// No description provided for @roleLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle'**
+  String get roleLabel;
+
+  /// No description provided for @roleAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Administrateur'**
+  String get roleAdmin;
+
+  /// No description provided for @roleUser.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisateur'**
+  String get roleUser;
+
+  /// No description provided for @roleReader.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecteur'**
+  String get roleReader;
+
+  /// No description provided for @roleHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecteur : consulte. Utilisateur : saisit et importe. Administrateur : gère les comptes et les membres.'**
+  String get roleHelp;
+
+  /// No description provided for @invitationSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation envoyée à {email}.'**
+  String invitationSent(String email);
+
+  /// No description provided for @invitationExpires.
+  ///
+  /// In fr, this message translates to:
+  /// **'expire le {date}'**
+  String invitationExpires(String date);
+
+  /// No description provided for @revoke.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révoquer'**
+  String get revoke;
+
+  /// No description provided for @you.
+  ///
+  /// In fr, this message translates to:
+  /// **'vous'**
+  String get you;
+
+  /// No description provided for @invitationAccepted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez rejoint « {group} ».'**
+  String invitationAccepted(String group);
+
+  /// No description provided for @error_login_failed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Email ou mot de passe incorrect.'**
+  String get error_login_failed;
+
+  /// No description provided for @error_too_many_attempts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop d\'essais. Réessayez plus tard.'**
+  String get error_too_many_attempts;
+
+  /// No description provided for @error_code_invalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code incorrect.'**
+  String get error_code_invalid;
+
+  /// No description provided for @error_code_expired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce code a expiré. Recommencez.'**
+  String get error_code_expired;
+
+  /// No description provided for @error_password_policy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mot de passe n\'est pas accepté : 8 caractères au minimum, sans espace au début ni à la fin.'**
+  String get error_password_policy;
+
+  /// No description provided for @error_ip_banned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop d\'échecs depuis cette adresse : l\'accès est bloqué temporairement.'**
+  String get error_ip_banned;
+
+  /// No description provided for @error_rate_limited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop de requêtes. Patientez une minute.'**
+  String get error_rate_limited;
+
+  /// No description provided for @error_network.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le serveur ne répond pas. Vérifiez votre connexion.'**
+  String get error_network;
+
+  /// No description provided for @copy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier'**
+  String get copy;
 }
 
 class _AppLocalizationsDelegate

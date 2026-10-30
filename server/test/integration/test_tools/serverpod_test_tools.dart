@@ -24,6 +24,7 @@ import 'package:owncoffer_server/src/generated/group_membership.dart'
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
+import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/setup_status.dart' as _i7xpdhgz;
 import 'package:owncoffer_server/src/generated/totp_enrollment.dart'
@@ -926,7 +927,7 @@ class _GroupEndpoint {
     });
   }
 
-  _ida.Future<List<_iep4djhw.GroupMember>> members(
+  _ida.Future<List<_ipfe689d.MemberInfo>> members(
     _ist.TestSessionBuilder sessionBuilder,
     int groupId,
   ) async {
@@ -949,7 +950,7 @@ class _GroupEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _ida.Future<List<_iep4djhw.GroupMember>>);
+                as _ida.Future<List<_ipfe689d.MemberInfo>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

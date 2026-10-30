@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 import 'client.dart';
 import 'l10n/app_localizations.dart';
+import 'l10n/error_messages.dart';
+import 'screens/home_screen.dart';
+import 'screens/setup_screen.dart';
 import 'screens/sign_in_screen.dart';
+import 'screens/two_factor_screen.dart';
+import 'state/session.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,9 +21,11 @@ const _brand = Color(0xFF3346C8);
 
 ThemeData _buildTheme(Brightness brightness) {
   final base = ThemeData(
+    // `fidelity` keeps the brand indigo instead of a desaturated tone.
     colorScheme: ColorScheme.fromSeed(
       seedColor: _brand,
       brightness: brightness,
+      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
     ),
     fontFamily: 'Inter',
   );
@@ -71,28 +77,64 @@ class OwnCofferApp extends StatelessWidget {
       theme: _buildTheme(Brightness.light),
       darkTheme: _buildTheme(Brightness.dark),
       themeMode: ThemeMode.system,
-      home: SignInScreen(child: const _Home()),
+      home: const _Root(),
     );
   }
 }
 
 /// Placeholder until the operations screens (phase 3).
-class _Home extends StatelessWidget {
-  const _Home();
+
+/// Shows the screen matching the session: setup, sign-in, code, or the app.
+class _Root extends StatefulWidget {
+  const _Root();
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).appTitle),
-        actions: [
-          IconButton(
-            tooltip: AppLocalizations.of(context).signOut,
-            icon: const Icon(Icons.logout),
-            onPressed: () => client.auth.signOutDevice(),
-          ),
-        ],
-      ),
-    );
+  State<_Root> createState() => _RootState();
+}
+
+class _RootState extends State<_Root> {
+  final _session = SessionController();
+
+  @override
+  void initState() {
+    super.initState();
+    _session.refresh();
   }
+
+  @override
+  void dispose() {
+    _session.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: _session,
+    builder: (context, _) => switch (_session.stage) {
+      SessionStage.loading => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      SessionStage.setup => SetupScreen(session: _session),
+      SessionStage.signedOut => SignInScreen(session: _session),
+      SessionStage.needsTwoFactor => TwoFactorScreen(session: _session),
+      SessionStage.ready => HomeScreen(session: _session),
+      SessionStage.error => Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                errorText(AppLocalizations.of(context), _session.lastError!),
+              ),
+              const SizedBox(height: 12),
+              FilledButton(
+                onPressed: _session.refresh,
+                child: Text(AppLocalizations.of(context).retry),
+              ),
+            ],
+          ),
+        ),
+      ),
+    },
+  );
 }

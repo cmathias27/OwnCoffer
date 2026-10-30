@@ -151,4 +151,270 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get import_format_unknown_format =>
       'Unknown format. Accepted formats: QIF, OFX, CSV.';
+
+  @override
+  String get continueLabel => 'Continue';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get emailLabel => 'Email address';
+
+  @override
+  String get passwordLabel => 'Password';
+
+  @override
+  String get passwordConfirmLabel => 'Confirm password';
+
+  @override
+  String get passwordHelp => 'At least 8 characters.';
+
+  @override
+  String get passwordsDiffer => 'The two passwords are different.';
+
+  @override
+  String get verificationCodeLabel => 'Code received by email';
+
+  @override
+  String get verificationCodeHelp =>
+      'Without an email server configured, the code is shown in the server log.';
+
+  @override
+  String get setupTitle => 'OwnCoffer setup';
+
+  @override
+  String get setupIntro =>
+      'Welcome! Create the administrator account of this server.';
+
+  @override
+  String get setupCodeLabel => 'Setup code';
+
+  @override
+  String get setupCodeHelp =>
+      '8-digit code shown in the server log: docker compose logs owncoffer | grep \"setup code\"';
+
+  @override
+  String get setupStepAdmin => 'Administrator';
+
+  @override
+  String get setupStepVerify => 'Verification';
+
+  @override
+  String get setupStepPassword => 'Password';
+
+  @override
+  String get setupStepGroup => 'Group';
+
+  @override
+  String verifyIntro(String email) {
+    return 'A code was sent to $email.';
+  }
+
+  @override
+  String get groupNameLabel => 'Group name';
+
+  @override
+  String get groupNameHint => 'For example: Our household';
+
+  @override
+  String get groupIntro =>
+      'A group gathers the people who share accounts (a household, an association…).';
+
+  @override
+  String get signInTitle => 'Sign in';
+
+  @override
+  String get signIn => 'Sign in';
+
+  @override
+  String get forgotPassword => 'Forgot your password?';
+
+  @override
+  String get haveInvitation => 'I received an invitation';
+
+  @override
+  String get registerTitle => 'Create my account';
+
+  @override
+  String get registerIntro =>
+      'Enter the email address the invitation was sent to.';
+
+  @override
+  String get resetTitle => 'New password';
+
+  @override
+  String get resetIntro =>
+      'Enter your email address: a code will be sent to you.';
+
+  @override
+  String get resetDone => 'Password changed. You can sign in.';
+
+  @override
+  String get totpTitle => 'Two-factor authentication';
+
+  @override
+  String get totpIntro =>
+      'Enter the 6-digit code from your authenticator app, or a backup code.';
+
+  @override
+  String get totpCodeLabel => 'Code';
+
+  @override
+  String get verify => 'Verify';
+
+  @override
+  String get homeNoGroup =>
+      'You are not in any group yet. Ask an administrator for an invitation.';
+
+  @override
+  String get groupLabel => 'Group';
+
+  @override
+  String get menuSecurity => 'Security';
+
+  @override
+  String get menuMembers => 'Members';
+
+  @override
+  String get accountsComingSoon =>
+      'Your accounts and operations will soon appear here.';
+
+  @override
+  String get securityTitle => 'Security';
+
+  @override
+  String get twoFactorTitle => 'Two-factor authentication (TOTP)';
+
+  @override
+  String get twoFactorOff => 'Off. Recommended, especially for administrators.';
+
+  @override
+  String twoFactorOn(int count) {
+    return 'On — $count backup codes left.';
+  }
+
+  @override
+  String get twoFactorEnable => 'Enable';
+
+  @override
+  String get twoFactorScan =>
+      'Scan this QR code with your authenticator app (Aegis, FreeOTP, Google Authenticator…), then enter the code it shows.';
+
+  @override
+  String get twoFactorSecretManual => 'Or type this key manually:';
+
+  @override
+  String get backupCodesTitle => 'Backup codes';
+
+  @override
+  String get backupCodesIntro =>
+      'Write them down and keep them safe: each one lets you sign in if you lose your phone. They will not be shown again.';
+
+  @override
+  String get backupCodesDone => 'I wrote down my codes';
+
+  @override
+  String get twoFactorDisable => 'Disable';
+
+  @override
+  String get twoFactorDisableIntro =>
+      'Enter a code to disable two-factor authentication.';
+
+  @override
+  String get twoFactorRenew => 'New backup codes';
+
+  @override
+  String get membersTitle => 'Members';
+
+  @override
+  String get invitationsTitle => 'Pending invitations';
+
+  @override
+  String get noInvitations => 'No pending invitation.';
+
+  @override
+  String get invite => 'Invite';
+
+  @override
+  String get inviteTitle => 'Invite someone';
+
+  @override
+  String get roleLabel => 'Role';
+
+  @override
+  String get roleAdmin => 'Administrator';
+
+  @override
+  String get roleUser => 'User';
+
+  @override
+  String get roleReader => 'Reader';
+
+  @override
+  String get roleHelp =>
+      'Reader: views. User: enters and imports. Administrator: manages accounts and members.';
+
+  @override
+  String invitationSent(String email) {
+    return 'Invitation sent to $email.';
+  }
+
+  @override
+  String invitationExpires(String date) {
+    return 'expires on $date';
+  }
+
+  @override
+  String get revoke => 'Revoke';
+
+  @override
+  String get you => 'you';
+
+  @override
+  String invitationAccepted(String group) {
+    return 'You joined \"$group\".';
+  }
+
+  @override
+  String get error_login_failed => 'Wrong email or password.';
+
+  @override
+  String get error_too_many_attempts => 'Too many attempts. Try again later.';
+
+  @override
+  String get error_code_invalid => 'Wrong code.';
+
+  @override
+  String get error_code_expired => 'This code has expired. Start again.';
+
+  @override
+  String get error_password_policy =>
+      'This password is not accepted: at least 8 characters, no space at the start or end.';
+
+  @override
+  String get error_ip_banned =>
+      'Too many failures from this address: access is temporarily blocked.';
+
+  @override
+  String get error_rate_limited => 'Too many requests. Please wait a minute.';
+
+  @override
+  String get error_network =>
+      'The server does not answer. Check your connection.';
+
+  @override
+  String get copy => 'Copy';
 }

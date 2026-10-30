@@ -23,6 +23,7 @@ import 'package:owncoffer_client/src/protocol/group_membership.dart'
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
+import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
 import 'package:owncoffer_client/src/protocol/totp_enrollment.dart'
@@ -353,8 +354,8 @@ class EndpointGroup extends _isc.EndpointRef {
   );
 
   /// Members of the group (any member may see who else is in it).
-  _ida.Future<List<_il25bams.GroupMember>> members(int groupId) =>
-      caller.callServerEndpoint<List<_il25bams.GroupMember>>(
+  _ida.Future<List<_igteyn7f.MemberInfo>> members(int groupId) =>
+      caller.callServerEndpoint<List<_igteyn7f.MemberInfo>>(
         'group',
         'members',
         {'groupId': groupId},
