@@ -110,8 +110,9 @@ final BankLabelProfile genericFrenchProfile = BankLabelProfile(
     // normalised), and compact 291026 / 29102026.
     RegExp(r'\b\d{1,2} \d{1,2}( \d{2,4})?\b'),
     RegExp(r'\b(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])(\d{2}|\d{4})\b'),
-    // Long numbers (references, contract numbers).
-    RegExp(r'\b\d{5,}\b'),
+    // Tokens holding 5 digits or more (references, contract numbers,
+    // 123456E loan numbers).
+    RegExp(r'\b[A-Z0-9]*\d{5,}[A-Z0-9]*\b'),
     // Tokens mixing letters and many digits (FR12ZZZ123456, REF A1B2C3D4).
     RegExp(r'\b(?=[A-Z]*\d)(?=\d*[A-Z])[A-Z0-9]{10,}\b'),
     // "FACT 281026", "DU 281026" leftovers.
@@ -129,6 +130,14 @@ final BankLabelProfile genericFrenchProfile = BankLabelProfile(
     'NUMERO',
   ],
 );
+
+/// Whether [raw] starts with a known operation prefix (`CB`, `PRLV`, `VIR`…).
+bool startsWithOperationPrefix(String raw, {BankLabelProfile? profile}) {
+  final s = normalizeForMatch(raw);
+  return (profile ?? genericFrenchProfile).prefixes.any(
+    (p) => startsWithWords(s, p.text),
+  );
+}
 
 /// Turns a raw bank label into a short, stable merchant label.
 ///
