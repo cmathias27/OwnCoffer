@@ -67,7 +67,7 @@ Objectif : tout décider et tout organiser avant la première ligne de code.
 
 - [ ] Exports anonymisés Caisse d'Épargne (QIF, OFX et CSV si disponibles), sur un à trois mois, noms de fichiers neutres
 - [x] Maquettes web : connexion, assistant de premier lancement, opérations, import, catégories et règles, réglages IA, administration ([MAQUETTES.md](MAQUETTES.md))
-- [ ] Liste des catégories standard (environ 15 catégories et 60 sous-catégories, en français et en anglais)
+- [x] Catalogue des catégories standard : 17 catégories, 73 sous-catégories, FR et EN ([CATEGORIES_STANDARD.md](CATEGORIES_STANDARD.md))
 - [ ] Avis recueillis grâce à la présentation du projet, cahier des charges ajusté
 
 **Validation** : toutes les décisions prises et écrites, dépôt prêt, relevés de test disponibles.
