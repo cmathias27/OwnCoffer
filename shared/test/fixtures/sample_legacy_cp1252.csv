@@ -1,0 +1,8 @@
+Code de la banque : 00000;Code de l'agence : 00000
+Numéro de compte : 00000000000
+
+Date;Numéro d'opération;Libellé;Débit;Crédit;Détail;
+03/10/26;0000001;CB CARREFOUR MARKET FACT 021026;-45,12;;CB CARREFOUR MARKET;
+02/10/26;0000002;VIR SEPA RECU EMPLOYEUR EXEMPLE;;2150,35;SALAIRE;
+04/10/26;0000003;CB CAFÉ DE LA GARE FACT 031026;-3,20;;;
+Solde en fin de période;;;;1385,81;
