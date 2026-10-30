@@ -9,3 +9,15 @@ emailIdp:
   - hasAccount:
 jwtRefresh:
   - refreshAccessToken:
+account:
+  - list:
+  - create:
+  - update:
+  - archive:
+  - setAccess:
+group:
+  - myGroups:
+  - rename:
+  - members:
+  - setRole:
+  - removeMember:

@@ -12,6 +12,15 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _ida;
 import 'package:http/http.dart' as _i85jenna;
+import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
+import 'package:owncoffer_client/src/protocol/account_kind.dart' as _ighjli9i;
+import 'package:owncoffer_client/src/protocol/account_visibility.dart'
+    as _i33sijhq;
+import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
+import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
+import 'package:owncoffer_client/src/protocol/group_membership.dart'
+    as _itelwlzo;
+import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -244,6 +253,157 @@ class EndpointJwtRefresh extends _iacc.EndpointRefreshJwtTokens {
       );
 }
 
+/// Bank accounts of a group. Only the fields below can be set by the client;
+/// group, ids and dates always come from the server.
+/// {@category Endpoint}
+class EndpointAccount extends _isc.EndpointRef {
+  EndpointAccount(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'account';
+
+  _ida.Future<List<_i4motmly.Account>> list(int groupId) =>
+      caller.callServerEndpoint<List<_i4motmly.Account>>(
+        'account',
+        'list',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<_i4motmly.Account> create(
+    int groupId,
+    String name,
+    _ighjli9i.AccountKind kind, {
+    String? bank,
+    int? initialBalanceCents,
+    DateTime? initialBalanceDate,
+    int? alertThresholdCents,
+    _i33sijhq.AccountVisibility? visibility,
+  }) => caller.callServerEndpoint<_i4motmly.Account>(
+    'account',
+    'create',
+    {
+      'groupId': groupId,
+      'name': name,
+      'kind': kind,
+      'bank': bank,
+      'initialBalanceCents': initialBalanceCents,
+      'initialBalanceDate': initialBalanceDate,
+      'alertThresholdCents': alertThresholdCents,
+      'visibility': visibility,
+    },
+  );
+
+  _ida.Future<_i4motmly.Account> update(
+    int accountId, {
+    String? name,
+    String? bank,
+    int? initialBalanceCents,
+    DateTime? initialBalanceDate,
+    int? alertThresholdCents,
+    _i33sijhq.AccountVisibility? visibility,
+    String? color,
+  }) => caller.callServerEndpoint<_i4motmly.Account>(
+    'account',
+    'update',
+    {
+      'accountId': accountId,
+      'name': name,
+      'bank': bank,
+      'initialBalanceCents': initialBalanceCents,
+      'initialBalanceDate': initialBalanceDate,
+      'alertThresholdCents': alertThresholdCents,
+      'visibility': visibility,
+      'color': color,
+    },
+  );
+
+  /// Moves the account to the trash (kept 30 days).
+  _ida.Future<void> archive(int accountId) => caller.callServerEndpoint<void>(
+    'account',
+    'archive',
+    {'accountId': accountId},
+  );
+
+  /// Gives or removes access to a restricted account (admins).
+  _ida.Future<void> setAccess(
+    int accountId,
+    _isc.UuidValue userId,
+    bool allowed,
+  ) => caller.callServerEndpoint<void>(
+    'account',
+    'setAccess',
+    {
+      'accountId': accountId,
+      'userId': userId,
+      'allowed': allowed,
+    },
+  );
+}
+
+/// Groups of the current user and their members.
+/// {@category Endpoint}
+class EndpointGroup extends _isc.EndpointRef {
+  EndpointGroup(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'group';
+
+  _ida.Future<List<_itelwlzo.GroupMembership>> myGroups() =>
+      caller.callServerEndpoint<List<_itelwlzo.GroupMembership>>(
+        'group',
+        'myGroups',
+        {},
+      );
+
+  _ida.Future<_izr9v441.FinanceGroup> rename(
+    int groupId,
+    String name,
+  ) => caller.callServerEndpoint<_izr9v441.FinanceGroup>(
+    'group',
+    'rename',
+    {
+      'groupId': groupId,
+      'name': name,
+    },
+  );
+
+  /// Members of the group (any member may see who else is in it).
+  _ida.Future<List<_il25bams.GroupMember>> members(int groupId) =>
+      caller.callServerEndpoint<List<_il25bams.GroupMember>>(
+        'group',
+        'members',
+        {'groupId': groupId},
+      );
+
+  /// Changes a member's role. The group always keeps at least one admin.
+  _ida.Future<_il25bams.GroupMember> setRole(
+    int groupId,
+    _isc.UuidValue memberUserId,
+    _ibbiwcdo.MemberRole role,
+  ) => caller.callServerEndpoint<_il25bams.GroupMember>(
+    'group',
+    'setRole',
+    {
+      'groupId': groupId,
+      'memberUserId': memberUserId,
+      'role': role,
+    },
+  );
+
+  /// Removes a member (admins), or leaves the group (any member, oneself).
+  _ida.Future<void> removeMember(
+    int groupId,
+    _isc.UuidValue memberUserId,
+  ) => caller.callServerEndpoint<void>(
+    'group',
+    'removeMember',
+    {
+      'groupId': groupId,
+      'memberUserId': memberUserId,
+    },
+  );
+}
+
 class Modules {
   Modules(Client client) {
     serverpod_auth_idp = _iaic.Caller(client);
@@ -284,6 +444,8 @@ class Client extends _isc.ServerpodClientShared {
        ) {
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
+    account = EndpointAccount(this);
+    group = EndpointGroup(this);
     modules = Modules(this);
   }
 
@@ -291,12 +453,18 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointJwtRefresh jwtRefresh;
 
+  late final EndpointAccount account;
+
+  late final EndpointGroup group;
+
   late final Modules modules;
 
   @override
   Map<String, _isc.EndpointRef> get endpointRefLookup => {
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
+    'account': account,
+    'group': group,
   };
 
   @override

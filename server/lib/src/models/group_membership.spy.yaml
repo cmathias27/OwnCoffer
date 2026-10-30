@@ -1,0 +1,5 @@
+### A group the current user belongs to, with their role.
+class: GroupMembership
+fields:
+  group: FinanceGroup
+  role: MemberRole
