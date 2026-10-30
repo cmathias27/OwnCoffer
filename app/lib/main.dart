@@ -15,9 +15,39 @@ void main() async {
 /// Indigo main colour (docs/MAQUETTES.md).
 const _brand = Color(0xFF3346C8);
 
-ThemeData _buildTheme(Brightness brightness) => ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: _brand, brightness: brightness),
-);
+ThemeData _buildTheme(Brightness brightness) {
+  final base = ThemeData(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: _brand,
+      brightness: brightness,
+    ),
+    fontFamily: 'Inter',
+  );
+  // Titles and figures in Manrope, text in Inter (docs/MAQUETTES.md).
+  return base.copyWith(
+    textTheme: base.textTheme.copyWith(
+      displayLarge: base.textTheme.displayLarge?.copyWith(
+        fontFamily: 'Manrope',
+      ),
+      displayMedium: base.textTheme.displayMedium?.copyWith(
+        fontFamily: 'Manrope',
+      ),
+      displaySmall: base.textTheme.displaySmall?.copyWith(
+        fontFamily: 'Manrope',
+      ),
+      headlineLarge: base.textTheme.headlineLarge?.copyWith(
+        fontFamily: 'Manrope',
+      ),
+      headlineMedium: base.textTheme.headlineMedium?.copyWith(
+        fontFamily: 'Manrope',
+      ),
+      headlineSmall: base.textTheme.headlineSmall?.copyWith(
+        fontFamily: 'Manrope',
+      ),
+      titleLarge: base.textTheme.titleLarge?.copyWith(fontFamily: 'Manrope'),
+    ),
+  );
+}
 
 class OwnCofferApp extends StatelessWidget {
   const OwnCofferApp({super.key});
