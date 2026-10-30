@@ -116,5 +116,10 @@
   "error_ip_banned": "Too many failures from this address: access is temporarily blocked.",
   "error_rate_limited": "Too many requests. Please wait a minute.",
   "error_network": "The server does not answer. Check your connection.",
-  "copy": "Copy"
+  "copy": "Copy",
+  "error_category_access_denied": "This category does not exist or you cannot access it.",
+  "error_rule_access_denied": "This rule does not exist or you cannot access it.",
+  "error_unknown_standard_category": "Unknown standard category.",
+  "error_invalid_pattern": "The pattern must be 1 to 100 characters (letters or digits).",
+  "error_invalid_amount_range": "The minimum amount is above the maximum amount."
 }

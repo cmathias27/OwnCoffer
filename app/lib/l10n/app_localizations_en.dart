@@ -417,4 +417,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get copy => 'Copy';
+
+  @override
+  String get error_category_access_denied =>
+      'This category does not exist or you cannot access it.';
+
+  @override
+  String get error_rule_access_denied =>
+      'This rule does not exist or you cannot access it.';
+
+  @override
+  String get error_unknown_standard_category => 'Unknown standard category.';
+
+  @override
+  String get error_invalid_pattern =>
+      'The pattern must be 1 to 100 characters (letters or digits).';
+
+  @override
+  String get error_invalid_amount_range =>
+      'The minimum amount is above the maximum amount.';
 }

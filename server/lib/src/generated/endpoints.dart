@@ -13,7 +13,12 @@
 import 'package:owncoffer_server/src/generated/account_kind.dart' as _ihbhvzqt;
 import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
+import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
+import 'package:owncoffer_server/src/generated/rule_direction.dart'
+    as _ini8nmtb;
+import 'package:owncoffer_server/src/generated/rule_match_type.dart'
+    as _ijwgwf7y;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
@@ -23,8 +28,10 @@ import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
 import '../endpoints/account_endpoint.dart' as _iaho7ul5;
 import '../endpoints/admin_endpoint.dart' as _i5t1w2d2;
+import '../endpoints/category_endpoint.dart' as _ioevag4g;
 import '../endpoints/group_endpoint.dart' as _iknqvl2r;
 import '../endpoints/invitation_endpoint.dart' as _iipval89;
+import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
 import '../endpoints/two_factor_endpoint.dart' as _ivxdn6q3;
 
@@ -56,6 +63,12 @@ class Endpoints extends _is.EndpointDispatch {
           'admin',
           null,
         ),
+      'category': _ioevag4g.CategoryEndpoint()
+        ..initialize(
+          server,
+          'category',
+          null,
+        ),
       'group': _iknqvl2r.GroupEndpoint()
         ..initialize(
           server,
@@ -66,6 +79,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'invitation',
+          null,
+        ),
+      'rule': _i1yhvvjn.RuleEndpoint()
+        ..initialize(
+          server,
+          'rule',
           null,
         ),
       'setup': _i5xhv8r1.SetupEndpoint()
@@ -519,6 +538,136 @@ class Endpoints extends _is.EndpointDispatch {
         ),
       },
     );
+    connectors['category'] = _is.EndpointConnector(
+      name: 'category',
+      endpoint: endpoints['category']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['category'] as _ioevag4g.CategoryEndpoint).list(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'kind': _is.ParameterDescription(
+              name: 'kind',
+              type: _is.getType<_io27ugya.CategoryKind>(),
+              nullable: false,
+            ),
+            'parentId': _is.ParameterDescription(
+              name: 'parentId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'standardCode': _is.ParameterDescription(
+              name: 'standardCode',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['category'] as _ioevag4g.CategoryEndpoint).create(
+                    session,
+                    params['groupId'],
+                    params['name'],
+                    params['kind'],
+                    parentId: params['parentId'],
+                    standardCode: params['standardCode'],
+                  ),
+        ),
+        'update': _is.MethodConnector(
+          name: 'update',
+          params: {
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'resetName': _is.ParameterDescription(
+              name: 'resetName',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+            'standardCode': _is.ParameterDescription(
+              name: 'standardCode',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'color': _is.ParameterDescription(
+              name: 'color',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['category'] as _ioevag4g.CategoryEndpoint).update(
+                    session,
+                    params['categoryId'],
+                    name: params['name'],
+                    resetName: params['resetName'],
+                    standardCode: params['standardCode'],
+                    color: params['color'],
+                  ),
+        ),
+        'archive': _is.MethodConnector(
+          name: 'archive',
+          params: {
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['category'] as _ioevag4g.CategoryEndpoint).archive(
+                    session,
+                    params['categoryId'],
+                  ),
+        ),
+      },
+    );
     connectors['group'] = _is.EndpointConnector(
       name: 'group',
       endpoint: endpoints['group']!,
@@ -747,6 +896,180 @@ class Endpoints extends _is.EndpointDispatch {
                         session,
                         params['token'],
                       ),
+        ),
+      },
+    );
+    connectors['rule'] = _is.EndpointConnector(
+      name: 'rule',
+      endpoint: endpoints['rule']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['rule'] as _i1yhvvjn.RuleEndpoint).list(
+                session,
+                params['groupId'],
+              ),
+        ),
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'pattern': _is.ParameterDescription(
+              name: 'pattern',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'matchType': _is.ParameterDescription(
+              name: 'matchType',
+              type: _is.getType<_ijwgwf7y.RuleMatchType>(),
+              nullable: false,
+            ),
+            'direction': _is.ParameterDescription(
+              name: 'direction',
+              type: _is.getType<_ini8nmtb.RuleDirection?>(),
+              nullable: true,
+            ),
+            'minAbsCents': _is.ParameterDescription(
+              name: 'minAbsCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'maxAbsCents': _is.ParameterDescription(
+              name: 'maxAbsCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'priority': _is.ParameterDescription(
+              name: 'priority',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['rule'] as _i1yhvvjn.RuleEndpoint).create(
+                session,
+                params['groupId'],
+                params['categoryId'],
+                params['pattern'],
+                params['matchType'],
+                direction: params['direction'],
+                minAbsCents: params['minAbsCents'],
+                maxAbsCents: params['maxAbsCents'],
+                priority: params['priority'],
+              ),
+        ),
+        'update': _is.MethodConnector(
+          name: 'update',
+          params: {
+            'ruleId': _is.ParameterDescription(
+              name: 'ruleId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'pattern': _is.ParameterDescription(
+              name: 'pattern',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'matchType': _is.ParameterDescription(
+              name: 'matchType',
+              type: _is.getType<_ijwgwf7y.RuleMatchType?>(),
+              nullable: true,
+            ),
+            'direction': _is.ParameterDescription(
+              name: 'direction',
+              type: _is.getType<_ini8nmtb.RuleDirection?>(),
+              nullable: true,
+            ),
+            'minAbsCents': _is.ParameterDescription(
+              name: 'minAbsCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'maxAbsCents': _is.ParameterDescription(
+              name: 'maxAbsCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'clearAmounts': _is.ParameterDescription(
+              name: 'clearAmounts',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+            'priority': _is.ParameterDescription(
+              name: 'priority',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'enabled': _is.ParameterDescription(
+              name: 'enabled',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['rule'] as _i1yhvvjn.RuleEndpoint).update(
+                session,
+                params['ruleId'],
+                categoryId: params['categoryId'],
+                pattern: params['pattern'],
+                matchType: params['matchType'],
+                direction: params['direction'],
+                minAbsCents: params['minAbsCents'],
+                maxAbsCents: params['maxAbsCents'],
+                clearAmounts: params['clearAmounts'],
+                priority: params['priority'],
+                enabled: params['enabled'],
+              ),
+        ),
+        'delete': _is.MethodConnector(
+          name: 'delete',
+          params: {
+            'ruleId': _is.ParameterDescription(
+              name: 'ruleId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['rule'] as _i1yhvvjn.RuleEndpoint).delete(
+                session,
+                params['ruleId'],
+              ),
         ),
       },
     );

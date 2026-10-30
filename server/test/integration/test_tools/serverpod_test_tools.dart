@@ -17,6 +17,8 @@ import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
 import 'package:owncoffer_server/src/generated/account_kind.dart' as _ihbhvzqt;
 import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
+import 'package:owncoffer_server/src/generated/category.dart' as _iemw1gpx;
+import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
 import 'package:owncoffer_server/src/generated/finance_group.dart' as _i6lqurfp;
 import 'package:owncoffer_server/src/generated/group_member.dart' as _iep4djhw;
 import 'package:owncoffer_server/src/generated/group_membership.dart'
@@ -26,6 +28,11 @@ import 'package:owncoffer_server/src/generated/invitation_info.dart'
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
+import 'package:owncoffer_server/src/generated/rule.dart' as _inhqt802;
+import 'package:owncoffer_server/src/generated/rule_direction.dart'
+    as _ini8nmtb;
+import 'package:owncoffer_server/src/generated/rule_match_type.dart'
+    as _ijwgwf7y;
 import 'package:owncoffer_server/src/generated/setup_status.dart' as _i7xpdhgz;
 import 'package:owncoffer_server/src/generated/totp_enrollment.dart'
     as _iq33hguv;
@@ -176,9 +183,13 @@ class TestEndpoints {
 
   late final _AdminEndpoint admin;
 
+  late final _CategoryEndpoint category;
+
   late final _GroupEndpoint group;
 
   late final _InvitationEndpoint invitation;
+
+  late final _RuleEndpoint rule;
 
   late final _SetupEndpoint setup;
 
@@ -208,11 +219,19 @@ class _InternalTestEndpoints extends TestEndpoints
       endpoints,
       serializationManager,
     );
+    category = _CategoryEndpoint(
+      endpoints,
+      serializationManager,
+    );
     group = _GroupEndpoint(
       endpoints,
       serializationManager,
     );
     invitation = _InvitationEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    rule = _RuleEndpoint(
       endpoints,
       serializationManager,
     );
@@ -821,6 +840,161 @@ class _AdminEndpoint {
   }
 }
 
+class _CategoryEndpoint {
+  _CategoryEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<List<_iemw1gpx.Category>> list(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'category',
+            method: 'list',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'category',
+          methodName: 'list',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iemw1gpx.Category>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iemw1gpx.Category> create(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    String name,
+    _io27ugya.CategoryKind kind, {
+    int? parentId,
+    String? standardCode,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'category',
+            method: 'create',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'category',
+          methodName: 'create',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'name': name,
+            'kind': kind,
+            'parentId': parentId,
+            'standardCode': standardCode,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iemw1gpx.Category>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iemw1gpx.Category> update(
+    _ist.TestSessionBuilder sessionBuilder,
+    int categoryId, {
+    String? name,
+    bool? resetName,
+    String? standardCode,
+    String? color,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'category',
+            method: 'update',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'category',
+          methodName: 'update',
+          parameters: _ist.testObjectToJson({
+            'categoryId': categoryId,
+            'name': name,
+            'resetName': resetName,
+            'standardCode': standardCode,
+            'color': color,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iemw1gpx.Category>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> archive(
+    _ist.TestSessionBuilder sessionBuilder,
+    int categoryId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'category',
+            method: 'archive',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'category',
+          methodName: 'archive',
+          parameters: _ist.testObjectToJson({'categoryId': categoryId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
 class _GroupEndpoint {
   _GroupEndpoint(
     this._endpointDispatch,
@@ -1164,6 +1338,177 @@ class _InvitationEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_idq93byd.GroupMembership>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _RuleEndpoint {
+  _RuleEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<List<_inhqt802.Rule>> list(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'rule',
+            method: 'list',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'rule',
+          methodName: 'list',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_inhqt802.Rule>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_inhqt802.Rule> create(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    int categoryId,
+    String pattern,
+    _ijwgwf7y.RuleMatchType matchType, {
+    _ini8nmtb.RuleDirection? direction,
+    int? minAbsCents,
+    int? maxAbsCents,
+    int? priority,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'rule',
+            method: 'create',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'rule',
+          methodName: 'create',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'categoryId': categoryId,
+            'pattern': pattern,
+            'matchType': matchType,
+            'direction': direction,
+            'minAbsCents': minAbsCents,
+            'maxAbsCents': maxAbsCents,
+            'priority': priority,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_inhqt802.Rule>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_inhqt802.Rule> update(
+    _ist.TestSessionBuilder sessionBuilder,
+    int ruleId, {
+    int? categoryId,
+    String? pattern,
+    _ijwgwf7y.RuleMatchType? matchType,
+    _ini8nmtb.RuleDirection? direction,
+    int? minAbsCents,
+    int? maxAbsCents,
+    bool? clearAmounts,
+    int? priority,
+    bool? enabled,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'rule',
+            method: 'update',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'rule',
+          methodName: 'update',
+          parameters: _ist.testObjectToJson({
+            'ruleId': ruleId,
+            'categoryId': categoryId,
+            'pattern': pattern,
+            'matchType': matchType,
+            'direction': direction,
+            'minAbsCents': minAbsCents,
+            'maxAbsCents': maxAbsCents,
+            'clearAmounts': clearAmounts,
+            'priority': priority,
+            'enabled': enabled,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_inhqt802.Rule>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> delete(
+    _ist.TestSessionBuilder sessionBuilder,
+    int ruleId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'rule',
+            method: 'delete',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'rule',
+          methodName: 'delete',
+          parameters: _ist.testObjectToJson({'ruleId': ruleId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

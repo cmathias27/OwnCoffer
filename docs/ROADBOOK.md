@@ -116,7 +116,7 @@ Objectif : la plus petite version utile, pour votre usage personnel (décision 0
 - [ ] Écran d'import : aperçu, compte reconnu, doublons écartés par empreinte, historique, annulation
 - [ ] Liste des opérations : recherche, filtres, saisie manuelle, pointage
 - [ ] Libellés nettoyés (« PRLV SEPA EDF SA REF… » devient « EDF »)
-- [ ] Classement : catégories reliées au catalogue standard, règles du groupe, historique, source de la catégorie affichée
+- [ ] Classement : catégories reliées au catalogue standard (fait), règles du groupe (API faite), historique, source de la catégorie affichée
 - [ ] Règles communautaires v0 : dépôt séparé `owncoffer-rules`, premières règles pour les libellés Caisse d'Épargne des grandes enseignes
 - [ ] Opérations prévues récurrentes (loyer, salaire, abonnements) et **solde prévu** à 30 jours
 - [ ] **Alerte de découvert prévu**, dans l'app et par email

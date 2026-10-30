@@ -3,6 +3,7 @@ import 'package:serverpod_auth_idp_server/core.dart';
 
 import '../generated/protocol.dart';
 import '../onboarding/onboarding.dart';
+import 'category_endpoint.dart';
 import '../security/access.dart';
 import '../security/scopes.dart';
 import '../security/audit.dart';
@@ -62,6 +63,7 @@ class GroupEndpoint extends Endpoint {
         ),
         transaction: tx,
       );
+      await createDefaultCategories(session, group.id!, transaction: tx);
       await Audit.log(
         session,
         groupId: group.id,

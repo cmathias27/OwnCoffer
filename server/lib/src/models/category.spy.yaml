@@ -5,7 +5,9 @@ table: categories
 fields:
   groupId: int, relation(parent=groups, onDelete=Cascade)
   parentId: int?, relation(parent=categories, onDelete=SetNull)
-  name: String
+  ### Custom name; null = the standard category's name in the user's
+  ### language (categories created from the catalogue).
+  name: String?
   kind: CategoryKind
   standardCode: String?
   icon: String?
