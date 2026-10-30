@@ -876,7 +876,7 @@ class EndpointTransaction extends _isc.EndpointRef {
     DateTime date,
     int amountCents,
     String label, {
-    String? memo,
+    String? note,
     int? categoryId,
   }) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
     'transaction',
@@ -886,19 +886,19 @@ class EndpointTransaction extends _isc.EndpointRef {
       'date': date,
       'amountCents': amountCents,
       'label': label,
-      'memo': memo,
+      'note': note,
       'categoryId': categoryId,
     },
   );
 
   /// Date, amount and label can only be changed on manual entries: imported
-  /// operations keep what the bank wrote. The memo can always be changed.
+  /// operations keep what the bank wrote. The note can always be changed.
   _ida.Future<_ivksw0b3.BankTransaction> update(
     int transactionId, {
     DateTime? date,
     int? amountCents,
     String? label,
-    String? memo,
+    String? note,
   }) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
     'transaction',
     'update',
@@ -907,7 +907,7 @@ class EndpointTransaction extends _isc.EndpointRef {
       'date': date,
       'amountCents': amountCents,
       'label': label,
-      'memo': memo,
+      'note': note,
     },
   );
 

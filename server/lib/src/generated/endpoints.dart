@@ -1698,8 +1698,8 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<String>(),
               nullable: false,
             ),
-            'memo': _is.ParameterDescription(
-              name: 'memo',
+            'note': _is.ParameterDescription(
+              name: 'note',
               type: _is.getType<String?>(),
               nullable: true,
             ),
@@ -1721,7 +1721,7 @@ class Endpoints extends _is.EndpointDispatch {
                         params['date'],
                         params['amountCents'],
                         params['label'],
-                        memo: params['memo'],
+                        note: params['note'],
                         categoryId: params['categoryId'],
                       ),
         ),
@@ -1748,8 +1748,8 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<String?>(),
               nullable: true,
             ),
-            'memo': _is.ParameterDescription(
-              name: 'memo',
+            'note': _is.ParameterDescription(
+              name: 'note',
               type: _is.getType<String?>(),
               nullable: true,
             ),
@@ -1766,7 +1766,7 @@ class Endpoints extends _is.EndpointDispatch {
                         date: params['date'],
                         amountCents: params['amountCents'],
                         label: params['label'],
-                        memo: params['memo'],
+                        note: params['note'],
                       ),
         ),
         'setCategory': _is.MethodConnector(

@@ -486,4 +486,195 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_notification_access_denied =>
       'This notification does not exist.';
+
+  @override
+  String get navAccounts => 'Accounts';
+
+  @override
+  String get navOperations => 'Operations';
+
+  @override
+  String get navImport => 'Import';
+
+  @override
+  String get navForecast => 'Forecast';
+
+  @override
+  String get navCategories => 'Categories';
+
+  @override
+  String get accountsTitle => 'Accounts';
+
+  @override
+  String get accountsEmpty => 'No account yet.';
+
+  @override
+  String get accountAdd => 'Add an account';
+
+  @override
+  String get accountEdit => 'Edit account';
+
+  @override
+  String get accountName => 'Account name';
+
+  @override
+  String get accountBank => 'Bank';
+
+  @override
+  String get accountKind => 'Type';
+
+  @override
+  String get kindChecking => 'Current account';
+
+  @override
+  String get kindSavings => 'Savings';
+
+  @override
+  String get kindDeferredCard => 'Deferred debit card';
+
+  @override
+  String get kindCash => 'Cash';
+
+  @override
+  String get initialBalance => 'Opening balance';
+
+  @override
+  String get initialBalanceHelp =>
+      'Balance of the account before the first imported operation.';
+
+  @override
+  String get alertThreshold => 'Alert threshold';
+
+  @override
+  String get alertThresholdHelp =>
+      'Alert when the forecast goes below it. 0 = any overdraft; -500 = authorised overdraft of 500.';
+
+  @override
+  String get visibilityRestricted =>
+      'Restricted account (visible only to administrators and allowed people)';
+
+  @override
+  String get balanceCurrent => 'Current balance';
+
+  @override
+  String get balanceCleared => 'Cleared balance';
+
+  @override
+  String forecastLowest(String amount, String date) {
+    return '30-day low: $amount on $date';
+  }
+
+  @override
+  String overdraftExpected(String date) {
+    return 'Overdraft expected on $date';
+  }
+
+  @override
+  String get amountInvalid => 'Unreadable amount. Example: -12.50';
+
+  @override
+  String get operationsTitle => 'Operations';
+
+  @override
+  String get operationsEmpty => 'No operation.';
+
+  @override
+  String get searchHint => 'Search a label';
+
+  @override
+  String get filterToClassify => 'To classify';
+
+  @override
+  String get filterUncleared => 'Not cleared';
+
+  @override
+  String get loadMore => 'Show more';
+
+  @override
+  String operationsCount(int count) {
+    return '$count operations';
+  }
+
+  @override
+  String get toClassify => 'To classify';
+
+  @override
+  String get operationAdd => 'Enter an operation';
+
+  @override
+  String get dateLabel => 'Date';
+
+  @override
+  String get amountLabel => 'Amount';
+
+  @override
+  String get amountHelp => 'Negative for an expense: -12.50';
+
+  @override
+  String get labelLabel => 'Label';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get noCategory => 'To classify';
+
+  @override
+  String get cleared => 'Cleared';
+
+  @override
+  String get bankLabel => 'Bank label';
+
+  @override
+  String get alwaysClassify => 'Always classify like this';
+
+  @override
+  String ruleCreated(int count) {
+    return 'Rule created: $count other operations reclassified.';
+  }
+
+  @override
+  String get trash => 'Move to trash';
+
+  @override
+  String get trashed => 'Operation moved to the trash.';
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String get sourceManual => 'chosen by you';
+
+  @override
+  String get sourceGroupRule => 'group rule';
+
+  @override
+  String get sourceCommunityRule => 'community rule';
+
+  @override
+  String get sourceHistory => 'history';
+
+  @override
+  String get sourceAi => 'AI';
+
+  @override
+  String get chooseAccount => 'Account';
+
+  @override
+  String clearedBalanceValue(String amount) {
+    return 'Cleared balance: $amount';
+  }
+
+  @override
+  String bankLabelValue(String label) {
+    return 'Bank label: $label';
+  }
+
+  @override
+  String dateValue(String date) {
+    return 'Date: $date';
+  }
+
+  @override
+  String get noteLabel => 'Your note';
 }

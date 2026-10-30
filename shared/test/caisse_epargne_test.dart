@@ -85,6 +85,27 @@ void main() {
     );
   });
 
+  test('short label from the operation label only; memo kept for rules', () {
+    final paypal = qif.transactions.firstWhere(
+      (t) => t.label.contains('PayPal'),
+    );
+    final c = cleanCaisseEpargneLabel(paypal.label, memo: paypal.memo);
+    expect(c.display, 'PAYPAL EUROPE');
+    expect(c.full, contains('PAYPAL EUROPE S A R L ET CIE S C A'));
+    final loan = qif.transactions.firstWhere((t) => t.label.startsWith('ECH'));
+    expect(
+      cleanCaisseEpargneLabel(loan.label, memo: loan.memo).display,
+      'ECH PRET',
+    );
+    final cash = qif.transactions.firstWhere(
+      (t) => t.label.startsWith('RETRAIT'),
+    );
+    expect(
+      cleanCaisseEpargneLabel(cash.label, memo: cash.memo).display,
+      'RETRAIT DAB',
+    );
+  });
+
   test('the two identical bakery purchases stay two operations', () {
     final prints = fingerprints(qif.transactions);
     expect(prints.toSet(), hasLength(20));

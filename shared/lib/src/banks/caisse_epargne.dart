@@ -33,5 +33,5 @@ final BankLabelProfile caisseEpargneProfile = BankLabelProfile(
 );
 
 /// Cleans a Caisse d'Épargne label.
-CleanedLabel cleanCaisseEpargneLabel(String raw) =>
-    cleanLabel(raw, profile: caisseEpargneProfile);
+CleanedLabel cleanCaisseEpargneLabel(String raw, {String? memo}) =>
+    cleanLabel(raw, memo: memo, profile: caisseEpargneProfile);

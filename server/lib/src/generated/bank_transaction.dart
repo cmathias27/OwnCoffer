@@ -24,6 +24,7 @@ abstract class BankTransaction
     required this.amountCents,
     required this.rawLabel,
     this.memo,
+    this.note,
     required this.cleanLabel,
     required this.operationKind,
     this.reference,
@@ -54,6 +55,7 @@ abstract class BankTransaction
     required int amountCents,
     required String rawLabel,
     String? memo,
+    String? note,
     required String cleanLabel,
     required String operationKind,
     String? reference,
@@ -82,6 +84,7 @@ abstract class BankTransaction
       amountCents: jsonSerialization['amountCents'] as int,
       rawLabel: jsonSerialization['rawLabel'] as String,
       memo: jsonSerialization['memo'] as String?,
+      note: jsonSerialization['note'] as String?,
       cleanLabel: jsonSerialization['cleanLabel'] as String,
       operationKind: jsonSerialization['operationKind'] as String,
       reference: jsonSerialization['reference'] as String?,
@@ -136,7 +139,11 @@ abstract class BankTransaction
 
   String rawLabel;
 
+  /// Details written by the bank (QIF M, OFX NAME/MEMO), never edited.
   String? memo;
+
+  /// The user's own note.
+  String? note;
 
   /// Cleaned, normalised label (e.g. `EDF`), used by the history.
   String cleanLabel;
@@ -196,6 +203,7 @@ abstract class BankTransaction
     int? amountCents,
     String? rawLabel,
     String? memo,
+    String? note,
     String? cleanLabel,
     String? operationKind,
     String? reference,
@@ -225,6 +233,7 @@ abstract class BankTransaction
       'amountCents': amountCents,
       'rawLabel': rawLabel,
       if (memo != null) 'memo': memo,
+      if (note != null) 'note': note,
       'cleanLabel': cleanLabel,
       'operationKind': operationKind,
       if (reference != null) 'reference': reference,
@@ -257,6 +266,7 @@ abstract class BankTransaction
       'amountCents': amountCents,
       'rawLabel': rawLabel,
       if (memo != null) 'memo': memo,
+      if (note != null) 'note': note,
       'cleanLabel': cleanLabel,
       'operationKind': operationKind,
       if (reference != null) 'reference': reference,
@@ -317,6 +327,7 @@ class _BankTransactionImpl extends BankTransaction {
     required int amountCents,
     required String rawLabel,
     String? memo,
+    String? note,
     required String cleanLabel,
     required String operationKind,
     String? reference,
@@ -342,6 +353,7 @@ class _BankTransactionImpl extends BankTransaction {
          amountCents: amountCents,
          rawLabel: rawLabel,
          memo: memo,
+         note: note,
          cleanLabel: cleanLabel,
          operationKind: operationKind,
          reference: reference,
@@ -373,6 +385,7 @@ class _BankTransactionImpl extends BankTransaction {
     int? amountCents,
     String? rawLabel,
     Object? memo = _Undefined,
+    Object? note = _Undefined,
     String? cleanLabel,
     String? operationKind,
     Object? reference = _Undefined,
@@ -399,6 +412,7 @@ class _BankTransactionImpl extends BankTransaction {
       amountCents: amountCents ?? this.amountCents,
       rawLabel: rawLabel ?? this.rawLabel,
       memo: memo is String? ? memo : this.memo,
+      note: note is String? ? note : this.note,
       cleanLabel: cleanLabel ?? this.cleanLabel,
       operationKind: operationKind ?? this.operationKind,
       reference: reference is String? ? reference : this.reference,
@@ -454,6 +468,11 @@ class BankTransactionUpdateTable extends _is.UpdateTable<BankTransactionTable> {
 
   _is.ColumnValue<String, String> memo(String? value) => _is.ColumnValue(
     table.memo,
+    value,
+  );
+
+  _is.ColumnValue<String, String> note(String? value) => _is.ColumnValue(
+    table.note,
     value,
   );
 
@@ -582,6 +601,10 @@ class BankTransactionTable extends _is.Table<int?> {
       'memo',
       this,
     );
+    note = _is.ColumnString(
+      'note',
+      this,
+    );
     cleanLabel = _is.ColumnString(
       'cleanLabel',
       this,
@@ -671,7 +694,11 @@ class BankTransactionTable extends _is.Table<int?> {
 
   late final _is.ColumnString rawLabel;
 
+  /// Details written by the bank (QIF M, OFX NAME/MEMO), never edited.
   late final _is.ColumnString memo;
+
+  /// The user's own note.
+  late final _is.ColumnString note;
 
   /// Cleaned, normalised label (e.g. `EDF`), used by the history.
   late final _is.ColumnString cleanLabel;
@@ -726,6 +753,7 @@ class BankTransactionTable extends _is.Table<int?> {
     amountCents,
     rawLabel,
     memo,
+    note,
     cleanLabel,
     operationKind,
     reference,

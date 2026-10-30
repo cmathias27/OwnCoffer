@@ -170,9 +170,10 @@ void main() {
       final noted = await endpoints.transaction.update(
         as(alice),
         t.id!,
-        memo: 'Note',
+        note: 'Note',
       );
-      expect(noted.memo, 'Note');
+      expect(noted.note, 'Note');
+      expect(noted.memo, t.memo, reason: 'bank details untouched');
       expect(noted.amountCents, t.amountCents);
     });
 
@@ -319,7 +320,7 @@ void main() {
             denied,
           );
           await expectLater(
-            endpoints.transaction.update(as(mallory), t.id!, memo: 'x'),
+            endpoints.transaction.update(as(mallory), t.id!, note: 'x'),
             denied,
           );
           await expectLater(
@@ -341,7 +342,7 @@ void main() {
           final same = await BankTransaction.db.findById(db, t.id!);
           expect(same!.deletedAt, isNull);
           expect(same.cleared, isFalse);
-          expect(same.memo, t.memo);
+          expect(same.note, t.note);
         },
       );
 

@@ -239,5 +239,115 @@
   "error_transaction_access_denied": "Cette opération n'existe pas ou vous n'y avez pas accès.",
   "error_imported_operation_locked": "La date, le montant et le libellé d'une opération importée ne se modifient pas : ce sont ceux de la banque.",
   "error_already_imported_again": "Cette opération a été réimportée entre-temps : elle est déjà dans le compte.",
-  "error_notification_access_denied": "Cette notification n'existe pas."
+  "error_notification_access_denied": "Cette notification n'existe pas.",
+  "navAccounts": "Comptes",
+  "navOperations": "Opérations",
+  "navImport": "Importer",
+  "navForecast": "Prévisions",
+  "navCategories": "Catégories",
+  "accountsTitle": "Comptes",
+  "accountsEmpty": "Aucun compte pour l'instant.",
+  "accountAdd": "Ajouter un compte",
+  "accountEdit": "Modifier le compte",
+  "accountName": "Nom du compte",
+  "accountBank": "Banque",
+  "accountKind": "Type",
+  "kindChecking": "Compte courant",
+  "kindSavings": "Épargne",
+  "kindDeferredCard": "Carte à débit différé",
+  "kindCash": "Espèces",
+  "initialBalance": "Solde initial",
+  "initialBalanceHelp": "Solde du compte avant la première opération importée.",
+  "alertThreshold": "Seuil d'alerte",
+  "alertThresholdHelp": "Alerte quand le solde prévu passe en dessous. 0 = tout découvert ; -500 = découvert autorisé de 500.",
+  "visibilityRestricted": "Compte restreint (visible seulement par les administrateurs et les personnes autorisées)",
+  "balanceCurrent": "Solde actuel",
+  "balanceCleared": "Solde pointé",
+  "forecastLowest": "Point bas à 30 jours : {amount} le {date}",
+  "@forecastLowest": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "overdraftExpected": "Découvert prévu le {date}",
+  "@overdraftExpected": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "amountInvalid": "Montant illisible. Exemple : -12,50",
+  "operationsTitle": "Opérations",
+  "operationsEmpty": "Aucune opération.",
+  "searchHint": "Rechercher un libellé",
+  "filterToClassify": "À classer",
+  "filterUncleared": "Non pointées",
+  "loadMore": "Afficher plus",
+  "operationsCount": "{count} opérations",
+  "@operationsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "toClassify": "À classer",
+  "operationAdd": "Saisir une opération",
+  "dateLabel": "Date",
+  "amountLabel": "Montant",
+  "amountHelp": "Négatif pour une dépense : -12,50",
+  "labelLabel": "Libellé",
+  "categoryLabel": "Catégorie",
+  "noCategory": "À classer",
+  "cleared": "Pointée",
+  "bankLabel": "Libellé de la banque",
+  "alwaysClassify": "Toujours classer ainsi",
+  "ruleCreated": "Règle créée : {count} autres opérations reclassées.",
+  "@ruleCreated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trash": "Mettre à la corbeille",
+  "trashed": "Opération mise à la corbeille.",
+  "undo": "Annuler",
+  "sourceManual": "choisie par vous",
+  "sourceGroupRule": "règle du groupe",
+  "sourceCommunityRule": "règle communautaire",
+  "sourceHistory": "historique",
+  "sourceAi": "IA",
+  "chooseAccount": "Compte",
+  "clearedBalanceValue": "Solde pointé : {amount}",
+  "@clearedBalanceValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "bankLabelValue": "Libellé de la banque : {label}",
+  "dateValue": "Date : {date}",
+  "@bankLabelValue": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "@dateValue": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "noteLabel": "Votre note"
 }
