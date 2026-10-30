@@ -15,6 +15,7 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0009](0009-actions-proposees-validees.md) | Modifications proposées, validées par l'utilisateur, exécutées par le moteur | Décidé |
 | [0010](0010-perimetre-alpha.md) | Alpha minimale : import, classement, solde prévu, alerte de découvert | Décidé |
 | [0011](0011-application-web-installable-pwa.md) | Application web installable sur téléphone (PWA) | Décidé |
-| [0012](0012-exposition-cloudflare-reseau-hote.md) | Exposition par Cloudflare, réseau de l'hôte, un seul port | Décidé |
+| [0012](0012-exposition-cloudflare-reseau-hote.md) | Exposition par Cloudflare, réseau de l'hôte, un seul port | Décidé, réseau remplacé par 0015 |
+| [0015](0015-reseau-docker-isole-proxy.md) | Réseau Docker isolé, proxy Caddy sur le port unique | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.
