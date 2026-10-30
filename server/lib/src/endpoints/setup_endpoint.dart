@@ -2,6 +2,7 @@ import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
 import '../onboarding/onboarding.dart';
+import '../security/ip_guard.dart';
 
 /// First launch wizard (no login: no account exists yet).
 class SetupEndpoint extends Endpoint {
@@ -10,6 +11,14 @@ class SetupEndpoint extends Endpoint {
 
   /// Checks the setup code from the server log and allows [email] to
   /// register as server administrator (then: emailIdp.startRegistration).
-  Future<void> start(Session session, String setupCode, String email) =>
-      Onboarding.startSetup(session, setupCode, email);
+  Future<void> start(Session session, String setupCode, String email) async {
+    try {
+      await Onboarding.startSetup(session, setupCode, email);
+    } on InvalidInputException catch (e) {
+      if (e.code == 'setup_code_invalid') {
+        await IpGuard.instance.recordFailure(session, 'setup_code');
+      }
+      rethrow;
+    }
+  }
 }

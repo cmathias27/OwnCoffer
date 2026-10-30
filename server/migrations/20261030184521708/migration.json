@@ -1,0 +1,105 @@
+{
+  "__className__": "serverpod.DatabaseMigration",
+  "actions": [
+    {
+      "__className__": "serverpod.DatabaseMigrationAction",
+      "type": "createTable",
+      "createTable": {
+        "__className__": "serverpod.TableDefinition",
+        "name": "ip_bans",
+        "dartName": "IpBan",
+        "module": "owncoffer",
+        "schema": "public",
+        "columns": [
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "id",
+            "fieldName": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "serial",
+            "dartType": "int?"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "ip",
+            "fieldName": "ip",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "failures",
+            "fieldName": "failures",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "0",
+            "dartType": "int"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "windowStart",
+            "fieldName": "windowStart",
+            "columnType": 4,
+            "isNullable": false,
+            "dartType": "DateTime"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "lastFailureAt",
+            "fieldName": "lastFailureAt",
+            "columnType": 4,
+            "isNullable": false,
+            "dartType": "DateTime"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "lastFailureKind",
+            "fieldName": "lastFailureKind",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "bannedUntil",
+            "fieldName": "bannedUntil",
+            "columnType": 4,
+            "isNullable": true,
+            "dartType": "DateTime?"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "banCount",
+            "fieldName": "banCount",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "0",
+            "dartType": "int"
+          }
+        ],
+        "foreignKeys": [],
+        "indexes": [
+          {
+            "__className__": "serverpod.IndexDefinition",
+            "indexName": "ip_bans_ip_idx",
+            "elements": [
+              {
+                "__className__": "serverpod.IndexElementDefinition",
+                "type": 0,
+                "definition": "ip"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [],
+  "migrationApiVersion": 1
+}

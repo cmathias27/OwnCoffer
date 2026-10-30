@@ -17,6 +17,7 @@ import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
+import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:serverpod/protocol.dart' as _isp;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
@@ -41,6 +42,8 @@ import 'group_membership.dart' as _i54nduyh;
 import 'invalid_input_exception.dart' as _ijc83d8f;
 import 'invitation.dart' as _ix00wubs;
 import 'invitation_info.dart' as _i9hwipt6;
+import 'ip_ban.dart' as _i88cvd1d;
+import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'member_role.dart' as _insyygng;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_direction.dart' as _i13yq1r7;
@@ -67,6 +70,8 @@ export 'group_membership.dart';
 export 'invalid_input_exception.dart';
 export 'invitation.dart';
 export 'invitation_info.dart';
+export 'ip_ban.dart';
+export 'ip_ban_info.dart';
 export 'member_role.dart';
 export 'rule.dart';
 export 'rule_direction.dart';
@@ -941,6 +946,82 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'ip_bans',
+      dartName: 'IpBan',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'ip',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'failures',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+          columnDefault: '0',
+        ),
+        _isp.ColumnDefinition(
+          name: 'windowStart',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'lastFailureAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'lastFailureKind',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'bannedUntil',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'banCount',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+          columnDefault: '0',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'ip_bans_ip_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'ip',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'rules',
       dartName: 'Rule',
       schema: 'public',
@@ -1640,6 +1721,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i9hwipt6.InvitationInfo) {
       return _i9hwipt6.InvitationInfo.fromJson(data) as T;
     }
+    if (t == _i88cvd1d.IpBan) {
+      return _i88cvd1d.IpBan.fromJson(data) as T;
+    }
+    if (t == _ijfl1fdm.IpBanInfo) {
+      return _ijfl1fdm.IpBanInfo.fromJson(data) as T;
+    }
     if (t == _insyygng.MemberRole) {
       return _insyygng.MemberRole.fromJson(data) as T;
     }
@@ -1732,6 +1819,12 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _i9hwipt6.InvitationInfo.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_i88cvd1d.IpBan?>()) {
+      return (data != null ? _i88cvd1d.IpBan.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ijfl1fdm.IpBanInfo?>()) {
+      return (data != null ? _ijfl1fdm.IpBanInfo.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_insyygng.MemberRole?>()) {
       return (data != null ? _insyygng.MemberRole.fromJson(data) : null) as T;
     }
@@ -1766,6 +1859,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_iul9ey3g.Account>) {
       return (data as List)
               .map((e) => deserialize<_iul9ey3g.Account>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_itqry2jn.IpBanInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_itqry2jn.IpBanInfo>(e))
               .toList()
           as T;
     }
@@ -1819,6 +1918,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
       _ix00wubs.Invitation => 'Invitation',
       _i9hwipt6.InvitationInfo => 'InvitationInfo',
+      _i88cvd1d.IpBan => 'IpBan',
+      _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ivw87pdb.Rule => 'Rule',
       _i13yq1r7.RuleDirection => 'RuleDirection',
@@ -1877,6 +1978,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'Invitation';
       case _i9hwipt6.InvitationInfo():
         return 'InvitationInfo';
+      case _i88cvd1d.IpBan():
+        return 'IpBan';
+      case _ijfl1fdm.IpBanInfo():
+        return 'IpBanInfo';
       case _insyygng.MemberRole():
         return 'MemberRole';
       case _ivw87pdb.Rule():
@@ -1973,6 +2078,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'InvitationInfo') {
       return deserialize<_i9hwipt6.InvitationInfo>(data['data']);
     }
+    if (dataClassName == 'IpBan') {
+      return deserialize<_i88cvd1d.IpBan>(data['data']);
+    }
+    if (dataClassName == 'IpBanInfo') {
+      return deserialize<_ijfl1fdm.IpBanInfo>(data['data']);
+    }
     if (dataClassName == 'MemberRole') {
       return deserialize<_insyygng.MemberRole>(data['data']);
     }
@@ -2056,6 +2167,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _igiek2ee.GroupMember.t;
       case _ix00wubs.Invitation:
         return _ix00wubs.Invitation.t;
+      case _i88cvd1d.IpBan:
+        return _i88cvd1d.IpBan.t;
       case _ivw87pdb.Rule:
         return _ivw87pdb.Rule.t;
       case _ifol8nrg.ScheduledTransaction:

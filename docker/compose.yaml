@@ -13,6 +13,8 @@ services:
     ports:
       # The only port published on the host.
       - "${OWNCOFFER_BIND:-127.0.0.1}:${OWNCOFFER_PORT:-8080}:8080"
+    environment:
+      OWNCOFFER_TRUSTED_LOCAL: ${OWNCOFFER_TRUSTED_LOCAL:-127.0.0.0/8 ::1/128 172.16.0.0/12}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
     networks: [owncoffer]
@@ -44,6 +46,11 @@ services:
       OWNCOFFER_SMTP_USER: ${OWNCOFFER_SMTP_USER:-}
       OWNCOFFER_SMTP_PASSWORD: ${OWNCOFFER_SMTP_PASSWORD:-}
       OWNCOFFER_SMTP_FROM: ${OWNCOFFER_SMTP_FROM:-owncoffer@localhost}
+      OWNCOFFER_IP_ALLOWLIST: ${OWNCOFFER_IP_ALLOWLIST:-}
+      OWNCOFFER_BAN_MAX_FAILURES: ${OWNCOFFER_BAN_MAX_FAILURES:-5}
+      OWNCOFFER_BAN_WINDOW_MINUTES: ${OWNCOFFER_BAN_WINDOW_MINUTES:-15}
+      OWNCOFFER_BAN_MINUTES: ${OWNCOFFER_BAN_MINUTES:-60}
+      OWNCOFFER_RATE_LIMIT_PER_MINUTE: ${OWNCOFFER_RATE_LIMIT_PER_MINUTE:-600}
     networks: [owncoffer]
 
   postgres:

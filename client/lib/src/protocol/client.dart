@@ -22,6 +22,7 @@ import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
+import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
@@ -32,7 +33,8 @@ import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'protocol.dart' as _il2as5qe;
 
 /// Email sign-in. Registration is closed except for emails with a pending
-/// invitation (or the first launch setup).
+/// invitation (or the first launch setup). Every failed attempt counts
+/// towards the automatic IP ban.
 /// {@category Endpoint}
 class EndpointEmailIdp extends _iaic.EndpointEmailIdpBase {
   EndpointEmailIdp(_isc.EndpointCaller caller) : super(caller);
@@ -40,23 +42,6 @@ class EndpointEmailIdp extends _iaic.EndpointEmailIdpBase {
   @override
   String get name => 'emailIdp';
 
-  @override
-  _ida.Future<_isc.UuidValue> startRegistration({required String email}) =>
-      caller.callServerEndpoint<_isc.UuidValue>(
-        'emailIdp',
-        'startRegistration',
-        {'email': email},
-      );
-
-  /// Logs in the user and returns a new session.
-  ///
-  /// Throws an [EmailAccountLoginException] in case of errors, with reason:
-  /// - [EmailAccountLoginExceptionReason.invalidCredentials] if the email or
-  ///   password is incorrect.
-  /// - [EmailAccountLoginExceptionReason.tooManyAttempts] if there have been
-  ///   too many failed login attempts.
-  ///
-  /// Throws an [AuthUserBlockedException] if the auth user is blocked.
   @override
   _ida.Future<_iacc.AuthSuccess> login({
     required String email,
@@ -70,16 +55,14 @@ class EndpointEmailIdp extends _iaic.EndpointEmailIdpBase {
     },
   );
 
-  /// Verifies an account request code and returns a token
-  /// that can be used to complete the account creation.
-  ///
-  /// Throws an [EmailAccountRequestException] in case of errors, with reason:
-  /// - [EmailAccountRequestExceptionReason.expired] if the account request has
-  ///   already expired.
-  /// - [EmailAccountRequestExceptionReason.policyViolation] if the password
-  ///   does not comply with the password policy.
-  /// - [EmailAccountRequestExceptionReason.invalid] if no request exists
-  ///   for the given [accountRequestId] or [verificationCode] is invalid.
+  @override
+  _ida.Future<_isc.UuidValue> startRegistration({required String email}) =>
+      caller.callServerEndpoint<_isc.UuidValue>(
+        'emailIdp',
+        'startRegistration',
+        {'email': email},
+      );
+
   @override
   _ida.Future<String> verifyRegistrationCode({
     required _isc.UuidValue accountRequestId,
@@ -89,6 +72,19 @@ class EndpointEmailIdp extends _iaic.EndpointEmailIdpBase {
     'verifyRegistrationCode',
     {
       'accountRequestId': accountRequestId,
+      'verificationCode': verificationCode,
+    },
+  );
+
+  @override
+  _ida.Future<String> verifyPasswordResetCode({
+    required _isc.UuidValue passwordResetRequestId,
+    required String verificationCode,
+  }) => caller.callServerEndpoint<String>(
+    'emailIdp',
+    'verifyPasswordResetCode',
+    {
+      'passwordResetRequestId': passwordResetRequestId,
       'verificationCode': verificationCode,
     },
   );
@@ -140,33 +136,6 @@ class EndpointEmailIdp extends _iaic.EndpointEmailIdpBase {
         'startPasswordReset',
         {'email': email},
       );
-
-  /// Verifies a password reset code and returns a finishPasswordResetToken
-  /// that can be used to finish the password reset.
-  ///
-  /// Throws an [EmailAccountPasswordResetException] in case of errors, with reason:
-  /// - [EmailAccountPasswordResetExceptionReason.expired] if the password reset
-  ///   request has already expired.
-  /// - [EmailAccountPasswordResetExceptionReason.tooManyAttempts] if the user has
-  ///   made too many attempts trying to verify the password reset.
-  /// - [EmailAccountPasswordResetExceptionReason.invalid] if no request exists
-  ///   for the given [passwordResetRequestId] or [verificationCode] is invalid.
-  ///
-  /// If multiple steps are required to complete the password reset, this endpoint
-  /// should be overridden to return credentials for the next step instead
-  /// of the credentials for setting the password.
-  @override
-  _ida.Future<String> verifyPasswordResetCode({
-    required _isc.UuidValue passwordResetRequestId,
-    required String verificationCode,
-  }) => caller.callServerEndpoint<String>(
-    'emailIdp',
-    'verifyPasswordResetCode',
-    {
-      'passwordResetRequestId': passwordResetRequestId,
-      'verificationCode': verificationCode,
-    },
-  );
 
   /// Completes a password reset request by setting a new password.
   ///
@@ -329,6 +298,28 @@ class EndpointAccount extends _isc.EndpointRef {
       'userId': userId,
       'allowed': allowed,
     },
+  );
+}
+
+/// Server administration (server administrator only).
+/// {@category Endpoint}
+class EndpointAdmin extends _isc.EndpointRef {
+  EndpointAdmin(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'admin';
+
+  _ida.Future<List<_ivw6xhv3.IpBanInfo>> bannedIps() =>
+      caller.callServerEndpoint<List<_ivw6xhv3.IpBanInfo>>(
+        'admin',
+        'bannedIps',
+        {},
+      );
+
+  _ida.Future<void> unbanIp(String ip) => caller.callServerEndpoint<void>(
+    'admin',
+    'unbanIp',
+    {'ip': ip},
   );
 }
 
@@ -523,6 +514,7 @@ class Client extends _isc.ServerpodClientShared {
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
     account = EndpointAccount(this);
+    admin = EndpointAdmin(this);
     group = EndpointGroup(this);
     invitation = EndpointInvitation(this);
     setup = EndpointSetup(this);
@@ -534,6 +526,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointJwtRefresh jwtRefresh;
 
   late final EndpointAccount account;
+
+  late final EndpointAdmin admin;
 
   late final EndpointGroup group;
 
@@ -548,6 +542,7 @@ class Client extends _isc.ServerpodClientShared {
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
     'account': account,
+    'admin': admin,
     'group': group,
     'invitation': invitation,
     'setup': setup,
