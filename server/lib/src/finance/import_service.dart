@@ -121,7 +121,10 @@ abstract final class ImportService {
     );
     final lines = <_Line>[];
     for (var i = 0; i < txs.length; i++) {
-      final cleaned = core.cleanCaisseEpargneLabel(txs[i].fullLabel);
+      final cleaned = core.cleanCaisseEpargneLabel(
+        txs[i].label,
+        memo: txs[i].memo,
+      );
       lines.add(
         _Line(
           i,

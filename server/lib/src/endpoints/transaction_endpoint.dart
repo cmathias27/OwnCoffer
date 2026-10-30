@@ -45,7 +45,8 @@ class TransactionEndpoint extends Endpoint {
             e &
             (t.rawLabel.ilike(pattern) |
                 t.cleanLabel.ilike(pattern) |
-                t.memo.ilike(pattern));
+                t.memo.ilike(pattern) |
+                t.note.ilike(pattern));
       }
       return e;
     }
@@ -69,7 +70,7 @@ class TransactionEndpoint extends Endpoint {
     DateTime date,
     int amountCents,
     String label, {
-    String? memo,
+    String? note,
     int? categoryId,
   }) async {
     final account = await Access.requireAccount(
@@ -102,7 +103,7 @@ class TransactionEndpoint extends Endpoint {
         date: _day(date),
         amountCents: amountCents,
         rawLabel: text,
-        memo: memo?.trim().isEmpty ?? true ? null : memo!.trim(),
+        note: note?.trim().isEmpty ?? true ? null : note!.trim(),
         cleanLabel: cleaned.display,
         operationKind: cleaned.kind.name,
         categoryId: category,
@@ -116,14 +117,14 @@ class TransactionEndpoint extends Endpoint {
   }
 
   /// Date, amount and label can only be changed on manual entries: imported
-  /// operations keep what the bank wrote. The memo can always be changed.
+  /// operations keep what the bank wrote. The note can always be changed.
   Future<BankTransaction> update(
     Session session,
     int transactionId, {
     DateTime? date,
     int? amountCents,
     String? label,
-    String? memo,
+    String? note,
   }) async {
     final (t, account) = await _find(session, transactionId);
     final imported = t.importId != null;
@@ -141,9 +142,9 @@ class TransactionEndpoint extends Endpoint {
         rawLabel: text,
         cleanLabel: cleaned?.display,
         operationKind: cleaned?.kind.name,
-        memo: memo == null
-            ? t.memo
-            : (memo.trim().isEmpty ? null : memo.trim()),
+        note: note == null
+            ? t.note
+            : (note.trim().isEmpty ? null : note.trim()),
         updatedAt: DateTime.now().toUtc(),
       ),
     );

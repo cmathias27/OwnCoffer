@@ -64,6 +64,18 @@ const _legalForms = {
   'SA', 'SAS', 'SASU', 'SARL', 'EURL', 'SNC', 'SCI', 'SCP', 'SCOP', 'GIE', //
 };
 
+/// Legal forms written with dots or in several words once normalised:
+/// "S.a.r.l." → `S A R L`, "et Cie" → `ET CIE`.
+const _legalSuffixes = [
+  ['S', 'A', 'R', 'L'],
+  ['S', 'A', 'S', 'U'],
+  ['S', 'A', 'S'],
+  ['S', 'C', 'A'],
+  ['S', 'A'],
+  ['ET', 'CIE'],
+  ['ET', 'C'],
+];
+
 final RegExp _multiSpace = RegExp(r' {2,}');
 final RegExp _leadingDayMonth = RegExp(
   r'^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2]) ',
@@ -147,11 +159,16 @@ bool startsWithOperationPrefix(String raw, {BankLabelProfile? profile}) {
 /// caller using [CleanedLabel.kind]).
 CleanedLabel cleanLabel(
   String raw, {
+  String? memo,
   BankLabelProfile? profile,
 }) {
   final p = profile ?? genericFrenchProfile;
-  final full = normalizeForMatch(raw);
-  var s = full;
+  // The short label comes from the operation label only; the memo (bank's
+  // short name, transfer reason…) is only used for matching rules.
+  final full = normalizeForMatch(
+    memo == null || memo.trim().isEmpty ? raw : '$raw $memo',
+  );
+  var s = normalizeForMatch(raw);
 
   var kind = OperationKind.other;
   final prefixes = [...p.prefixes]
@@ -178,19 +195,40 @@ CleanedLabel cleanLabel(
 
   // Drop trailing legal forms: "EDF SA" → "EDF".
   var words = s.isEmpty ? <String>[] : s.split(' ');
-  while (words.length > 1 && _legalForms.contains(words.last)) {
-    words = words.sublist(0, words.length - 1);
+  var trimmed = true;
+  while (trimmed) {
+    trimmed = false;
+    if (words.length > 1 && _legalForms.contains(words.last)) {
+      words = words.sublist(0, words.length - 1);
+      trimmed = true;
+      continue;
+    }
+    for (final suffix in _legalSuffixes) {
+      if (words.length > suffix.length && _endsWith(words, suffix)) {
+        words = words.sublist(0, words.length - suffix.length);
+        trimmed = true;
+        break;
+      }
+    }
   }
   s = words.join(' ');
 
   if (s.isEmpty) {
     // Nothing left (e.g. "RETRAIT DAB 29/10"): keep the kind as label.
+    final label = normalizeForMatch(raw);
     s =
         prefixes
-            .where((x) => x.kind == kind && startsWithWords(full, x.text))
+            .where((x) => x.kind == kind && startsWithWords(label, x.text))
             .map((x) => x.text)
             .firstOrNull ??
-        full;
+        label;
   }
   return CleanedLabel(s, full, kind);
+}
+
+bool _endsWith(List<String> words, List<String> suffix) {
+  for (var i = 0; i < suffix.length; i++) {
+    if (words[words.length - suffix.length + i] != suffix[i]) return false;
+  }
+  return true;
 }

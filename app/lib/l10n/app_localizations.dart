@@ -907,6 +907,354 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cette notification n\'existe pas.'**
   String get error_notification_access_denied;
+
+  /// No description provided for @navAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes'**
+  String get navAccounts;
+
+  /// No description provided for @navOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations'**
+  String get navOperations;
+
+  /// No description provided for @navImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer'**
+  String get navImport;
+
+  /// No description provided for @navForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévisions'**
+  String get navForecast;
+
+  /// No description provided for @navCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories'**
+  String get navCategories;
+
+  /// No description provided for @accountsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes'**
+  String get accountsTitle;
+
+  /// No description provided for @accountsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun compte pour l\'instant.'**
+  String get accountsEmpty;
+
+  /// No description provided for @accountAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un compte'**
+  String get accountAdd;
+
+  /// No description provided for @accountEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le compte'**
+  String get accountEdit;
+
+  /// No description provided for @accountName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom du compte'**
+  String get accountName;
+
+  /// No description provided for @accountBank.
+  ///
+  /// In fr, this message translates to:
+  /// **'Banque'**
+  String get accountBank;
+
+  /// No description provided for @accountKind.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type'**
+  String get accountKind;
+
+  /// No description provided for @kindChecking.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte courant'**
+  String get kindChecking;
+
+  /// No description provided for @kindSavings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Épargne'**
+  String get kindSavings;
+
+  /// No description provided for @kindDeferredCard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Carte à débit différé'**
+  String get kindDeferredCard;
+
+  /// No description provided for @kindCash.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espèces'**
+  String get kindCash;
+
+  /// No description provided for @initialBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde initial'**
+  String get initialBalance;
+
+  /// No description provided for @initialBalanceHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde du compte avant la première opération importée.'**
+  String get initialBalanceHelp;
+
+  /// No description provided for @alertThreshold.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuil d\'alerte'**
+  String get alertThreshold;
+
+  /// No description provided for @alertThresholdHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Alerte quand le solde prévu passe en dessous. 0 = tout découvert ; -500 = découvert autorisé de 500.'**
+  String get alertThresholdHelp;
+
+  /// No description provided for @visibilityRestricted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte restreint (visible seulement par les administrateurs et les personnes autorisées)'**
+  String get visibilityRestricted;
+
+  /// No description provided for @balanceCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde actuel'**
+  String get balanceCurrent;
+
+  /// No description provided for @balanceCleared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde pointé'**
+  String get balanceCleared;
+
+  /// No description provided for @forecastLowest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point bas à 30 jours : {amount} le {date}'**
+  String forecastLowest(String amount, String date);
+
+  /// No description provided for @overdraftExpected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Découvert prévu le {date}'**
+  String overdraftExpected(String date);
+
+  /// No description provided for @amountInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant illisible. Exemple : -12,50'**
+  String get amountInvalid;
+
+  /// No description provided for @operationsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations'**
+  String get operationsTitle;
+
+  /// No description provided for @operationsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération.'**
+  String get operationsEmpty;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un libellé'**
+  String get searchHint;
+
+  /// No description provided for @filterToClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'À classer'**
+  String get filterToClassify;
+
+  /// No description provided for @filterUncleared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non pointées'**
+  String get filterUncleared;
+
+  /// No description provided for @loadMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher plus'**
+  String get loadMore;
+
+  /// No description provided for @operationsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} opérations'**
+  String operationsCount(int count);
+
+  /// No description provided for @toClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'À classer'**
+  String get toClassify;
+
+  /// No description provided for @operationAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisir une opération'**
+  String get operationAdd;
+
+  /// No description provided for @dateLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date'**
+  String get dateLabel;
+
+  /// No description provided for @amountLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant'**
+  String get amountLabel;
+
+  /// No description provided for @amountHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Négatif pour une dépense : -12,50'**
+  String get amountHelp;
+
+  /// No description provided for @labelLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libellé'**
+  String get labelLabel;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get categoryLabel;
+
+  /// No description provided for @noCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'À classer'**
+  String get noCategory;
+
+  /// No description provided for @cleared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pointée'**
+  String get cleared;
+
+  /// No description provided for @bankLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libellé de la banque'**
+  String get bankLabel;
+
+  /// No description provided for @alwaysClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toujours classer ainsi'**
+  String get alwaysClassify;
+
+  /// No description provided for @ruleCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règle créée : {count} autres opérations reclassées.'**
+  String ruleCreated(int count);
+
+  /// No description provided for @trash.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre à la corbeille'**
+  String get trash;
+
+  /// No description provided for @trashed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération mise à la corbeille.'**
+  String get trashed;
+
+  /// No description provided for @undo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get undo;
+
+  /// No description provided for @sourceManual.
+  ///
+  /// In fr, this message translates to:
+  /// **'choisie par vous'**
+  String get sourceManual;
+
+  /// No description provided for @sourceGroupRule.
+  ///
+  /// In fr, this message translates to:
+  /// **'règle du groupe'**
+  String get sourceGroupRule;
+
+  /// No description provided for @sourceCommunityRule.
+  ///
+  /// In fr, this message translates to:
+  /// **'règle communautaire'**
+  String get sourceCommunityRule;
+
+  /// No description provided for @sourceHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'historique'**
+  String get sourceHistory;
+
+  /// No description provided for @sourceAi.
+  ///
+  /// In fr, this message translates to:
+  /// **'IA'**
+  String get sourceAi;
+
+  /// No description provided for @chooseAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get chooseAccount;
+
+  /// No description provided for @clearedBalanceValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde pointé : {amount}'**
+  String clearedBalanceValue(String amount);
+
+  /// No description provided for @bankLabelValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libellé de la banque : {label}'**
+  String bankLabelValue(String label);
+
+  /// No description provided for @dateValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date : {date}'**
+  String dateValue(String date);
+
+  /// No description provided for @noteLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre note'**
+  String get noteLabel;
 }
 
 class _AppLocalizationsDelegate

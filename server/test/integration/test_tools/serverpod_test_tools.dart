@@ -2260,7 +2260,7 @@ class _TransactionEndpoint {
     DateTime date,
     int amountCents,
     String label, {
-    String? memo,
+    String? note,
     int? categoryId,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
@@ -2279,7 +2279,7 @@ class _TransactionEndpoint {
             'date': date,
             'amountCents': amountCents,
             'label': label,
-            'memo': memo,
+            'note': note,
             'categoryId': categoryId,
           }),
           serializationManager: _serializationManager,
@@ -2303,7 +2303,7 @@ class _TransactionEndpoint {
     DateTime? date,
     int? amountCents,
     String? label,
-    String? memo,
+    String? note,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -2321,7 +2321,7 @@ class _TransactionEndpoint {
             'date': date,
             'amountCents': amountCents,
             'label': label,
-            'memo': memo,
+            'note': note,
           }),
           serializationManager: _serializationManager,
         );

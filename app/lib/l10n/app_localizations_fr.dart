@@ -492,4 +492,195 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_notification_access_denied =>
       'Cette notification n\'existe pas.';
+
+  @override
+  String get navAccounts => 'Comptes';
+
+  @override
+  String get navOperations => 'Opérations';
+
+  @override
+  String get navImport => 'Importer';
+
+  @override
+  String get navForecast => 'Prévisions';
+
+  @override
+  String get navCategories => 'Catégories';
+
+  @override
+  String get accountsTitle => 'Comptes';
+
+  @override
+  String get accountsEmpty => 'Aucun compte pour l\'instant.';
+
+  @override
+  String get accountAdd => 'Ajouter un compte';
+
+  @override
+  String get accountEdit => 'Modifier le compte';
+
+  @override
+  String get accountName => 'Nom du compte';
+
+  @override
+  String get accountBank => 'Banque';
+
+  @override
+  String get accountKind => 'Type';
+
+  @override
+  String get kindChecking => 'Compte courant';
+
+  @override
+  String get kindSavings => 'Épargne';
+
+  @override
+  String get kindDeferredCard => 'Carte à débit différé';
+
+  @override
+  String get kindCash => 'Espèces';
+
+  @override
+  String get initialBalance => 'Solde initial';
+
+  @override
+  String get initialBalanceHelp =>
+      'Solde du compte avant la première opération importée.';
+
+  @override
+  String get alertThreshold => 'Seuil d\'alerte';
+
+  @override
+  String get alertThresholdHelp =>
+      'Alerte quand le solde prévu passe en dessous. 0 = tout découvert ; -500 = découvert autorisé de 500.';
+
+  @override
+  String get visibilityRestricted =>
+      'Compte restreint (visible seulement par les administrateurs et les personnes autorisées)';
+
+  @override
+  String get balanceCurrent => 'Solde actuel';
+
+  @override
+  String get balanceCleared => 'Solde pointé';
+
+  @override
+  String forecastLowest(String amount, String date) {
+    return 'Point bas à 30 jours : $amount le $date';
+  }
+
+  @override
+  String overdraftExpected(String date) {
+    return 'Découvert prévu le $date';
+  }
+
+  @override
+  String get amountInvalid => 'Montant illisible. Exemple : -12,50';
+
+  @override
+  String get operationsTitle => 'Opérations';
+
+  @override
+  String get operationsEmpty => 'Aucune opération.';
+
+  @override
+  String get searchHint => 'Rechercher un libellé';
+
+  @override
+  String get filterToClassify => 'À classer';
+
+  @override
+  String get filterUncleared => 'Non pointées';
+
+  @override
+  String get loadMore => 'Afficher plus';
+
+  @override
+  String operationsCount(int count) {
+    return '$count opérations';
+  }
+
+  @override
+  String get toClassify => 'À classer';
+
+  @override
+  String get operationAdd => 'Saisir une opération';
+
+  @override
+  String get dateLabel => 'Date';
+
+  @override
+  String get amountLabel => 'Montant';
+
+  @override
+  String get amountHelp => 'Négatif pour une dépense : -12,50';
+
+  @override
+  String get labelLabel => 'Libellé';
+
+  @override
+  String get categoryLabel => 'Catégorie';
+
+  @override
+  String get noCategory => 'À classer';
+
+  @override
+  String get cleared => 'Pointée';
+
+  @override
+  String get bankLabel => 'Libellé de la banque';
+
+  @override
+  String get alwaysClassify => 'Toujours classer ainsi';
+
+  @override
+  String ruleCreated(int count) {
+    return 'Règle créée : $count autres opérations reclassées.';
+  }
+
+  @override
+  String get trash => 'Mettre à la corbeille';
+
+  @override
+  String get trashed => 'Opération mise à la corbeille.';
+
+  @override
+  String get undo => 'Annuler';
+
+  @override
+  String get sourceManual => 'choisie par vous';
+
+  @override
+  String get sourceGroupRule => 'règle du groupe';
+
+  @override
+  String get sourceCommunityRule => 'règle communautaire';
+
+  @override
+  String get sourceHistory => 'historique';
+
+  @override
+  String get sourceAi => 'IA';
+
+  @override
+  String get chooseAccount => 'Compte';
+
+  @override
+  String clearedBalanceValue(String amount) {
+    return 'Solde pointé : $amount';
+  }
+
+  @override
+  String bankLabelValue(String label) {
+    return 'Libellé de la banque : $label';
+  }
+
+  @override
+  String dateValue(String date) {
+    return 'Date : $date';
+  }
+
+  @override
+  String get noteLabel => 'Votre note';
 }
