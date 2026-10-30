@@ -34,7 +34,7 @@ docs/     cahier des charges, roadbook, décisions
 
 - **Aucune vraie donnée bancaire** dans le dépôt, les tests, les issues ou les logs. Fixtures uniquement anonymisées, noms de fichiers neutres (jamais de numéro de compte).
 - **Montants en centimes** (`int`), jamais en `double`. Dates d'opération sans fuseau.
-- **Sécurité** : toute requête vérifie groupe, rôle et visibilité du compte côté serveur ; tester qu'un utilisateur ne peut pas accéder aux données d'un autre groupe. Aucun secret dans le code ; `.env` jamais commité ; clés IA chiffrées, jamais journalisées.
+- **Sécurité** : toute requête vérifie groupe, rôle et visibilité du compte côté serveur (`Access`) ; **chaque point d'accès qui lit ou modifie des données d'un groupe a un test d'isolation** (un membre d'un autre groupe est refusé, les données restent intactes) — décision 0016, la RLS PostgreSQL étant repoussée avant la bêta. Aucun secret dans le code ; `.env` jamais commité ; clés IA chiffrées, jamais journalisées.
 - **Aucune télémétrie**, aucun appel réseau sortant non demandé par l'utilisateur.
 - **Bilingue** : aucun texte d'interface en dur, tout passe par les fichiers de traduction FR et EN.
 - **Classement** : règles du groupe → règles communautaires → historique → IA (optionnelle, en dernier). L'IA propose, l'utilisateur valide.

@@ -19,5 +19,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0013](0013-licence-regles-communautaires-cc0.md) | Licence CC0 pour la base de règles communautaires | Décidé |
 | [0014](0014-cible-classement-automatique-alpha.md) | Cible de classement automatique pour l'alpha : 70 % | Décidé |
 | [0015](0015-reseau-docker-isole-proxy.md) | Réseau Docker isolé, proxy Caddy sur le port unique | Décidé |
+| [0016](0016-rls-apres-alpha.md) | Row Level Security repoussée après l'alpha ; test d'isolation obligatoire | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.

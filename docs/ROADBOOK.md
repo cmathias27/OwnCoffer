@@ -39,6 +39,7 @@ flowchart TD
 | [0013](decisions/0013-licence-regles-communautaires-cc0.md) | Licence **CC0** pour les règles communautaires | Décidé |
 | [0014](decisions/0014-cible-classement-automatique-alpha.md) | Cible de classement automatique de l'alpha : **70 %** | Décidé |
 | [0015](decisions/0015-reseau-docker-isole-proxy.md) | **Réseau Docker isolé**, proxy Caddy sur le port unique (remplace la partie réseau de 0012) | Décidé |
+| [0016](decisions/0016-rls-apres-alpha.md) | **RLS PostgreSQL repoussée** après l'alpha, test d'isolation obligatoire | Décidé |
 
 ## Phase 0 — Préparation et décisions *(en cours)*
 
@@ -100,7 +101,7 @@ Objectif : se connecter en sécurité, créer des groupes, inviter des membres ;
 - [x] Double authentification TOTP, avec codes de secours (côté serveur ; écrans à venir)
 - [x] Blocage automatique des IP (5 échecs en 15 minutes, durée doublée à chaque récidive) et limite de requêtes
 - [x] Groupes, rôles (admin, user, lecteur) et invitations par lien expirant (côté serveur ; écrans à venir)
-- [ ] Permissions à deux niveaux : serveur (fait, testé) puis PostgreSQL (RLS)
+- [x] Permissions côté serveur, testées ; seconde barrière PostgreSQL (RLS) repoussée avant la bêta (décision 0016)
 - [x] Journal d'audit des actions sensibles (écriture ; consultation à venir)
 - [x] Accès extérieur par Cloudflare (HTTPS géré par Cloudflare) : vraie adresse IP lue dans `CF-Connecting-IP` uniquement si la requête vient de Cloudflare ou du connecteur local, pour que le blocage des IP fonctionne ; option Cloudflare Access en protection supplémentaire (décision 0012)
 
@@ -150,6 +151,7 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 - [ ] Lecture de documents : tickets (sans IA : saisie assistée ; avec IA : ventilation ligne par ligne), offres de prêt et confirmations de paiement fractionné (avec IA)
 - [ ] Assistant IA (en option) : interroge le moteur, explique, pose les scénarios en langage naturel ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable
 - [ ] Licence Serverpod clarifiée avant d'ouvrir la bêta à d'autres personnes (décision 0001)
+- [ ] Row Level Security PostgreSQL réévaluée avant d'ouvrir la bêta (décision 0016)
 
 **Validation** : un mois complet géré dans OwnCoffer par deux ou trois testeurs, dont au moins un **sans IA** ; les prévisions à 30 jours restent proches du solde réel.
 
