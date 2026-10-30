@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 import 'client.dart';
+import 'l10n/app_localizations.dart';
 import 'screens/sign_in_screen.dart';
 
 void main() async {
@@ -23,7 +25,19 @@ class OwnCofferApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'OwnCoffer',
+      onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      // French by default when the browser language is not supported.
+      localeResolutionCallback: (locale, supported) => supported.firstWhere(
+        (s) => s.languageCode == locale?.languageCode,
+        orElse: () => const Locale('fr'),
+      ),
       theme: _buildTheme(Brightness.light),
       darkTheme: _buildTheme(Brightness.dark),
       themeMode: ThemeMode.system,
@@ -40,9 +54,10 @@ class _Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('OwnCoffer'),
+        title: Text(AppLocalizations.of(context).appTitle),
         actions: [
           IconButton(
+            tooltip: AppLocalizations.of(context).signOut,
             icon: const Icon(Icons.logout),
             onPressed: () => client.auth.signOutDevice(),
           ),
