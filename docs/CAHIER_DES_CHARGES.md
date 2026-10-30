@@ -414,6 +414,12 @@ Quatre responsabilités :
 
 L'IA n'accède qu'aux données des comptes visibles par l'utilisateur qui l'a connectée, et seulement à travers les fonctions du moteur ; jamais directement à la base.
 
+### Passerelle IA et modifications validées
+
+- **IA hybride** (décision 0008) : modèle externe ou local, au choix explicite de l'utilisateur, derrière une **passerelle IA** unique (adaptateurs par fournisseur, capacités par modèle, aucun basculement automatique vers l'externe, affichage de ce qui quitte le serveur). Première version : un connecteur externe et un connecteur local.
+- **Contexte financier** : l'IA ne lit jamais la base ; elle appelle des fonctions en lecture seule (`get_account_overview`, `get_transactions`, `get_budget_status`, `get_upcoming_expenses`, `get_cashflow_forecast`, `get_financial_goals`) limitées aux comptes visibles par l'utilisateur. Elle n'attribue jamais une dépense à un membre du foyer sans information explicite.
+- **Modifications avec validation** (décision 0009) : détection → proposition structurée (état actuel, nouvel état, écart) → explication → validation (accepter, refuser, modifier) → exécution par le moteur. Périmètre : objectifs, budgets, catégories, règles, opérations prévues ; jamais d'opération bancaire réelle. Validation revérifiée côté serveur, exécution idempotente, propositions périmées refusées, journal d'audit, annulation possible.
+
 ## Modèle de données
 
 Première version du schéma PostgreSQL, hébergé dans le conteneur de base de données ; chaque table métier porte un `group_id`, ce qui permet de filtrer les accès directement dans la base.
@@ -443,6 +449,7 @@ Première version du schéma PostgreSQL, hébergé dans le conteneur de base de 
 | `advisor_preferences` | Connaissances du conseiller | user_id, objectifs suivis, préférences, habitudes détectées |
 | `advisor_insights` | Analyses et recommandations | user_id, type (bonne nouvelle, vigilance, recommandation), données sources, calcul, statut (acceptée, refusée, ignorée), date |
 | `advisor_followups` | Suivi des décisions | insight_id, action décidée, objectif lié, résultat mesuré |
+| `action_proposals` | Modifications proposées | type, cible, état actuel, nouvel état, version des données, origine (moteur ou IA, fournisseur, modèle), statut, dates |
 | `ai_connections` | Connexions IA de chaque utilisateur | user\_id, fournisseur, modèle, adresse (modèle local), clé chiffrée, par défaut, plafond mensuel, consommation |
 | `loans` | Crédits | group\_id, account\_id, type, organisme, capital, taux, TAEG, durée, périodicité, assurance, frais, date de première échéance |
 | `loan_schedule` | Tableau d'amortissement | loan\_id, numéro, date, mensualité, capital, intérêts, assurance, capital restant dû, source (calculé, importé) |

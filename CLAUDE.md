@@ -38,6 +38,8 @@ docs/     cahier des charges, roadbook, décisions
 - **Classement** : règles du groupe → règles communautaires → historique → IA (optionnelle, en dernier). L'IA propose, l'utilisateur valide.
 - **IA optionnelle** (décision 0006) : chaque fonction doit marcher complètement sans IA ; tous les calculs, prévisions et simulations sont faits par le moteur financier déterministe ; l'IA ne fait qu'appeler ce moteur et expliquer, ne calcule jamais un montant et ne modifie jamais les données. Tests exécutés IA désactivée.
 - **Mon conseiller** (décision 0007) : chaque analyse ou recommandation affiche ses données et son calcul ; une information inconnue est signalée, jamais inventée ; l'IA n'accède qu'aux comptes visibles par l'utilisateur, via les fonctions du moteur.
+- **Passerelle IA** (décision 0008) : tout appel à une IA passe par la passerelle ; jamais d'appel direct à un fournisseur, jamais de basculement automatique vers un modèle externe ; l'IA lit les données uniquement via les fonctions de contexte en lecture seule.
+- **Modifications** (décision 0009) : l'IA et le conseiller produisent des propositions structurées ; seul le service de commandes financières écrit, après validation explicite revérifiée côté serveur, de façon idempotente, en refusant toute proposition dont les données ont changé ; tout est journalisé. Jamais d'opération bancaire réelle.
 - **Licences** : toute dépendance ajoutée doit être compatible AGPL-3.0.
 - Une seule banque est prise en charge au départ (décision 0003) ; isoler ses particularités dans un module dédié.
 

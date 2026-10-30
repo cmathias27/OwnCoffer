@@ -31,6 +31,8 @@ flowchart TD
 | [0005](decisions/0005-interface-flutter-web.md) | Interface web en **Flutter web** | Proposé |
 | [0006](decisions/0006-ia-optionnelle.md) | **IA optionnelle** : l'application est aussi complète sans elle | Décidé |
 | [0007](decisions/0007-espace-mon-conseiller.md) | Espace **Mon conseiller** : analyses et recommandations suivies | Décidé |
+| [0008](decisions/0008-ia-hybride-passerelle.md) | **IA hybride** (locale ou externe) derrière une **passerelle IA** | Décidé |
+| [0009](decisions/0009-actions-proposees-validees.md) | **Modifications proposées**, validées par l'utilisateur, exécutées par le moteur | Décidé |
 
 ## Phase 0 — Préparation et décisions *(en cours)*
 
@@ -107,7 +109,9 @@ Objectif : importer ses vrais relevés et voir ses opérations classées, avec l
 - [ ] Classement : catégories reliées au catalogue standard, règles du groupe, historique, testeur de règles, source de la catégorie affichée
 - [ ] Règles communautaires v0 : dépôt séparé `owncoffer-rules`, premières règles pour les grandes enseignes françaises
 - [ ] Solde de contrôle et détection des frais bancaires
-- [ ] Connexions IA par utilisateur : fournisseur au choix (Claude, OpenAI, Mistral, Gemini, modèle local), clé chiffrée, plafond mensuel, appels relayés par le serveur
+- [ ] Passerelle IA (décision 0008) : interface commune, choix du fournisseur et du modèle par utilisateur, capacités par modèle, aucun basculement automatique vers l'externe, affichage de ce qui quitte le serveur ; clé chiffrée, plafond mensuel
+- [ ] Premiers connecteurs : un externe (compatible API OpenAI) et un local (Ollama)
+- [ ] Fonctions de contexte financier en lecture seule pour l'IA (`get_account_overview`, `get_transactions`, `get_budget_status`, `get_upcoming_expenses`, `get_cashflow_forecast`, `get_financial_goals`), limitées aux comptes visibles
 - [ ] Catégorisation d'appoint par l'IA pour les opérations restées non classées, avec la règle suggérée
 - [ ] Lecture de tickets de caisse : sans IA, saisie assistée avec montant et date lus sur l'appareil ; avec IA, ventilation automatique ligne par ligne, validée par l'utilisateur
 
@@ -126,6 +130,7 @@ Objectif : voir l'avenir de ses comptes et être prévenu à temps. Fin de phase
 - [ ] Tableau de bord et graphiques
 - [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois
 - [ ] Lecture par l'IA des offres de prêt (→ crédit et tableau d'amortissement, recalculé pour contrôle) et des confirmations de paiement fractionné (→ échéancier)
+- [ ] Circuit des modifications proposées (décision 0009) : service de propositions, service de validation, service de commandes financières ; idempotence, refus des propositions périmées, journal d'audit, annulation possible
 - [ ] Espace **Mon conseiller** (sans IA) : cartes surveiller / anticiper / conseiller / accompagner calculées par le moteur, acceptées, refusées ou ignorées, suivies dans le temps, chacune justifiée par ses données
 - [ ] Assistant IA (en option) : il interroge le moteur financier, explique les résultats et pose les scénarios en langage naturel ; il ne calcule ni ne modifie rien ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable
 - [ ] Revue de fin de mois et détection d'anomalies

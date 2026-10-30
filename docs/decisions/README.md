@@ -11,5 +11,7 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0005](0005-interface-flutter-web.md) | Interface web en Flutter web | Proposé |
 | [0006](0006-ia-optionnelle.md) | L'IA est optionnelle : l'application est complète sans elle | Décidé |
 | [0007](0007-espace-mon-conseiller.md) | Espace « Mon conseiller » : journal d'analyses et de recommandations | Décidé |
+| [0008](0008-ia-hybride-passerelle.md) | IA hybride (locale ou externe) derrière une passerelle IA unique | Décidé |
+| [0009](0009-actions-proposees-validees.md) | Modifications proposées, validées par l'utilisateur, exécutées par le moteur | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.
