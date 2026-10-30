@@ -1,0 +1,6 @@
+class: TwoFactorStatus
+fields:
+  enabled: bool
+  backupCodesLeft: int
+  ### False while signed in with the password only (code still required).
+  fullAccess: bool

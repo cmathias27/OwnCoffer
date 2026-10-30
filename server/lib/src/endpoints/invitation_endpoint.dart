@@ -6,6 +6,7 @@ import 'package:serverpod_auth_idp_server/core.dart';
 import '../generated/protocol.dart';
 import '../onboarding/onboarding.dart';
 import '../security/access.dart';
+import '../security/scopes.dart';
 import '../security/audit.dart';
 import '../security/ip_guard.dart';
 
@@ -14,6 +15,11 @@ import '../security/ip_guard.dart';
 class InvitationEndpoint extends Endpoint {
   @override
   bool get requireLogin => true;
+
+  /// Password-only sessions of users with two-factor authentication lack
+  /// this scope until they type their code.
+  @override
+  Set<Scope> get requiredScopes => {accessScope};
 
   static String get _publicUrl =>
       Platform.environment['OWNCOFFER_PUBLIC_URL'] ?? 'http://localhost:8080';

@@ -1,0 +1,5 @@
+### Shown once when enabling two-factor authentication.
+class: TotpEnrollment
+fields:
+  secret: String
+  otpauthUri: String

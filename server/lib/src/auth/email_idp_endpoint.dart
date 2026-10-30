@@ -1,4 +1,5 @@
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_idp_server/core.dart';
 import 'package:serverpod_auth_idp_server/providers/email.dart';
 
 import '../generated/protocol.dart';
@@ -48,6 +49,31 @@ class EmailIdpEndpoint extends EmailIdpBaseEndpoint {
     return super.startRegistration(
       session,
       email: Onboarding.normalizeEmail(email),
+    );
+  }
+
+  /// Serverpod reads the account scopes before our account-creation hook has
+  /// granted full access (no 2FA yet), so the first token would be partial:
+  /// it is replaced by a token with the account's final scopes.
+  @override
+  Future<AuthSuccess> finishRegistration(
+    Session session, {
+    required String registrationToken,
+    required String password,
+  }) async {
+    final first = await super.finishRegistration(
+      session,
+      registrationToken: registrationToken,
+      password: password,
+    );
+    final account = (await AuthUser.db.findById(session, first.authUserId))!;
+    final tokens = AuthServices.instance.tokenManager;
+    await tokens.revokeAllTokens(session, authUserId: first.authUserId);
+    return tokens.issueToken(
+      session,
+      authUserId: first.authUserId,
+      method: first.authStrategy,
+      scopes: {for (final name in account.scopeNames) Scope(name)},
     );
   }
 

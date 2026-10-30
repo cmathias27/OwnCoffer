@@ -206,6 +206,30 @@ abstract class AppLocalizations {
   /// **'Cette invitation a été envoyée à une autre adresse email.'**
   String get error_invitation_other_email;
 
+  /// No description provided for @error_two_factor_required.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez d\'abord votre code de double authentification.'**
+  String get error_two_factor_required;
+
+  /// No description provided for @error_two_factor_code_invalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code incorrect ou déjà utilisé.'**
+  String get error_two_factor_code_invalid;
+
+  /// No description provided for @error_two_factor_already_enabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'La double authentification est déjà activée.'**
+  String get error_two_factor_already_enabled;
+
+  /// No description provided for @error_two_factor_not_started.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencez par scanner le QR code dans votre application.'**
+  String get error_two_factor_not_started;
+
   /// No description provided for @import_error_missing_date.
   ///
   /// In fr, this message translates to:

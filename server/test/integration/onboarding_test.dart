@@ -1,4 +1,5 @@
 import 'package:owncoffer_server/src/generated/protocol.dart';
+import 'package:owncoffer_server/src/security/scopes.dart';
 import 'package:owncoffer_server/src/mail/mail_service.dart';
 import 'package:owncoffer_server/src/onboarding/onboarding.dart';
 import 'package:serverpod/serverpod.dart';
@@ -15,7 +16,7 @@ void main() {
     TestSessionBuilder as(UuidValue user) => sessionBuilder.copyWith(
       authentication: AuthenticationOverride.authenticationInfo(
         user.toString(),
-        {},
+        {accessScope},
       ),
     );
 

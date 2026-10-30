@@ -3,7 +3,6 @@
   "appTitle": "OwnCoffer",
   "signOut": "Se déconnecter",
   "language": "Langue",
-
   "error_generic": "Une erreur est survenue. Réessayez.",
   "error_not_authenticated": "Votre session a expiré. Reconnectez-vous.",
   "error_group_access_denied": "Ce groupe n'existe pas ou vous n'y avez pas accès.",
@@ -19,27 +18,90 @@
   "error_registration_closed": "L'inscription se fait uniquement sur invitation.",
   "error_invitation_invalid": "Cette invitation n'est plus valable.",
   "error_invitation_other_email": "Cette invitation a été envoyée à une autre adresse email.",
-
+  "error_two_factor_required": "Saisissez d'abord votre code de double authentification.",
+  "error_two_factor_code_invalid": "Code incorrect ou déjà utilisé.",
+  "error_two_factor_already_enabled": "La double authentification est déjà activée.",
+  "error_two_factor_not_started": "Commencez par scanner le QR code dans votre application.",
   "import_error_missing_date": "Ligne {line} : date absente",
-  "@import_error_missing_date": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_missing_date": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_error_invalid_date": "Ligne {line} : date illisible",
-  "@import_error_invalid_date": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_invalid_date": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_error_missing_amount": "Ligne {line} : montant absent",
-  "@import_error_missing_amount": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_missing_amount": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_error_invalid_amount": "Ligne {line} : montant illisible",
-  "@import_error_invalid_amount": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_invalid_amount": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_error_debit_and_credit": "Ligne {line} : débit et crédit remplis tous les deux",
-  "@import_error_debit_and_credit": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_debit_and_credit": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_error_missing_label": "Ligne {line} : libellé absent",
-  "@import_error_missing_label": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_missing_label": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_error_qif_missing_end": "Ligne {line} : fin d'opération manquante",
-  "@import_error_qif_missing_end": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_qif_missing_end": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_error_qif_section_skipped": "Ligne {line} : section ignorée",
-  "@import_error_qif_section_skipped": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_qif_section_skipped": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_error_qif_split_ignored": "Ligne {line} : ventilation ignorée, seul le total est importé",
-  "@import_error_qif_split_ignored": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_qif_split_ignored": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_error_ofx_balance_unreadable": "Ligne {line} : solde de la banque illisible",
-  "@import_error_ofx_balance_unreadable": {"placeholders": {"line": {"type": "int"}}},
+  "@import_error_ofx_balance_unreadable": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
   "import_format_qif_no_header": "Ce fichier QIF n'a pas d'en-tête « !Type ».",
   "import_format_ofx_no_root": "Ce fichier OFX est incomplet.",
   "import_format_csv_columns_unknown": "Colonnes non reconnues : choisissez-les.",

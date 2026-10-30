@@ -3,12 +3,18 @@ import 'package:serverpod/serverpod.dart';
 import '../generated/protocol.dart';
 import '../onboarding/onboarding.dart';
 import '../security/access.dart';
+import '../security/scopes.dart';
 import '../security/audit.dart';
 
 /// Groups of the current user and their members.
 class GroupEndpoint extends Endpoint {
   @override
   bool get requireLogin => true;
+
+  /// Password-only sessions of users with two-factor authentication lack
+  /// this scope until they type their code.
+  @override
+  Set<Scope> get requiredScopes => {accessScope};
 
   Future<List<GroupMembership>> myGroups(Session session) async {
     final user = Access.userId(session);

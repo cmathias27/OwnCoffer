@@ -1,4 +1,5 @@
 import 'package:owncoffer_server/src/generated/protocol.dart';
+import 'package:owncoffer_server/src/security/scopes.dart';
 import 'package:owncoffer_server/src/security/client_ip.dart';
 import 'package:owncoffer_server/src/security/ip_guard.dart';
 import 'package:serverpod/serverpod.dart';
@@ -92,7 +93,7 @@ void main() {
       TestSessionBuilder as(UuidValue u) => sessionBuilder.copyWith(
         authentication: AuthenticationOverride.authenticationInfo(
           u.toString(),
-          {},
+          {accessScope},
         ),
       );
       await expectLater(

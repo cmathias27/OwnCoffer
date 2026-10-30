@@ -33,3 +33,10 @@ invitation:
 setup:
   - status:
   - start:
+twoFactor:
+  - status:
+  - begin:
+  - confirm:
+  - verify:
+  - renewBackupCodes:
+  - disable:

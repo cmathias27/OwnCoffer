@@ -48,6 +48,8 @@ import 'scheduled_transaction.dart' as _ifol8nrg;
 import 'setup_status.dart' as _iw7q1xsb;
 import 'standard_category.dart' as _iwj8dr64;
 import 'statement_import.dart' as _ia7wudj2;
+import 'totp_enrollment.dart' as _iul1v2p7;
+import 'two_factor_status.dart' as _igcslm1n;
 export 'access_denied_exception.dart';
 export 'account.dart';
 export 'account_access.dart';
@@ -73,6 +75,8 @@ export 'scheduled_transaction.dart';
 export 'setup_status.dart';
 export 'standard_category.dart';
 export 'statement_import.dart';
+export 'totp_enrollment.dart';
+export 'two_factor_status.dart';
 export 'client.dart';
 
 class Protocol extends _isc.SerializationManager {
@@ -184,6 +188,12 @@ class Protocol extends _isc.SerializationManager {
     if (t == _ia7wudj2.StatementImport) {
       return _ia7wudj2.StatementImport.fromJson(data) as T;
     }
+    if (t == _iul1v2p7.TotpEnrollment) {
+      return _iul1v2p7.TotpEnrollment.fromJson(data) as T;
+    }
+    if (t == _igcslm1n.TwoFactorStatus) {
+      return _igcslm1n.TwoFactorStatus.fromJson(data) as T;
+    }
     if (t == _isc.getType<_i8te4v3o.AccessDeniedException?>()) {
       return (data != null
               ? _i8te4v3o.AccessDeniedException.fromJson(data)
@@ -280,6 +290,14 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _ia7wudj2.StatementImport.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_iul1v2p7.TotpEnrollment?>()) {
+      return (data != null ? _iul1v2p7.TotpEnrollment.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_igcslm1n.TwoFactorStatus?>()) {
+      return (data != null ? _igcslm1n.TwoFactorStatus.fromJson(data) : null)
+          as T;
+    }
     if (t == List<_i4motmly.Account>) {
       return (data as List)
               .map((e) => deserialize<_i4motmly.Account>(e))
@@ -309,6 +327,9 @@ class Protocol extends _isc.SerializationManager {
               .map((e) => deserialize<_i2judacm.InvitationInfo>(e))
               .toList()
           as T;
+    }
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
     try {
       return _iaic.Protocol().deserialize<T>(data, t);
@@ -346,6 +367,8 @@ class Protocol extends _isc.SerializationManager {
       _iw7q1xsb.SetupStatus => 'SetupStatus',
       _iwj8dr64.StandardCategory => 'StandardCategory',
       _ia7wudj2.StatementImport => 'StatementImport',
+      _iul1v2p7.TotpEnrollment => 'TotpEnrollment',
+      _igcslm1n.TwoFactorStatus => 'TwoFactorStatus',
       _ => null,
     };
   }
@@ -410,6 +433,10 @@ class Protocol extends _isc.SerializationManager {
         return 'StandardCategory';
       case _ia7wudj2.StatementImport():
         return 'StatementImport';
+      case _iul1v2p7.TotpEnrollment():
+        return 'TotpEnrollment';
+      case _igcslm1n.TwoFactorStatus():
+        return 'TwoFactorStatus';
     }
     className = _iaic.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -506,6 +533,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'StatementImport') {
       return deserialize<_ia7wudj2.StatementImport>(data['data']);
+    }
+    if (dataClassName == 'TotpEnrollment') {
+      return deserialize<_iul1v2p7.TotpEnrollment>(data['data']);
+    }
+    if (dataClassName == 'TwoFactorStatus') {
+      return deserialize<_igcslm1n.TwoFactorStatus>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       data['className'] = dataClassName.substring(19);

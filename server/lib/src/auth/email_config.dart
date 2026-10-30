@@ -4,6 +4,7 @@ import 'package:serverpod_auth_idp_server/providers/email.dart';
 import '../i18n/messages.dart';
 import '../mail/mail_service.dart';
 import '../onboarding/onboarding.dart';
+import '../security/two_factor.dart';
 
 /// Email/password sign-in: codes sent by [MailService] (SMTP from .env, or
 /// the server log), invitations applied as soon as the account exists.
@@ -52,9 +53,16 @@ Future<void> _afterAccountCreated(
   required UuidValue authUserId,
   required UuidValue emailAccountId,
   required Transaction? transaction,
-}) => Onboarding.applyInvitations(
-  session,
-  email: email,
-  userId: authUserId,
-  transaction: transaction,
-);
+}) async {
+  await TwoFactor.grantAccessToNewAccount(
+    session,
+    authUserId,
+    transaction: transaction,
+  );
+  await Onboarding.applyInvitations(
+    session,
+    email: email,
+    userId: authUserId,
+    transaction: transaction,
+  );
+}

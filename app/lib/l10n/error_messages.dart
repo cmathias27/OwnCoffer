@@ -19,6 +19,10 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'registration_closed' => l.error_registration_closed,
   'invitation_invalid' => l.error_invitation_invalid,
   'invitation_other_email' => l.error_invitation_other_email,
+  'two_factor_required' => l.error_two_factor_required,
+  'two_factor_code_invalid' => l.error_two_factor_code_invalid,
+  'two_factor_already_enabled' => l.error_two_factor_already_enabled,
+  'two_factor_not_started' => l.error_two_factor_not_started,
   _ => l.error_generic,
 };
 
