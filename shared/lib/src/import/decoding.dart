@@ -52,3 +52,18 @@ String decodeWindows1252(List<int> bytes) {
   }
   return String.fromCharCodes(codes);
 }
+
+/// Encodes text back to Windows-1252. Characters it cannot represent are
+/// replaced by `?`.
+List<int> encodeWindows1252(String text) {
+  final reverse = <int, int>{
+    for (var i = 0; i < _cp1252High.length; i++) _cp1252High[i]: 0x80 + i,
+  };
+  return [
+    for (final rune in text.runes)
+      if (rune < 0x80 || (rune >= 0xA0 && rune <= 0xFF))
+        rune
+      else
+        reverse[rune] ?? 0x3F,
+  ];
+}
