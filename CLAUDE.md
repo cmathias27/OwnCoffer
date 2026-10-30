@@ -36,6 +36,7 @@ docs/     cahier des charges, roadbook, décisions
 - **Aucune télémétrie**, aucun appel réseau sortant non demandé par l'utilisateur.
 - **Bilingue** : aucun texte d'interface en dur, tout passe par les fichiers de traduction FR et EN.
 - **Classement** : règles du groupe → règles communautaires → historique → IA (optionnelle, en dernier). L'IA propose, l'utilisateur valide.
+- **IA optionnelle** (décision 0006) : chaque fonction doit marcher complètement sans IA ; tous les calculs, prévisions et simulations sont faits par le moteur financier déterministe ; l'IA ne fait qu'appeler ce moteur et expliquer, ne calcule jamais un montant et ne modifie jamais les données. Tests exécutés IA désactivée.
 - **Licences** : toute dépendance ajoutée doit être compatible AGPL-3.0.
 - Une seule banque est prise en charge au départ (décision 0003) ; isoler ses particularités dans un module dédié.
 

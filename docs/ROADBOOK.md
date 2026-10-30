@@ -1,6 +1,6 @@
 # OwnCoffer — Roadbook serveur et application web
 
-Le serveur et l'application web passent en premier, avec l'IA intégrée dès la phase 3 ; les applications Windows et Android viendront ensuite, sur le même serveur.
+Le serveur et l'application web passent en premier, avec l'IA disponible dès la phase 3 — en option : chaque utilisateur décide de la connecter ou non, et l'application est aussi complète sans elle (décision 0006) ; les applications Windows et Android viendront ensuite, sur le même serveur.
 
 - **Six phases jusqu'à la 1.0**, chacune terminée par une validation concrète avant de passer à la suivante.
 - **Une version utilisable tôt** : dès la fin de la phase 3, on importe ses vrais relevés (version alpha 0.1).
@@ -29,6 +29,7 @@ flowchart TD
 | [0003](decisions/0003-une-seule-banque-au-depart.md) | **Une seule banque** prise en charge au départ | Décidé |
 | [0004](decisions/0004-licence-agpl.md) | Licence **AGPL-3.0**, gratuit, financé par les dons | Décidé |
 | [0005](decisions/0005-interface-flutter-web.md) | Interface web en **Flutter web** | Proposé |
+| [0006](decisions/0006-ia-optionnelle.md) | **IA optionnelle** : l'application est aussi complète sans elle | Décidé |
 
 ## Phase 0 — Préparation et décisions *(en cours)*
 
@@ -89,7 +90,7 @@ Objectif : se connecter en sécurité, créer des groupes, inviter des membres ;
 - [ ] Groupes, rôles (admin, user, lecteur) et invitations par lien expirant
 - [ ] Permissions à deux niveaux : serveur puis PostgreSQL (RLS)
 - [ ] Journal d'audit des actions sensibles
-- [ ] HTTPS : guide d'installation avec reverse proxy (Caddy) et Let's Encrypt, adapté au serveur existant
+- [ ] HTTPS : guide d'installation avec reverse proxy (Caddy) et Let's Encrypt, adapté au serveur existant ; alternative documentée : accès par VPN (WireGuard, Tailscale) sans exposition directe
 
 **Validation** : des tests automatiques prouvent qu'un utilisateur ne peut jamais lire ni modifier les données d'un autre groupe ; une tentative de force brute est bloquée.
 
@@ -107,7 +108,7 @@ Objectif : importer ses vrais relevés et voir ses opérations classées, avec l
 - [ ] Solde de contrôle et détection des frais bancaires
 - [ ] Connexions IA par utilisateur : fournisseur au choix (Claude, OpenAI, Mistral, Gemini, modèle local), clé chiffrée, plafond mensuel, appels relayés par le serveur
 - [ ] Catégorisation d'appoint par l'IA pour les opérations restées non classées, avec la règle suggérée
-- [ ] Lecture de tickets de caisse par l'IA : photo → opération ventilée ligne par ligne, validée par l'utilisateur
+- [ ] Lecture de tickets de caisse : sans IA, saisie assistée avec montant et date lus sur l'appareil ; avec IA, ventilation automatique ligne par ligne, validée par l'utilisateur
 
 **Validation** : trois mois de relevés réels importés sans doublon ni erreur de montant ; la cible de classement automatique est atteinte.
 
@@ -117,23 +118,24 @@ Objectif : voir l'avenir de ses comptes et être prévenu à temps. Fin de phase
 
 - [ ] Opérations prévues ponctuelles et récurrentes, rapprochement automatique
 - [ ] Moteur de prévision : solde futur, reste à vivre, dépenses variables, calendrier des échéances
-- [ ] Simulateur d'achat : solde à une date choisie, point bas, comptant / en plusieurs fois / plus tard
+- [ ] Moteur de simulation (sans IA) : simulateur d'achat (solde à une date choisie, point bas, comptant / en plusieurs fois / plus tard) et scénarios comparés côte à côte (« +300 €/mois », « −100 € de loisirs »)
+- [ ] Analyses calculées (sans IA) : évolutions par catégorie, hausses et anomalies expliquées par l'écart chiffré, objectifs suggérés d'après les 3 à 6 derniers mois, fiabilité des prévisions affichée
 - [ ] Objectifs par catégorie, alertes à 80 %, 100 % et anticipée
 - [ ] Notifications dans l'app web et par email
 - [ ] Tableau de bord et graphiques
 - [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois
 - [ ] Lecture par l'IA des offres de prêt (→ crédit et tableau d'amortissement, recalculé pour contrôle) et des confirmations de paiement fractionné (→ échéancier)
-- [ ] Bilan du mois en langage clair et questions sur ses dépenses (IA, en option)
+- [ ] Assistant IA (en option) : il interroge le moteur financier, explique les résultats et pose les scénarios en langage naturel ; il ne calcule ni ne modifie rien ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable
 - [ ] Revue de fin de mois et détection d'anomalies
 - [ ] Onglet Feedback
 
-**Validation** : un mois complet géré dans OwnCoffer par deux ou trois testeurs ; les prévisions à 30 jours restent proches du solde réel.
+**Validation** : un mois complet géré dans OwnCoffer par deux ou trois testeurs, dont au moins un **sans IA** ; les prévisions à 30 jours restent proches du solde réel.
 
 ## Phase 5 — Exploitation et version 1.0
 
 Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. Fin de phase = **1.0 serveur + web**.
 
-- [ ] Sauvegardes chaque nuit et avant chaque mise à jour, restauration testée automatiquement
+- [ ] Sauvegardes chiffrées chaque nuit et avant chaque mise à jour, restauration testée automatiquement
 - [ ] Service de mise à jour (Stable et Bêta), notification à l'admin, retour arrière en cas d'échec
 - [ ] Console d'administration : utilisateurs, sessions, IP bloquées, retours, état du serveur
 - [ ] Mode démo et export complet des données (JSON, CSV)
