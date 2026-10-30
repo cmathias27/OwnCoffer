@@ -476,4 +476,16 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_invalid_horizon =>
       'La durée de prévision doit être comprise entre 1 et 366 jours.';
+
+  @override
+  String get error_transaction_access_denied =>
+      'Cette opération n\'existe pas ou vous n\'y avez pas accès.';
+
+  @override
+  String get error_imported_operation_locked =>
+      'La date, le montant et le libellé d\'une opération importée ne se modifient pas : ce sont ceux de la banque.';
+
+  @override
+  String get error_already_imported_again =>
+      'Cette opération a été réimportée entre-temps : elle est déjà dans le compte.';
 }

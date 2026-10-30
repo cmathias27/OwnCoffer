@@ -17,6 +17,8 @@ import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
 import 'package:owncoffer_client/src/protocol/account_kind.dart' as _ighjli9i;
 import 'package:owncoffer_client/src/protocol/account_visibility.dart'
     as _i33sijhq;
+import 'package:owncoffer_client/src/protocol/bank_transaction.dart'
+    as _ivksw0b3;
 import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
 import 'package:owncoffer_client/src/protocol/category_kind.dart' as _ig2tt18e;
 import 'package:owncoffer_client/src/protocol/csv_columns.dart' as _irbioy6y;
@@ -34,6 +36,8 @@ import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
+import 'package:owncoffer_client/src/protocol/rule_application.dart'
+    as _i0d2e7ql;
 import 'package:owncoffer_client/src/protocol/rule_direction.dart' as _idnlspx6;
 import 'package:owncoffer_client/src/protocol/rule_match_type.dart'
     as _iko98d6o;
@@ -44,6 +48,8 @@ import 'package:owncoffer_client/src/protocol/statement_import.dart'
     as _i5x9swls;
 import 'package:owncoffer_client/src/protocol/totp_enrollment.dart'
     as _iy6m3xur;
+import 'package:owncoffer_client/src/protocol/transaction_page.dart'
+    as _ioa38wkb;
 import 'package:owncoffer_client/src/protocol/two_factor_status.dart'
     as _is1jzs1l;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
@@ -792,6 +798,140 @@ class EndpointSetup extends _isc.EndpointRef {
   );
 }
 
+/// Operations of an account: list, manual entry, corrections, checking,
+/// trash, and rules created from a correction.
+/// {@category Endpoint}
+class EndpointTransaction extends _isc.EndpointRef {
+  EndpointTransaction(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'transaction';
+
+  _ida.Future<_ioa38wkb.TransactionPage> list(
+    int accountId, {
+    DateTime? from,
+    DateTime? to,
+    String? search,
+    int? categoryId,
+    bool? toClassify,
+    bool? uncleared,
+    int? limit,
+    int? offset,
+  }) => caller.callServerEndpoint<_ioa38wkb.TransactionPage>(
+    'transaction',
+    'list',
+    {
+      'accountId': accountId,
+      'from': from,
+      'to': to,
+      'search': search,
+      'categoryId': categoryId,
+      'toClassify': toClassify,
+      'uncleared': uncleared,
+      'limit': limit,
+      'offset': offset,
+    },
+  );
+
+  /// Manual entry (cash, a cheque not yet on the statement…). Classified by
+  /// the rules unless a category is given.
+  _ida.Future<_ivksw0b3.BankTransaction> create(
+    int accountId,
+    DateTime date,
+    int amountCents,
+    String label, {
+    String? memo,
+    int? categoryId,
+  }) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
+    'transaction',
+    'create',
+    {
+      'accountId': accountId,
+      'date': date,
+      'amountCents': amountCents,
+      'label': label,
+      'memo': memo,
+      'categoryId': categoryId,
+    },
+  );
+
+  /// Date, amount and label can only be changed on manual entries: imported
+  /// operations keep what the bank wrote. The memo can always be changed.
+  _ida.Future<_ivksw0b3.BankTransaction> update(
+    int transactionId, {
+    DateTime? date,
+    int? amountCents,
+    String? label,
+    String? memo,
+  }) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
+    'transaction',
+    'update',
+    {
+      'transactionId': transactionId,
+      'date': date,
+      'amountCents': amountCents,
+      'label': label,
+      'memo': memo,
+    },
+  );
+
+  /// The user's choice; `null` puts the operation back to "to classify".
+  _ida.Future<_ivksw0b3.BankTransaction> setCategory(
+    int transactionId,
+    int? categoryId,
+  ) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
+    'transaction',
+    'setCategory',
+    {
+      'transactionId': transactionId,
+      'categoryId': categoryId,
+    },
+  );
+
+  _ida.Future<_ivksw0b3.BankTransaction> setCleared(
+    int transactionId,
+    bool cleared,
+  ) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
+    'transaction',
+    'setCleared',
+    {
+      'transactionId': transactionId,
+      'cleared': cleared,
+    },
+  );
+
+  /// Moves the operation to the trash (kept 30 days).
+  _ida.Future<void> trash(int transactionId) => caller.callServerEndpoint<void>(
+    'transaction',
+    'trash',
+    {'transactionId': transactionId},
+  );
+
+  _ida.Future<_ivksw0b3.BankTransaction> restore(int transactionId) =>
+      caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
+        'transaction',
+        'restore',
+        {'transactionId': transactionId},
+      );
+
+  /// "Always classify like this": a group rule on the cleaned label, in the
+  /// direction of the operation, applied at once to the operations of the
+  /// group not classified by hand.
+  _ida.Future<_i0d2e7ql.RuleApplication> createRuleFrom(
+    int transactionId,
+    int categoryId, {
+    _iko98d6o.RuleMatchType? matchType,
+  }) => caller.callServerEndpoint<_i0d2e7ql.RuleApplication>(
+    'transaction',
+    'createRuleFrom',
+    {
+      'transactionId': transactionId,
+      'categoryId': categoryId,
+      'matchType': matchType,
+    },
+  );
+}
+
 /// Two-factor authentication. Needs a signed-in user, but not [accessScope]:
 /// [verify] is how a password-only session gets full access.
 /// {@category Endpoint}
@@ -898,6 +1038,7 @@ class Client extends _isc.ServerpodClientShared {
     rule = EndpointRule(this);
     scheduled = EndpointScheduled(this);
     setup = EndpointSetup(this);
+    transaction = EndpointTransaction(this);
     twoFactor = EndpointTwoFactor(this);
     modules = Modules(this);
   }
@@ -924,6 +1065,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointSetup setup;
 
+  late final EndpointTransaction transaction;
+
   late final EndpointTwoFactor twoFactor;
 
   late final Modules modules;
@@ -941,6 +1084,7 @@ class Client extends _isc.ServerpodClientShared {
     'rule': rule,
     'scheduled': scheduled,
     'setup': setup,
+    'transaction': transaction,
     'twoFactor': twoFactor,
   };
 

@@ -114,7 +114,7 @@ Objectif : la plus petite version utile, pour votre usage personnel (décision 0
 - [ ] Comptes bancaires : création, solde initial, visibilité
 - [ ] Lecture des exports **Caisse d'Épargne** (format « Money » QIF d'abord, puis OFX et CSV si proposés) dans un module dédié de `shared/`, testée sur les relevés anonymisés et sur des fichiers mal formés (accents, virgule décimale, dates françaises)
 - [ ] Écran d'import : aperçu, compte reconnu, doublons écartés par empreinte, historique, annulation
-- [ ] Liste des opérations : recherche, filtres, saisie manuelle, pointage
+- [x] Liste des opérations : recherche, filtres, saisie manuelle, pointage (côté serveur ; écrans à venir)
 - [ ] Libellés nettoyés (« PRLV SEPA EDF SA REF… » devient « EDF »)
 - [ ] Classement : catégories reliées au catalogue standard (fait), règles du groupe (API faite), historique, source de la catégorie affichée
 - [x] Règles communautaires v0 : 154 règles pour les grandes enseignes (dans `shared/` pour l'alpha ; dépôt séparé `owncoffer-rules` plus tard)

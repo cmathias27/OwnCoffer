@@ -470,4 +470,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_invalid_horizon =>
       'The forecast length must be between 1 and 366 days.';
+
+  @override
+  String get error_transaction_access_denied =>
+      'This operation does not exist or you cannot access it.';
+
+  @override
+  String get error_imported_operation_locked =>
+      'The date, amount and label of an imported operation cannot be changed: they come from the bank.';
+
+  @override
+  String get error_already_imported_again =>
+      'This operation was imported again in the meantime: it is already in the account.';
 }

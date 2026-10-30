@@ -38,6 +38,7 @@ import '../endpoints/invitation_endpoint.dart' as _iipval89;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
+import '../endpoints/transaction_endpoint.dart' as _iyokctnp;
 import '../endpoints/two_factor_endpoint.dart' as _ivxdn6q3;
 
 class Endpoints extends _is.EndpointDispatch {
@@ -108,6 +109,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'setup',
+          null,
+        ),
+      'transaction': _iyokctnp.TransactionEndpoint()
+        ..initialize(
+          server,
+          'transaction',
           null,
         ),
       'twoFactor': _ivxdn6q3.TwoFactorEndpoint()
@@ -1518,6 +1525,298 @@ class Endpoints extends _is.EndpointDispatch {
                 params['setupCode'],
                 params['email'],
               ),
+        ),
+      },
+    );
+    connectors['transaction'] = _is.EndpointConnector(
+      name: 'transaction',
+      endpoint: endpoints['transaction']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'from': _is.ParameterDescription(
+              name: 'from',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'to': _is.ParameterDescription(
+              name: 'to',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'search': _is.ParameterDescription(
+              name: 'search',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'toClassify': _is.ParameterDescription(
+              name: 'toClassify',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+            'uncleared': _is.ParameterDescription(
+              name: 'uncleared',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+            'limit': _is.ParameterDescription(
+              name: 'limit',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'offset': _is.ParameterDescription(
+              name: 'offset',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .list(
+                        session,
+                        params['accountId'],
+                        from: params['from'],
+                        to: params['to'],
+                        search: params['search'],
+                        categoryId: params['categoryId'],
+                        toClassify: params['toClassify'],
+                        uncleared: params['uncleared'],
+                        limit: params['limit'],
+                        offset: params['offset'],
+                      ),
+        ),
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'label': _is.ParameterDescription(
+              name: 'label',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'memo': _is.ParameterDescription(
+              name: 'memo',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .create(
+                        session,
+                        params['accountId'],
+                        params['date'],
+                        params['amountCents'],
+                        params['label'],
+                        memo: params['memo'],
+                        categoryId: params['categoryId'],
+                      ),
+        ),
+        'update': _is.MethodConnector(
+          name: 'update',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'label': _is.ParameterDescription(
+              name: 'label',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'memo': _is.ParameterDescription(
+              name: 'memo',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .update(
+                        session,
+                        params['transactionId'],
+                        date: params['date'],
+                        amountCents: params['amountCents'],
+                        label: params['label'],
+                        memo: params['memo'],
+                      ),
+        ),
+        'setCategory': _is.MethodConnector(
+          name: 'setCategory',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .setCategory(
+                        session,
+                        params['transactionId'],
+                        params['categoryId'],
+                      ),
+        ),
+        'setCleared': _is.MethodConnector(
+          name: 'setCleared',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'cleared': _is.ParameterDescription(
+              name: 'cleared',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .setCleared(
+                        session,
+                        params['transactionId'],
+                        params['cleared'],
+                      ),
+        ),
+        'trash': _is.MethodConnector(
+          name: 'trash',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .trash(
+                        session,
+                        params['transactionId'],
+                      ),
+        ),
+        'restore': _is.MethodConnector(
+          name: 'restore',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .restore(
+                        session,
+                        params['transactionId'],
+                      ),
+        ),
+        'createRuleFrom': _is.MethodConnector(
+          name: 'createRuleFrom',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'matchType': _is.ParameterDescription(
+              name: 'matchType',
+              type: _is.getType<_ijwgwf7y.RuleMatchType?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .createRuleFrom(
+                        session,
+                        params['transactionId'],
+                        params['categoryId'],
+                        matchType: params['matchType'],
+                      ),
         ),
       },
     );
