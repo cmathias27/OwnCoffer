@@ -1,0 +1,34 @@
+# Secrets et configuration locale
+.env
+.env.*
+!.env.example
+
+# Données bancaires réelles : ne jamais les commiter
+/private/
+*.real.qif
+*.real.ofx
+*.real.csv
+
+# Dart / Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+pubspec_overrides.yaml
+
+# Serverpod
+**/generated/protocol.yaml.lock
+
+# Docker et sauvegardes locales
+docker/data/
+*.dump
+*.sql.gz
+
+# Éditeurs et systèmes
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

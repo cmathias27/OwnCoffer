@@ -1,0 +1,48 @@
+# CLAUDE.md — consignes pour Claude Code
+
+## Le projet
+
+OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de comptes bancaires : import de relevés (QIF, OFX, CSV), classement par règles (personnelles et communautaires), prévisions de solde, objectifs et alertes, crédits, IA optionnelle au choix de l'utilisateur.
+
+- Ordre de réalisation et tâches : `docs/ROADBOOK.md` (phases 0 à 6, chacune avec un milestone GitHub).
+- Fonctionnalités détaillées : `docs/CAHIER_DES_CHARGES.md`.
+- Décisions d'architecture : `docs/decisions/` — à respecter ; pour en changer une, écrire une nouvelle décision.
+
+**Phase actuelle : 0 (préparation).** Ne pas créer de code applicatif tant que l'utilisateur ne l'a pas demandé explicitement.
+
+## Pile technique décidée
+
+- Serveur : **Serverpod** (Dart) — décision 0001. Voir son point de vigilance licence.
+- Base : **PostgreSQL**, migrations Serverpod, Row Level Security en seconde barrière.
+- Interface : **Flutter** (web d'abord ; Windows et Android en phase 6) — décision 0005 (proposée).
+- Déploiement : `docker compose` sur un serveur Docker existant, exposé sur Internet derrière HTTPS — décision 0002.
+- CI : GitHub Actions ; image `ghcr.io/cmathias27/owncoffer`.
+
+## Organisation prévue du dépôt (phase 1)
+
+```
+server/   API Serverpod
+app/      interface Flutter (web pour l'instant)
+shared/   modèles de données, lecture des fichiers bancaires (Dart pur, testé)
+docker/   docker-compose, .env.example
+docs/     cahier des charges, roadbook, décisions
+```
+
+## Règles impératives
+
+- **Aucune vraie donnée bancaire** dans le dépôt, les tests, les issues ou les logs. Fixtures uniquement anonymisées, noms de fichiers neutres (jamais de numéro de compte).
+- **Montants en centimes** (`int`), jamais en `double`. Dates d'opération sans fuseau.
+- **Sécurité** : toute requête vérifie groupe, rôle et visibilité du compte côté serveur ; tester qu'un utilisateur ne peut pas accéder aux données d'un autre groupe. Aucun secret dans le code ; `.env` jamais commité ; clés IA chiffrées, jamais journalisées.
+- **Aucune télémétrie**, aucun appel réseau sortant non demandé par l'utilisateur.
+- **Bilingue** : aucun texte d'interface en dur, tout passe par les fichiers de traduction FR et EN.
+- **Classement** : règles du groupe → règles communautaires → historique → IA (optionnelle, en dernier). L'IA propose, l'utilisateur valide.
+- **Licences** : toute dépendance ajoutée doit être compatible AGPL-3.0.
+- Une seule banque est prise en charge au départ (décision 0003) ; isoler ses particularités dans un module dédié.
+
+## Façon de travailler
+
+- Une issue = une branche (`feature/…`, `fix/…`, `docs/…`) = une pull request vers `main`.
+- Commits *Conventional Commits*, signés DCO (`git commit -s`).
+- Code et commentaires techniques en anglais ; documentation et messages à l'utilisateur en français.
+- Tests obligatoires pour : lecture des fichiers bancaires, calculs de montants et de prévisions, permissions.
+- Après chaque tâche terminée, cocher la case correspondante dans `docs/ROADBOOK.md` et fermer l'issue liée.

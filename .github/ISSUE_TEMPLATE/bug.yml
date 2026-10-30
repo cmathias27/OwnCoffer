@@ -1,0 +1,24 @@
+name: Bug
+description: Signaler un problème
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "**Ne joignez aucun vrai relevé, montant ou numéro de compte.** Anonymisez d'abord."
+  - type: textarea
+    id: description
+    attributes:
+      label: Ce qui se passe
+      description: Décrivez le problème et ce que vous attendiez.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire
+      placeholder: "1. Aller sur…\n2. Cliquer sur…\n3. Voir…"
+  - type: input
+    id: version
+    attributes:
+      label: Version et plateforme
+      placeholder: "ex. 0.1.0, web (Firefox), serveur sur NAS ARM"

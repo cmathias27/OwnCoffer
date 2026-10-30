@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Signaler une faille de sécurité
+    url: https://github.com/cmathias27/OwnCoffer/security/advisories/new
+    about: Les failles se signalent en privé, jamais dans une issue publique.
