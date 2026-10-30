@@ -1,4 +1,5 @@
 import 'package:owncoffer_client/owncoffer_client.dart';
+import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart';
 
 import 'app_localizations.dart';
 
@@ -30,6 +31,28 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
 String errorText(AppLocalizations l, Object error) => switch (error) {
   AccessDeniedException(:final code) => serverErrorText(l, code),
   InvalidInputException(:final code) => serverErrorText(l, code),
+  EmailAccountLoginException(:final reason) => switch (reason) {
+    EmailAccountLoginExceptionReason.tooManyAttempts =>
+      l.error_too_many_attempts,
+    _ => l.error_login_failed,
+  },
+  EmailAccountRequestException(:final reason) => _codeReason(l, reason.name),
+  EmailAccountPasswordResetException(:final reason) => _codeReason(
+    l,
+    reason.name,
+  ),
+  ServerpodClientForbidden() => l.error_ip_banned,
+  ServerpodClientHttpException(:final statusCode) when statusCode == 429 =>
+    l.error_rate_limited,
+  ServerpodClientNetworkException() => l.error_network,
+  _ => l.error_generic,
+};
+
+String _codeReason(AppLocalizations l, String reason) => switch (reason) {
+  'expired' => l.error_code_expired,
+  'invalid' => l.error_code_invalid,
+  'policyViolation' => l.error_password_policy,
+  'tooManyAttempts' => l.error_too_many_attempts,
   _ => l.error_generic,
 };
 

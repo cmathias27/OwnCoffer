@@ -106,5 +106,120 @@
   "import_format_ofx_no_root": "Ce fichier OFX est incomplet.",
   "import_format_csv_columns_unknown": "Colonnes non reconnues : choisissez-les.",
   "import_format_empty_file": "Le fichier est vide.",
-  "import_format_unknown_format": "Format non reconnu. Formats acceptés : QIF, OFX, CSV."
+  "import_format_unknown_format": "Format non reconnu. Formats acceptés : QIF, OFX, CSV.",
+  "continueLabel": "Continuer",
+  "back": "Retour",
+  "cancel": "Annuler",
+  "close": "Fermer",
+  "save": "Enregistrer",
+  "retry": "Réessayer",
+  "emailLabel": "Adresse email",
+  "passwordLabel": "Mot de passe",
+  "passwordConfirmLabel": "Confirmer le mot de passe",
+  "passwordHelp": "8 caractères au minimum.",
+  "passwordsDiffer": "Les deux mots de passe sont différents.",
+  "verificationCodeLabel": "Code reçu par email",
+  "verificationCodeHelp": "Sans serveur d'envoi configuré, le code s'affiche dans le journal du serveur.",
+  "setupTitle": "Installation d'OwnCoffer",
+  "setupIntro": "Bienvenue ! Créez le compte administrateur de ce serveur.",
+  "setupCodeLabel": "Code d'installation",
+  "setupCodeHelp": "Code à 8 chiffres affiché dans le journal du serveur : docker compose logs owncoffer | grep \"setup code\"",
+  "setupStepAdmin": "Administrateur",
+  "setupStepVerify": "Vérification",
+  "setupStepPassword": "Mot de passe",
+  "setupStepGroup": "Groupe",
+  "verifyIntro": "Un code a été envoyé à {email}.",
+  "@verifyIntro": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "groupNameLabel": "Nom du groupe",
+  "groupNameHint": "Par exemple : Notre foyer",
+  "groupIntro": "Un groupe réunit les personnes qui partagent des comptes (un foyer, une association…).",
+  "signInTitle": "Connexion",
+  "signIn": "Se connecter",
+  "forgotPassword": "Mot de passe oublié ?",
+  "haveInvitation": "J'ai reçu une invitation",
+  "registerTitle": "Créer mon compte",
+  "registerIntro": "Saisissez l'adresse email à laquelle l'invitation a été envoyée.",
+  "resetTitle": "Nouveau mot de passe",
+  "resetIntro": "Saisissez votre adresse email : un code vous sera envoyé.",
+  "resetDone": "Mot de passe changé. Vous pouvez vous connecter.",
+  "totpTitle": "Double authentification",
+  "totpIntro": "Saisissez le code à 6 chiffres de votre application d'authentification, ou un code de secours.",
+  "totpCodeLabel": "Code",
+  "verify": "Valider",
+  "homeNoGroup": "Vous ne faites encore partie d'aucun groupe. Demandez une invitation à un administrateur.",
+  "groupLabel": "Groupe",
+  "menuSecurity": "Sécurité",
+  "menuMembers": "Membres",
+  "accountsComingSoon": "Vos comptes et opérations arrivent bientôt ici.",
+  "securityTitle": "Sécurité",
+  "twoFactorTitle": "Double authentification (TOTP)",
+  "twoFactorOff": "Désactivée. Recommandée, surtout pour les administrateurs.",
+  "twoFactorOn": "Activée — {count} codes de secours restants.",
+  "@twoFactorOn": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "twoFactorEnable": "Activer",
+  "twoFactorScan": "Scannez ce QR code avec votre application d'authentification (Aegis, FreeOTP, Google Authenticator…), puis saisissez le code affiché.",
+  "twoFactorSecretManual": "Ou saisissez cette clé à la main :",
+  "backupCodesTitle": "Codes de secours",
+  "backupCodesIntro": "Notez-les et gardez-les en lieu sûr : chacun permet une connexion si vous perdez votre téléphone. Ils ne seront plus affichés.",
+  "backupCodesDone": "J'ai noté mes codes",
+  "twoFactorDisable": "Désactiver",
+  "twoFactorDisableIntro": "Saisissez un code pour désactiver la double authentification.",
+  "twoFactorRenew": "Nouveaux codes de secours",
+  "membersTitle": "Membres",
+  "invitationsTitle": "Invitations en attente",
+  "noInvitations": "Aucune invitation en attente.",
+  "invite": "Inviter",
+  "inviteTitle": "Inviter une personne",
+  "roleLabel": "Rôle",
+  "roleAdmin": "Administrateur",
+  "roleUser": "Utilisateur",
+  "roleReader": "Lecteur",
+  "roleHelp": "Lecteur : consulte. Utilisateur : saisit et importe. Administrateur : gère les comptes et les membres.",
+  "invitationSent": "Invitation envoyée à {email}.",
+  "@invitationSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationExpires": "expire le {date}",
+  "@invitationExpires": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "revoke": "Révoquer",
+  "you": "vous",
+  "invitationAccepted": "Vous avez rejoint « {group} ».",
+  "@invitationAccepted": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "error_login_failed": "Email ou mot de passe incorrect.",
+  "error_too_many_attempts": "Trop d'essais. Réessayez plus tard.",
+  "error_code_invalid": "Code incorrect.",
+  "error_code_expired": "Ce code a expiré. Recommencez.",
+  "error_password_policy": "Ce mot de passe n'est pas accepté : 8 caractères au minimum, sans espace au début ni à la fin.",
+  "error_ip_banned": "Trop d'échecs depuis cette adresse : l'accès est bloqué temporairement.",
+  "error_rate_limited": "Trop de requêtes. Patientez une minute.",
+  "error_network": "Le serveur ne répond pas. Vérifiez votre connexion.",
+  "copy": "Copier"
 }

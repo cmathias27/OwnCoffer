@@ -12,12 +12,12 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
-import 'package:owncoffer_server/src/generated/group_member.dart' as _iep4djhw;
 import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
+import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:serverpod/protocol.dart' as _isp;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
@@ -45,6 +45,7 @@ import 'invitation.dart' as _ix00wubs;
 import 'invitation_info.dart' as _i9hwipt6;
 import 'ip_ban.dart' as _i88cvd1d;
 import 'ip_ban_info.dart' as _ijfl1fdm;
+import 'member_info.dart' as _i2slp771;
 import 'member_role.dart' as _insyygng;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_direction.dart' as _i13yq1r7;
@@ -77,6 +78,7 @@ export 'invitation.dart';
 export 'invitation_info.dart';
 export 'ip_ban.dart';
 export 'ip_ban_info.dart';
+export 'member_info.dart';
 export 'member_role.dart';
 export 'rule.dart';
 export 'rule_direction.dart';
@@ -1880,6 +1882,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ijfl1fdm.IpBanInfo) {
       return _ijfl1fdm.IpBanInfo.fromJson(data) as T;
     }
+    if (t == _i2slp771.MemberInfo) {
+      return _i2slp771.MemberInfo.fromJson(data) as T;
+    }
     if (t == _insyygng.MemberRole) {
       return _insyygng.MemberRole.fromJson(data) as T;
     }
@@ -1990,6 +1995,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_ijfl1fdm.IpBanInfo?>()) {
       return (data != null ? _ijfl1fdm.IpBanInfo.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_i2slp771.MemberInfo?>()) {
+      return (data != null ? _i2slp771.MemberInfo.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_insyygng.MemberRole?>()) {
       return (data != null ? _insyygng.MemberRole.fromJson(data) : null) as T;
     }
@@ -2050,9 +2058,9 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
-    if (t == List<_iep4djhw.GroupMember>) {
+    if (t == List<_ipfe689d.MemberInfo>) {
       return (data as List)
-              .map((e) => deserialize<_iep4djhw.GroupMember>(e))
+              .map((e) => deserialize<_ipfe689d.MemberInfo>(e))
               .toList()
           as T;
     }
@@ -2100,6 +2108,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i9hwipt6.InvitationInfo => 'InvitationInfo',
       _i88cvd1d.IpBan => 'IpBan',
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
+      _i2slp771.MemberInfo => 'MemberInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ivw87pdb.Rule => 'Rule',
       _i13yq1r7.RuleDirection => 'RuleDirection',
@@ -2167,6 +2176,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'IpBan';
       case _ijfl1fdm.IpBanInfo():
         return 'IpBanInfo';
+      case _i2slp771.MemberInfo():
+        return 'MemberInfo';
       case _insyygng.MemberRole():
         return 'MemberRole';
       case _ivw87pdb.Rule():
@@ -2277,6 +2288,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'IpBanInfo') {
       return deserialize<_ijfl1fdm.IpBanInfo>(data['data']);
+    }
+    if (dataClassName == 'MemberInfo') {
+      return deserialize<_i2slp771.MemberInfo>(data['data']);
     }
     if (dataClassName == 'MemberRole') {
       return deserialize<_insyygng.MemberRole>(data['data']);

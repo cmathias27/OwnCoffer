@@ -1,0 +1,7 @@
+### A group member as shown in the app.
+class: MemberInfo
+fields:
+  userId: UuidValue
+  email: String?
+  role: MemberRole
+  joinedAt: DateTime

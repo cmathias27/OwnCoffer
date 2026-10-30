@@ -115,6 +115,14 @@ void main() {
         final bob = await register('bob@example.org');
         final groups = await endpoints.group.myGroups(as(bob));
         expect(groups.single.role, MemberRole.user);
+        final members = await endpoints.group.members(as(bob), groupId);
+        expect(
+          {for (final m in members) m.email: m.role},
+          {
+            'admin@example.org': MemberRole.admin,
+            'bob@example.org': MemberRole.user,
+          },
+        );
         // Used: the email cannot register a second time with it.
         expect(await Onboarding.mayRegister(db, 'bob@example.org'), isFalse);
         expect(await Onboarding.isServerAdmin(db, bob), isFalse);

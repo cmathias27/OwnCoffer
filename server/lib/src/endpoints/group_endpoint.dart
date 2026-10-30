@@ -1,4 +1,5 @@
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_idp_server/core.dart';
 
 import '../generated/protocol.dart';
 import '../onboarding/onboarding.dart';
@@ -98,13 +99,29 @@ class GroupEndpoint extends Endpoint {
   }
 
   /// Members of the group (any member may see who else is in it).
-  Future<List<GroupMember>> members(Session session, int groupId) async {
+  Future<List<MemberInfo>> members(Session session, int groupId) async {
     await Access.requireMember(session, groupId);
-    return GroupMember.db.find(
+    final members = await GroupMember.db.find(
       session,
       where: (m) => m.groupId.equals(groupId),
       orderBy: (m) => m.createdAt,
     );
+    if (members.isEmpty) return [];
+    final Set<UuidValue> ids = {for (final m in members) m.authUserId};
+    final profiles = await UserProfile.db.find(
+      session,
+      where: (p) => p.authUserId.inSet(ids),
+    );
+    final emailOf = {for (final p in profiles) p.authUserId: p.email};
+    return [
+      for (final m in members)
+        MemberInfo(
+          userId: m.authUserId,
+          email: emailOf[m.authUserId],
+          role: m.role,
+          joinedAt: m.createdAt,
+        ),
+    ];
   }
 
   /// Changes a member's role. The group always keeps at least one admin.
