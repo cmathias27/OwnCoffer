@@ -373,6 +373,47 @@ Principes :
 - **Transparence** : chaque conseil indique sur quelles données il s'appuie ; l'IA propose, l'utilisateur valide (aucune modification automatique).
 - L'IA donne des conseils de gestion courante, pas de conseil en investissement.
 
+### IA optionnelle et espace « Mon conseiller »
+
+L'IA est un plus : chaque utilisateur décide de la connecter ou non, et l'application est aussi complète sans elle (décision 0006). Tous les calculs, prévisions, simulations et détections sont faits par le moteur financier ; l'IA l'interroge, explique ses résultats et ne modifie jamais les données.
+
+| Fonction | Sans IA | Avec IA, en plus |
+| --- | --- | --- |
+| Classement | Règles du groupe, règles communautaires, historique | Suggestion pour les opérations restantes |
+| Ticket de caisse | Saisie assistée, montant et date lus sur l'appareil | Ventilation automatique ligne par ligne |
+| Offre de prêt | Formulaire de crédit, tableau calculé | Champs remplis depuis le document |
+| Analyse des dépenses | Hausses et anomalies détectées par calcul, écart chiffré | Explication en langage clair, réponses aux questions |
+| Simulations | Scénarios comparés côte à côte | Scénarios posés en langage naturel, recalculés par le moteur |
+| Objectifs | Montants suggérés d'après les 3 à 6 derniers mois | Justification et ajustements discutés |
+| Alertes | Dépassements, découverts prévus, anomalies | Cause expliquée et pistes proposées |
+
+**Mon conseiller** est un espace dédié, pas une simple fenêtre de discussion : un fil d'analyses et de recommandations qui garde la mémoire de ce qui a été proposé et décidé. Il fonctionne sans IA (cartes produites par le moteur financier, textes fixes traduits) ; avec IA, les cartes sont rédigées en langage clair, la discussion est possible et les conseils s'adaptent.
+
+Quatre responsabilités :
+
+| Rôle | Ce qu'il fait |
+| --- | --- |
+| Surveiller | Dépenses inhabituelles, hausse des charges, nouveaux abonnements, risque de découvert, évolution des habitudes |
+| Anticiper | Solde prévisionnel, échéances à venir, risques budgétaires, objectifs qui risquent de ne pas être atteints |
+| Conseiller | Réduire une dépense, adapter un budget, modifier un objectif d'épargne, comparer des stratégies de remboursement |
+| Accompagner | Rappeler les objectifs, vérifier les progrès, mesurer les résultats, ajuster les recommandations |
+
+- **Cartes typées** : bonne nouvelle, point de vigilance, recommandation. Exemple fictif : « Vos dépenses alimentaires ont baissé de 12 % par rapport à la moyenne des trois derniers mois. »
+- **Décision sur chaque recommandation** : accepter, refuser ou ignorer. Une recommandation acceptée devient un suivi (objectif modifié, budget ajusté…) dont les résultats sont mesurés ensuite.
+- **Justifiable** : chaque carte affiche les données et le calcul sur lesquels elle repose. Si une information manque (par exemple, savoir si un abonnement est vraiment utilisé), le conseiller le dit et pose la question au lieu de supposer.
+- **Contestable** : l'utilisateur peut contester une analyse ; la contestation est enregistrée et prise en compte ensuite.
+- **Rythme** : analyse après chaque import et chaque semaine ; notification seulement pour les points de vigilance importants.
+
+**Trois niveaux de données**, avec des droits limités aux comptes que l'utilisateur peut voir :
+
+| Niveau | Contenu |
+| --- | --- |
+| Données financières | Comptes, opérations, soldes, crédits |
+| Connaissances du conseiller | Objectifs, habitudes détectées, préférences (ex. « ne pas me proposer de réduire le sport ») |
+| Historique du conseiller | Analyses, recommandations, décisions, contestations, résultats |
+
+L'IA n'accède qu'aux données des comptes visibles par l'utilisateur qui l'a connectée, et seulement à travers les fonctions du moteur ; jamais directement à la base.
+
 ## Modèle de données
 
 Première version du schéma PostgreSQL, hébergé dans le conteneur de base de données ; chaque table métier porte un `group_id`, ce qui permet de filtrer les accès directement dans la base.
@@ -399,6 +440,9 @@ Première version du schéma PostgreSQL, hébergé dans le conteneur de base de 
 | `attachments` | Pièces jointes | transaction\_id, chemin du fichier |
 | `server_settings` | Réglages du serveur | mode de mise à jour, heure, version installée, email d'envoi |
 | `audit_log` | Journal des modifications | group\_id, user\_id, action, table, ligne, avant / après, date |
+| `advisor_preferences` | Connaissances du conseiller | user_id, objectifs suivis, préférences, habitudes détectées |
+| `advisor_insights` | Analyses et recommandations | user_id, type (bonne nouvelle, vigilance, recommandation), données sources, calcul, statut (acceptée, refusée, ignorée), date |
+| `advisor_followups` | Suivi des décisions | insight_id, action décidée, objectif lié, résultat mesuré |
 | `ai_connections` | Connexions IA de chaque utilisateur | user\_id, fournisseur, modèle, adresse (modèle local), clé chiffrée, par défaut, plafond mensuel, consommation |
 | `loans` | Crédits | group\_id, account\_id, type, organisme, capital, taux, TAEG, durée, périodicité, assurance, frais, date de première échéance |
 | `loan_schedule` | Tableau d'amortissement | loan\_id, numéro, date, mensualité, capital, intérêts, assurance, capital restant dû, source (calculé, importé) |

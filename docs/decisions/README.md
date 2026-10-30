@@ -10,5 +10,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0004](0004-licence-agpl.md) | Licence AGPL-3.0, gratuit, financé par les dons | Décidé |
 | [0005](0005-interface-flutter-web.md) | Interface web en Flutter web | Proposé |
 | [0006](0006-ia-optionnelle.md) | L'IA est optionnelle : l'application est complète sans elle | Décidé |
+| [0007](0007-espace-mon-conseiller.md) | Espace « Mon conseiller » : journal d'analyses et de recommandations | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.

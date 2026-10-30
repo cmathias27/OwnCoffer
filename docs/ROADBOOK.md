@@ -30,6 +30,7 @@ flowchart TD
 | [0004](decisions/0004-licence-agpl.md) | Licence **AGPL-3.0**, gratuit, financé par les dons | Décidé |
 | [0005](decisions/0005-interface-flutter-web.md) | Interface web en **Flutter web** | Proposé |
 | [0006](decisions/0006-ia-optionnelle.md) | **IA optionnelle** : l'application est aussi complète sans elle | Décidé |
+| [0007](decisions/0007-espace-mon-conseiller.md) | Espace **Mon conseiller** : analyses et recommandations suivies | Décidé |
 
 ## Phase 0 — Préparation et décisions *(en cours)*
 
@@ -125,6 +126,7 @@ Objectif : voir l'avenir de ses comptes et être prévenu à temps. Fin de phase
 - [ ] Tableau de bord et graphiques
 - [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois
 - [ ] Lecture par l'IA des offres de prêt (→ crédit et tableau d'amortissement, recalculé pour contrôle) et des confirmations de paiement fractionné (→ échéancier)
+- [ ] Espace **Mon conseiller** (sans IA) : cartes surveiller / anticiper / conseiller / accompagner calculées par le moteur, acceptées, refusées ou ignorées, suivies dans le temps, chacune justifiée par ses données
 - [ ] Assistant IA (en option) : il interroge le moteur financier, explique les résultats et pose les scénarios en langage naturel ; il ne calcule ni ne modifie rien ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable
 - [ ] Revue de fin de mois et détection d'anomalies
 - [ ] Onglet Feedback
