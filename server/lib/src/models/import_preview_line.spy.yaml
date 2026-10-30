@@ -1,0 +1,12 @@
+class: ImportPreviewLine
+fields:
+  ### Position in the file, used to choose possible duplicates to import.
+  index: int
+  date: DateTime
+  amountCents: int
+  label: String
+  cleanLabel: String
+  ### new, duplicate or possibleDuplicate
+  status: String
+  categoryId: int?
+  categorySource: CategorySource

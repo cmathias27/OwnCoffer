@@ -226,5 +226,8 @@
   "error_rule_access_denied": "Cette règle n'existe pas ou vous n'y avez pas accès.",
   "error_unknown_standard_category": "Catégorie standard inconnue.",
   "error_invalid_pattern": "Le motif doit contenir entre 1 et 100 caractères (lettres ou chiffres).",
-  "error_invalid_amount_range": "Le montant minimum dépasse le montant maximum."
+  "error_invalid_amount_range": "Le montant minimum dépasse le montant maximum.",
+  "error_import_file_too_large": "Fichier trop volumineux (4 Mo au maximum).",
+  "error_import_nothing_readable": "Aucune opération lisible dans ce fichier.",
+  "error_import_access_denied": "Cet import n'existe pas ou vous n'y avez pas accès."
 }

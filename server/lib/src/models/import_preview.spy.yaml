@@ -1,0 +1,18 @@
+### What an import would do, computed without writing anything.
+class: ImportPreview
+fields:
+  format: String
+  encoding: String
+  readCount: int
+  newCount: int
+  duplicateCount: int
+  possibleDuplicateCount: int
+  classifiedCount: int
+  errorCount: int
+  issues: List<ImportIssueInfo>
+  lines: List<ImportPreviewLine>
+  ### The same file (same bytes) was already imported into this account.
+  sameFileAlreadyImported: bool
+  ### Closing balance stated by the bank (OFX), to compare with OwnCoffer's.
+  statedBalanceCents: int?
+  statedBalanceDate: DateTime?

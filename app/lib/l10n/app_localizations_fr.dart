@@ -441,4 +441,16 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_invalid_amount_range =>
       'Le montant minimum dépasse le montant maximum.';
+
+  @override
+  String get error_import_file_too_large =>
+      'Fichier trop volumineux (4 Mo au maximum).';
+
+  @override
+  String get error_import_nothing_readable =>
+      'Aucune opération lisible dans ce fichier.';
+
+  @override
+  String get error_import_access_denied =>
+      'Cet import n\'existe pas ou vous n\'y avez pas accès.';
 }

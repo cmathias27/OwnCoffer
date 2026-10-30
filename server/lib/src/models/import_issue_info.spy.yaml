@@ -1,0 +1,6 @@
+### A problem found while reading a file (code translated by the app).
+class: ImportIssueInfo
+fields:
+  severity: String
+  code: String
+  line: int
