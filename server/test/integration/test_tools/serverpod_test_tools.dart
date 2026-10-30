@@ -13,12 +13,14 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _ida;
 import 'dart:io' as _idi;
+import 'dart:typed_data' as _idt;
 import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
 import 'package:owncoffer_server/src/generated/account_kind.dart' as _ihbhvzqt;
 import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
 import 'package:owncoffer_server/src/generated/category.dart' as _iemw1gpx;
 import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
+import 'package:owncoffer_server/src/generated/csv_columns.dart' as _iytxq8gu;
 import 'package:owncoffer_server/src/generated/finance_group.dart' as _i6lqurfp;
 import 'package:owncoffer_server/src/generated/forecast_result.dart'
     as _isjvyxsm;
@@ -26,6 +28,8 @@ import 'package:owncoffer_server/src/generated/frequency.dart' as _iugtcrzz;
 import 'package:owncoffer_server/src/generated/group_member.dart' as _iep4djhw;
 import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
+import 'package:owncoffer_server/src/generated/import_preview.dart'
+    as _itw310ng;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
@@ -39,6 +43,8 @@ import 'package:owncoffer_server/src/generated/rule_match_type.dart'
 import 'package:owncoffer_server/src/generated/scheduled_transaction.dart'
     as _inu9ydal;
 import 'package:owncoffer_server/src/generated/setup_status.dart' as _i7xpdhgz;
+import 'package:owncoffer_server/src/generated/statement_import.dart'
+    as _igipv995;
 import 'package:owncoffer_server/src/generated/totp_enrollment.dart'
     as _iq33hguv;
 import 'package:owncoffer_server/src/generated/two_factor_status.dart'
@@ -192,6 +198,8 @@ class TestEndpoints {
 
   late final _GroupEndpoint group;
 
+  late final _ImportEndpoint import;
+
   late final _InvitationEndpoint invitation;
 
   late final _RuleEndpoint rule;
@@ -231,6 +239,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     group = _GroupEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    import = _ImportEndpoint(
       endpoints,
       serializationManager,
     );
@@ -1208,6 +1220,157 @@ class _GroupEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _ImportEndpoint {
+  _ImportEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<_itw310ng.ImportPreview> preview(
+    _ist.TestSessionBuilder sessionBuilder,
+    int accountId,
+    _idt.ByteData file, {
+    _iytxq8gu.CsvColumns? columns,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'import',
+            method: 'preview',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'import',
+          methodName: 'preview',
+          parameters: _ist.testObjectToJson({
+            'accountId': accountId,
+            'file': file,
+            'columns': columns,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_itw310ng.ImportPreview>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_igipv995.StatementImport> commit(
+    _ist.TestSessionBuilder sessionBuilder,
+    int accountId,
+    String fileName,
+    _idt.ByteData file, {
+    _iytxq8gu.CsvColumns? columns,
+    List<int>? acceptedPossibleDuplicates,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'import',
+            method: 'commit',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'import',
+          methodName: 'commit',
+          parameters: _ist.testObjectToJson({
+            'accountId': accountId,
+            'fileName': fileName,
+            'file': file,
+            'columns': columns,
+            'acceptedPossibleDuplicates': acceptedPossibleDuplicates,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_igipv995.StatementImport>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_igipv995.StatementImport>> history(
+    _ist.TestSessionBuilder sessionBuilder,
+    int accountId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'import',
+            method: 'history',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'import',
+          methodName: 'history',
+          parameters: _ist.testObjectToJson({'accountId': accountId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_igipv995.StatementImport>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_igipv995.StatementImport> cancel(
+    _ist.TestSessionBuilder sessionBuilder,
+    int importId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'import',
+            method: 'cancel',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'import',
+          methodName: 'cancel',
+          parameters: _ist.testObjectToJson({'importId': importId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_igipv995.StatementImport>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

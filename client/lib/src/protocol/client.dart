@@ -11,6 +11,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _ida;
+import 'dart:typed_data' as _idt;
 import 'package:http/http.dart' as _i85jenna;
 import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
 import 'package:owncoffer_client/src/protocol/account_kind.dart' as _ighjli9i;
@@ -18,6 +19,7 @@ import 'package:owncoffer_client/src/protocol/account_visibility.dart'
     as _i33sijhq;
 import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
 import 'package:owncoffer_client/src/protocol/category_kind.dart' as _ig2tt18e;
+import 'package:owncoffer_client/src/protocol/csv_columns.dart' as _irbioy6y;
 import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
 import 'package:owncoffer_client/src/protocol/forecast_result.dart'
     as _ip0wp7v2;
@@ -25,6 +27,7 @@ import 'package:owncoffer_client/src/protocol/frequency.dart' as _i1mv9fwy;
 import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
+import 'package:owncoffer_client/src/protocol/import_preview.dart' as _ikjuebnd;
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
@@ -37,6 +40,8 @@ import 'package:owncoffer_client/src/protocol/rule_match_type.dart'
 import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
     as _ibpr6881;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
+import 'package:owncoffer_client/src/protocol/statement_import.dart'
+    as _i5x9swls;
 import 'package:owncoffer_client/src/protocol/totp_enrollment.dart'
     as _iy6m3xur;
 import 'package:owncoffer_client/src/protocol/two_factor_status.dart'
@@ -463,6 +468,62 @@ class EndpointGroup extends _isc.EndpointRef {
   );
 }
 
+/// Bank statement import: preview, import, history, cancel.
+/// {@category Endpoint}
+class EndpointImport extends _isc.EndpointRef {
+  EndpointImport(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'import';
+
+  /// What the import would do. Writes nothing.
+  _ida.Future<_ikjuebnd.ImportPreview> preview(
+    int accountId,
+    _idt.ByteData file, {
+    _irbioy6y.CsvColumns? columns,
+  }) => caller.callServerEndpoint<_ikjuebnd.ImportPreview>(
+    'import',
+    'preview',
+    {
+      'accountId': accountId,
+      'file': file,
+      'columns': columns,
+    },
+  );
+
+  _ida.Future<_i5x9swls.StatementImport> commit(
+    int accountId,
+    String fileName,
+    _idt.ByteData file, {
+    _irbioy6y.CsvColumns? columns,
+    List<int>? acceptedPossibleDuplicates,
+  }) => caller.callServerEndpoint<_i5x9swls.StatementImport>(
+    'import',
+    'commit',
+    {
+      'accountId': accountId,
+      'fileName': fileName,
+      'file': file,
+      'columns': columns,
+      'acceptedPossibleDuplicates': acceptedPossibleDuplicates,
+    },
+  );
+
+  _ida.Future<List<_i5x9swls.StatementImport>> history(int accountId) =>
+      caller.callServerEndpoint<List<_i5x9swls.StatementImport>>(
+        'import',
+        'history',
+        {'accountId': accountId},
+      );
+
+  _ida.Future<_i5x9swls.StatementImport> cancel(int importId) =>
+      caller.callServerEndpoint<_i5x9swls.StatementImport>(
+        'import',
+        'cancel',
+        {'importId': importId},
+      );
+}
+
 /// Invitations to join a group (group admins), and acceptance by users who
 /// already have an account.
 /// {@category Endpoint}
@@ -832,6 +893,7 @@ class Client extends _isc.ServerpodClientShared {
     admin = EndpointAdmin(this);
     category = EndpointCategory(this);
     group = EndpointGroup(this);
+    import = EndpointImport(this);
     invitation = EndpointInvitation(this);
     rule = EndpointRule(this);
     scheduled = EndpointScheduled(this);
@@ -851,6 +913,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointCategory category;
 
   late final EndpointGroup group;
+
+  late final EndpointImport import;
 
   late final EndpointInvitation invitation;
 
@@ -872,6 +936,7 @@ class Client extends _isc.ServerpodClientShared {
     'admin': admin,
     'category': category,
     'group': group,
+    'import': import,
     'invitation': invitation,
     'rule': rule,
     'scheduled': scheduled,

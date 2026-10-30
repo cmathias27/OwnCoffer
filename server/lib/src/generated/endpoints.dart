@@ -10,10 +10,12 @@
 // ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:typed_data' as _idt;
 import 'package:owncoffer_server/src/generated/account_kind.dart' as _ihbhvzqt;
 import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
 import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
+import 'package:owncoffer_server/src/generated/csv_columns.dart' as _iytxq8gu;
 import 'package:owncoffer_server/src/generated/frequency.dart' as _iugtcrzz;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/rule_direction.dart'
@@ -31,6 +33,7 @@ import '../endpoints/account_endpoint.dart' as _iaho7ul5;
 import '../endpoints/admin_endpoint.dart' as _i5t1w2d2;
 import '../endpoints/category_endpoint.dart' as _ioevag4g;
 import '../endpoints/group_endpoint.dart' as _iknqvl2r;
+import '../endpoints/import_endpoint.dart' as _i51ek8od;
 import '../endpoints/invitation_endpoint.dart' as _iipval89;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
@@ -75,6 +78,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'group',
+          null,
+        ),
+      'import': _i51ek8od.ImportEndpoint()
+        ..initialize(
+          server,
+          'import',
           null,
         ),
       'invitation': _iipval89.InvitationEndpoint()
@@ -805,6 +814,125 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['groupId'],
                     params['memberUserId'],
+                  ),
+        ),
+      },
+    );
+    connectors['import'] = _is.EndpointConnector(
+      name: 'import',
+      endpoint: endpoints['import']!,
+      methodConnectors: {
+        'preview': _is.MethodConnector(
+          name: 'preview',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'file': _is.ParameterDescription(
+              name: 'file',
+              type: _is.getType<_idt.ByteData>(),
+              nullable: false,
+            ),
+            'columns': _is.ParameterDescription(
+              name: 'columns',
+              type: _is.getType<_iytxq8gu.CsvColumns?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['import'] as _i51ek8od.ImportEndpoint).preview(
+                    session,
+                    params['accountId'],
+                    params['file'],
+                    columns: params['columns'],
+                  ),
+        ),
+        'commit': _is.MethodConnector(
+          name: 'commit',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'fileName': _is.ParameterDescription(
+              name: 'fileName',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'file': _is.ParameterDescription(
+              name: 'file',
+              type: _is.getType<_idt.ByteData>(),
+              nullable: false,
+            ),
+            'columns': _is.ParameterDescription(
+              name: 'columns',
+              type: _is.getType<_iytxq8gu.CsvColumns?>(),
+              nullable: true,
+            ),
+            'acceptedPossibleDuplicates': _is.ParameterDescription(
+              name: 'acceptedPossibleDuplicates',
+              type: _is.getType<List<int>?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['import'] as _i51ek8od.ImportEndpoint).commit(
+                    session,
+                    params['accountId'],
+                    params['fileName'],
+                    params['file'],
+                    columns: params['columns'],
+                    acceptedPossibleDuplicates:
+                        params['acceptedPossibleDuplicates'],
+                  ),
+        ),
+        'history': _is.MethodConnector(
+          name: 'history',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['import'] as _i51ek8od.ImportEndpoint).history(
+                    session,
+                    params['accountId'],
+                  ),
+        ),
+        'cancel': _is.MethodConnector(
+          name: 'cancel',
+          params: {
+            'importId': _is.ParameterDescription(
+              name: 'importId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['import'] as _i51ek8od.ImportEndpoint).cancel(
+                    session,
+                    params['importId'],
                   ),
         ),
       },

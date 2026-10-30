@@ -1,0 +1,13 @@
+### Columns chosen by the user for a CSV file whose header is not recognised.
+### Indexes are 0-based.
+class: CsvColumns
+fields:
+  delimiter: String
+  headerRow: int
+  dateColumn: int
+  labelColumn: int
+  memoColumn: int?
+  amountColumn: int?
+  debitColumn: int?
+  creditColumn: int?
+  monthFirst: bool

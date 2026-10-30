@@ -22,6 +22,8 @@ import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:owncoffer_server/src/generated/rule.dart' as _inhqt802;
 import 'package:owncoffer_server/src/generated/scheduled_transaction.dart'
     as _inu9ydal;
+import 'package:owncoffer_server/src/generated/statement_import.dart'
+    as _igipv995;
 import 'package:serverpod/protocol.dart' as _isp;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
@@ -40,6 +42,7 @@ import 'category.dart' as _issw2w8j;
 import 'category_kind.dart' as _i7kso3nf;
 import 'category_source.dart' as _idpjit5g;
 import 'community_rule.dart' as _igloa2c5;
+import 'csv_columns.dart' as _iq9wp9wq;
 import 'finance_group.dart' as _iqh5irlt;
 import 'forecast_day.dart' as _ids0ngao;
 import 'forecast_event_info.dart' as _iuscnr1n;
@@ -47,6 +50,9 @@ import 'forecast_result.dart' as _idemr8ki;
 import 'frequency.dart' as _ixycnzxw;
 import 'group_member.dart' as _igiek2ee;
 import 'group_membership.dart' as _i54nduyh;
+import 'import_issue_info.dart' as _iso7nf03;
+import 'import_preview.dart' as _im8lwq6n;
+import 'import_preview_line.dart' as _i4e8elxc;
 import 'invalid_input_exception.dart' as _ijc83d8f;
 import 'invitation.dart' as _ix00wubs;
 import 'invitation_info.dart' as _i9hwipt6;
@@ -77,6 +83,7 @@ export 'category.dart';
 export 'category_kind.dart';
 export 'category_source.dart';
 export 'community_rule.dart';
+export 'csv_columns.dart';
 export 'finance_group.dart';
 export 'forecast_day.dart';
 export 'forecast_event_info.dart';
@@ -84,6 +91,9 @@ export 'forecast_result.dart';
 export 'frequency.dart';
 export 'group_member.dart';
 export 'group_membership.dart';
+export 'import_issue_info.dart';
+export 'import_preview.dart';
+export 'import_preview_line.dart';
 export 'invalid_input_exception.dart';
 export 'invitation.dart';
 export 'invitation_info.dart';
@@ -1786,6 +1796,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _igloa2c5.CommunityRule) {
       return _igloa2c5.CommunityRule.fromJson(data) as T;
     }
+    if (t == _iq9wp9wq.CsvColumns) {
+      return _iq9wp9wq.CsvColumns.fromJson(data) as T;
+    }
     if (t == _iqh5irlt.FinanceGroup) {
       return _iqh5irlt.FinanceGroup.fromJson(data) as T;
     }
@@ -1806,6 +1819,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _i54nduyh.GroupMembership) {
       return _i54nduyh.GroupMembership.fromJson(data) as T;
+    }
+    if (t == _iso7nf03.ImportIssueInfo) {
+      return _iso7nf03.ImportIssueInfo.fromJson(data) as T;
+    }
+    if (t == _im8lwq6n.ImportPreview) {
+      return _im8lwq6n.ImportPreview.fromJson(data) as T;
+    }
+    if (t == _i4e8elxc.ImportPreviewLine) {
+      return _i4e8elxc.ImportPreviewLine.fromJson(data) as T;
     }
     if (t == _ijc83d8f.InvalidInputException) {
       return _ijc83d8f.InvalidInputException.fromJson(data) as T;
@@ -1905,6 +1927,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _igloa2c5.CommunityRule.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_iq9wp9wq.CsvColumns?>()) {
+      return (data != null ? _iq9wp9wq.CsvColumns.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_iqh5irlt.FinanceGroup?>()) {
       return (data != null ? _iqh5irlt.FinanceGroup.fromJson(data) : null) as T;
     }
@@ -1928,6 +1953,18 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_i54nduyh.GroupMembership?>()) {
       return (data != null ? _i54nduyh.GroupMembership.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_iso7nf03.ImportIssueInfo?>()) {
+      return (data != null ? _iso7nf03.ImportIssueInfo.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_im8lwq6n.ImportPreview?>()) {
+      return (data != null ? _im8lwq6n.ImportPreview.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_i4e8elxc.ImportPreviewLine?>()) {
+      return (data != null ? _i4e8elxc.ImportPreviewLine.fromJson(data) : null)
           as T;
     }
     if (t == _is.getType<_ijc83d8f.InvalidInputException?>()) {
@@ -2026,6 +2063,18 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_iso7nf03.ImportIssueInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iso7nf03.ImportIssueInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i4e8elxc.ImportPreviewLine>) {
+      return (data as List)
+              .map((e) => deserialize<_i4e8elxc.ImportPreviewLine>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_iul9ey3g.Account>) {
       return (data as List)
               .map((e) => deserialize<_iul9ey3g.Account>(e))
@@ -2053,6 +2102,21 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_ipfe689d.MemberInfo>) {
       return (data as List)
               .map((e) => deserialize<_ipfe689d.MemberInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    }
+    if (t == _is.getType<List<int>?>()) {
+      return (data != null
+              ? (data as List).map((e) => deserialize<int>(e)).toList()
+              : null)
+          as T;
+    }
+    if (t == List<_igipv995.StatementImport>) {
+      return (data as List)
+              .map((e) => deserialize<_igipv995.StatementImport>(e))
               .toList()
           as T;
     }
@@ -2101,6 +2165,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i7kso3nf.CategoryKind => 'CategoryKind',
       _idpjit5g.CategorySource => 'CategorySource',
       _igloa2c5.CommunityRule => 'CommunityRule',
+      _iq9wp9wq.CsvColumns => 'CsvColumns',
       _iqh5irlt.FinanceGroup => 'FinanceGroup',
       _ids0ngao.ForecastDay => 'ForecastDay',
       _iuscnr1n.ForecastEventInfo => 'ForecastEventInfo',
@@ -2108,6 +2173,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ixycnzxw.ScheduleFrequency => 'ScheduleFrequency',
       _igiek2ee.GroupMember => 'GroupMember',
       _i54nduyh.GroupMembership => 'GroupMembership',
+      _iso7nf03.ImportIssueInfo => 'ImportIssueInfo',
+      _im8lwq6n.ImportPreview => 'ImportPreview',
+      _i4e8elxc.ImportPreviewLine => 'ImportPreviewLine',
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
       _ix00wubs.Invitation => 'Invitation',
       _i9hwipt6.InvitationInfo => 'InvitationInfo',
@@ -2164,6 +2232,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'CategorySource';
       case _igloa2c5.CommunityRule():
         return 'CommunityRule';
+      case _iq9wp9wq.CsvColumns():
+        return 'CsvColumns';
       case _iqh5irlt.FinanceGroup():
         return 'FinanceGroup';
       case _ids0ngao.ForecastDay():
@@ -2178,6 +2248,12 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'GroupMember';
       case _i54nduyh.GroupMembership():
         return 'GroupMembership';
+      case _iso7nf03.ImportIssueInfo():
+        return 'ImportIssueInfo';
+      case _im8lwq6n.ImportPreview():
+        return 'ImportPreview';
+      case _i4e8elxc.ImportPreviewLine():
+        return 'ImportPreviewLine';
       case _ijc83d8f.InvalidInputException():
         return 'InvalidInputException';
       case _ix00wubs.Invitation():
@@ -2276,6 +2352,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'CommunityRule') {
       return deserialize<_igloa2c5.CommunityRule>(data['data']);
     }
+    if (dataClassName == 'CsvColumns') {
+      return deserialize<_iq9wp9wq.CsvColumns>(data['data']);
+    }
     if (dataClassName == 'FinanceGroup') {
       return deserialize<_iqh5irlt.FinanceGroup>(data['data']);
     }
@@ -2296,6 +2375,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'GroupMembership') {
       return deserialize<_i54nduyh.GroupMembership>(data['data']);
+    }
+    if (dataClassName == 'ImportIssueInfo') {
+      return deserialize<_iso7nf03.ImportIssueInfo>(data['data']);
+    }
+    if (dataClassName == 'ImportPreview') {
+      return deserialize<_im8lwq6n.ImportPreview>(data['data']);
+    }
+    if (dataClassName == 'ImportPreviewLine') {
+      return deserialize<_i4e8elxc.ImportPreviewLine>(data['data']);
     }
     if (dataClassName == 'InvalidInputException') {
       return deserialize<_ijc83d8f.InvalidInputException>(data['data']);

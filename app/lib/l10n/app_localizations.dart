@@ -830,6 +830,24 @@ abstract class AppLocalizations {
   /// **'Le montant minimum dépasse le montant maximum.'**
   String get error_invalid_amount_range;
 
+  /// No description provided for @error_import_file_too_large.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier trop volumineux (4 Mo au maximum).'**
+  String get error_import_file_too_large;
+
+  /// No description provided for @error_import_nothing_readable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération lisible dans ce fichier.'**
+  String get error_import_nothing_readable;
+
+  /// No description provided for @error_import_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet import n\'existe pas ou vous n\'y avez pas accès.'**
+  String get error_import_access_denied;
+
   /// No description provided for @error_scheduled_access_denied.
   ///
   /// In fr, this message translates to:
