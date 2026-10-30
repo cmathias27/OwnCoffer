@@ -1,0 +1,7 @@
+### A banned IP as shown to the server administrator.
+class: IpBanInfo
+fields:
+  ip: String
+  bannedUntil: DateTime
+  banCount: int
+  lastFailureKind: String

@@ -22,6 +22,7 @@ import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
 import '../endpoints/account_endpoint.dart' as _iaho7ul5;
+import '../endpoints/admin_endpoint.dart' as _i5t1w2d2;
 import '../endpoints/group_endpoint.dart' as _iknqvl2r;
 import '../endpoints/invitation_endpoint.dart' as _iipval89;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
@@ -48,6 +49,12 @@ class Endpoints extends _is.EndpointDispatch {
           'account',
           null,
         ),
+      'admin': _i5t1w2d2.AdminEndpoint()
+        ..initialize(
+          server,
+          'admin',
+          null,
+        ),
       'group': _iknqvl2r.GroupEndpoint()
         ..initialize(
           server,
@@ -71,25 +78,6 @@ class Endpoints extends _is.EndpointDispatch {
       name: 'emailIdp',
       endpoint: endpoints['emailIdp']!,
       methodConnectors: {
-        'startRegistration': _is.MethodConnector(
-          name: 'startRegistration',
-          params: {
-            'email': _is.ParameterDescription(
-              name: 'email',
-              type: _is.getType<String>(),
-              nullable: false,
-            ),
-          },
-          call:
-              (
-                _is.Session session,
-                Map<String, dynamic> params,
-              ) async => (endpoints['emailIdp'] as _iuc1hd5t.EmailIdpEndpoint)
-                  .startRegistration(
-                    session,
-                    email: params['email'],
-                  ),
-        ),
         'login': _is.MethodConnector(
           name: 'login',
           params: {
@@ -115,6 +103,25 @@ class Endpoints extends _is.EndpointDispatch {
                     password: params['password'],
                   ),
         ),
+        'startRegistration': _is.MethodConnector(
+          name: 'startRegistration',
+          params: {
+            'email': _is.ParameterDescription(
+              name: 'email',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['emailIdp'] as _iuc1hd5t.EmailIdpEndpoint)
+                  .startRegistration(
+                    session,
+                    email: params['email'],
+                  ),
+        ),
         'verifyRegistrationCode': _is.MethodConnector(
           name: 'verifyRegistrationCode',
           params: {
@@ -137,6 +144,31 @@ class Endpoints extends _is.EndpointDispatch {
                   .verifyRegistrationCode(
                     session,
                     accountRequestId: params['accountRequestId'],
+                    verificationCode: params['verificationCode'],
+                  ),
+        ),
+        'verifyPasswordResetCode': _is.MethodConnector(
+          name: 'verifyPasswordResetCode',
+          params: {
+            'passwordResetRequestId': _is.ParameterDescription(
+              name: 'passwordResetRequestId',
+              type: _is.getType<_is.UuidValue>(),
+              nullable: false,
+            ),
+            'verificationCode': _is.ParameterDescription(
+              name: 'verificationCode',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['emailIdp'] as _iuc1hd5t.EmailIdpEndpoint)
+                  .verifyPasswordResetCode(
+                    session,
+                    passwordResetRequestId: params['passwordResetRequestId'],
                     verificationCode: params['verificationCode'],
                   ),
         ),
@@ -182,31 +214,6 @@ class Endpoints extends _is.EndpointDispatch {
                   .startPasswordReset(
                     session,
                     email: params['email'],
-                  ),
-        ),
-        'verifyPasswordResetCode': _is.MethodConnector(
-          name: 'verifyPasswordResetCode',
-          params: {
-            'passwordResetRequestId': _is.ParameterDescription(
-              name: 'passwordResetRequestId',
-              type: _is.getType<_is.UuidValue>(),
-              nullable: false,
-            ),
-            'verificationCode': _is.ParameterDescription(
-              name: 'verificationCode',
-              type: _is.getType<String>(),
-              nullable: false,
-            ),
-          },
-          call:
-              (
-                _is.Session session,
-                Map<String, dynamic> params,
-              ) async => (endpoints['emailIdp'] as _iuc1hd5t.EmailIdpEndpoint)
-                  .verifyPasswordResetCode(
-                    session,
-                    passwordResetRequestId: params['passwordResetRequestId'],
-                    verificationCode: params['verificationCode'],
                   ),
         ),
         'finishPasswordReset': _is.MethodConnector(
@@ -466,6 +473,41 @@ class Endpoints extends _is.EndpointDispatch {
                     params['accountId'],
                     params['userId'],
                     params['allowed'],
+                  ),
+        ),
+      },
+    );
+    connectors['admin'] = _is.EndpointConnector(
+      name: 'admin',
+      endpoint: endpoints['admin']!,
+      methodConnectors: {
+        'bannedIps': _is.MethodConnector(
+          name: 'bannedIps',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .bannedIps(session),
+        ),
+        'unbanIp': _is.MethodConnector(
+          name: 'unbanIp',
+          params: {
+            'ip': _is.ParameterDescription(
+              name: 'ip',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).unbanIp(
+                    session,
+                    params['ip'],
                   ),
         ),
       },

@@ -33,6 +33,13 @@ Ce code n'est valable que tant qu'aucun compte n'existe. Il change après 5 essa
 
 Les migrations de la base s'appliquent automatiquement au démarrage.
 
+## Sécurité de l'accès
+
+- **Vraie adresse IP** : le proxy ne croit l'en-tête `CF-Connecting-IP` que si la requête vient de Cloudflare ou du connecteur Cloudflare local (`OWNCOFFER_TRUSTED_LOCAL`). Si vous passez `OWNCOFFER_BIND=0.0.0.0`, retirez de cette liste les plages de votre réseau local.
+- **Blocage automatique** : 5 échecs (mot de passe, code de vérification, code d'installation, lien d'invitation) en 15 minutes bloquent l'adresse IP 1 heure ; la durée double à chaque récidive. Votre réseau domestique peut être exclu avec `OWNCOFFER_IP_ALLOWLIST`.
+- **Limite de requêtes** : 600 requêtes par minute et par IP sur l'API (`OWNCOFFER_RATE_LIMIT_PER_MINUTE`).
+- **fail2ban ou CrowdSec** (optionnel) : chaque échec est écrit dans les journaux sous la forme `[auth-failure] ip=… kind=…`, et chaque blocage sous la forme `[ip-banned] ip=…`.
+
 ## Mettre à jour
 
 ```sh

@@ -6,6 +6,8 @@ import 'src/auth/email_config.dart';
 import 'src/cache_busting.dart';
 import 'src/generated/serverpod.dart';
 import 'src/onboarding/onboarding.dart';
+import 'src/security/ip_guard.dart';
+import 'src/security/ip_middleware.dart';
 import 'src/web/routes/app_config_route.dart';
 
 /// The starting point of the Serverpod server.
@@ -89,12 +91,27 @@ void run(List<String> args) async {
   pod.addCloudStorage(DatabaseCloudStorage('public'));
 
   // Start the server.
+  // Banned IPs and request flooding are stopped before any endpoint runs.
+  pod.server.addMiddleware(
+    ipProtection(
+      IpGuard.instance,
+      IpRateLimiter(
+        int.tryParse(
+              Platform.environment['OWNCOFFER_RATE_LIMIT_PER_MINUTE'] ?? '',
+            ) ??
+            600,
+      ),
+    ),
+  );
+
   await pod.start();
 
   // First launch: print the one-time setup code while no account exists.
+  // Active IP bans are loaded so they survive a restart.
   final session = await pod.createSession(enableLogging: true);
   try {
     await Onboarding.announceSetupIfNeeded(session);
+    await IpGuard.instance.load(session);
   } finally {
     await session.close();
   }

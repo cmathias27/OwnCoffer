@@ -1,0 +1,17 @@
+### Failed attempts and bans per client IP (roadbook phase 2): 5 failures in
+### 15 minutes ban the IP for 1 hour, doubled at each new ban.
+class: IpBan
+table: ip_bans
+serverOnly: true
+fields:
+  ip: String
+  failures: int, default=0
+  windowStart: DateTime
+  lastFailureAt: DateTime
+  lastFailureKind: String
+  bannedUntil: DateTime?
+  banCount: int, default=0
+indexes:
+  ip_bans_ip_idx:
+    fields: ip
+    unique: true

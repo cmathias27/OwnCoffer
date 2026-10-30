@@ -7,6 +7,7 @@ import '../generated/protocol.dart';
 import '../onboarding/onboarding.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
+import '../security/ip_guard.dart';
 
 /// Invitations to join a group (group admins), and acceptance by users who
 /// already have an account.
@@ -94,6 +95,7 @@ class InvitationEndpoint extends Endpoint {
         invitation.acceptedAt != null ||
         invitation.revokedAt != null ||
         invitation.expiresAt.isBefore(now)) {
+      await IpGuard.instance.recordFailure(session, 'invitation');
       throw InvalidInputException(code: 'invitation_invalid');
     }
     final emails = await _emailsOf(session, userId);

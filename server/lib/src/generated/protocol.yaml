@@ -1,10 +1,10 @@
 emailIdp:
-  - startRegistration:
   - login:
+  - startRegistration:
   - verifyRegistrationCode:
+  - verifyPasswordResetCode:
   - finishRegistration:
   - startPasswordReset:
-  - verifyPasswordResetCode:
   - finishPasswordReset:
   - hasAccount:
 jwtRefresh:
@@ -15,6 +15,9 @@ account:
   - update:
   - archive:
   - setAccess:
+admin:
+  - bannedIps:
+  - unbanIp:
 group:
   - myGroups:
   - create:
