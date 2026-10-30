@@ -1,0 +1,25 @@
+### Invitation to join a group (or, for the first launch, to become the
+### server administrator: `groupId` null and `serverAdmin` true).
+### Registration is only possible for an email with a pending invitation.
+class: Invitation
+table: invitations
+serverOnly: true
+fields:
+  groupId: int?, relation(parent=groups, onDelete=Cascade)
+  email: String
+  role: MemberRole
+  serverAdmin: bool, default=false
+  ### SHA-256 of the token sent by email; the token itself is never stored.
+  tokenHash: String
+  expiresAt: DateTime
+  createdBy: UuidValue?
+  createdAt: DateTime, default=now
+  acceptedAt: DateTime?
+  acceptedBy: UuidValue?
+  revokedAt: DateTime?
+indexes:
+  invitations_email_idx:
+    fields: email
+  invitations_token_idx:
+    fields: tokenHash
+    unique: true

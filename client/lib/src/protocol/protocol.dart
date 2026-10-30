@@ -15,6 +15,8 @@ import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
 import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
+import 'package:owncoffer_client/src/protocol/invitation_info.dart'
+    as _i2judacm;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -35,11 +37,13 @@ import 'frequency.dart' as _ixycnzxw;
 import 'group_member.dart' as _igiek2ee;
 import 'group_membership.dart' as _i54nduyh;
 import 'invalid_input_exception.dart' as _ijc83d8f;
+import 'invitation_info.dart' as _i9hwipt6;
 import 'member_role.dart' as _insyygng;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
 import 'scheduled_transaction.dart' as _ifol8nrg;
+import 'setup_status.dart' as _iw7q1xsb;
 import 'standard_category.dart' as _iwj8dr64;
 import 'statement_import.dart' as _ia7wudj2;
 export 'access_denied_exception.dart';
@@ -57,11 +61,13 @@ export 'frequency.dart';
 export 'group_member.dart';
 export 'group_membership.dart';
 export 'invalid_input_exception.dart';
+export 'invitation_info.dart';
 export 'member_role.dart';
 export 'rule.dart';
 export 'rule_direction.dart';
 export 'rule_match_type.dart';
 export 'scheduled_transaction.dart';
+export 'setup_status.dart';
 export 'standard_category.dart';
 export 'statement_import.dart';
 export 'client.dart';
@@ -145,6 +151,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _ijc83d8f.InvalidInputException) {
       return _ijc83d8f.InvalidInputException.fromJson(data) as T;
     }
+    if (t == _i9hwipt6.InvitationInfo) {
+      return _i9hwipt6.InvitationInfo.fromJson(data) as T;
+    }
     if (t == _insyygng.MemberRole) {
       return _insyygng.MemberRole.fromJson(data) as T;
     }
@@ -159,6 +168,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ifol8nrg.ScheduledTransaction) {
       return _ifol8nrg.ScheduledTransaction.fromJson(data) as T;
+    }
+    if (t == _iw7q1xsb.SetupStatus) {
+      return _iw7q1xsb.SetupStatus.fromJson(data) as T;
     }
     if (t == _iwj8dr64.StandardCategory) {
       return _iwj8dr64.StandardCategory.fromJson(data) as T;
@@ -224,6 +236,10 @@ class Protocol extends _isc.SerializationManager {
               : null)
           as T;
     }
+    if (t == _isc.getType<_i9hwipt6.InvitationInfo?>()) {
+      return (data != null ? _i9hwipt6.InvitationInfo.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_insyygng.MemberRole?>()) {
       return (data != null ? _insyygng.MemberRole.fromJson(data) : null) as T;
     }
@@ -243,6 +259,9 @@ class Protocol extends _isc.SerializationManager {
               ? _ifol8nrg.ScheduledTransaction.fromJson(data)
               : null)
           as T;
+    }
+    if (t == _isc.getType<_iw7q1xsb.SetupStatus?>()) {
+      return (data != null ? _iw7q1xsb.SetupStatus.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_iwj8dr64.StandardCategory?>()) {
       return (data != null ? _iwj8dr64.StandardCategory.fromJson(data) : null)
@@ -267,6 +286,12 @@ class Protocol extends _isc.SerializationManager {
     if (t == List<_il25bams.GroupMember>) {
       return (data as List)
               .map((e) => deserialize<_il25bams.GroupMember>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i2judacm.InvitationInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_i2judacm.InvitationInfo>(e))
               .toList()
           as T;
     }
@@ -296,11 +321,13 @@ class Protocol extends _isc.SerializationManager {
       _igiek2ee.GroupMember => 'GroupMember',
       _i54nduyh.GroupMembership => 'GroupMembership',
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
+      _i9hwipt6.InvitationInfo => 'InvitationInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ivw87pdb.Rule => 'Rule',
       _i13yq1r7.RuleDirection => 'RuleDirection',
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
       _ifol8nrg.ScheduledTransaction => 'ScheduledTransaction',
+      _iw7q1xsb.SetupStatus => 'SetupStatus',
       _iwj8dr64.StandardCategory => 'StandardCategory',
       _ia7wudj2.StatementImport => 'StatementImport',
       _ => null,
@@ -347,6 +374,8 @@ class Protocol extends _isc.SerializationManager {
         return 'GroupMembership';
       case _ijc83d8f.InvalidInputException():
         return 'InvalidInputException';
+      case _i9hwipt6.InvitationInfo():
+        return 'InvitationInfo';
       case _insyygng.MemberRole():
         return 'MemberRole';
       case _ivw87pdb.Rule():
@@ -357,6 +386,8 @@ class Protocol extends _isc.SerializationManager {
         return 'RuleMatchType';
       case _ifol8nrg.ScheduledTransaction():
         return 'ScheduledTransaction';
+      case _iw7q1xsb.SetupStatus():
+        return 'SetupStatus';
       case _iwj8dr64.StandardCategory():
         return 'StandardCategory';
       case _ia7wudj2.StatementImport():
@@ -428,6 +459,9 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'InvalidInputException') {
       return deserialize<_ijc83d8f.InvalidInputException>(data['data']);
     }
+    if (dataClassName == 'InvitationInfo') {
+      return deserialize<_i9hwipt6.InvitationInfo>(data['data']);
+    }
     if (dataClassName == 'MemberRole') {
       return deserialize<_insyygng.MemberRole>(data['data']);
     }
@@ -442,6 +476,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'ScheduledTransaction') {
       return deserialize<_ifol8nrg.ScheduledTransaction>(data['data']);
+    }
+    if (dataClassName == 'SetupStatus') {
+      return deserialize<_iw7q1xsb.SetupStatus>(data['data']);
     }
     if (dataClassName == 'StandardCategory') {
       return deserialize<_iwj8dr64.StandardCategory>(data['data']);
