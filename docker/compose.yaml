@@ -1,0 +1,64 @@
+# OwnCoffer — production deployment (decisions 0002, 0012, 0015).
+#   cp docker/.env.example docker/.env   (or: ./docker/generate-env.sh)
+#   docker compose -f docker/compose.yaml up -d
+name: owncoffer
+
+services:
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      owncoffer:
+        condition: service_started
+    ports:
+      # The only port published on the host.
+      - "${OWNCOFFER_BIND:-127.0.0.1}:${OWNCOFFER_PORT:-8080}:8080"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    networks: [owncoffer]
+
+  owncoffer:
+    image: ghcr.io/cmathias27/owncoffer:${OWNCOFFER_TAG:-edge}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SERVERPOD_DATABASE_HOST: postgres
+      SERVERPOD_DATABASE_PORT: "5432"
+      SERVERPOD_DATABASE_NAME: owncoffer
+      SERVERPOD_DATABASE_USER: owncoffer
+      SERVERPOD_DATABASE_REQUIRE_SSL: "false"
+      SERVERPOD_PASSWORD_database: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in docker/.env}
+      SERVERPOD_PASSWORD_serviceSecret: ${OWNCOFFER_SERVICE_SECRET:?}
+      SERVERPOD_PASSWORD_emailSecretHashPepper: ${OWNCOFFER_EMAIL_PEPPER:?}
+      SERVERPOD_PASSWORD_jwtHmacSha512PrivateKey: ${OWNCOFFER_JWT_KEY:?}
+      SERVERPOD_PASSWORD_jwtRefreshTokenHashPepper: ${OWNCOFFER_JWT_REFRESH_PEPPER:?}
+      OWNCOFFER_PUBLIC_URL: ${OWNCOFFER_PUBLIC_URL:-http://localhost:8080}
+    networks: [owncoffer]
+
+  postgres:
+    image: ghcr.io/serverpod/postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: owncoffer
+      POSTGRES_DB: owncoffer
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    volumes:
+      - owncoffer_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U owncoffer -d owncoffer"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # No "ports:": the database is never published on the host.
+    networks: [owncoffer]
+
+networks:
+  owncoffer:
+
+volumes:
+  owncoffer_db:

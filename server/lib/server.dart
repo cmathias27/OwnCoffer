@@ -42,8 +42,13 @@ void run(List<String> args) async {
   // Setup the app config route.
   // We build this configuration based on the servers api url and serve it to
   // the flutter app.
+  // Behind the single-port proxy (decision 0015) the app calls the API on
+  // the same origin, under OWNCOFFER_API_PATH (e.g. `/api/`).
   pod.webServer.addRoute(
-    AppConfigRoute(apiConfig: pod.config.apiServer),
+    AppConfigRoute(
+      apiConfig: pod.config.apiServer,
+      sameOriginPath: Platform.environment['OWNCOFFER_API_PATH'],
+    ),
     '/assets/assets/config.json',
   );
 

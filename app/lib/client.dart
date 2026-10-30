@@ -13,7 +13,16 @@ import 'package:serverpod_flutter/serverpod_flutter.dart';
 //
 // Otherwise, the server URL is fetched from the assets/config.json file or
 // defaults to http://$localhost:8080/ if not found.
-final serverUrl = getServerUrl();
+final serverUrl = _resolveServerUrl();
+
+/// A relative URL (`/api/`, sent by the server behind the single-port proxy)
+/// is resolved against the page's own origin.
+Future<String> _resolveServerUrl() async {
+  final url = await getServerUrl();
+  final uri = Uri.parse(url);
+  if (uri.hasScheme) return url;
+  return Uri.base.resolveUri(uri).toString();
+}
 
 /// Sets up a global client object that can be used to talk to the server from
 /// anywhere in our app. The client is generated from your server code

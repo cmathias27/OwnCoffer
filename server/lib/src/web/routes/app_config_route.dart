@@ -11,9 +11,16 @@ class AppConfigWidget extends JsonWidget {
 class AppConfigRoute extends WidgetRoute {
   AppConfigWidget widget;
 
+  /// [sameOriginPath], when set (e.g. `/api/`), is sent as a relative URL that
+  /// the web app resolves against its own origin.
   AppConfigRoute({
     required final ServerConfig apiConfig,
-  }) : widget = AppConfigWidget(apiUrl: apiConfig.apiUrl.toString());
+    final String? sameOriginPath,
+  }) : widget = AppConfigWidget(
+         apiUrl: (sameOriginPath != null && sameOriginPath.isNotEmpty)
+             ? sameOriginPath
+             : apiConfig.apiUrl.toString(),
+       );
 
   @override
   Future<WebWidget> build(Session session, Request request) async {
