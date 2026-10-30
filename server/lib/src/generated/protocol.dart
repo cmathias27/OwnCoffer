@@ -15,6 +15,8 @@ import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
 import 'package:owncoffer_server/src/generated/group_member.dart' as _iep4djhw;
 import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
+import 'package:owncoffer_server/src/generated/invitation_info.dart'
+    as _ip1vy3u6;
 import 'package:serverpod/protocol.dart' as _isp;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
@@ -37,11 +39,14 @@ import 'frequency.dart' as _ixycnzxw;
 import 'group_member.dart' as _igiek2ee;
 import 'group_membership.dart' as _i54nduyh;
 import 'invalid_input_exception.dart' as _ijc83d8f;
+import 'invitation.dart' as _ix00wubs;
+import 'invitation_info.dart' as _i9hwipt6;
 import 'member_role.dart' as _insyygng;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
 import 'scheduled_transaction.dart' as _ifol8nrg;
+import 'setup_status.dart' as _iw7q1xsb;
 import 'standard_category.dart' as _iwj8dr64;
 import 'statement_import.dart' as _ia7wudj2;
 export 'access_denied_exception.dart';
@@ -60,11 +65,14 @@ export 'frequency.dart';
 export 'group_member.dart';
 export 'group_membership.dart';
 export 'invalid_input_exception.dart';
+export 'invitation.dart';
+export 'invitation_info.dart';
 export 'member_role.dart';
 export 'rule.dart';
 export 'rule_direction.dart';
 export 'rule_match_type.dart';
 export 'scheduled_transaction.dart';
+export 'setup_status.dart';
 export 'standard_category.dart';
 export 'statement_import.dart';
 
@@ -809,6 +817,130 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'invitations',
+      dartName: 'Invitation',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'email',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'role',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:MemberRole',
+        ),
+        _isp.ColumnDefinition(
+          name: 'serverAdmin',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'false',
+        ),
+        _isp.ColumnDefinition(
+          name: 'tokenHash',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'expiresAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdBy',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: true,
+          dartType: 'UuidValue?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+        _isp.ColumnDefinition(
+          name: 'acceptedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'acceptedBy',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: true,
+          dartType: 'UuidValue?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'revokedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'invitations_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'invitations_email_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'email',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'invitations_token_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'tokenHash',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'rules',
       dartName: 'Rule',
       schema: 'public',
@@ -1502,6 +1634,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ijc83d8f.InvalidInputException) {
       return _ijc83d8f.InvalidInputException.fromJson(data) as T;
     }
+    if (t == _ix00wubs.Invitation) {
+      return _ix00wubs.Invitation.fromJson(data) as T;
+    }
+    if (t == _i9hwipt6.InvitationInfo) {
+      return _i9hwipt6.InvitationInfo.fromJson(data) as T;
+    }
     if (t == _insyygng.MemberRole) {
       return _insyygng.MemberRole.fromJson(data) as T;
     }
@@ -1516,6 +1654,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _ifol8nrg.ScheduledTransaction) {
       return _ifol8nrg.ScheduledTransaction.fromJson(data) as T;
+    }
+    if (t == _iw7q1xsb.SetupStatus) {
+      return _iw7q1xsb.SetupStatus.fromJson(data) as T;
     }
     if (t == _iwj8dr64.StandardCategory) {
       return _iwj8dr64.StandardCategory.fromJson(data) as T;
@@ -1584,6 +1725,13 @@ class Protocol extends _is.DatabaseSerializationManager {
               : null)
           as T;
     }
+    if (t == _is.getType<_ix00wubs.Invitation?>()) {
+      return (data != null ? _ix00wubs.Invitation.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i9hwipt6.InvitationInfo?>()) {
+      return (data != null ? _i9hwipt6.InvitationInfo.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_insyygng.MemberRole?>()) {
       return (data != null ? _insyygng.MemberRole.fromJson(data) : null) as T;
     }
@@ -1603,6 +1751,9 @@ class Protocol extends _is.DatabaseSerializationManager {
               ? _ifol8nrg.ScheduledTransaction.fromJson(data)
               : null)
           as T;
+    }
+    if (t == _is.getType<_iw7q1xsb.SetupStatus?>()) {
+      return (data != null ? _iw7q1xsb.SetupStatus.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_iwj8dr64.StandardCategory?>()) {
       return (data != null ? _iwj8dr64.StandardCategory.fromJson(data) : null)
@@ -1627,6 +1778,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_iep4djhw.GroupMember>) {
       return (data as List)
               .map((e) => deserialize<_iep4djhw.GroupMember>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ip1vy3u6.InvitationInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_ip1vy3u6.InvitationInfo>(e))
               .toList()
           as T;
     }
@@ -1660,11 +1817,14 @@ class Protocol extends _is.DatabaseSerializationManager {
       _igiek2ee.GroupMember => 'GroupMember',
       _i54nduyh.GroupMembership => 'GroupMembership',
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
+      _ix00wubs.Invitation => 'Invitation',
+      _i9hwipt6.InvitationInfo => 'InvitationInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ivw87pdb.Rule => 'Rule',
       _i13yq1r7.RuleDirection => 'RuleDirection',
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
       _ifol8nrg.ScheduledTransaction => 'ScheduledTransaction',
+      _iw7q1xsb.SetupStatus => 'SetupStatus',
       _iwj8dr64.StandardCategory => 'StandardCategory',
       _ia7wudj2.StatementImport => 'StatementImport',
       _ => null,
@@ -1713,6 +1873,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'GroupMembership';
       case _ijc83d8f.InvalidInputException():
         return 'InvalidInputException';
+      case _ix00wubs.Invitation():
+        return 'Invitation';
+      case _i9hwipt6.InvitationInfo():
+        return 'InvitationInfo';
       case _insyygng.MemberRole():
         return 'MemberRole';
       case _ivw87pdb.Rule():
@@ -1723,6 +1887,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'RuleMatchType';
       case _ifol8nrg.ScheduledTransaction():
         return 'ScheduledTransaction';
+      case _iw7q1xsb.SetupStatus():
+        return 'SetupStatus';
       case _iwj8dr64.StandardCategory():
         return 'StandardCategory';
       case _ia7wudj2.StatementImport():
@@ -1801,6 +1967,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'InvalidInputException') {
       return deserialize<_ijc83d8f.InvalidInputException>(data['data']);
     }
+    if (dataClassName == 'Invitation') {
+      return deserialize<_ix00wubs.Invitation>(data['data']);
+    }
+    if (dataClassName == 'InvitationInfo') {
+      return deserialize<_i9hwipt6.InvitationInfo>(data['data']);
+    }
     if (dataClassName == 'MemberRole') {
       return deserialize<_insyygng.MemberRole>(data['data']);
     }
@@ -1815,6 +1987,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'ScheduledTransaction') {
       return deserialize<_ifol8nrg.ScheduledTransaction>(data['data']);
+    }
+    if (dataClassName == 'SetupStatus') {
+      return deserialize<_iw7q1xsb.SetupStatus>(data['data']);
     }
     if (dataClassName == 'StandardCategory') {
       return deserialize<_iwj8dr64.StandardCategory>(data['data']);
@@ -1879,6 +2054,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _iqh5irlt.FinanceGroup.t;
       case _igiek2ee.GroupMember:
         return _igiek2ee.GroupMember.t;
+      case _ix00wubs.Invitation:
+        return _ix00wubs.Invitation.t;
       case _ivw87pdb.Rule:
         return _ivw87pdb.Rule.t;
       case _ifol8nrg.ScheduledTransaction:

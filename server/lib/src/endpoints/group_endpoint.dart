@@ -1,6 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
+import '../onboarding/onboarding.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
 
@@ -26,6 +27,45 @@ class GroupEndpoint extends Endpoint {
     return [
       for (final g in groups) GroupMembership(group: g, role: roleOf[g.id]!),
     ];
+  }
+
+  /// Creates a group whose administrator is the current user. Only the
+  /// server administrator creates groups; others join by invitation.
+  Future<GroupMembership> create(Session session, String name) async {
+    final user = Access.userId(session);
+    if (!await Onboarding.isServerAdmin(session, user)) {
+      throw AccessDeniedException(code: 'server_admin_only');
+    }
+    final trimmed = name.trim();
+    if (trimmed.isEmpty || trimmed.length > 80) {
+      throw InvalidInputException(code: 'invalid_name', field: 'name');
+    }
+    return session.db.transaction((tx) async {
+      final group = await FinanceGroup.db.insertRow(
+        session,
+        FinanceGroup(name: trimmed, createdBy: user),
+        transaction: tx,
+      );
+      await GroupMember.db.insertRow(
+        session,
+        GroupMember(
+          groupId: group.id!,
+          authUserId: user,
+          role: MemberRole.admin,
+        ),
+        transaction: tx,
+      );
+      await Audit.log(
+        session,
+        groupId: group.id,
+        action: 'create',
+        entity: 'group',
+        rowId: group.id,
+        after: group,
+        transaction: tx,
+      );
+      return GroupMembership(group: group, role: MemberRole.admin);
+    });
   }
 
   Future<FinanceGroup> rename(Session session, int groupId, String name) async {

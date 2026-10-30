@@ -1,6 +1,6 @@
 emailIdp:
-  - login:
   - startRegistration:
+  - login:
   - verifyRegistrationCode:
   - finishRegistration:
   - startPasswordReset:
@@ -17,7 +17,16 @@ account:
   - setAccess:
 group:
   - myGroups:
+  - create:
   - rename:
   - members:
   - setRole:
   - removeMember:
+invitation:
+  - create:
+  - list:
+  - revoke:
+  - accept:
+setup:
+  - status:
+  - start:

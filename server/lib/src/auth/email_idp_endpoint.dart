@@ -1,6 +1,23 @@
+import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/providers/email.dart';
 
-/// By extending [EmailIdpBaseEndpoint], the email identity provider endpoints
-/// are made available on the server and enable the corresponding sign-in widget
-/// on the client.
-class EmailIdpEndpoint extends EmailIdpBaseEndpoint {}
+import '../generated/protocol.dart';
+import '../onboarding/onboarding.dart';
+
+/// Email sign-in. Registration is closed except for emails with a pending
+/// invitation (or the first launch setup).
+class EmailIdpEndpoint extends EmailIdpBaseEndpoint {
+  @override
+  Future<UuidValue> startRegistration(
+    Session session, {
+    required String email,
+  }) async {
+    if (!await Onboarding.mayRegister(session, email)) {
+      throw InvalidInputException(code: 'registration_closed', field: 'email');
+    }
+    return super.startRegistration(
+      session,
+      email: Onboarding.normalizeEmail(email),
+    );
+  }
+}

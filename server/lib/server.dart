@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:serverpod_auth_idp_server/core.dart';
-import 'package:serverpod_auth_idp_server/providers/email.dart';
 
+import 'src/auth/email_config.dart';
 import 'src/cache_busting.dart';
 import 'src/generated/serverpod.dart';
+import 'src/onboarding/onboarding.dart';
 import 'src/web/routes/app_config_route.dart';
 
 /// The starting point of the Serverpod server.
@@ -22,13 +23,8 @@ void run(List<String> args) async {
       JwtConfigFromPasswords(),
     ],
     identityProviderBuilders: [
-      // Email/password authentication. No third-party email service: until
-      // SMTP sending is implemented (phase 2), verification codes are only
-      // written to the server log, and only outside production.
-      EmailIdpConfigFromPasswords(
-        sendRegistrationVerificationCode: _logVerificationCode,
-        sendPasswordResetVerificationCode: _logPasswordResetCode,
-      ),
+      // Email/password; registration on invitation only (see Onboarding).
+      buildEmailIdpConfig(),
     ],
   );
 
@@ -94,26 +90,12 @@ void run(List<String> args) async {
 
   // Start the server.
   await pod.start();
-}
 
-void _logVerificationCode(
-  Session session, {
-  required String email,
-  required UuidValue accountRequestId,
-  required String verificationCode,
-  required Transaction? transaction,
-}) {
-  if (session.serverpod.runMode == ServerpodRunMode.production) return;
-  session.log('[EmailIdp] Registration code for $email: $verificationCode');
-}
-
-void _logPasswordResetCode(
-  Session session, {
-  required String email,
-  required UuidValue passwordResetRequestId,
-  required String verificationCode,
-  required Transaction? transaction,
-}) {
-  if (session.serverpod.runMode == ServerpodRunMode.production) return;
-  session.log('[EmailIdp] Password reset code for $email: $verificationCode');
+  // First launch: print the one-time setup code while no account exists.
+  final session = await pod.createSession(enableLogging: true);
+  try {
+    await Onboarding.announceSetupIfNeeded(session);
+  } finally {
+    await session.close();
+  }
 }

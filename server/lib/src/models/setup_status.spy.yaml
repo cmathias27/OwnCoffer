@@ -1,0 +1,4 @@
+### `needsSetup`: no account exists yet; the first launch wizard is shown.
+class: SetupStatus
+fields:
+  needsSetup: bool

@@ -1,5 +1,5 @@
 name: owncoffer_app
-description: A new Flutter project with Serverpod.
+description: OwnCoffer web app (Flutter).
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -24,12 +24,11 @@ environment:
 resolution: workspace
 
 dependencies:
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.5
   flutter:
     sdk: flutter
-  google_fonts: ^8.1.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
   owncoffer_client:
     path: ../client
   serverpod_auth_idp_flutter: 4.0.4
@@ -51,6 +50,8 @@ dependency_overrides:
 
 # The following section is specific to Flutter.
 flutter:
+  # Translations: lib/l10n/app_fr.arb (template) and app_en.arb.
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

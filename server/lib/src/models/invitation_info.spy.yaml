@@ -1,0 +1,9 @@
+### Invitation as shown to group admins (no token).
+class: InvitationInfo
+fields:
+  id: int
+  groupId: int
+  email: String
+  role: MemberRole
+  expiresAt: DateTime
+  createdAt: DateTime
