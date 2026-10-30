@@ -56,6 +56,15 @@ scheduled:
 setup:
   - status:
   - start:
+transaction:
+  - list:
+  - create:
+  - update:
+  - setCategory:
+  - setCleared:
+  - trash:
+  - restore:
+  - createRuleFrom:
 twoFactor:
   - status:
   - begin:

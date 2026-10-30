@@ -1,0 +1,5 @@
+### One page of operations, newest first.
+class: TransactionPage
+fields:
+  items: List<BankTransaction>
+  total: int
