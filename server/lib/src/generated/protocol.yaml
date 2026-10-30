@@ -1,9 +1,9 @@
 emailIdp:
   - login:
   - startRegistration:
+  - finishRegistration:
   - verifyRegistrationCode:
   - verifyPasswordResetCode:
-  - finishRegistration:
   - startPasswordReset:
   - finishPasswordReset:
   - hasAccount:
@@ -33,3 +33,10 @@ invitation:
 setup:
   - status:
   - start:
+twoFactor:
+  - status:
+  - begin:
+  - confirm:
+  - verify:
+  - renewBackupCodes:
+  - disable:

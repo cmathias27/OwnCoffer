@@ -25,6 +25,10 @@ import 'package:owncoffer_client/src/protocol/invitation_info.dart'
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
+import 'package:owncoffer_client/src/protocol/totp_enrollment.dart'
+    as _iy6m3xur;
+import 'package:owncoffer_client/src/protocol/two_factor_status.dart'
+    as _is1jzs1l;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -63,6 +67,22 @@ class EndpointEmailIdp extends _iaic.EndpointEmailIdpBase {
         {'email': email},
       );
 
+  /// Serverpod reads the account scopes before our account-creation hook has
+  /// granted full access (no 2FA yet), so the first token would be partial:
+  /// it is replaced by a token with the account's final scopes.
+  @override
+  _ida.Future<_iacc.AuthSuccess> finishRegistration({
+    required String registrationToken,
+    required String password,
+  }) => caller.callServerEndpoint<_iacc.AuthSuccess>(
+    'emailIdp',
+    'finishRegistration',
+    {
+      'registrationToken': registrationToken,
+      'password': password,
+    },
+  );
+
   @override
   _ida.Future<String> verifyRegistrationCode({
     required _isc.UuidValue accountRequestId,
@@ -86,33 +106,6 @@ class EndpointEmailIdp extends _iaic.EndpointEmailIdpBase {
     {
       'passwordResetRequestId': passwordResetRequestId,
       'verificationCode': verificationCode,
-    },
-  );
-
-  /// Completes a new account registration, creating a new auth user with a
-  /// profile and attaching the given email account to it.
-  ///
-  /// Throws an [EmailAccountRequestException] in case of errors, with reason:
-  /// - [EmailAccountRequestExceptionReason.expired] if the account request has
-  ///   already expired.
-  /// - [EmailAccountRequestExceptionReason.policyViolation] if the password
-  ///   does not comply with the password policy.
-  /// - [EmailAccountRequestExceptionReason.invalid] if the [registrationToken]
-  ///   is invalid.
-  ///
-  /// Throws an [AuthUserBlockedException] if the auth user is blocked.
-  ///
-  /// Returns a session for the newly created user.
-  @override
-  _ida.Future<_iacc.AuthSuccess> finishRegistration({
-    required String registrationToken,
-    required String password,
-  }) => caller.callServerEndpoint<_iacc.AuthSuccess>(
-    'emailIdp',
-    'finishRegistration',
-    {
-      'registrationToken': registrationToken,
-      'password': password,
     },
   );
 
@@ -473,6 +466,63 @@ class EndpointSetup extends _isc.EndpointRef {
   );
 }
 
+/// Two-factor authentication. Needs a signed-in user, but not [accessScope]:
+/// [verify] is how a password-only session gets full access.
+/// {@category Endpoint}
+class EndpointTwoFactor extends _isc.EndpointRef {
+  EndpointTwoFactor(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'twoFactor';
+
+  _ida.Future<_is1jzs1l.TwoFactorStatus> status() =>
+      caller.callServerEndpoint<_is1jzs1l.TwoFactorStatus>(
+        'twoFactor',
+        'status',
+        {},
+      );
+
+  /// Step 1: secret and QR code URI for the authenticator app.
+  _ida.Future<_iy6m3xur.TotpEnrollment> begin() =>
+      caller.callServerEndpoint<_iy6m3xur.TotpEnrollment>(
+        'twoFactor',
+        'begin',
+        {},
+      );
+
+  /// Step 2: first code from the app. Returns the 10 backup codes, shown
+  /// only once.
+  _ida.Future<List<String>> confirm(String code) =>
+      caller.callServerEndpoint<List<String>>(
+        'twoFactor',
+        'confirm',
+        {'code': code},
+      );
+
+  /// After the password sign-in: exchanges the partial session for a full
+  /// one when [code] (TOTP or backup code) is valid.
+  _ida.Future<_iacc.AuthSuccess> verify(String code) =>
+      caller.callServerEndpoint<_iacc.AuthSuccess>(
+        'twoFactor',
+        'verify',
+        {'code': code},
+      );
+
+  /// New backup codes (the old ones stop working).
+  _ida.Future<List<String>> renewBackupCodes(String code) =>
+      caller.callServerEndpoint<List<String>>(
+        'twoFactor',
+        'renewBackupCodes',
+        {'code': code},
+      );
+
+  _ida.Future<void> disable(String code) => caller.callServerEndpoint<void>(
+    'twoFactor',
+    'disable',
+    {'code': code},
+  );
+}
+
 class Modules {
   Modules(Client client) {
     serverpod_auth_idp = _iaic.Caller(client);
@@ -518,6 +568,7 @@ class Client extends _isc.ServerpodClientShared {
     group = EndpointGroup(this);
     invitation = EndpointInvitation(this);
     setup = EndpointSetup(this);
+    twoFactor = EndpointTwoFactor(this);
     modules = Modules(this);
   }
 
@@ -535,6 +586,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointSetup setup;
 
+  late final EndpointTwoFactor twoFactor;
+
   late final Modules modules;
 
   @override
@@ -546,6 +599,7 @@ class Client extends _isc.ServerpodClientShared {
     'group': group,
     'invitation': invitation,
     'setup': setup,
+    'twoFactor': twoFactor,
   };
 
   @override

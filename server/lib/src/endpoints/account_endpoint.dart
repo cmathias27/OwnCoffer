@@ -2,6 +2,7 @@ import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
 import '../security/access.dart';
+import '../security/scopes.dart';
 import '../security/audit.dart';
 
 /// Bank accounts of a group. Only the fields below can be set by the client;
@@ -9,6 +10,11 @@ import '../security/audit.dart';
 class AccountEndpoint extends Endpoint {
   @override
   bool get requireLogin => true;
+
+  /// Password-only sessions of users with two-factor authentication lack
+  /// this scope until they type their code.
+  @override
+  Set<Scope> get requiredScopes => {accessScope};
 
   Future<List<Account>> list(Session session, int groupId) =>
       Access.visibleAccounts(session, groupId);

@@ -70,6 +70,21 @@ class AppLocalizationsEn extends AppLocalizations {
       'This invitation was sent to another email address.';
 
   @override
+  String get error_two_factor_required =>
+      'Please enter your two-factor authentication code first.';
+
+  @override
+  String get error_two_factor_code_invalid => 'Wrong or already used code.';
+
+  @override
+  String get error_two_factor_already_enabled =>
+      'Two-factor authentication is already enabled.';
+
+  @override
+  String get error_two_factor_not_started =>
+      'Start by scanning the QR code with your app.';
+
+  @override
   String import_error_missing_date(int line) {
     return 'Line $line: missing date';
   }

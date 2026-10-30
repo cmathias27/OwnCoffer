@@ -11,6 +11,7 @@ resolution: workspace
 dependencies:
   crypto: ^3.0.6
   mailer: ^7.2.2
+  pointycastle: ^4.0.0
   owncoffer_shared: any
   serverpod: 4.0.4
   serverpod_auth_idp_server: 4.0.4

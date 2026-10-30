@@ -30,6 +30,7 @@ import 'account_access.dart' as _idkoqesg;
 import 'account_kind.dart' as _ifkquxga;
 import 'account_visibility.dart' as _ioxxcdxl;
 import 'audit_entry.dart' as _i1613bfs;
+import 'backup_code.dart' as _i0b7vj86;
 import 'bank_transaction.dart' as _i0mjlwv3;
 import 'category.dart' as _issw2w8j;
 import 'category_kind.dart' as _i7kso3nf;
@@ -52,12 +53,16 @@ import 'scheduled_transaction.dart' as _ifol8nrg;
 import 'setup_status.dart' as _iw7q1xsb;
 import 'standard_category.dart' as _iwj8dr64;
 import 'statement_import.dart' as _ia7wudj2;
+import 'totp_enrollment.dart' as _iul1v2p7;
+import 'totp_secret.dart' as _iac9sbwj;
+import 'two_factor_status.dart' as _igcslm1n;
 export 'access_denied_exception.dart';
 export 'account.dart';
 export 'account_access.dart';
 export 'account_kind.dart';
 export 'account_visibility.dart';
 export 'audit_entry.dart';
+export 'backup_code.dart';
 export 'bank_transaction.dart';
 export 'category.dart';
 export 'category_kind.dart';
@@ -80,6 +85,9 @@ export 'scheduled_transaction.dart';
 export 'setup_status.dart';
 export 'standard_category.dart';
 export 'statement_import.dart';
+export 'totp_enrollment.dart';
+export 'totp_secret.dart';
+export 'two_factor_status.dart';
 
 class Protocol extends _is.DatabaseSerializationManager {
   Protocol._();
@@ -1374,6 +1382,148 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'totp_backup_codes',
+      dartName: 'BackupCode',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'codeHash',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'usedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'totp_backup_codes_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'totp_backup_codes_user_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'totp_secrets',
+      dartName: 'TotpSecret',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'secretBox',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'enabled',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'false',
+        ),
+        _isp.ColumnDefinition(
+          name: 'lastUsedStep',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+        _isp.ColumnDefinition(
+          name: 'enabledAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'totp_secrets_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'totp_secrets_user_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'transactions',
       dartName: 'BankTransaction',
       schema: 'public',
@@ -1685,6 +1835,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i1613bfs.AuditEntry) {
       return _i1613bfs.AuditEntry.fromJson(data) as T;
     }
+    if (t == _i0b7vj86.BackupCode) {
+      return _i0b7vj86.BackupCode.fromJson(data) as T;
+    }
     if (t == _i0mjlwv3.BankTransaction) {
       return _i0mjlwv3.BankTransaction.fromJson(data) as T;
     }
@@ -1751,6 +1904,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ia7wudj2.StatementImport) {
       return _ia7wudj2.StatementImport.fromJson(data) as T;
     }
+    if (t == _iul1v2p7.TotpEnrollment) {
+      return _iul1v2p7.TotpEnrollment.fromJson(data) as T;
+    }
+    if (t == _iac9sbwj.TotpSecret) {
+      return _iac9sbwj.TotpSecret.fromJson(data) as T;
+    }
+    if (t == _igcslm1n.TwoFactorStatus) {
+      return _igcslm1n.TwoFactorStatus.fromJson(data) as T;
+    }
     if (t == _is.getType<_i8te4v3o.AccessDeniedException?>()) {
       return (data != null
               ? _i8te4v3o.AccessDeniedException.fromJson(data)
@@ -1773,6 +1935,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_i1613bfs.AuditEntry?>()) {
       return (data != null ? _i1613bfs.AuditEntry.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i0b7vj86.BackupCode?>()) {
+      return (data != null ? _i0b7vj86.BackupCode.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_i0mjlwv3.BankTransaction?>()) {
       return (data != null ? _i0mjlwv3.BankTransaction.fromJson(data) : null)
@@ -1856,6 +2021,17 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _ia7wudj2.StatementImport.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_iul1v2p7.TotpEnrollment?>()) {
+      return (data != null ? _iul1v2p7.TotpEnrollment.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_iac9sbwj.TotpSecret?>()) {
+      return (data != null ? _iac9sbwj.TotpSecret.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_igcslm1n.TwoFactorStatus?>()) {
+      return (data != null ? _igcslm1n.TwoFactorStatus.fromJson(data) : null)
+          as T;
+    }
     if (t == List<_iul9ey3g.Account>) {
       return (data as List)
               .map((e) => deserialize<_iul9ey3g.Account>(e))
@@ -1886,6 +2062,9 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
+    }
     try {
       return _iais.Protocol().deserialize<T>(data, t);
     } on _is.DeserializationTypeNotFoundException catch (_) {}
@@ -1906,6 +2085,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ifkquxga.AccountKind => 'AccountKind',
       _ioxxcdxl.AccountVisibility => 'AccountVisibility',
       _i1613bfs.AuditEntry => 'AuditEntry',
+      _i0b7vj86.BackupCode => 'BackupCode',
       _i0mjlwv3.BankTransaction => 'BankTransaction',
       _issw2w8j.Category => 'Category',
       _i7kso3nf.CategoryKind => 'CategoryKind',
@@ -1928,6 +2108,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iw7q1xsb.SetupStatus => 'SetupStatus',
       _iwj8dr64.StandardCategory => 'StandardCategory',
       _ia7wudj2.StatementImport => 'StatementImport',
+      _iul1v2p7.TotpEnrollment => 'TotpEnrollment',
+      _iac9sbwj.TotpSecret => 'TotpSecret',
+      _igcslm1n.TwoFactorStatus => 'TwoFactorStatus',
       _ => null,
     };
   }
@@ -1954,6 +2137,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'AccountVisibility';
       case _i1613bfs.AuditEntry():
         return 'AuditEntry';
+      case _i0b7vj86.BackupCode():
+        return 'BackupCode';
       case _i0mjlwv3.BankTransaction():
         return 'BankTransaction';
       case _issw2w8j.Category():
@@ -1998,6 +2183,12 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'StandardCategory';
       case _ia7wudj2.StatementImport():
         return 'StatementImport';
+      case _iul1v2p7.TotpEnrollment():
+        return 'TotpEnrollment';
+      case _iac9sbwj.TotpSecret():
+        return 'TotpSecret';
+      case _igcslm1n.TwoFactorStatus():
+        return 'TwoFactorStatus';
     }
     className = _iais.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -2041,6 +2232,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'AuditEntry') {
       return deserialize<_i1613bfs.AuditEntry>(data['data']);
+    }
+    if (dataClassName == 'BackupCode') {
+      return deserialize<_i0b7vj86.BackupCode>(data['data']);
     }
     if (dataClassName == 'BankTransaction') {
       return deserialize<_i0mjlwv3.BankTransaction>(data['data']);
@@ -2108,6 +2302,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'StatementImport') {
       return deserialize<_ia7wudj2.StatementImport>(data['data']);
     }
+    if (dataClassName == 'TotpEnrollment') {
+      return deserialize<_iul1v2p7.TotpEnrollment>(data['data']);
+    }
+    if (dataClassName == 'TotpSecret') {
+      return deserialize<_iac9sbwj.TotpSecret>(data['data']);
+    }
+    if (dataClassName == 'TwoFactorStatus') {
+      return deserialize<_igcslm1n.TwoFactorStatus>(data['data']);
+    }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       data['className'] = dataClassName.substring(19);
       return _iais.Protocol().deserializeByClassName(data);
@@ -2155,6 +2358,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _idkoqesg.AccountAccess.t;
       case _i1613bfs.AuditEntry:
         return _i1613bfs.AuditEntry.t;
+      case _i0b7vj86.BackupCode:
+        return _i0b7vj86.BackupCode.t;
       case _i0mjlwv3.BankTransaction:
         return _i0mjlwv3.BankTransaction.t;
       case _issw2w8j.Category:
@@ -2177,6 +2382,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _iwj8dr64.StandardCategory.t;
       case _ia7wudj2.StatementImport:
         return _ia7wudj2.StatementImport.t;
+      case _iac9sbwj.TotpSecret:
+        return _iac9sbwj.TotpSecret.t;
     }
     return null;
   }

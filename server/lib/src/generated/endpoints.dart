@@ -26,6 +26,7 @@ import '../endpoints/admin_endpoint.dart' as _i5t1w2d2;
 import '../endpoints/group_endpoint.dart' as _iknqvl2r;
 import '../endpoints/invitation_endpoint.dart' as _iipval89;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
+import '../endpoints/two_factor_endpoint.dart' as _ivxdn6q3;
 
 class Endpoints extends _is.EndpointDispatch {
   @override
@@ -71,6 +72,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'setup',
+          null,
+        ),
+      'twoFactor': _ivxdn6q3.TwoFactorEndpoint()
+        ..initialize(
+          server,
+          'twoFactor',
           null,
         ),
     };
@@ -122,6 +129,31 @@ class Endpoints extends _is.EndpointDispatch {
                     email: params['email'],
                   ),
         ),
+        'finishRegistration': _is.MethodConnector(
+          name: 'finishRegistration',
+          params: {
+            'registrationToken': _is.ParameterDescription(
+              name: 'registrationToken',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'password': _is.ParameterDescription(
+              name: 'password',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['emailIdp'] as _iuc1hd5t.EmailIdpEndpoint)
+                  .finishRegistration(
+                    session,
+                    registrationToken: params['registrationToken'],
+                    password: params['password'],
+                  ),
+        ),
         'verifyRegistrationCode': _is.MethodConnector(
           name: 'verifyRegistrationCode',
           params: {
@@ -170,31 +202,6 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     passwordResetRequestId: params['passwordResetRequestId'],
                     verificationCode: params['verificationCode'],
-                  ),
-        ),
-        'finishRegistration': _is.MethodConnector(
-          name: 'finishRegistration',
-          params: {
-            'registrationToken': _is.ParameterDescription(
-              name: 'registrationToken',
-              type: _is.getType<String>(),
-              nullable: false,
-            ),
-            'password': _is.ParameterDescription(
-              name: 'password',
-              type: _is.getType<String>(),
-              nullable: false,
-            ),
-          },
-          call:
-              (
-                _is.Session session,
-                Map<String, dynamic> params,
-              ) async => (endpoints['emailIdp'] as _iuc1hd5t.EmailIdpEndpoint)
-                  .finishRegistration(
-                    session,
-                    registrationToken: params['registrationToken'],
-                    password: params['password'],
                   ),
         ),
         'startPasswordReset': _is.MethodConnector(
@@ -781,6 +788,108 @@ class Endpoints extends _is.EndpointDispatch {
                 params['setupCode'],
                 params['email'],
               ),
+        ),
+      },
+    );
+    connectors['twoFactor'] = _is.EndpointConnector(
+      name: 'twoFactor',
+      endpoint: endpoints['twoFactor']!,
+      methodConnectors: {
+        'status': _is.MethodConnector(
+          name: 'status',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['twoFactor'] as _ivxdn6q3.TwoFactorEndpoint)
+                  .status(session),
+        ),
+        'begin': _is.MethodConnector(
+          name: 'begin',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['twoFactor'] as _ivxdn6q3.TwoFactorEndpoint)
+                  .begin(session),
+        ),
+        'confirm': _is.MethodConnector(
+          name: 'confirm',
+          params: {
+            'code': _is.ParameterDescription(
+              name: 'code',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['twoFactor'] as _ivxdn6q3.TwoFactorEndpoint)
+                  .confirm(
+                    session,
+                    params['code'],
+                  ),
+        ),
+        'verify': _is.MethodConnector(
+          name: 'verify',
+          params: {
+            'code': _is.ParameterDescription(
+              name: 'code',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['twoFactor'] as _ivxdn6q3.TwoFactorEndpoint)
+                  .verify(
+                    session,
+                    params['code'],
+                  ),
+        ),
+        'renewBackupCodes': _is.MethodConnector(
+          name: 'renewBackupCodes',
+          params: {
+            'code': _is.ParameterDescription(
+              name: 'code',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['twoFactor'] as _ivxdn6q3.TwoFactorEndpoint)
+                  .renewBackupCodes(
+                    session,
+                    params['code'],
+                  ),
+        ),
+        'disable': _is.MethodConnector(
+          name: 'disable',
+          params: {
+            'code': _is.ParameterDescription(
+              name: 'code',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['twoFactor'] as _ivxdn6q3.TwoFactorEndpoint)
+                  .disable(
+                    session,
+                    params['code'],
+                  ),
         ),
       },
     );

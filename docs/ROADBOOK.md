@@ -98,7 +98,7 @@ Objectif : se connecter en sécurité, créer des groupes, inviter des membres ;
 
 - [x] Assistant de premier lancement : compte administrateur du serveur et premier groupe (côté serveur ; écrans à venir)
 - [ ] Connexion email et mot de passe (Argon2), sessions, déconnexion de tous les appareils
-- [ ] Double authentification TOTP, avec codes de secours
+- [x] Double authentification TOTP, avec codes de secours (côté serveur ; écrans à venir)
 - [x] Blocage automatique des IP (5 échecs en 15 minutes, durée doublée à chaque récidive) et limite de requêtes
 - [x] Groupes, rôles (admin, user, lecteur) et invitations par lien expirant (côté serveur ; écrans à venir)
 - [x] Permissions côté serveur, testées ; seconde barrière PostgreSQL (RLS) repoussée avant la bêta (décision 0016)
