@@ -39,6 +39,9 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'invalid_recurrence' => l.error_invalid_recurrence,
   'invalid_date' => l.error_invalid_date,
   'invalid_horizon' => l.error_invalid_horizon,
+  'transaction_access_denied' => l.error_transaction_access_denied,
+  'imported_operation_locked' => l.error_imported_operation_locked,
+  'already_imported_again' => l.error_already_imported_again,
   // File format errors of shared/ come prefixed with `import_`.
   _ when code.startsWith('import_') => importFormatText(l, code.substring(7)),
   _ => l.error_generic,

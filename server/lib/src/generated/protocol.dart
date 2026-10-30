@@ -65,6 +65,7 @@ import 'missed_occurrence_info.dart' as _ifjtpr6l;
 import 'notification.dart' as _irt10kca;
 import 'reconciliation_proposal.dart' as _i7qmkh8w;
 import 'rule.dart' as _ivw87pdb;
+import 'rule_application.dart' as _ie66uvh9;
 import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
 import 'scheduled_transaction.dart' as _ifol8nrg;
@@ -72,6 +73,7 @@ import 'setup_status.dart' as _iw7q1xsb;
 import 'statement_import.dart' as _ia7wudj2;
 import 'totp_enrollment.dart' as _iul1v2p7;
 import 'totp_secret.dart' as _iac9sbwj;
+import 'transaction_page.dart' as _i4rkvxa2;
 import 'two_factor_status.dart' as _igcslm1n;
 export 'access_denied_exception.dart';
 export 'account.dart';
@@ -107,6 +109,7 @@ export 'missed_occurrence_info.dart';
 export 'notification.dart';
 export 'reconciliation_proposal.dart';
 export 'rule.dart';
+export 'rule_application.dart';
 export 'rule_direction.dart';
 export 'rule_match_type.dart';
 export 'scheduled_transaction.dart';
@@ -114,6 +117,7 @@ export 'setup_status.dart';
 export 'statement_import.dart';
 export 'totp_enrollment.dart';
 export 'totp_secret.dart';
+export 'transaction_page.dart';
 export 'two_factor_status.dart';
 
 class Protocol extends _is.DatabaseSerializationManager {
@@ -1984,6 +1988,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ivw87pdb.Rule) {
       return _ivw87pdb.Rule.fromJson(data) as T;
     }
+    if (t == _ie66uvh9.RuleApplication) {
+      return _ie66uvh9.RuleApplication.fromJson(data) as T;
+    }
     if (t == _i13yq1r7.RuleDirection) {
       return _i13yq1r7.RuleDirection.fromJson(data) as T;
     }
@@ -2004,6 +2011,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _iac9sbwj.TotpSecret) {
       return _iac9sbwj.TotpSecret.fromJson(data) as T;
+    }
+    if (t == _i4rkvxa2.TransactionPage) {
+      return _i4rkvxa2.TransactionPage.fromJson(data) as T;
     }
     if (t == _igcslm1n.TwoFactorStatus) {
       return _igcslm1n.TwoFactorStatus.fromJson(data) as T;
@@ -2136,6 +2146,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_ivw87pdb.Rule?>()) {
       return (data != null ? _ivw87pdb.Rule.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_ie66uvh9.RuleApplication?>()) {
+      return (data != null ? _ie66uvh9.RuleApplication.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_i13yq1r7.RuleDirection?>()) {
       return (data != null ? _i13yq1r7.RuleDirection.fromJson(data) : null)
           as T;
@@ -2163,6 +2177,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_iac9sbwj.TotpSecret?>()) {
       return (data != null ? _iac9sbwj.TotpSecret.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i4rkvxa2.TransactionPage?>()) {
+      return (data != null ? _i4rkvxa2.TransactionPage.fromJson(data) : null)
+          as T;
     }
     if (t == _is.getType<_igcslm1n.TwoFactorStatus?>()) {
       return (data != null ? _igcslm1n.TwoFactorStatus.fromJson(data) : null)
@@ -2201,6 +2219,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_i4e8elxc.ImportPreviewLine>) {
       return (data as List)
               .map((e) => deserialize<_i4e8elxc.ImportPreviewLine>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i0mjlwv3.BankTransaction>) {
+      return (data as List)
+              .map((e) => deserialize<_i0mjlwv3.BankTransaction>(e))
               .toList()
           as T;
     }
@@ -2322,6 +2346,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _irt10kca.AppNotification => 'AppNotification',
       _i7qmkh8w.ReconciliationProposal => 'ReconciliationProposal',
       _ivw87pdb.Rule => 'Rule',
+      _ie66uvh9.RuleApplication => 'RuleApplication',
       _i13yq1r7.RuleDirection => 'RuleDirection',
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
       _ifol8nrg.ScheduledTransaction => 'ScheduledTransaction',
@@ -2329,6 +2354,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ia7wudj2.StatementImport => 'StatementImport',
       _iul1v2p7.TotpEnrollment => 'TotpEnrollment',
       _iac9sbwj.TotpSecret => 'TotpSecret',
+      _i4rkvxa2.TransactionPage => 'TransactionPage',
       _igcslm1n.TwoFactorStatus => 'TwoFactorStatus',
       _ => null,
     };
@@ -2412,6 +2438,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'ReconciliationProposal';
       case _ivw87pdb.Rule():
         return 'Rule';
+      case _ie66uvh9.RuleApplication():
+        return 'RuleApplication';
       case _i13yq1r7.RuleDirection():
         return 'RuleDirection';
       case _ibgrh3pe.RuleMatchType():
@@ -2426,6 +2454,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'TotpEnrollment';
       case _iac9sbwj.TotpSecret():
         return 'TotpSecret';
+      case _i4rkvxa2.TransactionPage():
+        return 'TransactionPage';
       case _igcslm1n.TwoFactorStatus():
         return 'TwoFactorStatus';
     }
@@ -2556,6 +2586,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'Rule') {
       return deserialize<_ivw87pdb.Rule>(data['data']);
     }
+    if (dataClassName == 'RuleApplication') {
+      return deserialize<_ie66uvh9.RuleApplication>(data['data']);
+    }
     if (dataClassName == 'RuleDirection') {
       return deserialize<_i13yq1r7.RuleDirection>(data['data']);
     }
@@ -2576,6 +2609,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'TotpSecret') {
       return deserialize<_iac9sbwj.TotpSecret>(data['data']);
+    }
+    if (dataClassName == 'TransactionPage') {
+      return deserialize<_i4rkvxa2.TransactionPage>(data['data']);
     }
     if (dataClassName == 'TwoFactorStatus') {
       return deserialize<_igcslm1n.TwoFactorStatus>(data['data']);

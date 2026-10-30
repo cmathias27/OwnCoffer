@@ -131,5 +131,8 @@
   "error_invalid_recurrence": "The end date is before the start date.",
   "error_invalid_date": "Invalid date.",
   "error_invalid_horizon": "The forecast length must be between 1 and 366 days.",
+  "error_transaction_access_denied": "This operation does not exist or you cannot access it.",
+  "error_imported_operation_locked": "The date, amount and label of an imported operation cannot be changed: they come from the bank.",
+  "error_already_imported_again": "This operation was imported again in the meantime: it is already in the account.",
   "error_notification_access_denied": "This notification does not exist."
 }

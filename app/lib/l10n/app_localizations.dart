@@ -884,6 +884,24 @@ abstract class AppLocalizations {
   /// **'La durée de prévision doit être comprise entre 1 et 366 jours.'**
   String get error_invalid_horizon;
 
+  /// No description provided for @error_transaction_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette opération n\'existe pas ou vous n\'y avez pas accès.'**
+  String get error_transaction_access_denied;
+
+  /// No description provided for @error_imported_operation_locked.
+  ///
+  /// In fr, this message translates to:
+  /// **'La date, le montant et le libellé d\'une opération importée ne se modifient pas : ce sont ceux de la banque.'**
+  String get error_imported_operation_locked;
+
+  /// No description provided for @error_already_imported_again.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette opération a été réimportée entre-temps : elle est déjà dans le compte.'**
+  String get error_already_imported_again;
+
   /// No description provided for @error_notification_access_denied.
   ///
   /// In fr, this message translates to:

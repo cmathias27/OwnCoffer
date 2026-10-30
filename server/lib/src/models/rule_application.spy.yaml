@@ -1,0 +1,7 @@
+### Result of creating a rule from a correction.
+class: RuleApplication
+fields:
+  rule: Rule
+  ### Existing operations reclassified by the new rule (manual choices are
+  ### never overwritten).
+  reclassifiedCount: int
