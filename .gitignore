@@ -32,3 +32,12 @@ docker/data/
 *.swp
 .DS_Store
 Thumbs.db
+
+# Serverpod (généré ou local)
+.serverpod/
+**/config/passwords.yaml
+**/config/firebase_service_account_key.json
+server/web/app/
+**/sp_*.db*
+.pub-cache/
+.mcp.json

@@ -78,7 +78,7 @@ Objectif : tout décider et tout organiser avant la première ligne de code.
 
 Objectif : un serveur vide mais complet, qui se lance en une commande et se teste automatiquement à chaque modification.
 
-- [ ] Organisation du code en un seul dépôt : `server/` (Serverpod), `app/` (Flutter, web pour l'instant), `shared/` (modèles et lecture des fichiers bancaires), `docker/`, `docs/`
+- [x] Organisation du code en un seul dépôt : `server/` (Serverpod), `app/` (Flutter, web pour l'instant), `shared/` (modèles et lecture des fichiers bancaires), `docker/`, `docs/`
 - [ ] `docker-compose.yml` : conteneur OwnCoffer sur le **réseau de l'hôte** (`network_mode: host`), **un seul port** configurable servant l'app web et l'API ; PostgreSQL écoutant uniquement sur `127.0.0.1` ; volume de données ; `.env.example` commenté ; démarrage par `docker compose up -d` (décision 0012)
 - [ ] Base de données v1 avec migrations : utilisateurs, sessions, groupes, membres, comptes, opérations, catégories, catégories standard, règles, imports, journal d'audit
 - [ ] Montants en centimes (entiers) partout, dates d'opération sans fuseau
