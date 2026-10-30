@@ -8,7 +8,7 @@ OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de 
 - Fonctionnalités détaillées : `docs/CAHIER_DES_CHARGES.md`.
 - Décisions d'architecture : `docs/decisions/` — à respecter ; pour en changer une, écrire une nouvelle décision.
 
-**Phase actuelle : 0 (préparation).** Ne pas créer de code applicatif tant que l'utilisateur ne l'a pas demandé explicitement.
+**Phase actuelle : 1 (fondations techniques)**, démarrée à la demande de l'utilisateur le 30 octobre 2026. Le cœur financier (`shared/` : import, doublons, classement, solde prévu) est développé en avance car prioritaire : il doit être fiable avant tout le reste.
 
 **Objectif prioritaire : l'alpha minimale (décision 0010)** — import Caisse d'Épargne, opérations, classement par règles, solde prévu, alerte de découvert. Ne rien ajouter au-delà avant que l'alpha soit utilisée un mois.
 
