@@ -1,0 +1,17 @@
+### Catalogue of standard categories (docs/data/standard_categories.yaml).
+### `code` is stable (e.g. `food.groceries`) and never reused.
+class: StandardCategory
+table: standard_categories
+fields:
+  code: String
+  parentCode: String?
+  kind: CategoryKind
+  nameFr: String
+  nameEn: String
+  icon: String?
+  deprecated: bool, default=false
+  catalogVersion: int
+indexes:
+  standard_categories_code_idx:
+    fields: code
+    unique: true

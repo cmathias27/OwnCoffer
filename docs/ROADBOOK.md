@@ -78,8 +78,8 @@ Objectif : un serveur vide mais complet, qui se lance en une commande et se test
 
 - [x] Organisation du code en un seul dépôt : `server/` (Serverpod), `app/` (Flutter, web pour l'instant), `shared/` (modèles et lecture des fichiers bancaires), `docker/`, `docs/`
 - [ ] `docker-compose.yml` : conteneur OwnCoffer sur le **réseau de l'hôte** (`network_mode: host`), **un seul port** configurable servant l'app web et l'API ; PostgreSQL écoutant uniquement sur `127.0.0.1` ; volume de données ; `.env.example` commenté ; démarrage par `docker compose up -d` (décision 0012)
-- [ ] Base de données v1 avec migrations : utilisateurs, sessions, groupes, membres, comptes, opérations, catégories, catégories standard, règles, imports, journal d'audit
-- [ ] Montants en centimes (entiers) partout, dates d'opération sans fuseau
+- [x] Base de données v1 avec migrations : utilisateurs, sessions, groupes, membres, comptes, opérations, catégories, catégories standard, règles, imports, journal d'audit
+- [x] Montants en centimes (entiers) partout, dates d'opération sans fuseau
 - [ ] Intégration continue GitHub Actions : analyse, formatage, tests, image Docker `ghcr.io/cmathias27/owncoffer:edge`
 - [ ] Sécurité automatique : Dependabot, CodeQL, vérification des licences des dépendances
 - [ ] Page d'état minimale : version, connexion à la base, espace disque

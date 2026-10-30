@@ -1,0 +1,19 @@
+### A classification rule of the group. `pattern` is normalised
+### (upper case, no accents) when saved.
+class: Rule
+table: rules
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  categoryId: int, relation(parent=categories, onDelete=Cascade)
+  matchType: RuleMatchType
+  pattern: String
+  direction: RuleDirection, default=any
+  minAbsCents: int?
+  maxAbsCents: int?
+  priority: int, default=100
+  enabled: bool, default=true
+  createdBy: UuidValue?
+  createdAt: DateTime, default=now
+indexes:
+  rules_group_idx:
+    fields: groupId

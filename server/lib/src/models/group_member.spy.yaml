@@ -1,0 +1,13 @@
+class: GroupMember
+table: group_members
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  role: MemberRole
+  createdAt: DateTime, default=now
+indexes:
+  group_members_group_user_idx:
+    fields: groupId, authUserId
+    unique: true
+  group_members_user_idx:
+    fields: authUserId
