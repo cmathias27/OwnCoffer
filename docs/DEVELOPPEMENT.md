@@ -37,3 +37,5 @@ Les bases de développement écoutent uniquement sur `127.0.0.1` (ports 8090 et 
 cd shared && dart test       # cœur : montants, import, classement, prévisions
 cd server && dart test       # serveur, avec la base de test
 ```
+
+Avant de pousser, `./tool/check.sh` refait toutes les vérifications de la CI (code généré à jour, formatage, analyse, tests).

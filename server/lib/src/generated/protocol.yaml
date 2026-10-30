@@ -1,9 +1,9 @@
 emailIdp:
   - login:
   - startRegistration:
+  - finishRegistration:
   - verifyRegistrationCode:
   - verifyPasswordResetCode:
-  - finishRegistration:
   - startPasswordReset:
   - finishPasswordReset:
   - hasAccount:
