@@ -45,6 +45,13 @@ docs/     cahier des charges, roadbook, décisions
 - **Licences** : toute dépendance ajoutée doit être compatible AGPL-3.0.
 - Une seule banque au départ : **Caisse d'Épargne** (décision 0003) ; isoler ses particularités dans un module dédié.
 
+## Pièges connus (Serverpod 4)
+
+- Un paramètre nommé **avec valeur par défaut** dans un point d'accès devient **obligatoire** côté client : utiliser un type nullable sans valeur par défaut (`bool? x`) et appliquer la valeur par défaut dans le corps.
+- Après toute modification de `server/lib` (points d'accès, modèles `.spy.yaml`) : `serverpod generate`, puis `serverpod create-migration` si un modèle de table a changé.
+- `inSet` attend un `Set<T>` explicitement typé (`final Set<int> ids = {...}`).
+- Avant chaque push : `./tool/check.sh` (mêmes vérifications que la CI).
+
 ## Façon de travailler
 
 - Une issue = une branche (`feature/…`, `fix/…`, `docs/…`) = une pull request vers `main`.

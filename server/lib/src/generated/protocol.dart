@@ -12,12 +12,14 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
+import 'package:owncoffer_server/src/generated/category.dart' as _iemw1gpx;
 import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
+import 'package:owncoffer_server/src/generated/rule.dart' as _inhqt802;
 import 'package:serverpod/protocol.dart' as _isp;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
@@ -52,7 +54,6 @@ import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
 import 'scheduled_transaction.dart' as _ifol8nrg;
 import 'setup_status.dart' as _iw7q1xsb;
-import 'standard_category.dart' as _iwj8dr64;
 import 'statement_import.dart' as _ia7wudj2;
 import 'totp_enrollment.dart' as _iul1v2p7;
 import 'totp_secret.dart' as _iac9sbwj;
@@ -85,7 +86,6 @@ export 'rule_direction.dart';
 export 'rule_match_type.dart';
 export 'scheduled_transaction.dart';
 export 'setup_status.dart';
-export 'standard_category.dart';
 export 'statement_import.dart';
 export 'totp_enrollment.dart';
 export 'totp_secret.dart';
@@ -401,8 +401,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         _isp.ColumnDefinition(
           name: 'name',
           columnType: _isp.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _isp.ColumnDefinition(
           name: 'kind',
@@ -1303,87 +1303,6 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
-      name: 'standard_categories',
-      dartName: 'StandardCategory',
-      schema: 'public',
-      module: 'owncoffer',
-      columns: [
-        _isp.ColumnDefinition(
-          name: 'id',
-          columnType: _isp.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'serial',
-        ),
-        _isp.ColumnDefinition(
-          name: 'code',
-          columnType: _isp.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-        _isp.ColumnDefinition(
-          name: 'parentCode',
-          columnType: _isp.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _isp.ColumnDefinition(
-          name: 'kind',
-          columnType: _isp.ColumnType.text,
-          isNullable: false,
-          dartType: 'protocol:CategoryKind',
-        ),
-        _isp.ColumnDefinition(
-          name: 'nameFr',
-          columnType: _isp.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-        _isp.ColumnDefinition(
-          name: 'nameEn',
-          columnType: _isp.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-        _isp.ColumnDefinition(
-          name: 'icon',
-          columnType: _isp.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _isp.ColumnDefinition(
-          name: 'deprecated',
-          columnType: _isp.ColumnType.boolean,
-          isNullable: false,
-          dartType: 'bool',
-          columnDefault: 'false',
-        ),
-        _isp.ColumnDefinition(
-          name: 'catalogVersion',
-          columnType: _isp.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int',
-        ),
-      ],
-      foreignKeys: [],
-      indexes: [
-        _isp.IndexDefinition(
-          indexName: 'standard_categories_code_idx',
-          tableSpace: null,
-          elements: [
-            _isp.IndexElementDefinition(
-              type: _isp.IndexElementDefinitionType.column,
-              definition: 'code',
-            ),
-          ],
-          type: 'btree',
-          isUnique: true,
-          isPrimary: false,
-        ),
-      ],
-      managed: true,
-    ),
-    _isp.TableDefinition(
       name: 'totp_backup_codes',
       dartName: 'BackupCode',
       schema: 'public',
@@ -1903,9 +1822,6 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _iw7q1xsb.SetupStatus) {
       return _iw7q1xsb.SetupStatus.fromJson(data) as T;
     }
-    if (t == _iwj8dr64.StandardCategory) {
-      return _iwj8dr64.StandardCategory.fromJson(data) as T;
-    }
     if (t == _ia7wudj2.StatementImport) {
       return _ia7wudj2.StatementImport.fromJson(data) as T;
     }
@@ -2021,10 +1937,6 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_iw7q1xsb.SetupStatus?>()) {
       return (data != null ? _iw7q1xsb.SetupStatus.fromJson(data) : null) as T;
     }
-    if (t == _is.getType<_iwj8dr64.StandardCategory?>()) {
-      return (data != null ? _iwj8dr64.StandardCategory.fromJson(data) : null)
-          as T;
-    }
     if (t == _is.getType<_ia7wudj2.StatementImport?>()) {
       return (data != null ? _ia7wudj2.StatementImport.fromJson(data) : null)
           as T;
@@ -2052,6 +1964,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_iemw1gpx.Category>) {
+      return (data as List)
+              .map((e) => deserialize<_iemw1gpx.Category>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_idq93byd.GroupMembership>) {
       return (data as List)
               .map((e) => deserialize<_idq93byd.GroupMembership>(e))
@@ -2068,6 +1986,10 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data as List)
               .map((e) => deserialize<_ip1vy3u6.InvitationInfo>(e))
               .toList()
+          as T;
+    }
+    if (t == List<_inhqt802.Rule>) {
+      return (data as List).map((e) => deserialize<_inhqt802.Rule>(e)).toList()
           as T;
     }
     if (t == List<String>) {
@@ -2115,7 +2037,6 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
       _ifol8nrg.ScheduledTransaction => 'ScheduledTransaction',
       _iw7q1xsb.SetupStatus => 'SetupStatus',
-      _iwj8dr64.StandardCategory => 'StandardCategory',
       _ia7wudj2.StatementImport => 'StatementImport',
       _iul1v2p7.TotpEnrollment => 'TotpEnrollment',
       _iac9sbwj.TotpSecret => 'TotpSecret',
@@ -2190,8 +2111,6 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'ScheduledTransaction';
       case _iw7q1xsb.SetupStatus():
         return 'SetupStatus';
-      case _iwj8dr64.StandardCategory():
-        return 'StandardCategory';
       case _ia7wudj2.StatementImport():
         return 'StatementImport';
       case _iul1v2p7.TotpEnrollment():
@@ -2310,9 +2229,6 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'SetupStatus') {
       return deserialize<_iw7q1xsb.SetupStatus>(data['data']);
     }
-    if (dataClassName == 'StandardCategory') {
-      return deserialize<_iwj8dr64.StandardCategory>(data['data']);
-    }
     if (dataClassName == 'StatementImport') {
       return deserialize<_ia7wudj2.StatementImport>(data['data']);
     }
@@ -2392,8 +2308,6 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _ivw87pdb.Rule.t;
       case _ifol8nrg.ScheduledTransaction:
         return _ifol8nrg.ScheduledTransaction.t;
-      case _iwj8dr64.StandardCategory:
-        return _iwj8dr64.StandardCategory.t;
       case _ia7wudj2.StatementImport:
         return _ia7wudj2.StatementImport.t;
       case _iac9sbwj.TotpSecret:

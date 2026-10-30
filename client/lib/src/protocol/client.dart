@@ -16,6 +16,8 @@ import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
 import 'package:owncoffer_client/src/protocol/account_kind.dart' as _ighjli9i;
 import 'package:owncoffer_client/src/protocol/account_visibility.dart'
     as _i33sijhq;
+import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
+import 'package:owncoffer_client/src/protocol/category_kind.dart' as _ig2tt18e;
 import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
 import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
@@ -25,6 +27,10 @@ import 'package:owncoffer_client/src/protocol/invitation_info.dart'
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
+import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
+import 'package:owncoffer_client/src/protocol/rule_direction.dart' as _idnlspx6;
+import 'package:owncoffer_client/src/protocol/rule_match_type.dart'
+    as _iko98d6o;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
 import 'package:owncoffer_client/src/protocol/totp_enrollment.dart'
     as _iy6m3xur;
@@ -317,6 +323,68 @@ class EndpointAdmin extends _isc.EndpointRef {
   );
 }
 
+/// Categories of a group, linked to the standard catalogue.
+/// {@category Endpoint}
+class EndpointCategory extends _isc.EndpointRef {
+  EndpointCategory(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'category';
+
+  _ida.Future<List<_i37qqsjr.Category>> list(int groupId) =>
+      caller.callServerEndpoint<List<_i37qqsjr.Category>>(
+        'category',
+        'list',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<_i37qqsjr.Category> create(
+    int groupId,
+    String name,
+    _ig2tt18e.CategoryKind kind, {
+    int? parentId,
+    String? standardCode,
+  }) => caller.callServerEndpoint<_i37qqsjr.Category>(
+    'category',
+    'create',
+    {
+      'groupId': groupId,
+      'name': name,
+      'kind': kind,
+      'parentId': parentId,
+      'standardCode': standardCode,
+    },
+  );
+
+  /// Renames (empty name = back to the standard name) and relinks to the
+  /// standard catalogue.
+  _ida.Future<_i37qqsjr.Category> update(
+    int categoryId, {
+    String? name,
+    bool? resetName,
+    String? standardCode,
+    String? color,
+  }) => caller.callServerEndpoint<_i37qqsjr.Category>(
+    'category',
+    'update',
+    {
+      'categoryId': categoryId,
+      'name': name,
+      'resetName': resetName,
+      'standardCode': standardCode,
+      'color': color,
+    },
+  );
+
+  /// Moves the category to the trash; its operations become "to classify"
+  /// only if the user chooses so (they keep the link until purge).
+  _ida.Future<void> archive(int categoryId) => caller.callServerEndpoint<void>(
+    'category',
+    'archive',
+    {'categoryId': categoryId},
+  );
+}
+
 /// Groups of the current user and their members.
 /// {@category Endpoint}
 class EndpointGroup extends _isc.EndpointRef {
@@ -435,6 +503,80 @@ class EndpointInvitation extends _isc.EndpointRef {
         'accept',
         {'token': token},
       );
+}
+
+/// Classification rules of a group (cahier des charges, Classement).
+/// {@category Endpoint}
+class EndpointRule extends _isc.EndpointRef {
+  EndpointRule(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'rule';
+
+  _ida.Future<List<_i0jtaw5e.Rule>> list(int groupId) =>
+      caller.callServerEndpoint<List<_i0jtaw5e.Rule>>(
+        'rule',
+        'list',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<_i0jtaw5e.Rule> create(
+    int groupId,
+    int categoryId,
+    String pattern,
+    _iko98d6o.RuleMatchType matchType, {
+    _idnlspx6.RuleDirection? direction,
+    int? minAbsCents,
+    int? maxAbsCents,
+    int? priority,
+  }) => caller.callServerEndpoint<_i0jtaw5e.Rule>(
+    'rule',
+    'create',
+    {
+      'groupId': groupId,
+      'categoryId': categoryId,
+      'pattern': pattern,
+      'matchType': matchType,
+      'direction': direction,
+      'minAbsCents': minAbsCents,
+      'maxAbsCents': maxAbsCents,
+      'priority': priority,
+    },
+  );
+
+  _ida.Future<_i0jtaw5e.Rule> update(
+    int ruleId, {
+    int? categoryId,
+    String? pattern,
+    _iko98d6o.RuleMatchType? matchType,
+    _idnlspx6.RuleDirection? direction,
+    int? minAbsCents,
+    int? maxAbsCents,
+    bool? clearAmounts,
+    int? priority,
+    bool? enabled,
+  }) => caller.callServerEndpoint<_i0jtaw5e.Rule>(
+    'rule',
+    'update',
+    {
+      'ruleId': ruleId,
+      'categoryId': categoryId,
+      'pattern': pattern,
+      'matchType': matchType,
+      'direction': direction,
+      'minAbsCents': minAbsCents,
+      'maxAbsCents': maxAbsCents,
+      'clearAmounts': clearAmounts,
+      'priority': priority,
+      'enabled': enabled,
+    },
+  );
+
+  _ida.Future<void> delete(int ruleId) => caller.callServerEndpoint<void>(
+    'rule',
+    'delete',
+    {'ruleId': ruleId},
+  );
 }
 
 /// First launch wizard (no login: no account exists yet).
@@ -566,8 +708,10 @@ class Client extends _isc.ServerpodClientShared {
     jwtRefresh = EndpointJwtRefresh(this);
     account = EndpointAccount(this);
     admin = EndpointAdmin(this);
+    category = EndpointCategory(this);
     group = EndpointGroup(this);
     invitation = EndpointInvitation(this);
+    rule = EndpointRule(this);
     setup = EndpointSetup(this);
     twoFactor = EndpointTwoFactor(this);
     modules = Modules(this);
@@ -581,9 +725,13 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointAdmin admin;
 
+  late final EndpointCategory category;
+
   late final EndpointGroup group;
 
   late final EndpointInvitation invitation;
+
+  late final EndpointRule rule;
 
   late final EndpointSetup setup;
 
@@ -597,8 +745,10 @@ class Client extends _isc.ServerpodClientShared {
     'jwtRefresh': jwtRefresh,
     'account': account,
     'admin': admin,
+    'category': category,
     'group': group,
     'invitation': invitation,
+    'rule': rule,
     'setup': setup,
     'twoFactor': twoFactor,
   };

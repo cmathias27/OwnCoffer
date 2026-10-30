@@ -18,6 +18,11 @@ account:
 admin:
   - bannedIps:
   - unbanIp:
+category:
+  - list:
+  - create:
+  - update:
+  - archive:
 group:
   - myGroups:
   - create:
@@ -30,6 +35,11 @@ invitation:
   - list:
   - revoke:
   - accept:
+rule:
+  - list:
+  - create:
+  - update:
+  - delete:
 setup:
   - status:
   - start:

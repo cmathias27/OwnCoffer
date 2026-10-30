@@ -24,6 +24,11 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'two_factor_code_invalid' => l.error_two_factor_code_invalid,
   'two_factor_already_enabled' => l.error_two_factor_already_enabled,
   'two_factor_not_started' => l.error_two_factor_not_started,
+  'category_access_denied' => l.error_category_access_denied,
+  'rule_access_denied' => l.error_rule_access_denied,
+  'unknown_standard_category' => l.error_unknown_standard_category,
+  'invalid_pattern' => l.error_invalid_pattern,
+  'invalid_amount_range' => l.error_invalid_amount_range,
   _ => l.error_generic,
 };
 

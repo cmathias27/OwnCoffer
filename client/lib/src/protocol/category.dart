@@ -21,7 +21,7 @@ abstract class Category
     this.id,
     required this.groupId,
     this.parentId,
-    required this.name,
+    this.name,
     required this.kind,
     this.standardCode,
     this.icon,
@@ -34,7 +34,7 @@ abstract class Category
     int? id,
     required int groupId,
     int? parentId,
-    required String name,
+    String? name,
     required _i7kso3nf.CategoryKind kind,
     String? standardCode,
     String? icon,
@@ -48,7 +48,7 @@ abstract class Category
       id: jsonSerialization['id'] as int?,
       groupId: jsonSerialization['groupId'] as int,
       parentId: jsonSerialization['parentId'] as int?,
-      name: jsonSerialization['name'] as String,
+      name: jsonSerialization['name'] as String?,
       kind: _i7kso3nf.CategoryKind.fromJson(
         (jsonSerialization['kind'] as String),
       ),
@@ -73,7 +73,9 @@ abstract class Category
 
   int? parentId;
 
-  String name;
+  /// Custom name; null = the standard category's name in the user's
+  /// language (categories created from the catalogue).
+  String? name;
 
   _i7kso3nf.CategoryKind kind;
 
@@ -109,7 +111,7 @@ abstract class Category
       if (id != null) 'id': id,
       'groupId': groupId,
       if (parentId != null) 'parentId': parentId,
-      'name': name,
+      if (name != null) 'name': name,
       'kind': kind.toJson(),
       if (standardCode != null) 'standardCode': standardCode,
       if (icon != null) 'icon': icon,
@@ -126,7 +128,7 @@ abstract class Category
       if (id != null) 'id': id,
       'groupId': groupId,
       if (parentId != null) 'parentId': parentId,
-      'name': name,
+      if (name != null) 'name': name,
       'kind': kind.toJson(),
       if (standardCode != null) 'standardCode': standardCode,
       if (icon != null) 'icon': icon,
@@ -149,7 +151,7 @@ class _CategoryImpl extends Category {
     int? id,
     required int groupId,
     int? parentId,
-    required String name,
+    String? name,
     required _i7kso3nf.CategoryKind kind,
     String? standardCode,
     String? icon,
@@ -177,7 +179,7 @@ class _CategoryImpl extends Category {
     Object? id = _Undefined,
     int? groupId,
     Object? parentId = _Undefined,
-    String? name,
+    Object? name = _Undefined,
     _i7kso3nf.CategoryKind? kind,
     Object? standardCode = _Undefined,
     Object? icon = _Undefined,
@@ -189,7 +191,7 @@ class _CategoryImpl extends Category {
       id: id is int? ? id : this.id,
       groupId: groupId ?? this.groupId,
       parentId: parentId is int? ? parentId : this.parentId,
-      name: name ?? this.name,
+      name: name is String? ? name : this.name,
       kind: kind ?? this.kind,
       standardCode: standardCode is String? ? standardCode : this.standardCode,
       icon: icon is String? ? icon : this.icon,

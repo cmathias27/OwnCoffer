@@ -12,12 +12,14 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
+import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
+import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -47,7 +49,6 @@ import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
 import 'scheduled_transaction.dart' as _ifol8nrg;
 import 'setup_status.dart' as _iw7q1xsb;
-import 'standard_category.dart' as _iwj8dr64;
 import 'statement_import.dart' as _ia7wudj2;
 import 'totp_enrollment.dart' as _iul1v2p7;
 import 'two_factor_status.dart' as _igcslm1n;
@@ -75,7 +76,6 @@ export 'rule_direction.dart';
 export 'rule_match_type.dart';
 export 'scheduled_transaction.dart';
 export 'setup_status.dart';
-export 'standard_category.dart';
 export 'statement_import.dart';
 export 'totp_enrollment.dart';
 export 'two_factor_status.dart';
@@ -187,9 +187,6 @@ class Protocol extends _isc.SerializationManager {
     if (t == _iw7q1xsb.SetupStatus) {
       return _iw7q1xsb.SetupStatus.fromJson(data) as T;
     }
-    if (t == _iwj8dr64.StandardCategory) {
-      return _iwj8dr64.StandardCategory.fromJson(data) as T;
-    }
     if (t == _ia7wudj2.StatementImport) {
       return _ia7wudj2.StatementImport.fromJson(data) as T;
     }
@@ -290,10 +287,6 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_iw7q1xsb.SetupStatus?>()) {
       return (data != null ? _iw7q1xsb.SetupStatus.fromJson(data) : null) as T;
     }
-    if (t == _isc.getType<_iwj8dr64.StandardCategory?>()) {
-      return (data != null ? _iwj8dr64.StandardCategory.fromJson(data) : null)
-          as T;
-    }
     if (t == _isc.getType<_ia7wudj2.StatementImport?>()) {
       return (data != null ? _ia7wudj2.StatementImport.fromJson(data) : null)
           as T;
@@ -318,6 +311,12 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_i37qqsjr.Category>) {
+      return (data as List)
+              .map((e) => deserialize<_i37qqsjr.Category>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_itelwlzo.GroupMembership>) {
       return (data as List)
               .map((e) => deserialize<_itelwlzo.GroupMembership>(e))
@@ -334,6 +333,10 @@ class Protocol extends _isc.SerializationManager {
       return (data as List)
               .map((e) => deserialize<_i2judacm.InvitationInfo>(e))
               .toList()
+          as T;
+    }
+    if (t == List<_i0jtaw5e.Rule>) {
+      return (data as List).map((e) => deserialize<_i0jtaw5e.Rule>(e)).toList()
           as T;
     }
     if (t == List<String>) {
@@ -374,7 +377,6 @@ class Protocol extends _isc.SerializationManager {
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
       _ifol8nrg.ScheduledTransaction => 'ScheduledTransaction',
       _iw7q1xsb.SetupStatus => 'SetupStatus',
-      _iwj8dr64.StandardCategory => 'StandardCategory',
       _ia7wudj2.StatementImport => 'StatementImport',
       _iul1v2p7.TotpEnrollment => 'TotpEnrollment',
       _igcslm1n.TwoFactorStatus => 'TwoFactorStatus',
@@ -440,8 +442,6 @@ class Protocol extends _isc.SerializationManager {
         return 'ScheduledTransaction';
       case _iw7q1xsb.SetupStatus():
         return 'SetupStatus';
-      case _iwj8dr64.StandardCategory():
-        return 'StandardCategory';
       case _ia7wudj2.StatementImport():
         return 'StatementImport';
       case _iul1v2p7.TotpEnrollment():
@@ -541,9 +541,6 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'SetupStatus') {
       return deserialize<_iw7q1xsb.SetupStatus>(data['data']);
-    }
-    if (dataClassName == 'StandardCategory') {
-      return deserialize<_iwj8dr64.StandardCategory>(data['data']);
     }
     if (dataClassName == 'StatementImport') {
       return deserialize<_ia7wudj2.StatementImport>(data['data']);

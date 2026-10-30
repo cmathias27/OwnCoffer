@@ -799,6 +799,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Copier'**
   String get copy;
+
+  /// No description provided for @error_category_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette catégorie n\'existe pas ou vous n\'y avez pas accès.'**
+  String get error_category_access_denied;
+
+  /// No description provided for @error_rule_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette règle n\'existe pas ou vous n\'y avez pas accès.'**
+  String get error_rule_access_denied;
+
+  /// No description provided for @error_unknown_standard_category.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie standard inconnue.'**
+  String get error_unknown_standard_category;
+
+  /// No description provided for @error_invalid_pattern.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le motif doit contenir entre 1 et 100 caractères (lettres ou chiffres).'**
+  String get error_invalid_pattern;
+
+  /// No description provided for @error_invalid_amount_range.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le montant minimum dépasse le montant maximum.'**
+  String get error_invalid_amount_range;
 }
 
 class _AppLocalizationsDelegate

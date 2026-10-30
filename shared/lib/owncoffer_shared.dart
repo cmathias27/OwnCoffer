@@ -9,7 +9,9 @@
 library;
 
 export 'src/banks/caisse_epargne.dart';
+export 'src/categories.dart';
 export 'src/classification/classifier.dart';
+export 'src/data/standard_categories.dart';
 export 'src/forecast/forecast.dart';
 export 'src/forecast/recurrence.dart';
 export 'src/import/csv_parser.dart';

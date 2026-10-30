@@ -221,5 +221,10 @@
   "error_ip_banned": "Trop d'échecs depuis cette adresse : l'accès est bloqué temporairement.",
   "error_rate_limited": "Trop de requêtes. Patientez une minute.",
   "error_network": "Le serveur ne répond pas. Vérifiez votre connexion.",
-  "copy": "Copier"
+  "copy": "Copier",
+  "error_category_access_denied": "Cette catégorie n'existe pas ou vous n'y avez pas accès.",
+  "error_rule_access_denied": "Cette règle n'existe pas ou vous n'y avez pas accès.",
+  "error_unknown_standard_category": "Catégorie standard inconnue.",
+  "error_invalid_pattern": "Le motif doit contenir entre 1 et 100 caractères (lettres ou chiffres).",
+  "error_invalid_amount_range": "Le montant minimum dépasse le montant maximum."
 }

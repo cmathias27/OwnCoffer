@@ -422,4 +422,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get copy => 'Copier';
+
+  @override
+  String get error_category_access_denied =>
+      'Cette catégorie n\'existe pas ou vous n\'y avez pas accès.';
+
+  @override
+  String get error_rule_access_denied =>
+      'Cette règle n\'existe pas ou vous n\'y avez pas accès.';
+
+  @override
+  String get error_unknown_standard_category => 'Catégorie standard inconnue.';
+
+  @override
+  String get error_invalid_pattern =>
+      'Le motif doit contenir entre 1 et 100 caractères (lettres ou chiffres).';
+
+  @override
+  String get error_invalid_amount_range =>
+      'Le montant minimum dépasse le montant maximum.';
 }
