@@ -1,0 +1,5 @@
+### Thrown when the user may not see or change a resource. The same error is
+### used for "does not exist" and "not allowed", so ids cannot be probed.
+exception: AccessDeniedException
+fields:
+  code: String

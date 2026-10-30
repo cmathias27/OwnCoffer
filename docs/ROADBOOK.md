@@ -100,7 +100,7 @@ Objectif : se connecter en sécurité, créer des groupes, inviter des membres ;
 - [ ] Double authentification TOTP, avec codes de secours
 - [ ] Blocage automatique des IP (5 échecs en 15 minutes, durée doublée à chaque récidive) et limite de requêtes
 - [ ] Groupes, rôles (admin, user, lecteur) et invitations par lien expirant
-- [ ] Permissions à deux niveaux : serveur puis PostgreSQL (RLS)
+- [ ] Permissions à deux niveaux : serveur (fait, testé) puis PostgreSQL (RLS)
 - [ ] Journal d'audit des actions sensibles
 - [ ] Accès extérieur par Cloudflare (HTTPS géré par Cloudflare) : vraie adresse IP lue dans `CF-Connecting-IP` uniquement si la requête vient de Cloudflare ou du connecteur local, pour que le blocage des IP fonctionne ; option Cloudflare Access en protection supplémentaire (décision 0012)
 

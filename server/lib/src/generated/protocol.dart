@@ -11,12 +11,17 @@
 // ignore_for_file: dead_code, unnecessary_type_check
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
+import 'package:owncoffer_server/src/generated/group_member.dart' as _iep4djhw;
+import 'package:owncoffer_server/src/generated/group_membership.dart'
+    as _idq93byd;
 import 'package:serverpod/protocol.dart' as _isp;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
+import 'access_denied_exception.dart' as _i8te4v3o;
 import 'account.dart' as _iulmo8pc;
 import 'account_access.dart' as _idkoqesg;
 import 'account_kind.dart' as _ifkquxga;
@@ -30,6 +35,8 @@ import 'community_rule.dart' as _igloa2c5;
 import 'finance_group.dart' as _iqh5irlt;
 import 'frequency.dart' as _ixycnzxw;
 import 'group_member.dart' as _igiek2ee;
+import 'group_membership.dart' as _i54nduyh;
+import 'invalid_input_exception.dart' as _ijc83d8f;
 import 'member_role.dart' as _insyygng;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_direction.dart' as _i13yq1r7;
@@ -37,6 +44,7 @@ import 'rule_match_type.dart' as _ibgrh3pe;
 import 'scheduled_transaction.dart' as _ifol8nrg;
 import 'standard_category.dart' as _iwj8dr64;
 import 'statement_import.dart' as _ia7wudj2;
+export 'access_denied_exception.dart';
 export 'account.dart';
 export 'account_access.dart';
 export 'account_kind.dart';
@@ -50,6 +58,8 @@ export 'community_rule.dart';
 export 'finance_group.dart';
 export 'frequency.dart';
 export 'group_member.dart';
+export 'group_membership.dart';
+export 'invalid_input_exception.dart';
 export 'member_role.dart';
 export 'rule.dart';
 export 'rule_direction.dart';
@@ -1444,6 +1454,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       }
     }
 
+    if (t == _i8te4v3o.AccessDeniedException) {
+      return _i8te4v3o.AccessDeniedException.fromJson(data) as T;
+    }
     if (t == _iulmo8pc.Account) {
       return _iulmo8pc.Account.fromJson(data) as T;
     }
@@ -1483,6 +1496,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _igiek2ee.GroupMember) {
       return _igiek2ee.GroupMember.fromJson(data) as T;
     }
+    if (t == _i54nduyh.GroupMembership) {
+      return _i54nduyh.GroupMembership.fromJson(data) as T;
+    }
+    if (t == _ijc83d8f.InvalidInputException) {
+      return _ijc83d8f.InvalidInputException.fromJson(data) as T;
+    }
     if (t == _insyygng.MemberRole) {
       return _insyygng.MemberRole.fromJson(data) as T;
     }
@@ -1503,6 +1522,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _ia7wudj2.StatementImport) {
       return _ia7wudj2.StatementImport.fromJson(data) as T;
+    }
+    if (t == _is.getType<_i8te4v3o.AccessDeniedException?>()) {
+      return (data != null
+              ? _i8te4v3o.AccessDeniedException.fromJson(data)
+              : null)
+          as T;
     }
     if (t == _is.getType<_iulmo8pc.Account?>()) {
       return (data != null ? _iulmo8pc.Account.fromJson(data) : null) as T;
@@ -1549,6 +1574,16 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_igiek2ee.GroupMember?>()) {
       return (data != null ? _igiek2ee.GroupMember.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_i54nduyh.GroupMembership?>()) {
+      return (data != null ? _i54nduyh.GroupMembership.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ijc83d8f.InvalidInputException?>()) {
+      return (data != null
+              ? _ijc83d8f.InvalidInputException.fromJson(data)
+              : null)
+          as T;
+    }
     if (t == _is.getType<_insyygng.MemberRole?>()) {
       return (data != null ? _insyygng.MemberRole.fromJson(data) : null) as T;
     }
@@ -1577,6 +1612,24 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _ia7wudj2.StatementImport.fromJson(data) : null)
           as T;
     }
+    if (t == List<_iul9ey3g.Account>) {
+      return (data as List)
+              .map((e) => deserialize<_iul9ey3g.Account>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_idq93byd.GroupMembership>) {
+      return (data as List)
+              .map((e) => deserialize<_idq93byd.GroupMembership>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iep4djhw.GroupMember>) {
+      return (data as List)
+              .map((e) => deserialize<_iep4djhw.GroupMember>(e))
+              .toList()
+          as T;
+    }
     try {
       return _iais.Protocol().deserialize<T>(data, t);
     } on _is.DeserializationTypeNotFoundException catch (_) {}
@@ -1591,6 +1644,7 @@ class Protocol extends _is.DatabaseSerializationManager {
 
   static String? getClassNameForType(Type type) {
     return switch (type) {
+      _i8te4v3o.AccessDeniedException => 'AccessDeniedException',
       _iulmo8pc.Account => 'Account',
       _idkoqesg.AccountAccess => 'AccountAccess',
       _ifkquxga.AccountKind => 'AccountKind',
@@ -1604,6 +1658,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iqh5irlt.FinanceGroup => 'FinanceGroup',
       _ixycnzxw.ScheduleFrequency => 'ScheduleFrequency',
       _igiek2ee.GroupMember => 'GroupMember',
+      _i54nduyh.GroupMembership => 'GroupMembership',
+      _ijc83d8f.InvalidInputException => 'InvalidInputException',
       _insyygng.MemberRole => 'MemberRole',
       _ivw87pdb.Rule => 'Rule',
       _i13yq1r7.RuleDirection => 'RuleDirection',
@@ -1625,6 +1681,8 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
 
     switch (data) {
+      case _i8te4v3o.AccessDeniedException():
+        return 'AccessDeniedException';
       case _iulmo8pc.Account():
         return 'Account';
       case _idkoqesg.AccountAccess():
@@ -1651,6 +1709,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'ScheduleFrequency';
       case _igiek2ee.GroupMember():
         return 'GroupMember';
+      case _i54nduyh.GroupMembership():
+        return 'GroupMembership';
+      case _ijc83d8f.InvalidInputException():
+        return 'InvalidInputException';
       case _insyygng.MemberRole():
         return 'MemberRole';
       case _ivw87pdb.Rule():
@@ -1691,6 +1753,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName is! String) {
       return super.deserializeByClassName(data);
     }
+    if (dataClassName == 'AccessDeniedException') {
+      return deserialize<_i8te4v3o.AccessDeniedException>(data['data']);
+    }
     if (dataClassName == 'Account') {
       return deserialize<_iulmo8pc.Account>(data['data']);
     }
@@ -1729,6 +1794,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'GroupMember') {
       return deserialize<_igiek2ee.GroupMember>(data['data']);
+    }
+    if (dataClassName == 'GroupMembership') {
+      return deserialize<_i54nduyh.GroupMembership>(data['data']);
+    }
+    if (dataClassName == 'InvalidInputException') {
+      return deserialize<_ijc83d8f.InvalidInputException>(data['data']);
     }
     if (dataClassName == 'MemberRole') {
       return deserialize<_insyygng.MemberRole>(data['data']);

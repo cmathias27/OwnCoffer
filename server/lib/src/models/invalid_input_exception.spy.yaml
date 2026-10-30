@@ -1,0 +1,6 @@
+### Thrown when a request is refused because of its content. `code` is
+### translated by the app; `field` names the faulty input, if any.
+exception: InvalidInputException
+fields:
+  code: String
+  field: String?

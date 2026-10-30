@@ -10,6 +10,10 @@
 // ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:owncoffer_server/src/generated/account_kind.dart' as _ihbhvzqt;
+import 'package:owncoffer_server/src/generated/account_visibility.dart'
+    as _ioa13f9g;
+import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
@@ -17,6 +21,8 @@ import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
+import '../endpoints/account_endpoint.dart' as _iaho7ul5;
+import '../endpoints/group_endpoint.dart' as _iknqvl2r;
 
 class Endpoints extends _is.EndpointDispatch {
   @override
@@ -32,6 +38,18 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'jwtRefresh',
+          null,
+        ),
+      'account': _iaho7ul5.AccountEndpoint()
+        ..initialize(
+          server,
+          'account',
+          null,
+        ),
+      'group': _iknqvl2r.GroupEndpoint()
+        ..initialize(
+          server,
+          'group',
           null,
         ),
     };
@@ -238,6 +256,318 @@ class Endpoints extends _is.EndpointDispatch {
                         session,
                         refreshToken: params['refreshToken'],
                       ),
+        ),
+      },
+    );
+    connectors['account'] = _is.EndpointConnector(
+      name: 'account',
+      endpoint: endpoints['account']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['account'] as _iaho7ul5.AccountEndpoint).list(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'kind': _is.ParameterDescription(
+              name: 'kind',
+              type: _is.getType<_ihbhvzqt.AccountKind>(),
+              nullable: false,
+            ),
+            'bank': _is.ParameterDescription(
+              name: 'bank',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'initialBalanceCents': _is.ParameterDescription(
+              name: 'initialBalanceCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'initialBalanceDate': _is.ParameterDescription(
+              name: 'initialBalanceDate',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'alertThresholdCents': _is.ParameterDescription(
+              name: 'alertThresholdCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'visibility': _is.ParameterDescription(
+              name: 'visibility',
+              type: _is.getType<_ioa13f9g.AccountVisibility?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['account'] as _iaho7ul5.AccountEndpoint).create(
+                    session,
+                    params['groupId'],
+                    params['name'],
+                    params['kind'],
+                    bank: params['bank'],
+                    initialBalanceCents: params['initialBalanceCents'],
+                    initialBalanceDate: params['initialBalanceDate'],
+                    alertThresholdCents: params['alertThresholdCents'],
+                    visibility: params['visibility'],
+                  ),
+        ),
+        'update': _is.MethodConnector(
+          name: 'update',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'bank': _is.ParameterDescription(
+              name: 'bank',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'initialBalanceCents': _is.ParameterDescription(
+              name: 'initialBalanceCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'initialBalanceDate': _is.ParameterDescription(
+              name: 'initialBalanceDate',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'alertThresholdCents': _is.ParameterDescription(
+              name: 'alertThresholdCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'visibility': _is.ParameterDescription(
+              name: 'visibility',
+              type: _is.getType<_ioa13f9g.AccountVisibility?>(),
+              nullable: true,
+            ),
+            'color': _is.ParameterDescription(
+              name: 'color',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['account'] as _iaho7ul5.AccountEndpoint).update(
+                    session,
+                    params['accountId'],
+                    name: params['name'],
+                    bank: params['bank'],
+                    initialBalanceCents: params['initialBalanceCents'],
+                    initialBalanceDate: params['initialBalanceDate'],
+                    alertThresholdCents: params['alertThresholdCents'],
+                    visibility: params['visibility'],
+                    color: params['color'],
+                  ),
+        ),
+        'archive': _is.MethodConnector(
+          name: 'archive',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['account'] as _iaho7ul5.AccountEndpoint).archive(
+                    session,
+                    params['accountId'],
+                  ),
+        ),
+        'setAccess': _is.MethodConnector(
+          name: 'setAccess',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'userId': _is.ParameterDescription(
+              name: 'userId',
+              type: _is.getType<_is.UuidValue>(),
+              nullable: false,
+            ),
+            'allowed': _is.ParameterDescription(
+              name: 'allowed',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['account'] as _iaho7ul5.AccountEndpoint).setAccess(
+                    session,
+                    params['accountId'],
+                    params['userId'],
+                    params['allowed'],
+                  ),
+        ),
+      },
+    );
+    connectors['group'] = _is.EndpointConnector(
+      name: 'group',
+      endpoint: endpoints['group']!,
+      methodConnectors: {
+        'myGroups': _is.MethodConnector(
+          name: 'myGroups',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['group'] as _iknqvl2r.GroupEndpoint)
+                  .myGroups(session),
+        ),
+        'rename': _is.MethodConnector(
+          name: 'rename',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['group'] as _iknqvl2r.GroupEndpoint).rename(
+                session,
+                params['groupId'],
+                params['name'],
+              ),
+        ),
+        'members': _is.MethodConnector(
+          name: 'members',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['group'] as _iknqvl2r.GroupEndpoint).members(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'setRole': _is.MethodConnector(
+          name: 'setRole',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'memberUserId': _is.ParameterDescription(
+              name: 'memberUserId',
+              type: _is.getType<_is.UuidValue>(),
+              nullable: false,
+            ),
+            'role': _is.ParameterDescription(
+              name: 'role',
+              type: _is.getType<_is2flj8o.MemberRole>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['group'] as _iknqvl2r.GroupEndpoint).setRole(
+                    session,
+                    params['groupId'],
+                    params['memberUserId'],
+                    params['role'],
+                  ),
+        ),
+        'removeMember': _is.MethodConnector(
+          name: 'removeMember',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'memberUserId': _is.ParameterDescription(
+              name: 'memberUserId',
+              type: _is.getType<_is.UuidValue>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['group'] as _iknqvl2r.GroupEndpoint).removeMember(
+                    session,
+                    params['groupId'],
+                    params['memberUserId'],
+                  ),
         ),
       },
     );
