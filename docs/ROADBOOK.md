@@ -36,6 +36,9 @@ flowchart TD
 | [0010](decisions/0010-perimetre-alpha.md) | **Alpha minimale** : import, classement, solde prévu, alerte de découvert | Décidé |
 | [0011](decisions/0011-application-web-installable-pwa.md) | Application web **installable sur téléphone** (PWA) | Décidé |
 | [0012](decisions/0012-exposition-cloudflare-reseau-hote.md) | Exposition par **Cloudflare**, conteneur sur le **réseau de l'hôte**, **un seul port** | Décidé |
+| [0013](decisions/0013-licence-regles-communautaires-cc0.md) | Licence **CC0** pour les règles communautaires | Décidé |
+| [0014](decisions/0014-cible-classement-automatique-alpha.md) | Cible de classement automatique de l'alpha : **70 %** | Décidé |
+| [0015](decisions/0015-reseau-docker-isole-proxy.md) | **Réseau Docker isolé**, proxy Caddy sur le port unique (remplace la partie réseau de 0012) | Décidé |
 
 ## Phase 0 — Préparation et décisions *(en cours)*
 
@@ -50,8 +53,8 @@ Objectif : tout décider et tout organiser avant la première ligne de code.
 - [x] Licence Serverpod : accepter le risque pour l'usage personnel, trancher avant d'ouvrir à d'autres (décision 0001)
 - [x] Interface web : Flutter web (décision 0005)
 - [x] Accès extérieur : redirection Cloudflare, réseau de l'hôte, un seul port (décision 0012)
-- [ ] Licence de la base de règles communautaires (CC0 ou ODbL)
-- [ ] Cible de classement automatique pour l'alpha (proposition : 70 % des opérations classées sans intervention)
+- [x] Licence de la base de règles communautaires : CC0 (décision 0013)
+- [x] Cible de classement automatique pour l'alpha : 70 % des opérations classées sans intervention (décision 0014)
 
 **Dépôt GitHub**
 
@@ -60,7 +63,7 @@ Objectif : tout décider et tout organiser avant la première ligne de code.
 - [x] Dossier `docs/` : cahier des charges, roadbook, décisions
 - [x] `CLAUDE.md` : consignes pour le développement avec Claude Code
 - [x] Milestones par phase, étiquettes, issues des phases 0 et 1
-- [ ] Protéger la branche `main` (réglages GitHub : fusion par pull request, vérifications au vert)
+- [x] Protéger la branche `main` (fusion par pull request ; vérifications au vert à ajouter avec la CI)
 - [ ] Tableau de suivi GitHub Projects (optionnel, les milestones suffisent au départ)
 
 **Données et maquettes**
