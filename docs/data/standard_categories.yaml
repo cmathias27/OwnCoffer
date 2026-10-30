@@ -1,0 +1,237 @@
+# Catalogue de catégories standard OwnCoffer — version 1
+# Identifiants stables : ne jamais renommer ni réutiliser un id ; pour retirer une entrée, ajouter deprecated: true.
+# type : income (revenu), expense (dépense), savings (épargne), transfer (mouvement interne, exclu des revenus et dépenses).
+# icon : nom d'icône Material Symbols.
+version: 1
+categories:
+  - id: income
+    type: income
+    icon: payments
+    name: { fr: "Revenus", en: "Income" }
+    children:
+      - id: income.salary
+        name: { fr: "Salaire", en: "Salary" }
+      - id: income.bonus
+        name: { fr: "Primes", en: "Bonuses" }
+      - id: income.benefits
+        name: { fr: "Allocations et prestations", en: "Benefits" }
+      - id: income.pension
+        name: { fr: "Retraite", en: "Pension" }
+      - id: income.rental
+        name: { fr: "Revenus locatifs", en: "Rental income" }
+      - id: income.refunds
+        name: { fr: "Remboursements", en: "Refunds" }
+      - id: income.investment
+        name: { fr: "Revenus financiers", en: "Investment income" }
+      - id: income.other
+        name: { fr: "Autres revenus", en: "Other income" }
+  - id: housing
+    type: expense
+    icon: home
+    name: { fr: "Logement", en: "Housing" }
+    children:
+      - id: housing.rent
+        name: { fr: "Loyer", en: "Rent" }
+      - id: housing.mortgage
+        name: { fr: "Crédit immobilier", en: "Mortgage" }
+      - id: housing.service_charges
+        name: { fr: "Charges de copropriété", en: "Service charges" }
+      - id: housing.energy
+        name: { fr: "Électricité et gaz", en: "Energy" }
+      - id: housing.water
+        name: { fr: "Eau", en: "Water" }
+      - id: housing.insurance
+        name: { fr: "Assurance habitation", en: "Home insurance" }
+      - id: housing.maintenance
+        name: { fr: "Travaux et entretien", en: "Repairs and maintenance" }
+      - id: housing.furniture
+        name: { fr: "Ameublement et équipement", en: "Furniture and appliances" }
+  - id: food
+    type: expense
+    icon: shopping_cart
+    name: { fr: "Alimentation", en: "Food" }
+    children:
+      - id: food.groceries
+        name: { fr: "Courses", en: "Groceries" }
+      - id: food.restaurants
+        name: { fr: "Restaurants", en: "Restaurants" }
+      - id: food.takeaway
+        name: { fr: "Livraison et à emporter", en: "Takeaway and delivery" }
+      - id: food.canteen
+        name: { fr: "Cantine et restaurant d'entreprise", en: "Canteen" }
+  - id: transport
+    type: expense
+    icon: directions_car
+    name: { fr: "Transport", en: "Transport" }
+    children:
+      - id: transport.fuel
+        name: { fr: "Carburant et recharge", en: "Fuel and charging" }
+      - id: transport.public_transport
+        name: { fr: "Transports en commun", en: "Public transport" }
+      - id: transport.train_plane
+        name: { fr: "Train et avion", en: "Train and plane" }
+      - id: transport.parking_tolls
+        name: { fr: "Parking et péages", en: "Parking and tolls" }
+      - id: transport.vehicle_maintenance
+        name: { fr: "Entretien du véhicule", en: "Vehicle maintenance" }
+      - id: transport.vehicle_insurance
+        name: { fr: "Assurance du véhicule", en: "Vehicle insurance" }
+      - id: transport.vehicle_loan
+        name: { fr: "Crédit ou location du véhicule", en: "Vehicle loan or lease" }
+      - id: transport.taxi_ride_hailing
+        name: { fr: "Taxi et VTC", en: "Taxi and ride-hailing" }
+  - id: health
+    type: expense
+    icon: health_and_safety
+    name: { fr: "Santé", en: "Health" }
+    children:
+      - id: health.doctors
+        name: { fr: "Médecins et spécialistes", en: "Doctors and specialists" }
+      - id: health.pharmacy
+        name: { fr: "Pharmacie", en: "Pharmacy" }
+      - id: health.health_insurance
+        name: { fr: "Mutuelle", en: "Health insurance" }
+      - id: health.optical_dental
+        name: { fr: "Optique et dentaire", en: "Optical and dental" }
+      - id: health.hospital
+        name: { fr: "Hôpital", en: "Hospital" }
+  - id: subscriptions
+    type: expense
+    icon: wifi
+    name: { fr: "Télécoms et abonnements", en: "Telecom and subscriptions" }
+    children:
+      - id: subscriptions.phone_internet
+        name: { fr: "Téléphone et internet", en: "Phone and internet" }
+      - id: subscriptions.streaming
+        name: { fr: "Streaming, vidéo et musique", en: "Streaming, video and music" }
+      - id: subscriptions.software
+        name: { fr: "Logiciels et services en ligne", en: "Software and online services" }
+      - id: subscriptions.press
+        name: { fr: "Presse", en: "News and magazines" }
+  - id: leisure
+    type: expense
+    icon: sports_esports
+    name: { fr: "Loisirs", en: "Leisure" }
+    children:
+      - id: leisure.sport
+        name: { fr: "Sport", en: "Sport" }
+      - id: leisure.culture_outings
+        name: { fr: "Culture et sorties", en: "Culture and outings" }
+      - id: leisure.hobbies
+        name: { fr: "Loisirs et jeux", en: "Hobbies and games" }
+      - id: leisure.travel
+        name: { fr: "Voyages et vacances", en: "Travel and holidays" }
+      - id: leisure.gifts
+        name: { fr: "Cadeaux", en: "Gifts" }
+  - id: shopping
+    type: expense
+    icon: shopping_bag
+    name: { fr: "Achats", en: "Shopping" }
+    children:
+      - id: shopping.clothing
+        name: { fr: "Vêtements et chaussures", en: "Clothing and shoes" }
+      - id: shopping.electronics
+        name: { fr: "High-tech", en: "Electronics" }
+      - id: shopping.diy_garden
+        name: { fr: "Bricolage et jardinage", en: "DIY and garden" }
+      - id: shopping.personal_care
+        name: { fr: "Beauté et soins", en: "Personal care" }
+      - id: shopping.misc_online
+        name: { fr: "Achats en ligne divers", en: "Miscellaneous online purchases" }
+  - id: family
+    type: expense
+    icon: family_restroom
+    name: { fr: "Enfants et famille", en: "Children and family" }
+    children:
+      - id: family.childcare
+        name: { fr: "Garde d'enfants", en: "Childcare" }
+      - id: family.school
+        name: { fr: "Scolarité et fournitures", en: "School and supplies" }
+      - id: family.kids_activities
+        name: { fr: "Activités des enfants", en: "Children's activities" }
+      - id: family.pocket_money
+        name: { fr: "Argent de poche", en: "Pocket money" }
+      - id: family.pets
+        name: { fr: "Animaux", en: "Pets" }
+  - id: education
+    type: expense
+    icon: school
+    name: { fr: "Formation", en: "Education" }
+    children:
+      - id: education.tuition
+        name: { fr: "Frais de formation", en: "Tuition" }
+      - id: education.books_supplies
+        name: { fr: "Livres et fournitures", en: "Books and supplies" }
+  - id: banking
+    type: expense
+    icon: account_balance
+    name: { fr: "Banque et crédits", en: "Banking and loans" }
+    children:
+      - id: banking.bank_fees
+        name: { fr: "Frais bancaires", en: "Bank fees" }
+      - id: banking.overdraft_interest
+        name: { fr: "Agios et intérêts débiteurs", en: "Overdraft interest" }
+      - id: banking.consumer_loan
+        name: { fr: "Crédits à la consommation", en: "Consumer loans" }
+      - id: banking.installments
+        name: { fr: "Paiements en plusieurs fois", en: "Buy now, pay later" }
+      - id: banking.other_insurance
+        name: { fr: "Assurances (vie, prévoyance)", en: "Life and other insurance" }
+  - id: taxes
+    type: expense
+    icon: receipt_long
+    name: { fr: "Impôts et taxes", en: "Taxes" }
+    children:
+      - id: taxes.income_tax
+        name: { fr: "Impôt sur le revenu", en: "Income tax" }
+      - id: taxes.property_tax
+        name: { fr: "Taxe foncière", en: "Property tax" }
+      - id: taxes.housing_tax
+        name: { fr: "Taxe d'habitation", en: "Housing tax" }
+      - id: taxes.other_taxes_fines
+        name: { fr: "Autres taxes et amendes", en: "Other taxes and fines" }
+  - id: giving
+    type: expense
+    icon: volunteer_activism
+    name: { fr: "Dons et solidarité", en: "Giving" }
+    children:
+      - id: giving.donations
+        name: { fr: "Dons à des associations", en: "Charitable donations" }
+      - id: giving.family_support
+        name: { fr: "Aide à des proches", en: "Support to relatives" }
+  - id: professional
+    type: expense
+    icon: work
+    name: { fr: "Dépenses professionnelles", en: "Work expenses" }
+    children:
+      - id: professional.reimbursable
+        name: { fr: "Frais remboursables", en: "Reimbursable expenses" }
+      - id: professional.self_employed
+        name: { fr: "Dépenses d'activité indépendante", en: "Self-employment expenses" }
+  - id: savings
+    type: savings
+    icon: savings
+    name: { fr: "Épargne et placements", en: "Savings and investments" }
+    children:
+      - id: savings.savings_deposit
+        name: { fr: "Versement sur épargne", en: "Savings deposit" }
+      - id: savings.investments
+        name: { fr: "Placements", en: "Investments" }
+  - id: transfers
+    type: transfer
+    icon: swap_horiz
+    name: { fr: "Mouvements internes", en: "Internal movements" }
+    children:
+      - id: transfers.between_accounts
+        name: { fr: "Virement entre mes comptes", en: "Transfer between my accounts" }
+      - id: transfers.cash_withdrawal
+        name: { fr: "Retrait d'espèces", en: "Cash withdrawal" }
+      - id: transfers.card_settlement
+        name: { fr: "Débit différé de carte", en: "Deferred card settlement" }
+  - id: misc
+    type: expense
+    icon: category
+    name: { fr: "Divers", en: "Miscellaneous" }
+    children:
+      - id: misc.other
+        name: { fr: "Autres dépenses", en: "Other expenses" }
