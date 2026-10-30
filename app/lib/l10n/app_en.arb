@@ -121,5 +121,11 @@
   "error_rule_access_denied": "This rule does not exist or you cannot access it.",
   "error_unknown_standard_category": "Unknown standard category.",
   "error_invalid_pattern": "The pattern must be 1 to 100 characters (letters or digits).",
-  "error_invalid_amount_range": "The minimum amount is above the maximum amount."
+  "error_invalid_amount_range": "The minimum amount is above the maximum amount.",
+  "error_scheduled_access_denied": "This planned operation does not exist or you cannot access it.",
+  "error_invalid_interval": "The interval must be between 1 and 120.",
+  "error_invalid_tolerance": "Invalid tolerance (0 to 31 days, 0 to 100 %).",
+  "error_invalid_recurrence": "The end date is before the start date.",
+  "error_invalid_date": "Invalid date.",
+  "error_invalid_horizon": "The forecast length must be between 1 and 366 days."
 }

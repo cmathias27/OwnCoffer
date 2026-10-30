@@ -1,0 +1,10 @@
+### A real operation that probably realises a planned one (approximate amount
+### or label): the user confirms it.
+class: ReconciliationProposal
+fields:
+  scheduledId: int
+  dueDate: DateTime
+  transactionId: int
+  label: String
+  amountCents: int
+  date: DateTime

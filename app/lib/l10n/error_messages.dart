@@ -29,6 +29,12 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'unknown_standard_category' => l.error_unknown_standard_category,
   'invalid_pattern' => l.error_invalid_pattern,
   'invalid_amount_range' => l.error_invalid_amount_range,
+  'scheduled_access_denied' => l.error_scheduled_access_denied,
+  'invalid_interval' => l.error_invalid_interval,
+  'invalid_tolerance' => l.error_invalid_tolerance,
+  'invalid_recurrence' => l.error_invalid_recurrence,
+  'invalid_date' => l.error_invalid_date,
+  'invalid_horizon' => l.error_invalid_horizon,
   _ => l.error_generic,
 };
 

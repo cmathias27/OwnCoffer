@@ -441,4 +441,27 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_invalid_amount_range =>
       'Le montant minimum dépasse le montant maximum.';
+
+  @override
+  String get error_scheduled_access_denied =>
+      'Cette opération prévue n\'existe pas ou vous n\'y avez pas accès.';
+
+  @override
+  String get error_invalid_interval =>
+      'La périodicité doit être comprise entre 1 et 120.';
+
+  @override
+  String get error_invalid_tolerance =>
+      'Tolérance invalide (0 à 31 jours, 0 à 100 %).';
+
+  @override
+  String get error_invalid_recurrence =>
+      'La date de fin est avant la date de début.';
+
+  @override
+  String get error_invalid_date => 'Date invalide.';
+
+  @override
+  String get error_invalid_horizon =>
+      'La durée de prévision doit être comprise entre 1 et 366 jours.';
 }

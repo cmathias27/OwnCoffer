@@ -1,0 +1,22 @@
+### Forecast of one account. Every figure comes from the deterministic
+### engine (shared/forecast); nothing is estimated by an AI.
+class: ForecastResult
+fields:
+  accountId: int
+  today: DateTime
+  until: DateTime
+  ### Initial balance + operations dated today or earlier.
+  currentBalanceCents: int
+  ### Initial balance + checked operations.
+  clearedBalanceCents: int
+  alertThresholdCents: int
+  days: List<ForecastDay>
+  events: List<ForecastEventInfo>
+  lowestDate: DateTime
+  lowestBalanceCents: int
+  ### First day below the alert threshold, if any.
+  firstBelowThresholdDate: DateTime?
+  missed: List<MissedOccurrenceInfo>
+  proposals: List<ReconciliationProposal>
+  ### Operations linked automatically to their planned occurrence.
+  autoReconciledCount: int

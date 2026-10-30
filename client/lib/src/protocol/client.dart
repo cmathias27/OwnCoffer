@@ -19,6 +19,9 @@ import 'package:owncoffer_client/src/protocol/account_visibility.dart'
 import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
 import 'package:owncoffer_client/src/protocol/category_kind.dart' as _ig2tt18e;
 import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
+import 'package:owncoffer_client/src/protocol/forecast_result.dart'
+    as _ip0wp7v2;
+import 'package:owncoffer_client/src/protocol/frequency.dart' as _i1mv9fwy;
 import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
@@ -31,6 +34,8 @@ import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
 import 'package:owncoffer_client/src/protocol/rule_direction.dart' as _idnlspx6;
 import 'package:owncoffer_client/src/protocol/rule_match_type.dart'
     as _iko98d6o;
+import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
+    as _ibpr6881;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
 import 'package:owncoffer_client/src/protocol/totp_enrollment.dart'
     as _iy6m3xur;
@@ -579,6 +584,123 @@ class EndpointRule extends _isc.EndpointRef {
   );
 }
 
+/// Planned operations (rent, salary, subscriptions…) and the forecast.
+/// {@category Endpoint}
+class EndpointScheduled extends _isc.EndpointRef {
+  EndpointScheduled(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'scheduled';
+
+  _ida.Future<List<_ibpr6881.ScheduledTransaction>> list(int accountId) =>
+      caller.callServerEndpoint<List<_ibpr6881.ScheduledTransaction>>(
+        'scheduled',
+        'list',
+        {'accountId': accountId},
+      );
+
+  _ida.Future<_ibpr6881.ScheduledTransaction> create(
+    int accountId,
+    int amountCents,
+    String label,
+    _i1mv9fwy.ScheduleFrequency frequency,
+    DateTime startDate, {
+    int? interval,
+    DateTime? endDate,
+    int? occurrenceCount,
+    int? categoryId,
+    String? matchPattern,
+    int? dateToleranceDays,
+    int? amountTolerancePercent,
+  }) => caller.callServerEndpoint<_ibpr6881.ScheduledTransaction>(
+    'scheduled',
+    'create',
+    {
+      'accountId': accountId,
+      'amountCents': amountCents,
+      'label': label,
+      'frequency': frequency,
+      'startDate': startDate,
+      'interval': interval,
+      'endDate': endDate,
+      'occurrenceCount': occurrenceCount,
+      'categoryId': categoryId,
+      'matchPattern': matchPattern,
+      'dateToleranceDays': dateToleranceDays,
+      'amountTolerancePercent': amountTolerancePercent,
+    },
+  );
+
+  _ida.Future<_ibpr6881.ScheduledTransaction> update(
+    int scheduledId, {
+    int? amountCents,
+    String? label,
+    int? categoryId,
+    DateTime? endDate,
+    String? matchPattern,
+    int? dateToleranceDays,
+    int? amountTolerancePercent,
+  }) => caller.callServerEndpoint<_ibpr6881.ScheduledTransaction>(
+    'scheduled',
+    'update',
+    {
+      'scheduledId': scheduledId,
+      'amountCents': amountCents,
+      'label': label,
+      'categoryId': categoryId,
+      'endDate': endDate,
+      'matchPattern': matchPattern,
+      'dateToleranceDays': dateToleranceDays,
+      'amountTolerancePercent': amountTolerancePercent,
+    },
+  );
+
+  _ida.Future<void> delete(int scheduledId) => caller.callServerEndpoint<void>(
+    'scheduled',
+    'delete',
+    {'scheduledId': scheduledId},
+  );
+
+  /// The next occurrence will not happen (or was paid otherwise): skip it.
+  _ida.Future<_ibpr6881.ScheduledTransaction> skipNext(int scheduledId) =>
+      caller.callServerEndpoint<_ibpr6881.ScheduledTransaction>(
+        'scheduled',
+        'skipNext',
+        {'scheduledId': scheduledId},
+      );
+
+  /// Forecast of the account from the user's [today] (calendar date of the
+  /// device; must be within a day of the server's date).
+  _ida.Future<_ip0wp7v2.ForecastResult> forecast(
+    int accountId,
+    DateTime today, {
+    int? horizonDays,
+  }) => caller.callServerEndpoint<_ip0wp7v2.ForecastResult>(
+    'scheduled',
+    'forecast',
+    {
+      'accountId': accountId,
+      'today': today,
+      'horizonDays': horizonDays,
+    },
+  );
+
+  /// Confirms a reconciliation proposal.
+  _ida.Future<void> confirmMatch(
+    int scheduledId,
+    DateTime dueDate,
+    int transactionId,
+  ) => caller.callServerEndpoint<void>(
+    'scheduled',
+    'confirmMatch',
+    {
+      'scheduledId': scheduledId,
+      'dueDate': dueDate,
+      'transactionId': transactionId,
+    },
+  );
+}
+
 /// First launch wizard (no login: no account exists yet).
 /// {@category Endpoint}
 class EndpointSetup extends _isc.EndpointRef {
@@ -712,6 +834,7 @@ class Client extends _isc.ServerpodClientShared {
     group = EndpointGroup(this);
     invitation = EndpointInvitation(this);
     rule = EndpointRule(this);
+    scheduled = EndpointScheduled(this);
     setup = EndpointSetup(this);
     twoFactor = EndpointTwoFactor(this);
     modules = Modules(this);
@@ -733,6 +856,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointRule rule;
 
+  late final EndpointScheduled scheduled;
+
   late final EndpointSetup setup;
 
   late final EndpointTwoFactor twoFactor;
@@ -749,6 +874,7 @@ class Client extends _isc.ServerpodClientShared {
     'group': group,
     'invitation': invitation,
     'rule': rule,
+    'scheduled': scheduled,
     'setup': setup,
     'twoFactor': twoFactor,
   };

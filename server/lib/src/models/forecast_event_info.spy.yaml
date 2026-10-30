@@ -1,0 +1,8 @@
+class: ForecastEventInfo
+fields:
+  date: DateTime
+  amountCents: int
+  label: String
+  scheduledId: int?
+  ### Set when the occurrence is late and counted today.
+  dueDate: DateTime?

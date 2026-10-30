@@ -226,5 +226,11 @@
   "error_rule_access_denied": "Cette règle n'existe pas ou vous n'y avez pas accès.",
   "error_unknown_standard_category": "Catégorie standard inconnue.",
   "error_invalid_pattern": "Le motif doit contenir entre 1 et 100 caractères (lettres ou chiffres).",
-  "error_invalid_amount_range": "Le montant minimum dépasse le montant maximum."
+  "error_invalid_amount_range": "Le montant minimum dépasse le montant maximum.",
+  "error_scheduled_access_denied": "Cette opération prévue n'existe pas ou vous n'y avez pas accès.",
+  "error_invalid_interval": "La périodicité doit être comprise entre 1 et 120.",
+  "error_invalid_tolerance": "Tolérance invalide (0 à 31 jours, 0 à 100 %).",
+  "error_invalid_recurrence": "La date de fin est avant la date de début.",
+  "error_invalid_date": "Date invalide.",
+  "error_invalid_horizon": "La durée de prévision doit être comprise entre 1 et 366 jours."
 }
