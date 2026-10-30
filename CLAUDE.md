@@ -8,7 +8,7 @@ OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de 
 - Fonctionnalités détaillées : `docs/CAHIER_DES_CHARGES.md`.
 - Décisions d'architecture : `docs/decisions/` — à respecter ; pour en changer une, écrire une nouvelle décision.
 
-**Phase actuelle : 0 (préparation).** Ne pas créer de code applicatif tant que l'utilisateur ne l'a pas demandé explicitement.
+**Phase actuelle : 1 (fondations techniques)**, démarrée à la demande de l'utilisateur le 30 octobre 2026. Le cœur financier (`shared/` : import, doublons, classement, solde prévu) est développé en avance car prioritaire : il doit être fiable avant tout le reste.
 
 **Objectif prioritaire : l'alpha minimale (décision 0010)** — import Caisse d'Épargne, opérations, classement par règles, solde prévu, alerte de découvert. Ne rien ajouter au-delà avant que l'alpha soit utilisée un mois.
 
@@ -17,7 +17,7 @@ OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de 
 - Serveur : **Serverpod** (Dart) — décision 0001. Voir son point de vigilance licence.
 - Base : **PostgreSQL**, migrations Serverpod, Row Level Security en seconde barrière.
 - Interface : **Flutter web**, installable sur téléphone (PWA, sans cache de données financières) ; Windows et Android natifs en phase 6 — décisions 0005 et 0011.
-- Déploiement : `docker compose` sur un serveur Docker existant, exposé par une redirection **Cloudflare** (HTTPS géré par Cloudflare) ; conteneur en `network_mode: host`, **un seul port** configurable pour l'app web et l'API, PostgreSQL et ports internes sur `127.0.0.1` uniquement ; IP réelle via `CF-Connecting-IP` seulement si la requête vient de Cloudflare ou du connecteur local — décisions 0002 et 0012.
+- Déploiement : `docker compose` sur un serveur Docker existant, exposé par une redirection **Cloudflare** (HTTPS géré par Cloudflare) ; réseau Docker privé, seul un proxy Caddy publie **un seul port** configurable (app web et API sous `/api/`), PostgreSQL et ports internes jamais publiés ; IP réelle via `CF-Connecting-IP` seulement si la requête vient de Cloudflare ou du connecteur local — décisions 0002, 0012 et 0015.
 - CI : GitHub Actions ; image `ghcr.io/cmathias27/owncoffer`.
 
 ## Organisation prévue du dépôt (phase 1)

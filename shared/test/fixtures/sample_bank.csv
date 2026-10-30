@@ -1,0 +1,4 @@
+Date de comptabilisation;Libelle simplifie;Libelle operation;Reference;Informations complementaires;Type operation;Categorie;Sous categorie;Debit;Credit;Date operation;Date de valeur;Pointage operation
+03/10/2026;CARREFOUR MARKET;CB CARREFOUR MARKET FACT 021026;0000001;;Carte bancaire;Alimentation;Supermarché;-45,12;;02/10/2026;03/10/2026;0
+02/10/2026;EMPLOYEUR EXEMPLE;VIR SEPA RECU EMPLOYEUR EXEMPLE SAS;0000002;SALAIRE OCTOBRE;Virement;Revenus;Salaire;;+2 150,35;02/10/2026;02/10/2026;0
+06/10/2026;EDF;"PRLV SEPA EDF SA";0000003;"ECH/061026; MDT/000";Prélèvement;Logement;Énergie;-71,42;;06/10/2026;06/10/2026;0

@@ -1,0 +1,28 @@
+# Single public port (decision 0015): /api/… → Serverpod API, the rest → web app.
+{
+	admin off
+	auto_https off
+	servers {
+		# Only the private Docker network may send forwarded headers.
+		trusted_proxies static private_ranges
+	}
+}
+
+:8080 {
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		X-Frame-Options DENY
+		-Server
+	}
+
+	handle_path /api/* {
+		reverse_proxy owncoffer:8080
+	}
+
+	handle {
+		reverse_proxy owncoffer:8082
+	}
+}

@@ -1,0 +1,9 @@
+### A group (household, association…) owning accounts, categories and rules.
+class: FinanceGroup
+table: groups
+fields:
+  name: String
+  ### Optional AI (decision 0006): off by default.
+  aiEnabled: bool, default=false
+  createdBy: UuidValue
+  createdAt: DateTime, default=now

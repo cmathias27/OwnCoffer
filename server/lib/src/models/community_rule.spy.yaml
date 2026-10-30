@@ -1,0 +1,16 @@
+### Local copy of the community rules base (CC0, decision 0013).
+class: CommunityRule
+table: community_rules
+fields:
+  ruleKey: String
+  pattern: String
+  matchType: RuleMatchType
+  direction: RuleDirection, default=any
+  standardCode: String
+  country: String, default='FR'
+  confidence: int, default=50
+  baseVersion: int
+indexes:
+  community_rules_key_idx:
+    fields: ruleKey
+    unique: true

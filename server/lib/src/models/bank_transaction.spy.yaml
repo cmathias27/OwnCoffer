@@ -1,0 +1,47 @@
+### A real operation. `date` is a calendar date stored as UTC midnight;
+### `amountCents` is signed (negative = debit).
+class: BankTransaction
+table: transactions
+fields:
+  accountId: int, relation(parent=accounts, onDelete=Cascade)
+  date: DateTime
+  amountCents: int
+  rawLabel: String
+  memo: String?
+  ### Cleaned, normalised label (e.g. `EDF`), used by the history.
+  cleanLabel: String
+  ### OperationKind from the label cleaner (card, directDebit…).
+  operationKind: String
+  reference: String?
+  ### Unique id given by the bank (OFX FITID).
+  bankId: String?
+  ### Duplicate fingerprint; null for manual entries. Unique per account, so
+  ### it is moved to `trashedFingerprint` when the operation goes to the trash
+  ### (and moved back on restore) — a cancelled import can be re-imported.
+  fingerprint: String?
+  trashedFingerprint: String?
+  importId: int?, relation(parent=imports, onDelete=SetNull)
+  categoryId: int?, relation(parent=categories, onDelete=SetNull)
+  categorySource: CategorySource, default=none
+  ### Group rule id or community rule key that set the category.
+  categoryRuleRef: String?
+  cleared: bool, default=false
+  ### Scheduled operation this one realises (reconciliation).
+  scheduledId: int?, relation(parent=scheduled_transactions, onDelete=SetNull)
+  scheduledDueDate: DateTime?
+  ### Other side of a transfer between two accounts of the group.
+  transferPairId: int?
+  createdBy: UuidValue?
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+  deletedAt: DateTime?
+indexes:
+  transactions_account_date_idx:
+    fields: accountId, date
+  transactions_account_fingerprint_idx:
+    fields: accountId, fingerprint
+    unique: true
+  transactions_import_idx:
+    fields: importId
+  transactions_category_idx:
+    fields: categoryId

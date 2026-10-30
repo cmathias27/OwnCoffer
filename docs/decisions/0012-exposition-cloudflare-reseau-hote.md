@@ -1,6 +1,6 @@
 # 0012 — Exposition par Cloudflare, conteneur sur le réseau de l'hôte, un seul port
 
-**Statut** : Décidé (30 octobre 2026) — précise la décision 0002
+**Statut** : Décidé (30 octobre 2026) — précise la décision 0002 ; partie réseau remplacée par la décision [0015](0015-reseau-docker-isole-proxy.md)
 
 ## Contexte
 
