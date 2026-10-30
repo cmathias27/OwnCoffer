@@ -605,4 +605,4 @@ Les fonctionnalités marquées « 1.0 » dans le tableau des autres fonctionnali
 - [ ] Langues : français et anglais dès la 1.0 (décidé) ; autres langues ensuite via Weblate.
 - [ ] Publier aussi sur F-Droid ou le Play Store plus tard, en plus de l'APK fourni par le serveur ?
 - [ ] Mode autonome : en faire la première version livrée, avant le serveur ? Plus simple à construire, et utile tout de suite.
-- [ ] Règles communautaires : dépôt séparé, qui relit les propositions, et quelle licence pour la base (ex. CC0 ou ODbL) ?
+- [ ] Règles communautaires : dépôt séparé, qui relit les propositions ? (licence : CC0, décision 0013)
