@@ -67,6 +67,18 @@ class ForecastScreenState extends State<ForecastScreen> {
 
   Future<void> reload() => _reload();
 
+  /// Shows the forecast of [accountId] (from a notification).
+  void showAccount(int accountId) {
+    final account = widget.accounts.where((a) => a.id == accountId).firstOrNull;
+    if (account == null) return;
+    setState(() {
+      _account = account;
+      _forecast = null;
+      _scheduled = [];
+    });
+    _reload();
+  }
+
   Future<void> _reload() async {
     final account = _account;
     if (account == null) return;

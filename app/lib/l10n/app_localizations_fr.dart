@@ -1307,4 +1307,46 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get testerRuleOpen => 'Voir la règle';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsEmpty => 'Aucune notification.';
+
+  @override
+  String get notificationsMarkAll => 'Tout marquer comme lu';
+
+  @override
+  String notificationsUnread(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Notifications : $count non lues',
+      one: 'Notifications : 1 non lue',
+      zero: 'Notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notifOverdraftTitle(String account, String date) {
+    return '$account : découvert prévu le $date';
+  }
+
+  @override
+  String notifOverdraftBody(
+    String balance,
+    String threshold,
+    String lowest,
+    String lowestDate,
+  ) {
+    return 'Solde prévu ce jour-là : $balance (seuil $threshold). Point bas : $lowest le $lowestDate.';
+  }
+
+  @override
+  String get notifUnknown => 'Notification';
+
+  @override
+  String get notifOpenForecast => 'Voir les prévisions';
 }
