@@ -930,4 +930,219 @@ class AppLocalizationsEn extends AppLocalizations {
   String csvRowSample(int number, String sample) {
     return 'Row $number: $sample';
   }
+
+  @override
+  String get forecastTitle => 'Forecast balance';
+
+  @override
+  String get forecastUnavailable => 'Forecast unavailable for now.';
+
+  @override
+  String horizonDays(int count) {
+    return '$count d';
+  }
+
+  @override
+  String get horizonYear => '1 year';
+
+  @override
+  String forecastCurrent(String amount) {
+    return 'Current balance: $amount';
+  }
+
+  @override
+  String forecastEnd(String date, String amount) {
+    return 'On $date: $amount';
+  }
+
+  @override
+  String forecastThresholdLine(String amount) {
+    return 'Alert threshold: $amount';
+  }
+
+  @override
+  String get forecastChartLabel => 'Day-by-day forecast balance curve';
+
+  @override
+  String get forecastLowestMark => 'Lowest';
+
+  @override
+  String get forecastProposals => 'To confirm';
+
+  @override
+  String forecastProposalText(
+    String operation,
+    String date,
+    String planned,
+    String due,
+  ) {
+    return 'Does $operation of $date realise “$planned” due on $due?';
+  }
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get forecastMatched => 'Match confirmed.';
+
+  @override
+  String get forecastMissed => 'Not arrived';
+
+  @override
+  String forecastMissedText(String date) {
+    return 'Due on $date, still not on the account.';
+  }
+
+  @override
+  String get forecastSkip => 'Stop waiting';
+
+  @override
+  String get forecastSkipped => 'Occurrence skipped.';
+
+  @override
+  String forecastAutoReconciled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count operations linked automatically to their planned occurrence.',
+      one: '1 operation linked automatically to its planned occurrence.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get forecastUpcoming => 'Upcoming';
+
+  @override
+  String get forecastNoUpcoming => 'No planned operation in this period.';
+
+  @override
+  String forecastLate(String date) {
+    return 'late, due on $date';
+  }
+
+  @override
+  String forecastBalanceAfter(String amount) {
+    return 'balance: $amount';
+  }
+
+  @override
+  String get scheduledTitle => 'Planned operations';
+
+  @override
+  String get scheduledEmpty =>
+      'No planned operation. Add your rent, salary, subscriptions…';
+
+  @override
+  String get scheduledAdd => 'Add a planned operation';
+
+  @override
+  String get scheduledEdit => 'Edit the planned operation';
+
+  @override
+  String get scheduledDelete => 'Delete';
+
+  @override
+  String scheduledDeleteConfirm(String label) {
+    return 'Delete “$label”? Forecasts will no longer count it.';
+  }
+
+  @override
+  String get frequencyLabel => 'Frequency';
+
+  @override
+  String get frequencyOnce => 'Once';
+
+  @override
+  String get frequencyWeekly => 'Weekly';
+
+  @override
+  String get frequencyMonthly => 'Monthly';
+
+  @override
+  String get frequencyYearly => 'Yearly';
+
+  @override
+  String everyWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Every $count weeks',
+      one: 'Every week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String everyMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Every $count months',
+      one: 'Every month',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String everyYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Every $count years',
+      one: 'Every year',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get intervalLabel => 'Interval';
+
+  @override
+  String get intervalHelp => '2 = every other week, month…';
+
+  @override
+  String get startDateLabel => 'First occurrence';
+
+  @override
+  String get endDateLabel => 'Last occurrence (optional)';
+
+  @override
+  String get noEndDate => 'No end';
+
+  @override
+  String onceOn(String date) {
+    return 'On $date';
+  }
+
+  @override
+  String fromDate(String date) {
+    return 'from $date';
+  }
+
+  @override
+  String untilDate(String date) {
+    return 'until $date';
+  }
+
+  @override
+  String get matchPatternLabel => 'Bank label to recognise (optional)';
+
+  @override
+  String get matchPatternHelp =>
+      'E.g. RENT. Used to link the real operation to the planned occurrence.';
+
+  @override
+  String get dateToleranceLabel => 'Date tolerance (days)';
+
+  @override
+  String get amountToleranceLabel => 'Amount tolerance (%)';
+
+  @override
+  String get toleranceInvalid => 'Whole number expected.';
+
+  @override
+  String get scheduledLockedHelp =>
+      'Frequency and first occurrence cannot be changed: delete and create the planned operation again.';
 }

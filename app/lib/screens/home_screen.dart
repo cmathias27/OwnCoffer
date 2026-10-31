@@ -5,6 +5,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../state/session.dart';
 import 'accounts_screen.dart';
+import 'forecast_screen.dart';
 import 'import_screen.dart';
 import 'members_screen.dart';
 import 'operations_screen.dart';
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Account? _openAccount;
   var _imports = 0;
   final _accountsKey = GlobalKey<AccountsScreenState>();
+  final _forecastKey = GlobalKey<ForecastScreenState>();
 
   @override
   void initState() {
@@ -56,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _selectTab(int i) {
     setState(() => _tab = i);
     if (i == 0) _accountsKey.currentState?.reload();
+    if (i == 2) _forecastKey.currentState?.reload();
     _loadAccounts();
   }
 
@@ -69,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final destinations = [
       (Icons.account_balance_wallet_outlined, l.navAccounts),
       (Icons.receipt_long_outlined, l.navOperations),
+      (Icons.show_chart, l.navForecast),
       (Icons.upload_file_outlined, l.navImport),
     ];
 
@@ -95,12 +99,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 accounts: _accounts,
                 initialAccount: _openAccount,
               ),
+              ForecastScreen(
+                key: _forecastKey,
+                membership: current,
+                accounts: _accounts,
+                onChanged: () {
+                  setState(() => _imports++);
+                  _accountsKey.currentState?.reload();
+                },
+              ),
               ImportScreen(
                 key: ValueKey('import-${current.group.id}'),
                 membership: current,
                 accounts: _accounts,
                 onImported: () {
                   setState(() => _imports++);
+                  _forecastKey.currentState?.reload();
                   _accountsKey.currentState?.reload();
                 },
               ),

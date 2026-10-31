@@ -319,6 +319,56 @@ void main() {
         );
       });
 
+      test('another group cannot confirm a match either way', () async {
+        final s = await endpoints.scheduled.create(
+          as(alice),
+          account.id!,
+          -7000,
+          'EDF',
+          ScheduleFrequency.monthly,
+          day(0),
+        );
+        final t = await op(0, -7000, 'EDF');
+        final groupB = (await endpoints.group.myGroups(
+          as(mallory),
+        )).single.group.id!;
+        final other = await endpoints.account.create(
+          as(mallory),
+          groupB,
+          'B',
+          AccountKind.checking,
+        );
+        final mine = await endpoints.scheduled.create(
+          as(mallory),
+          other.id!,
+          -7000,
+          'EDF',
+          ScheduleFrequency.monthly,
+          day(0),
+        );
+        // Alice's planned operation with Alice's operation.
+        await expectLater(
+          endpoints.scheduled.confirmMatch(as(mallory), s.id!, day(0), t.id!),
+          denied,
+        );
+        // Mallory's planned operation with Alice's operation.
+        await expectLater(
+          endpoints.scheduled.confirmMatch(
+            as(mallory),
+            mine.id!,
+            day(0),
+            t.id!,
+          ),
+          denied,
+        );
+        final unchanged = (await BankTransaction.db.findById(db, t.id!))!;
+        expect(unchanged.amountCents, -7000);
+        expect(
+          (await ScheduledTransaction.db.findById(db, s.id!))!.nextDue,
+          isNull,
+        );
+      });
+
       test('a reader can forecast but not plan', () async {
         expect(
           (await endpoints.scheduled.forecast(
