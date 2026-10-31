@@ -13,6 +13,7 @@ import 'budget_screen.dart';
 import 'categories_screen.dart';
 import 'forecast_screen.dart';
 import 'import_screen.dart';
+import 'invoices_screen.dart';
 import 'loans_screen.dart';
 import 'members_screen.dart';
 import 'notifications_screen.dart';
@@ -42,10 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final _categoriesKey = GlobalKey<CategoriesScreenState>();
   final _budgetKey = GlobalKey<BudgetScreenState>();
   final _loansKey = GlobalKey<LoansScreenState>();
+  final _invoicesKey = GlobalKey<InvoicesScreenState>();
 
   /// Tabs in display order (indexes of the stack below): budget next to the
-  /// operations, loans next to the forecast.
-  static const _order = [0, 1, 5, 2, 6, 3, 4];
+  /// operations, loans next to the forecast, then invoices.
+  static const _order = [0, 1, 5, 2, 6, 7, 3, 4];
 
   /// Tabs of the phone's bottom bar; the others are under "More".
   static const _phoneTabs = 4;
@@ -167,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
       (Icons.label_outline, l.navCategories),
       (Icons.pie_chart_outline, l.navBudget),
       (Icons.account_balance_outlined, l.navLoans),
+      (Icons.description_outlined, l.navInvoices),
     ];
     final destinations = [for (final i in _order) tabs[i]];
     final shown = _order.indexOf(_tab);
@@ -223,6 +226,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   _forecastKey.currentState?.reload();
                   _accountsKey.currentState?.reload();
                 },
+              ),
+              InvoicesScreen(
+                key: _invoicesKey,
+                membership: current,
               ),
             ],
           );

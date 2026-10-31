@@ -21,6 +21,13 @@ abstract final class Messages {
     'invitation.body':
         'Vous êtes invité à rejoindre le groupe « {group} » sur OwnCoffer.\n'
         'Ouvrez ce lien avant le {expires} : {link}',
+    'invoice.subject': 'Facture « {name} »',
+    'invoice.body':
+        '{sender} vous envoie la facture jointe « {name} » depuis OwnCoffer.',
+    'warranty.subject': 'OwnCoffer — fin de garantie le {date}',
+    'warranty.body':
+        'La garantie de « {name} » se termine le {date}. La facture est dans '
+        'OwnCoffer, page Factures : {link}',
   };
 
   static const en = <String, String>{
@@ -42,6 +49,13 @@ abstract final class Messages {
     'invitation.body':
         'You are invited to join the group "{group}" on OwnCoffer.\n'
         'Open this link before {expires}: {link}',
+    'invoice.subject': 'Invoice "{name}"',
+    'invoice.body':
+        '{sender} sends you the attached invoice "{name}" from OwnCoffer.',
+    'warranty.subject': 'OwnCoffer — warranty ends on {date}',
+    'warranty.body':
+        'The warranty of "{name}" ends on {date}. The invoice is in '
+        'OwnCoffer, Invoices page: {link}',
   };
 
   static String _fill(String text, Map<String, String> values) {

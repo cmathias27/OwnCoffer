@@ -72,7 +72,7 @@ abstract final class Onboarding {
       if (_setupFailures >= 5) _newSetupCode(session);
       throw InvalidInputException(code: 'setup_code_invalid', field: 'code');
     }
-    final normalized = _checkEmail(email);
+    final normalized = checkEmail(email);
     await Invitation.db.insertRow(
       session,
       Invitation(
@@ -96,7 +96,8 @@ abstract final class Onboarding {
 
   static final _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
-  static String _checkEmail(String email) {
+  /// The address normalised, or `invalid_email`.
+  static String checkEmail(String email) {
     final normalized = normalizeEmail(email);
     if (normalized.length > 254 || !_emailPattern.hasMatch(normalized)) {
       throw InvalidInputException(code: 'invalid_email', field: 'email');
@@ -133,7 +134,7 @@ abstract final class Onboarding {
     required UuidValue invitedBy,
     required String publicUrl,
   }) async {
-    final normalized = _checkEmail(email);
+    final normalized = checkEmail(email);
     final group = (await FinanceGroup.db.findById(session, groupId))!;
     final token = _token();
     final expires = DateTime.now().toUtc().add(invitationLifetime);

@@ -43,6 +43,7 @@ import '../endpoints/goal_endpoint.dart' as _i2k4izhk;
 import '../endpoints/group_endpoint.dart' as _iknqvl2r;
 import '../endpoints/import_endpoint.dart' as _i51ek8od;
 import '../endpoints/invitation_endpoint.dart' as _iipval89;
+import '../endpoints/invoice_endpoint.dart' as _ito116jz;
 import '../endpoints/loan_endpoint.dart' as _imitaxsf;
 import '../endpoints/notification_endpoint.dart' as _ihb11yhk;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
@@ -113,6 +114,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'invitation',
+          null,
+        ),
+      'invoice': _ito116jz.InvoiceEndpoint()
+        ..initialize(
+          server,
+          'invoice',
           null,
         ),
       'loan': _imitaxsf.LoanEndpoint()
@@ -1624,6 +1631,199 @@ class Endpoints extends _is.EndpointDispatch {
                         session,
                         params['token'],
                       ),
+        ),
+      },
+    );
+    connectors['invoice'] = _is.EndpointConnector(
+      name: 'invoice',
+      endpoint: endpoints['invoice']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'year': _is.ParameterDescription(
+              name: 'year',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'search': _is.ParameterDescription(
+              name: 'search',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'warranty': _is.ParameterDescription(
+              name: 'warranty',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invoice'] as _ito116jz.InvoiceEndpoint).list(
+                    session,
+                    params['groupId'],
+                    year: params['year'],
+                    search: params['search'],
+                    warranty: params['warranty'],
+                  ),
+        ),
+        'forTransaction': _is.MethodConnector(
+          name: 'forTransaction',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['invoice'] as _ito116jz.InvoiceEndpoint)
+                  .forTransaction(
+                    session,
+                    params['transactionId'],
+                  ),
+        ),
+        'upload': _is.MethodConnector(
+          name: 'upload',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'fileName': _is.ParameterDescription(
+              name: 'fileName',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'file': _is.ParameterDescription(
+              name: 'file',
+              type: _is.getType<_idt.ByteData>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invoice'] as _ito116jz.InvoiceEndpoint).upload(
+                    session,
+                    params['transactionId'],
+                    params['fileName'],
+                    params['file'],
+                  ),
+        ),
+        'download': _is.MethodConnector(
+          name: 'download',
+          params: {
+            'invoiceId': _is.ParameterDescription(
+              name: 'invoiceId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invoice'] as _ito116jz.InvoiceEndpoint).download(
+                    session,
+                    params['invoiceId'],
+                  ),
+        ),
+        'update': _is.MethodConnector(
+          name: 'update',
+          params: {
+            'invoiceId': _is.ParameterDescription(
+              name: 'invoiceId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'label': _is.ParameterDescription(
+              name: 'label',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'warrantyUntil': _is.ParameterDescription(
+              name: 'warrantyUntil',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invoice'] as _ito116jz.InvoiceEndpoint).update(
+                    session,
+                    params['invoiceId'],
+                    params['label'],
+                    params['warrantyUntil'],
+                  ),
+        ),
+        'delete': _is.MethodConnector(
+          name: 'delete',
+          params: {
+            'invoiceId': _is.ParameterDescription(
+              name: 'invoiceId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invoice'] as _ito116jz.InvoiceEndpoint).delete(
+                    session,
+                    params['invoiceId'],
+                  ),
+        ),
+        'send': _is.MethodConnector(
+          name: 'send',
+          params: {
+            'invoiceId': _is.ParameterDescription(
+              name: 'invoiceId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'to': _is.ParameterDescription(
+              name: 'to',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'message': _is.ParameterDescription(
+              name: 'message',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invoice'] as _ito116jz.InvoiceEndpoint).send(
+                    session,
+                    params['invoiceId'],
+                    params['to'],
+                    params['message'],
+                  ),
         ),
       },
     );

@@ -54,6 +54,7 @@ import 'package:owncoffer_server/src/generated/import_preview.dart'
     as _itw310ng;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
+import 'package:owncoffer_server/src/generated/invoice_info.dart' as _iq9lo0p4;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/left_to_live_report.dart'
     as _idzqc1lk;
@@ -256,6 +257,8 @@ class TestEndpoints {
 
   late final _InvitationEndpoint invitation;
 
+  late final _InvoiceEndpoint invoice;
+
   late final _LoanEndpoint loan;
 
   late final _NotificationEndpoint notification;
@@ -315,6 +318,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     invitation = _InvitationEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    invoice = _InvoiceEndpoint(
       endpoints,
       serializationManager,
     );
@@ -2504,6 +2511,260 @@ class _InvitationEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_idq93byd.GroupMembership>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _InvoiceEndpoint {
+  _InvoiceEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<List<_iq9lo0p4.InvoiceInfo>> list(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId, {
+    int? year,
+    String? search,
+    bool? warranty,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'invoice',
+            method: 'list',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'invoice',
+          methodName: 'list',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'year': year,
+            'search': search,
+            'warranty': warranty,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iq9lo0p4.InvoiceInfo>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_iq9lo0p4.InvoiceInfo>> forTransaction(
+    _ist.TestSessionBuilder sessionBuilder,
+    int transactionId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'invoice',
+            method: 'forTransaction',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'invoice',
+          methodName: 'forTransaction',
+          parameters: _ist.testObjectToJson({'transactionId': transactionId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iq9lo0p4.InvoiceInfo>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iq9lo0p4.InvoiceInfo> upload(
+    _ist.TestSessionBuilder sessionBuilder,
+    int transactionId,
+    String fileName,
+    _idt.ByteData file,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'invoice',
+            method: 'upload',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'invoice',
+          methodName: 'upload',
+          parameters: _ist.testObjectToJson({
+            'transactionId': transactionId,
+            'fileName': fileName,
+            'file': file,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iq9lo0p4.InvoiceInfo>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_idt.ByteData> download(
+    _ist.TestSessionBuilder sessionBuilder,
+    int invoiceId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'invoice',
+            method: 'download',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'invoice',
+          methodName: 'download',
+          parameters: _ist.testObjectToJson({'invoiceId': invoiceId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_idt.ByteData>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iq9lo0p4.InvoiceInfo> update(
+    _ist.TestSessionBuilder sessionBuilder,
+    int invoiceId,
+    String? label,
+    DateTime? warrantyUntil,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'invoice',
+            method: 'update',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'invoice',
+          methodName: 'update',
+          parameters: _ist.testObjectToJson({
+            'invoiceId': invoiceId,
+            'label': label,
+            'warrantyUntil': warrantyUntil,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iq9lo0p4.InvoiceInfo>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> delete(
+    _ist.TestSessionBuilder sessionBuilder,
+    int invoiceId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'invoice',
+            method: 'delete',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'invoice',
+          methodName: 'delete',
+          parameters: _ist.testObjectToJson({'invoiceId': invoiceId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> send(
+    _ist.TestSessionBuilder sessionBuilder,
+    int invoiceId,
+    String to,
+    String? message,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'invoice',
+            method: 'send',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'invoice',
+          methodName: 'send',
+          parameters: _ist.testObjectToJson({
+            'invoiceId': invoiceId,
+            'to': to,
+            'message': message,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

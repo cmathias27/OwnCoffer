@@ -1,0 +1,11 @@
+### Content of an invoice, apart so that listing invoices does not read the
+### files.
+class: InvoiceBlob
+table: invoice_blobs
+fields:
+  invoiceId: int, relation(parent=invoices, onDelete=Cascade)
+  content: ByteData
+indexes:
+  invoice_blobs_invoice_idx:
+    fields: invoiceId
+    unique: true

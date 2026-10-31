@@ -12,6 +12,7 @@ import '../i18n/messages.dart';
 import '../mail/mail_service.dart';
 import 'forecast_service.dart';
 import 'goal_alert_service.dart';
+import 'warranty_alert_service.dart';
 
 /// Overdraft alert (roadbook phase 3, issue #53): when the forecast of an
 /// account goes below its alert threshold, every member who can see the
@@ -64,7 +65,7 @@ abstract final class AlertService {
     });
 
     var created = 0;
-    for (final user in await _recipients(session, account)) {
+    for (final user in await recipients(session, account)) {
       final exists = await AppNotification.db.count(
         session,
         where: (n) => n.authUserId.equals(user) & n.dedupKey.equals(key),
@@ -89,7 +90,7 @@ abstract final class AlertService {
 
   /// Members who can see the account (restricted accounts: admins and
   /// users given access).
-  static Future<List<UuidValue>> _recipients(
+  static Future<List<UuidValue>> recipients(
     Session session,
     Account account,
   ) async {
@@ -195,6 +196,11 @@ abstract final class AlertService {
           core.LocalDate.fromDateTime(DateTime.now().toUtc()),
         );
         if (g > 0) session.log('[alert] $g goal notification(s)');
+        final w = await WarrantyAlertService.checkAll(
+          session,
+          core.LocalDate.fromDateTime(DateTime.now().toUtc()),
+        );
+        if (w > 0) session.log('[alert] $w warranty notification(s)');
         lastRunOk = true;
       } finally {
         await session.close();

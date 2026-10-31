@@ -1,0 +1,28 @@
+### An invoice or receipt kept on the server: PDF or photo, attached to an
+### operation (or waiting to be, `transactionId` null). Stored in the
+### database (so in the backups), never sent anywhere unless a member emails
+### it.
+class: Invoice
+table: invoices
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  ### The operation it justifies; null while it waits to be attached.
+  ### Deleted with the operation (when deleted for good, not when in the
+  ### trash): never left visible to the whole group when it was only seen
+  ### through a restricted account.
+  transactionId: int?, relation(parent=transactions, onDelete=Cascade)
+  ### Name of the file as it was sent.
+  fileName: String
+  mimeType: String
+  sizeBytes: int
+  ### What it is for (e.g. `Lave-linge`), part of its name.
+  label: String?
+  ### End of the warranty: a reminder comes a month before.
+  warrantyUntil: DateTime?
+  uploadedBy: UuidValue?
+  createdAt: DateTime, default=now
+indexes:
+  invoices_group_idx:
+    fields: groupId, createdAt
+  invoices_transaction_idx:
+    fields: transactionId

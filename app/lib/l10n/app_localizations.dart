@@ -4794,6 +4794,282 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Version invalide : seule une version publiée plus récente que celle installée peut être installée.'**
   String get error_invalid_version;
+
+  /// No description provided for @navInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures'**
+  String get navInvoices;
+
+  /// No description provided for @invoicesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures'**
+  String get invoicesTitle;
+
+  /// No description provided for @invoicesIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les factures et tickets joints aux opérations, nommés d\'après l\'opération (date, libellé, montant). Pour en ajouter une, ouvrez l\'opération dans la page Opérations.'**
+  String get invoicesIntro;
+
+  /// No description provided for @invoicesSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher (nom, libellé, compte)'**
+  String get invoicesSearch;
+
+  /// No description provided for @invoicesAllYears.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les années'**
+  String get invoicesAllYears;
+
+  /// No description provided for @invoicesWarrantyFilter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garantie en cours'**
+  String get invoicesWarrantyFilter;
+
+  /// No description provided for @invoicesExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter en ZIP'**
+  String get invoicesExport;
+
+  /// No description provided for @invoicesExporting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Export… {done}/{total}'**
+  String invoicesExporting(int done, int total);
+
+  /// No description provided for @invoicesZipName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures.zip'**
+  String get invoicesZipName;
+
+  /// No description provided for @invoicesZipNameYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures {year}.zip'**
+  String invoicesZipNameYear(String year);
+
+  /// No description provided for @invoicesEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune facture pour l\'instant.'**
+  String get invoicesEmpty;
+
+  /// No description provided for @invoicesCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 facture} other{{count} factures}}'**
+  String invoicesCount(int count);
+
+  /// No description provided for @invoicesOfOperation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures'**
+  String get invoicesOfOperation;
+
+  /// No description provided for @invoicesNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune facture jointe.'**
+  String get invoicesNone;
+
+  /// No description provided for @invoiceAttach.
+  ///
+  /// In fr, this message translates to:
+  /// **'Joindre une facture'**
+  String get invoiceAttach;
+
+  /// No description provided for @invoiceTakePhoto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prendre en photo'**
+  String get invoiceTakePhoto;
+
+  /// No description provided for @invoiceAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture ajoutée : {name}'**
+  String invoiceAdded(String name);
+
+  /// No description provided for @invoiceBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture jointe'**
+  String get invoiceBadge;
+
+  /// No description provided for @invoiceUnattached.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans opération'**
+  String get invoiceUnattached;
+
+  /// No description provided for @invoiceActions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actions'**
+  String get invoiceActions;
+
+  /// No description provided for @invoiceOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir'**
+  String get invoiceOpen;
+
+  /// No description provided for @invoiceEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description et garantie'**
+  String get invoiceEdit;
+
+  /// No description provided for @invoiceSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer par courriel'**
+  String get invoiceSend;
+
+  /// No description provided for @invoiceDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get invoiceDelete;
+
+  /// No description provided for @invoiceDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la facture « {name} » ?'**
+  String invoiceDeleteConfirm(String name);
+
+  /// No description provided for @invoiceLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description'**
+  String get invoiceLabel;
+
+  /// No description provided for @invoiceLabelHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lave-linge, réparation voiture…'**
+  String get invoiceLabelHint;
+
+  /// No description provided for @invoiceLabelHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutée au nom de la facture.'**
+  String get invoiceLabelHelp;
+
+  /// No description provided for @invoiceWarranty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin de garantie'**
+  String get invoiceWarranty;
+
+  /// No description provided for @invoiceWarrantyNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de garantie suivie.'**
+  String get invoiceWarrantyNone;
+
+  /// No description provided for @invoiceWarrantyUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garantie jusqu\'au {date}'**
+  String invoiceWarrantyUntil(String date);
+
+  /// No description provided for @invoiceWarrantyOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garantie terminée le {date}'**
+  String invoiceWarrantyOver(String date);
+
+  /// No description provided for @invoiceWarrantyYears.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 an} other{{count} ans}}'**
+  String invoiceWarrantyYears(int count);
+
+  /// No description provided for @invoiceWarrantyPick.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir une date'**
+  String get invoiceWarrantyPick;
+
+  /// No description provided for @invoiceWarrantyClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune'**
+  String get invoiceWarrantyClear;
+
+  /// No description provided for @invoiceWarrantyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptée à partir de la date de l\'opération. Un rappel arrive dans les notifications et par courriel un mois avant la fin.'**
+  String get invoiceWarrantyHelp;
+
+  /// No description provided for @invoiceSendTo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse du destinataire'**
+  String get invoiceSendTo;
+
+  /// No description provided for @invoiceSendMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message (facultatif)'**
+  String get invoiceSendMessage;
+
+  /// No description provided for @invoiceSendHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La facture part en pièce jointe, depuis l\'adresse du serveur OwnCoffer.'**
+  String get invoiceSendHelp;
+
+  /// No description provided for @invoiceSendAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get invoiceSendAction;
+
+  /// No description provided for @invoiceSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture envoyée.'**
+  String get invoiceSent;
+
+  /// No description provided for @notifWarrantyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garantie de « {name} » : fin le {date}'**
+  String notifWarrantyTitle(String name, String date);
+
+  /// No description provided for @notifWarrantyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'La facture est dans la page Factures.'**
+  String get notifWarrantyBody;
+
+  /// No description provided for @error_invoice_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture introuvable ou non accessible.'**
+  String get error_invoice_access_denied;
+
+  /// No description provided for @error_mail_not_configured.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'envoi de courriels n\'est pas configuré sur ce serveur (réglages SMTP de docker/.env).'**
+  String get error_mail_not_configured;
+
+  /// No description provided for @error_send_limit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Limite atteinte : 20 envois par jour. Réessayez demain.'**
+  String get error_send_limit;
 }
 
 class _AppLocalizationsDelegate

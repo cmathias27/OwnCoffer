@@ -2229,5 +2229,120 @@
   "adminUpdateRollback": "retour à la version précédente",
   "adminUpdateRollbackFailed": "retour en arrière en échec",
   "adminUpdateRefused": "refusée",
-  "error_invalid_version": "Version invalide : seule une version publiée plus récente que celle installée peut être installée."
+  "error_invalid_version": "Version invalide : seule une version publiée plus récente que celle installée peut être installée.",
+  "navInvoices": "Factures",
+  "invoicesTitle": "Factures",
+  "invoicesIntro": "Les factures et tickets joints aux opérations, nommés d'après l'opération (date, libellé, montant). Pour en ajouter une, ouvrez l'opération dans la page Opérations.",
+  "invoicesSearch": "Rechercher (nom, libellé, compte)",
+  "invoicesAllYears": "Toutes les années",
+  "invoicesWarrantyFilter": "Garantie en cours",
+  "invoicesExport": "Exporter en ZIP",
+  "invoicesExporting": "Export… {done}/{total}",
+  "@invoicesExporting": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "invoicesZipName": "Factures.zip",
+  "invoicesZipNameYear": "Factures {year}.zip",
+  "@invoicesZipNameYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "invoicesEmpty": "Aucune facture pour l'instant.",
+  "invoicesCount": "{count, plural, =1{1 facture} other{{count} factures}}",
+  "@invoicesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "invoicesOfOperation": "Factures",
+  "invoicesNone": "Aucune facture jointe.",
+  "invoiceAttach": "Joindre une facture",
+  "invoiceTakePhoto": "Prendre en photo",
+  "invoiceAdded": "Facture ajoutée : {name}",
+  "@invoiceAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceBadge": "Facture jointe",
+  "invoiceUnattached": "Sans opération",
+  "invoiceActions": "Actions",
+  "invoiceOpen": "Ouvrir",
+  "invoiceEdit": "Description et garantie",
+  "invoiceSend": "Envoyer par courriel",
+  "invoiceDelete": "Supprimer",
+  "invoiceDeleteConfirm": "Supprimer la facture « {name} » ?",
+  "@invoiceDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceLabel": "Description",
+  "invoiceLabelHint": "Lave-linge, réparation voiture…",
+  "invoiceLabelHelp": "Ajoutée au nom de la facture.",
+  "invoiceWarranty": "Fin de garantie",
+  "invoiceWarrantyNone": "Pas de garantie suivie.",
+  "invoiceWarrantyUntil": "Garantie jusqu'au {date}",
+  "@invoiceWarrantyUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceWarrantyOver": "Garantie terminée le {date}",
+  "@invoiceWarrantyOver": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceWarrantyYears": "{count, plural, =1{1 an} other{{count} ans}}",
+  "@invoiceWarrantyYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "invoiceWarrantyPick": "Choisir une date",
+  "invoiceWarrantyClear": "Aucune",
+  "invoiceWarrantyHelp": "Comptée à partir de la date de l'opération. Un rappel arrive dans les notifications et par courriel un mois avant la fin.",
+  "invoiceSendTo": "Adresse du destinataire",
+  "invoiceSendMessage": "Message (facultatif)",
+  "invoiceSendHelp": "La facture part en pièce jointe, depuis l'adresse du serveur OwnCoffer.",
+  "invoiceSendAction": "Envoyer",
+  "invoiceSent": "Facture envoyée.",
+  "notifWarrantyTitle": "Garantie de « {name} » : fin le {date}",
+  "@notifWarrantyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarrantyBody": "La facture est dans la page Factures.",
+  "error_invoice_access_denied": "Facture introuvable ou non accessible.",
+  "error_mail_not_configured": "L'envoi de courriels n'est pas configuré sur ce serveur (réglages SMTP de docker/.env).",
+  "error_send_limit": "Limite atteinte : 20 envois par jour. Réessayez demain."
 }

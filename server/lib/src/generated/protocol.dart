@@ -29,6 +29,7 @@ import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
+import 'package:owncoffer_server/src/generated/invoice_info.dart' as _iq9lo0p4;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/loan_document.dart' as _ib7nzwu9;
 import 'package:owncoffer_server/src/generated/loan_installment.dart'
@@ -90,6 +91,9 @@ import 'import_preview_line.dart' as _i4e8elxc;
 import 'invalid_input_exception.dart' as _ijc83d8f;
 import 'invitation.dart' as _ix00wubs;
 import 'invitation_info.dart' as _i9hwipt6;
+import 'invoice.dart' as _ifja8moh;
+import 'invoice_blob.dart' as _i0mnzbub;
+import 'invoice_info.dart' as _im7mm4oj;
 import 'ip_ban.dart' as _i88cvd1d;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'left_to_live_report.dart' as _ibb3lpoc;
@@ -176,6 +180,9 @@ export 'import_preview_line.dart';
 export 'invalid_input_exception.dart';
 export 'invitation.dart';
 export 'invitation_info.dart';
+export 'invoice.dart';
+export 'invoice_blob.dart';
+export 'invoice_info.dart';
 export 'ip_ban.dart';
 export 'ip_ban_info.dart';
 export 'left_to_live_report.dart';
@@ -1300,6 +1307,186 @@ class Protocol extends _is.DatabaseSerializationManager {
           ],
           type: 'btree',
           isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'invoice_blobs',
+      dartName: 'InvoiceBlob',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'invoiceId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'content',
+          columnType: _isp.ColumnType.bytea,
+          isNullable: false,
+          dartType: 'dart:typed_data:ByteData',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'invoice_blobs_fk_0',
+          columns: ['invoiceId'],
+          referenceTable: 'invoices',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'invoice_blobs_invoice_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'invoiceId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'invoices',
+      dartName: 'Invoice',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'transactionId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'fileName',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'mimeType',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'sizeBytes',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'label',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'warrantyUntil',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'uploadedBy',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: true,
+          dartType: 'UuidValue?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'invoices_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'invoices_fk_1',
+          columns: ['transactionId'],
+          referenceTable: 'transactions',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'invoices_group_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'createdAt',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'invoices_transaction_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'transactionId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
           isPrimary: false,
         ),
       ],
@@ -2771,6 +2958,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i9hwipt6.InvitationInfo) {
       return _i9hwipt6.InvitationInfo.fromJson(data) as T;
     }
+    if (t == _ifja8moh.Invoice) {
+      return _ifja8moh.Invoice.fromJson(data) as T;
+    }
+    if (t == _i0mnzbub.InvoiceBlob) {
+      return _i0mnzbub.InvoiceBlob.fromJson(data) as T;
+    }
+    if (t == _im7mm4oj.InvoiceInfo) {
+      return _im7mm4oj.InvoiceInfo.fromJson(data) as T;
+    }
     if (t == _i88cvd1d.IpBan) {
       return _i88cvd1d.IpBan.fromJson(data) as T;
     }
@@ -3056,6 +3252,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_i9hwipt6.InvitationInfo?>()) {
       return (data != null ? _i9hwipt6.InvitationInfo.fromJson(data) : null)
           as T;
+    }
+    if (t == _is.getType<_ifja8moh.Invoice?>()) {
+      return (data != null ? _ifja8moh.Invoice.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i0mnzbub.InvoiceBlob?>()) {
+      return (data != null ? _i0mnzbub.InvoiceBlob.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_im7mm4oj.InvoiceInfo?>()) {
+      return (data != null ? _im7mm4oj.InvoiceInfo.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_i88cvd1d.IpBan?>()) {
       return (data != null ? _i88cvd1d.IpBan.fromJson(data) : null) as T;
@@ -3460,6 +3665,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_iq9lo0p4.InvoiceInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iq9lo0p4.InvoiceInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ictm0roz.LoanInstallment>) {
       return (data as List)
               .map((e) => deserialize<_ictm0roz.LoanInstallment>(e))
@@ -3553,6 +3764,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
       _ix00wubs.Invitation => 'Invitation',
       _i9hwipt6.InvitationInfo => 'InvitationInfo',
+      _ifja8moh.Invoice => 'Invoice',
+      _i0mnzbub.InvoiceBlob => 'InvoiceBlob',
+      _im7mm4oj.InvoiceInfo => 'InvoiceInfo',
       _i88cvd1d.IpBan => 'IpBan',
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _ibb3lpoc.LeftToLiveReport => 'LeftToLiveReport',
@@ -3695,6 +3909,12 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'Invitation';
       case _i9hwipt6.InvitationInfo():
         return 'InvitationInfo';
+      case _ifja8moh.Invoice():
+        return 'Invoice';
+      case _i0mnzbub.InvoiceBlob():
+        return 'InvoiceBlob';
+      case _im7mm4oj.InvoiceInfo():
+        return 'InvoiceInfo';
       case _i88cvd1d.IpBan():
         return 'IpBan';
       case _ijfl1fdm.IpBanInfo():
@@ -3935,6 +4155,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'InvitationInfo') {
       return deserialize<_i9hwipt6.InvitationInfo>(data['data']);
     }
+    if (dataClassName == 'Invoice') {
+      return deserialize<_ifja8moh.Invoice>(data['data']);
+    }
+    if (dataClassName == 'InvoiceBlob') {
+      return deserialize<_i0mnzbub.InvoiceBlob>(data['data']);
+    }
+    if (dataClassName == 'InvoiceInfo') {
+      return deserialize<_im7mm4oj.InvoiceInfo>(data['data']);
+    }
     if (dataClassName == 'IpBan') {
       return deserialize<_i88cvd1d.IpBan>(data['data']);
     }
@@ -4132,6 +4361,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _igiek2ee.GroupMember.t;
       case _ix00wubs.Invitation:
         return _ix00wubs.Invitation.t;
+      case _ifja8moh.Invoice:
+        return _ifja8moh.Invoice.t;
+      case _i0mnzbub.InvoiceBlob:
+        return _i0mnzbub.InvoiceBlob.t;
       case _i88cvd1d.IpBan:
         return _i88cvd1d.IpBan.t;
       case _i7jednjp.Loan:

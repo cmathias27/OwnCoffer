@@ -69,6 +69,14 @@ invitation:
   - list:
   - revoke:
   - accept:
+invoice:
+  - list:
+  - forTransaction:
+  - upload:
+  - download:
+  - update:
+  - delete:
+  - send:
 loan:
   - overview:
   - schedule:

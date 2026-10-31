@@ -2924,4 +2924,178 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_invalid_version =>
       'Invalid version: only a published version newer than the installed one can be installed.';
+
+  @override
+  String get navInvoices => 'Invoices';
+
+  @override
+  String get invoicesTitle => 'Invoices';
+
+  @override
+  String get invoicesIntro =>
+      'Invoices and receipts attached to operations, named after the operation (date, label, amount). To add one, open the operation in the Operations page.';
+
+  @override
+  String get invoicesSearch => 'Search (name, label, account)';
+
+  @override
+  String get invoicesAllYears => 'All years';
+
+  @override
+  String get invoicesWarrantyFilter => 'Warranty running';
+
+  @override
+  String get invoicesExport => 'Export as ZIP';
+
+  @override
+  String invoicesExporting(int done, int total) {
+    return 'Exporting… $done/$total';
+  }
+
+  @override
+  String get invoicesZipName => 'Invoices.zip';
+
+  @override
+  String invoicesZipNameYear(String year) {
+    return 'Invoices $year.zip';
+  }
+
+  @override
+  String get invoicesEmpty => 'No invoice yet.';
+
+  @override
+  String invoicesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count invoices',
+      one: '1 invoice',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get invoicesOfOperation => 'Invoices';
+
+  @override
+  String get invoicesNone => 'No invoice attached.';
+
+  @override
+  String get invoiceAttach => 'Attach an invoice';
+
+  @override
+  String get invoiceTakePhoto => 'Take a photo';
+
+  @override
+  String invoiceAdded(String name) {
+    return 'Invoice added: $name';
+  }
+
+  @override
+  String get invoiceBadge => 'Invoice attached';
+
+  @override
+  String get invoiceUnattached => 'No operation';
+
+  @override
+  String get invoiceActions => 'Actions';
+
+  @override
+  String get invoiceOpen => 'Open';
+
+  @override
+  String get invoiceEdit => 'Description and warranty';
+
+  @override
+  String get invoiceSend => 'Send by email';
+
+  @override
+  String get invoiceDelete => 'Delete';
+
+  @override
+  String invoiceDeleteConfirm(String name) {
+    return 'Delete the invoice \"$name\"?';
+  }
+
+  @override
+  String get invoiceLabel => 'Description';
+
+  @override
+  String get invoiceLabelHint => 'Washing machine, car repair…';
+
+  @override
+  String get invoiceLabelHelp => 'Added to the invoice\'s name.';
+
+  @override
+  String get invoiceWarranty => 'End of warranty';
+
+  @override
+  String get invoiceWarrantyNone => 'No warranty followed.';
+
+  @override
+  String invoiceWarrantyUntil(String date) {
+    return 'Warranty until $date';
+  }
+
+  @override
+  String invoiceWarrantyOver(String date) {
+    return 'Warranty ended on $date';
+  }
+
+  @override
+  String invoiceWarrantyYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count years',
+      one: '1 year',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get invoiceWarrantyPick => 'Pick a date';
+
+  @override
+  String get invoiceWarrantyClear => 'None';
+
+  @override
+  String get invoiceWarrantyHelp =>
+      'Counted from the operation\'s date. A reminder comes in the notifications and by email a month before the end.';
+
+  @override
+  String get invoiceSendTo => 'Recipient\'s address';
+
+  @override
+  String get invoiceSendMessage => 'Message (optional)';
+
+  @override
+  String get invoiceSendHelp =>
+      'The invoice is attached, sent from the OwnCoffer server\'s address.';
+
+  @override
+  String get invoiceSendAction => 'Send';
+
+  @override
+  String get invoiceSent => 'Invoice sent.';
+
+  @override
+  String notifWarrantyTitle(String name, String date) {
+    return 'Warranty of \"$name\": ends on $date';
+  }
+
+  @override
+  String get notifWarrantyBody => 'The invoice is in the Invoices page.';
+
+  @override
+  String get error_invoice_access_denied =>
+      'Invoice not found or not accessible.';
+
+  @override
+  String get error_mail_not_configured =>
+      'Sending emails is not set up on this server (SMTP settings in docker/.env).';
+
+  @override
+  String get error_send_limit =>
+      'Limit reached: 20 emails a day. Try again tomorrow.';
 }

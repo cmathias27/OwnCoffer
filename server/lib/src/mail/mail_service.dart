@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:mailer/mailer.dart' as mailer;
 import 'package:mailer/smtp_server.dart';
@@ -14,9 +16,21 @@ class MailService {
   final String _from;
 
   /// Emails "sent" when SMTP is not configured; read by tests.
-  final List<({String to, String subject, String body})> outbox = [];
+  final List<
+    ({String to, String subject, String body, List<MailAttachment> attachments})
+  >
+  outbox = [];
 
-  MailService._(this._smtp, this._from);
+  /// Records emails in [outbox] as if SMTP were configured (tests).
+  final bool _recording;
+
+  MailService._(this._smtp, this._from) : _recording = false;
+
+  /// For tests: behaves as a configured server, sends nothing.
+  MailService.recording()
+    : _smtp = null,
+      _from = 'owncoffer@localhost',
+      _recording = true;
 
   static MailService? _instance;
   static MailService get instance =>
@@ -48,20 +62,28 @@ class MailService {
     );
   }
 
-  bool get isConfigured => _smtp != null;
+  bool get isConfigured => _smtp != null || _recording;
 
   Future<void> send(
     Session session, {
     required String to,
     required String subject,
     required String body,
+    List<MailAttachment> attachments = const [],
   }) async {
     final smtp = _smtp;
     if (smtp == null) {
-      outbox.add((to: to, subject: subject, body: body));
+      outbox.add((
+        to: to,
+        subject: subject,
+        body: body,
+        attachments: attachments,
+      ));
+      if (_recording) return;
       session.log(
         '[mail] SMTP not configured — email to $to\n'
-        'Subject: $subject\n$body',
+        'Subject: $subject\n$body'
+        '${attachments.isEmpty ? '' : '\n(${attachments.length} attachment(s), not written)'}',
         level: LogLevel.warning,
       );
       return;
@@ -70,7 +92,15 @@ class MailService {
       ..from = mailer.Address(_from, 'OwnCoffer')
       ..recipients.add(to)
       ..subject = subject
-      ..text = body;
+      ..text = body
+      ..attachments = [
+        for (final a in attachments)
+          mailer.StreamAttachment(
+            Stream.value(a.bytes),
+            a.mimeType,
+            fileName: a.name,
+          ),
+      ];
     try {
       await mailer.send(message, smtp);
     } on Object catch (e) {
@@ -83,3 +113,6 @@ class MailService {
     }
   }
 }
+
+/// A file sent with an email (an invoice).
+typedef MailAttachment = ({String name, String mimeType, Uint8List bytes});

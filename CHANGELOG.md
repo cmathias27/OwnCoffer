@@ -2,6 +2,19 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.11 (31 octobre 2026)
+
+### Factures
+
+- **Joindre une facture à une opération** : dans le détail d'une opération, « Joindre une facture » (PDF ou image, 10 Mo au plus) ou « Prendre en photo » (sur téléphone, l'appareil photo s'ouvre directement). Les opérations qui ont une facture sont marquées d'un trombone dans la liste.
+- **Noms automatiques** tirés de l'opération : `2026-10-31 - DARTY - Lave-linge - 499,00 EUR.pdf`. Une description facultative (« Lave-linge ») s'ajoute au nom.
+- **Nouvelle page « Factures »** : recherche, année, filtre « Garantie en cours », ouverture, et **export ZIP** des factures affichées, sous leurs noms.
+- **Fin de garantie** : 1, 2, 3 ou 5 ans après l'achat, ou une date au choix. Un **rappel** arrive dans les notifications et par courriel un mois avant la fin.
+- **Envoi par courriel** d'une facture en pièce jointe (comptable, service après-vente…), avec un message facultatif. Il faut que le SMTP soit réglé dans `docker/.env` ; 20 envois par jour et par personne au plus.
+- Confidentialité : une facture n'est visible que par ceux qui voient le compte de son opération. Elle est cachée tant que l'opération est dans la corbeille, et supprimée si l'opération l'est définitivement. Les factures sont dans la base de données, donc dans les sauvegardes.
+
+À venir : factures « à rattacher » (enregistrées sans opération, avec propositions), puis photo recadrée sur la facture seulement.
+
 ## 0.3.10 (31 octobre 2026)
 
 ### Administration du serveur : mises à jour

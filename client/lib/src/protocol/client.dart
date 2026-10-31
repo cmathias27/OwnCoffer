@@ -52,6 +52,7 @@ import 'package:owncoffer_client/src/protocol/group_membership.dart'
 import 'package:owncoffer_client/src/protocol/import_preview.dart' as _ikjuebnd;
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
+import 'package:owncoffer_client/src/protocol/invoice_info.dart' as _iej1c1us;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/left_to_live_report.dart'
     as _iqfjeddm;
@@ -935,6 +936,108 @@ class EndpointInvitation extends _isc.EndpointRef {
       );
 }
 
+/// Invoices and receipts (PDF or photo) attached to operations: kept,
+/// listed under a name built from their operation, opened, emailed, with
+/// an optional end of warranty (reminder a month before).
+///
+/// An invoice of an operation is seen by those who see its account; one
+/// without operation by every member of the group.
+/// {@category Endpoint}
+class EndpointInvoice extends _isc.EndpointRef {
+  EndpointInvoice(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'invoice';
+
+  /// Invoices the user may see, newest operation first. [year] filters on
+  /// the operation's date (the sending date without operation); [search]
+  /// on names and labels; [warranty]: only those with a running warranty.
+  _ida.Future<List<_iej1c1us.InvoiceInfo>> list(
+    int groupId, {
+    int? year,
+    String? search,
+    bool? warranty,
+  }) => caller.callServerEndpoint<List<_iej1c1us.InvoiceInfo>>(
+    'invoice',
+    'list',
+    {
+      'groupId': groupId,
+      'year': year,
+      'search': search,
+      'warranty': warranty,
+    },
+  );
+
+  /// Invoices of one operation, in the order they were added.
+  _ida.Future<List<_iej1c1us.InvoiceInfo>> forTransaction(int transactionId) =>
+      caller.callServerEndpoint<List<_iej1c1us.InvoiceInfo>>(
+        'invoice',
+        'forTransaction',
+        {'transactionId': transactionId},
+      );
+
+  /// Keeps an invoice of the operation (PDF or image, 10 MB at most).
+  _ida.Future<_iej1c1us.InvoiceInfo> upload(
+    int transactionId,
+    String fileName,
+    _idt.ByteData file,
+  ) => caller.callServerEndpoint<_iej1c1us.InvoiceInfo>(
+    'invoice',
+    'upload',
+    {
+      'transactionId': transactionId,
+      'fileName': fileName,
+      'file': file,
+    },
+  );
+
+  /// The content, for the user to open or save it.
+  _ida.Future<_idt.ByteData> download(int invoiceId) =>
+      caller.callServerEndpoint<_idt.ByteData>(
+        'invoice',
+        'download',
+        {'invoiceId': invoiceId},
+      );
+
+  /// What it is for and the end of its warranty (null clears them).
+  _ida.Future<_iej1c1us.InvoiceInfo> update(
+    int invoiceId,
+    String? label,
+    DateTime? warrantyUntil,
+  ) => caller.callServerEndpoint<_iej1c1us.InvoiceInfo>(
+    'invoice',
+    'update',
+    {
+      'invoiceId': invoiceId,
+      'label': label,
+      'warrantyUntil': warrantyUntil,
+    },
+  );
+
+  _ida.Future<void> delete(int invoiceId) => caller.callServerEndpoint<void>(
+    'invoice',
+    'delete',
+    {'invoiceId': invoiceId},
+  );
+
+  /// Emails the invoice to [to] (an accountant, a shop's after-sales
+  /// service…), with an optional [message]. Needs the server's SMTP
+  /// settings; at most [maxSentPerDay] per member and 24 hours.
+  _ida.Future<void> send(
+    int invoiceId,
+    String to,
+    String? message,
+  ) => caller.callServerEndpoint<void>(
+    'invoice',
+    'send',
+    {
+      'invoiceId': invoiceId,
+      'to': to,
+      'message': message,
+    },
+  );
+}
+
 /// Loans: entry, amortisation schedule, where they stand, early repayment
 /// simulation. With an account, the instalments become a planned operation
 /// (forecast and reconciliation with the real debits).
@@ -1753,6 +1856,7 @@ class Client extends _isc.ServerpodClientShared {
     group = EndpointGroup(this);
     import = EndpointImport(this);
     invitation = EndpointInvitation(this);
+    invoice = EndpointInvoice(this);
     loan = EndpointLoan(this);
     notification = EndpointNotification(this);
     rule = EndpointRule(this);
@@ -1783,6 +1887,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointInvitation invitation;
 
+  late final EndpointInvoice invoice;
+
   late final EndpointLoan loan;
 
   late final EndpointNotification notification;
@@ -1811,6 +1917,7 @@ class Client extends _isc.ServerpodClientShared {
     'group': group,
     'import': import,
     'invitation': invitation,
+    'invoice': invoice,
     'loan': loan,
     'notification': notification,
     'rule': rule,

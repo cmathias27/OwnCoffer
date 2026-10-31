@@ -19,6 +19,8 @@ export 'src/categories.dart';
 export 'src/classification/classifier.dart';
 export 'src/data/community_rules.dart';
 export 'src/data/standard_categories.dart';
+export 'src/documents/invoice_name.dart';
+export 'src/documents/zip.dart';
 export 'src/forecast/forecast.dart';
 export 'src/forecast/purchase.dart';
 export 'src/forecast/recurrence.dart';

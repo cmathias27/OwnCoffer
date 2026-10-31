@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
+import '../core/documents.dart';
 import '../finance/alert_service.dart';
 import '../finance/classification_service.dart';
 import '../finance/forecast_service.dart';
@@ -91,22 +91,7 @@ class LoanEndpoint extends Endpoint {
 
   // --- documents ------------------------------------------------------------
 
-  static const maxDocumentBytes = 10 * 1024 * 1024;
   static const maxDocumentsPerLoan = 30;
-
-  /// Accepted types, by extension; the first bytes are checked for the
-  /// binary ones.
-  static const _types = {
-    'pdf': 'application/pdf',
-    'png': 'image/png',
-    'jpg': 'image/jpeg',
-    'jpeg': 'image/jpeg',
-    'webp': 'image/webp',
-    'csv': 'text/csv',
-    'txt': 'text/plain',
-    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'ods': 'application/vnd.oasis.opendocument.spreadsheet',
-  };
 
   /// Documents of the loan (amortisation table, offer, screenshots…),
   /// newest first, without their content.
@@ -127,21 +112,12 @@ class LoanEndpoint extends Endpoint {
     ByteData file,
   ) async {
     final loan = await _find(session, loanId, write: true);
-    final name = fileName.trim().replaceAll(RegExp(r'[\\/\x00-\x1f]'), '_');
-    if (name.isEmpty || name.length > 120) {
-      throw InvalidInputException(code: 'invalid_name', field: 'fileName');
-    }
+    final (:name, :mime) = Documents.check(
+      fileName,
+      file,
+      allowed: Documents.types.keys.toSet(),
+    );
     final size = file.lengthInBytes;
-    if (size == 0 || size > maxDocumentBytes) {
-      throw InvalidInputException(code: 'document_too_large');
-    }
-    final dot = name.lastIndexOf('.');
-    final ext = dot < 0 ? '' : name.substring(dot + 1).toLowerCase();
-    final mime = _types[ext];
-    final bytes = file.buffer.asUint8List(file.offsetInBytes, size);
-    if (mime == null || !_looksLike(ext, bytes)) {
-      throw InvalidInputException(code: 'document_type');
-    }
     final count = await LoanDocument.db.count(
       session,
       where: (d) => d.loanId.equals(loanId),
@@ -215,32 +191,6 @@ class LoanEndpoint extends Endpoint {
     if (doc == null) throw AccessDeniedException(code: 'loan_access_denied');
     await _find(session, doc.loanId, write: write);
     return doc;
-  }
-
-  /// Magic bytes of the binary formats; text files must be valid UTF-8.
-  static bool _looksLike(String ext, Uint8List b) {
-    bool starts(List<int> sig) =>
-        b.length >= sig.length &&
-        [for (var i = 0; i < sig.length; i++) b[i] == sig[i]].every((x) => x);
-    return switch (ext) {
-      'pdf' => starts([0x25, 0x50, 0x44, 0x46]),
-      'png' => starts([0x89, 0x50, 0x4E, 0x47]),
-      'jpg' || 'jpeg' => starts([0xFF, 0xD8, 0xFF]),
-      'webp' =>
-        starts([0x52, 0x49, 0x46, 0x46]) &&
-            b.length > 12 &&
-            String.fromCharCodes(b.sublist(8, 12)) == 'WEBP',
-      'xlsx' || 'ods' => starts([0x50, 0x4B, 0x03, 0x04]),
-      'csv' || 'txt' => () {
-        try {
-          utf8.decode(b);
-          return true;
-        } on FormatException {
-          return false;
-        }
-      }(),
-      _ => false,
-    };
   }
 
   Future<EarlyRepayment> simulate(

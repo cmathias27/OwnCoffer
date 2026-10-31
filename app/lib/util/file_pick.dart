@@ -12,5 +12,9 @@ class PickedFile {
 }
 
 /// Opens the browser's file dialog. Returns null when the user cancels.
-Future<PickedFile?> pickFile({List<String> extensions = const []}) =>
-    impl.pickFile(extensions);
+/// [camera]: on a phone, opens the back camera to take a photo (a file
+/// dialog elsewhere).
+Future<PickedFile?> pickFile({
+  List<String> extensions = const [],
+  bool camera = false,
+}) => impl.pickFile(extensions, camera: camera);
