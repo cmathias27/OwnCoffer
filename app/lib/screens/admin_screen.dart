@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/admin_backups.dart';
+import '../widgets/admin_invitations.dart';
 
 /// Server administration (server administrator only): health, figures,
 /// accounts, banned IPs and the audit log. Never a group's financial data.
@@ -23,6 +24,8 @@ class _AdminScreenState extends State<AdminScreen> {
   List<IpBanInfo> _bans = [];
   List<AdminAuditInfo> _audit = [];
   BackupOverview? _backups;
+  List<AdminInvitationInfo> _invitations = [];
+  List<AdminGroupInfo> _groups = [];
   String? _error;
 
   @override
@@ -39,6 +42,8 @@ class _AdminScreenState extends State<AdminScreen> {
       final bans = await client.admin.bannedIps();
       final audit = await client.admin.audit(limit: 100);
       final backups = await client.admin.backups();
+      final invitations = await client.admin.invitations();
+      final groups = await client.admin.groups();
       if (!mounted) return;
       setState(() {
         _health = health;
@@ -47,6 +52,8 @@ class _AdminScreenState extends State<AdminScreen> {
         _bans = bans;
         _audit = audit;
         _backups = backups;
+        _invitations = invitations;
+        _groups = groups;
         _error = null;
       });
     } on Object catch (e) {
@@ -72,7 +79,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.adminTitle),
@@ -89,6 +96,7 @@ class _AdminScreenState extends State<AdminScreen> {
               Tab(text: l.adminTabHealth),
               Tab(text: l.adminTabBackups),
               Tab(text: l.adminTabUsers),
+              Tab(text: l.adminTabInvitations),
               Tab(text: l.adminTabSecurity),
               Tab(text: l.adminTabAudit),
             ],
@@ -137,6 +145,11 @@ class _AdminScreenState extends State<AdminScreen> {
                       () => client.admin.setBlocked(u.authUserId, blocked),
                       blocked ? l.adminUserBlocked : l.adminUserUnblocked,
                     ),
+                  ),
+                  AdminInvitationsView(
+                    invitations: _invitations,
+                    groups: _groups,
+                    onChanged: _load,
                   ),
                   _BansView(
                     bans: _bans,

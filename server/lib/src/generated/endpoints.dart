@@ -736,6 +736,76 @@ class Endpoints extends _is.EndpointDispatch {
                 offset: params['offset'],
               ),
         ),
+        'groups': _is.MethodConnector(
+          name: 'groups',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).groups(
+                session,
+              ),
+        ),
+        'invitations': _is.MethodConnector(
+          name: 'invitations',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .invitations(session),
+        ),
+        'invite': _is.MethodConnector(
+          name: 'invite',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'email': _is.ParameterDescription(
+              name: 'email',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'role': _is.ParameterDescription(
+              name: 'role',
+              type: _is.getType<_is2flj8o.MemberRole>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).invite(
+                session,
+                params['groupId'],
+                params['email'],
+                params['role'],
+              ),
+        ),
+        'revokeInvitation': _is.MethodConnector(
+          name: 'revokeInvitation',
+          params: {
+            'invitationId': _is.ParameterDescription(
+              name: 'invitationId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .revokeInvitation(
+                    session,
+                    params['invitationId'],
+                  ),
+        ),
         'backups': _is.MethodConnector(
           name: 'backups',
           params: {},

@@ -1,0 +1,8 @@
+### A group of the server, for the server administrator (name and size
+### only).
+class: AdminGroupInfo
+fields:
+  id: int
+  name: String
+  members: int
+  accounts: int

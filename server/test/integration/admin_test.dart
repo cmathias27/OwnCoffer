@@ -69,6 +69,14 @@ void main() {
         () => endpoints.admin.setBlocked(as(mallory), bob, true),
         () => endpoints.admin.backups(as(mallory)),
         () => endpoints.admin.requestBackup(as(mallory)),
+        () => endpoints.admin.groups(as(mallory)),
+        () => endpoints.admin.invitations(as(mallory)),
+        () => endpoints.admin.invite(
+          as(mallory),
+          groupA,
+          'eve@example.org',
+          MemberRole.user,
+        ),
       ]) {
         await expectLater(call(), denied);
       }
@@ -137,6 +145,66 @@ void main() {
       expect(to, 'admin@example.org');
       expect(MailService.instance.outbox.single.to, 'admin@example.org');
     });
+
+    test(
+      'invitations: any group, listed with who sent them, revoked',
+      () async {
+        // Another household the administrator is not a member of.
+        final other = await FinanceGroup.db.insertRow(
+          db,
+          FinanceGroup(name: 'Voisins', createdBy: bob),
+        );
+        final i = await endpoints.admin.invite(
+          as(admin),
+          other.id!,
+          'Eve@Example.org',
+          MemberRole.admin,
+        );
+        expect(i.email, 'eve@example.org');
+        expect(i.groupName, 'Voisins');
+        expect(MailService.instance.outbox.last.to, 'eve@example.org');
+        await endpoints.invitation.create(
+          as(mallory),
+          groupA,
+          'zoe@example.org',
+          MemberRole.reader,
+        );
+        final list = await endpoints.admin.invitations(as(admin));
+        expect(list.map((x) => x.email), [
+          'eve@example.org',
+          'zoe@example.org',
+        ]);
+        expect(list.last.invitedBy, 'mallory@example.org');
+        expect(list.last.groupName, 'Maison');
+
+        final groups = await endpoints.admin.groups(as(admin));
+        expect(groups.map((g) => g.name), ['Maison', 'Voisins']);
+        expect(groups.first.members, 3);
+
+        await expectLater(
+          endpoints.admin.revokeInvitation(as(mallory), i.id),
+          denied,
+        );
+        await endpoints.admin.revokeInvitation(as(admin), i.id);
+        expect(
+          (await endpoints.admin.invitations(as(admin))).map((x) => x.email),
+          ['zoe@example.org'],
+        );
+        await expectLater(
+          endpoints.admin.revokeInvitation(as(admin), i.id),
+          throwsA(isA<InvalidInputException>()),
+        );
+        await expectLater(
+          endpoints.admin.invite(
+            as(admin),
+            999999,
+            'x@example.org',
+            MemberRole.user,
+          ),
+          denied,
+        );
+      },
+    );
 
     group('backups (docker/state)', () {
       late Directory dir;

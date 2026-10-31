@@ -254,6 +254,134 @@ class AdminEndpoint extends Endpoint {
     ];
   }
 
+  /// Groups of the server, by name, with their size.
+  Future<List<AdminGroupInfo>> groups(Session session) async {
+    await _requireServerAdmin(session);
+    final members = <int, int>{};
+    for (final m in await GroupMember.db.find(session)) {
+      members[m.groupId] = (members[m.groupId] ?? 0) + 1;
+    }
+    final accounts = <int, int>{};
+    for (final a in await Account.db.find(
+      session,
+      where: (a) => a.deletedAt.equals(null),
+    )) {
+      accounts[a.groupId] = (accounts[a.groupId] ?? 0) + 1;
+    }
+    return [
+      for (final g in await FinanceGroup.db.find(
+        session,
+        orderBy: (g) => g.name,
+      ))
+        AdminGroupInfo(
+          id: g.id!,
+          name: g.name,
+          members: members[g.id] ?? 0,
+          accounts: accounts[g.id] ?? 0,
+        ),
+    ];
+  }
+
+  /// Pending invitations of every group, oldest first.
+  Future<List<AdminInvitationInfo>> invitations(Session session) async {
+    await _requireServerAdmin(session);
+    final groups = {
+      for (final g in await FinanceGroup.db.find(session)) g.id!: g.name,
+    };
+    final emails = {
+      for (final p in await UserProfile.db.find(session)) p.authUserId: p.email,
+    };
+    return [
+      for (final i in await Invitation.db.find(
+        session,
+        where: (i) =>
+            i.acceptedAt.equals(null) &
+            i.revokedAt.equals(null) &
+            (i.expiresAt > DateTime.now().toUtc()),
+        orderBy: (i) => i.createdAt,
+      ))
+        AdminInvitationInfo(
+          id: i.id!,
+          groupId: i.groupId,
+          groupName: groups[i.groupId],
+          email: i.email,
+          role: i.role,
+          serverAdmin: i.serverAdmin,
+          createdAt: i.createdAt,
+          expiresAt: i.expiresAt,
+          invitedBy: emails[i.createdBy],
+        ),
+    ];
+  }
+
+  /// Invites [email] into any group of the server (the link is emailed).
+  Future<AdminInvitationInfo> invite(
+    Session session,
+    int groupId,
+    String email,
+    MemberRole role,
+  ) async {
+    await _requireServerAdmin(session);
+    final group = await FinanceGroup.db.findById(session, groupId);
+    if (group == null) {
+      throw AccessDeniedException(code: 'group_access_denied');
+    }
+    final i = await Onboarding.invite(
+      session,
+      groupId: groupId,
+      email: email,
+      role: role,
+      invitedBy: Access.userId(session),
+      publicUrl:
+          Platform.environment['OWNCOFFER_PUBLIC_URL'] ??
+          'http://localhost:8080',
+    );
+    await AuditEntry.db.insertRow(
+      session,
+      AuditEntry(
+        groupId: groupId,
+        authUserId: Access.userId(session),
+        action: 'invite',
+        entity: 'invitation',
+        rowId: '${i.id}',
+      ),
+    );
+    return AdminInvitationInfo(
+      id: i.id!,
+      groupId: groupId,
+      groupName: group.name,
+      email: i.email,
+      role: i.role,
+      serverAdmin: i.serverAdmin,
+      createdAt: i.createdAt,
+      expiresAt: i.expiresAt,
+      invitedBy: null,
+    );
+  }
+
+  /// Revokes a pending invitation of any group: its link stops working.
+  Future<void> revokeInvitation(Session session, int invitationId) async {
+    await _requireServerAdmin(session);
+    final i = await Invitation.db.findById(session, invitationId);
+    if (i == null || i.acceptedAt != null || i.revokedAt != null) {
+      throw InvalidInputException(code: 'invitation_not_pending');
+    }
+    await Invitation.db.updateRow(
+      session,
+      i.copyWith(revokedAt: DateTime.now().toUtc()),
+    );
+    await AuditEntry.db.insertRow(
+      session,
+      AuditEntry(
+        groupId: i.groupId,
+        authUserId: Access.userId(session),
+        action: 'revoke',
+        entity: 'invitation',
+        rowId: '$invitationId',
+      ),
+    );
+  }
+
   /// Backups kept on the host, as reported by its scripts.
   Future<BackupOverview> backups(Session session) async {
     await _requireServerAdmin(session);

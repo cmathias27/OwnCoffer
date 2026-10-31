@@ -1,0 +1,13 @@
+### A pending invitation of any group, for the server administrator (no
+### token).
+class: AdminInvitationInfo
+fields:
+  id: int
+  groupId: int?
+  groupName: String?
+  email: String
+  role: MemberRole
+  serverAdmin: bool
+  createdAt: DateTime
+  expiresAt: DateTime
+  invitedBy: String?
