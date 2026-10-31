@@ -229,6 +229,38 @@ void main() {
         StatementFormat.csv,
       );
       expect(detectStatementFormat(utf8.encode('nothing')), isNull);
+      expect(
+        detectStatementFormat(utf8.encode('just a line; of text\n')),
+        isNull,
+      );
+    });
+
+    test('a table with unknown columns asks for them', () {
+      final csv = utf8.encode(
+        'Jour;Texte;Valeur\n03/11/2026;CB EXEMPLE;-42,10\n04/11/2026;EXEMPLE;-1,00\n',
+      );
+      expect(detectStatementFormat(csv), StatementFormat.csv);
+      expect(
+        () => readStatement(csv),
+        throwsA(
+          isA<StatementFormatException>().having(
+            (e) => e.code,
+            'code',
+            'csv_columns_unknown',
+          ),
+        ),
+      );
+      final s = readStatement(
+        csv,
+        csvMapping: const CsvMapping(
+          delimiter: ';',
+          headerRow: 0,
+          dateColumn: 0,
+          labelColumn: 1,
+          amountColumn: 2,
+        ),
+      );
+      expect(s.transactions.map((t) => t.amountCents), [-4210, -100]);
     });
 
     test('same operations give the same amounts whatever the format', () {

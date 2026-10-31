@@ -30,6 +30,8 @@ dependencies:
     sdk: flutter
   intl: any
   qr_flutter: ^4.1.0
+  # File dialog of the browser (BSD-3-Clause, by the Dart team).
+  web: ^1.1.1
   owncoffer_shared: any
   owncoffer_client:
     path: ../client

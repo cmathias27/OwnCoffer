@@ -32,6 +32,7 @@ abstract class ImportPreview
     required this.sameFileAlreadyImported,
     this.statedBalanceCents,
     this.statedBalanceDate,
+    this.balanceAfterImportCents,
   });
 
   factory ImportPreview({
@@ -48,6 +49,7 @@ abstract class ImportPreview
     required bool sameFileAlreadyImported,
     int? statedBalanceCents,
     DateTime? statedBalanceDate,
+    int? balanceAfterImportCents,
   }) = _ImportPreviewImpl;
 
   factory ImportPreview.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -77,6 +79,8 @@ abstract class ImportPreview
           : _isc.DateTimeJsonExtension.fromJson(
               jsonSerialization['statedBalanceDate'],
             ),
+      balanceAfterImportCents:
+          jsonSerialization['balanceAfterImportCents'] as int?,
     );
   }
 
@@ -108,6 +112,10 @@ abstract class ImportPreview
 
   DateTime? statedBalanceDate;
 
+  /// OwnCoffer's balance on statedBalanceDate once the new lines are
+  /// imported (possible duplicates left out), to compare with the bank's.
+  int? balanceAfterImportCents;
+
   /// Returns a shallow copy of this [ImportPreview]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
@@ -125,6 +133,7 @@ abstract class ImportPreview
     bool? sameFileAlreadyImported,
     int? statedBalanceCents,
     DateTime? statedBalanceDate,
+    int? balanceAfterImportCents,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -144,6 +153,8 @@ abstract class ImportPreview
       if (statedBalanceCents != null) 'statedBalanceCents': statedBalanceCents,
       if (statedBalanceDate != null)
         'statedBalanceDate': statedBalanceDate?.toJson(),
+      if (balanceAfterImportCents != null)
+        'balanceAfterImportCents': balanceAfterImportCents,
     };
   }
 
@@ -165,6 +176,8 @@ abstract class ImportPreview
       if (statedBalanceCents != null) 'statedBalanceCents': statedBalanceCents,
       if (statedBalanceDate != null)
         'statedBalanceDate': statedBalanceDate?.toJson(),
+      if (balanceAfterImportCents != null)
+        'balanceAfterImportCents': balanceAfterImportCents,
     };
   }
 
@@ -191,6 +204,7 @@ class _ImportPreviewImpl extends ImportPreview {
     required bool sameFileAlreadyImported,
     int? statedBalanceCents,
     DateTime? statedBalanceDate,
+    int? balanceAfterImportCents,
   }) : super._(
          format: format,
          encoding: encoding,
@@ -205,6 +219,7 @@ class _ImportPreviewImpl extends ImportPreview {
          sameFileAlreadyImported: sameFileAlreadyImported,
          statedBalanceCents: statedBalanceCents,
          statedBalanceDate: statedBalanceDate,
+         balanceAfterImportCents: balanceAfterImportCents,
        );
 
   /// Returns a shallow copy of this [ImportPreview]
@@ -225,6 +240,7 @@ class _ImportPreviewImpl extends ImportPreview {
     bool? sameFileAlreadyImported,
     Object? statedBalanceCents = _Undefined,
     Object? statedBalanceDate = _Undefined,
+    Object? balanceAfterImportCents = _Undefined,
   }) {
     return ImportPreview(
       format: format ?? this.format,
@@ -246,6 +262,9 @@ class _ImportPreviewImpl extends ImportPreview {
       statedBalanceDate: statedBalanceDate is DateTime?
           ? statedBalanceDate
           : this.statedBalanceDate,
+      balanceAfterImportCents: balanceAfterImportCents is int?
+          ? balanceAfterImportCents
+          : this.balanceAfterImportCents,
     );
   }
 }

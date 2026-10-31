@@ -349,5 +349,190 @@
       }
     }
   },
-  "noteLabel": "Votre note"
+  "noteLabel": "Votre note",
+  "importTitle": "Importer un relevé",
+  "importChooseFile": "Choisir un fichier",
+  "importOtherFile": "Choisir un autre fichier",
+  "importFormats": "QIF, OFX ou CSV, 4 Mo au maximum. Le fichier n'est envoyé qu'à votre serveur OwnCoffer.",
+  "importReaderOnly": "Avec le rôle Lecteur, vous ne pouvez pas importer.",
+  "importNoAccount": "Créez d'abord un compte dans l'onglet Comptes.",
+  "importFileInfo": "{name} : format {format}, encodage {encoding}",
+  "@importFileInfo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "format": {
+        "type": "String"
+      },
+      "encoding": {
+        "type": "String"
+      }
+    }
+  },
+  "importCountRead": "{count, plural, =0{Aucune opération lue} =1{1 opération lue} other{{count} opérations lues}}",
+  "@importCountRead": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importCountNew": "{count, plural, =1{1 nouvelle} other{{count} nouvelles}}",
+  "@importCountNew": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importCountDuplicate": "{count, plural, =1{1 déjà présente} other{{count} déjà présentes}}",
+  "@importCountDuplicate": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importCountPossible": "{count, plural, =1{1 doublon possible} other{{count} doublons possibles}}",
+  "@importCountPossible": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importCountClassified": "{count, plural, =1{1 classée} other{{count} classées}}",
+  "@importCountClassified": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importCountErrors": "{count, plural, =1{1 erreur} other{{count} erreurs}}",
+  "@importCountErrors": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importSameFile": "Ce fichier a déjà été importé dans ce compte.",
+  "importBankBalance": "Solde indiqué par la banque le {date} : {amount}",
+  "@importBankBalance": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "importBalanceMatches": "Après l'import, OwnCoffer aura le même solde à cette date.",
+  "importBalanceDiffers": "Après l'import, OwnCoffer affichera {amount} à cette date, soit un écart de {gap}. Vérifiez le solde initial du compte ou s'il manque des opérations plus anciennes.",
+  "@importBalanceDiffers": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "gap": {
+        "type": "String"
+      }
+    }
+  },
+  "importIssues": "Remarques sur le fichier",
+  "importStatusNew": "Nouvelle",
+  "importStatusDuplicate": "Déjà présente",
+  "importStatusPossible": "Doublon possible",
+  "importPossibleHelp": "Un doublon possible a la même date et le même montant qu'une opération déjà présente, avec un libellé différent. Cochez ceux à importer quand même.",
+  "importConfirm": "{count, plural, =0{Rien à importer} =1{Importer 1 opération} other{Importer {count} opérations}}",
+  "@importConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importDone": "{added, plural, =0{Aucune opération ajoutée.} =1{1 opération ajoutée, {classified} classée.} other{{added} opérations ajoutées, dont {classified} classées.}}",
+  "@importDone": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      },
+      "classified": {
+        "type": "int"
+      }
+    }
+  },
+  "importHistory": "Imports précédents",
+  "importHistoryEmpty": "Aucun import pour ce compte.",
+  "importHistoryLine": "{date} · {added} ajoutées, {duplicates} déjà présentes",
+  "@importHistoryLine": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "added": {
+        "type": "int"
+      },
+      "duplicates": {
+        "type": "int"
+      }
+    }
+  },
+  "importCancelled": "Annulé",
+  "importCancel": "Annuler cet import",
+  "importCancelConfirm": "{count, plural, =1{L'opération ajoutée par cet import sera mise à la corbeille.} other{Les {count} opérations ajoutées par cet import seront mises à la corbeille.}} Vos corrections sur ces opérations seront perdues.",
+  "@importCancelConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importCancelDone": "Import annulé.",
+  "csvTitle": "Colonnes du fichier CSV",
+  "csvHelp": "OwnCoffer ne reconnaît pas l'en-tête de ce fichier. Indiquez ce que contient chaque colonne.",
+  "csvChangeColumns": "Modifier les colonnes",
+  "csvDelimiter": "Séparateur",
+  "csvTab": "Tabulation",
+  "csvHeaderRow": "Ligne d'en-tête",
+  "csvNoHeader": "Aucune",
+  "csvDate": "Date",
+  "csvLabel": "Libellé",
+  "csvMemo": "Détail (facultatif)",
+  "csvAmountMode": "Montants",
+  "csvOneColumn": "Une colonne signée",
+  "csvDebitCredit": "Débit et crédit séparés",
+  "csvAmount": "Montant",
+  "csvDebit": "Débit",
+  "csvCredit": "Crédit",
+  "csvNone": "Aucune",
+  "csvColumn": "Colonne {number} : {sample}",
+  "@csvColumn": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "sample": {
+        "type": "String"
+      }
+    }
+  },
+  "csvMonthFirst": "Dates au format mois/jour/année (américain)",
+  "csvIncomplete": "Choisissez au moins la date, le libellé et un montant.",
+  "validate": "Valider",
+  "csvRowSample": "Ligne {number} : {sample}",
+  "@csvRowSample": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "sample": {
+        "type": "String"
+      }
+    }
+  }
 }
