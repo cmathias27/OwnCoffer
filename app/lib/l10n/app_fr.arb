@@ -856,5 +856,30 @@
     }
   },
   "notifUnknown": "Notification",
-  "notifOpenForecast": "Voir les prévisions"
+  "notifOpenForecast": "Voir les prévisions",
+  "importAccountRecognised": "Compte reconnu d'après le fichier.",
+  "importOtherAccountMatch": "Ce fichier correspond au compte « {account} ».",
+  "@importOtherAccountMatch": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "importSwitchAccount": "Importer dans « {account} »",
+  "@importSwitchAccount": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "importWrongBankAccount": "Ce fichier vient d'un autre compte bancaire que « {account} ». Vérifiez le compte choisi.",
+  "@importWrongBankAccount": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  }
 }

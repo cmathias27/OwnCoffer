@@ -14,6 +14,10 @@ fields:
   ### negative = authorised overdraft).
   alertThresholdCents: int, default=0
   visibility: AccountVisibility, default=shared
+  ### HMAC of the bank account number seen in an OFX file (keyed with the
+  ### server secret): recognises the account at import without storing the
+  ### number. Learnt at the first OFX import.
+  bankAccountKey: String?, scope=serverOnly
   color: String?
   createdAt: DateTime, default=now
   deletedAt: DateTime?

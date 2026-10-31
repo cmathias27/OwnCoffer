@@ -348,5 +348,9 @@
   "notifOverdraftTitle": "{account}: overdraft expected on {date}",
   "notifOverdraftBody": "Expected balance that day when the alert was raised: {balance} (threshold {threshold}).",
   "notifUnknown": "Notification",
-  "notifOpenForecast": "Show the forecast"
+  "notifOpenForecast": "Show the forecast",
+  "importAccountRecognised": "Account recognised from the file.",
+  "importOtherAccountMatch": "This file matches the account “{account}”.",
+  "importSwitchAccount": "Import into “{account}”",
+  "importWrongBankAccount": "This file comes from another bank account than “{account}”. Check the chosen account."
 }

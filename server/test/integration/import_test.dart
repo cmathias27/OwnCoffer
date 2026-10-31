@@ -134,6 +134,116 @@ void main() {
       },
     );
 
+    group('account recognised from the OFX number', () {
+      // The fixture has a placeholder number (zeros, ignored): a fictional
+      // one is put in its place.
+      ByteData ofxOf(String number) => ByteData.sublistView(
+        utf8.encode(
+          utf8
+              .decode(fixture('ce_export.ofx').buffer.asUint8List())
+              .replaceFirst('<ACCTID>00000000000', '<ACCTID>$number'),
+        ),
+      );
+
+      test('learnt at the first import, never stored in clear', () async {
+        final file = ofxOf('12345678901');
+        final first = await endpoints.import.preview(
+          as(alice),
+          account.id!,
+          file,
+        );
+        expect(first.recognisedAccountId, isNull);
+        await endpoints.import.commit(
+          as(alice),
+          account.id!,
+          'a.ofx',
+          file,
+        );
+        final saved = (await Account.db.findById(db, account.id!))!;
+        expect(saved.bankAccountKey, isNotNull);
+        expect(saved.bankAccountKey, isNot(contains('12345678901')));
+
+        final other = await endpoints.account.create(
+          as(alice),
+          groupA,
+          'Joint',
+          AccountKind.checking,
+        );
+        final p = await endpoints.import.preview(as(alice), other.id!, file);
+        expect(p.recognisedAccountId, account.id);
+        expect(p.otherBankAccount, isFalse);
+
+        final same = await endpoints.import.preview(
+          as(alice),
+          account.id!,
+          file,
+        );
+        expect(same.recognisedAccountId, account.id);
+
+        final wrong = await endpoints.import.preview(
+          as(alice),
+          account.id!,
+          ofxOf('99999999999'),
+        );
+        expect(wrong.recognisedAccountId, isNull);
+        expect(wrong.otherBankAccount, isTrue);
+      });
+
+      test('a restricted account is not revealed to others', () async {
+        final file = ofxOf('12345678901');
+        await endpoints.import.commit(
+          as(alice),
+          account.id!,
+          'a.ofx',
+          file,
+        );
+        await endpoints.account.update(
+          as(alice),
+          account.id!,
+          visibility: AccountVisibility.restricted,
+        );
+        final shared = await endpoints.account.create(
+          as(alice),
+          groupA,
+          'Joint',
+          AccountKind.checking,
+        );
+        final bob = await user({});
+        await GroupMember.db.insertRow(
+          db,
+          GroupMember(groupId: groupA, authUserId: bob, role: MemberRole.user),
+        );
+        final p = await endpoints.import.preview(as(bob), shared.id!, file);
+        expect(p.recognisedAccountId, isNull);
+      });
+
+      test('another group\'s account is never revealed', () async {
+        final file = ofxOf('12345678901');
+        await endpoints.import.commit(
+          as(alice),
+          account.id!,
+          'a.ofx',
+          file,
+        );
+        final groupB = (await endpoints.group.myGroups(
+          as(mallory),
+        )).single.group.id!;
+        final theirs = await endpoints.account.create(
+          as(mallory),
+          groupB,
+          'B',
+          AccountKind.checking,
+        );
+        final p = await endpoints.import.preview(
+          as(mallory),
+          theirs.id!,
+          file,
+        );
+        expect(p.recognisedAccountId, isNull);
+        expect(p.otherBankAccount, isFalse);
+      });
+    });
+
     test('the balance after import is compared with the bank one', () async {
       final before = await endpoints.import.preview(
         as(alice),

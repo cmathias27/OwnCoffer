@@ -217,6 +217,63 @@ class _ImportScreenState extends State<ImportScreen> {
     }
   }
 
+  /// Which account the file belongs to (OFX account number, compared by
+  /// the server without storing it).
+  List<Widget> _accountNotice(
+    BuildContext context,
+    Account account,
+    ImportPreview preview,
+  ) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final id = preview.recognisedAccountId;
+    if (id == account.id) {
+      return [
+        _Notice(
+          icon: Icons.check_circle_outline,
+          text: l.importAccountRecognised,
+          color: Colors.green.shade700,
+        ),
+      ];
+    }
+    final match = widget.accounts.where((a) => a.id == id).firstOrNull;
+    if (match != null) {
+      return [
+        _Notice(
+          icon: Icons.swap_horiz,
+          text: l.importOtherAccountMatch(match.name),
+          color: theme.colorScheme.tertiary,
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            onPressed: _busy
+                ? null
+                : () {
+                    setState(() {
+                      _account = match;
+                      _history = [];
+                    });
+                    _loadHistory();
+                    _runPreview();
+                  },
+            child: Text(l.importSwitchAccount(match.name)),
+          ),
+        ),
+      ];
+    }
+    if (preview.otherBankAccount) {
+      return [
+        _Notice(
+          icon: Icons.warning_amber,
+          text: l.importWrongBankAccount(account.name),
+          color: theme.colorScheme.error,
+        ),
+      ];
+    }
+    return const [];
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
@@ -299,6 +356,7 @@ class _ImportScreenState extends State<ImportScreen> {
                   preview: preview,
                   currency: account.currency,
                 ),
+                ..._accountNotice(context, account, preview),
                 const SizedBox(height: 12),
                 if (preview.possibleDuplicateCount > 0) ...[
                   Text(l.importPossibleHelp, style: theme.textTheme.bodySmall),

@@ -271,6 +271,12 @@ class Protocol extends _is.DatabaseSerializationManager {
           columnDefault: '\'shared\'',
         ),
         _isp.ColumnDefinition(
+          name: 'bankAccountKey',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
           name: 'color',
           columnType: _isp.ColumnType.text,
           isNullable: true,
