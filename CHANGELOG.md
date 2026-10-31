@@ -2,6 +2,12 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.2 (31 octobre 2026)
+
+### Corrigé
+
+- Le bandeau « Annuler » qui apparaît après une action ne restait plus à l'écran indéfiniment en cachant les boutons du bas : il flotte au-dessus de la page et disparaît seul au bout de dix secondes.
+
 ## 0.3.1 (31 octobre 2026)
 
 ### Crédits
