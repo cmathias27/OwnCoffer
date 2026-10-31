@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.6 (31 octobre 2026)
+
+### Simulateur d'achat
+
+- Dans la page Prévisions, **« Simuler un achat »** : on saisit un montant, la date de l'achat et la date à laquelle on veut connaître son solde (par défaut le 25 du mois suivant), et éventuellement une catégorie.
+- Cinq cartes côte à côte : **sans l'achat** (pour comparer), **comptant**, **en 3 fois**, **en 4 fois** et **le mois suivant**. Chacune donne ses prélèvements, le solde à la date choisie, le point bas et sa date, et prévient en cas de découvert prévu ou d'objectif du mois dépassé.
+- Le calcul passe par le moteur de prévision, avec les opérations prévues et, au choix, les dépenses variables estimées. Rien n'est enregistré tant qu'on ne choisit pas.
+- **« Choisir et enregistrer »** : le choix comptant ou le mois suivant devient une opération prévue ; en 3 ou 4 fois, il devient un paiement en plusieurs fois dans la page Crédits. Les échéances sont arrondies au centime supérieur, la dernière ajuste, sans frais.
+
 ## 0.3.5 (31 octobre 2026)
 
 ### Prévisions

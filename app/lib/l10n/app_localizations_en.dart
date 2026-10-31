@@ -438,6 +438,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The minimum amount is above the maximum amount.';
 
   @override
+  String get error_invalid_amount =>
+      'Invalid amount: it must be positive and reasonable.';
+
+  @override
   String get error_import_file_too_large => 'File too large (4 MB maximum).';
 
   @override
@@ -2401,4 +2405,93 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get variableNone => 'Variable spending: none in the last months.';
+
+  @override
+  String get purchaseTitle => 'Simulate a purchase';
+
+  @override
+  String purchaseHelp(String account) {
+    return 'On the “$account” account: the balance on the chosen day, the low point and the overdraft risk, depending on how you pay. Nothing is saved until you choose.';
+  }
+
+  @override
+  String get purchaseAmount => 'Purchase amount';
+
+  @override
+  String get purchaseAmountInvalid =>
+      'A positive amount, for example 600 or 599.90';
+
+  @override
+  String get purchaseLabel => 'Label';
+
+  @override
+  String get purchaseDefaultLabel => 'Purchase';
+
+  @override
+  String purchaseDate(String date) {
+    return 'Bought on $date';
+  }
+
+  @override
+  String purchaseTarget(String date) {
+    return 'Balance on $date';
+  }
+
+  @override
+  String get purchaseCategoryHelp =>
+      'Optional: warns if the month\'s goal would be exceeded';
+
+  @override
+  String get purchaseSimulate => 'Compare';
+
+  @override
+  String get purchaseNone => 'Without buying';
+
+  @override
+  String get purchaseNoneHelp => 'For comparison';
+
+  @override
+  String get purchaseCash => 'In cash';
+
+  @override
+  String purchaseTimes(int count) {
+    return 'In $count instalments';
+  }
+
+  @override
+  String get purchaseNextMonth => 'Next month';
+
+  @override
+  String purchaseBalanceOn(String date) {
+    return 'Balance on $date';
+  }
+
+  @override
+  String purchaseLowest(String amount, String date) {
+    return 'Low point: $amount on $date';
+  }
+
+  @override
+  String purchaseGoal(String spent, String goal) {
+    return 'Category goal: $spent spent of $goal this month.';
+  }
+
+  @override
+  String purchaseGoalOver(String amount) {
+    return 'Month\'s goal exceeded by $amount';
+  }
+
+  @override
+  String get purchaseChoose => 'Choose and save';
+
+  @override
+  String get purchaseSaved => 'Purchase saved in the planned operations.';
+
+  @override
+  String get purchaseHowVariable =>
+      'Computed by the forecast engine: planned operations and estimated variable spending. In instalments: rounded up to the cent, the last one settles; no fees.';
+
+  @override
+  String get purchaseHowPlanned =>
+      'Computed by the forecast engine: planned operations only. In instalments: rounded up to the cent, the last one settles; no fees.';
 }

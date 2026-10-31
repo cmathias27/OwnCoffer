@@ -1,0 +1,15 @@
+### One way of paying, computed by the forecast engine.
+class: PurchaseScenarioInfo
+fields:
+  option: PurchaseOption
+  payments: List<PurchasePaymentInfo>
+  ### Balance at the end of the chosen day.
+  balanceOnTargetCents: int
+  lowestDate: DateTime
+  lowestBalanceCents: int
+  ### First day below the account's alert threshold, if any.
+  firstBelowThresholdDate: DateTime?
+  ### Paid this budget month, and how much the category's goal would then be
+  ### exceeded by (null: no goal, or not exceeded).
+  thisMonthCents: int
+  goalOverCents: int?

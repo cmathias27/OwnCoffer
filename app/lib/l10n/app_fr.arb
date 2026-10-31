@@ -227,6 +227,7 @@
   "error_unknown_standard_category": "Catégorie standard inconnue.",
   "error_invalid_pattern": "Le motif doit contenir entre 1 et 100 caractères (lettres ou chiffres).",
   "error_invalid_amount_range": "Le montant minimum dépasse le montant maximum.",
+  "error_invalid_amount": "Montant invalide : il doit être positif et raisonnable.",
   "error_import_file_too_large": "Fichier trop volumineux (4 Mo au maximum).",
   "error_import_nothing_readable": "Aucune opération lisible dans ce fichier.",
   "error_import_access_denied": "Cet import n'existe pas ou vous n'y avez pas accès.",
@@ -1821,5 +1822,90 @@
     }
   },
   "variableNoHistory": "Dépenses variables : pas encore assez d'historique (il faut au moins un mois complet d'opérations).",
-  "variableNone": "Dépenses variables : aucune sur les derniers mois."
+  "variableNone": "Dépenses variables : aucune sur les derniers mois.",
+  "purchaseTitle": "Simuler un achat",
+  "purchaseHelp": "Sur le compte « {account} » : le solde à la date choisie, le point bas et le risque de découvert, selon la façon de payer. Rien n'est enregistré tant que vous ne choisissez pas.",
+  "@purchaseHelp": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseAmount": "Montant de l'achat",
+  "purchaseAmountInvalid": "Montant positif, par exemple 600 ou 599,90",
+  "purchaseLabel": "Libellé",
+  "purchaseDefaultLabel": "Achat",
+  "purchaseDate": "Achat le {date}",
+  "@purchaseDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseTarget": "Solde au {date}",
+  "@purchaseTarget": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseCategoryHelp": "Facultatif : prévient si l'objectif du mois serait dépassé",
+  "purchaseSimulate": "Comparer",
+  "purchaseNone": "Sans l'achat",
+  "purchaseNoneHelp": "Pour comparer",
+  "purchaseCash": "Comptant",
+  "purchaseTimes": "En {count} fois",
+  "@purchaseTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "purchaseNextMonth": "Le mois suivant",
+  "purchaseBalanceOn": "Solde au {date}",
+  "@purchaseBalanceOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseLowest": "Point bas : {amount} le {date}",
+  "@purchaseLowest": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseGoal": "Objectif de la catégorie : {spent} dépensés sur {goal} ce mois-ci.",
+  "@purchaseGoal": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseGoalOver": "Objectif du mois dépassé de {amount}",
+  "@purchaseGoalOver": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseChoose": "Choisir et enregistrer",
+  "purchaseSaved": "Achat enregistré dans les opérations prévues.",
+  "purchaseHowVariable": "Calculé par le moteur de prévision : opérations prévues et dépenses variables estimées. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais.",
+  "purchaseHowPlanned": "Calculé par le moteur de prévision : opérations prévues seulement. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais."
 }

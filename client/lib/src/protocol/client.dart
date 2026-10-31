@@ -55,6 +55,8 @@ import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/month_review.dart' as _ilg6npsn;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
+import 'package:owncoffer_client/src/protocol/purchase_simulation.dart'
+    as _is7p90bk;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
 import 'package:owncoffer_client/src/protocol/rule_application.dart'
     as _i0d2e7ql;
@@ -1219,6 +1221,32 @@ class EndpointScheduled extends _isc.EndpointRef {
       'accountId': accountId,
       'today': today,
       'horizonDays': horizonDays,
+      'includeVariable': includeVariable,
+    },
+  );
+
+  /// Purchase simulator: the balance on [target], the low point and the
+  /// overdraft risk if [amountCents] is spent on [date] in cash, in 3 or 4
+  /// instalments, or a month later, next to not buying. [categoryId] adds
+  /// the category's monthly goal. Nothing is saved.
+  _ida.Future<_is7p90bk.PurchaseSimulation> simulatePurchase(
+    int accountId,
+    DateTime today,
+    int amountCents,
+    DateTime date,
+    DateTime target, {
+    int? categoryId,
+    bool? includeVariable,
+  }) => caller.callServerEndpoint<_is7p90bk.PurchaseSimulation>(
+    'scheduled',
+    'simulatePurchase',
+    {
+      'accountId': accountId,
+      'today': today,
+      'amountCents': amountCents,
+      'date': date,
+      'target': target,
+      'categoryId': categoryId,
       'includeVariable': includeVariable,
     },
   );

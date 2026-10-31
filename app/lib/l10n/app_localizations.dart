@@ -830,6 +830,12 @@ abstract class AppLocalizations {
   /// **'Le montant minimum dépasse le montant maximum.'**
   String get error_invalid_amount_range;
 
+  /// No description provided for @error_invalid_amount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant invalide : il doit être positif et raisonnable.'**
+  String get error_invalid_amount;
+
   /// No description provided for @error_import_file_too_large.
   ///
   /// In fr, this message translates to:
@@ -3930,6 +3936,144 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Dépenses variables : aucune sur les derniers mois.'**
   String get variableNone;
+
+  /// No description provided for @purchaseTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simuler un achat'**
+  String get purchaseTitle;
+
+  /// No description provided for @purchaseHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur le compte « {account} » : le solde à la date choisie, le point bas et le risque de découvert, selon la façon de payer. Rien n\'est enregistré tant que vous ne choisissez pas.'**
+  String purchaseHelp(String account);
+
+  /// No description provided for @purchaseAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant de l\'achat'**
+  String get purchaseAmount;
+
+  /// No description provided for @purchaseAmountInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant positif, par exemple 600 ou 599,90'**
+  String get purchaseAmountInvalid;
+
+  /// No description provided for @purchaseLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libellé'**
+  String get purchaseLabel;
+
+  /// No description provided for @purchaseDefaultLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achat'**
+  String get purchaseDefaultLabel;
+
+  /// No description provided for @purchaseDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achat le {date}'**
+  String purchaseDate(String date);
+
+  /// No description provided for @purchaseTarget.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde au {date}'**
+  String purchaseTarget(String date);
+
+  /// No description provided for @purchaseCategoryHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultatif : prévient si l\'objectif du mois serait dépassé'**
+  String get purchaseCategoryHelp;
+
+  /// No description provided for @purchaseSimulate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comparer'**
+  String get purchaseSimulate;
+
+  /// No description provided for @purchaseNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans l\'achat'**
+  String get purchaseNone;
+
+  /// No description provided for @purchaseNoneHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour comparer'**
+  String get purchaseNoneHelp;
+
+  /// No description provided for @purchaseCash.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptant'**
+  String get purchaseCash;
+
+  /// No description provided for @purchaseTimes.
+  ///
+  /// In fr, this message translates to:
+  /// **'En {count} fois'**
+  String purchaseTimes(int count);
+
+  /// No description provided for @purchaseNextMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mois suivant'**
+  String get purchaseNextMonth;
+
+  /// No description provided for @purchaseBalanceOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde au {date}'**
+  String purchaseBalanceOn(String date);
+
+  /// No description provided for @purchaseLowest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point bas : {amount} le {date}'**
+  String purchaseLowest(String amount, String date);
+
+  /// No description provided for @purchaseGoal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif de la catégorie : {spent} dépensés sur {goal} ce mois-ci.'**
+  String purchaseGoal(String spent, String goal);
+
+  /// No description provided for @purchaseGoalOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif du mois dépassé de {amount}'**
+  String purchaseGoalOver(String amount);
+
+  /// No description provided for @purchaseChoose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir et enregistrer'**
+  String get purchaseChoose;
+
+  /// No description provided for @purchaseSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Achat enregistré dans les opérations prévues.'**
+  String get purchaseSaved;
+
+  /// No description provided for @purchaseHowVariable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculé par le moteur de prévision : opérations prévues et dépenses variables estimées. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais.'**
+  String get purchaseHowVariable;
+
+  /// No description provided for @purchaseHowPlanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculé par le moteur de prévision : opérations prévues seulement. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais.'**
+  String get purchaseHowPlanned;
 }
 
 class _AppLocalizationsDelegate

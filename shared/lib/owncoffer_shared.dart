@@ -20,6 +20,7 @@ export 'src/classification/classifier.dart';
 export 'src/data/community_rules.dart';
 export 'src/data/standard_categories.dart';
 export 'src/forecast/forecast.dart';
+export 'src/forecast/purchase.dart';
 export 'src/forecast/recurrence.dart';
 export 'src/import/csv_parser.dart';
 export 'src/import/decoding.dart';

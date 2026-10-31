@@ -443,6 +443,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le montant minimum dépasse le montant maximum.';
 
   @override
+  String get error_invalid_amount =>
+      'Montant invalide : il doit être positif et raisonnable.';
+
+  @override
   String get error_import_file_too_large =>
       'Fichier trop volumineux (4 Mo au maximum).';
 
@@ -2414,4 +2418,93 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get variableNone =>
       'Dépenses variables : aucune sur les derniers mois.';
+
+  @override
+  String get purchaseTitle => 'Simuler un achat';
+
+  @override
+  String purchaseHelp(String account) {
+    return 'Sur le compte « $account » : le solde à la date choisie, le point bas et le risque de découvert, selon la façon de payer. Rien n\'est enregistré tant que vous ne choisissez pas.';
+  }
+
+  @override
+  String get purchaseAmount => 'Montant de l\'achat';
+
+  @override
+  String get purchaseAmountInvalid =>
+      'Montant positif, par exemple 600 ou 599,90';
+
+  @override
+  String get purchaseLabel => 'Libellé';
+
+  @override
+  String get purchaseDefaultLabel => 'Achat';
+
+  @override
+  String purchaseDate(String date) {
+    return 'Achat le $date';
+  }
+
+  @override
+  String purchaseTarget(String date) {
+    return 'Solde au $date';
+  }
+
+  @override
+  String get purchaseCategoryHelp =>
+      'Facultatif : prévient si l\'objectif du mois serait dépassé';
+
+  @override
+  String get purchaseSimulate => 'Comparer';
+
+  @override
+  String get purchaseNone => 'Sans l\'achat';
+
+  @override
+  String get purchaseNoneHelp => 'Pour comparer';
+
+  @override
+  String get purchaseCash => 'Comptant';
+
+  @override
+  String purchaseTimes(int count) {
+    return 'En $count fois';
+  }
+
+  @override
+  String get purchaseNextMonth => 'Le mois suivant';
+
+  @override
+  String purchaseBalanceOn(String date) {
+    return 'Solde au $date';
+  }
+
+  @override
+  String purchaseLowest(String amount, String date) {
+    return 'Point bas : $amount le $date';
+  }
+
+  @override
+  String purchaseGoal(String spent, String goal) {
+    return 'Objectif de la catégorie : $spent dépensés sur $goal ce mois-ci.';
+  }
+
+  @override
+  String purchaseGoalOver(String amount) {
+    return 'Objectif du mois dépassé de $amount';
+  }
+
+  @override
+  String get purchaseChoose => 'Choisir et enregistrer';
+
+  @override
+  String get purchaseSaved => 'Achat enregistré dans les opérations prévues.';
+
+  @override
+  String get purchaseHowVariable =>
+      'Calculé par le moteur de prévision : opérations prévues et dépenses variables estimées. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais.';
+
+  @override
+  String get purchaseHowPlanned =>
+      'Calculé par le moteur de prévision : opérations prévues seulement. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais.';
 }

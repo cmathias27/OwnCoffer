@@ -415,6 +415,126 @@ class ScheduledEndpoint extends Endpoint {
     );
   }
 
+  /// Purchase simulator: the balance on [target], the low point and the
+  /// overdraft risk if [amountCents] is spent on [date] in cash, in 3 or 4
+  /// instalments, or a month later, next to not buying. [categoryId] adds
+  /// the category's monthly goal. Nothing is saved.
+  Future<PurchaseSimulation> simulatePurchase(
+    Session session,
+    int accountId,
+    DateTime today,
+    int amountCents,
+    DateTime date,
+    DateTime target, {
+    int? categoryId,
+    bool? includeVariable,
+  }) async {
+    final account = await Access.requireAccount(session, accountId);
+    final t = today.toUtc();
+    final day = core.LocalDate(t.year, t.month, t.day);
+    final server = core.LocalDate.fromDateTime(DateTime.now().toUtc());
+    if (day.daysUntil(server).abs() > 1) {
+      throw InvalidInputException(code: 'invalid_date', field: 'today');
+    }
+    if (amountCents <= 0 || amountCents > core.maxLoanPrincipalCents) {
+      throw InvalidInputException(code: 'invalid_amount', field: 'amount');
+    }
+    final on = date.toLocalDate(), until = target.toLocalDate();
+    for (final (d, field) in [(on, 'date'), (until, 'target')]) {
+      if (d < day || day.daysUntil(d) > 366) {
+        throw InvalidInputException(code: 'invalid_date', field: field);
+      }
+    }
+    if (categoryId != null) {
+      await _ownCategory(session, account.groupId, categoryId);
+    }
+    final variable = includeVariable ?? true;
+    final scenarios = await ForecastService.simulatePurchase(
+      session,
+      account,
+      day,
+      amountCents: amountCents,
+      date: on,
+      target: until,
+      variable: variable,
+    );
+
+    // The category's goal, on the accounts the user may see.
+    final month = await SpendingService.period(
+      session,
+      account.groupId,
+      core.PeriodKind.month,
+      day,
+    );
+    final goal = categoryId == null
+        ? null
+        : await Goal.db.findFirstRow(
+            session,
+            where: (g) =>
+                g.groupId.equals(account.groupId) &
+                g.categoryId.equals(categoryId),
+          );
+    int? spent;
+    if (goal != null) {
+      final ids = await SpendingService.accounts(
+        session,
+        account.groupId,
+        null,
+      );
+      spent =
+          core
+              .summarizeSpending(
+                await SpendingService.categories(session, account.groupId),
+                await SpendingService.operations(
+                  session,
+                  ids,
+                  month.start,
+                  month.end,
+                ),
+              )
+              .totals[categoryId] ??
+          0;
+    }
+    return PurchaseSimulation(
+      accountId: accountId,
+      amountCents: amountCents,
+      date: on.toDb(),
+      target: until.toDb(),
+      until: core.purchaseHorizon(amountCents, on, until).toDb(),
+      alertThresholdCents: account.alertThresholdCents,
+      variableIncluded: variable,
+      goalCents: goal?.amountCents,
+      goalSpentCents: spent,
+      scenarios: [
+        for (final s in scenarios)
+          () {
+            final thisMonth = s.payments
+                .where((p) => month.contains(p.date))
+                .fold(0, (a, p) => a + p.amountCents);
+            final over = goal == null
+                ? 0
+                : spent! + thisMonth - goal.amountCents;
+            return PurchaseScenarioInfo(
+              option: PurchaseOption.values.byName(s.option.name),
+              payments: [
+                for (final p in s.payments)
+                  PurchasePaymentInfo(
+                    date: p.date.toDb(),
+                    amountCents: p.amountCents,
+                  ),
+              ],
+              balanceOnTargetCents: s.balanceOnTargetCents,
+              lowestDate: s.lowest.date.toDb(),
+              lowestBalanceCents: s.lowest.balanceCents,
+              firstBelowThresholdDate: s.firstBelowThreshold?.toDb(),
+              thisMonthCents: thisMonth,
+              goalOverCents: thisMonth > 0 && over > 0 ? over : null,
+            );
+          }(),
+      ],
+    );
+  }
+
   /// Confirms a reconciliation proposal.
   Future<void> confirmMatch(
     Session session,

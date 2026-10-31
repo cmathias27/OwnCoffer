@@ -90,6 +90,7 @@ scheduled:
   - calendar:
   - skipNext:
   - forecast:
+  - simulatePurchase:
   - confirmMatch:
 setup:
   - status:
