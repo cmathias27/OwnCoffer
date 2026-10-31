@@ -1895,4 +1895,17 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_loan_needs_debit =>
       'Un crédit se déclare depuis un prélèvement.';
+
+  @override
+  String get sameProvider => 'Autres paiements de ce prestataire';
+
+  @override
+  String sameProviderFilter(String label) {
+    return 'Prestataire : $label';
+  }
+
+  @override
+  String sameProviderSummary(int count, String total, String average) {
+    return '$count opérations · total $total · moyenne $average';
+  }
 }

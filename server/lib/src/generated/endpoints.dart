@@ -2085,6 +2085,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<String?>(),
               nullable: true,
             ),
+            'sameLabel': _is.ParameterDescription(
+              name: 'sameLabel',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
             'categoryId': _is.ParameterDescription(
               name: 'categoryId',
               type: _is.getType<int?>(),
@@ -2128,6 +2133,7 @@ class Endpoints extends _is.EndpointDispatch {
                         from: params['from'],
                         to: params['to'],
                         search: params['search'],
+                        sameLabel: params['sameLabel'],
                         categoryId: params['categoryId'],
                         includeSubcategories: params['includeSubcategories'],
                         toClassify: params['toClassify'],

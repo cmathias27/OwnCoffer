@@ -1242,5 +1242,28 @@
       }
     }
   },
-  "error_loan_needs_debit": "Un crédit se déclare depuis un prélèvement."
+  "error_loan_needs_debit": "Un crédit se déclare depuis un prélèvement.",
+  "sameProvider": "Autres paiements de ce prestataire",
+  "sameProviderFilter": "Prestataire : {label}",
+  "@sameProviderFilter": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "sameProviderSummary": "{count} opérations · total {total} · moyenne {average}",
+  "@sameProviderSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  }
 }

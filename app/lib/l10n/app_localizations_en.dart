@@ -1884,4 +1884,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_loan_needs_debit => 'A loan is declared from a debit.';
+
+  @override
+  String get sameProvider => 'Other payments to this provider';
+
+  @override
+  String sameProviderFilter(String label) {
+    return 'Provider: $label';
+  }
+
+  @override
+  String sameProviderSummary(int count, String total, String average) {
+    return '$count operations · total $total · average $average';
+  }
 }

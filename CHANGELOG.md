@@ -12,6 +12,10 @@ Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). 
 - Les **échéances passées** retrouvées sur le compte sont rattachées au crédit, et les prochaines le seront à l'import. Une opération prévue créée auparavant pour ces prélèvements est remplacée par celle du crédit.
 - Changer la catégorie du crédit change celle de sa règle. Supprimer le crédit supprime sa règle, et les opérations gardent leur catégorie.
 
+### Opérations
+
+- Dans la fiche d'une opération : **« Autres paiements de ce prestataire »** liste les opérations du compte qui ont le même libellé nettoyé, avec leur nombre, leur total et leur moyenne. Le filtre se retire d'un clic.
+
 ## 0.2.0 (31 octobre 2026)
 
 Ajouts demandés pendant le mois d'essai de l'alpha.

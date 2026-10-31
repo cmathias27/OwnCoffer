@@ -3132,6 +3132,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Un crédit se déclare depuis un prélèvement.'**
   String get error_loan_needs_debit;
+
+  /// No description provided for @sameProvider.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autres paiements de ce prestataire'**
+  String get sameProvider;
+
+  /// No description provided for @sameProviderFilter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prestataire : {label}'**
+  String sameProviderFilter(String label);
+
+  /// No description provided for @sameProviderSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} opérations · total {total} · moyenne {average}'**
+  String sameProviderSummary(int count, String total, String average);
 }
 
 class _AppLocalizationsDelegate

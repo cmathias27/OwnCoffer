@@ -504,5 +504,8 @@
   "loanFirstDueFromOperationHelp": "Date of the very first instalment. If you do not know it, keep this debit's date and enter the remaining duration: the computed capital is then the capital still owed.",
   "loanCategoryDefaultHelp": "Without a choice, the category of the loan type is used (e.g. Mortgage).",
   "loanFromOperationDone": "Loan created: {linked} instalments linked, {others} other operations classified.",
-  "error_loan_needs_debit": "A loan is declared from a debit."
+  "error_loan_needs_debit": "A loan is declared from a debit.",
+  "sameProvider": "Other payments to this provider",
+  "sameProviderFilter": "Provider: {label}",
+  "sameProviderSummary": "{count} operations · total {total} · average {average}"
 }

@@ -36,6 +36,10 @@ class _OperationsScreenState extends State<OperationsScreen> {
   var _toClassify = false;
   var _uncleared = false;
   int? _categoryFilter;
+
+  /// Cleaned label of the provider whose operations are listed.
+  String? _provider;
+  int? _providerSum;
   final List<BankTransaction> _items = [];
   var _total = 0;
   var _loading = false;
@@ -77,6 +81,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
       final page = await client.transaction.list(
         account.id!,
         search: _search.text,
+        sameLabel: _provider,
         toClassify: _toClassify,
         uncleared: _uncleared,
         categoryId: _toClassify ? null : _categoryFilter,
@@ -88,6 +93,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
       setState(() {
         _items.addAll(page.items);
         _total = page.total;
+        _providerSum = page.amountSumCents;
       });
     } on Object catch (e) {
       if (mounted) {
@@ -126,6 +132,11 @@ class _OperationsScreenState extends State<OperationsScreen> {
           currency: _account!.currency,
           canWrite: _canWrite,
           onChanged: _replace,
+          onSameProvider: () {
+            Navigator.of(context).pop();
+            setState(() => _provider = t.cleanLabel);
+            _reload();
+          },
           scrollController: scroll,
         ),
       ),
@@ -237,6 +248,17 @@ class _OperationsScreenState extends State<OperationsScreen> {
                           _reload();
                         },
                 ),
+                if (_provider != null)
+                  InputChip(
+                    avatar: const Icon(Icons.storefront_outlined, size: 18),
+                    label: Text(l.sameProviderFilter(_provider!)),
+                    selected: true,
+                    showCheckmark: false,
+                    onDeleted: () {
+                      setState(() => _provider = null);
+                      _reload();
+                    },
+                  ),
                 FilterChip(
                   label: Text(l.filterUncleared),
                   selected: _uncleared,
@@ -246,7 +268,19 @@ class _OperationsScreenState extends State<OperationsScreen> {
                   },
                 ),
                 Text(
-                  l.operationsCount(_total),
+                  _provider != null && _providerSum != null && _total > 0
+                      ? l.sameProviderSummary(
+                          _total,
+                          context.money(
+                            _providerSum!,
+                            currency: account?.currency ?? 'EUR',
+                          ),
+                          context.money(
+                            (_providerSum! / _total).round(),
+                            currency: account?.currency ?? 'EUR',
+                          ),
+                        )
+                      : l.operationsCount(_total),
                   style: theme.textTheme.bodySmall,
                 ),
               ],
@@ -345,6 +379,9 @@ class _OperationSheet extends StatefulWidget {
   final String currency;
   final bool canWrite;
   final void Function(BankTransaction) onChanged;
+
+  /// Lists the operations with the same cleaned label (closes the sheet).
+  final VoidCallback onSameProvider;
   final ScrollController scrollController;
 
   const _OperationSheet({
@@ -355,6 +392,7 @@ class _OperationSheet extends StatefulWidget {
     required this.currency,
     required this.canWrite,
     required this.onChanged,
+    required this.onSameProvider,
     required this.scrollController,
   });
 
@@ -406,6 +444,14 @@ class _OperationSheetState extends State<_OperationSheet> {
         Text(
           l.bankLabelValue(t.rawLabel),
           style: theme.textTheme.bodySmall,
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton.icon(
+            icon: const Icon(Icons.storefront_outlined),
+            label: Text(l.sameProvider),
+            onPressed: widget.onSameProvider,
+          ),
         ),
         Align(
           alignment: Alignment.centerLeft,

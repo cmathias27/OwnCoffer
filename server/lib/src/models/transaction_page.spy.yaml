@@ -3,3 +3,6 @@ class: TransactionPage
 fields:
   items: List<BankTransaction>
   total: int
+  ### Sum of the matching operations, given with a provider filter
+  ### (`sameLabel`) only.
+  amountSumCents: int?
