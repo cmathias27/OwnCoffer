@@ -111,4 +111,34 @@ void main() {
     expect(refreshed, 1);
     expect(find.text('Action annulée.'), findsOneWidget);
   });
+
+  testWidgets('undo bar: goes away by itself after about ten seconds', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        Scaffold(
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => showUndo(
+                ScaffoldMessenger.of(context),
+                AppLocalizations.of(context),
+                'Catégorie modifiée.',
+                () async {},
+              ),
+              child: const Text('go'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('go'));
+    await tester.pumpAndSettle();
+    expect(find.text('Catégorie modifiée.'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 9));
+    expect(find.text('Catégorie modifiée.'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(find.text('Catégorie modifiée.'), findsNothing);
+  });
 }
