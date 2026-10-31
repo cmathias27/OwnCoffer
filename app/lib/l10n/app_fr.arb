@@ -152,7 +152,7 @@
   "totpIntro": "Saisissez le code à 6 chiffres de votre application d'authentification, ou un code de secours.",
   "totpCodeLabel": "Code",
   "verify": "Valider",
-  "homeNoGroup": "Vous ne faites encore partie d'aucun groupe. Demandez une invitation à un administrateur.",
+  "homeNoGroup": "Vous ne faites encore partie d'aucun groupe. Si vous administrez ce serveur, créez votre foyer ci-dessous ; sinon, demandez une invitation à son administrateur.",
   "groupLabel": "Groupe",
   "menuSecurity": "Sécurité",
   "menuMembers": "Membres",
@@ -881,5 +881,6 @@
         "type": "String"
       }
     }
-  }
+  },
+  "groupCreateTitle": "Créer votre foyer"
 }
