@@ -33,6 +33,13 @@ if [[ $latest == "$current" || $newest == "$current" ]]; then
 fi
 version=${latest#v}
 
+# A version that failed once is not retried (it would stop the service at
+# every run); the next published version will be tried.
+failed_file=docker/backups/failed-version
+if [[ -f $failed_file && $(cat "$failed_file") == "$latest" ]]; then
+  exit 0
+fi
+
 image=$(sed -n 's/^OWNCOFFER_IMAGE=//p' docker/.env)
 image=${image:-ghcr.io/cmathias27/owncoffer}
 
@@ -74,6 +81,7 @@ if healthy; then
 fi
 
 log "$latest does not answer: back to $current and to the backup"
+echo "$latest" > "$failed_file"
 compose logs --tail 80 owncoffer >&2 || true
 git -c advice.detachedHead=false checkout --quiet "$current"
 set_tag "${current#v}"
