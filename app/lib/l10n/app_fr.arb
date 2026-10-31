@@ -1005,6 +1005,25 @@
       }
     }
   },
+  "goalProjection": "À ce rythme : {amount} en fin de mois",
+  "@goalProjection": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "goalProjectionOver": "À ce rythme : {amount} de trop, dépassement vers le {date}",
+  "@goalProjectionOver": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "monthStartTitle": "Début du mois",
   "monthStartHelp": "Le jour où commence votre mois de budget, par exemple le jour de la paie. Le budget, le classement des dépenses et les objectifs l'utilisent pour tout le foyer.",
   "monthStartLabel": "Le mois commence",
@@ -1524,6 +1543,31 @@
         "type": "String"
       },
       "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "notifGoalForecastTitle": "Objectif « {category} » : dépassement prévu vers le {date}",
+  "@notifGoalForecastTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "notifGoalForecastBody": "{spent} dépensés pour un objectif de {goal} ; à ce rythme, {projected} en fin de mois.",
+  "@notifGoalForecastBody": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      },
+      "projected": {
         "type": "String"
       }
     }

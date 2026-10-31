@@ -4,6 +4,7 @@ import 'package:serverpod/serverpod.dart';
 import '../core/dates.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
+import 'forecast_service.dart';
 
 /// Data of the spending engine, read on the accounts the user may see.
 abstract final class SpendingService {
@@ -64,6 +65,7 @@ abstract final class SpendingService {
               t.date.toLocalDate(),
               p.amountCents,
               categoryId: p.categoryId,
+              planned: t.scheduledId != null,
             )
         else
           core.SpendingOperation(
@@ -71,6 +73,7 @@ abstract final class SpendingService {
             t.amountCents,
             categoryId: t.categoryId,
             internalTransfer: t.transferPairId != null,
+            planned: t.scheduledId != null,
           ),
     ];
   }
@@ -120,6 +123,78 @@ abstract final class SpendingService {
       date,
       monthStartDay: (group?.monthStartDay ?? 1).clamp(1, 28),
     );
+  }
+
+  /// Projection of each goal of the group to the end of [month], on the
+  /// operations [ops] of [accountIds] (the month's, already read): spending,
+  /// planned operations of the category still expected, and the pace of the
+  /// rest (cahier des charges : « à ce rythme, dépassement de 45 € vers le
+  /// 26 »).
+  static Future<Map<int, core.GoalProjection>> projections(
+    Session session,
+    List<Goal> goals,
+    List<core.SpendingCategory> categories,
+    Set<int> accountIds,
+    List<core.SpendingOperation> ops,
+    core.Period month,
+    core.LocalDate today,
+  ) async {
+    if (goals.isEmpty || !month.contains(today)) return const {};
+    final inMonth = [
+      for (final o in ops)
+        if (month.contains(o.date)) o,
+    ];
+    final all = core.summarizeSpending(categories, inMonth);
+    final variable = core.summarizeSpending(categories, [
+      for (final o in inMonth)
+        if (!o.planned) o,
+    ]);
+    final scheduled = accountIds.isEmpty
+        ? const <ScheduledTransaction>[]
+        : await ScheduledTransaction.db.find(
+            session,
+            where: (s) =>
+                s.accountId.inSet(accountIds) &
+                s.deletedAt.equals(null) &
+                s.categoryId.notEquals(null) &
+                (s.amountCents < 0),
+          );
+    final parents = {for (final c in categories) c.id: c.parentId};
+    bool under(int? id, int goalCategory) {
+      final seen = <int>{};
+      while (id != null && seen.add(id)) {
+        if (id == goalCategory) return true;
+        id = parents[id];
+      }
+      return false;
+    }
+
+    Map<core.LocalDate, int> planned(int goalCategory) {
+      final byDay = <core.LocalDate, int>{};
+      for (final s in scheduled) {
+        if (!under(s.categoryId, goalCategory)) continue;
+        for (final due in ForecastService.operationOf(
+          s,
+        ).pendingUntil(month.last)) {
+          if (due < month.start) continue;
+          byDay[due] = (byDay[due] ?? 0) - s.amountCents;
+        }
+      }
+      return byDay;
+    }
+
+    return {
+      for (final g in goals)
+        g.categoryId: core.projectGoal(
+          spentCents: all.totals[g.categoryId] ?? 0,
+          variableSpentCents: variable.totals[g.categoryId] ?? 0,
+          goalCents: g.amountCents,
+          start: month.start,
+          end: month.end,
+          today: today,
+          plannedCents: planned(g.categoryId),
+        ),
+    };
   }
 
   /// Average monthly income of the three last complete months.

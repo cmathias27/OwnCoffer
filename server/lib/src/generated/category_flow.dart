@@ -23,6 +23,8 @@ abstract class CategoryFlow
     required this.previousCents,
     required this.averageCents,
     this.goalCents,
+    this.projectedCents,
+    this.projectedOverDate,
   });
 
   factory CategoryFlow({
@@ -32,6 +34,8 @@ abstract class CategoryFlow
     required int previousCents,
     required int averageCents,
     int? goalCents,
+    int? projectedCents,
+    DateTime? projectedOverDate,
   }) = _CategoryFlowImpl;
 
   factory CategoryFlow.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -42,6 +46,12 @@ abstract class CategoryFlow
       previousCents: jsonSerialization['previousCents'] as int,
       averageCents: jsonSerialization['averageCents'] as int,
       goalCents: jsonSerialization['goalCents'] as int?,
+      projectedCents: jsonSerialization['projectedCents'] as int?,
+      projectedOverDate: jsonSerialization['projectedOverDate'] == null
+          ? null
+          : _is.DateTimeJsonExtension.fromJson(
+              jsonSerialization['projectedOverDate'],
+            ),
     );
   }
 
@@ -60,6 +70,13 @@ abstract class CategoryFlow
   /// Monthly goal (month view only).
   int? goalCents;
 
+  /// Spending expected at the end of the current month, goal categories
+  /// only (planned operations and the current pace).
+  int? projectedCents;
+
+  /// First day the goal should be exceeded at this pace, if it should.
+  DateTime? projectedOverDate;
+
   /// Returns a shallow copy of this [CategoryFlow]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -70,6 +87,8 @@ abstract class CategoryFlow
     int? previousCents,
     int? averageCents,
     int? goalCents,
+    int? projectedCents,
+    DateTime? projectedOverDate,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -81,6 +100,9 @@ abstract class CategoryFlow
       'previousCents': previousCents,
       'averageCents': averageCents,
       if (goalCents != null) 'goalCents': goalCents,
+      if (projectedCents != null) 'projectedCents': projectedCents,
+      if (projectedOverDate != null)
+        'projectedOverDate': projectedOverDate?.toJson(),
     };
   }
 
@@ -94,6 +116,9 @@ abstract class CategoryFlow
       'previousCents': previousCents,
       'averageCents': averageCents,
       if (goalCents != null) 'goalCents': goalCents,
+      if (projectedCents != null) 'projectedCents': projectedCents,
+      if (projectedOverDate != null)
+        'projectedOverDate': projectedOverDate?.toJson(),
     };
   }
 
@@ -113,6 +138,8 @@ class _CategoryFlowImpl extends CategoryFlow {
     required int previousCents,
     required int averageCents,
     int? goalCents,
+    int? projectedCents,
+    DateTime? projectedOverDate,
   }) : super._(
          categoryId: categoryId,
          amountCents: amountCents,
@@ -120,6 +147,8 @@ class _CategoryFlowImpl extends CategoryFlow {
          previousCents: previousCents,
          averageCents: averageCents,
          goalCents: goalCents,
+         projectedCents: projectedCents,
+         projectedOverDate: projectedOverDate,
        );
 
   /// Returns a shallow copy of this [CategoryFlow]
@@ -133,6 +162,8 @@ class _CategoryFlowImpl extends CategoryFlow {
     int? previousCents,
     int? averageCents,
     Object? goalCents = _Undefined,
+    Object? projectedCents = _Undefined,
+    Object? projectedOverDate = _Undefined,
   }) {
     return CategoryFlow(
       categoryId: categoryId ?? this.categoryId,
@@ -141,6 +172,12 @@ class _CategoryFlowImpl extends CategoryFlow {
       previousCents: previousCents ?? this.previousCents,
       averageCents: averageCents ?? this.averageCents,
       goalCents: goalCents is int? ? goalCents : this.goalCents,
+      projectedCents: projectedCents is int?
+          ? projectedCents
+          : this.projectedCents,
+      projectedOverDate: projectedOverDate is DateTime?
+          ? projectedOverDate
+          : this.projectedOverDate,
     );
   }
 }

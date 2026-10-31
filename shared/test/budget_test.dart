@@ -148,6 +148,95 @@ void main() {
       expect(suggestedGoal([]), isNull);
       expect(suggestedGoal([0, 0]), isNull);
     });
+
+    group('projection', () {
+      final start = LocalDate(2026, 10, 1), end = LocalDate(2026, 11, 1);
+
+      test('at this pace: 200 € in 10 days → 620 € by the 31st', () {
+        final p = projectGoal(
+          spentCents: 20000,
+          variableSpentCents: 20000,
+          goalCents: 50000,
+          start: start,
+          end: end,
+          today: LocalDate(2026, 10, 10),
+        );
+        expect(p.fromPace, isTrue);
+        expect(p.projectedCents, 20000 + 20000 * 21 ~/ 10);
+        // 200 + 20 × k > 500 from k = 16, the 26th.
+        expect(p.overDate, LocalDate(2026, 10, 26));
+        expect(p.overByCents(50000), 12000);
+      });
+
+      test('planned operations count on their day, late ones today', () {
+        final p = projectGoal(
+          spentCents: 1000,
+          variableSpentCents: 0,
+          goalCents: 5000,
+          start: start,
+          end: end,
+          today: LocalDate(2026, 10, 15),
+          plannedCents: {
+            LocalDate(2026, 10, 12): 1500,
+            LocalDate(2026, 10, 20): 3000,
+          },
+        );
+        expect(p.projectedCents, 5500);
+        expect(p.overDate, LocalDate(2026, 10, 20));
+      });
+
+      test('no pace in the first days: one purchase is not multiplied', () {
+        final p = projectGoal(
+          spentCents: 30000,
+          variableSpentCents: 30000,
+          goalCents: 50000,
+          start: start,
+          end: end,
+          today: LocalDate(2026, 10, 3),
+        );
+        expect(p.fromPace, isFalse);
+        expect(p.projectedCents, 30000);
+        expect(p.overDate, isNull);
+      });
+
+      test('already over: no date; within the goal: none either', () {
+        expect(
+          projectGoal(
+            spentCents: 60000,
+            variableSpentCents: 60000,
+            goalCents: 50000,
+            start: start,
+            end: end,
+            today: LocalDate(2026, 10, 20),
+          ).overDate,
+          isNull,
+        );
+        final ok = projectGoal(
+          spentCents: 10000,
+          variableSpentCents: 10000,
+          goalCents: 50000,
+          start: start,
+          end: end,
+          today: LocalDate(2026, 10, 20),
+        );
+        expect(ok.overDate, isNull);
+        expect(ok.projectedCents, 10000 + 10000 * 11 ~/ 20);
+      });
+
+      test('last day: what is spent, plus what is planned today', () {
+        final p = projectGoal(
+          spentCents: 4000,
+          variableSpentCents: 4000,
+          goalCents: 5000,
+          start: start,
+          end: end,
+          today: LocalDate(2026, 10, 31),
+          plannedCents: {LocalDate(2026, 10, 31): 2000},
+        );
+        expect(p.projectedCents, 6000);
+        expect(p.overDate, LocalDate(2026, 10, 31));
+      });
+    });
   });
 
   group('subscriptions', () {

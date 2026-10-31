@@ -644,6 +644,8 @@ class BudgetScreenState extends State<BudgetScreen> {
                             spentCents: g.amountCents,
                             goalCents: g.goalCents!,
                             elapsed: elapsed < 1 ? elapsed : null,
+                            projectedCents: g.projectedCents,
+                            projectedOverDate: g.projectedOverDate,
                           ),
                         ],
                       ),
@@ -1267,11 +1269,19 @@ class GoalMeter extends StatelessWidget {
 
   /// Share of the month passed: a mark where spending should be today.
   final double? elapsed;
+
+  /// Spending expected at the end of the month, and the day the goal should
+  /// be exceeded (current month only).
+  final int? projectedCents;
+  final DateTime? projectedOverDate;
+
   const GoalMeter({
     super.key,
     required this.spentCents,
     required this.goalCents,
     this.elapsed,
+    this.projectedCents,
+    this.projectedOverDate,
   });
 
   @override
@@ -1290,6 +1300,8 @@ class GoalMeter extends StatelessWidget {
     };
     final pct = (spentCents * 100 / goalCents).round();
     final left = goalCents - spentCents;
+    final projected = projectedCents;
+    final overDate = projectedOverDate;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -1313,6 +1325,35 @@ class GoalMeter extends StatelessWidget {
             ),
           ],
         ),
+        if (projected != null && level != core.GoalLevel.over)
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Row(
+              children: [
+                Icon(
+                  overDate == null ? Icons.trending_flat : Icons.trending_up,
+                  size: 16,
+                  color: overDate == null
+                      ? theme.colorScheme.onSurfaceVariant
+                      : ChartColors.critical,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    overDate == null
+                        ? l.goalProjection(context.money(projected))
+                        : l.goalProjectionOver(
+                            context.money(projected - goalCents),
+                            context.day(overDate),
+                          ),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: overDate == null ? null : ChartColors.critical,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
       ],
     );
   }
