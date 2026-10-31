@@ -13,9 +13,11 @@ cd "$(dirname "$0")/.."
 log() { echo "[owncoffer-update] $*"; }
 compose() { docker compose -f docker/compose.yaml "$@"; }
 
-current=$(git describe --tags --exact-match 2>/dev/null || true)
+# The installed version is the image tag in docker/.env (this script keeps
+# it in step with the files); "edge" or a custom tag is never touched.
+current="v$(sed -n 's/^OWNCOFFER_TAG=//p' docker/.env)"
 if [[ ! $current =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  log "not on a version tag ($(git rev-parse --short HEAD)): nothing done"
+  log "OWNCOFFER_TAG is not a version (${current#v}): nothing done"
   exit 1
 fi
 if ! git diff --quiet || ! git diff --cached --quiet; then
