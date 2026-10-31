@@ -30,6 +30,7 @@ import 'package:owncoffer_client/src/protocol/group_membership.dart'
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/invoice_info.dart' as _iej1c1us;
+import 'package:owncoffer_client/src/protocol/invoice_match.dart' as _ikyjg3a9;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/loan_document.dart' as _ixzu9i3x;
 import 'package:owncoffer_client/src/protocol/loan_installment.dart'
@@ -90,6 +91,7 @@ import 'invitation_info.dart' as _i9hwipt6;
 import 'invoice.dart' as _ifja8moh;
 import 'invoice_blob.dart' as _i0mnzbub;
 import 'invoice_info.dart' as _im7mm4oj;
+import 'invoice_match.dart' as _ixgqo4yu;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'left_to_live_report.dart' as _ibb3lpoc;
 import 'loan.dart' as _i7jednjp;
@@ -174,6 +176,7 @@ export 'invitation_info.dart';
 export 'invoice.dart';
 export 'invoice_blob.dart';
 export 'invoice_info.dart';
+export 'invoice_match.dart';
 export 'ip_ban_info.dart';
 export 'left_to_live_report.dart';
 export 'loan.dart';
@@ -377,6 +380,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _im7mm4oj.InvoiceInfo) {
       return _im7mm4oj.InvoiceInfo.fromJson(data) as T;
+    }
+    if (t == _ixgqo4yu.InvoiceMatch) {
+      return _ixgqo4yu.InvoiceMatch.fromJson(data) as T;
     }
     if (t == _ijfl1fdm.IpBanInfo) {
       return _ijfl1fdm.IpBanInfo.fromJson(data) as T;
@@ -657,6 +663,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_im7mm4oj.InvoiceInfo?>()) {
       return (data != null ? _im7mm4oj.InvoiceInfo.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ixgqo4yu.InvoiceMatch?>()) {
+      return (data != null ? _ixgqo4yu.InvoiceMatch.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_ijfl1fdm.IpBanInfo?>()) {
       return (data != null ? _ijfl1fdm.IpBanInfo.fromJson(data) : null) as T;
@@ -1061,6 +1070,12 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ikyjg3a9.InvoiceMatch>) {
+      return (data as List)
+              .map((e) => deserialize<_ikyjg3a9.InvoiceMatch>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_i18weoko.LoanInstallment>) {
       return (data as List)
               .map((e) => deserialize<_i18weoko.LoanInstallment>(e))
@@ -1151,6 +1166,7 @@ class Protocol extends _isc.SerializationManager {
       _ifja8moh.Invoice => 'Invoice',
       _i0mnzbub.InvoiceBlob => 'InvoiceBlob',
       _im7mm4oj.InvoiceInfo => 'InvoiceInfo',
+      _ixgqo4yu.InvoiceMatch => 'InvoiceMatch',
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _ibb3lpoc.LeftToLiveReport => 'LeftToLiveReport',
       _i7jednjp.Loan => 'Loan',
@@ -1291,6 +1307,8 @@ class Protocol extends _isc.SerializationManager {
         return 'InvoiceBlob';
       case _im7mm4oj.InvoiceInfo():
         return 'InvoiceInfo';
+      case _ixgqo4yu.InvoiceMatch():
+        return 'InvoiceMatch';
       case _ijfl1fdm.IpBanInfo():
         return 'IpBanInfo';
       case _ibb3lpoc.LeftToLiveReport():
@@ -1522,6 +1540,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'InvoiceInfo') {
       return deserialize<_im7mm4oj.InvoiceInfo>(data['data']);
+    }
+    if (dataClassName == 'InvoiceMatch') {
+      return deserialize<_ixgqo4yu.InvoiceMatch>(data['data']);
     }
     if (dataClassName == 'IpBanInfo') {
       return deserialize<_ijfl1fdm.IpBanInfo>(data['data']);

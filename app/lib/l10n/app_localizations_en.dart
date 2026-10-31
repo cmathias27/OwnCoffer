@@ -2943,7 +2943,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invoicesIntro =>
-      'Invoices and receipts attached to operations, named after the operation (date, label, amount). To add one, open the operation in the Operations page.';
+      'Invoices and receipts, named after their operation (date, label, amount). Add them from an operation (Operations page), or here if the operation is not there yet: it will be proposed as soon as it arrives.';
 
   @override
   String get invoicesSearch => 'Search (name, label, account)';
@@ -3119,4 +3119,70 @@ class AppLocalizationsEn extends AppLocalizations {
   String adminMembersOf(String group) {
     return 'Members of \"$group\"';
   }
+
+  @override
+  String get invoiceAddWaiting => 'Add an invoice';
+
+  @override
+  String get invoicesWaitingFilter => 'To attach';
+
+  @override
+  String get invoiceAttachTo => 'Attach to an operation';
+
+  @override
+  String get invoiceHints => 'What the invoice says';
+
+  @override
+  String get invoiceHintsHelp =>
+      'All optional: the amount, date and merchant are used to propose the right operation, now or after the next import. Meanwhile, every member of the group sees the invoice.';
+
+  @override
+  String get invoiceHintAmount => 'Amount paid';
+
+  @override
+  String get invoiceHintAmountInvalid => 'Unreadable amount (example: 499.00).';
+
+  @override
+  String get invoiceHintMerchant => 'Merchant';
+
+  @override
+  String get invoiceHintMerchantHint => 'Darty, Martin\'s garage…';
+
+  @override
+  String get invoiceHintNoDate => 'Date unknown';
+
+  @override
+  String invoiceHintDate(String date) {
+    return 'Date: $date';
+  }
+
+  @override
+  String get invoiceProposalsSearch => 'Search an operation by its label';
+
+  @override
+  String get invoiceProposalsNone =>
+      'No operation matches yet. The invoice stays \"to attach\": it will be proposed in the operation once imported.';
+
+  @override
+  String get invoiceProposalsNoneSearch => 'No operation contains this text.';
+
+  @override
+  String invoiceMatchScore(int score) {
+    return 'match $score%';
+  }
+
+  @override
+  String get invoiceAttachLater => 'Later';
+
+  @override
+  String invoiceAttached(String name) {
+    return 'Invoice attached: $name';
+  }
+
+  @override
+  String get invoicesWaitingForThis =>
+      'Waiting invoices that could be this one\'s';
+
+  @override
+  String get invoiceAttachHere => 'Attach here';
 }

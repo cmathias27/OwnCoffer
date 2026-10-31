@@ -73,6 +73,11 @@ invoice:
   - list:
   - forTransaction:
   - upload:
+  - uploadUnattached:
+  - setHints:
+  - proposals:
+  - candidatesFor:
+  - attach:
   - download:
   - update:
   - delete:

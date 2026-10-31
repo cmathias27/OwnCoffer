@@ -27,6 +27,9 @@ abstract class Invoice
     required this.sizeBytes,
     this.label,
     this.warrantyUntil,
+    this.hintAmountCents,
+    this.hintDate,
+    this.hintMerchant,
     this.uploadedBy,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
@@ -40,6 +43,9 @@ abstract class Invoice
     required int sizeBytes,
     String? label,
     DateTime? warrantyUntil,
+    int? hintAmountCents,
+    DateTime? hintDate,
+    String? hintMerchant,
     _is.UuidValue? uploadedBy,
     DateTime? createdAt,
   }) = _InvoiceImpl;
@@ -58,6 +64,11 @@ abstract class Invoice
           : _is.DateTimeJsonExtension.fromJson(
               jsonSerialization['warrantyUntil'],
             ),
+      hintAmountCents: jsonSerialization['hintAmountCents'] as int?,
+      hintDate: jsonSerialization['hintDate'] == null
+          ? null
+          : _is.DateTimeJsonExtension.fromJson(jsonSerialization['hintDate']),
+      hintMerchant: jsonSerialization['hintMerchant'] as String?,
       uploadedBy: jsonSerialization['uploadedBy'] == null
           ? null
           : _is.UuidValueJsonExtension.fromJson(
@@ -97,6 +108,14 @@ abstract class Invoice
   /// End of the warranty: a reminder comes a month before.
   DateTime? warrantyUntil;
 
+  /// What is known of an invoice waiting for its operation, to propose
+  /// the right one: total paid (positive cents), date, merchant.
+  int? hintAmountCents;
+
+  DateTime? hintDate;
+
+  String? hintMerchant;
+
   _is.UuidValue? uploadedBy;
 
   DateTime createdAt;
@@ -116,6 +135,9 @@ abstract class Invoice
     int? sizeBytes,
     String? label,
     DateTime? warrantyUntil,
+    int? hintAmountCents,
+    DateTime? hintDate,
+    String? hintMerchant,
     _is.UuidValue? uploadedBy,
     DateTime? createdAt,
   });
@@ -131,6 +153,9 @@ abstract class Invoice
       'sizeBytes': sizeBytes,
       if (label != null) 'label': label,
       if (warrantyUntil != null) 'warrantyUntil': warrantyUntil?.toJson(),
+      if (hintAmountCents != null) 'hintAmountCents': hintAmountCents,
+      if (hintDate != null) 'hintDate': hintDate?.toJson(),
+      if (hintMerchant != null) 'hintMerchant': hintMerchant,
       if (uploadedBy != null) 'uploadedBy': uploadedBy?.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -148,6 +173,9 @@ abstract class Invoice
       'sizeBytes': sizeBytes,
       if (label != null) 'label': label,
       if (warrantyUntil != null) 'warrantyUntil': warrantyUntil?.toJson(),
+      if (hintAmountCents != null) 'hintAmountCents': hintAmountCents,
+      if (hintDate != null) 'hintDate': hintDate?.toJson(),
+      if (hintMerchant != null) 'hintMerchant': hintMerchant,
       if (uploadedBy != null) 'uploadedBy': uploadedBy?.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -193,6 +221,9 @@ class _InvoiceImpl extends Invoice {
     required int sizeBytes,
     String? label,
     DateTime? warrantyUntil,
+    int? hintAmountCents,
+    DateTime? hintDate,
+    String? hintMerchant,
     _is.UuidValue? uploadedBy,
     DateTime? createdAt,
   }) : super._(
@@ -204,6 +235,9 @@ class _InvoiceImpl extends Invoice {
          sizeBytes: sizeBytes,
          label: label,
          warrantyUntil: warrantyUntil,
+         hintAmountCents: hintAmountCents,
+         hintDate: hintDate,
+         hintMerchant: hintMerchant,
          uploadedBy: uploadedBy,
          createdAt: createdAt,
        );
@@ -221,6 +255,9 @@ class _InvoiceImpl extends Invoice {
     int? sizeBytes,
     Object? label = _Undefined,
     Object? warrantyUntil = _Undefined,
+    Object? hintAmountCents = _Undefined,
+    Object? hintDate = _Undefined,
+    Object? hintMerchant = _Undefined,
     Object? uploadedBy = _Undefined,
     DateTime? createdAt,
   }) {
@@ -235,6 +272,11 @@ class _InvoiceImpl extends Invoice {
       warrantyUntil: warrantyUntil is DateTime?
           ? warrantyUntil
           : this.warrantyUntil,
+      hintAmountCents: hintAmountCents is int?
+          ? hintAmountCents
+          : this.hintAmountCents,
+      hintDate: hintDate is DateTime? ? hintDate : this.hintDate,
+      hintMerchant: hintMerchant is String? ? hintMerchant : this.hintMerchant,
       uploadedBy: uploadedBy is _is.UuidValue? ? uploadedBy : this.uploadedBy,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -277,6 +319,23 @@ class InvoiceUpdateTable extends _is.UpdateTable<InvoiceTable> {
   _is.ColumnValue<DateTime, DateTime> warrantyUntil(DateTime? value) =>
       _is.ColumnValue(
         table.warrantyUntil,
+        value,
+      );
+
+  _is.ColumnValue<int, int> hintAmountCents(int? value) => _is.ColumnValue(
+    table.hintAmountCents,
+    value,
+  );
+
+  _is.ColumnValue<DateTime, DateTime> hintDate(DateTime? value) =>
+      _is.ColumnValue(
+        table.hintDate,
+        value,
+      );
+
+  _is.ColumnValue<String, String> hintMerchant(String? value) =>
+      _is.ColumnValue(
+        table.hintMerchant,
         value,
       );
 
@@ -325,6 +384,18 @@ class InvoiceTable extends _is.Table<int?> {
       'warrantyUntil',
       this,
     );
+    hintAmountCents = _is.ColumnInt(
+      'hintAmountCents',
+      this,
+    );
+    hintDate = _is.ColumnDateTime(
+      'hintDate',
+      this,
+    );
+    hintMerchant = _is.ColumnString(
+      'hintMerchant',
+      this,
+    );
     uploadedBy = _is.ColumnUuid(
       'uploadedBy',
       this,
@@ -359,6 +430,14 @@ class InvoiceTable extends _is.Table<int?> {
   /// End of the warranty: a reminder comes a month before.
   late final _is.ColumnDateTime warrantyUntil;
 
+  /// What is known of an invoice waiting for its operation, to propose
+  /// the right one: total paid (positive cents), date, merchant.
+  late final _is.ColumnInt hintAmountCents;
+
+  late final _is.ColumnDateTime hintDate;
+
+  late final _is.ColumnString hintMerchant;
+
   late final _is.ColumnUuid uploadedBy;
 
   late final _is.ColumnDateTime createdAt;
@@ -373,6 +452,9 @@ class InvoiceTable extends _is.Table<int?> {
     sizeBytes,
     label,
     warrantyUntil,
+    hintAmountCents,
+    hintDate,
+    hintMerchant,
     uploadedBy,
     createdAt,
   ];

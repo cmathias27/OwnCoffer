@@ -363,5 +363,184 @@ void main() {
         expect(await WarrantyAlertService.checkAll(db, today), 0);
       },
     );
+    test('waiting for its operation: hints, proposals, attached', () async {
+      final waiting = await endpoints.invoice.uploadUnattached(
+        as(bob),
+        groupA,
+        'ticket.jpg',
+        jpg,
+        amountCents: 49900,
+        date: DateTime.utc(2026, 10, 30),
+        merchant: ' Darty ',
+      );
+      expect(waiting.invoice.transactionId, isNull);
+      expect(waiting.invoice.hintMerchant, 'Darty');
+      expect(waiting.name, '2026-10-30 - Darty - 499,00.jpg');
+      // Seen by every member while waiting, reader included.
+      expect(
+        (await endpoints.invoice.list(
+          as(reader),
+          groupA,
+          unattached: true,
+        )).map((i) => i.invoice.id),
+        [waiting.invoice.id],
+      );
+      final other = await op(shared, 'BOULANGER', -49900);
+      final proposed = await endpoints.invoice.proposals(
+        as(bob),
+        waiting.invoice.id!,
+      );
+      expect(proposed.map((m) => m.transactionId), [darty.id, other.id]);
+      expect(proposed.first.score, greaterThan(proposed.last.score));
+      expect(proposed.first.accountName, 'Courant');
+      // The restricted account's operations are only proposed to alice.
+      final hiddenSame = await op(restricted, 'DARTY', -49900);
+      expect(
+        (await endpoints.invoice.proposals(
+          as(bob),
+          waiting.invoice.id!,
+        )).map((m) => m.transactionId),
+        isNot(contains(hiddenSame.id)),
+      );
+      expect(
+        (await endpoints.invoice.proposals(
+          as(alice),
+          waiting.invoice.id!,
+        )).map((m) => m.transactionId),
+        contains(hiddenSame.id),
+      );
+      expect(
+        (await endpoints.invoice.proposals(
+          as(bob),
+          waiting.invoice.id!,
+          search: 'boul',
+        )).map((m) => m.transactionId),
+        [other.id],
+      );
+      expect(
+        (await endpoints.invoice.candidatesFor(
+          as(bob),
+          darty.id!,
+        )).map((m) => m.invoiceId),
+        [waiting.invoice.id],
+      );
+
+      await expectLater(
+        endpoints.invoice.attach(as(reader), waiting.invoice.id!, darty.id!),
+        denied,
+      );
+      await expectLater(
+        endpoints.invoice.attach(as(bob), waiting.invoice.id!, secret.id!),
+        denied,
+        reason: 'bob cannot see the restricted account',
+      );
+      final attached = await endpoints.invoice.attach(
+        as(bob),
+        waiting.invoice.id!,
+        darty.id!,
+      );
+      expect(attached.invoice.transactionId, darty.id);
+      expect(attached.name, '2026-10-31 - DARTY - 499,00 EUR.jpg');
+      expect(
+        await endpoints.invoice.list(as(bob), groupA, unattached: true),
+        isEmpty,
+      );
+      expect(
+        await endpoints.invoice.proposals(as(bob), waiting.invoice.id!),
+        isEmpty,
+      );
+
+      final cleared = await endpoints.invoice.setHints(
+        as(bob),
+        waiting.invoice.id!,
+        null,
+        null,
+        null,
+      );
+      expect(cleared.invoice.hintAmountCents, isNull);
+      await expectLater(
+        endpoints.invoice.setHints(
+          as(bob),
+          waiting.invoice.id!,
+          -5,
+          null,
+          null,
+        ),
+        invalid,
+      );
+    });
+
+    test('waiting invoices: isolation from another group', () async {
+      final waiting = await endpoints.invoice.uploadUnattached(
+        as(bob),
+        groupA,
+        'a.pdf',
+        pdf,
+      );
+      final id = waiting.invoice.id!;
+      await expectLater(
+        endpoints.invoice.uploadUnattached(as(mallory), groupA, 'm.pdf', pdf),
+        denied,
+      );
+      await expectLater(
+        endpoints.invoice.uploadUnattached(as(reader), groupA, 'r.pdf', pdf),
+        denied,
+      );
+      await expectLater(endpoints.invoice.download(as(mallory), id), denied);
+      await expectLater(endpoints.invoice.proposals(as(mallory), id), denied);
+      await expectLater(
+        endpoints.invoice.setHints(as(mallory), id, 100, null, null),
+        denied,
+      );
+      await expectLater(
+        endpoints.invoice.setHints(as(reader), id, 100, null, null),
+        denied,
+      );
+      await expectLater(endpoints.invoice.delete(as(mallory), id), denied);
+      // Mallory cannot pull it into her group, nor push hers onto ours.
+      final groupB = (await GroupMember.db.findFirstRow(
+        db,
+        where: (m) => m.authUserId.equals(mallory),
+      ))!.groupId;
+      final hers = await endpoints.account.create(
+        as(mallory),
+        groupB,
+        'B',
+        AccountKind.checking,
+      );
+      final herOp = await op(hers, 'X', -100);
+      await expectLater(
+        endpoints.invoice.attach(as(mallory), id, herOp.id!),
+        denied,
+      );
+      await expectLater(
+        endpoints.invoice.candidatesFor(as(mallory), darty.id!),
+        denied,
+      );
+      final mine = await endpoints.invoice.uploadUnattached(
+        as(mallory),
+        groupB,
+        'm.pdf',
+        pdf,
+      );
+      await expectLater(
+        endpoints.invoice.attach(as(mallory), mine.invoice.id!, darty.id!),
+        denied,
+      );
+      await expectLater(
+        endpoints.invoice.attach(as(alice), mine.invoice.id!, darty.id!),
+        denied,
+        reason: 'invoice of another group',
+      );
+      final kept = (await Invoice.db.findById(db, id))!;
+      expect(kept.transactionId, isNull);
+      expect(kept.groupId, groupA);
+      expect(
+        (await endpoints.invoice.list(as(mallory), groupB)).map(
+          (i) => i.invoice.id,
+        ),
+        [mine.invoice.id],
+      );
+    });
   });
 }

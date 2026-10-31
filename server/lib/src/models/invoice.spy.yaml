@@ -19,6 +19,11 @@ fields:
   label: String?
   ### End of the warranty: a reminder comes a month before.
   warrantyUntil: DateTime?
+  ### What is known of an invoice waiting for its operation, to propose
+  ### the right one: total paid (positive cents), date, merchant.
+  hintAmountCents: int?
+  hintDate: DateTime?
+  hintMerchant: String?
   uploadedBy: UuidValue?
   createdAt: DateTime, default=now
 indexes:

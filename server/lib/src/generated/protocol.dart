@@ -30,6 +30,7 @@ import 'package:owncoffer_server/src/generated/group_membership.dart'
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/invoice_info.dart' as _iq9lo0p4;
+import 'package:owncoffer_server/src/generated/invoice_match.dart' as _ifsyb1bj;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/loan_document.dart' as _ib7nzwu9;
 import 'package:owncoffer_server/src/generated/loan_installment.dart'
@@ -94,6 +95,7 @@ import 'invitation_info.dart' as _i9hwipt6;
 import 'invoice.dart' as _ifja8moh;
 import 'invoice_blob.dart' as _i0mnzbub;
 import 'invoice_info.dart' as _im7mm4oj;
+import 'invoice_match.dart' as _ixgqo4yu;
 import 'ip_ban.dart' as _i88cvd1d;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'left_to_live_report.dart' as _ibb3lpoc;
@@ -183,6 +185,7 @@ export 'invitation_info.dart';
 export 'invoice.dart';
 export 'invoice_blob.dart';
 export 'invoice_info.dart';
+export 'invoice_match.dart';
 export 'ip_ban.dart';
 export 'ip_ban_info.dart';
 export 'left_to_live_report.dart';
@@ -1421,6 +1424,24 @@ class Protocol extends _is.DatabaseSerializationManager {
           columnType: _isp.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
           dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'hintAmountCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'hintDate',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'hintMerchant',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
         ),
         _isp.ColumnDefinition(
           name: 'uploadedBy',
@@ -2967,6 +2988,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _im7mm4oj.InvoiceInfo) {
       return _im7mm4oj.InvoiceInfo.fromJson(data) as T;
     }
+    if (t == _ixgqo4yu.InvoiceMatch) {
+      return _ixgqo4yu.InvoiceMatch.fromJson(data) as T;
+    }
     if (t == _i88cvd1d.IpBan) {
       return _i88cvd1d.IpBan.fromJson(data) as T;
     }
@@ -3261,6 +3285,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_im7mm4oj.InvoiceInfo?>()) {
       return (data != null ? _im7mm4oj.InvoiceInfo.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ixgqo4yu.InvoiceMatch?>()) {
+      return (data != null ? _ixgqo4yu.InvoiceMatch.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_i88cvd1d.IpBan?>()) {
       return (data != null ? _i88cvd1d.IpBan.fromJson(data) : null) as T;
@@ -3671,6 +3698,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ifsyb1bj.InvoiceMatch>) {
+      return (data as List)
+              .map((e) => deserialize<_ifsyb1bj.InvoiceMatch>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ictm0roz.LoanInstallment>) {
       return (data as List)
               .map((e) => deserialize<_ictm0roz.LoanInstallment>(e))
@@ -3767,6 +3800,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ifja8moh.Invoice => 'Invoice',
       _i0mnzbub.InvoiceBlob => 'InvoiceBlob',
       _im7mm4oj.InvoiceInfo => 'InvoiceInfo',
+      _ixgqo4yu.InvoiceMatch => 'InvoiceMatch',
       _i88cvd1d.IpBan => 'IpBan',
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _ibb3lpoc.LeftToLiveReport => 'LeftToLiveReport',
@@ -3915,6 +3949,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'InvoiceBlob';
       case _im7mm4oj.InvoiceInfo():
         return 'InvoiceInfo';
+      case _ixgqo4yu.InvoiceMatch():
+        return 'InvoiceMatch';
       case _i88cvd1d.IpBan():
         return 'IpBan';
       case _ijfl1fdm.IpBanInfo():
@@ -4163,6 +4199,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'InvoiceInfo') {
       return deserialize<_im7mm4oj.InvoiceInfo>(data['data']);
+    }
+    if (dataClassName == 'InvoiceMatch') {
+      return deserialize<_ixgqo4yu.InvoiceMatch>(data['data']);
     }
     if (dataClassName == 'IpBan') {
       return deserialize<_i88cvd1d.IpBan>(data['data']);
