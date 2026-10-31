@@ -2367,4 +2367,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String sizeKb(String value) {
     return '$value kB';
   }
+
+  @override
+  String get variableToggle => 'Variable spending';
+
+  @override
+  String get variableToggleHelp =>
+      'Count groceries, fuel, outings… estimated from the previous months';
+
+  @override
+  String variableIncluded(String amount) {
+    return 'Including $amount of estimated variable spending';
+  }
+
+  @override
+  String variableMonthly(String amount) {
+    return 'Usually $amount a month · see how';
+  }
+
+  @override
+  String variableHow(String months) {
+    return 'From $months: for each category, the median of the months (one exceptional month does not count). Planned operations, transfers between your accounts and income are left out.';
+  }
+
+  @override
+  String variableThisMonth(String spent, String left) {
+    return 'This month: $spent already spent, $left still expected, spread day by day.';
+  }
+
+  @override
+  String get variableNoHistory =>
+      'Variable spending: not enough history yet (at least one complete month of operations is needed).';
+
+  @override
+  String get variableNone => 'Variable spending: none in the last months.';
 }

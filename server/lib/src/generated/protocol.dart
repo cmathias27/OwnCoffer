@@ -109,6 +109,8 @@ import 'totp_secret.dart' as _iac9sbwj;
 import 'transaction_page.dart' as _i4rkvxa2;
 import 'transaction_split.dart' as _iqvm376u;
 import 'two_factor_status.dart' as _igcslm1n;
+import 'variable_category_info.dart' as _ic7yx6at;
+import 'variable_estimate_info.dart' as _in08zzvs;
 export 'access_denied_exception.dart';
 export 'account.dart';
 export 'account_access.dart';
@@ -178,6 +180,8 @@ export 'totp_secret.dart';
 export 'transaction_page.dart';
 export 'transaction_split.dart';
 export 'two_factor_status.dart';
+export 'variable_category_info.dart';
+export 'variable_estimate_info.dart';
 
 class Protocol extends _is.DatabaseSerializationManager {
   Protocol._();
@@ -2810,6 +2814,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _igcslm1n.TwoFactorStatus) {
       return _igcslm1n.TwoFactorStatus.fromJson(data) as T;
     }
+    if (t == _ic7yx6at.VariableCategoryInfo) {
+      return _ic7yx6at.VariableCategoryInfo.fromJson(data) as T;
+    }
+    if (t == _in08zzvs.VariableEstimateInfo) {
+      return _in08zzvs.VariableEstimateInfo.fromJson(data) as T;
+    }
     if (t == _is.getType<_i8te4v3o.AccessDeniedException?>()) {
       return (data != null
               ? _i8te4v3o.AccessDeniedException.fromJson(data)
@@ -3067,6 +3077,18 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _igcslm1n.TwoFactorStatus.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_ic7yx6at.VariableCategoryInfo?>()) {
+      return (data != null
+              ? _ic7yx6at.VariableCategoryInfo.fromJson(data)
+              : null)
+          as T;
+    }
+    if (t == _is.getType<_in08zzvs.VariableEstimateInfo?>()) {
+      return (data != null
+              ? _in08zzvs.VariableEstimateInfo.fromJson(data)
+              : null)
+          as T;
+    }
     if (t == List<_itcb21m0.CalendarItem>) {
       return (data as List)
               .map((e) => deserialize<_itcb21m0.CalendarItem>(e))
@@ -3151,6 +3173,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_imctw77w.PeriodTotals>) {
       return (data as List)
               .map((e) => deserialize<_imctw77w.PeriodTotals>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<DateTime>) {
+      return (data as List).map((e) => deserialize<DateTime>(e)).toList() as T;
+    }
+    if (t == List<_ic7yx6at.VariableCategoryInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_ic7yx6at.VariableCategoryInfo>(e))
               .toList()
           as T;
     }
@@ -3341,6 +3372,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i4rkvxa2.TransactionPage => 'TransactionPage',
       _iqvm376u.TransactionSplit => 'TransactionSplit',
       _igcslm1n.TwoFactorStatus => 'TwoFactorStatus',
+      _ic7yx6at.VariableCategoryInfo => 'VariableCategoryInfo',
+      _in08zzvs.VariableEstimateInfo => 'VariableEstimateInfo',
       _ => null,
     };
   }
@@ -3493,6 +3526,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'TransactionSplit';
       case _igcslm1n.TwoFactorStatus():
         return 'TwoFactorStatus';
+      case _ic7yx6at.VariableCategoryInfo():
+        return 'VariableCategoryInfo';
+      case _in08zzvs.VariableEstimateInfo():
+        return 'VariableEstimateInfo';
     }
     className = _iais.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -3725,6 +3762,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'TwoFactorStatus') {
       return deserialize<_igcslm1n.TwoFactorStatus>(data['data']);
+    }
+    if (dataClassName == 'VariableCategoryInfo') {
+      return deserialize<_ic7yx6at.VariableCategoryInfo>(data['data']);
+    }
+    if (dataClassName == 'VariableEstimateInfo') {
+      return deserialize<_in08zzvs.VariableEstimateInfo>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       data['className'] = dataClassName.substring(19);

@@ -14,6 +14,7 @@ export 'src/budget/period.dart';
 export 'src/budget/review.dart';
 export 'src/budget/spending.dart';
 export 'src/budget/subscriptions.dart';
+export 'src/budget/variable.dart';
 export 'src/categories.dart';
 export 'src/classification/classifier.dart';
 export 'src/data/community_rules.dart';

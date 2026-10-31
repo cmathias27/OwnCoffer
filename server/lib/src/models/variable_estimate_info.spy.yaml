@@ -1,0 +1,15 @@
+### Variable spending (groceries, fuel…) estimated from the previous months
+### and counted in the forecast; every figure is shown to the user.
+class: VariableEstimateInfo
+fields:
+  ### Usual amount of a month: sum of the categories' medians.
+  monthlyCents: int
+  ### Already spent this month, and still expected until its end.
+  spentThisMonthCents: int
+  leftThisMonthCents: int
+  ### Counted in the forecast, up to its last day.
+  horizonCents: int
+  ### First day of each complete month used, oldest first (empty: not enough
+  ### history).
+  months: List<DateTime>
+  categories: List<VariableCategoryInfo>

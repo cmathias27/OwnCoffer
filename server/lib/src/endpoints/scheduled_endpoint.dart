@@ -386,12 +386,14 @@ class ScheduledEndpoint extends Endpoint {
   }
 
   /// Forecast of the account from the user's [today] (calendar date of the
-  /// device; must be within a day of the server's date).
+  /// device; must be within a day of the server's date). [includeVariable]
+  /// (default true) adds the estimated variable spending.
   Future<ForecastResult> forecast(
     Session session,
     int accountId,
     DateTime today, {
     int? horizonDays,
+    bool? includeVariable,
   }) async {
     final account = await Access.requireAccount(session, accountId);
     final t = today.toUtc();
@@ -404,7 +406,13 @@ class ScheduledEndpoint extends Endpoint {
     if (horizon < 1 || horizon > 366) {
       throw InvalidInputException(code: 'invalid_horizon');
     }
-    return ForecastService.compute(session, account, day, horizonDays: horizon);
+    return ForecastService.compute(
+      session,
+      account,
+      day,
+      horizonDays: horizon,
+      variable: includeVariable ?? true,
+    );
   }
 
   /// Confirms a reconciliation proposal.

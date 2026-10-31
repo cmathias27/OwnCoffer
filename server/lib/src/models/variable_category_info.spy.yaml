@@ -1,0 +1,8 @@
+### What one category usually costs in a month (null id: unclassified).
+class: VariableCategoryInfo
+fields:
+  categoryId: int?
+  ### Spending of each month used, oldest first.
+  monthsCents: List<int>
+  ### Median of those months.
+  monthlyCents: int

@@ -1205,11 +1205,13 @@ class EndpointScheduled extends _isc.EndpointRef {
       );
 
   /// Forecast of the account from the user's [today] (calendar date of the
-  /// device; must be within a day of the server's date).
+  /// device; must be within a day of the server's date). [includeVariable]
+  /// (default true) adds the estimated variable spending.
   _ida.Future<_ip0wp7v2.ForecastResult> forecast(
     int accountId,
     DateTime today, {
     int? horizonDays,
+    bool? includeVariable,
   }) => caller.callServerEndpoint<_ip0wp7v2.ForecastResult>(
     'scheduled',
     'forecast',
@@ -1217,6 +1219,7 @@ class EndpointScheduled extends _isc.EndpointRef {
       'accountId': accountId,
       'today': today,
       'horizonDays': horizonDays,
+      'includeVariable': includeVariable,
     },
   );
 

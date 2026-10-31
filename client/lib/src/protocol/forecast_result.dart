@@ -16,6 +16,7 @@ import 'forecast_day.dart' as _ids0ngao;
 import 'forecast_event_info.dart' as _iuscnr1n;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
 import 'reconciliation_proposal.dart' as _i7qmkh8w;
+import 'variable_estimate_info.dart' as _in08zzvs;
 
 /// Forecast of one account. Every figure comes from the deterministic
 /// engine (shared/forecast); nothing is estimated by an AI.
@@ -36,6 +37,7 @@ abstract class ForecastResult
     required this.missed,
     required this.proposals,
     required this.autoReconciledCount,
+    this.variable,
   });
 
   factory ForecastResult({
@@ -53,6 +55,7 @@ abstract class ForecastResult
     required List<_ifjtpr6l.MissedOccurrenceInfo> missed,
     required List<_i7qmkh8w.ReconciliationProposal> proposals,
     required int autoReconciledCount,
+    _in08zzvs.VariableEstimateInfo? variable,
   }) = _ForecastResultImpl;
 
   factory ForecastResult.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -89,6 +92,11 @@ abstract class ForecastResult
             jsonSerialization['proposals'],
           ),
       autoReconciledCount: jsonSerialization['autoReconciledCount'] as int,
+      variable: jsonSerialization['variable'] == null
+          ? null
+          : _iylp5nsw.Protocol().deserialize<_in08zzvs.VariableEstimateInfo>(
+              jsonSerialization['variable'],
+            ),
     );
   }
 
@@ -124,6 +132,9 @@ abstract class ForecastResult
   /// Operations linked automatically to their planned occurrence.
   int autoReconciledCount;
 
+  /// Estimated variable spending, when asked for (already in `days`).
+  _in08zzvs.VariableEstimateInfo? variable;
+
   /// Returns a shallow copy of this [ForecastResult]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
@@ -142,6 +153,7 @@ abstract class ForecastResult
     List<_ifjtpr6l.MissedOccurrenceInfo>? missed,
     List<_i7qmkh8w.ReconciliationProposal>? proposals,
     int? autoReconciledCount,
+    _in08zzvs.VariableEstimateInfo? variable,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -162,6 +174,7 @@ abstract class ForecastResult
       'missed': missed.toJson(valueToJson: (v) => v.toJson()),
       'proposals': proposals.toJson(valueToJson: (v) => v.toJson()),
       'autoReconciledCount': autoReconciledCount,
+      if (variable != null) 'variable': variable?.toJson(),
     };
   }
 
@@ -184,6 +197,7 @@ abstract class ForecastResult
       'missed': missed.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'proposals': proposals.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'autoReconciledCount': autoReconciledCount,
+      if (variable != null) 'variable': variable?.toJsonForProtocol(),
     };
   }
 
@@ -211,6 +225,7 @@ class _ForecastResultImpl extends ForecastResult {
     required List<_ifjtpr6l.MissedOccurrenceInfo> missed,
     required List<_i7qmkh8w.ReconciliationProposal> proposals,
     required int autoReconciledCount,
+    _in08zzvs.VariableEstimateInfo? variable,
   }) : super._(
          accountId: accountId,
          today: today,
@@ -226,6 +241,7 @@ class _ForecastResultImpl extends ForecastResult {
          missed: missed,
          proposals: proposals,
          autoReconciledCount: autoReconciledCount,
+         variable: variable,
        );
 
   /// Returns a shallow copy of this [ForecastResult]
@@ -247,6 +263,7 @@ class _ForecastResultImpl extends ForecastResult {
     List<_ifjtpr6l.MissedOccurrenceInfo>? missed,
     List<_i7qmkh8w.ReconciliationProposal>? proposals,
     int? autoReconciledCount,
+    Object? variable = _Undefined,
   }) {
     return ForecastResult(
       accountId: accountId ?? this.accountId,
@@ -266,6 +283,9 @@ class _ForecastResultImpl extends ForecastResult {
       proposals:
           proposals ?? this.proposals.map((e0) => e0.copyWith()).toList(),
       autoReconciledCount: autoReconciledCount ?? this.autoReconciledCount,
+      variable: variable is _in08zzvs.VariableEstimateInfo?
+          ? variable
+          : this.variable?.copyWith(),
     );
   }
 }

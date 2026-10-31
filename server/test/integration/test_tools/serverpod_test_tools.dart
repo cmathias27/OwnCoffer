@@ -3155,6 +3155,7 @@ class _ScheduledEndpoint {
     int accountId,
     DateTime today, {
     int? horizonDays,
+    bool? includeVariable,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -3171,6 +3172,7 @@ class _ScheduledEndpoint {
             'accountId': accountId,
             'today': today,
             'horizonDays': horizonDays,
+            'includeVariable': includeVariable,
           }),
           serializationManager: _serializationManager,
         );
