@@ -2566,7 +2566,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get adminNotYet => 'pas encore';
 
   @override
-  String get adminDocuments => 'Documents stockés';
+  String get adminDocuments => 'Documents et factures stockés';
 
   @override
   String get adminAlertsJob => 'Dernière vérification des alertes';

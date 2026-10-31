@@ -2553,7 +2553,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminNotYet => 'not yet';
 
   @override
-  String get adminDocuments => 'Stored documents';
+  String get adminDocuments => 'Stored documents and invoices';
 
   @override
   String get adminAlertsJob => 'Last alert check';

@@ -4180,7 +4180,7 @@ abstract class AppLocalizations {
   /// No description provided for @adminDocuments.
   ///
   /// In fr, this message translates to:
-  /// **'Documents stockés'**
+  /// **'Documents et factures stockés'**
   String get adminDocuments;
 
   /// No description provided for @adminAlertsJob.

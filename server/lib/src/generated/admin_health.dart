@@ -81,7 +81,7 @@ abstract class AdminHealth
 
   int? databaseBytes;
 
-  /// Documents kept in the database (loan documents).
+  /// Files kept in the database (loan documents and invoices).
   int documentsBytes;
 
   bool smtpConfigured;
