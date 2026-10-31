@@ -9,7 +9,15 @@ import '../l10n/error_messages.dart';
 /// Members of the group; invitations for administrators.
 class MembersScreen extends StatefulWidget {
   final GroupMembership membership;
-  const MembersScreen({super.key, required this.membership});
+
+  /// Inside another page (an administration tab): no own app bar, the
+  /// invite button at the top of the list.
+  final bool embedded;
+  const MembersScreen({
+    super.key,
+    required this.membership,
+    this.embedded = false,
+  });
 
   @override
   State<MembersScreen> createState() => _MembersScreenState();
@@ -71,6 +79,65 @@ class _MembersScreenState extends State<MembersScreen> {
     final theme = Theme.of(context);
     final locale = Localizations.localeOf(context).toLanguageTag();
     final members = _members;
+    final embedded = widget.embedded;
+    final Widget body = _error != null
+        ? Center(child: Text(_error!))
+        : members == null
+        ? const Center(child: CircularProgressIndicator())
+        : ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              if (embedded) ...[
+                Text(
+                  l.adminMembersOf(widget.membership.group.name),
+                  style: theme.textTheme.titleMedium,
+                ),
+                if (_isAdmin)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: FilledButton.icon(
+                        onPressed: _invite,
+                        icon: const Icon(Icons.person_add_alt),
+                        label: Text(l.invite),
+                      ),
+                    ),
+                  ),
+              ],
+              for (final m in members)
+                ListTile(
+                  leading: const Icon(Icons.person_outline),
+                  title: Text(m.email ?? '—'),
+                  subtitle: Text(roleName(l, m.role)),
+                ),
+              if (_isAdmin) ...[
+                const Divider(height: 32),
+                Text(l.invitationsTitle, style: theme.textTheme.titleMedium),
+                if (_invitations.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Text(l.noInvitations),
+                  ),
+                for (final i in _invitations)
+                  ListTile(
+                    leading: const Icon(Icons.mail_outline),
+                    title: Text(i.email),
+                    subtitle: Text(
+                      '${roleName(l, i.role)} · ${l.invitationExpires(DateFormat.yMMMd(locale).format(i.expiresAt.toLocal()))}',
+                    ),
+                    trailing: TextButton(
+                      onPressed: () async {
+                        await client.invitation.revoke(i.id);
+                        await _load();
+                      },
+                      child: Text(l.revoke),
+                    ),
+                  ),
+              ],
+            ],
+          );
+    if (embedded) return body;
     return Scaffold(
       appBar: AppBar(title: Text(l.membersTitle)),
       floatingActionButton: _isAdmin
@@ -80,45 +147,7 @@ class _MembersScreenState extends State<MembersScreen> {
               label: Text(l.invite),
             )
           : null,
-      body: _error != null
-          ? Center(child: Text(_error!))
-          : members == null
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                for (final m in members)
-                  ListTile(
-                    leading: const Icon(Icons.person_outline),
-                    title: Text(m.email ?? '—'),
-                    subtitle: Text(roleName(l, m.role)),
-                  ),
-                if (_isAdmin) ...[
-                  const Divider(height: 32),
-                  Text(l.invitationsTitle, style: theme.textTheme.titleMedium),
-                  if (_invitations.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Text(l.noInvitations),
-                    ),
-                  for (final i in _invitations)
-                    ListTile(
-                      leading: const Icon(Icons.mail_outline),
-                      title: Text(i.email),
-                      subtitle: Text(
-                        '${roleName(l, i.role)} · ${l.invitationExpires(DateFormat.yMMMd(locale).format(i.expiresAt.toLocal()))}',
-                      ),
-                      trailing: TextButton(
-                        onPressed: () async {
-                          await client.invitation.revoke(i.id);
-                          await _load();
-                        },
-                        child: Text(l.revoke),
-                      ),
-                    ),
-                ],
-              ],
-            ),
+      body: body,
     );
   }
 }

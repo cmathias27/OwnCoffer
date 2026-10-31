@@ -10,7 +10,9 @@ import '../l10n/error_messages.dart';
 /// Two-factor authentication: enable (QR code, first code, backup codes),
 /// renew backup codes, disable.
 class SecurityScreen extends StatefulWidget {
-  const SecurityScreen({super.key});
+  /// Inside another page (an administration tab): no own app bar.
+  final bool embedded;
+  const SecurityScreen({super.key, this.embedded = false});
 
   @override
   State<SecurityScreen> createState() => _SecurityScreenState();
@@ -59,50 +61,52 @@ class _SecurityScreenState extends State<SecurityScreen> {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final status = _status;
+    final Widget body = status == null
+        ? const Center(child: CircularProgressIndicator())
+        : ListView(
+            padding: const EdgeInsets.all(24),
+            children: [
+              Text(l.twoFactorTitle, style: theme.textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Text(
+                status.enabled
+                    ? l.twoFactorOn(status.backupCodesLeft)
+                    : l.twoFactorOff,
+              ),
+              const SizedBox(height: 16),
+              if (_backupCodes != null)
+                ..._backupView(l, theme)
+              else if (_enrollment != null)
+                ..._enrollView(l)
+              else if (!status.enabled)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FilledButton(
+                    onPressed: _busy
+                        ? null
+                        : () => _run(() async {
+                            final e = await client.twoFactor.begin();
+                            setState(() => _enrollment = e);
+                          }),
+                    child: Text(l.twoFactorEnable),
+                  ),
+                )
+              else
+                ..._manageView(l),
+              if (_error != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Text(
+                    _error!,
+                    style: TextStyle(color: theme.colorScheme.error),
+                  ),
+                ),
+            ],
+          );
+    if (widget.embedded) return body;
     return Scaffold(
       appBar: AppBar(title: Text(l.securityTitle)),
-      body: status == null
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsets.all(24),
-              children: [
-                Text(l.twoFactorTitle, style: theme.textTheme.titleLarge),
-                const SizedBox(height: 8),
-                Text(
-                  status.enabled
-                      ? l.twoFactorOn(status.backupCodesLeft)
-                      : l.twoFactorOff,
-                ),
-                const SizedBox(height: 16),
-                if (_backupCodes != null)
-                  ..._backupView(l, theme)
-                else if (_enrollment != null)
-                  ..._enrollView(l)
-                else if (!status.enabled)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: FilledButton(
-                      onPressed: _busy
-                          ? null
-                          : () => _run(() async {
-                              final e = await client.twoFactor.begin();
-                              setState(() => _enrollment = e);
-                            }),
-                      child: Text(l.twoFactorEnable),
-                    ),
-                  )
-                else
-                  ..._manageView(l),
-                if (_error != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Text(
-                      _error!,
-                      style: TextStyle(color: theme.colorScheme.error),
-                    ),
-                  ),
-              ],
-            ),
+      body: body,
     );
   }
 

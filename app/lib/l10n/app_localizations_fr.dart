@@ -3125,4 +3125,15 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_send_limit =>
       'Limite atteinte : 20 envois par jour. Réessayez demain.';
+
+  @override
+  String get adminTabMembers => 'Membres du groupe';
+
+  @override
+  String get adminTabMySecurity => 'Ma sécurité';
+
+  @override
+  String adminMembersOf(String group) {
+    return 'Membres de « $group »';
+  }
 }
