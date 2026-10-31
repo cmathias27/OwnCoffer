@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.3 (31 octobre 2026)
+
+### Opérations
+
+- **Les abonnements sont mis en évidence** : chaque opération rattachée à un abonnement porte une icône ↻ et la mention « Abonnement ».
+- Nouveau filtre **« Abonnements »** pour ne voir que leurs prélèvements, et bouton **« Liste des abonnements »** pour ouvrir la page des abonnements.
+- La fiche d'une opération d'abonnement indique son abonnement, avec un lien vers la liste, au lieu de proposer « Marquer comme abonnement ».
+
 ## 0.3.2 (31 octobre 2026)
 
 ### Corrigé
