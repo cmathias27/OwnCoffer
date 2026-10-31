@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/balance_chart.dart';
+import '../widgets/category_field.dart';
 
 /// Forecast balance of an account: the day-by-day curve, what is coming,
 /// matches to confirm, planned operations that never arrived, and the
@@ -664,18 +665,11 @@ class _ScheduledDialogState extends State<_ScheduledDialog> {
                 if (_editing)
                   Text(l.scheduledLockedHelp, style: theme.textTheme.bodySmall),
                 gap,
-                DropdownButtonFormField<int?>(
+                CategoryFormField(
+                  categories: categories,
                   initialValue: _category,
-                  isExpanded: true,
-                  decoration: InputDecoration(labelText: l.categoryLabel),
-                  items: [
-                    DropdownMenuItem(value: null, child: Text(l.noCategory)),
-                    for (final c in categories)
-                      DropdownMenuItem(
-                        value: c.id,
-                        child: Text(context.categoryName(c)),
-                      ),
-                  ],
+                  label: l.categoryLabel,
+                  noneLabel: l.noCategory,
                   onChanged: (v) => _category = v,
                 ),
                 gap,

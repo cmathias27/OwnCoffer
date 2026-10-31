@@ -146,10 +146,10 @@ const List<_R> _rules = [
   ('ACTION', 'shopping', _d),
   ('GIFI', 'shopping', _d),
   ('LA FOIR FOUILLE', 'shopping', _d),
-  // Family
-  ('MAXI ZOO', 'family.pets', _d),
-  ('ANIMALIS', 'family.pets', _d),
-  ('TRUFFAUT ANIMALERIE', 'family.pets', _d),
+  // Pets (ids keep their position: new rules go at the end)
+  ('MAXI ZOO', 'pets.food', _d),
+  ('ANIMALIS', 'pets.food', _d),
+  ('TRUFFAUT ANIMALERIE', 'pets.food', _d),
   // Income and public bodies
   ('CAF', 'income.benefits', _c),
   ('FRANCE TRAVAIL', 'income.benefits', _c),
@@ -182,6 +182,13 @@ const List<_R> _rules = [
   ('CROIX ROUGE', 'giving.donations', _d),
   ('RESTOS DU COEUR', 'giving.donations', _d),
   ('UNICEF', 'giving.donations', _d),
+  // Pets (catalogue v2)
+  ('ZOOPLUS', 'pets.food', _d),
+  ('WANIMO', 'pets.food', _d),
+  ('CLINIQUE VETERINAIRE', 'pets.vet', _d),
+  ('VETERINAIRE', 'pets.vet', _d),
+  ('SANTEVET', 'pets.insurance', _d),
+  ('BULLE BLEUE', 'pets.insurance', _d),
 ];
 
 /// The community rules, ready for the [Classifier].

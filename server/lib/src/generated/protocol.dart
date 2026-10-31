@@ -723,6 +723,13 @@ class Protocol extends _is.DatabaseSerializationManager {
           columnDefault: 'false',
         ),
         _isp.ColumnDefinition(
+          name: 'standardCatalogVersion',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+          columnDefault: '1',
+        ),
+        _isp.ColumnDefinition(
           name: 'createdBy',
           columnType: _isp.ColumnType.uuid,
           isNullable: false,

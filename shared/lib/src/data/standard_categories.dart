@@ -3,7 +3,7 @@
 
 import '../categories.dart';
 
-const int standardCatalogVersion = 1;
+const int standardCatalogVersion = 2;
 
 const List<StandardCategoryDef> standardCategories = [
   StandardCategoryDef(
@@ -493,6 +493,71 @@ const List<StandardCategoryDef> standardCategories = [
     fr: 'Animaux',
     en: 'Pets',
     icon: 'family_restroom',
+    deprecated: true,
+    replacedBy: 'pets.other',
+  ),
+  StandardCategoryDef(
+    'pets',
+    parent: null,
+    kind: StandardKind.expense,
+    fr: 'Animaux',
+    en: 'Pets',
+    icon: 'pets',
+    since: 2,
+  ),
+  StandardCategoryDef(
+    'pets.food',
+    parent: 'pets',
+    kind: StandardKind.expense,
+    fr: 'Alimentation animale',
+    en: 'Pet food',
+    icon: 'pets',
+    since: 2,
+  ),
+  StandardCategoryDef(
+    'pets.vet',
+    parent: 'pets',
+    kind: StandardKind.expense,
+    fr: 'Vétérinaire',
+    en: 'Vet',
+    icon: 'pets',
+    since: 2,
+  ),
+  StandardCategoryDef(
+    'pets.insurance',
+    parent: 'pets',
+    kind: StandardKind.expense,
+    fr: 'Assurance animaux',
+    en: 'Pet insurance',
+    icon: 'pets',
+    since: 2,
+  ),
+  StandardCategoryDef(
+    'pets.care',
+    parent: 'pets',
+    kind: StandardKind.expense,
+    fr: 'Toilettage, garde et pension',
+    en: 'Grooming, sitting and boarding',
+    icon: 'pets',
+    since: 2,
+  ),
+  StandardCategoryDef(
+    'pets.supplies',
+    parent: 'pets',
+    kind: StandardKind.expense,
+    fr: 'Accessoires et jouets',
+    en: 'Accessories and toys',
+    icon: 'pets',
+    since: 2,
+  ),
+  StandardCategoryDef(
+    'pets.other',
+    parent: 'pets',
+    kind: StandardKind.expense,
+    fr: 'Autres dépenses animaux',
+    en: 'Other pet expenses',
+    icon: 'pets',
+    since: 2,
   ),
   StandardCategoryDef(
     'education',

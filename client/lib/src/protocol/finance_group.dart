@@ -19,15 +19,18 @@ abstract class FinanceGroup
     this.id,
     required this.name,
     bool? aiEnabled,
+    int? standardCatalogVersion,
     required this.createdBy,
     DateTime? createdAt,
   }) : aiEnabled = aiEnabled ?? false,
+       standardCatalogVersion = standardCatalogVersion ?? 1,
        createdAt = createdAt ?? DateTime.now();
 
   factory FinanceGroup({
     int? id,
     required String name,
     bool? aiEnabled,
+    int? standardCatalogVersion,
     required _isc.UuidValue createdBy,
     DateTime? createdAt,
   }) = _FinanceGroupImpl;
@@ -39,6 +42,8 @@ abstract class FinanceGroup
       aiEnabled: jsonSerialization['aiEnabled'] == null
           ? null
           : _isc.BoolJsonExtension.fromJson(jsonSerialization['aiEnabled']),
+      standardCatalogVersion:
+          jsonSerialization['standardCatalogVersion'] as int?,
       createdBy: _isc.UuidValueJsonExtension.fromJson(
         jsonSerialization['createdBy'],
       ),
@@ -58,6 +63,10 @@ abstract class FinanceGroup
   /// Optional AI (decision 0006): off by default.
   bool aiEnabled;
 
+  /// Version of the standard catalogue its categories were last updated to
+  /// (see updateStandardCategories).
+  int standardCatalogVersion;
+
   _isc.UuidValue createdBy;
 
   DateTime createdAt;
@@ -69,6 +78,7 @@ abstract class FinanceGroup
     int? id,
     String? name,
     bool? aiEnabled,
+    int? standardCatalogVersion,
     _isc.UuidValue? createdBy,
     DateTime? createdAt,
   });
@@ -79,6 +89,7 @@ abstract class FinanceGroup
       if (id != null) 'id': id,
       'name': name,
       'aiEnabled': aiEnabled,
+      'standardCatalogVersion': standardCatalogVersion,
       'createdBy': createdBy.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -91,6 +102,7 @@ abstract class FinanceGroup
       if (id != null) 'id': id,
       'name': name,
       'aiEnabled': aiEnabled,
+      'standardCatalogVersion': standardCatalogVersion,
       'createdBy': createdBy.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -109,12 +121,14 @@ class _FinanceGroupImpl extends FinanceGroup {
     int? id,
     required String name,
     bool? aiEnabled,
+    int? standardCatalogVersion,
     required _isc.UuidValue createdBy,
     DateTime? createdAt,
   }) : super._(
          id: id,
          name: name,
          aiEnabled: aiEnabled,
+         standardCatalogVersion: standardCatalogVersion,
          createdBy: createdBy,
          createdAt: createdAt,
        );
@@ -127,6 +141,7 @@ class _FinanceGroupImpl extends FinanceGroup {
     Object? id = _Undefined,
     String? name,
     bool? aiEnabled,
+    int? standardCatalogVersion,
     _isc.UuidValue? createdBy,
     DateTime? createdAt,
   }) {
@@ -134,6 +149,8 @@ class _FinanceGroupImpl extends FinanceGroup {
       id: id is int? ? id : this.id,
       name: name ?? this.name,
       aiEnabled: aiEnabled ?? this.aiEnabled,
+      standardCatalogVersion:
+          standardCatalogVersion ?? this.standardCatalogVersion,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
     );

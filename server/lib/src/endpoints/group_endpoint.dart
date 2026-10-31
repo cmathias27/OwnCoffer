@@ -1,3 +1,4 @@
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 
@@ -51,7 +52,11 @@ class GroupEndpoint extends Endpoint {
     return session.db.transaction((tx) async {
       final group = await FinanceGroup.db.insertRow(
         session,
-        FinanceGroup(name: trimmed, createdBy: user),
+        FinanceGroup(
+          name: trimmed,
+          createdBy: user,
+          standardCatalogVersion: core.standardCatalogVersion,
+        ),
         transaction: tx,
       );
       await GroupMember.db.insertRow(

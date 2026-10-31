@@ -5,6 +5,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import '../widgets/category_field.dart';
 
 /// Categories of the group (rename, add, archive) and its classification
 /// rules, with a tester that shows how a bank label would be classified.
@@ -264,13 +265,6 @@ String _directionText(AppLocalizations l, RuleDirection d) => switch (d) {
   RuleDirection.credit => l.directionCredit,
 };
 
-String _kindText(AppLocalizations l, CategoryKind k) => switch (k) {
-  CategoryKind.income => l.kindIncome,
-  CategoryKind.expense => l.kindExpense,
-  CategoryKind.savings => l.kindSavings,
-  CategoryKind.transfer => l.kindTransfer,
-};
-
 /// Rule tester: the server cleans and classifies a label, writing nothing.
 class _Tester extends StatefulWidget {
   final int groupId;
@@ -502,7 +496,10 @@ class _CategoryDialogState extends State<_CategoryDialog> {
                   decoration: InputDecoration(labelText: l.categoryKindLabel),
                   items: [
                     for (final k in CategoryKind.values)
-                      DropdownMenuItem(value: k, child: Text(_kindText(l, k))),
+                      DropdownMenuItem(
+                        value: k,
+                        child: Text(categoryKindText(l, k)),
+                      ),
                   ],
                   onChanged: (v) => _kind = v!,
                 ),
@@ -704,17 +701,10 @@ class _RuleDialogState extends State<_RuleDialog> {
                       ? l.error_invalid_pattern
                       : null,
                 ),
-                DropdownButtonFormField<int?>(
+                CategoryFormField(
+                  categories: widget.categories,
                   initialValue: _category,
-                  isExpanded: true,
-                  decoration: InputDecoration(labelText: l.categoryLabel),
-                  items: [
-                    for (final c in widget.categories)
-                      DropdownMenuItem(
-                        value: c.id,
-                        child: Text(widget.label(c)),
-                      ),
-                  ],
+                  label: l.categoryLabel,
                   validator: (v) => v == null ? l.categoryLabel : null,
                   onChanged: (v) => _category = v,
                 ),

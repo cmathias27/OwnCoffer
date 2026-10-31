@@ -305,6 +305,16 @@
   "labelLabel": "Libellé",
   "categoryLabel": "Catégorie",
   "noCategory": "À classer",
+  "categorySearchHint": "Rechercher une catégorie",
+  "categorySearchEmpty": "Aucune catégorie ne correspond.",
+  "categoryCreateNamed": "Créer la catégorie « {name} »",
+  "@categoryCreateNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "cleared": "Pointée",
   "bankLabel": "Libellé de la banque",
   "alwaysClassify": "Toujours classer ainsi",
@@ -342,6 +352,8 @@
       }
     }
   },
+  "webSearch": "Rechercher ce libellé sur Google",
+  "webSearchHelp": "Ouvre Google dans un nouvel onglet avec le libellé nettoyé (pas le libellé complet de la banque).",
   "@dateValue": {
     "placeholders": {
       "date": {

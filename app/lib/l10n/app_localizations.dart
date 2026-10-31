@@ -1154,6 +1154,24 @@ abstract class AppLocalizations {
   /// **'À classer'**
   String get noCategory;
 
+  /// No description provided for @categorySearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher une catégorie'**
+  String get categorySearchHint;
+
+  /// No description provided for @categorySearchEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune catégorie ne correspond.'**
+  String get categorySearchEmpty;
+
+  /// No description provided for @categoryCreateNamed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer la catégorie « {name} »'**
+  String categoryCreateNamed(String name);
+
   /// No description provided for @cleared.
   ///
   /// In fr, this message translates to:
@@ -1249,6 +1267,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Date : {date}'**
   String dateValue(String date);
+
+  /// No description provided for @webSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher ce libellé sur Google'**
+  String get webSearch;
+
+  /// No description provided for @webSearchHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvre Google dans un nouvel onglet avec le libellé nettoyé (pas le libellé complet de la banque).'**
+  String get webSearchHelp;
 
   /// No description provided for @noteLabel.
   ///

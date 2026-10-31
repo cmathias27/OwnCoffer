@@ -1,8 +1,10 @@
 # Catalogue de catégories standard OwnCoffer — version 1
-# Identifiants stables : ne jamais renommer ni réutiliser un id ; pour retirer une entrée, ajouter deprecated: true.
+# Identifiants stables : ne jamais renommer ni réutiliser un id ; pour retirer une entrée, ajouter deprecated: true
+# (et replaced_by: <id> pour que les groupes existants y basculent leur catégorie).
+# since : version du catalogue qui a ajouté l'entrée (1 par défaut) ; les groupes existants la reçoivent à la mise à jour.
 # type : income (revenu), expense (dépense), savings (épargne), transfer (mouvement interne, exclu des revenus et dépenses).
 # icon : nom d'icône Material Symbols.
-version: 1
+version: 2
 categories:
   - id: income
     type: income
@@ -153,6 +155,33 @@ categories:
         name: { fr: "Argent de poche", en: "Pocket money" }
       - id: family.pets
         name: { fr: "Animaux", en: "Pets" }
+        # Replaced in version 2 by the Pets category and its sub-categories.
+        deprecated: true
+        replaced_by: pets.other
+  - id: pets
+    type: expense
+    icon: pets
+    since: 2
+    name: { fr: "Animaux", en: "Pets" }
+    children:
+      - id: pets.food
+        since: 2
+        name: { fr: "Alimentation animale", en: "Pet food" }
+      - id: pets.vet
+        since: 2
+        name: { fr: "Vétérinaire", en: "Vet" }
+      - id: pets.insurance
+        since: 2
+        name: { fr: "Assurance animaux", en: "Pet insurance" }
+      - id: pets.care
+        since: 2
+        name: { fr: "Toilettage, garde et pension", en: "Grooming, sitting and boarding" }
+      - id: pets.supplies
+        since: 2
+        name: { fr: "Accessoires et jouets", en: "Accessories and toys" }
+      - id: pets.other
+        since: 2
+        name: { fr: "Autres dépenses animaux", en: "Other pet expenses" }
   - id: education
     type: expense
     icon: school
