@@ -44,12 +44,11 @@ Les migrations de la base s'appliquent automatiquement au démarrage.
 
 ## Sauvegarder
 
-Faites une sauvegarde avant chaque mise à jour, et régulièrement (les sauvegardes automatiques arrivent en phase 5) :
-
 ```sh
-docker compose -f docker/compose.yaml exec -T postgres \
-  pg_dump -U owncoffer -d owncoffer --format=custom > owncoffer-$(date +%F).dump
+./docker/backup.sh            # écrit docker/backups/owncoffer-<date>-manual.dump
 ```
+
+Avec les mises à jour automatiques (plus bas), une sauvegarde est faite chaque nuit et avant chaque mise à jour. Les 30 dernières sont gardées **sur le même serveur** : copiez régulièrement `docker/backups/` ailleurs.
 
 Le fichier contient vos opérations bancaires : rangez-le dans un endroit chiffré, jamais dans le dépôt. Gardez aussi une copie de `docker/.env`, sans laquelle la double authentification ne se déchiffre plus.
 
@@ -62,7 +61,9 @@ docker compose -f docker/compose.yaml exec -T postgres \
 
 ## Mettre à jour
 
-1. Sauvegardez (ci-dessus).
+Sans les mises à jour automatiques ci-dessous :
+
+1. Sauvegardez : `./docker/backup.sh`.
 2. Lisez les nouveautés de la version dans [CHANGELOG.md](../CHANGELOG.md).
 3. Récupérez les fichiers de la nouvelle version et changez `OWNCOFFER_TAG` dans `docker/.env` :
    ```sh
@@ -74,6 +75,20 @@ docker compose -f docker/compose.yaml exec -T postgres \
 
 Les migrations de la base s'appliquent au démarrage.
 
+## Mises à jour automatiques (recommandé)
+
+Pour recevoir chaque **version publiée** sans intervenir, installez les deux minuteries systemd (en root, depuis le dossier d'installation) :
+
+```sh
+./docker/install-auto-update.sh
+```
+
+- `owncoffer-update.timer`, toutes les 15 minutes : si une nouvelle version `vX.Y.Z` est publiée et son image disponible, `docker/auto-update.sh` **sauvegarde la base**, passe les fichiers et l'image à cette version, redémarre et vérifie que l'API répond. Sinon, il **revient à la version précédente et restaure la sauvegarde**, puis n'essaie plus cette version : il attend la suivante. L'image `edge` (développement) n'est jamais installée ainsi.
+- `owncoffer-backup.timer`, chaque nuit à 3 h 30 : sauvegarde dans `docker/backups/` (30 dernières gardées, dossier lisible par root seulement).
+- Journal : `journalctl -u owncoffer-update -u owncoffer-backup`.
+
+Le script refuse d'agir si des fichiers suivis par git ont été modifiés à la main dans le dossier d'installation : réglez tout dans `docker/.env`.
+
 ## Image privée
 
 Si `docker compose pull` répond `denied` ou `unauthorized`, l'image `ghcr.io/cmathias27/owncoffer` n'est pas publique : rendez le paquet public dans GitHub (Packages, owncoffer, Package settings), ou connectez-vous avec `docker login ghcr.io` et un jeton ayant le droit `read:packages`.
@@ -82,4 +97,4 @@ Si `docker compose pull` répond `denied` ou `unauthorized`, l'image `ghcr.io/cm
 
 - `docker/.env` contient les secrets : ne jamais le commiter ni le partager. Le perdre rend les sessions invalides, et le mot de passe de la base reste celui de la première installation.
 - Laissez `OWNCOFFER_BIND=127.0.0.1` si le connecteur Cloudflare tourne sur la même machine.
-- Les sauvegardes automatiques arrivent en phase 5 : en attendant, suivez « Sauvegarder » ci-dessus.
+- Sauvegardes : voir « Sauvegarder » et « Mises à jour automatiques » ci-dessus ; une copie hors du serveur reste à votre charge.

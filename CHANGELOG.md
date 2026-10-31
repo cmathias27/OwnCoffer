@@ -42,8 +42,13 @@ Première version utilisable, pour un usage personnel (décision 0010). À utili
 - Chaque point d'accès vérifie groupe, rôle et visibilité du compte, et a son test d'isolation (décision 0016).
 - Un seul port publié, derrière Cloudflare ; aucune télémétrie.
 
+### Installation
+
+- Mise à jour automatique des versions publiées : sauvegarde avant, contrôle après, retour à la version précédente et à la sauvegarde en cas d'échec.
+- Sauvegarde de la base chaque nuit (30 dernières gardées) et à la demande (`docker/backup.sh`).
+
 ### Limites connues
 
 - Une seule banque testée : la Caisse d'Épargne.
-- Pas encore de sauvegarde automatique : voir « Sauvegarder » dans l'installation.
+- Sauvegardes sur le même serveur seulement : copiez `docker/backups/` ailleurs (chiffré).
 - Pas d'IA ni d'objectifs : ils viennent en phase 4.
