@@ -4,6 +4,7 @@ import 'package:serverpod/serverpod.dart';
 import '../core/dates.dart';
 import '../finance/alert_service.dart';
 import '../finance/forecast_service.dart';
+import '../finance/spending_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
@@ -129,10 +130,26 @@ class ScheduledEndpoint extends Endpoint {
 
   Future<void> delete(Session session, int scheduledId) async {
     final (current, account) = await _find(session, scheduledId);
-    await ScheduledTransaction.db.updateRow(
-      session,
-      current.copyWith(deletedAt: DateTime.now().toUtc()),
-    );
+    await session.db.transaction((tx) async {
+      await ScheduledTransaction.db.updateRow(
+        session,
+        current.copyWith(deletedAt: DateTime.now().toUtc()),
+        transaction: tx,
+      );
+      // Its operations are no longer realisations of anything.
+      final linked = await BankTransaction.db.find(
+        session,
+        where: (t) => t.scheduledId.equals(scheduledId),
+        transaction: tx,
+      );
+      if (linked.isNotEmpty) {
+        await BankTransaction.db.update(session, [
+          for (final t in linked)
+            t.copyWith(scheduledId: null, scheduledDueDate: null),
+        ], transaction: tx);
+      }
+    });
+    await AlertService.checkAfterChange(session, account);
     await Audit.log(
       session,
       groupId: account.groupId,
@@ -248,6 +265,107 @@ class ScheduledEndpoint extends Endpoint {
       after: saved,
     );
     return (await ScheduledTransaction.db.findById(session, saved.id!))!;
+  }
+
+  /// Due dates of the budget month containing [date], on the accounts the
+  /// user may see (or the one asked for): each occurrence of the planned
+  /// operations, paid, late, skipped or to come.
+  Future<DueCalendar> calendar(
+    Session session,
+    int groupId,
+    DateTime date, {
+    int? accountId,
+  }) async {
+    final ids = await SpendingService.accounts(session, groupId, accountId);
+    final u = date.toUtc();
+    final month = await SpendingService.period(
+      session,
+      groupId,
+      core.PeriodKind.month,
+      core.LocalDate(u.year, u.month, u.day),
+    );
+    final today = core.LocalDate.fromDateTime(DateTime.now().toUtc());
+    final rows = ids.isEmpty
+        ? <ScheduledTransaction>[]
+        : await ScheduledTransaction.db.find(
+            session,
+            where: (s) => s.accountId.inSet(ids) & s.deletedAt.equals(null),
+          );
+    final Set<int> scheduledIds = {for (final s in rows) s.id!};
+    final linked = <(int, core.LocalDate), BankTransaction>{};
+    final loans = <int, int>{};
+    if (scheduledIds.isNotEmpty) {
+      for (final t in await BankTransaction.db.find(
+        session,
+        where: (t) =>
+            t.scheduledId.inSet(scheduledIds) &
+            t.deletedAt.equals(null) &
+            (t.scheduledDueDate >= month.start.toDb()) &
+            (t.scheduledDueDate < month.end.toDb()),
+      )) {
+        linked[(t.scheduledId!, t.scheduledDueDate!.toLocalDate())] = t;
+      }
+      for (final l in await Loan.db.find(
+        session,
+        where: (l) =>
+            l.scheduledId.inSet(scheduledIds) & l.deletedAt.equals(null),
+      )) {
+        loans[l.scheduledId!] = l.id!;
+      }
+    }
+    final items = <CalendarItem>[];
+    var debits = 0, credits = 0;
+    for (final s in rows) {
+      for (final due in ForecastService.recurrenceOf(
+        s,
+      ).between(month.start, month.last)) {
+        final t = linked[(s.id!, due)];
+        final status = OccurrenceStatus.values.byName(
+          core
+              .occurrenceStatus(
+                due: due,
+                today: today,
+                linked: t != null,
+                nextDue: s.nextDue?.toLocalDate(),
+              )
+              .name,
+        );
+        if (status == OccurrenceStatus.upcoming ||
+            status == OccurrenceStatus.late) {
+          if (s.amountCents < 0) {
+            debits += s.amountCents;
+          } else {
+            credits += s.amountCents;
+          }
+        }
+        items.add(
+          CalendarItem(
+            date: due.toDb(),
+            scheduledId: s.id!,
+            accountId: s.accountId,
+            label: s.label,
+            amountCents: s.amountCents,
+            categoryId: s.categoryId,
+            subscription: s.subscription,
+            loanId: loans[s.id],
+            status: status,
+            transactionId: t?.id,
+            transactionAmountCents: t?.amountCents,
+          ),
+        );
+      }
+    }
+    items.sort((a, b) {
+      final c = a.date.compareTo(b.date);
+      return c != 0 ? c : a.amountCents.compareTo(b.amountCents);
+    });
+    return DueCalendar(
+      start: month.start.toDb(),
+      last: month.last.toDb(),
+      items: items,
+      upcomingDebitsCents: debits,
+      upcomingCreditsCents: credits,
+    );
   }
 
   /// The next occurrence will not happen (or was paid otherwise): skip it.

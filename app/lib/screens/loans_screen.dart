@@ -86,6 +86,11 @@ class LoansScreenState extends State<LoansScreen> {
     }
   }
 
+  static List<LoanInfo> _ordered(List<LoanInfo> loans) => [
+    ...loans.where((x) => x.loan.kind != LoanKind.installments),
+    ...loans.where((x) => x.loan.kind == LoanKind.installments),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
@@ -129,7 +134,19 @@ class LoansScreenState extends State<LoansScreen> {
                       padding: const EdgeInsets.all(32),
                       child: Text(l.loansEmpty, textAlign: TextAlign.center),
                     ),
-                  for (final info in d.loans)
+                  for (final (i, info) in _ordered(d.loans).indexed) ...[
+                    // Payments in instalments come last, under their title.
+                    if (info.loan.kind == LoanKind.installments &&
+                        (i == 0 ||
+                            _ordered(d.loans)[i - 1].loan.kind !=
+                                LoanKind.installments))
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+                        child: Text(
+                          l.loanSectionInstallments,
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ),
                     Card(
                       margin: const EdgeInsets.only(bottom: 12),
                       child: InkWell(
@@ -141,6 +158,7 @@ class LoansScreenState extends State<LoansScreen> {
                         ),
                       ),
                     ),
+                  ],
                   Text(l.loansDisclaimer, style: theme.textTheme.bodySmall),
                 ],
               ),
@@ -156,6 +174,7 @@ String loanKindText(AppLocalizations l, LoanKind k) => switch (k) {
   LoanKind.student => l.loanKindStudent,
   LoanKind.personal => l.loanKindPersonal,
   LoanKind.other => l.loanKindOther,
+  LoanKind.installments => l.loanKindInstallments,
 };
 
 IconData _kindIcon(LoanKind k) => switch (k) {
@@ -165,6 +184,7 @@ IconData _kindIcon(LoanKind k) => switch (k) {
   LoanKind.student => Icons.school_outlined,
   LoanKind.personal => Icons.people_outline,
   LoanKind.other => Icons.account_balance_outlined,
+  LoanKind.installments => Icons.splitscreen_outlined,
 };
 
 /// `3,45 %` from thousandths of a percent.
@@ -385,6 +405,8 @@ class LoanDetailScreen extends StatefulWidget {
 class _LoanDetailScreenState extends State<LoanDetailScreen> {
   late LoanInfo _info = widget.info;
   List<LoanInstallment>? _schedule;
+  List<BankTransaction>? _operations;
+  var _allOperations = false;
   final _extra = TextEditingController();
   EarlyRepayment? _simulation;
   String? _error;
@@ -404,8 +426,11 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
 
   Future<void> _load() async {
     try {
-      final s = await client.loan.schedule(_info.loan.id!);
-      if (mounted) setState(() => _schedule = s);
+      final (s, ops) = await (
+        client.loan.schedule(_info.loan.id!),
+        client.loan.operations(_info.loan.id!),
+      ).wait;
+      if (mounted) setState(() => (_schedule = s, _operations = ops));
     } on Object catch (e) {
       if (mounted) {
         setState(() => _error = errorText(AppLocalizations.of(context), e));
@@ -443,6 +468,104 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
       setState(() => (_info = saved, _changed = true, _simulation = null));
       await _load();
     }
+  }
+
+  /// The debits of the account that concern this loan, newest first.
+  Widget _operationsCard(
+    BuildContext context,
+    AppLocalizations l,
+    ThemeData theme,
+  ) {
+    final ops = _operations;
+    final currency =
+        widget.accounts
+            .where((a) => a.id == _info.loan.accountId)
+            .firstOrNull
+            ?.currency ??
+        'EUR';
+    final total = (ops ?? const <BankTransaction>[]).fold(
+      0,
+      (a, t) => a - t.amountCents,
+    );
+    const shown = 12;
+    final visible = ops == null
+        ? const <BankTransaction>[]
+        : (_allOperations ? ops : ops.take(shown).toList());
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l.loanOperationsTitle, style: theme.textTheme.titleMedium),
+            if (ops == null)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else if (ops.isEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(l.loanOperationsEmpty),
+              )
+            else ...[
+              Text(
+                l.loanOperationsSummary(
+                  ops.length,
+                  context.money(total, currency: currency),
+                ),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 8),
+              for (final t in visible)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 110,
+                        child: Text(
+                          context.day(t.date),
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          t.cleanLabel,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        context.money(t.amountCents, currency: currency),
+                        style: const TextStyle(
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              if (ops.length > shown)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    onPressed: () =>
+                        setState(() => _allOperations = !_allOperations),
+                    child: Text(
+                      _allOperations
+                          ? l.rankingShowLess
+                          : l.loanOperationsMore(ops.length),
+                    ),
+                  ),
+                ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _delete() async {
@@ -565,6 +688,8 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 12),
+            _operationsCard(context, l, theme),
             const SizedBox(height: 12),
             if (info.nextDueDate != null)
               Card(
@@ -765,6 +890,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
   late final Loan? _l = widget.loan;
   late final BankTransaction? _op = widget.fromOperation;
   late var _kind = _l?.kind ?? LoanKind.mortgage;
+  bool get _installments => _kind == LoanKind.installments;
   late final _lender = TextEditingController(
     text: _l?.lender ?? _op?.cleanLabel,
   );
@@ -982,8 +1108,23 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                             child: Text(loanKindText(l, k)),
                           ),
                       ],
-                      onChanged: (v) => setState(() => _kind = v!),
+                      onChanged: (v) => setState(() {
+                        _kind = v!;
+                        if (_installments) {
+                          _rate.text = '0';
+                          _apr.clear();
+                          _insurance.clear();
+                        }
+                      }),
                     ),
+                    if (_installments)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          l.loanInstallmentsHelp,
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ),
                     gap,
                     TextFormField(
                       controller: _lender,
@@ -1005,7 +1146,9 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         decimal: true,
                       ),
                       decoration: InputDecoration(
-                        labelText: l.loanPrincipal,
+                        labelText: _installments
+                            ? l.loanInstallmentsTotal
+                            : l.loanPrincipal,
                         suffixText: '€',
                       ),
                       validator: (v) => (parseUserAmount(v ?? '') ?? 0) > 0
@@ -1022,53 +1165,59 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         ),
                       ),
                     gap,
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _rate,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
+                    if (!_installments) ...[
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _rate,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                              decoration: InputDecoration(
+                                labelText: l.loanRate,
+                                suffixText: '%',
+                                helperText: l.loanRateHelp,
+                              ),
+                              validator: (v) => parseRateMilli(v ?? '') == null
+                                  ? l.loanRateInvalid
+                                  : null,
                             ),
-                            decoration: InputDecoration(
-                              labelText: l.loanRate,
-                              suffixText: '%',
-                              helperText: l.loanRateHelp,
-                            ),
-                            validator: (v) => parseRateMilli(v ?? '') == null
-                                ? l.loanRateInvalid
-                                : null,
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _apr,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _apr,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                              decoration: InputDecoration(
+                                labelText: l.loanApr,
+                                suffixText: '%',
+                                helperText: l.optional,
+                              ),
+                              validator: (v) =>
+                                  v == null ||
+                                      v.trim().isEmpty ||
+                                      parseRateMilli(v) != null
+                                  ? null
+                                  : l.loanRateInvalid,
                             ),
-                            decoration: InputDecoration(
-                              labelText: l.loanApr,
-                              suffixText: '%',
-                              helperText: l.optional,
-                            ),
-                            validator: (v) =>
-                                v == null ||
-                                    v.trim().isEmpty ||
-                                    parseRateMilli(v) != null
-                                ? null
-                                : l.loanRateInvalid,
                           ),
-                        ),
-                      ],
-                    ),
-                    gap,
+                        ],
+                      ),
+                      gap,
+                    ],
                     TextFormField(
                       controller: _months,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: l.loanDurationMonths,
-                        helperText: l.loanDurationHelp,
+                        labelText: _installments
+                            ? l.loanInstallmentsCount
+                            : l.loanDurationMonths,
+                        helperText: _installments ? null : l.loanDurationHelp,
                       ),
                       validator: (v) {
                         final n = int.tryParse(v?.trim() ?? '');
@@ -1113,21 +1262,24 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                     ),
                     Row(
                       children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _insurance,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
+                        if (!_installments) ...[
+                          Expanded(
+                            child: TextFormField(
+                              controller: _insurance,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                              decoration: InputDecoration(
+                                labelText: l.loanInsuranceMonthly,
+                                suffixText: '€',
+                              ),
+                              validator: optionalAmount,
+                              onChanged: (_) => setState(() {}),
                             ),
-                            decoration: InputDecoration(
-                              labelText: l.loanInsuranceMonthly,
-                              suffixText: '€',
-                            ),
-                            validator: optionalAmount,
-                            onChanged: (_) => setState(() {}),
                           ),
-                        ),
-                        const SizedBox(width: 12),
+                          const SizedBox(width: 12),
+                        ],
                         Expanded(
                           child: TextFormField(
                             controller: _fees,

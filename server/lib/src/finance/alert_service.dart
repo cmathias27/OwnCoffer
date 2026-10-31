@@ -11,6 +11,7 @@ import '../generated/protocol.dart';
 import '../i18n/messages.dart';
 import '../mail/mail_service.dart';
 import 'forecast_service.dart';
+import 'goal_alert_service.dart';
 
 /// Overdraft alert (roadbook phase 3, issue #53): when the forecast of an
 /// account goes below its alert threshold, every member who can see the
@@ -34,6 +35,7 @@ abstract final class AlertService {
         level: LogLevel.error,
       );
     }
+    await GoalAlertService.checkAfterChange(session, account.groupId);
   }
 
   /// Checks one account; returns the number of new notifications.
@@ -182,6 +184,11 @@ abstract final class AlertService {
           core.LocalDate.fromDateTime(DateTime.now().toUtc()),
         );
         if (n > 0) session.log('[alert] $n overdraft notification(s)');
+        final g = await GoalAlertService.checkAll(
+          session,
+          core.LocalDate.fromDateTime(DateTime.now().toUtc()),
+        );
+        if (g > 0) session.log('[alert] $g goal notification(s)');
       } finally {
         await session.close();
       }

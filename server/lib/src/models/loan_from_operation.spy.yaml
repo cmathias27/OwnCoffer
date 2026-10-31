@@ -7,3 +7,5 @@ fields:
   reclassifiedCount: int
   ### Operations recognised as past instalments of the loan.
   linkedCount: int
+  ### Rule created by this action (for undo), if any.
+  ruleId: int?

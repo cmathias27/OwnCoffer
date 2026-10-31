@@ -148,10 +148,29 @@ class CategoriesScreenState extends State<CategoriesScreen> {
         (children[p] ??= []).add(c);
       }
     }
+    // Top-level categories stand out on a tinted band, in bold; their
+    // sub-categories are indented along a guide line, in a lighter style.
     Widget tile(Category c, {required bool child}) => ListTile(
-      contentPadding: EdgeInsets.only(left: child ? 48 : 16, right: 16),
-      leading: child ? null : Icon(_kindIcon(c.kind)),
-      title: Text(context.categoryName(c)),
+      contentPadding: EdgeInsets.only(left: child ? 40 : 16, right: 16),
+      tileColor: child ? null : theme.colorScheme.surfaceContainerHigh,
+      leading: child
+          ? Container(
+              width: 2,
+              height: 36,
+              color: theme.colorScheme.outlineVariant,
+            )
+          : Icon(_kindIcon(c.kind)),
+      minLeadingWidth: child ? 8 : null,
+      title: Text(
+        context.categoryName(c),
+        style: child
+            ? theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              )
+            : theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+      ),
       subtitle: c.name != null && c.standardCode != null
           ? Text(
               AppLocalizations.of(context).categoryStandardName(
@@ -166,6 +185,7 @@ class CategoriesScreenState extends State<CategoriesScreen> {
       padding: const EdgeInsets.only(bottom: 96),
       children: [
         for (final c in mains) ...[
+          const SizedBox(height: 8),
           tile(c, child: false),
           for (final k in children[c.id] ?? const <Category>[])
             tile(k, child: true),

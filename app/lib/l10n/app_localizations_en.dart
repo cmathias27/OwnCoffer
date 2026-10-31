@@ -1897,4 +1897,361 @@ class AppLocalizationsEn extends AppLocalizations {
   String sameProviderSummary(int count, String total, String average) {
     return '$count operations · total $total · average $average';
   }
+
+  @override
+  String get undoDone => 'Undone.';
+
+  @override
+  String get categoryChanged => 'Category changed.';
+
+  @override
+  String get clearedChanged => 'Checking changed.';
+
+  @override
+  String get goalSaved => 'Goal saved.';
+
+  @override
+  String get goalRemoved => 'Goal removed.';
+
+  @override
+  String get splitTitle => 'Split the operation';
+
+  @override
+  String get splitAction => 'Split between categories';
+
+  @override
+  String get splitAddPart => 'Add a part';
+
+  @override
+  String splitRemaining(String amount) {
+    return 'Left to allocate: $amount';
+  }
+
+  @override
+  String get splitBalanced => 'The total matches the operation\'s amount.';
+
+  @override
+  String get splitRemove => 'Remove the split';
+
+  @override
+  String get splitSaved => 'Operation split.';
+
+  @override
+  String splitPartLabel(int number) {
+    return 'Part $number';
+  }
+
+  @override
+  String splitPartsSummary(int count) {
+    return 'Split into $count parts';
+  }
+
+  @override
+  String get splitNoteLabel => 'Detail';
+
+  @override
+  String get splitRemovePart => 'Remove this part';
+
+  @override
+  String get leftToLiveTitle => 'Left to live on';
+
+  @override
+  String leftToLiveBody(String perDay, int days, String date) {
+    return 'that is $perDay a day for $days days, until $date';
+  }
+
+  @override
+  String leftToLiveDetail(String balance, String debits, String credits) {
+    return 'Balance $balance · planned debits $debits · planned credits $credits';
+  }
+
+  @override
+  String get leftToLiveHelp =>
+      'Checking accounts only, planned operations included, until the end of the budget month (the day before the next pay day).';
+
+  @override
+  String get calendarTitle => 'Due-date calendar';
+
+  @override
+  String get calendarEmpty => 'No due date over this period.';
+
+  @override
+  String calendarUpcoming(String debits, String credits) {
+    return 'Still to come: $debits of debits, $credits of credits';
+  }
+
+  @override
+  String get statusPaid => 'Paid';
+
+  @override
+  String get statusLate => 'Late';
+
+  @override
+  String get statusSkipped => 'Skipped';
+
+  @override
+  String get statusUpcoming => 'Upcoming';
+
+  @override
+  String statusPaidOther(String amount) {
+    return 'Paid: $amount';
+  }
+
+  @override
+  String get calendarLoan => 'Loan';
+
+  @override
+  String get calendarSubscription => 'Subscription';
+
+  @override
+  String get reviewTitle => 'Month review';
+
+  @override
+  String reviewNet(String net, String previous) {
+    return 'Left over this month: $net (previous month: $previous)';
+  }
+
+  @override
+  String get reviewRises => 'Up';
+
+  @override
+  String get reviewDrops => 'Down';
+
+  @override
+  String reviewChange(String amount, String average) {
+    return '$amount instead of $average on average';
+  }
+
+  @override
+  String get reviewGoalsOver => 'Goals exceeded';
+
+  @override
+  String reviewGoalOver(String amount, String goal) {
+    return '$amount for a goal of $goal';
+  }
+
+  @override
+  String get reviewFees => 'Bank fees';
+
+  @override
+  String reviewFeesTotal(String amount) {
+    return '$amount of bank fees this month';
+  }
+
+  @override
+  String get reviewNoFees => 'No bank fees this month.';
+
+  @override
+  String get reviewBiggest => 'Biggest expenses';
+
+  @override
+  String get reviewSubscriptions => 'Subscriptions';
+
+  @override
+  String reviewSubscriptionChange(String label, String actual, String planned) {
+    return '$label: $actual instead of $planned';
+  }
+
+  @override
+  String reviewNewSubscription(String label, String amount) {
+    return 'New subscription: $label ($amount)';
+  }
+
+  @override
+  String reviewUnclassified(int count) {
+    return '$count operations are still to classify this month.';
+  }
+
+  @override
+  String get reviewNothing => 'Nothing to report.';
+
+  @override
+  String get balanceCheckAction => 'Check the balance';
+
+  @override
+  String get balanceCheckHelp =>
+      'Enter the balance your bank shows at the end of a day: OwnCoffer compares it with the balance computed from the operations.';
+
+  @override
+  String get balanceCheckDate => 'Balance date';
+
+  @override
+  String get balanceCheckAmount => 'Balance shown by the bank';
+
+  @override
+  String get balanceCheckOk => 'The balance matches.';
+
+  @override
+  String balanceCheckGap(String amount, String computed) {
+    return 'Gap of $amount: the computed balance is $computed.';
+  }
+
+  @override
+  String balanceCheckUncleared(String amount) {
+    return 'Including $amount of operations entered by hand and not checked, which may not have reached the bank yet.';
+  }
+
+  @override
+  String balanceCheckLastImport(String date) {
+    return 'Last imported operation: $date. A statement may be missing.';
+  }
+
+  @override
+  String get balanceCheckHistory => 'Last checks';
+
+  @override
+  String balanceCheckRow(String date, String bank, String gap) {
+    return '$date: bank $bank, gap $gap';
+  }
+
+  @override
+  String notifGoalWarningTitle(String category) {
+    return 'Goal “$category” almost reached';
+  }
+
+  @override
+  String notifGoalOverTitle(String category) {
+    return 'Goal “$category” exceeded';
+  }
+
+  @override
+  String notifGoalBody(String spent, String goal) {
+    return '$spent spent for a goal of $goal this month.';
+  }
+
+  @override
+  String get loanKindInstallments => 'Payment in instalments';
+
+  @override
+  String get loanInstallmentsCount => 'Number of instalments';
+
+  @override
+  String get loanInstallmentsTotal => 'Total amount of the purchase';
+
+  @override
+  String get loanInstallmentsHelp =>
+      'Payment in 3 or 4 instalments (Alma, Oney, card…), usually free: the rate stays at 0%.';
+
+  @override
+  String get loanSectionInstallments => 'Payments in instalments';
+
+  @override
+  String get error_split_invalid =>
+      'A split needs at least two parts of the operation\'s sign adding up to its amount.';
+
+  @override
+  String get goalsTitle => 'Goals of the month';
+
+  @override
+  String get goalsEmpty =>
+      'No goal yet. Set a monthly limit on an expense category to see where you stand as the month goes.';
+
+  @override
+  String goalsSummary(int ok, int warning, int over) {
+    return '$ok on track · $warning almost reached · $over exceeded';
+  }
+
+  @override
+  String get goalPaceHelp =>
+      'The vertical mark shows where you should be today to keep the goal until the end of the month.';
+
+  @override
+  String goalSpentOf(String spent, String goal) {
+    return '$spent of $goal';
+  }
+
+  @override
+  String rankingShowAll(int count) {
+    return 'See all $count categories';
+  }
+
+  @override
+  String get rankingShowLess => 'Show less';
+
+  @override
+  String rankingTotal(String amount) {
+    return 'Total: $amount';
+  }
+
+  @override
+  String rankingVsAverage(String percent, String amount) {
+    return '$percent% vs average ($amount)';
+  }
+
+  @override
+  String get budgetBalanceTitle => 'Period overview';
+
+  @override
+  String budgetOverspent(String amount) {
+    return 'You spent $amount more than your income';
+  }
+
+  @override
+  String budgetLeftOver(String amount) {
+    return 'You have $amount left';
+  }
+
+  @override
+  String budgetBarsSemantic(String income, String out) {
+    return 'Income $income, expenses and savings $out';
+  }
+
+  @override
+  String get budgetExpensesAndSavings => 'Expenses and savings';
+
+  @override
+  String get budgetSavingsPart => 'of which savings';
+
+  @override
+  String budgetVsPrevious(String delta) {
+    return '$delta vs previous period';
+  }
+
+  @override
+  String unclassifiedBanner(int count, String amount) {
+    return '$count operations to classify ($amount)';
+  }
+
+  @override
+  String get unclassifiedBannerHelp =>
+      'They count in the totals but not in the rankings or goals.';
+
+  @override
+  String get classifyNow => 'Classify';
+
+  @override
+  String get loanAttachTitle => 'Instalment of which loan?';
+
+  @override
+  String get loanAttachHelp =>
+      'Pick a loan already entered: this debit is attached to it and the next ones are classified automatically.';
+
+  @override
+  String get loanAttachNew => 'Declare a new loan';
+
+  @override
+  String loanAttachDone(int linked, int others) {
+    return 'Debit attached to the loan: $linked instalments linked, $others other operations classified.';
+  }
+
+  @override
+  String get error_loan_other_account =>
+      'This loan is debited from another account.';
+
+  @override
+  String get loanOperationsTitle => 'Loan operations';
+
+  @override
+  String loanOperationsSummary(int count, String total) {
+    return '$count debits · $total paid';
+  }
+
+  @override
+  String get loanOperationsEmpty =>
+      'No debit attached yet. From a debit\'s details, “This is a loan instalment” attaches it to this loan.';
+
+  @override
+  String loanOperationsMore(int count) {
+    return 'See all $count debits';
+  }
 }

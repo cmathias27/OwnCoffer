@@ -1,0 +1,21 @@
+### Month-end review, computed without AI: what changed, what it cost.
+class: MonthReview
+fields:
+  start: DateTime
+  last: DateTime
+  incomeCents: int
+  expenseCents: int
+  savingsCents: int
+  netCents: int
+  previousNetCents: int
+  rises: List<CategoryChangeInfo>
+  drops: List<CategoryChangeInfo>
+  ### Expense goals exceeded (month view).
+  goalsOver: List<CategoryFlow>
+  ### Bank fees and overdraft interest of the month.
+  bankFeesCents: int
+  bankFees: List<BankTransaction>
+  biggestExpenses: List<BankTransaction>
+  subscriptionChanges: List<SubscriptionChange>
+  newSubscriptions: List<ScheduledTransaction>
+  unclassifiedCount: int

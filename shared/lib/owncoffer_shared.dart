@@ -11,6 +11,7 @@ library;
 export 'src/banks/caisse_epargne.dart';
 export 'src/budget/goals.dart';
 export 'src/budget/period.dart';
+export 'src/budget/review.dart';
 export 'src/budget/spending.dart';
 export 'src/budget/subscriptions.dart';
 export 'src/categories.dart';

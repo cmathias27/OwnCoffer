@@ -3150,6 +3150,564 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{count} opérations · total {total} · moyenne {average}'**
   String sameProviderSummary(int count, String total, String average);
+
+  /// No description provided for @undoDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Action annulée.'**
+  String get undoDone;
+
+  /// No description provided for @categoryChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie modifiée.'**
+  String get categoryChanged;
+
+  /// No description provided for @clearedChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pointage modifié.'**
+  String get clearedChanged;
+
+  /// No description provided for @goalSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif enregistré.'**
+  String get goalSaved;
+
+  /// No description provided for @goalRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif supprimé.'**
+  String get goalRemoved;
+
+  /// No description provided for @splitTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ventiler l\'opération'**
+  String get splitTitle;
+
+  /// No description provided for @splitAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ventiler entre plusieurs catégories'**
+  String get splitAction;
+
+  /// No description provided for @splitAddPart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une part'**
+  String get splitAddPart;
+
+  /// No description provided for @splitRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste à répartir : {amount}'**
+  String splitRemaining(String amount);
+
+  /// No description provided for @splitBalanced.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le total correspond au montant de l\'opération.'**
+  String get splitBalanced;
+
+  /// No description provided for @splitRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ne plus ventiler'**
+  String get splitRemove;
+
+  /// No description provided for @splitSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération ventilée.'**
+  String get splitSaved;
+
+  /// No description provided for @splitPartLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Part {number}'**
+  String splitPartLabel(int number);
+
+  /// No description provided for @splitPartsSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ventilée en {count} parts'**
+  String splitPartsSummary(int count);
+
+  /// No description provided for @splitNoteLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Précision'**
+  String get splitNoteLabel;
+
+  /// No description provided for @splitRemovePart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer cette part'**
+  String get splitRemovePart;
+
+  /// No description provided for @leftToLiveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste à vivre'**
+  String get leftToLiveTitle;
+
+  /// No description provided for @leftToLiveBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'soit {perDay} par jour pendant {days} jours, jusqu\'au {date}'**
+  String leftToLiveBody(String perDay, int days, String date);
+
+  /// No description provided for @leftToLiveDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde {balance} · prélèvements prévus {debits} · rentrées prévues {credits}'**
+  String leftToLiveDetail(String balance, String debits, String credits);
+
+  /// No description provided for @leftToLiveHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes courants seulement, opérations prévues comprises, jusqu\'à la fin du mois de budget (veille de la prochaine paie).'**
+  String get leftToLiveHelp;
+
+  /// No description provided for @calendarTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calendrier des échéances'**
+  String get calendarTitle;
+
+  /// No description provided for @calendarEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune échéance prévue sur cette période.'**
+  String get calendarEmpty;
+
+  /// No description provided for @calendarUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Encore à venir : {debits} de prélèvements, {credits} de rentrées'**
+  String calendarUpcoming(String debits, String credits);
+
+  /// No description provided for @statusPaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passé'**
+  String get statusPaid;
+
+  /// No description provided for @statusLate.
+  ///
+  /// In fr, this message translates to:
+  /// **'En retard'**
+  String get statusLate;
+
+  /// No description provided for @statusSkipped.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauté'**
+  String get statusSkipped;
+
+  /// No description provided for @statusUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get statusUpcoming;
+
+  /// No description provided for @statusPaidOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passé : {amount}'**
+  String statusPaidOther(String amount);
+
+  /// No description provided for @calendarLoan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédit'**
+  String get calendarLoan;
+
+  /// No description provided for @calendarSubscription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement'**
+  String get calendarSubscription;
+
+  /// No description provided for @reviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revue du mois'**
+  String get reviewTitle;
+
+  /// No description provided for @reviewNet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste du mois : {net} (mois précédent : {previous})'**
+  String reviewNet(String net, String previous);
+
+  /// No description provided for @reviewRises.
+  ///
+  /// In fr, this message translates to:
+  /// **'En hausse'**
+  String get reviewRises;
+
+  /// No description provided for @reviewDrops.
+  ///
+  /// In fr, this message translates to:
+  /// **'En baisse'**
+  String get reviewDrops;
+
+  /// No description provided for @reviewChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} au lieu de {average} en moyenne'**
+  String reviewChange(String amount, String average);
+
+  /// No description provided for @reviewGoalsOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectifs dépassés'**
+  String get reviewGoalsOver;
+
+  /// No description provided for @reviewGoalOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} pour un objectif de {goal}'**
+  String reviewGoalOver(String amount, String goal);
+
+  /// No description provided for @reviewFees.
+  ///
+  /// In fr, this message translates to:
+  /// **'Frais bancaires'**
+  String get reviewFees;
+
+  /// No description provided for @reviewFeesTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} de frais bancaires ce mois-ci'**
+  String reviewFeesTotal(String amount);
+
+  /// No description provided for @reviewNoFees.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun frais bancaire ce mois-ci.'**
+  String get reviewNoFees;
+
+  /// No description provided for @reviewBiggest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus grosses dépenses'**
+  String get reviewBiggest;
+
+  /// No description provided for @reviewSubscriptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnements'**
+  String get reviewSubscriptions;
+
+  /// No description provided for @reviewSubscriptionChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} : {actual} au lieu de {planned}'**
+  String reviewSubscriptionChange(String label, String actual, String planned);
+
+  /// No description provided for @reviewNewSubscription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel abonnement : {label} ({amount})'**
+  String reviewNewSubscription(String label, String amount);
+
+  /// No description provided for @reviewUnclassified.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} opérations restent à classer sur ce mois.'**
+  String reviewUnclassified(int count);
+
+  /// No description provided for @reviewNothing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien de notable.'**
+  String get reviewNothing;
+
+  /// No description provided for @balanceCheckAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôler le solde'**
+  String get balanceCheckAction;
+
+  /// No description provided for @balanceCheckHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez le solde affiché par votre banque en fin de journée à une date : OwnCoffer le compare avec le solde calculé à partir des opérations.'**
+  String get balanceCheckHelp;
+
+  /// No description provided for @balanceCheckDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date du solde'**
+  String get balanceCheckDate;
+
+  /// No description provided for @balanceCheckAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde affiché par la banque'**
+  String get balanceCheckAmount;
+
+  /// No description provided for @balanceCheckOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le solde correspond.'**
+  String get balanceCheckOk;
+
+  /// No description provided for @balanceCheckGap.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écart de {amount} : le solde calculé est de {computed}.'**
+  String balanceCheckGap(String amount, String computed);
+
+  /// No description provided for @balanceCheckUncleared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dont {amount} d\'opérations saisies à la main et non pointées, peut-être pas encore passées à la banque.'**
+  String balanceCheckUncleared(String amount);
+
+  /// No description provided for @balanceCheckLastImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière opération importée : {date}. Un relevé manque peut-être.'**
+  String balanceCheckLastImport(String date);
+
+  /// No description provided for @balanceCheckHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Derniers contrôles'**
+  String get balanceCheckHistory;
+
+  /// No description provided for @balanceCheckRow.
+  ///
+  /// In fr, this message translates to:
+  /// **'{date} : banque {bank}, écart {gap}'**
+  String balanceCheckRow(String date, String bank, String gap);
+
+  /// No description provided for @notifGoalWarningTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif « {category} » bientôt atteint'**
+  String notifGoalWarningTitle(String category);
+
+  /// No description provided for @notifGoalOverTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif « {category} » dépassé'**
+  String notifGoalOverTitle(String category);
+
+  /// No description provided for @notifGoalBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{spent} dépensés pour un objectif de {goal} ce mois-ci.'**
+  String notifGoalBody(String spent, String goal);
+
+  /// No description provided for @loanKindInstallments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement en plusieurs fois'**
+  String get loanKindInstallments;
+
+  /// No description provided for @loanInstallmentsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre d\'échéances'**
+  String get loanInstallmentsCount;
+
+  /// No description provided for @loanInstallmentsTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant total de l\'achat'**
+  String get loanInstallmentsTotal;
+
+  /// No description provided for @loanInstallmentsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement en 3 ou 4 fois (Alma, Oney, carte bancaire…), généralement sans frais : le taux reste à 0 %.'**
+  String get loanInstallmentsHelp;
+
+  /// No description provided for @loanSectionInstallments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiements en plusieurs fois'**
+  String get loanSectionInstallments;
+
+  /// No description provided for @error_split_invalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'La ventilation doit compter au moins deux parts du même signe que l\'opération, dont le total est égal à son montant.'**
+  String get error_split_invalid;
+
+  /// No description provided for @goalsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectifs du mois'**
+  String get goalsTitle;
+
+  /// No description provided for @goalsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun objectif. Fixez un plafond mensuel sur une catégorie de dépenses pour voir où vous en êtes au fil du mois.'**
+  String get goalsEmpty;
+
+  /// No description provided for @goalsSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'{ok} dans l\'objectif · {warning} bientôt atteint · {over} dépassé'**
+  String goalsSummary(int ok, int warning, int over);
+
+  /// No description provided for @goalPaceHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le trait vertical marque où vous devriez en être aujourd\'hui pour tenir l\'objectif jusqu\'à la fin du mois.'**
+  String get goalPaceHelp;
+
+  /// No description provided for @goalSpentOf.
+  ///
+  /// In fr, this message translates to:
+  /// **'{spent} sur {goal}'**
+  String goalSpentOf(String spent, String goal);
+
+  /// No description provided for @rankingShowAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les {count} catégories'**
+  String rankingShowAll(int count);
+
+  /// No description provided for @rankingShowLess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réduire'**
+  String get rankingShowLess;
+
+  /// No description provided for @rankingTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total : {amount}'**
+  String rankingTotal(String amount);
+
+  /// No description provided for @rankingVsAverage.
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} % par rapport à la moyenne ({amount})'**
+  String rankingVsAverage(String percent, String amount);
+
+  /// No description provided for @budgetBalanceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan de la période'**
+  String get budgetBalanceTitle;
+
+  /// No description provided for @budgetOverspent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez dépensé {amount} de plus que vos revenus'**
+  String budgetOverspent(String amount);
+
+  /// No description provided for @budgetLeftOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il vous reste {amount}'**
+  String budgetLeftOver(String amount);
+
+  /// No description provided for @budgetBarsSemantic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus {income}, dépenses et épargne {out}'**
+  String budgetBarsSemantic(String income, String out);
+
+  /// No description provided for @budgetExpensesAndSavings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses et épargne'**
+  String get budgetExpensesAndSavings;
+
+  /// No description provided for @budgetSavingsPart.
+  ///
+  /// In fr, this message translates to:
+  /// **'dont épargne'**
+  String get budgetSavingsPart;
+
+  /// No description provided for @budgetVsPrevious.
+  ///
+  /// In fr, this message translates to:
+  /// **'{delta} par rapport à la période précédente'**
+  String budgetVsPrevious(String delta);
+
+  /// No description provided for @unclassifiedBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} opérations à classer ({amount})'**
+  String unclassifiedBanner(int count, String amount);
+
+  /// No description provided for @unclassifiedBannerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Elles comptent dans les totaux mais pas dans les classements ni les objectifs.'**
+  String get unclassifiedBannerHelp;
+
+  /// No description provided for @classifyNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classer'**
+  String get classifyNow;
+
+  /// No description provided for @loanAttachTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance de quel crédit ?'**
+  String get loanAttachTitle;
+
+  /// No description provided for @loanAttachHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez un crédit déjà saisi : ce prélèvement y sera rattaché et les suivants seront classés automatiquement.'**
+  String get loanAttachHelp;
+
+  /// No description provided for @loanAttachNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déclarer un nouveau crédit'**
+  String get loanAttachNew;
+
+  /// No description provided for @loanAttachDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prélèvement rattaché au crédit : {linked} échéances rattachées, {others} autres opérations classées.'**
+  String loanAttachDone(int linked, int others);
+
+  /// No description provided for @error_loan_other_account.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce crédit est prélevé sur un autre compte.'**
+  String get error_loan_other_account;
+
+  /// No description provided for @loanOperationsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations du crédit'**
+  String get loanOperationsTitle;
+
+  /// No description provided for @loanOperationsSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} prélèvements · {total} payés'**
+  String loanOperationsSummary(int count, String total);
+
+  /// No description provided for @loanOperationsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun prélèvement rattaché pour l\'instant. Depuis la fiche d\'un prélèvement, « C\'est une échéance de crédit » le rattache à ce crédit.'**
+  String get loanOperationsEmpty;
+
+  /// No description provided for @loanOperationsMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les {count} prélèvements'**
+  String loanOperationsMore(int count);
 }
 
 class _AppLocalizationsDelegate

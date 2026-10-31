@@ -4,6 +4,7 @@ import 'package:serverpod/serverpod.dart';
 import '../core/dates.dart';
 import '../finance/alert_service.dart';
 import '../finance/classification_service.dart';
+import '../finance/goal_alert_service.dart';
 import '../finance/spending_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
@@ -56,11 +57,21 @@ class TransactionEndpoint extends Endpoint {
         );
       }
     }
+    final Set<int> splitIds = await SpendingService.splitTransactionsIn(
+      session,
+      categoryIds,
+    );
     Expression where(BankTransactionTable t) {
       Expression e = t.accountId.equals(accountId) & t.deletedAt.equals(null);
       if (from != null) e = e & (t.date >= _day(from));
       if (to != null) e = e & (t.date <= _day(to));
-      if (categoryIds.isNotEmpty) e = e & t.categoryId.inSet(categoryIds);
+      if (categoryIds.isNotEmpty) {
+        e =
+            e &
+            (splitIds.isEmpty
+                ? t.categoryId.inSet(categoryIds)
+                : (t.categoryId.inSet(categoryIds) | t.id.inSet(splitIds)));
+      }
       if (provider != null) e = e & t.cleanLabel.equals(provider);
       if (toClassify == true) e = e & t.categoryId.equals(null);
       if (uncleared == true) e = e & t.cleared.equals(false);
@@ -161,7 +172,10 @@ class TransactionEndpoint extends Endpoint {
     if (imported && (date != null || amountCents != null || label != null)) {
       throw InvalidInputException(code: 'imported_operation_locked');
     }
-    if (amountCents != null) _amount(amountCents);
+    if (amountCents != null) {
+      _amount(amountCents);
+      if (amountCents != t.amountCents) await _dropSplits(session, t.id!);
+    }
     final text = label == null ? null : _label(label);
     final cleaned = text == null ? null : core.cleanCaisseEpargneLabel(text);
     final updated = await BankTransaction.db.updateRow(
@@ -192,6 +206,8 @@ class TransactionEndpoint extends Endpoint {
     if (categoryId != null) {
       await _ownCategory(session, account.groupId, categoryId);
     }
+    // One category for the whole operation: no more split.
+    await _dropSplits(session, t.id!);
     final updated = await BankTransaction.db.updateRow(
       session,
       t.copyWith(
@@ -211,6 +227,167 @@ class TransactionEndpoint extends Endpoint {
       before: t,
       after: updated,
     );
+    await GoalAlertService.checkAfterChange(session, account.groupId);
+    return updated;
+  }
+
+  /// Undo of a classification change: puts back the category, its source
+  /// and the split the operation had before (as the app saw it).
+  Future<BankTransaction> restoreClassification(
+    Session session,
+    int transactionId,
+    int? categoryId,
+    CategorySource source,
+    String? ruleRef,
+    List<TransactionSplit> splits,
+  ) async {
+    final (t, account) = await _find(session, transactionId);
+    if (categoryId != null) {
+      await _ownCategory(session, account.groupId, categoryId);
+    }
+    if (ruleRef != null && ruleRef.length > 64) {
+      throw InvalidInputException(code: 'invalid_name', field: 'ruleRef');
+    }
+    if (splits.isNotEmpty) {
+      if (!core.isValidSplit(t.amountCents, [
+        for (final p in splits) p.amountCents,
+      ])) {
+        throw InvalidInputException(code: 'split_invalid');
+      }
+      for (final p in splits) {
+        if (p.categoryId != null) {
+          await _ownCategory(session, account.groupId, p.categoryId!);
+        }
+      }
+    }
+    final updated = await session.db.transaction((tx) async {
+      await TransactionSplit.db.deleteWhere(
+        session,
+        where: (s) => s.transactionId.equals(t.id!),
+        transaction: tx,
+      );
+      if (splits.isNotEmpty) {
+        await TransactionSplit.db.insert(session, [
+          for (final p in splits)
+            TransactionSplit(
+              transactionId: t.id!,
+              categoryId: p.categoryId,
+              amountCents: p.amountCents,
+              note: p.note,
+            ),
+        ], transaction: tx);
+      }
+      return BankTransaction.db.updateRow(
+        session,
+        t.copyWith(
+          categoryId: categoryId,
+          categorySource: categoryId == null ? CategorySource.none : source,
+          categoryRuleRef: ruleRef,
+          updatedAt: DateTime.now().toUtc(),
+        ),
+        transaction: tx,
+      );
+    });
+    await _audit(
+      session,
+      account,
+      'restore_classification',
+      t.id,
+      before: t,
+      after: updated,
+    );
+    await GoalAlertService.checkAfterChange(session, account.groupId);
+    return updated;
+  }
+
+  /// Parts of a split operation (empty when not split).
+  Future<List<TransactionSplit>> splits(
+    Session session,
+    int transactionId,
+  ) async {
+    final t = await BankTransaction.db.findById(session, transactionId);
+    if (t == null || t.deletedAt != null) {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    await _account(session, t, write: false);
+    return TransactionSplit.db.find(
+      session,
+      where: (s) => s.transactionId.equals(transactionId),
+      orderBy: (s) => s.id,
+    );
+  }
+
+  /// Splits the operation between categories (a receipt: groceries,
+  /// household…): at least two parts of its sign adding up to its amount.
+  /// The operation shows the category of its largest part and counts as
+  /// classified by hand. An empty list removes the split.
+  Future<BankTransaction> setSplits(
+    Session session,
+    int transactionId,
+    List<TransactionSplit> parts,
+  ) async {
+    final (t, account) = await _find(session, transactionId);
+    if (parts.isEmpty) {
+      await _dropSplits(session, t.id!);
+      await _audit(session, account, 'unsplit', t.id, before: t, after: t);
+      return t;
+    }
+    if (parts.length > 20 ||
+        !core.isValidSplit(t.amountCents, [
+          for (final p in parts) p.amountCents,
+        ])) {
+      throw InvalidInputException(code: 'split_invalid');
+    }
+    for (final p in parts) {
+      if (p.categoryId != null) {
+        await _ownCategory(session, account.groupId, p.categoryId!);
+      }
+      final note = p.note?.trim();
+      if (note != null && note.length > 200) {
+        throw InvalidInputException(code: 'invalid_name', field: 'note');
+      }
+    }
+    final largest = parts.reduce(
+      (a, b) => a.amountCents.abs() >= b.amountCents.abs() ? a : b,
+    );
+    final updated = await session.db.transaction((tx) async {
+      await TransactionSplit.db.deleteWhere(
+        session,
+        where: (s) => s.transactionId.equals(t.id!),
+        transaction: tx,
+      );
+      await TransactionSplit.db.insert(session, [
+        for (final p in parts)
+          TransactionSplit(
+            transactionId: t.id!,
+            categoryId: p.categoryId,
+            amountCents: p.amountCents,
+            note: p.note == null || p.note!.trim().isEmpty
+                ? null
+                : p.note!.trim(),
+          ),
+      ], transaction: tx);
+      return BankTransaction.db.updateRow(
+        session,
+        t.copyWith(
+          categoryId: largest.categoryId,
+          categorySource: CategorySource.manual,
+          categoryRuleRef: null,
+          updatedAt: DateTime.now().toUtc(),
+        ),
+        transaction: tx,
+      );
+    });
+    await Audit.log(
+      session,
+      groupId: account.groupId,
+      action: 'split',
+      entity: 'transaction',
+      rowId: t.id,
+      before: t,
+      after: updated,
+    );
+    await GoalAlertService.checkAfterChange(session, account.groupId);
     return updated;
   }
 
@@ -353,6 +530,12 @@ class TransactionEndpoint extends Endpoint {
       throw AccessDeniedException(code: 'transaction_access_denied');
     }
   }
+
+  static Future<void> _dropSplits(Session session, int transactionId) =>
+      TransactionSplit.db.deleteWhere(
+        session,
+        where: (s) => s.transactionId.equals(transactionId),
+      );
 
   static Future<void> _ownCategory(
     Session session,

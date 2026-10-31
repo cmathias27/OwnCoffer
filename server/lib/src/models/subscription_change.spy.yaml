@@ -1,0 +1,8 @@
+### A subscription debited this month for another amount than planned.
+class: SubscriptionChange
+fields:
+  scheduledId: int
+  label: String
+  plannedCents: int
+  actualCents: int
+  transactionId: int

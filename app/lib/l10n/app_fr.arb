@@ -1265,5 +1265,405 @@
         "type": "String"
       }
     }
+  },
+  "undoDone": "Action annulée.",
+  "categoryChanged": "Catégorie modifiée.",
+  "clearedChanged": "Pointage modifié.",
+  "goalSaved": "Objectif enregistré.",
+  "goalRemoved": "Objectif supprimé.",
+  "splitTitle": "Ventiler l'opération",
+  "splitAction": "Ventiler entre plusieurs catégories",
+  "splitAddPart": "Ajouter une part",
+  "splitRemaining": "Reste à répartir : {amount}",
+  "@splitRemaining": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "splitBalanced": "Le total correspond au montant de l'opération.",
+  "splitRemove": "Ne plus ventiler",
+  "splitSaved": "Opération ventilée.",
+  "splitPartLabel": "Part {number}",
+  "@splitPartLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "splitPartsSummary": "Ventilée en {count} parts",
+  "@splitPartsSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "splitNoteLabel": "Précision",
+  "splitRemovePart": "Retirer cette part",
+  "leftToLiveTitle": "Reste à vivre",
+  "leftToLiveBody": "soit {perDay} par jour pendant {days} jours, jusqu'au {date}",
+  "@leftToLiveBody": {
+    "placeholders": {
+      "perDay": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "leftToLiveDetail": "Solde {balance} · prélèvements prévus {debits} · rentrées prévues {credits}",
+  "@leftToLiveDetail": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "debits": {
+        "type": "String"
+      },
+      "credits": {
+        "type": "String"
+      }
+    }
+  },
+  "leftToLiveHelp": "Comptes courants seulement, opérations prévues comprises, jusqu'à la fin du mois de budget (veille de la prochaine paie).",
+  "calendarTitle": "Calendrier des échéances",
+  "calendarEmpty": "Aucune échéance prévue sur cette période.",
+  "calendarUpcoming": "Encore à venir : {debits} de prélèvements, {credits} de rentrées",
+  "@calendarUpcoming": {
+    "placeholders": {
+      "debits": {
+        "type": "String"
+      },
+      "credits": {
+        "type": "String"
+      }
+    }
+  },
+  "statusPaid": "Passé",
+  "statusLate": "En retard",
+  "statusSkipped": "Sauté",
+  "statusUpcoming": "À venir",
+  "statusPaidOther": "Passé : {amount}",
+  "@statusPaidOther": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarLoan": "Crédit",
+  "calendarSubscription": "Abonnement",
+  "reviewTitle": "Revue du mois",
+  "reviewNet": "Reste du mois : {net} (mois précédent : {previous})",
+  "@reviewNet": {
+    "placeholders": {
+      "net": {
+        "type": "String"
+      },
+      "previous": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewRises": "En hausse",
+  "reviewDrops": "En baisse",
+  "reviewChange": "{amount} au lieu de {average} en moyenne",
+  "@reviewChange": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewGoalsOver": "Objectifs dépassés",
+  "reviewGoalOver": "{amount} pour un objectif de {goal}",
+  "@reviewGoalOver": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewFees": "Frais bancaires",
+  "reviewFeesTotal": "{amount} de frais bancaires ce mois-ci",
+  "@reviewFeesTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewNoFees": "Aucun frais bancaire ce mois-ci.",
+  "reviewBiggest": "Plus grosses dépenses",
+  "reviewSubscriptions": "Abonnements",
+  "reviewSubscriptionChange": "{label} : {actual} au lieu de {planned}",
+  "@reviewSubscriptionChange": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "actual": {
+        "type": "String"
+      },
+      "planned": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewNewSubscription": "Nouvel abonnement : {label} ({amount})",
+  "@reviewNewSubscription": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewUnclassified": "{count} opérations restent à classer sur ce mois.",
+  "@reviewUnclassified": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewNothing": "Rien de notable.",
+  "balanceCheckAction": "Contrôler le solde",
+  "balanceCheckHelp": "Saisissez le solde affiché par votre banque en fin de journée à une date : OwnCoffer le compare avec le solde calculé à partir des opérations.",
+  "balanceCheckDate": "Date du solde",
+  "balanceCheckAmount": "Solde affiché par la banque",
+  "balanceCheckOk": "Le solde correspond.",
+  "balanceCheckGap": "Écart de {amount} : le solde calculé est de {computed}.",
+  "@balanceCheckGap": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "computed": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceCheckUncleared": "Dont {amount} d'opérations saisies à la main et non pointées, peut-être pas encore passées à la banque.",
+  "@balanceCheckUncleared": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceCheckLastImport": "Dernière opération importée : {date}. Un relevé manque peut-être.",
+  "@balanceCheckLastImport": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceCheckHistory": "Derniers contrôles",
+  "balanceCheckRow": "{date} : banque {bank}, écart {gap}",
+  "@balanceCheckRow": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "bank": {
+        "type": "String"
+      },
+      "gap": {
+        "type": "String"
+      }
+    }
+  },
+  "notifGoalWarningTitle": "Objectif « {category} » bientôt atteint",
+  "@notifGoalWarningTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "notifGoalOverTitle": "Objectif « {category} » dépassé",
+  "@notifGoalOverTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "notifGoalBody": "{spent} dépensés pour un objectif de {goal} ce mois-ci.",
+  "@notifGoalBody": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "loanKindInstallments": "Paiement en plusieurs fois",
+  "loanInstallmentsCount": "Nombre d'échéances",
+  "loanInstallmentsTotal": "Montant total de l'achat",
+  "loanInstallmentsHelp": "Paiement en 3 ou 4 fois (Alma, Oney, carte bancaire…), généralement sans frais : le taux reste à 0 %.",
+  "loanSectionInstallments": "Paiements en plusieurs fois",
+  "error_split_invalid": "La ventilation doit compter au moins deux parts du même signe que l'opération, dont le total est égal à son montant.",
+  "goalsTitle": "Objectifs du mois",
+  "goalsEmpty": "Aucun objectif. Fixez un plafond mensuel sur une catégorie de dépenses pour voir où vous en êtes au fil du mois.",
+  "goalsSummary": "{ok} dans l'objectif · {warning} bientôt atteint · {over} dépassé",
+  "@goalsSummary": {
+    "placeholders": {
+      "ok": {
+        "type": "int"
+      },
+      "warning": {
+        "type": "int"
+      },
+      "over": {
+        "type": "int"
+      }
+    }
+  },
+  "goalPaceHelp": "Le trait vertical marque où vous devriez en être aujourd'hui pour tenir l'objectif jusqu'à la fin du mois.",
+  "goalSpentOf": "{spent} sur {goal}",
+  "@goalSpentOf": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingShowAll": "Voir les {count} catégories",
+  "@rankingShowAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingShowLess": "Réduire",
+  "rankingTotal": "Total : {amount}",
+  "@rankingTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingVsAverage": "{percent} % par rapport à la moyenne ({amount})",
+  "@rankingVsAverage": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetBalanceTitle": "Bilan de la période",
+  "budgetOverspent": "Vous avez dépensé {amount} de plus que vos revenus",
+  "@budgetOverspent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetLeftOver": "Il vous reste {amount}",
+  "@budgetLeftOver": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetBarsSemantic": "Revenus {income}, dépenses et épargne {out}",
+  "@budgetBarsSemantic": {
+    "placeholders": {
+      "income": {
+        "type": "String"
+      },
+      "out": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetExpensesAndSavings": "Dépenses et épargne",
+  "budgetSavingsPart": "dont épargne",
+  "budgetVsPrevious": "{delta} par rapport à la période précédente",
+  "@budgetVsPrevious": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "unclassifiedBanner": "{count} opérations à classer ({amount})",
+  "@unclassifiedBanner": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "unclassifiedBannerHelp": "Elles comptent dans les totaux mais pas dans les classements ni les objectifs.",
+  "classifyNow": "Classer",
+  "loanAttachTitle": "Échéance de quel crédit ?",
+  "loanAttachHelp": "Choisissez un crédit déjà saisi : ce prélèvement y sera rattaché et les suivants seront classés automatiquement.",
+  "loanAttachNew": "Déclarer un nouveau crédit",
+  "loanAttachDone": "Prélèvement rattaché au crédit : {linked} échéances rattachées, {others} autres opérations classées.",
+  "@loanAttachDone": {
+    "placeholders": {
+      "linked": {
+        "type": "int"
+      },
+      "others": {
+        "type": "int"
+      }
+    }
+  },
+  "error_loan_other_account": "Ce crédit est prélevé sur un autre compte.",
+  "loanOperationsTitle": "Opérations du crédit",
+  "loanOperationsSummary": "{count} prélèvements · {total} payés",
+  "@loanOperationsSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "loanOperationsEmpty": "Aucun prélèvement rattaché pour l'instant. Depuis la fiche d'un prélèvement, « C'est une échéance de crédit » le rattache à ce crédit.",
+  "loanOperationsMore": "Voir les {count} prélèvements",
+  "@loanOperationsMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

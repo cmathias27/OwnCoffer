@@ -5,6 +5,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import '../widgets/balance_check_dialog.dart';
 
 /// Accounts of the group with their balance and 30-day forecast.
 class AccountsScreen extends StatefulWidget {
@@ -103,6 +104,12 @@ class AccountsScreenState extends State<AccountsScreen> {
                       forecast: f,
                       onTap: () => widget.onOpen(a),
                       onEdit: _isAdmin ? () => _edit(a) : null,
+                      onCheck: widget.membership.role == MemberRole.reader
+                          ? null
+                          : () => showDialog<void>(
+                              context: context,
+                              builder: (_) => BalanceCheckDialog(account: a),
+                            ),
                     ),
                 ],
               ),
@@ -116,12 +123,14 @@ class _AccountCard extends StatelessWidget {
   final ForecastResult? forecast;
   final VoidCallback onTap;
   final VoidCallback? onEdit;
+  final VoidCallback? onCheck;
 
   const _AccountCard({
     required this.account,
     required this.forecast,
     required this.onTap,
     required this.onEdit,
+    required this.onCheck,
   });
 
   @override
@@ -152,6 +161,12 @@ class _AccountCard extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsets.only(right: 8),
                       child: Icon(Icons.lock_outline, size: 18),
+                    ),
+                  if (onCheck != null)
+                    IconButton(
+                      tooltip: l.balanceCheckAction,
+                      icon: const Icon(Icons.fact_check_outlined),
+                      onPressed: onCheck,
                     ),
                   if (onEdit != null)
                     IconButton(

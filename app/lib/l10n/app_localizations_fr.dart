@@ -1908,4 +1908,361 @@ class AppLocalizationsFr extends AppLocalizations {
   String sameProviderSummary(int count, String total, String average) {
     return '$count opérations · total $total · moyenne $average';
   }
+
+  @override
+  String get undoDone => 'Action annulée.';
+
+  @override
+  String get categoryChanged => 'Catégorie modifiée.';
+
+  @override
+  String get clearedChanged => 'Pointage modifié.';
+
+  @override
+  String get goalSaved => 'Objectif enregistré.';
+
+  @override
+  String get goalRemoved => 'Objectif supprimé.';
+
+  @override
+  String get splitTitle => 'Ventiler l\'opération';
+
+  @override
+  String get splitAction => 'Ventiler entre plusieurs catégories';
+
+  @override
+  String get splitAddPart => 'Ajouter une part';
+
+  @override
+  String splitRemaining(String amount) {
+    return 'Reste à répartir : $amount';
+  }
+
+  @override
+  String get splitBalanced => 'Le total correspond au montant de l\'opération.';
+
+  @override
+  String get splitRemove => 'Ne plus ventiler';
+
+  @override
+  String get splitSaved => 'Opération ventilée.';
+
+  @override
+  String splitPartLabel(int number) {
+    return 'Part $number';
+  }
+
+  @override
+  String splitPartsSummary(int count) {
+    return 'Ventilée en $count parts';
+  }
+
+  @override
+  String get splitNoteLabel => 'Précision';
+
+  @override
+  String get splitRemovePart => 'Retirer cette part';
+
+  @override
+  String get leftToLiveTitle => 'Reste à vivre';
+
+  @override
+  String leftToLiveBody(String perDay, int days, String date) {
+    return 'soit $perDay par jour pendant $days jours, jusqu\'au $date';
+  }
+
+  @override
+  String leftToLiveDetail(String balance, String debits, String credits) {
+    return 'Solde $balance · prélèvements prévus $debits · rentrées prévues $credits';
+  }
+
+  @override
+  String get leftToLiveHelp =>
+      'Comptes courants seulement, opérations prévues comprises, jusqu\'à la fin du mois de budget (veille de la prochaine paie).';
+
+  @override
+  String get calendarTitle => 'Calendrier des échéances';
+
+  @override
+  String get calendarEmpty => 'Aucune échéance prévue sur cette période.';
+
+  @override
+  String calendarUpcoming(String debits, String credits) {
+    return 'Encore à venir : $debits de prélèvements, $credits de rentrées';
+  }
+
+  @override
+  String get statusPaid => 'Passé';
+
+  @override
+  String get statusLate => 'En retard';
+
+  @override
+  String get statusSkipped => 'Sauté';
+
+  @override
+  String get statusUpcoming => 'À venir';
+
+  @override
+  String statusPaidOther(String amount) {
+    return 'Passé : $amount';
+  }
+
+  @override
+  String get calendarLoan => 'Crédit';
+
+  @override
+  String get calendarSubscription => 'Abonnement';
+
+  @override
+  String get reviewTitle => 'Revue du mois';
+
+  @override
+  String reviewNet(String net, String previous) {
+    return 'Reste du mois : $net (mois précédent : $previous)';
+  }
+
+  @override
+  String get reviewRises => 'En hausse';
+
+  @override
+  String get reviewDrops => 'En baisse';
+
+  @override
+  String reviewChange(String amount, String average) {
+    return '$amount au lieu de $average en moyenne';
+  }
+
+  @override
+  String get reviewGoalsOver => 'Objectifs dépassés';
+
+  @override
+  String reviewGoalOver(String amount, String goal) {
+    return '$amount pour un objectif de $goal';
+  }
+
+  @override
+  String get reviewFees => 'Frais bancaires';
+
+  @override
+  String reviewFeesTotal(String amount) {
+    return '$amount de frais bancaires ce mois-ci';
+  }
+
+  @override
+  String get reviewNoFees => 'Aucun frais bancaire ce mois-ci.';
+
+  @override
+  String get reviewBiggest => 'Plus grosses dépenses';
+
+  @override
+  String get reviewSubscriptions => 'Abonnements';
+
+  @override
+  String reviewSubscriptionChange(String label, String actual, String planned) {
+    return '$label : $actual au lieu de $planned';
+  }
+
+  @override
+  String reviewNewSubscription(String label, String amount) {
+    return 'Nouvel abonnement : $label ($amount)';
+  }
+
+  @override
+  String reviewUnclassified(int count) {
+    return '$count opérations restent à classer sur ce mois.';
+  }
+
+  @override
+  String get reviewNothing => 'Rien de notable.';
+
+  @override
+  String get balanceCheckAction => 'Contrôler le solde';
+
+  @override
+  String get balanceCheckHelp =>
+      'Saisissez le solde affiché par votre banque en fin de journée à une date : OwnCoffer le compare avec le solde calculé à partir des opérations.';
+
+  @override
+  String get balanceCheckDate => 'Date du solde';
+
+  @override
+  String get balanceCheckAmount => 'Solde affiché par la banque';
+
+  @override
+  String get balanceCheckOk => 'Le solde correspond.';
+
+  @override
+  String balanceCheckGap(String amount, String computed) {
+    return 'Écart de $amount : le solde calculé est de $computed.';
+  }
+
+  @override
+  String balanceCheckUncleared(String amount) {
+    return 'Dont $amount d\'opérations saisies à la main et non pointées, peut-être pas encore passées à la banque.';
+  }
+
+  @override
+  String balanceCheckLastImport(String date) {
+    return 'Dernière opération importée : $date. Un relevé manque peut-être.';
+  }
+
+  @override
+  String get balanceCheckHistory => 'Derniers contrôles';
+
+  @override
+  String balanceCheckRow(String date, String bank, String gap) {
+    return '$date : banque $bank, écart $gap';
+  }
+
+  @override
+  String notifGoalWarningTitle(String category) {
+    return 'Objectif « $category » bientôt atteint';
+  }
+
+  @override
+  String notifGoalOverTitle(String category) {
+    return 'Objectif « $category » dépassé';
+  }
+
+  @override
+  String notifGoalBody(String spent, String goal) {
+    return '$spent dépensés pour un objectif de $goal ce mois-ci.';
+  }
+
+  @override
+  String get loanKindInstallments => 'Paiement en plusieurs fois';
+
+  @override
+  String get loanInstallmentsCount => 'Nombre d\'échéances';
+
+  @override
+  String get loanInstallmentsTotal => 'Montant total de l\'achat';
+
+  @override
+  String get loanInstallmentsHelp =>
+      'Paiement en 3 ou 4 fois (Alma, Oney, carte bancaire…), généralement sans frais : le taux reste à 0 %.';
+
+  @override
+  String get loanSectionInstallments => 'Paiements en plusieurs fois';
+
+  @override
+  String get error_split_invalid =>
+      'La ventilation doit compter au moins deux parts du même signe que l\'opération, dont le total est égal à son montant.';
+
+  @override
+  String get goalsTitle => 'Objectifs du mois';
+
+  @override
+  String get goalsEmpty =>
+      'Aucun objectif. Fixez un plafond mensuel sur une catégorie de dépenses pour voir où vous en êtes au fil du mois.';
+
+  @override
+  String goalsSummary(int ok, int warning, int over) {
+    return '$ok dans l\'objectif · $warning bientôt atteint · $over dépassé';
+  }
+
+  @override
+  String get goalPaceHelp =>
+      'Le trait vertical marque où vous devriez en être aujourd\'hui pour tenir l\'objectif jusqu\'à la fin du mois.';
+
+  @override
+  String goalSpentOf(String spent, String goal) {
+    return '$spent sur $goal';
+  }
+
+  @override
+  String rankingShowAll(int count) {
+    return 'Voir les $count catégories';
+  }
+
+  @override
+  String get rankingShowLess => 'Réduire';
+
+  @override
+  String rankingTotal(String amount) {
+    return 'Total : $amount';
+  }
+
+  @override
+  String rankingVsAverage(String percent, String amount) {
+    return '$percent % par rapport à la moyenne ($amount)';
+  }
+
+  @override
+  String get budgetBalanceTitle => 'Bilan de la période';
+
+  @override
+  String budgetOverspent(String amount) {
+    return 'Vous avez dépensé $amount de plus que vos revenus';
+  }
+
+  @override
+  String budgetLeftOver(String amount) {
+    return 'Il vous reste $amount';
+  }
+
+  @override
+  String budgetBarsSemantic(String income, String out) {
+    return 'Revenus $income, dépenses et épargne $out';
+  }
+
+  @override
+  String get budgetExpensesAndSavings => 'Dépenses et épargne';
+
+  @override
+  String get budgetSavingsPart => 'dont épargne';
+
+  @override
+  String budgetVsPrevious(String delta) {
+    return '$delta par rapport à la période précédente';
+  }
+
+  @override
+  String unclassifiedBanner(int count, String amount) {
+    return '$count opérations à classer ($amount)';
+  }
+
+  @override
+  String get unclassifiedBannerHelp =>
+      'Elles comptent dans les totaux mais pas dans les classements ni les objectifs.';
+
+  @override
+  String get classifyNow => 'Classer';
+
+  @override
+  String get loanAttachTitle => 'Échéance de quel crédit ?';
+
+  @override
+  String get loanAttachHelp =>
+      'Choisissez un crédit déjà saisi : ce prélèvement y sera rattaché et les suivants seront classés automatiquement.';
+
+  @override
+  String get loanAttachNew => 'Déclarer un nouveau crédit';
+
+  @override
+  String loanAttachDone(int linked, int others) {
+    return 'Prélèvement rattaché au crédit : $linked échéances rattachées, $others autres opérations classées.';
+  }
+
+  @override
+  String get error_loan_other_account =>
+      'Ce crédit est prélevé sur un autre compte.';
+
+  @override
+  String get loanOperationsTitle => 'Opérations du crédit';
+
+  @override
+  String loanOperationsSummary(int count, String total) {
+    return '$count prélèvements · $total payés';
+  }
+
+  @override
+  String get loanOperationsEmpty =>
+      'Aucun prélèvement rattaché pour l\'instant. Depuis la fiche d\'un prélèvement, « C\'est une échéance de crédit » le rattache à ce crédit.';
+
+  @override
+  String loanOperationsMore(int count) {
+    return 'Voir les $count prélèvements';
+  }
 }

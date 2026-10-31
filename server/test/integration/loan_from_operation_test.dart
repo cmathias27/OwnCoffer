@@ -249,5 +249,155 @@ void main() {
         throwsA(isA<InvalidInputException>()),
       );
     });
+
+    test("the loan's operations, kept when the loan is changed", () async {
+      final first = await debit(shared, due(3), instalment);
+      final source = await debit(shared, due(1), instalment);
+      await debit(shared, due(1), instalment, label: 'LOYER');
+      final r = await endpoints.loan.createFromTransaction(
+        as(bob),
+        source.id!,
+        terms(),
+      );
+      Future<List<int?>> ids(UuidValue u) async => [
+        for (final t in await endpoints.loan.operations(as(u), r.info.loan.id!))
+          t.id,
+      ];
+      expect(await ids(reader), [source.id, first.id]);
+
+      final changed = await endpoints.loan.update(
+        as(bob),
+        r.info.loan.copyWith(label: 'Maison'),
+      );
+      expect(changed.loan.scheduledId, isNot(r.info.loan.scheduledId));
+      expect(await ids(reader), [source.id, first.id]);
+      expect(
+        (await BankTransaction.db.findById(db, first.id!))!.scheduledId,
+        changed.loan.scheduledId,
+      );
+
+      await expectLater(
+        endpoints.loan.operations(as(mallory), r.info.loan.id!),
+        denied,
+      );
+    });
+
+    group('attach to an existing loan', () {
+      test('a loan without account takes the debit, its label and a rule; '
+          'undo puts things back', () async {
+        final info = await endpoints.loan.create(as(bob), groupA, terms());
+        expect(info.loan.accountId, isNull);
+        final older = await debit(shared, due(2), instalment);
+        // 8 days late: beyond the tolerance, linked because the user said so.
+        final source = await debit(
+          shared,
+          due(1).add(const Duration(days: 8)),
+          instalment,
+        );
+        final r = await endpoints.loan.attachTransaction(
+          as(bob),
+          info.loan.id!,
+          source.id!,
+        );
+        final loan = r.info.loan;
+        expect(loan.accountId, shared.id);
+        expect(loan.matchPattern, 'PRET IMMO 123');
+        expect(loan.categoryId, cats['housing.mortgage']!.id);
+        expect(r.ruleId, loan.ruleId);
+        expect(r.linkedCount, 2);
+        expect(r.reclassifiedCount, 1);
+        final src = (await BankTransaction.db.findById(db, source.id!))!;
+        expect(src.scheduledId, loan.scheduledId);
+        expect(src.categorySource, CategorySource.manual);
+        expect(
+          (await BankTransaction.db.findById(db, older.id!))!.scheduledId,
+          loan.scheduledId,
+        );
+
+        await expectLater(
+          endpoints.loan.undoAttach(
+            as(mallory),
+            loan.id!,
+            source.id!,
+            ruleId: r.ruleId,
+          ),
+          denied,
+        );
+        await endpoints.transaction.restoreClassification(
+          as(bob),
+          source.id!,
+          null,
+          CategorySource.none,
+          null,
+          [],
+        );
+        expect(
+          await endpoints.loan.undoAttach(
+            as(bob),
+            loan.id!,
+            source.id!,
+            ruleId: r.ruleId,
+          ),
+          1,
+        );
+        final back = (await BankTransaction.db.findById(db, source.id!))!;
+        expect(back.scheduledId, isNull);
+        expect(back.categoryId, isNull);
+        expect(await Rule.db.findById(db, r.ruleId!), isNull);
+        expect(
+          (await BankTransaction.db.findById(db, older.id!))!.categoryId,
+          isNull,
+        );
+      });
+
+      test('a loan on another account, a credit, another group or a reader '
+          'are refused', () async {
+        final other = await endpoints.account.create(
+          as(alice),
+          groupA,
+          'Joint',
+          AccountKind.checking,
+        );
+        final info = await endpoints.loan.create(
+          as(bob),
+          groupA,
+          terms().copyWith(accountId: other.id),
+        );
+        final source = await debit(shared, due(1), instalment);
+        await expectLater(
+          endpoints.loan.attachTransaction(as(bob), info.loan.id!, source.id!),
+          throwsA(isA<InvalidInputException>()),
+        );
+        final free = await endpoints.loan.create(as(bob), groupA, terms());
+        await expectLater(
+          endpoints.loan.attachTransaction(
+            as(mallory),
+            free.loan.id!,
+            source.id!,
+          ),
+          denied,
+        );
+        await expectLater(
+          endpoints.loan.attachTransaction(
+            as(reader),
+            free.loan.id!,
+            source.id!,
+          ),
+          denied,
+        );
+        final hidden = await debit(restricted, due(1), instalment);
+        await expectLater(
+          endpoints.loan.attachTransaction(as(bob), free.loan.id!, hidden.id!),
+          denied,
+        );
+        final unchanged = (await Loan.db.findById(db, free.loan.id!))!;
+        expect(unchanged.accountId, isNull);
+        expect(unchanged.ruleId, isNull);
+        expect(
+          (await BankTransaction.db.findById(db, source.id!))!.scheduledId,
+          isNull,
+        );
+      });
+    });
   });
 }

@@ -1,0 +1,9 @@
+### Due dates of a budget month on the accounts the user may see.
+class: DueCalendar
+fields:
+  start: DateTime
+  last: DateTime
+  items: List<CalendarItem>
+  ### Debits still to come (negative) and credits still to come.
+  upcomingDebitsCents: int
+  upcomingCreditsCents: int

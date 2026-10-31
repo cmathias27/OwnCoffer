@@ -1,0 +1,23 @@
+### The balance the bank shows on a date, compared with the balance computed
+### from the operations: a gap points to a missing import or an operation not
+### passed yet.
+class: BalanceCheck
+table: balance_checks
+fields:
+  accountId: int, relation(parent=accounts, onDelete=Cascade)
+  ### Calendar date (UTC midnight), end of day.
+  date: DateTime
+  bankBalanceCents: int
+  computedCents: int
+  ### computed − bank.
+  differenceCents: int
+  ### Manual operations up to the date not yet cleared (may not have reached
+  ### the bank).
+  unclearedManualCents: int
+  ### Latest imported operation, for "an import may be missing".
+  lastImportedDate: DateTime?
+  createdBy: UuidValue?
+  createdAt: DateTime, default=now
+indexes:
+  balance_checks_account_idx:
+    fields: accountId, date

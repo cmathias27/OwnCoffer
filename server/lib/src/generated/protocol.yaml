@@ -15,12 +15,16 @@ account:
   - update:
   - archive:
   - setAccess:
+  - checkBalance:
+  - balanceChecks:
 admin:
   - bannedIps:
   - unbanIp:
 analysis:
   - report:
   - operations:
+  - leftToLive:
+  - review:
 category:
   - list:
   - create:
@@ -51,10 +55,14 @@ invitation:
 loan:
   - overview:
   - schedule:
+  - operations:
   - simulate:
   - create:
   - update:
   - createFromTransaction:
+  - attachTransaction:
+  - undoAttach:
+  - undoCreate:
   - delete:
 notification:
   - list:
@@ -65,6 +73,7 @@ rule:
   - list:
   - create:
   - update:
+  - undoCreate:
   - delete:
   - tryLabel:
 scheduled:
@@ -74,6 +83,7 @@ scheduled:
   - delete:
   - subscriptions:
   - subscribeFrom:
+  - calendar:
   - skipNext:
   - forecast:
   - confirmMatch:
@@ -85,6 +95,9 @@ transaction:
   - create:
   - update:
   - setCategory:
+  - restoreClassification:
+  - splits:
+  - setSplits:
   - setCleared:
   - trash:
   - restore:

@@ -1,4 +1,7 @@
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
+
+import '../core/dates.dart';
 
 import '../generated/protocol.dart';
 import '../security/access.dart';
@@ -162,5 +165,83 @@ class AccountEndpoint extends Endpoint {
       throw InvalidInputException(code: 'amount_out_of_range');
     }
     return cents;
+  }
+
+  /// Balance check: the balance the bank shows at the end of [date],
+  /// compared with the one computed from the operations. Saved, so the last
+  /// checks can be seen again.
+  Future<BalanceCheck> checkBalance(
+    Session session,
+    int accountId,
+    DateTime date,
+    int bankBalanceCents,
+  ) async {
+    final account = await Access.requireAccount(
+      session,
+      accountId,
+      write: true,
+    );
+    if (bankBalanceCents.abs() > 100000000000000) {
+      throw InvalidInputException(code: 'amount_out_of_range');
+    }
+    final u = date.toUtc();
+    final day = core.LocalDate(u.year, u.month, u.day);
+    final today = core.LocalDate.fromDateTime(DateTime.now().toUtc());
+    if (day > today.addDays(1)) {
+      throw InvalidInputException(code: 'invalid_date', field: 'date');
+    }
+    final ops = await BankTransaction.db.find(
+      session,
+      where: (t) =>
+          t.accountId.equals(accountId) &
+          t.deletedAt.equals(null) &
+          (t.date <= day.toDb()),
+    );
+    var computed = account.initialBalanceCents, uncleared = 0;
+    DateTime? lastImported;
+    for (final t in ops) {
+      computed += t.amountCents;
+      if (t.importId == null && !t.cleared) uncleared += t.amountCents;
+      if (t.importId != null &&
+          (lastImported == null || t.date.isAfter(lastImported))) {
+        lastImported = t.date;
+      }
+    }
+    final saved = await BalanceCheck.db.insertRow(
+      session,
+      BalanceCheck(
+        accountId: accountId,
+        date: day.toDb(),
+        bankBalanceCents: bankBalanceCents,
+        computedCents: computed,
+        differenceCents: computed - bankBalanceCents,
+        unclearedManualCents: uncleared,
+        lastImportedDate: lastImported,
+        createdBy: Access.userId(session),
+      ),
+    );
+    await Audit.log(
+      session,
+      groupId: account.groupId,
+      action: 'check_balance',
+      entity: 'account',
+      rowId: accountId,
+      after: saved,
+    );
+    return saved;
+  }
+
+  /// The last balance checks of the account, newest first.
+  Future<List<BalanceCheck>> balanceChecks(
+    Session session,
+    int accountId,
+  ) async {
+    await Access.requireAccount(session, accountId);
+    return BalanceCheck.db.find(
+      session,
+      where: (c) => c.accountId.equals(accountId),
+      orderByList: (c) => [c.createdAt.desc(), c.id.desc()],
+      limit: 10,
+    );
   }
 }
