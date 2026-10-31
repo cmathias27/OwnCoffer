@@ -24,6 +24,12 @@ fields:
   categoryId: int?, relation(parent=categories, onDelete=SetNull)
   ### Planned operation of the instalments, when an account is chosen.
   scheduledId: int?, relation(parent=scheduled_transactions, onDelete=SetNull)
+  ### Bank label (normalised) of the instalments, when the loan was declared
+  ### from one of its debits; otherwise the lender's name is used.
+  matchPattern: String?
+  ### Group rule classifying the instalments, created with the loan when it
+  ### is declared from an operation.
+  ruleId: int?, relation(parent=rules, onDelete=SetNull)
   createdAt: DateTime, default=now
   deletedAt: DateTime?
 indexes:

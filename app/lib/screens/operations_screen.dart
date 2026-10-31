@@ -9,6 +9,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../util/web_search.dart';
 import '../widgets/category_field.dart';
+import 'loans_screen.dart';
 
 /// Operations of one account: search, filters, corrections, manual entry.
 class OperationsScreen extends StatefulWidget {
@@ -120,6 +121,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
         builder: (_, scroll) => _OperationSheet(
           groupId: widget.membership.group.id!,
           operation: t,
+          accounts: widget.accounts,
           categories: _categories,
           currency: _account!.currency,
           canWrite: _canWrite,
@@ -336,6 +338,7 @@ class _OperationTile extends StatelessWidget {
 class _OperationSheet extends StatefulWidget {
   final int groupId;
   final BankTransaction operation;
+  final List<Account> accounts;
 
   /// The screen's categories; a category created here is added to it.
   final Map<int, Category> categories;
@@ -347,6 +350,7 @@ class _OperationSheet extends StatefulWidget {
   const _OperationSheet({
     required this.groupId,
     required this.operation,
+    required this.accounts,
     required this.categories,
     required this.currency,
     required this.canWrite,
@@ -497,6 +501,38 @@ class _OperationSheetState extends State<_OperationSheet> {
                 } on Object catch (e) {
                   setState(() => _error = errorText(l, e));
                 }
+              },
+            ),
+          ),
+        if (widget.canWrite && t.amountCents < 0)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              icon: const Icon(Icons.account_balance_outlined),
+              label: Text(l.loanFromOperation),
+              onPressed: () async {
+                final r = await Navigator.of(context).push<LoanFromOperation>(
+                  MaterialPageRoute(
+                    builder: (_) => LoanFormScreen(
+                      groupId: widget.groupId,
+                      accounts: widget.accounts,
+                      fromOperation: t,
+                      categories: widget.categories.values.toList(),
+                    ),
+                  ),
+                );
+                if (r == null || !context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      l.loanFromOperationDone(
+                        r.linkedCount,
+                        r.reclassifiedCount,
+                      ),
+                    ),
+                  ),
+                );
+                Navigator.of(context).pop(true);
               },
             ),
           ),

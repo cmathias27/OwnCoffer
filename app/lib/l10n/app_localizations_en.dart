@@ -1841,4 +1841,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_invalid_month_start_day =>
       'The month must start between the 1st and the 28th.';
+
+  @override
+  String get loanFromOperation => 'This is a loan instalment';
+
+  @override
+  String get loanFromOperationTitle => 'Declare the loan';
+
+  @override
+  String loanFromOperationIntro(String label) {
+    return 'Future “$label” debits will be recognised as this loan\'s instalments and classified automatically.';
+  }
+
+  @override
+  String loanObservedInstalment(String amount) {
+    return 'Observed debit: $amount (insurance included)';
+  }
+
+  @override
+  String get loanDeducePrincipal => 'Compute the capital from this debit';
+
+  @override
+  String get loanDeduceNeedsTerms => 'Enter the rate and the duration first.';
+
+  @override
+  String loanInstalmentMismatch(String amount) {
+    return 'The computed instalment ($amount) is more than 5% away from the debit: check the capital, rate, duration and insurance.';
+  }
+
+  @override
+  String get loanFirstDueFromOperationHelp =>
+      'Date of the very first instalment. If you do not know it, keep this debit\'s date and enter the remaining duration: the computed capital is then the capital still owed.';
+
+  @override
+  String get loanCategoryDefaultHelp =>
+      'Without a choice, the category of the loan type is used (e.g. Mortgage).';
+
+  @override
+  String loanFromOperationDone(int linked, int others) {
+    return 'Loan created: $linked instalments linked, $others other operations classified.';
+  }
+
+  @override
+  String get error_loan_needs_debit => 'A loan is declared from a debit.';
 }

@@ -1373,6 +1373,31 @@ class Endpoints extends _is.EndpointDispatch {
                 params['loan'],
               ),
         ),
+        'createFromTransaction': _is.MethodConnector(
+          name: 'createFromTransaction',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'loan': _is.ParameterDescription(
+              name: 'loan',
+              type: _is.getType<_i2yv792g.Loan>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint)
+                  .createFromTransaction(
+                    session,
+                    params['transactionId'],
+                    params['loan'],
+                  ),
+        ),
         'delete': _is.MethodConnector(
           name: 'delete',
           params: {

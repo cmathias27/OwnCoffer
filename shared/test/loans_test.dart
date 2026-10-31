@@ -104,4 +104,24 @@ void main() {
     expect(() => terms(rate: 50001), throwsArgumentError);
     expect(() => terms(months: 601), throwsArgumentError);
   });
+
+  test('principal deduced from an observed instalment', () {
+    // 200 000 € at 3.45 % over 240 months -> 1 154,79 €.
+    final p = loanPrincipalForPaymentCents(115479, 3450, 240)!;
+    expect(loanPaymentCents(p, 3450, 240), 115479);
+    expect((p - 20000000).abs(), lessThan(300));
+    // Interest-free: payment × months.
+    expect(loanPrincipalForPaymentCents(5000, 0, 10), 50000);
+    expect(loanPaymentCents(50000, 0, 10), 5000);
+    for (final (pay, rate, n) in [
+      (87604, 1000, 120),
+      (1, 500, 12),
+      (99999, 49999, 600),
+    ]) {
+      final q = loanPrincipalForPaymentCents(pay, rate, n);
+      if (q != null) expect(loanPaymentCents(q, rate, n), pay);
+    }
+    expect(loanPrincipalForPaymentCents(0, 1000, 12), isNull);
+    expect(loanPrincipalForPaymentCents(1000, 1000, 601), isNull);
+  });
 }

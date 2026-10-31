@@ -493,5 +493,16 @@
   "error_goal_expense_only": "A goal can only be set on an expense category.",
   "error_loan_access_denied": "This loan does not exist or you cannot access it.",
   "error_loan_terms_invalid": "Impossible loan terms: check the amount, rate and duration.",
-  "error_invalid_month_start_day": "The month must start between the 1st and the 28th."
+  "error_invalid_month_start_day": "The month must start between the 1st and the 28th.",
+  "loanFromOperation": "This is a loan instalment",
+  "loanFromOperationTitle": "Declare the loan",
+  "loanFromOperationIntro": "Future “{label}” debits will be recognised as this loan's instalments and classified automatically.",
+  "loanObservedInstalment": "Observed debit: {amount} (insurance included)",
+  "loanDeducePrincipal": "Compute the capital from this debit",
+  "loanDeduceNeedsTerms": "Enter the rate and the duration first.",
+  "loanInstalmentMismatch": "The computed instalment ({amount}) is more than 5% away from the debit: check the capital, rate, duration and insurance.",
+  "loanFirstDueFromOperationHelp": "Date of the very first instalment. If you do not know it, keep this debit's date and enter the remaining duration: the computed capital is then the capital still owed.",
+  "loanCategoryDefaultHelp": "Without a choice, the category of the loan type is used (e.g. Mortgage).",
+  "loanFromOperationDone": "Loan created: {linked} instalments linked, {others} other operations classified.",
+  "error_loan_needs_debit": "A loan is declared from a debit."
 }

@@ -1,0 +1,9 @@
+### Result of declaring a loan from one of its debits.
+class: LoanFromOperation
+fields:
+  info: LoanInfo
+  ### Other operations classified by the loan's rule (manual choices are
+  ### never overwritten).
+  reclassifiedCount: int
+  ### Operations recognised as past instalments of the loan.
+  linkedCount: int

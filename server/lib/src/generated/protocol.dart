@@ -69,6 +69,7 @@ import 'invitation_info.dart' as _i9hwipt6;
 import 'ip_ban.dart' as _i88cvd1d;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'loan.dart' as _i7jednjp;
+import 'loan_from_operation.dart' as _ibgzxro1;
 import 'loan_info.dart' as _ijbwwnsd;
 import 'loan_installment.dart' as _ics9k3ng;
 import 'loan_kind.dart' as _i1700pxx;
@@ -126,6 +127,7 @@ export 'invitation_info.dart';
 export 'ip_ban.dart';
 export 'ip_ban_info.dart';
 export 'loan.dart';
+export 'loan_from_operation.dart';
 export 'loan_info.dart';
 export 'loan_installment.dart';
 export 'loan_kind.dart';
@@ -1309,6 +1311,18 @@ class Protocol extends _is.DatabaseSerializationManager {
           dartType: 'int?',
         ),
         _isp.ColumnDefinition(
+          name: 'matchPattern',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'ruleId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
           name: 'createdAt',
           columnType: _isp.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
@@ -1357,6 +1371,16 @@ class Protocol extends _is.DatabaseSerializationManager {
           constraintName: 'loans_fk_3',
           columns: ['scheduledId'],
           referenceTable: 'scheduled_transactions',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.setNull,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'loans_fk_4',
+          columns: ['ruleId'],
+          referenceTable: 'rules',
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _isp.ForeignKeyAction.noAction,
@@ -2319,6 +2343,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i7jednjp.Loan) {
       return _i7jednjp.Loan.fromJson(data) as T;
     }
+    if (t == _ibgzxro1.LoanFromOperation) {
+      return _ibgzxro1.LoanFromOperation.fromJson(data) as T;
+    }
     if (t == _ijbwwnsd.LoanInfo) {
       return _ijbwwnsd.LoanInfo.fromJson(data) as T;
     }
@@ -2509,6 +2536,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_i7jednjp.Loan?>()) {
       return (data != null ? _i7jednjp.Loan.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ibgzxro1.LoanFromOperation?>()) {
+      return (data != null ? _ibgzxro1.LoanFromOperation.fromJson(data) : null)
+          as T;
     }
     if (t == _is.getType<_ijbwwnsd.LoanInfo?>()) {
       return (data != null ? _ijbwwnsd.LoanInfo.fromJson(data) : null) as T;
@@ -2807,6 +2838,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i88cvd1d.IpBan => 'IpBan',
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _i7jednjp.Loan => 'Loan',
+      _ibgzxro1.LoanFromOperation => 'LoanFromOperation',
       _ijbwwnsd.LoanInfo => 'LoanInfo',
       _ics9k3ng.LoanInstallment => 'LoanInstallment',
       _i1700pxx.LoanKind => 'LoanKind',
@@ -2911,6 +2943,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'IpBanInfo';
       case _i7jednjp.Loan():
         return 'Loan';
+      case _ibgzxro1.LoanFromOperation():
+        return 'LoanFromOperation';
       case _ijbwwnsd.LoanInfo():
         return 'LoanInfo';
       case _ics9k3ng.LoanInstallment():
@@ -3083,6 +3117,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'Loan') {
       return deserialize<_i7jednjp.Loan>(data['data']);
+    }
+    if (dataClassName == 'LoanFromOperation') {
+      return deserialize<_ibgzxro1.LoanFromOperation>(data['data']);
     }
     if (dataClassName == 'LoanInfo') {
       return deserialize<_ijbwwnsd.LoanInfo>(data['data']);

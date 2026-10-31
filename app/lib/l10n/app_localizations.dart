@@ -3066,6 +3066,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le mois doit commencer entre le 1er et le 28.'**
   String get error_invalid_month_start_day;
+
+  /// No description provided for @loanFromOperation.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est une échéance de crédit'**
+  String get loanFromOperation;
+
+  /// No description provided for @loanFromOperationTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déclarer le crédit'**
+  String get loanFromOperationTitle;
+
+  /// No description provided for @loanFromOperationIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les prochains prélèvements « {label} » seront reconnus comme les échéances de ce crédit et classés automatiquement.'**
+  String loanFromOperationIntro(String label);
+
+  /// No description provided for @loanObservedInstalment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prélèvement constaté : {amount} (assurance comprise)'**
+  String loanObservedInstalment(String amount);
+
+  /// No description provided for @loanDeducePrincipal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculer le capital à partir de ce prélèvement'**
+  String get loanDeducePrincipal;
+
+  /// No description provided for @loanDeduceNeedsTerms.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez d\'abord le taux et la durée.'**
+  String get loanDeduceNeedsTerms;
+
+  /// No description provided for @loanInstalmentMismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'La mensualité calculée ({amount}) s\'écarte de plus de 5 % du prélèvement : vérifiez le capital, le taux, la durée et l\'assurance.'**
+  String loanInstalmentMismatch(String amount);
+
+  /// No description provided for @loanFirstDueFromOperationHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de la toute première échéance. Si vous ne la connaissez pas, gardez celle de ce prélèvement et indiquez la durée restante : le capital calculé sera alors le capital restant dû.'**
+  String get loanFirstDueFromOperationHelp;
+
+  /// No description provided for @loanCategoryDefaultHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans choix, la catégorie du type de crédit est utilisée (par exemple Crédit immobilier).'**
+  String get loanCategoryDefaultHelp;
+
+  /// No description provided for @loanFromOperationDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédit créé : {linked} échéances rattachées, {others} autres opérations classées.'**
+  String loanFromOperationDone(int linked, int others);
+
+  /// No description provided for @error_loan_needs_debit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un crédit se déclare depuis un prélèvement.'**
+  String get error_loan_needs_debit;
 }
 
 class _AppLocalizationsDelegate

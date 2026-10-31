@@ -81,6 +81,39 @@ int loanPaymentCents(int principalCents, int annualRateMilli, int months) {
   return (principalCents * t / (1 - math.pow(1 + t, -months))).round();
 }
 
+/// Inverse of [loanPaymentCents]: the principal whose instalment is
+/// [paymentCents] (rounded down to the cent, then nudged so that
+/// `loanPaymentCents` gives back [paymentCents] when some principal does).
+/// Used when a loan is declared from an observed debit and the borrowed (or
+/// remaining) capital is unknown. Null when out of the supported limits.
+int? loanPrincipalForPaymentCents(
+  int paymentCents,
+  int annualRateMilli,
+  int months,
+) {
+  if (paymentCents <= 0 || months < 1 || months > maxLoanMonths) return null;
+  if (annualRateMilli < 0 || annualRateMilli > maxLoanRateMilli) return null;
+  final int estimate;
+  if (annualRateMilli == 0) {
+    estimate = paymentCents * months;
+  } else {
+    final t = annualRateMilli / 1200000;
+    estimate = (paymentCents * (1 - math.pow(1 + t, -months)) / t).floor();
+  }
+  if (estimate <= 0 || estimate > maxLoanPrincipalCents) return null;
+  // Largest principal within a few cents whose instalment is still the one
+  // observed.
+  var best = estimate;
+  for (var p = estimate + months; p >= math.max(1, estimate - months); p--) {
+    if (p <= maxLoanPrincipalCents &&
+        loanPaymentCents(p, annualRateMilli, months) == paymentCents) {
+      best = p;
+      break;
+    }
+  }
+  return best;
+}
+
 /// Interest of one month on [remainingCents], rounded half up.
 int _monthInterest(int remainingCents, int annualRateMilli) =>
     (remainingCents * annualRateMilli + 600000) ~/ 1200000;

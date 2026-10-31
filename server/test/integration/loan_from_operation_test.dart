@@ -1,0 +1,253 @@
+import 'package:owncoffer_server/src/generated/protocol.dart';
+import 'package:owncoffer_server/src/security/scopes.dart';
+import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_idp_server/core.dart';
+import 'package:test/test.dart';
+
+import 'test_tools/serverpod_test_tools.dart';
+
+void main() {
+  withServerpod('Loan declared from an operation', (sessionBuilder, endpoints) {
+    late Session db;
+    late UuidValue alice, mallory, reader, bob;
+    late int groupA;
+    late Account shared, restricted;
+    late Map<String, Category> cats;
+    final denied = throwsA(isA<AccessDeniedException>());
+    final now = DateTime.now().toUtc();
+    // 100 000 € at 1 % over 10 years: 876,04 € + 15 € insurance.
+    const instalment = 87604 + 1500;
+    DateTime due(int monthsAgo) =>
+        DateTime.utc(now.year, now.month - monthsAgo, 5);
+
+    TestSessionBuilder as(UuidValue u) => sessionBuilder.copyWith(
+      authentication: AuthenticationOverride.authenticationInfo(
+        u.toString(),
+        {accessScope},
+      ),
+    );
+    Future<UuidValue> user(Set<String> scopes) async =>
+        (await AuthUser.db.insertRow(
+          db,
+          AuthUser(
+            createdAt: DateTime.now(),
+            scopeNames: scopes,
+            blocked: false,
+          ),
+        )).id!;
+    Future<BankTransaction> debit(
+      Account a,
+      DateTime date,
+      int cents, {
+      String label = 'PRET IMMO 123',
+      int? categoryId,
+      CategorySource source = CategorySource.none,
+    }) => BankTransaction.db.insertRow(
+      db,
+      BankTransaction(
+        accountId: a.id!,
+        date: date,
+        amountCents: -cents,
+        rawLabel: 'PRLV $label',
+        cleanLabel: label,
+        operationKind: 'directDebit',
+        categoryId: categoryId,
+        categorySource: source,
+      ),
+    );
+
+    /// Terms the user types; account and category come from the operation.
+    Loan terms() => Loan(
+      groupId: 0,
+      kind: LoanKind.mortgage,
+      lender: 'Banque',
+      principalCents: 10000000,
+      annualRateMilli: 1000,
+      durationMonths: 120,
+      firstDueDate: due(3),
+      insuranceMonthlyCents: 1500,
+    );
+
+    setUp(() async {
+      db = sessionBuilder.build();
+      alice = await user({'owncoffer.serverAdmin'});
+      mallory = await user({'owncoffer.serverAdmin'});
+      reader = await user({});
+      bob = await user({});
+      groupA = (await endpoints.group.create(as(alice), 'A')).group.id!;
+      await endpoints.group.create(as(mallory), 'B');
+      for (final (u, role) in [
+        (reader, MemberRole.reader),
+        (bob, MemberRole.user),
+      ]) {
+        await GroupMember.db.insertRow(
+          db,
+          GroupMember(groupId: groupA, authUserId: u, role: role),
+        );
+      }
+      shared = await endpoints.account.create(
+        as(alice),
+        groupA,
+        'Courant',
+        AccountKind.checking,
+      );
+      restricted = await endpoints.account.create(
+        as(alice),
+        groupA,
+        'Perso',
+        AccountKind.checking,
+        visibility: AccountVisibility.restricted,
+      );
+      cats = {
+        for (final c in await endpoints.category.list(as(alice), groupA))
+          c.standardCode!: c,
+      };
+    });
+
+    test('classifies and links the instalments, keeps manual choices and '
+        'other debits apart', () async {
+      final first = await debit(shared, due(3), instalment);
+      final second = await debit(shared, due(2), instalment + 30);
+      final source = await debit(shared, due(1), instalment);
+      final manual = await debit(
+        shared,
+        due(1).add(const Duration(days: 1)),
+        instalment,
+        categoryId: cats['banking.bank_fees']!.id,
+        source: CategorySource.manual,
+      );
+      final small = await debit(shared, due(1), 2000);
+      final other = await debit(shared, due(1), instalment, label: 'LOYER');
+
+      final r = await endpoints.loan.createFromTransaction(
+        as(bob),
+        source.id!,
+        terms().copyWith(accountId: restricted.id),
+      );
+      final loan = r.info.loan;
+      expect(loan.groupId, groupA);
+      expect(loan.accountId, shared.id, reason: "the operation's account");
+      expect(loan.categoryId, cats['housing.mortgage']!.id);
+      expect(loan.matchPattern, 'PRET IMMO 123');
+      expect(r.reclassifiedCount, 2, reason: 'first and second');
+      expect(r.linkedCount, 3, reason: 'first, second and source');
+
+      final rule = (await Rule.db.findById(db, loan.ruleId!))!;
+      expect(rule.groupId, groupA);
+      expect(rule.categoryId, loan.categoryId);
+      expect(rule.direction, RuleDirection.debit);
+      expect(rule.minAbsCents, lessThan(instalment));
+      expect(rule.maxAbsCents, greaterThan(instalment));
+
+      final s = (await ScheduledTransaction.db.findById(
+        db,
+        loan.scheduledId!,
+      ))!;
+      expect(s.matchPattern, 'PRET IMMO 123');
+      expect(s.amountCents, -instalment);
+
+      Future<BankTransaction> reread(BankTransaction t) async =>
+          (await BankTransaction.db.findById(db, t.id!))!;
+      for (final t in [first, second]) {
+        final x = await reread(t);
+        expect(x.categoryId, loan.categoryId);
+        expect(x.categorySource, CategorySource.groupRule);
+        expect(x.scheduledId, s.id);
+      }
+      final src = await reread(source);
+      expect(src.categoryId, loan.categoryId);
+      expect(src.categorySource, CategorySource.manual);
+      expect(src.scheduledId, s.id);
+      expect((await reread(manual)).categoryId, cats['banking.bank_fees']!.id);
+      expect((await reread(small)).categoryId, isNull);
+      expect((await reread(other)).categoryId, isNull);
+      expect((await reread(other)).scheduledId, isNull);
+    });
+
+    test('a planned operation made for these debits is replaced', () async {
+      final source = await debit(shared, due(1), instalment);
+      final planned = await endpoints.scheduled.subscribeFrom(
+        as(bob),
+        source.id!,
+      );
+      final r = await endpoints.loan.createFromTransaction(
+        as(bob),
+        source.id!,
+        terms(),
+      );
+      final old = (await ScheduledTransaction.db.findById(db, planned.id!))!;
+      expect(old.deletedAt, isNotNull);
+      final src = (await BankTransaction.db.findById(db, source.id!))!;
+      expect(src.scheduledId, r.info.loan.scheduledId);
+    });
+
+    test('category change follows on the rule; deleting the loan removes '
+        'the rule, classified operations keep their category', () async {
+      final source = await debit(shared, due(1), instalment);
+      final r = await endpoints.loan.createFromTransaction(
+        as(bob),
+        source.id!,
+        terms(),
+      );
+      final other = cats['banking.consumer_loan']!.id!;
+      final updated = await endpoints.loan.update(
+        as(bob),
+        r.info.loan.copyWith(categoryId: other),
+      );
+      expect(updated.loan.ruleId, r.info.loan.ruleId);
+      expect(updated.loan.matchPattern, 'PRET IMMO 123');
+      expect(
+        (await Rule.db.findById(db, r.info.loan.ruleId!))!.categoryId,
+        other,
+      );
+
+      await endpoints.loan.delete(as(bob), r.info.loan.id!);
+      expect(await Rule.db.findById(db, r.info.loan.ruleId!), isNull);
+      expect(
+        (await BankTransaction.db.findById(db, source.id!))!.categoryId,
+        cats['housing.mortgage']!.id,
+      );
+    });
+
+    test('isolation: another group, a reader or a hidden account are '
+        'refused and nothing is written', () async {
+      final source = await debit(shared, due(1), instalment);
+      final hidden = await debit(restricted, due(1), instalment);
+      await expectLater(
+        endpoints.loan.createFromTransaction(as(mallory), source.id!, terms()),
+        denied,
+      );
+      await expectLater(
+        endpoints.loan.createFromTransaction(as(reader), source.id!, terms()),
+        denied,
+      );
+      await expectLater(
+        endpoints.loan.createFromTransaction(as(bob), hidden.id!, terms()),
+        denied,
+      );
+      expect(await Loan.db.count(db), 0);
+      expect(await Rule.db.count(db), 0);
+      final t = (await BankTransaction.db.findById(db, source.id!))!;
+      expect(t.categoryId, isNull);
+      expect(t.scheduledId, isNull);
+    });
+
+    test('only from a debit', () async {
+      final credit = await BankTransaction.db.insertRow(
+        db,
+        BankTransaction(
+          accountId: shared.id!,
+          date: due(1),
+          amountCents: 5000,
+          rawLabel: 'VIR',
+          cleanLabel: 'VIR',
+          operationKind: 'transfer',
+        ),
+      );
+      await expectLater(
+        endpoints.loan.createFromTransaction(as(bob), credit.id!, terms()),
+        throwsA(isA<InvalidInputException>()),
+      );
+    });
+  });
+}

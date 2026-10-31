@@ -739,12 +739,22 @@ class LoanFormScreen extends StatefulWidget {
   /// Pop with the saved [LoanInfo] instead of `true`.
   final bool returnInfo;
 
+  /// Declares a new loan from this debit (one of its instalments): the
+  /// account is the operation's, and the form pops with the
+  /// [LoanFromOperation] result.
+  final BankTransaction? fromOperation;
+
+  /// The group's categories when the caller has them (else loaded).
+  final List<Category>? categories;
+
   const LoanFormScreen({
     super.key,
     required this.groupId,
     required this.accounts,
     this.loan,
     this.returnInfo = false,
+    this.fromOperation,
+    this.categories,
   });
 
   @override
@@ -753,8 +763,11 @@ class LoanFormScreen extends StatefulWidget {
 
 class _LoanFormScreenState extends State<LoanFormScreen> {
   late final Loan? _l = widget.loan;
+  late final BankTransaction? _op = widget.fromOperation;
   late var _kind = _l?.kind ?? LoanKind.mortgage;
-  late final _lender = TextEditingController(text: _l?.lender);
+  late final _lender = TextEditingController(
+    text: _l?.lender ?? _op?.cleanLabel,
+  );
   late final _label = TextEditingController(text: _l?.label);
   late final _principal = TextEditingController(
     text: _money(_l?.principalCents),
@@ -772,10 +785,10 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
     text: _money(_l?.insuranceMonthlyCents),
   );
   late final _fees = TextEditingController(text: _money(_l?.feesCents));
-  late var _firstDue = _l?.firstDueDate ?? todayUtcMidnight();
-  late int? _account = _l?.accountId;
-  late int? _category = _l?.categoryId;
-  List<Category> _categories = [];
+  late var _firstDue = _l?.firstDueDate ?? _op?.date ?? todayUtcMidnight();
+  late int? _account = _l?.accountId ?? _op?.accountId;
+  late int? _category = _l?.categoryId ?? _op?.categoryId;
+  late List<Category> _categories = widget.categories ?? [];
   final _form = GlobalKey<FormState>();
   String? _error;
   var _busy = false;
@@ -795,10 +808,12 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
   @override
   void initState() {
     super.initState();
-    client.category.list(widget.groupId).then((list) {
-      if (mounted) setState(() => _categories = list);
-    }, onError: (_) {});
-    for (final c in [_principal, _rate, _months]) {
+    if (widget.categories == null) {
+      client.category.list(widget.groupId).then((list) {
+        if (mounted) setState(() => _categories = list);
+      }, onError: (_) {});
+    }
+    for (final c in [_principal, _rate, _months, _insurance]) {
       c.addListener(() => setState(() {}));
     }
   }
@@ -832,6 +847,28 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
     return core.loanPaymentCents(p, r, n);
   }
 
+  /// Capital whose instalment, insurance added, is the observed debit.
+  void _deducePrincipal() {
+    final l = AppLocalizations.of(context);
+    final r = parseRateMilli(_rate.text);
+    final n = int.tryParse(_months.text.trim());
+    final insurance = parseUserAmount(_insurance.text) ?? 0;
+    final p = r == null || n == null
+        ? null
+        : core.loanPrincipalForPaymentCents(
+            -_op!.amountCents - insurance,
+            r,
+            n,
+          );
+    if (p == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l.loanDeduceNeedsTerms)));
+      return;
+    }
+    _principal.text = _money(p);
+  }
+
   Future<void> _save() async {
     final l = AppLocalizations.of(context);
     if (!_form.currentState!.validate()) return;
@@ -853,6 +890,12 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
     );
     setState(() => (_busy = true, _error = null));
     try {
+      final op = _op;
+      if (op != null) {
+        final r = await client.loan.createFromTransaction(op.id!, loan);
+        if (mounted) Navigator.of(context).pop(r);
+        return;
+      }
       final info = _l == null
           ? await client.loan.create(widget.groupId, loan)
           : await client.loan.update(loan);
@@ -880,8 +923,22 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
         : l.amountInvalid;
     final preview = _previewPayment;
     final insurance = parseUserAmount(_insurance.text) ?? 0;
+    final op = _op;
+    final observed = op == null ? null : -op.amountCents;
+    final mismatch =
+        observed != null &&
+        preview != null &&
+        ((preview + insurance) - observed).abs() * 20 > observed;
     return Scaffold(
-      appBar: AppBar(title: Text(_l == null ? l.loanAdd : l.loanEdit)),
+      appBar: AppBar(
+        title: Text(
+          op != null
+              ? l.loanFromOperationTitle
+              : _l == null
+              ? l.loanAdd
+              : l.loanEdit,
+        ),
+      ),
       body: Form(
         key: _form,
         child: ListView(
@@ -893,6 +950,28 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    if (op != null) ...[
+                      Card(
+                        margin: EdgeInsets.zero,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l.loanObservedInstalment(
+                                  context.money(observed!),
+                                ),
+                                style: theme.textTheme.titleSmall,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(l.loanFromOperationIntro(op.cleanLabel)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      gap,
+                    ],
                     DropdownButtonFormField<LoanKind>(
                       initialValue: _kind,
                       decoration: InputDecoration(labelText: l.loanKind),
@@ -933,6 +1012,15 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                           ? null
                           : l.amountInvalid,
                     ),
+                    if (op != null)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          icon: const Icon(Icons.calculate_outlined),
+                          label: Text(l.loanDeducePrincipal),
+                          onPressed: _deducePrincipal,
+                        ),
+                      ),
                     gap,
                     Row(
                       children: [
@@ -994,7 +1082,13 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(Icons.event),
                       title: Text(l.loanFirstDue),
-                      subtitle: Text(context.day(_firstDue)),
+                      subtitle: Text(
+                        op == null
+                            ? context.day(_firstDue)
+                            : '${context.day(_firstDue)}\n'
+                                  '${l.loanFirstDueFromOperationHelp}',
+                      ),
+                      isThreeLine: op != null,
                       onTap: () async {
                         final picked = await showDatePicker(
                           context: context,
@@ -1066,7 +1160,9 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         for (final a in widget.accounts)
                           DropdownMenuItem(value: a.id, child: Text(a.name)),
                       ],
-                      onChanged: (v) => setState(() => _account = v),
+                      onChanged: op != null
+                          ? null
+                          : (v) => setState(() => _account = v),
                     ),
                     gap,
                     if (_categories.isNotEmpty)
@@ -1075,6 +1171,9 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         initialValue: _category,
                         label: l.categoryLabel,
                         noneLabel: l.noCategory,
+                        helperText: op == null
+                            ? null
+                            : l.loanCategoryDefaultHelp,
                         onChanged: (v) => _category = v,
                       ),
                     const SizedBox(height: 20),
@@ -1094,6 +1193,27 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         ),
                       ),
                     ),
+                    if (mismatch)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.warning_amber_rounded,
+                              color: theme.colorScheme.error,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                l.loanInstalmentMismatch(
+                                  context.money(preview + insurance),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     if (_error != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 12),

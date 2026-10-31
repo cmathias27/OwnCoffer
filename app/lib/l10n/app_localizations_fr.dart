@@ -1850,4 +1850,49 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_invalid_month_start_day =>
       'Le mois doit commencer entre le 1er et le 28.';
+
+  @override
+  String get loanFromOperation => 'C\'est une échéance de crédit';
+
+  @override
+  String get loanFromOperationTitle => 'Déclarer le crédit';
+
+  @override
+  String loanFromOperationIntro(String label) {
+    return 'Les prochains prélèvements « $label » seront reconnus comme les échéances de ce crédit et classés automatiquement.';
+  }
+
+  @override
+  String loanObservedInstalment(String amount) {
+    return 'Prélèvement constaté : $amount (assurance comprise)';
+  }
+
+  @override
+  String get loanDeducePrincipal =>
+      'Calculer le capital à partir de ce prélèvement';
+
+  @override
+  String get loanDeduceNeedsTerms => 'Indiquez d\'abord le taux et la durée.';
+
+  @override
+  String loanInstalmentMismatch(String amount) {
+    return 'La mensualité calculée ($amount) s\'écarte de plus de 5 % du prélèvement : vérifiez le capital, le taux, la durée et l\'assurance.';
+  }
+
+  @override
+  String get loanFirstDueFromOperationHelp =>
+      'Date de la toute première échéance. Si vous ne la connaissez pas, gardez celle de ce prélèvement et indiquez la durée restante : le capital calculé sera alors le capital restant dû.';
+
+  @override
+  String get loanCategoryDefaultHelp =>
+      'Sans choix, la catégorie du type de crédit est utilisée (par exemple Crédit immobilier).';
+
+  @override
+  String loanFromOperationDone(int linked, int others) {
+    return 'Crédit créé : $linked échéances rattachées, $others autres opérations classées.';
+  }
+
+  @override
+  String get error_loan_needs_debit =>
+      'Un crédit se déclare depuis un prélèvement.';
 }
