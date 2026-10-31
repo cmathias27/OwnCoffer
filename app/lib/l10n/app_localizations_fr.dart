@@ -2149,4 +2149,84 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_split_invalid =>
       'La ventilation doit compter au moins deux parts du même signe que l\'opération, dont le total est égal à son montant.';
+
+  @override
+  String get goalsTitle => 'Objectifs du mois';
+
+  @override
+  String get goalsEmpty =>
+      'Aucun objectif. Fixez un plafond mensuel sur une catégorie de dépenses pour voir où vous en êtes au fil du mois.';
+
+  @override
+  String goalsSummary(int ok, int warning, int over) {
+    return '$ok dans l\'objectif · $warning bientôt atteint · $over dépassé';
+  }
+
+  @override
+  String get goalPaceHelp =>
+      'Le trait vertical marque où vous devriez en être aujourd\'hui pour tenir l\'objectif jusqu\'à la fin du mois.';
+
+  @override
+  String goalSpentOf(String spent, String goal) {
+    return '$spent sur $goal';
+  }
+
+  @override
+  String rankingShowAll(int count) {
+    return 'Voir les $count catégories';
+  }
+
+  @override
+  String get rankingShowLess => 'Réduire';
+
+  @override
+  String rankingTotal(String amount) {
+    return 'Total : $amount';
+  }
+
+  @override
+  String rankingVsAverage(String percent, String amount) {
+    return '$percent % par rapport à la moyenne ($amount)';
+  }
+
+  @override
+  String get budgetBalanceTitle => 'Bilan de la période';
+
+  @override
+  String budgetOverspent(String amount) {
+    return 'Vous avez dépensé $amount de plus que vos revenus';
+  }
+
+  @override
+  String budgetLeftOver(String amount) {
+    return 'Il vous reste $amount';
+  }
+
+  @override
+  String budgetBarsSemantic(String income, String out) {
+    return 'Revenus $income, dépenses et épargne $out';
+  }
+
+  @override
+  String get budgetExpensesAndSavings => 'Dépenses et épargne';
+
+  @override
+  String get budgetSavingsPart => 'dont épargne';
+
+  @override
+  String budgetVsPrevious(String delta) {
+    return '$delta par rapport à la période précédente';
+  }
+
+  @override
+  String unclassifiedBanner(int count, String amount) {
+    return '$count opérations à classer ($amount)';
+  }
+
+  @override
+  String get unclassifiedBannerHelp =>
+      'Elles comptent dans les totaux mais pas dans les classements ni les objectifs.';
+
+  @override
+  String get classifyNow => 'Classer';
 }

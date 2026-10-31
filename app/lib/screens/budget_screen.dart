@@ -249,6 +249,16 @@ class BudgetScreenState extends State<BudgetScreen> {
 
   // --- build -----------------------------------------------------------------
 
+  /// Share of the period already passed (1 for a past period), for the
+  /// "where you should be today" mark on goals.
+  double _elapsed(SpendingReport r) {
+    final today = todayUtcMidnight();
+    if (today.isBefore(r.start)) return 0;
+    if (today.isAfter(r.last)) return 1;
+    final days = r.last.difference(r.start).inDays + 1;
+    return (today.difference(r.start).inDays + 1) / days;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
@@ -258,57 +268,110 @@ class BudgetScreenState extends State<BudgetScreen> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: [
-          _controls(context, l, r),
-          if (_loading && r == null)
-            const Padding(
-              padding: EdgeInsets.all(48),
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          if (_error != null)
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Text(_error!, textAlign: TextAlign.center),
-            ),
-          if (r != null) ...[
-            const SizedBox(height: 12),
-            _summary(context, l, r),
-            if (_left case final left?)
-              if (_period == BudgetPeriod.month &&
-                  !todayUtcMidnight().isBefore(r.start) &&
-                  !todayUtcMidnight().isAfter(r.last)) ...[
-                const SizedBox(height: 16),
-                _LeftToLiveCard(report: left),
-              ],
-            const SizedBox(height: 16),
-            _card(
-              context,
-              l.budgetHistoryTitle,
-              IncomeExpenseChart(
-                points: [
-                  for (final h in r.history)
-                    IncomeExpensePoint(
-                      label: _historyLabel(context, h.start),
-                      tooltipTitle: _historyLabel(context, h.start),
-                      incomeCents: h.incomeCents,
-                      expenseCents: h.expenseCents,
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _controls(context, l, r),
+                  if (_loading && r == null)
+                    const Padding(
+                      padding: EdgeInsets.all(48),
+                      child: Center(child: CircularProgressIndicator()),
                     ),
+                  if (_error != null)
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(_error!, textAlign: TextAlign.center),
+                    ),
+                  if (r != null) ..._body(context, l, r),
                 ],
-                incomeLabel: l.budgetIncome,
-                expenseLabel: l.budgetExpenses,
-                netLabel: l.budgetNet,
-                semanticLabel: l.budgetHistorySemantic,
-                money: (c) => context.money(c),
-                axisMoney: (c) => _axisMoney(context, c),
               ),
             ),
-            const SizedBox(height: 16),
-            _ranking(context, l, r, CategoryKind.expense),
-            const SizedBox(height: 16),
-            _ranking(context, l, r, CategoryKind.income),
-          ],
+          ),
         ],
       ),
     );
+  }
+
+  List<Widget> _body(
+    BuildContext context,
+    AppLocalizations l,
+    SpendingReport r,
+  ) {
+    final left = _left;
+    final showLeft =
+        left != null &&
+        _period == BudgetPeriod.month &&
+        !todayUtcMidnight().isBefore(r.start) &&
+        !todayUtcMidnight().isAfter(r.last);
+    const gap = SizedBox(height: 16);
+    return [
+      const SizedBox(height: 12),
+      // Overview first: what came in, what went out, what is left.
+      LayoutBuilder(
+        builder: (context, box) {
+          final wide = box.maxWidth >= 720;
+          final balance = BalanceCard(
+            report: r,
+            previous: r.history.length >= 2
+                ? r.history[r.history.length - 2]
+                : null,
+          );
+          if (!showLeft) return balance;
+          final leftCard = LeftToLiveCard(report: left);
+          return wide
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 3, child: balance),
+                    const SizedBox(width: 16),
+                    Expanded(flex: 2, child: leftCard),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [balance, gap, leftCard],
+                );
+        },
+      ),
+      if (r.unclassifiedCount > 0) ...[
+        gap,
+        _UnclassifiedBanner(
+          count: r.unclassifiedCount,
+          cents: r.unclassifiedOutCents + r.unclassifiedInCents,
+          onOpen: () => _showOperations(l.toClassify),
+        ),
+      ],
+      if (_period == BudgetPeriod.month) ...[gap, _goals(context, l, r)],
+      gap,
+      _ranking(context, l, r, CategoryKind.expense),
+      gap,
+      _ranking(context, l, r, CategoryKind.income),
+      gap,
+      _card(
+        context,
+        l.budgetHistoryTitle,
+        IncomeExpenseChart(
+          points: [
+            for (final h in r.history)
+              IncomeExpensePoint(
+                label: _historyLabel(context, h.start),
+                tooltipTitle: _historyLabel(context, h.start),
+                incomeCents: h.incomeCents,
+                expenseCents: h.expenseCents,
+              ),
+          ],
+          incomeLabel: l.budgetIncome,
+          expenseLabel: l.budgetExpenses,
+          netLabel: l.budgetNet,
+          semanticLabel: l.budgetHistorySemantic,
+          money: (c) => context.money(c),
+          axisMoney: (c) => _axisMoney(context, c),
+        ),
+      ),
+    ];
   }
 
   Widget _controls(
@@ -318,163 +381,133 @@ class BudgetScreenState extends State<BudgetScreen> {
   ) {
     final theme = Theme.of(context);
     final today = todayUtcMidnight();
-    return Wrap(
-      spacing: 12,
-      runSpacing: 8,
-      crossAxisAlignment: WrapCrossAlignment.center,
+    void open(Widget screen) => Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => screen));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SegmentedButton<BudgetPeriod>(
-          segments: [
-            ButtonSegment(value: BudgetPeriod.week, label: Text(l.periodWeek)),
-            ButtonSegment(
-              value: BudgetPeriod.month,
-              label: Text(l.periodMonth),
-            ),
-            ButtonSegment(value: BudgetPeriod.year, label: Text(l.periodYear)),
-          ],
-          selected: {_period},
-          showSelectedIcon: false,
-          onSelectionChanged: (s) {
-            setState(() {
-              _period = s.single;
-              _expanded.clear();
-            });
-            reload();
-          },
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
+        Wrap(
+          spacing: 12,
+          runSpacing: 8,
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            IconButton(
-              tooltip: l.periodPrevious,
-              icon: const Icon(Icons.chevron_left),
-              onPressed: r == null ? null : () => _shift(-1),
+            SegmentedButton<BudgetPeriod>(
+              segments: [
+                ButtonSegment(
+                  value: BudgetPeriod.week,
+                  label: Text(l.periodWeek),
+                ),
+                ButtonSegment(
+                  value: BudgetPeriod.month,
+                  label: Text(l.periodMonth),
+                ),
+                ButtonSegment(
+                  value: BudgetPeriod.year,
+                  label: Text(l.periodYear),
+                ),
+              ],
+              selected: {_period},
+              showSelectedIcon: false,
+              onSelectionChanged: (s) {
+                setState(() {
+                  _period = s.single;
+                  _expanded.clear();
+                });
+                reload();
+              },
             ),
-            ConstrainedBox(
-              constraints: const BoxConstraints(minWidth: 140),
-              child: Text(
-                r == null ? '' : _periodLabel(context, r),
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  tooltip: l.periodPrevious,
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: r == null ? null : () => _shift(-1),
+                ),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 150),
+                  child: Text(
+                    r == null ? '' : _periodLabel(context, r),
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleLarge,
+                  ),
+                ),
+                IconButton(
+                  tooltip: l.periodNext,
+                  icon: const Icon(Icons.chevron_right),
+                  onPressed: r == null || !r.last.isBefore(today)
+                      ? null
+                      : () => _shift(1),
+                ),
+              ],
+            ),
+            if (widget.accounts.length > 1)
+              DropdownButton<int?>(
+                value: _accountId,
+                items: [
+                  DropdownMenuItem(value: null, child: Text(l.allAccounts)),
+                  for (final a in widget.accounts)
+                    DropdownMenuItem(value: a.id, child: Text(a.name)),
+                ],
+                onChanged: (v) {
+                  setState(() => _accountId = v);
+                  reload();
+                },
               ),
-            ),
-            IconButton(
-              tooltip: l.periodNext,
-              icon: const Icon(Icons.chevron_right),
-              onPressed: r == null || !r.last.isBefore(today)
-                  ? null
-                  : () => _shift(1),
-            ),
           ],
         ),
-        if (widget.accounts.length > 1)
-          DropdownButton<int?>(
-            value: _accountId,
-            items: [
-              DropdownMenuItem(value: null, child: Text(l.allAccounts)),
-              for (final a in widget.accounts)
-                DropdownMenuItem(value: a.id, child: Text(a.name)),
-            ],
-            onChanged: (v) {
-              setState(() => _accountId = v);
-              reload();
-            },
-          ),
-        OutlinedButton.icon(
-          icon: const Icon(Icons.autorenew),
-          label: Text(l.subscriptionsTitle),
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => SubscriptionsScreen(
-                membership: widget.membership,
-                accounts: widget.accounts,
+        const SizedBox(height: 8),
+        // Shortcuts to the other views of the budget.
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ActionChip(
+              avatar: const Icon(Icons.fact_check_outlined, size: 18),
+              label: Text(l.reviewTitle),
+              onPressed: () => open(
+                ReviewScreen(
+                  membership: widget.membership,
+                  accountId: _accountId,
+                  date: _period == BudgetPeriod.month
+                      ? _date
+                      : todayUtcMidnight(),
+                ),
               ),
             ),
-          ),
-        ),
-        OutlinedButton.icon(
-          icon: const Icon(Icons.calendar_month_outlined),
-          label: Text(l.calendarTitle),
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => CalendarScreen(
-                membership: widget.membership,
-                accounts: widget.accounts,
-                accountId: _accountId,
+            ActionChip(
+              avatar: const Icon(Icons.calendar_month_outlined, size: 18),
+              label: Text(l.calendarTitle),
+              onPressed: () => open(
+                CalendarScreen(
+                  membership: widget.membership,
+                  accounts: widget.accounts,
+                  accountId: _accountId,
+                ),
               ),
             ),
-          ),
-        ),
-        OutlinedButton.icon(
-          icon: const Icon(Icons.fact_check_outlined),
-          label: Text(l.reviewTitle),
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => ReviewScreen(
-                membership: widget.membership,
-                accountId: _accountId,
-                // The month shown, or the one just ended early in a month.
-                date: _period == BudgetPeriod.month
-                    ? _date
-                    : todayUtcMidnight(),
+            ActionChip(
+              avatar: const Icon(Icons.autorenew, size: 18),
+              label: Text(l.subscriptionsTitle),
+              onPressed: () => open(
+                SubscriptionsScreen(
+                  membership: widget.membership,
+                  accounts: widget.accounts,
+                ),
               ),
             ),
-          ),
-        ),
-        if (_isAdmin)
-          IconButton(
-            tooltip: l.monthStartTitle,
-            icon: const Icon(Icons.event_repeat),
-            onPressed: _settings,
-          ),
-      ],
-    );
-  }
-
-  Widget _summary(BuildContext context, AppLocalizations l, SpendingReport r) {
-    final prev = r.history.length >= 2 ? r.history[r.history.length - 2] : null;
-    Widget tile(
-      String label,
-      int cents,
-      int? before, {
-      bool lowerIsBetter = false,
-    }) => _StatTile(
-      label: label,
-      value: context.money(cents),
-      delta: before == null ? null : _delta(l, cents, before),
-      // A rise in spending is bad news; in income, good news.
-      good: before == null || cents == before
-          ? null
-          : (cents > before) != lowerIsBetter,
-    );
-    return Wrap(
-      spacing: 12,
-      runSpacing: 12,
-      children: [
-        tile(l.budgetIncome, r.incomeCents, prev?.incomeCents),
-        tile(
-          l.budgetExpenses,
-          r.expenseCents,
-          prev?.expenseCents,
-          lowerIsBetter: true,
-        ),
-        tile(l.budgetSavings, r.savingsCents, prev?.savingsCents),
-        tile(
-          l.budgetNet,
-          r.netCents,
-          prev == null
-              ? null
-              : prev.incomeCents - prev.expenseCents - prev.savingsCents,
+            if (_isAdmin)
+              ActionChip(
+                avatar: const Icon(Icons.event_repeat, size: 18),
+                label: Text(l.monthStartTitle),
+                onPressed: _settings,
+              ),
+          ],
         ),
       ],
     );
-  }
-
-  /// "+12 % vs previous period", in whole percent; null when meaningless.
-  String? _delta(AppLocalizations l, int now, int before) {
-    if (before == 0) return null;
-    final pct = ((now - before) * 100 / before.abs()).round();
-    return l.budgetDeltaPrevious('${pct > 0 ? '+' : ''}$pct');
   }
 
   Widget _card(
@@ -482,6 +515,7 @@ class BudgetScreenState extends State<BudgetScreen> {
     String title,
     Widget child, {
     Widget? trailing,
+    String? subtitle,
   }) {
     final theme = Theme.of(context);
     return Card(
@@ -494,7 +528,19 @@ class BudgetScreenState extends State<BudgetScreen> {
             Row(
               children: [
                 Expanded(
-                  child: Text(title, style: theme.textTheme.titleMedium),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: theme.textTheme.titleMedium),
+                      if (subtitle != null)
+                        Text(
+                          subtitle,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
                 ?trailing,
               ],
@@ -507,113 +553,24 @@ class BudgetScreenState extends State<BudgetScreen> {
     );
   }
 
-  Widget _ranking(
-    BuildContext context,
-    AppLocalizations l,
-    SpendingReport r,
-    CategoryKind kind,
-  ) {
-    final flows = {for (final f in r.categories) f.categoryId: f};
-    final isExpense = kind == CategoryKind.expense;
-    final total = isExpense ? r.expenseCents : r.incomeCents;
-    List<(Category, CategoryFlow)> rows(int? parentId) {
-      final list = [
-        for (final c in _categories.values)
-          if (c.kind == kind && c.parentId == parentId && flows[c.id] != null)
-            (c, flows[c.id]!),
-      ]..removeWhere((e) => e.$2.amountCents <= 0 && e.$2.goalCents == null);
-      list.sort((a, b) => b.$2.amountCents.compareTo(a.$2.amountCents));
-      return list;
-    }
-
-    final top = rows(null);
-    final unclassified = isExpense
-        ? r.unclassifiedOutCents
-        : r.unclassifiedInCents;
-    final max = [
-      for (final (_, f) in top) f.amountCents,
-      unclassified,
-    ].fold(0, (a, b) => a > b ? a : b);
-
-    final children = <Widget>[];
-    for (final (c, f) in top) {
-      final sub = rows(c.id);
-      final open = _expanded.contains(c.id);
-      children.add(
-        _RankRow(
-          name: context.categoryName(c),
-          flow: f,
-          max: max,
-          total: total,
-          period: _period,
-          expense: isExpense,
-          expandable: sub.isNotEmpty,
-          expanded: open,
-          onTap: sub.isEmpty
-              ? () => _showOperations(context.categoryName(c), categoryId: c.id)
-              : () => setState(
-                  () => open ? _expanded.remove(c.id) : _expanded.add(c.id!),
-                ),
-          onOperations: () =>
-              _showOperations(context.categoryName(c), categoryId: c.id),
-          onGoal: isExpense && _canWrite && _period == BudgetPeriod.month
-              ? () => _editGoal(c, f)
-              : null,
-        ),
-      );
-      if (open) {
-        for (final (s, sf) in sub) {
-          children.add(
-            Padding(
-              padding: const EdgeInsets.only(left: 24),
-              child: _RankRow(
-                name: context.categoryName(s),
-                flow: sf,
-                max: f.amountCents,
-                total: total,
-                period: _period,
-                expense: isExpense,
-                onTap: () => _showOperations(
-                  context.categoryName(s),
-                  categoryId: s.id,
-                ),
-                onOperations: () => _showOperations(
-                  context.categoryName(s),
-                  categoryId: s.id,
-                ),
-                onGoal: isExpense && _canWrite && _period == BudgetPeriod.month
-                    ? () => _editGoal(s, sf)
-                    : null,
-              ),
-            ),
-          );
-        }
-      }
-    }
-    if (unclassified > 0) {
-      children.add(
-        _RankRow(
-          name: l.toClassify,
-          flow: CategoryFlow(
-            categoryId: -1,
-            amountCents: unclassified,
-            count: 0,
-            previousCents: 0,
-            averageCents: 0,
+  /// Every goal of the month in one place, the most used first.
+  Widget _goals(BuildContext context, AppLocalizations l, SpendingReport r) {
+    final goals =
+        [
+          for (final f in r.categories)
+            if (f.goalCents != null && _categories[f.categoryId] != null) f,
+        ]..sort(
+          (a, b) => (b.amountCents * 1000 ~/ b.goalCents!).compareTo(
+            a.amountCents * 1000 ~/ a.goalCents!,
           ),
-          max: max,
-          total: total,
-          period: _period,
-          expense: isExpense,
-          muted: true,
-          onTap: () => _showOperations(l.toClassify),
-          onOperations: () => _showOperations(l.toClassify),
-        ),
-      );
-    }
-    final goalButton = isExpense && _canWrite && _period == BudgetPeriod.month
+        );
+    final levels = [
+      for (final g in goals) core.goalLevel(g.amountCents, g.goalCents!),
+    ];
+    int count(core.GoalLevel v) => levels.where((x) => x == v).length;
+    final add = _canWrite
         ? TextButton.icon(
-            icon: const Icon(Icons.flag_outlined),
+            icon: const Icon(Icons.add),
             label: Text(l.goalAdd),
             onPressed: () async {
               final expenses = [
@@ -626,11 +583,196 @@ class BudgetScreenState extends State<BudgetScreen> {
               );
               final picked = _categories[choice?.id];
               if (picked != null && mounted) {
-                await _editGoal(picked, flows[picked.id]);
+                await _editGoal(
+                  picked,
+                  r.categories
+                      .where((f) => f.categoryId == picked.id)
+                      .firstOrNull,
+                );
               }
             },
           )
         : null;
+    final elapsed = _elapsed(r);
+    return _card(
+      context,
+      l.goalsTitle,
+      goals.isEmpty
+          ? Text(l.goalsEmpty)
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (final g in goals)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: _canWrite
+                        ? () => _editGoal(_categories[g.categoryId]!, g)
+                        : null,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 4,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  categoryPath(
+                                    context,
+                                    _categories[g.categoryId]!,
+                                    _categories,
+                                  ),
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ),
+                              Text(
+                                l.goalSpentOf(
+                                  context.money(g.amountCents),
+                                  context.money(g.goalCents!),
+                                ),
+                                style: const TextStyle(
+                                  fontFeatures: [FontFeature.tabularFigures()],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          GoalMeter(
+                            spentCents: g.amountCents,
+                            goalCents: g.goalCents!,
+                            elapsed: elapsed < 1 ? elapsed : null,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (elapsed < 1)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      l.goalPaceHelp,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+              ],
+            ),
+      subtitle: goals.isEmpty
+          ? null
+          : l.goalsSummary(
+              count(core.GoalLevel.ok),
+              count(core.GoalLevel.warning),
+              count(core.GoalLevel.over),
+            ),
+      trailing: add,
+    );
+  }
+
+  static const _shown = 6;
+
+  Widget _ranking(
+    BuildContext context,
+    AppLocalizations l,
+    SpendingReport r,
+    CategoryKind kind,
+  ) {
+    final flows = {for (final f in r.categories) f.categoryId: f};
+    final isExpense = kind == CategoryKind.expense;
+    final total = isExpense ? r.expenseCents : r.incomeCents;
+    final color = isExpense
+        ? ChartColors.expense(context)
+        : ChartColors.income(context);
+    List<(Category, CategoryFlow)> rows(int? parentId) {
+      final list = [
+        for (final c in _categories.values)
+          if (c.kind == kind && c.parentId == parentId && flows[c.id] != null)
+            (c, flows[c.id]!),
+      ]..removeWhere((e) => e.$2.amountCents <= 0);
+      list.sort((a, b) => b.$2.amountCents.compareTo(a.$2.amountCents));
+      return list;
+    }
+
+    final top = rows(null);
+    final max = top.fold(
+      0,
+      (a, e) => a > e.$2.amountCents ? a : e.$2.amountCents,
+    );
+    final all = _expanded.contains(isExpense ? -1 : -2);
+    final children = <Widget>[];
+    for (final (c, f) in all ? top : top.take(_shown)) {
+      final sub = rows(c.id);
+      final open = _expanded.contains(c.id);
+      final name = context.categoryName(c);
+      children.add(
+        RankRow(
+          name: name,
+          flow: f,
+          max: max,
+          total: total,
+          color: color,
+          expense: isExpense,
+          expandable: sub.isNotEmpty,
+          expanded: open,
+          onTap: sub.isEmpty
+              ? () => _showOperations(name, categoryId: c.id)
+              : () => setState(
+                  () => open ? _expanded.remove(c.id) : _expanded.add(c.id!),
+                ),
+          onOperations: () => _showOperations(name, categoryId: c.id),
+          onGoal: isExpense && _canWrite && _period == BudgetPeriod.month
+              ? () => _editGoal(c, f)
+              : null,
+        ),
+      );
+      if (open) {
+        children.add(
+          SubRows(
+            children: [
+              for (final (s, sf) in sub)
+                RankRow(
+                  name: context.categoryName(s),
+                  flow: sf,
+                  max: f.amountCents,
+                  total: total,
+                  color: color,
+                  expense: isExpense,
+                  child: true,
+                  onTap: () => _showOperations(
+                    '$name › ${context.categoryName(s)}',
+                    categoryId: s.id,
+                  ),
+                  onOperations: () => _showOperations(
+                    '$name › ${context.categoryName(s)}',
+                    categoryId: s.id,
+                  ),
+                  onGoal:
+                      isExpense && _canWrite && _period == BudgetPeriod.month
+                      ? () => _editGoal(s, sf)
+                      : null,
+                ),
+            ],
+          ),
+        );
+      }
+    }
+    if (top.length > _shown) {
+      children.add(
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton.icon(
+            icon: Icon(all ? Icons.expand_less : Icons.expand_more),
+            label: Text(all ? l.rankingShowLess : l.rankingShowAll(top.length)),
+            onPressed: () => setState(
+              () => all
+                  ? _expanded.remove(isExpense ? -1 : -2)
+                  : _expanded.add(isExpense ? -1 : -2),
+            ),
+          ),
+        ),
+      );
+    }
     return _card(
       context,
       isExpense ? l.rankingExpenses : l.rankingIncome,
@@ -640,15 +782,242 @@ class BudgetScreenState extends State<BudgetScreen> {
               child: Text(l.rankingEmpty, textAlign: TextAlign.center),
             )
           : Column(children: children),
-      trailing: goalButton,
+      subtitle: l.rankingTotal(context.money(total)),
     );
   }
 }
 
-/// "Left to live on until pay day", the figure and how it is made.
-class _LeftToLiveCard extends StatelessWidget {
+/// Income, expenses and savings of the period, and what is left: two bars on
+/// one scale show at a glance whether spending stays below income.
+class BalanceCard extends StatelessWidget {
+  final SpendingReport report;
+  final PeriodTotals? previous;
+  const BalanceCard({super.key, required this.report, required this.previous});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final r = report;
+    final p = previous;
+    final out = r.expenseCents + r.savingsCents;
+    final scale = r.incomeCents > out ? r.incomeCents : out;
+    final negative = r.netCents < 0;
+    String? delta(int now, int? before) {
+      if (before == null || before == 0) return null;
+      final pct = ((now - before) * 100 / before.abs()).round();
+      return '${pct > 0 ? '+' : ''}$pct %';
+    }
+
+    Widget figure(
+      String label,
+      int cents,
+      Color? color,
+      int? before, {
+      bool lowerIsBetter = false,
+    }) {
+      final d = delta(cents, before);
+      final good = before == null || cents == before
+          ? null
+          : (cents > before) != lowerIsBetter;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (color != null) ...[
+                Container(
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 6),
+              ],
+              Text(label, style: theme.textTheme.labelLarge),
+            ],
+          ),
+          Text(
+            context.money(cents),
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontFamily: 'Manrope',
+              fontWeight: FontWeight.w600,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+          if (d != null)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (good != null)
+                  Icon(
+                    cents > before! ? Icons.arrow_upward : Icons.arrow_downward,
+                    size: 14,
+                    color: good ? ChartColors.good : ChartColors.critical,
+                  ),
+                Flexible(
+                  child: Text(
+                    l.budgetVsPrevious(d),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+        ],
+      );
+    }
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l.budgetBalanceTitle, style: theme.textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(
+                  negative ? Icons.error : Icons.check_circle,
+                  color: negative ? ChartColors.critical : ChartColors.good,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    negative
+                        ? l.budgetOverspent(context.money(-r.netCents))
+                        : l.budgetLeftOver(context.money(r.netCents)),
+                    style: theme.textTheme.titleLarge,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Semantics(
+              label: l.budgetBarsSemantic(
+                context.money(r.incomeCents),
+                context.money(out),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ThinBar(
+                    fraction: scale <= 0 ? 0 : r.incomeCents / scale,
+                    color: ChartColors.income(context),
+                    height: 14,
+                  ),
+                  const SizedBox(height: 6),
+                  ThinBar(
+                    fraction: scale <= 0 ? 0 : out / scale,
+                    color: ChartColors.expense(context),
+                    height: 14,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 32,
+              runSpacing: 12,
+              children: [
+                figure(
+                  l.budgetIncome,
+                  r.incomeCents,
+                  ChartColors.income(context),
+                  p?.incomeCents,
+                ),
+                figure(
+                  l.budgetExpensesAndSavings,
+                  out,
+                  ChartColors.expense(context),
+                  p == null ? null : p.expenseCents + p.savingsCents,
+                  lowerIsBetter: true,
+                ),
+                if (r.savingsCents != 0)
+                  figure(
+                    l.budgetSavingsPart,
+                    r.savingsCents,
+                    null,
+                    p?.savingsCents,
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Operations not classified yet: they weigh in the totals, not in the
+/// rankings.
+class _UnclassifiedBanner extends StatelessWidget {
+  final int count;
+  final int cents;
+  final VoidCallback onOpen;
+  const _UnclassifiedBanner({
+    required this.count,
+    required this.cents,
+    required this.onOpen,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    return Card(
+      margin: EdgeInsets.zero,
+      color: theme.colorScheme.secondaryContainer,
+      child: ListTile(
+        leading: Icon(
+          Icons.label_off_outlined,
+          color: theme.colorScheme.onSecondaryContainer,
+        ),
+        title: Text(l.unclassifiedBanner(count, context.money(cents))),
+        subtitle: Text(l.unclassifiedBannerHelp),
+        trailing: FilledButton.tonal(
+          onPressed: onOpen,
+          child: Text(l.classifyNow),
+        ),
+        onTap: onOpen,
+      ),
+    );
+  }
+}
+
+/// Sub-categories under their parent: indented along a guide line, in a
+/// lighter style, so the hierarchy reads at a glance.
+class SubRows extends StatelessWidget {
+  final List<Widget> children;
+  const SubRows({super.key, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      margin: const EdgeInsets.only(left: 14, bottom: 8),
+      padding: const EdgeInsets.only(left: 12),
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(color: theme.colorScheme.outlineVariant, width: 2),
+        ),
+      ),
+      child: Column(children: children),
+    );
+  }
+}
+
+/// "Left to live on until pay day": the amount per day first, then how it
+/// is made.
+class LeftToLiveCard extends StatelessWidget {
   final LeftToLiveReport report;
-  const _LeftToLiveCard({required this.report});
+  const LeftToLiveCard({super.key, required this.report});
 
   @override
   Widget build(BuildContext context) {
@@ -658,22 +1027,38 @@ class _LeftToLiveCard extends StatelessWidget {
     final negative = r.leftCents < 0;
     return Card(
       margin: EdgeInsets.zero,
+      color: theme.colorScheme.primaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l.leftToLiveTitle, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 4),
+            Text(
+              l.leftToLiveTitle,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
+            ),
+            const SizedBox(height: 8),
             Row(
               children: [
                 if (negative) ...[
                   const Icon(Icons.error, color: ChartColors.critical),
                   const SizedBox(width: 8),
                 ],
-                Text(
-                  context.money(r.leftCents),
-                  style: theme.textTheme.headlineMedium,
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.money(r.leftCents),
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontFamily: 'Manrope',
+                        fontWeight: FontWeight.w700,
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -683,17 +1068,27 @@ class _LeftToLiveCard extends StatelessWidget {
                 r.daysLeft,
                 context.day(r.last),
               ),
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Text(
               l.leftToLiveDetail(
                 context.money(r.balanceCents),
                 context.money(r.plannedDebitsCents),
                 context.money(r.plannedCreditsCents),
               ),
-              style: theme.textTheme.bodySmall,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
             ),
-            Text(l.leftToLiveHelp, style: theme.textTheme.bodySmall),
+            Text(
+              l.leftToLiveHelp,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
+            ),
           ],
         ),
       ),
@@ -701,103 +1096,37 @@ class _LeftToLiveCard extends StatelessWidget {
   }
 }
 
-class _StatTile extends StatelessWidget {
-  final String label;
-  final String value;
-  final String? delta;
-
-  /// Whether the change is good news (null: neutral).
-  final bool? good;
-
-  const _StatTile({
-    required this.label,
-    required this.value,
-    this.delta,
-    this.good,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final g = good;
-    return SizedBox(
-      width: 170,
-      child: Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: theme.textTheme.labelMedium),
-              const SizedBox(height: 4),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  value,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontFamily: 'Manrope',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              if (delta != null)
-                Row(
-                  children: [
-                    if (g != null)
-                      Icon(
-                        g ? Icons.trending_up : Icons.trending_down,
-                        size: 16,
-                        color: g ? ChartColors.good : ChartColors.critical,
-                      ),
-                    const SizedBox(width: 4),
-                    Flexible(
-                      child: Text(
-                        delta!,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// One category of the ranking: amount, share, change, and its goal.
-class _RankRow extends StatelessWidget {
+/// One category of the ranking: amount, share of the total and change
+/// against the average. A top-level category is bold with a thick bar; a
+/// sub-category ([child]) is lighter, with a thin bar.
+class RankRow extends StatelessWidget {
   final String name;
   final CategoryFlow flow;
   final int max;
   final int total;
-  final BudgetPeriod period;
+  final Color color;
   final bool expense;
   final bool expandable;
   final bool expanded;
-  final bool muted;
+  final bool child;
   final VoidCallback onTap;
   final VoidCallback onOperations;
   final VoidCallback? onGoal;
 
-  const _RankRow({
+  const RankRow({
+    super.key,
     required this.name,
     required this.flow,
     required this.max,
     required this.total,
-    required this.period,
+    required this.color,
     required this.expense,
     required this.onTap,
     required this.onOperations,
     this.onGoal,
     this.expandable = false,
     this.expanded = false,
-    this.muted = false,
+    this.child = false,
   });
 
   @override
@@ -807,18 +1136,31 @@ class _RankRow extends StatelessWidget {
     final f = flow;
     final share = total <= 0 ? 0 : (f.amountCents * 100 / total).round();
     final goal = f.goalCents;
-    final details = <String>[
-      l.rankingShare(share),
-      if (!muted && f.previousCents != 0)
-        l.rankingPrevious(context.money(f.previousCents)),
-      if (!muted && f.averageCents > 0)
-        l.rankingAverage(context.money(f.averageCents)),
-    ];
+    final avg = f.averageCents;
+    final change = avg <= 0
+        ? null
+        : ((f.amountCents - avg) * 100 / avg).round();
+    // Spending above its average is bad news, income above it good news.
+    final good = change == null || change.abs() < 10
+        ? null
+        : (change > 0) != expense;
+    final nameStyle = child
+        ? theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          )
+        : theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700);
+    final amountStyle =
+        (child ? theme.textTheme.bodyMedium : theme.textTheme.titleSmall)
+            ?.copyWith(
+              fontFamily: 'Manrope',
+              fontWeight: child ? FontWeight.w500 : FontWeight.w700,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            );
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        padding: EdgeInsets.symmetric(vertical: child ? 6 : 10, horizontal: 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -834,18 +1176,29 @@ class _RankRow extends StatelessWidget {
                     name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: muted ? theme.colorScheme.tertiary : null,
+                    style: nameStyle,
+                  ),
+                ),
+                if (goal != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: Tooltip(
+                      message: l.goalProgress(
+                        (f.amountCents * 100 / goal).round(),
+                        context.money(goal),
+                      ),
+                      child: Icon(
+                        Icons.flag,
+                        size: 16,
+                        color: switch (core.goalLevel(f.amountCents, goal)) {
+                          core.GoalLevel.ok => ChartColors.good,
+                          core.GoalLevel.warning => ChartColors.warning,
+                          core.GoalLevel.over => ChartColors.critical,
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Text(
-                  context.money(f.amountCents),
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontFamily: 'Manrope',
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
-                ),
+                Text(context.money(f.amountCents), style: amountStyle),
                 PopupMenuButton<int>(
                   tooltip: l.moreActions,
                   icon: const Icon(Icons.more_vert, size: 20),
@@ -864,21 +1217,41 @@ class _RankRow extends StatelessWidget {
             const SizedBox(height: 4),
             ThinBar(
               fraction: max <= 0 ? 0 : f.amountCents / max,
-              color: muted
-                  ? theme.colorScheme.outline
-                  : ChartColors.rank(context),
+              color: child ? color.withValues(alpha: 0.6) : color,
+              height: child ? 6 : 10,
             ),
             const SizedBox(height: 4),
-            Text(
-              details.join(' · '),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
+            Row(
+              children: [
+                Text(
+                  l.rankingShare(share),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                if (change != null) ...[
+                  const SizedBox(width: 12),
+                  if (good != null)
+                    Icon(
+                      change > 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                      size: 14,
+                      color: good ? ChartColors.good : ChartColors.critical,
+                    ),
+                  Flexible(
+                    child: Text(
+                      l.rankingVsAverage(
+                        '${change > 0 ? '+' : ''}$change',
+                        context.money(avg),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ),
-            if (goal != null) ...[
-              const SizedBox(height: 6),
-              _GoalMeter(spentCents: f.amountCents, goalCents: goal),
-            ],
           ],
         ),
       ),
@@ -888,10 +1261,18 @@ class _RankRow extends StatelessWidget {
 
 /// Spent against the monthly goal: green, orange, then red, always with an
 /// icon and a label.
-class _GoalMeter extends StatelessWidget {
+class GoalMeter extends StatelessWidget {
   final int spentCents;
   final int goalCents;
-  const _GoalMeter({required this.spentCents, required this.goalCents});
+
+  /// Share of the month passed: a mark where spending should be today.
+  final double? elapsed;
+  const GoalMeter({
+    super.key,
+    required this.spentCents,
+    required this.goalCents,
+    this.elapsed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -912,7 +1293,12 @@ class _GoalMeter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ThinBar(fraction: spentCents / goalCents, color: color, height: 6),
+        ThinBar(
+          fraction: spentCents / goalCents,
+          color: color,
+          height: 10,
+          marker: elapsed,
+        ),
         const SizedBox(height: 4),
         Row(
           children: [

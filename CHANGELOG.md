@@ -13,6 +13,14 @@ Suite des ajouts demandés pendant le mois d'essai : on peut annuler une action,
 
 ### Budget
 
+- **Page Budget réorganisée** pour se lire de haut en bas :
+  - **bilan de la période** en tête : « Il vous reste… » ou « Vous avez dépensé … de plus que vos revenus », avec deux barres sur la même échelle (revenus en bleu, dépenses et épargne en orange) et l'évolution par rapport à la période précédente ;
+  - **reste à vivre** à côté du bilan (ou dessous sur téléphone) ;
+  - bandeau des **opérations à classer** avec un bouton « Classer » ;
+  - carte **Objectifs du mois** qui réunit tous les objectifs, du plus entamé au moins entamé. Chaque jauge porte un trait qui marque où on devrait en être aujourd'hui pour tenir l'objectif jusqu'à la fin du mois ;
+  - **classements** des dépenses et des revenus avec leur total. Les six premières catégories sont affichées et « Voir les … catégories » montre les autres. L'écart avec la moyenne est indiqué par une flèche de couleur, et un drapeau signale les catégories qui ont un objectif ;
+  - Revue du mois, Calendrier, Abonnements et réglage du début du mois en raccourcis sous la période.
+- **Catégories parentes et sous-catégories mieux distinguées** dans les classements, la page Catégories et le choix d'une catégorie. La catégorie parente est en gras, sur un fond teinté et avec son icône. La sous-catégorie est décalée le long d'un trait, en plus clair et avec une barre plus fine. Pendant une recherche, une sous-catégorie affiche le nom de sa catégorie parente.
 - **Reste à vivre** jusqu'à la prochaine paie : solde des comptes courants, moins les prélèvements prévus d'ici la fin du mois de budget, plus les rentrées prévues. Il est aussi ramené à un montant par jour.
 - **Alertes d'objectif** : une notification quand une catégorie atteint 80 % puis 100 % de son objectif du mois, une seule fois par seuil. Le calcul se fait sur les comptes que chaque membre peut voir.
 - **Calendrier des échéances** : toutes les opérations prévues du mois (loyer, abonnements, échéances de crédit), avec leur état : passée, en retard, sautée ou à venir.

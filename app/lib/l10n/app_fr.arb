@@ -1522,5 +1522,112 @@
   "loanInstallmentsTotal": "Montant total de l'achat",
   "loanInstallmentsHelp": "Paiement en 3 ou 4 fois (Alma, Oney, carte bancaire…), généralement sans frais : le taux reste à 0 %.",
   "loanSectionInstallments": "Paiements en plusieurs fois",
-  "error_split_invalid": "La ventilation doit compter au moins deux parts du même signe que l'opération, dont le total est égal à son montant."
+  "error_split_invalid": "La ventilation doit compter au moins deux parts du même signe que l'opération, dont le total est égal à son montant.",
+  "goalsTitle": "Objectifs du mois",
+  "goalsEmpty": "Aucun objectif. Fixez un plafond mensuel sur une catégorie de dépenses pour voir où vous en êtes au fil du mois.",
+  "goalsSummary": "{ok} dans l'objectif · {warning} bientôt atteint · {over} dépassé",
+  "@goalsSummary": {
+    "placeholders": {
+      "ok": {
+        "type": "int"
+      },
+      "warning": {
+        "type": "int"
+      },
+      "over": {
+        "type": "int"
+      }
+    }
+  },
+  "goalPaceHelp": "Le trait vertical marque où vous devriez en être aujourd'hui pour tenir l'objectif jusqu'à la fin du mois.",
+  "goalSpentOf": "{spent} sur {goal}",
+  "@goalSpentOf": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingShowAll": "Voir les {count} catégories",
+  "@rankingShowAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingShowLess": "Réduire",
+  "rankingTotal": "Total : {amount}",
+  "@rankingTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingVsAverage": "{percent} % par rapport à la moyenne ({amount})",
+  "@rankingVsAverage": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetBalanceTitle": "Bilan de la période",
+  "budgetOverspent": "Vous avez dépensé {amount} de plus que vos revenus",
+  "@budgetOverspent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetLeftOver": "Il vous reste {amount}",
+  "@budgetLeftOver": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetBarsSemantic": "Revenus {income}, dépenses et épargne {out}",
+  "@budgetBarsSemantic": {
+    "placeholders": {
+      "income": {
+        "type": "String"
+      },
+      "out": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetExpensesAndSavings": "Dépenses et épargne",
+  "budgetSavingsPart": "dont épargne",
+  "budgetVsPrevious": "{delta} par rapport à la période précédente",
+  "@budgetVsPrevious": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "unclassifiedBanner": "{count} opérations à classer ({amount})",
+  "@unclassifiedBanner": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "unclassifiedBannerHelp": "Elles comptent dans les totaux mais pas dans les classements ni les objectifs.",
+  "classifyNow": "Classer"
 }

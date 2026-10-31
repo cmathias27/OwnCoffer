@@ -65,7 +65,9 @@ void main() {
     final picked = await pump(tester);
     await tester.tap(find.text('Logement'));
     await tester.pumpAndSettle();
-    expect(find.text('Alimentation › Épicerie'), findsOneWidget);
+    // Full list: the sub-category sits under its parent.
+    expect(find.text('Alimentation'), findsOneWidget);
+    expect(find.text('Épicerie'), findsOneWidget);
     expect(find.text('Salaire'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'epic');
@@ -73,7 +75,8 @@ void main() {
     expect(find.text('Salaire'), findsNothing);
     expect(find.text('À classer'), findsNothing);
 
-    await tester.tap(find.text('Alimentation › Épicerie'));
+    // Searching: the sub-category shows its parent.
+    await tester.tap(find.text('Alimentation › Épicerie', findRichText: true));
     await tester.pumpAndSettle();
     expect(picked, [2]);
     expect(find.text('Alimentation › Épicerie'), findsOneWidget);

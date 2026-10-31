@@ -3540,6 +3540,120 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'La ventilation doit compter au moins deux parts du même signe que l\'opération, dont le total est égal à son montant.'**
   String get error_split_invalid;
+
+  /// No description provided for @goalsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectifs du mois'**
+  String get goalsTitle;
+
+  /// No description provided for @goalsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun objectif. Fixez un plafond mensuel sur une catégorie de dépenses pour voir où vous en êtes au fil du mois.'**
+  String get goalsEmpty;
+
+  /// No description provided for @goalsSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'{ok} dans l\'objectif · {warning} bientôt atteint · {over} dépassé'**
+  String goalsSummary(int ok, int warning, int over);
+
+  /// No description provided for @goalPaceHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le trait vertical marque où vous devriez en être aujourd\'hui pour tenir l\'objectif jusqu\'à la fin du mois.'**
+  String get goalPaceHelp;
+
+  /// No description provided for @goalSpentOf.
+  ///
+  /// In fr, this message translates to:
+  /// **'{spent} sur {goal}'**
+  String goalSpentOf(String spent, String goal);
+
+  /// No description provided for @rankingShowAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les {count} catégories'**
+  String rankingShowAll(int count);
+
+  /// No description provided for @rankingShowLess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réduire'**
+  String get rankingShowLess;
+
+  /// No description provided for @rankingTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total : {amount}'**
+  String rankingTotal(String amount);
+
+  /// No description provided for @rankingVsAverage.
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} % par rapport à la moyenne ({amount})'**
+  String rankingVsAverage(String percent, String amount);
+
+  /// No description provided for @budgetBalanceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan de la période'**
+  String get budgetBalanceTitle;
+
+  /// No description provided for @budgetOverspent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez dépensé {amount} de plus que vos revenus'**
+  String budgetOverspent(String amount);
+
+  /// No description provided for @budgetLeftOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il vous reste {amount}'**
+  String budgetLeftOver(String amount);
+
+  /// No description provided for @budgetBarsSemantic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus {income}, dépenses et épargne {out}'**
+  String budgetBarsSemantic(String income, String out);
+
+  /// No description provided for @budgetExpensesAndSavings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses et épargne'**
+  String get budgetExpensesAndSavings;
+
+  /// No description provided for @budgetSavingsPart.
+  ///
+  /// In fr, this message translates to:
+  /// **'dont épargne'**
+  String get budgetSavingsPart;
+
+  /// No description provided for @budgetVsPrevious.
+  ///
+  /// In fr, this message translates to:
+  /// **'{delta} par rapport à la période précédente'**
+  String budgetVsPrevious(String delta);
+
+  /// No description provided for @unclassifiedBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} opérations à classer ({amount})'**
+  String unclassifiedBanner(int count, String amount);
+
+  /// No description provided for @unclassifiedBannerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Elles comptent dans les totaux mais pas dans les classements ni les objectifs.'**
+  String get unclassifiedBannerHelp;
+
+  /// No description provided for @classifyNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classer'**
+  String get classifyNow;
 }
 
 class _AppLocalizationsDelegate

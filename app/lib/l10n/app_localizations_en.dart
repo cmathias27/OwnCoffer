@@ -2138,4 +2138,84 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_split_invalid =>
       'A split needs at least two parts of the operation\'s sign adding up to its amount.';
+
+  @override
+  String get goalsTitle => 'Goals of the month';
+
+  @override
+  String get goalsEmpty =>
+      'No goal yet. Set a monthly limit on an expense category to see where you stand as the month goes.';
+
+  @override
+  String goalsSummary(int ok, int warning, int over) {
+    return '$ok on track · $warning almost reached · $over exceeded';
+  }
+
+  @override
+  String get goalPaceHelp =>
+      'The vertical mark shows where you should be today to keep the goal until the end of the month.';
+
+  @override
+  String goalSpentOf(String spent, String goal) {
+    return '$spent of $goal';
+  }
+
+  @override
+  String rankingShowAll(int count) {
+    return 'See all $count categories';
+  }
+
+  @override
+  String get rankingShowLess => 'Show less';
+
+  @override
+  String rankingTotal(String amount) {
+    return 'Total: $amount';
+  }
+
+  @override
+  String rankingVsAverage(String percent, String amount) {
+    return '$percent% vs average ($amount)';
+  }
+
+  @override
+  String get budgetBalanceTitle => 'Period overview';
+
+  @override
+  String budgetOverspent(String amount) {
+    return 'You spent $amount more than your income';
+  }
+
+  @override
+  String budgetLeftOver(String amount) {
+    return 'You have $amount left';
+  }
+
+  @override
+  String budgetBarsSemantic(String income, String out) {
+    return 'Income $income, expenses and savings $out';
+  }
+
+  @override
+  String get budgetExpensesAndSavings => 'Expenses and savings';
+
+  @override
+  String get budgetSavingsPart => 'of which savings';
+
+  @override
+  String budgetVsPrevious(String delta) {
+    return '$delta vs previous period';
+  }
+
+  @override
+  String unclassifiedBanner(int count, String amount) {
+    return '$count operations to classify ($amount)';
+  }
+
+  @override
+  String get unclassifiedBannerHelp =>
+      'They count in the totals but not in the rankings or goals.';
+
+  @override
+  String get classifyNow => 'Classify';
 }

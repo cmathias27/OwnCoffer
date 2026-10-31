@@ -119,12 +119,13 @@ class _PickerDialog extends StatefulWidget {
 
 class _PickerDialogState extends State<_PickerDialog> {
   var _query = '';
-  late final List<(Category, String, String)> _entries;
+  late List<(Category, String, String)> _entries;
+  late Map<int, Category> _byId;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final byId = {for (final c in widget.categories) c.id!: c};
+    final byId = _byId = {for (final c in widget.categories) c.id!: c};
     _entries = [
       for (final c in widget.categories)
         (
@@ -191,10 +192,13 @@ class _PickerDialogState extends State<_PickerDialog> {
                       selected: widget.selected == null,
                       onTap: () => Navigator.of(context).pop((id: null)),
                     ),
-                  for (final (c, path, _) in shown)
-                    ListTile(
-                      dense: true,
-                      title: Text(path),
+                  for (final (c, _, _) in shown)
+                    _PickerTile(
+                      category: c,
+                      parent: _byId[c.parentId],
+                      // While searching, children show their parent; in
+                      // the full list they sit under it.
+                      showParent: searching,
                       selected: c.id == widget.selected,
                       onTap: () => Navigator.of(context).pop((id: c.id)),
                     ),
@@ -406,3 +410,87 @@ class _NewCategoryDialogState extends State<_NewCategoryDialog> {
     );
   }
 }
+
+/// A category in the picker: a top-level category stands out (bold, on a
+/// tinted band, with its kind icon); a sub-category is indented along a
+/// guide line, in a lighter style.
+class _PickerTile extends StatelessWidget {
+  final Category category;
+  final Category? parent;
+  final bool showParent;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _PickerTile({
+    required this.category,
+    required this.parent,
+    required this.showParent,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final name = context.categoryName(category);
+    final p = parent;
+    if (p == null) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: ListTile(
+          dense: true,
+          selected: selected,
+          tileColor: theme.colorScheme.surfaceContainerHigh,
+          leading: Icon(categoryKindIcon(category.kind), size: 20),
+          title: Text(
+            name,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          onTap: onTap,
+        ),
+      );
+    }
+    return ListTile(
+      dense: true,
+      selected: selected,
+      contentPadding: const EdgeInsets.only(left: 28, right: 16),
+      leading: showParent
+          ? null
+          : Container(
+              width: 2,
+              height: 32,
+              color: theme.colorScheme.outlineVariant,
+            ),
+      minLeadingWidth: 8,
+      title: showParent
+          ? Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: '${context.categoryName(p)} › ',
+                    style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                  TextSpan(text: name),
+                ],
+              ),
+            )
+          : Text(
+              name,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: selected ? null : theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+      onTap: onTap,
+    );
+  }
+}
+
+/// Icon of a category kind (income, expense, savings, transfer).
+IconData categoryKindIcon(CategoryKind k) => switch (k) {
+  CategoryKind.income => Icons.south_west,
+  CategoryKind.expense => Icons.north_east,
+  CategoryKind.savings => Icons.savings_outlined,
+  CategoryKind.transfer => Icons.swap_horiz,
+};
