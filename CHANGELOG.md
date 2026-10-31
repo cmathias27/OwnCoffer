@@ -2,7 +2,7 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
-## 0.2.0 (à publier)
+## 0.2.0 (31 octobre 2026)
 
 Ajouts demandés pendant le mois d'essai de l'alpha.
 
