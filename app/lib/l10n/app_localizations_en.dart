@@ -620,6 +620,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noCategory => 'To classify';
 
   @override
+  String get categorySearchHint => 'Search a category';
+
+  @override
+  String get categorySearchEmpty => 'No matching category.';
+
+  @override
+  String categoryCreateNamed(String name) {
+    return 'Create the category “$name”';
+  }
+
+  @override
   String get cleared => 'Cleared';
 
   @override
@@ -674,6 +685,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String dateValue(String date) {
     return 'Date: $date';
   }
+
+  @override
+  String get webSearch => 'Search this label on Google';
+
+  @override
+  String get webSearchHelp =>
+      'Opens Google in a new tab with the cleaned label (not the bank\'s full label).';
 
   @override
   String get noteLabel => 'Your note';

@@ -626,6 +626,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noCategory => 'À classer';
 
   @override
+  String get categorySearchHint => 'Rechercher une catégorie';
+
+  @override
+  String get categorySearchEmpty => 'Aucune catégorie ne correspond.';
+
+  @override
+  String categoryCreateNamed(String name) {
+    return 'Créer la catégorie « $name »';
+  }
+
+  @override
   String get cleared => 'Pointée';
 
   @override
@@ -680,6 +691,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String dateValue(String date) {
     return 'Date : $date';
   }
+
+  @override
+  String get webSearch => 'Rechercher ce libellé sur Google';
+
+  @override
+  String get webSearchHelp =>
+      'Ouvre Google dans un nouvel onglet avec le libellé nettoyé (pas le libellé complet de la banque).';
 
   @override
   String get noteLabel => 'Votre note';

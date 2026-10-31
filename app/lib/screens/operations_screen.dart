@@ -7,6 +7,8 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import '../util/web_search.dart';
+import '../widgets/category_field.dart';
 
 /// Operations of one account: search, filters, corrections, manual entry.
 class OperationsScreen extends StatefulWidget {
@@ -98,16 +100,29 @@ class _OperationsScreenState extends State<OperationsScreen> {
   }
 
   Future<void> _open(BankTransaction t) async {
+    // Resizable by dragging, always within the screen (small phones,
+    // keyboard open): the content scrolls inside the sheet.
     final changed = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       showDragHandle: true,
-      builder: (_) => _OperationSheet(
-        operation: t,
-        categories: _categories,
-        currency: _account!.currency,
-        canWrite: _canWrite,
-        onChanged: _replace,
+      builder: (_) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.7,
+        minChildSize: 0.3,
+        maxChildSize: 1,
+        snap: true,
+        snapSizes: const [0.7],
+        builder: (_, scroll) => _OperationSheet(
+          groupId: widget.membership.group.id!,
+          operation: t,
+          categories: _categories,
+          currency: _account!.currency,
+          canWrite: _canWrite,
+          onChanged: _replace,
+          scrollController: scroll,
+        ),
       ),
     );
     if (changed == true) await _reload();
@@ -288,18 +303,24 @@ class _OperationTile extends StatelessWidget {
 
 /// Details of an operation: category, rule, checking, note, trash.
 class _OperationSheet extends StatefulWidget {
+  final int groupId;
   final BankTransaction operation;
+
+  /// The screen's categories; a category created here is added to it.
   final Map<int, Category> categories;
   final String currency;
   final bool canWrite;
   final void Function(BankTransaction) onChanged;
+  final ScrollController scrollController;
 
   const _OperationSheet({
+    required this.groupId,
     required this.operation,
     required this.categories,
     required this.currency,
     required this.canWrite,
     required this.onChanged,
+    required this.scrollController,
   });
 
   @override
@@ -327,142 +348,146 @@ class _OperationSheetState extends State<_OperationSheet> {
     }
   }
 
-  List<DropdownMenuItem<int?>> _categoryItems(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final cats = widget.categories.values.toList();
-    String label(Category c) {
-      final parent = c.parentId == null ? null : widget.categories[c.parentId];
-      return parent == null
-          ? context.categoryName(c)
-          : '${context.categoryName(parent)} › ${context.categoryName(c)}';
-    }
-
-    cats.sort((a, b) => label(a).compareTo(label(b)));
-    return [
-      DropdownMenuItem<int?>(value: null, child: Text(l.noCategory)),
-      for (final c in cats)
-        DropdownMenuItem<int?>(value: c.id, child: Text(label(c))),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final t = _t;
-    return Padding(
+    return ListView(
+      controller: widget.scrollController,
       padding: EdgeInsets.fromLTRB(
         24,
         0,
         24,
         24 + MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(t.cleanLabel, style: theme.textTheme.titleLarge),
-            Text(
-              '${context.day(t.date)} · ${context.money(t.amountCents, currency: widget.currency)}',
-              style: theme.textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              l.bankLabelValue(t.rawLabel),
-              style: theme.textTheme.bodySmall,
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<int?>(
-              initialValue: t.categoryId,
-              isExpanded: true,
-              decoration: InputDecoration(
-                labelText: l.categoryLabel,
-                helperText: t.categoryId == null
-                    ? null
-                    : context.categorySourceName(t.categorySource),
-              ),
-              items: _categoryItems(context),
-              onChanged: widget.canWrite
-                  ? (id) => _do(() => client.transaction.setCategory(t.id!, id))
-                  : null,
-            ),
-            if (widget.canWrite && t.categoryId != null)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  icon: const Icon(Icons.rule),
-                  label: Text(l.alwaysClassify),
-                  onPressed: () async {
-                    try {
-                      final r = await client.transaction.createRuleFrom(
-                        t.id!,
-                        t.categoryId!,
-                      );
-                      if (!context.mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(l.ruleCreated(r.reclassifiedCount)),
-                        ),
-                      );
-                      Navigator.of(context).pop(true);
-                    } on Object catch (e) {
-                      setState(() => _error = errorText(l, e));
-                    }
-                  },
-                ),
-              ),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(l.cleared),
-              value: t.cleared,
-              onChanged: widget.canWrite
-                  ? (v) => _do(() => client.transaction.setCleared(t.id!, v))
-                  : null,
-            ),
-            TextField(
-              controller: _note,
-              enabled: widget.canWrite,
-              decoration: InputDecoration(labelText: l.noteLabel),
-              onSubmitted: (v) =>
-                  _do(() => client.transaction.update(t.id!, note: v)),
-            ),
-            if (_error != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: Text(
-                  _error!,
-                  style: TextStyle(color: theme.colorScheme.error),
-                ),
-              ),
-            if (widget.canWrite)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: OutlinedButton.icon(
-                    icon: const Icon(Icons.delete_outline),
-                    label: Text(l.trash),
-                    onPressed: () async {
-                      await client.transaction.trash(t.id!);
-                      if (!context.mounted) return;
-                      final messenger = ScaffoldMessenger.of(context);
-                      Navigator.of(context).pop(true);
-                      messenger.showSnackBar(
-                        SnackBar(
-                          content: Text(l.trashed),
-                          action: SnackBarAction(
-                            label: l.undo,
-                            onPressed: () => client.transaction.restore(t.id!),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-          ],
+      children: [
+        Text(t.cleanLabel, style: theme.textTheme.titleLarge),
+        Text(
+          '${context.day(t.date)} · ${context.money(t.amountCents, currency: widget.currency)}',
+          style: theme.textTheme.titleMedium,
         ),
-      ),
+        const SizedBox(height: 8),
+        Text(
+          l.bankLabelValue(t.rawLabel),
+          style: theme.textTheme.bodySmall,
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Tooltip(
+            message: l.webSearchHelp,
+            child: TextButton.icon(
+              icon: const Icon(Icons.travel_explore),
+              label: Text(l.webSearch),
+              onPressed: () => openWebSearch(t.cleanLabel),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        CategoryFormField(
+          // Rebuilt with the saved value after each change.
+          key: ValueKey('category-${t.categoryId}'),
+          categories: widget.categories.values.toList(),
+          initialValue: t.categoryId,
+          label: l.categoryLabel,
+          noneLabel: l.noCategory,
+          helperText: t.categoryId == null
+              ? null
+              : context.categorySourceName(t.categorySource),
+          onChanged: widget.canWrite
+              ? (id) => _do(() => client.transaction.setCategory(t.id!, id))
+              : null,
+          onCreate: widget.canWrite
+              ? (context, name) async {
+                  final c = await showNewCategoryDialog(
+                    context,
+                    groupId: widget.groupId,
+                    name: name,
+                    kind: t.amountCents < 0
+                        ? CategoryKind.expense
+                        : CategoryKind.income,
+                    categories: widget.categories.values.toList(),
+                  );
+                  if (c != null) widget.categories[c.id!] = c;
+                  return c;
+                }
+              : null,
+        ),
+        if (widget.canWrite && t.categoryId != null)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              icon: const Icon(Icons.rule),
+              label: Text(l.alwaysClassify),
+              onPressed: () async {
+                try {
+                  final r = await client.transaction.createRuleFrom(
+                    t.id!,
+                    t.categoryId!,
+                  );
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l.ruleCreated(r.reclassifiedCount)),
+                    ),
+                  );
+                  Navigator.of(context).pop(true);
+                } on Object catch (e) {
+                  setState(() => _error = errorText(l, e));
+                }
+              },
+            ),
+          ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l.cleared),
+          value: t.cleared,
+          onChanged: widget.canWrite
+              ? (v) => _do(() => client.transaction.setCleared(t.id!, v))
+              : null,
+        ),
+        TextField(
+          controller: _note,
+          enabled: widget.canWrite,
+          decoration: InputDecoration(labelText: l.noteLabel),
+          onSubmitted: (v) =>
+              _do(() => client.transaction.update(t.id!, note: v)),
+        ),
+        if (_error != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Text(
+              _error!,
+              style: TextStyle(color: theme.colorScheme.error),
+            ),
+          ),
+        if (widget.canWrite)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.delete_outline),
+                label: Text(l.trash),
+                onPressed: () async {
+                  await client.transaction.trash(t.id!);
+                  if (!context.mounted) return;
+                  final messenger = ScaffoldMessenger.of(context);
+                  Navigator.of(context).pop(true);
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text(l.trashed),
+                      action: SnackBarAction(
+                        label: l.undo,
+                        onPressed: () => client.transaction.restore(t.id!),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
