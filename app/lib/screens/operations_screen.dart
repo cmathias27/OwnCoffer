@@ -12,6 +12,7 @@ import '../widgets/category_field.dart';
 import '../widgets/split_dialog.dart';
 import '../widgets/undo.dart';
 import 'loans_screen.dart';
+import 'subscriptions_screen.dart';
 
 /// Operations of one account: search, filters, corrections, manual entry.
 class OperationsScreen extends StatefulWidget {
@@ -37,6 +38,10 @@ class _OperationsScreenState extends State<OperationsScreen> {
   Timer? _debounce;
   var _toClassify = false;
   var _uncleared = false;
+  var _subscriptionsOnly = false;
+
+  /// Subscriptions of the account, by id: their operations are marked.
+  Map<int, ScheduledTransaction> _subscriptions = {};
   int? _categoryFilter;
 
   /// Cleaned label of the provider whose operations are listed.
@@ -86,6 +91,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
         sameLabel: _provider,
         toClassify: _toClassify,
         uncleared: _uncleared,
+        subscriptions: _subscriptionsOnly,
         categoryId: _toClassify ? null : _categoryFilter,
         includeSubcategories: true,
         limit: _page,
@@ -96,6 +102,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
         _items.addAll(page.items);
         _total = page.total;
         _providerSum = page.amountSumCents;
+        _subscriptions = {for (final s in page.subscriptions) s.id!: s};
       });
     } on Object catch (e) {
       if (mounted) {
@@ -136,6 +143,11 @@ class _OperationsScreenState extends State<OperationsScreen> {
               messenger: messenger,
               onUndone: _reload,
               operation: t,
+              subscription: _subscriptions[t.scheduledId],
+              onOpenSubscriptions: () {
+                Navigator.of(context).pop();
+                _openSubscriptions();
+              },
               accounts: widget.accounts,
               categories: _categories,
               currency: _account!.currency,
@@ -153,6 +165,19 @@ class _OperationsScreenState extends State<OperationsScreen> {
       ),
     );
     if (changed == true) await _reload();
+  }
+
+  Future<void> _openSubscriptions() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => SubscriptionsScreen(
+          membership: widget.membership,
+          accounts: widget.accounts,
+        ),
+      ),
+    );
+    // A subscription may have been stopped or unmarked there.
+    if (mounted) await _reload();
   }
 
   Future<void> _add() async {
@@ -278,6 +303,22 @@ class _OperationsScreenState extends State<OperationsScreen> {
                     _reload();
                   },
                 ),
+                FilterChip(
+                  avatar: _subscriptionsOnly
+                      ? null
+                      : const Icon(Icons.autorenew, size: 18),
+                  label: Text(l.filterSubscriptions),
+                  selected: _subscriptionsOnly,
+                  onSelected: (v) {
+                    setState(() => _subscriptionsOnly = v);
+                    _reload();
+                  },
+                ),
+                TextButton.icon(
+                  icon: const Icon(Icons.list_alt, size: 18),
+                  label: Text(l.subscriptionsOpen),
+                  onPressed: _openSubscriptions,
+                ),
                 Text(
                   _provider != null && _providerSum != null && _total > 0
                       ? l.sameProviderSummary(
@@ -326,6 +367,9 @@ class _OperationsScreenState extends State<OperationsScreen> {
                       return _OperationTile(
                         operation: _items[i],
                         category: _categories[_items[i].categoryId],
+                        subscription: _subscriptions.containsKey(
+                          _items[i].scheduledId,
+                        ),
                         currency: account?.currency ?? 'EUR',
                         onTap: () => _open(_items[i]),
                       );
@@ -341,12 +385,16 @@ class _OperationsScreenState extends State<OperationsScreen> {
 class _OperationTile extends StatelessWidget {
   final BankTransaction operation;
   final Category? category;
+
+  /// Realises a subscription: marked with an icon and a word.
+  final bool subscription;
   final String currency;
   final VoidCallback onTap;
 
   const _OperationTile({
     required this.operation,
     required this.category,
+    required this.subscription,
     required this.currency,
     required this.onTap,
   });
@@ -363,10 +411,43 @@ class _OperationTile extends StatelessWidget {
         t.cleared ? Icons.check_circle : Icons.radio_button_unchecked,
         color: t.cleared ? theme.colorScheme.primary : theme.disabledColor,
       ),
-      title: Text(t.cleanLabel, maxLines: 1, overflow: TextOverflow.ellipsis),
-      subtitle: Text(
-        '${context.shortDay(t.date)} · ${c == null ? l.toClassify : context.categoryName(c)}',
-        style: c == null ? TextStyle(color: theme.colorScheme.tertiary) : null,
+      title: Row(
+        children: [
+          Flexible(
+            child: Text(
+              t.cleanLabel,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          if (subscription) ...[
+            const SizedBox(width: 6),
+            Icon(
+              Icons.autorenew,
+              size: 16,
+              color: theme.colorScheme.primary,
+              semanticLabel: l.subscriptionBadge,
+            ),
+          ],
+        ],
+      ),
+      subtitle: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text:
+                  '${context.shortDay(t.date)} · ${c == null ? l.toClassify : context.categoryName(c)}',
+              style: c == null
+                  ? TextStyle(color: theme.colorScheme.tertiary)
+                  : null,
+            ),
+            if (subscription)
+              TextSpan(
+                text: ' · ${l.subscriptionBadge}',
+                style: TextStyle(color: theme.colorScheme.primary),
+              ),
+          ],
+        ),
       ),
       trailing: Text(
         context.money(t.amountCents, currency: currency),
@@ -391,6 +472,12 @@ class _OperationSheet extends StatefulWidget {
   /// Refreshes the screen after an undo.
   final VoidCallback onUndone;
 
+  /// The subscription this operation realises, if any.
+  final ScheduledTransaction? subscription;
+
+  /// Opens the subscriptions list (closes the sheet).
+  final VoidCallback onOpenSubscriptions;
+
   /// The screen's categories; a category created here is added to it.
   final Map<int, Category> categories;
   final String currency;
@@ -407,6 +494,8 @@ class _OperationSheet extends StatefulWidget {
     required this.accounts,
     required this.messenger,
     required this.onUndone,
+    required this.subscription,
+    required this.onOpenSubscriptions,
     required this.categories,
     required this.currency,
     required this.canWrite,
@@ -537,6 +626,30 @@ class _OperationSheetState extends State<_OperationSheet> {
           '${context.day(t.date)} · ${context.money(t.amountCents, currency: widget.currency)}',
           style: theme.textTheme.titleMedium,
         ),
+        if (widget.subscription != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Wrap(
+              spacing: 8,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Chip(
+                  avatar: Icon(
+                    Icons.autorenew,
+                    size: 18,
+                    color: theme.colorScheme.primary,
+                  ),
+                  label: Text(
+                    l.subscriptionOfOperation(widget.subscription!.label),
+                  ),
+                ),
+                TextButton(
+                  onPressed: widget.onOpenSubscriptions,
+                  child: Text(l.subscriptionsOpen),
+                ),
+              ],
+            ),
+          ),
         const SizedBox(height: 8),
         Text(
           l.bankLabelValue(t.rawLabel),
@@ -659,7 +772,7 @@ class _OperationSheetState extends State<_OperationSheet> {
               },
             ),
           ),
-        if (widget.canWrite && t.amountCents < 0)
+        if (widget.canWrite && t.amountCents < 0 && widget.subscription == null)
           Align(
             alignment: Alignment.centerLeft,
             child: TextButton.icon(

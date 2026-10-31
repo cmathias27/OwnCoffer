@@ -3322,6 +3322,7 @@ class _TransactionEndpoint {
     bool? includeSubcategories,
     bool? toClassify,
     bool? uncleared,
+    bool? subscriptions,
     int? limit,
     int? offset,
   }) async {
@@ -3346,6 +3347,7 @@ class _TransactionEndpoint {
             'includeSubcategories': includeSubcategories,
             'toClassify': toClassify,
             'uncleared': uncleared,
+            'subscriptions': subscriptions,
             'limit': limit,
             'offset': offset,
           }),

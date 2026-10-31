@@ -313,6 +313,48 @@ void main() {
       );
     });
 
+    test('operations list: subscriptions filter and marks', () async {
+      final now = DateTime.now().toUtc();
+      final day = DateTime.utc(now.year, now.month, now.day - 3);
+      final netflix = await op(shared, day, -1399, 'NETFLIX');
+      final rent = await op(shared, day, -70000, 'LOYER');
+      await op(shared, day, -2500, 'HYPER');
+      final s = await endpoints.scheduled.subscribeFrom(as(bob), netflix.id!);
+      // A planned operation that is not a subscription.
+      final planned = await endpoints.scheduled.create(
+        as(alice),
+        shared.id!,
+        -70000,
+        'LOYER',
+        ScheduleFrequency.monthly,
+        day,
+      );
+      await BankTransaction.db.updateRow(
+        db,
+        rent.copyWith(scheduledId: planned.id),
+      );
+
+      final all = await endpoints.transaction.list(as(reader), shared.id!);
+      expect(all.total, 3);
+      expect(all.subscriptions.map((x) => x.id), [s.id]);
+      final only = await endpoints.transaction.list(
+        as(reader),
+        shared.id!,
+        subscriptions: true,
+      );
+      expect(only.items.map((t) => t.id), [netflix.id]);
+      expect(only.total, 1);
+
+      await endpoints.scheduled.update(as(alice), s.id!, subscription: false);
+      final none = await endpoints.transaction.list(
+        as(reader),
+        shared.id!,
+        subscriptions: true,
+      );
+      expect(none.items, isEmpty);
+      expect(none.subscriptions, isEmpty);
+    });
+
     test('operations list: a category with its sub-categories', () async {
       await october();
       final page = await endpoints.transaction.list(
@@ -389,6 +431,14 @@ void main() {
           expect(await endpoints.goal.list(as(alice), groupA), hasLength(1));
           await expectLater(
             endpoints.scheduled.subscriptions(as(mallory), groupA),
+            denied,
+          );
+          await expectLater(
+            endpoints.transaction.list(
+              as(mallory),
+              shared.id!,
+              subscriptions: true,
+            ),
             denied,
           );
           final o = await op(shared, DateTime.utc(2026, 10, 1), -999, 'X');

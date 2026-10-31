@@ -6,3 +6,6 @@ fields:
   ### Sum of the matching operations, given with a provider filter
   ### (`sameLabel`) only.
   amountSumCents: int?
+  ### Subscriptions of the account (planned operations marked as such, ended
+  ### ones included), to mark the operations they realised.
+  subscriptions: List<ScheduledTransaction>

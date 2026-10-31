@@ -2623,6 +2623,30 @@ abstract class AppLocalizations {
   /// **'Marquer comme abonnement'**
   String get subscriptionMarkPlanned;
 
+  /// No description provided for @filterSubscriptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnements'**
+  String get filterSubscriptions;
+
+  /// No description provided for @subscriptionsOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Liste des abonnements'**
+  String get subscriptionsOpen;
+
+  /// No description provided for @subscriptionBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement'**
+  String get subscriptionBadge;
+
+  /// No description provided for @subscriptionOfOperation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement « {label} »'**
+  String subscriptionOfOperation(String label);
+
   /// No description provided for @subscriptionCreated.
   ///
   /// In fr, this message translates to:

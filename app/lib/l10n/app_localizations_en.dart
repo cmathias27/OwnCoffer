@@ -1592,6 +1592,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subscriptionMarkPlanned => 'Mark as a subscription';
 
   @override
+  String get filterSubscriptions => 'Subscriptions';
+
+  @override
+  String get subscriptionsOpen => 'Subscriptions list';
+
+  @override
+  String get subscriptionBadge => 'Subscription';
+
+  @override
+  String subscriptionOfOperation(String label) {
+    return 'Subscription “$label”';
+  }
+
+  @override
   String subscriptionCreated(String label, String date) {
     return 'Subscription “$label” added, next debit on $date.';
   }
