@@ -2173,6 +2173,78 @@ class _LoanEndpoint {
     });
   }
 
+  _ida.Future<_iqwwu4ga.LoanFromOperation> attachTransaction(
+    _ist.TestSessionBuilder sessionBuilder,
+    int loanId,
+    int transactionId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'attachTransaction',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'attachTransaction',
+          parameters: _ist.testObjectToJson({
+            'loanId': loanId,
+            'transactionId': transactionId,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iqwwu4ga.LoanFromOperation>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<int> undoAttach(
+    _ist.TestSessionBuilder sessionBuilder,
+    int loanId,
+    int transactionId, {
+    int? ruleId,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'undoAttach',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'undoAttach',
+          parameters: _ist.testObjectToJson({
+            'loanId': loanId,
+            'transactionId': transactionId,
+            'ruleId': ruleId,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<int>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<int> undoCreate(
     _ist.TestSessionBuilder sessionBuilder,
     int loanId,

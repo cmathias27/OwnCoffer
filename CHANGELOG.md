@@ -39,6 +39,11 @@ Suite des ajouts demandés pendant le mois d'essai : on peut annuler une action,
 
 ### Crédits
 
+- **Rattacher un prélèvement passé à un crédit déjà saisi** : « C'est une échéance de crédit » propose de choisir un crédit existant ou d'en déclarer un nouveau.
+  - Le prélèvement est relié à l'échéance la plus proche, même décalée de quelques jours, et classé dans la catégorie du crédit.
+  - Un crédit sans compte prend celui du prélèvement. Un crédit sans libellé reconnu prend celui du prélèvement, avec une règle qui classera les prochains automatiquement.
+  - Les autres échéances passées retrouvées sur le compte sont rattachées aussi.
+  - Le bouton « Annuler » fonctionne comme pour les autres actions.
 - **Paiements en plusieurs fois** (3 ou 4 fois, Alma, Oney…) : un nouveau type dans la page Crédits, sans taux, rangé à part. Il peut être déclaré depuis le premier prélèvement : le montant total est alors calculé à partir du prélèvement.
 
 ## 0.2.1 (31 octobre 2026)

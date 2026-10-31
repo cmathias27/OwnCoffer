@@ -1508,6 +1508,62 @@ class Endpoints extends _is.EndpointDispatch {
                     params['loan'],
                   ),
         ),
+        'attachTransaction': _is.MethodConnector(
+          name: 'attachTransaction',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint)
+                  .attachTransaction(
+                    session,
+                    params['loanId'],
+                    params['transactionId'],
+                  ),
+        ),
+        'undoAttach': _is.MethodConnector(
+          name: 'undoAttach',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'ruleId': _is.ParameterDescription(
+              name: 'ruleId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['loan'] as _imitaxsf.LoanEndpoint).undoAttach(
+                    session,
+                    params['loanId'],
+                    params['transactionId'],
+                    ruleId: params['ruleId'],
+                  ),
+        ),
         'undoCreate': _is.MethodConnector(
           name: 'undoCreate',
           params: {

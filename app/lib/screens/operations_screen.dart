@@ -703,6 +703,85 @@ class _OperationSheetState extends State<_OperationSheet> {
               label: Text(l.loanFromOperation),
               onPressed: () async {
                 final before = _snapshot;
+                // A loan already entered, or a new one.
+                final loans = await client.loan
+                    .overview(widget.groupId)
+                    .then((o) => o.loans, onError: (_) => <LoanInfo>[]);
+                if (!context.mounted) return;
+                if (loans.isNotEmpty) {
+                  final choice = await showDialog<({LoanInfo? loan})>(
+                    context: context,
+                    builder: (context) => SimpleDialog(
+                      title: Text(l.loanAttachTitle),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+                          child: Text(l.loanAttachHelp),
+                        ),
+                        for (final info in loans)
+                          SimpleDialogOption(
+                            onPressed: () =>
+                                Navigator.of(context).pop((loan: info)),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: const Icon(
+                                Icons.account_balance_outlined,
+                              ),
+                              title: Text(
+                                info.loan.label == null
+                                    ? info.loan.lender
+                                    : '${info.loan.lender} · ${info.loan.label}',
+                              ),
+                              subtitle: Text(
+                                '${loanKindText(l, info.loan.kind)} · '
+                                '${context.money(info.paymentCents + info.loan.insuranceMonthlyCents)}',
+                              ),
+                            ),
+                          ),
+                        SimpleDialogOption(
+                          onPressed: () =>
+                              Navigator.of(context).pop((loan: null)),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: const Icon(Icons.add),
+                            title: Text(l.loanAttachNew),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                  // Dismissed without a choice: nothing.
+                  if (choice == null || !context.mounted) return;
+                  final picked = choice.loan;
+                  if (picked != null) {
+                    try {
+                      final r = await client.loan.attachTransaction(
+                        picked.loan.id!,
+                        t.id!,
+                      );
+                      if (!context.mounted) return;
+                      Navigator.of(context).pop(true);
+                      showUndo(
+                        widget.messenger,
+                        l,
+                        l.loanAttachDone(r.linkedCount, r.reclassifiedCount),
+                        () async {
+                          await _restore(before);
+                          await client.loan.undoAttach(
+                            picked.loan.id!,
+                            t.id!,
+                            ruleId: r.ruleId,
+                          );
+                        },
+                        after: widget.onUndone,
+                      );
+                    } on Object catch (e) {
+                      setState(() => _error = errorText(l, e));
+                    }
+                    return;
+                  }
+                }
+                if (!context.mounted) return;
                 final r = await Navigator.of(context).push<LoanFromOperation>(
                   MaterialPageRoute(
                     builder: (_) => LoanFormScreen(

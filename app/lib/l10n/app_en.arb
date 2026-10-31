@@ -591,5 +591,10 @@
   "budgetVsPrevious": "{delta} vs previous period",
   "unclassifiedBanner": "{count} operations to classify ({amount})",
   "unclassifiedBannerHelp": "They count in the totals but not in the rankings or goals.",
-  "classifyNow": "Classify"
+  "classifyNow": "Classify",
+  "loanAttachTitle": "Instalment of which loan?",
+  "loanAttachHelp": "Pick a loan already entered: this debit is attached to it and the next ones are classified automatically.",
+  "loanAttachNew": "Declare a new loan",
+  "loanAttachDone": "Debit attached to the loan: {linked} instalments linked, {others} other operations classified.",
+  "error_loan_other_account": "This loan is debited from another account."
 }

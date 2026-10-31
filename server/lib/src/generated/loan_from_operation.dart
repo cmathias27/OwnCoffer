@@ -21,12 +21,14 @@ abstract class LoanFromOperation
     required this.info,
     required this.reclassifiedCount,
     required this.linkedCount,
+    this.ruleId,
   });
 
   factory LoanFromOperation({
     required _ijbwwnsd.LoanInfo info,
     required int reclassifiedCount,
     required int linkedCount,
+    int? ruleId,
   }) = _LoanFromOperationImpl;
 
   factory LoanFromOperation.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -36,6 +38,7 @@ abstract class LoanFromOperation
       ),
       reclassifiedCount: jsonSerialization['reclassifiedCount'] as int,
       linkedCount: jsonSerialization['linkedCount'] as int,
+      ruleId: jsonSerialization['ruleId'] as int?,
     );
   }
 
@@ -48,6 +51,9 @@ abstract class LoanFromOperation
   /// Operations recognised as past instalments of the loan.
   int linkedCount;
 
+  /// Rule created by this action (for undo), if any.
+  int? ruleId;
+
   /// Returns a shallow copy of this [LoanFromOperation]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -55,6 +61,7 @@ abstract class LoanFromOperation
     _ijbwwnsd.LoanInfo? info,
     int? reclassifiedCount,
     int? linkedCount,
+    int? ruleId,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -63,6 +70,7 @@ abstract class LoanFromOperation
       'info': info.toJson(),
       'reclassifiedCount': reclassifiedCount,
       'linkedCount': linkedCount,
+      if (ruleId != null) 'ruleId': ruleId,
     };
   }
 
@@ -73,6 +81,7 @@ abstract class LoanFromOperation
       'info': info.toJsonForProtocol(),
       'reclassifiedCount': reclassifiedCount,
       'linkedCount': linkedCount,
+      if (ruleId != null) 'ruleId': ruleId,
     };
   }
 
@@ -82,15 +91,19 @@ abstract class LoanFromOperation
   }
 }
 
+class _Undefined {}
+
 class _LoanFromOperationImpl extends LoanFromOperation {
   _LoanFromOperationImpl({
     required _ijbwwnsd.LoanInfo info,
     required int reclassifiedCount,
     required int linkedCount,
+    int? ruleId,
   }) : super._(
          info: info,
          reclassifiedCount: reclassifiedCount,
          linkedCount: linkedCount,
+         ruleId: ruleId,
        );
 
   /// Returns a shallow copy of this [LoanFromOperation]
@@ -101,11 +114,13 @@ class _LoanFromOperationImpl extends LoanFromOperation {
     _ijbwwnsd.LoanInfo? info,
     int? reclassifiedCount,
     int? linkedCount,
+    Object? ruleId = _Undefined,
   }) {
     return LoanFromOperation(
       info: info ?? this.info.copyWith(),
       reclassifiedCount: reclassifiedCount ?? this.reclassifiedCount,
       linkedCount: linkedCount ?? this.linkedCount,
+      ruleId: ruleId is int? ? ruleId : this.ruleId,
     );
   }
 }

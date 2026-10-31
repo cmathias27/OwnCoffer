@@ -2218,4 +2218,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get classifyNow => 'Classify';
+
+  @override
+  String get loanAttachTitle => 'Instalment of which loan?';
+
+  @override
+  String get loanAttachHelp =>
+      'Pick a loan already entered: this debit is attached to it and the next ones are classified automatically.';
+
+  @override
+  String get loanAttachNew => 'Declare a new loan';
+
+  @override
+  String loanAttachDone(int linked, int others) {
+    return 'Debit attached to the loan: $linked instalments linked, $others other operations classified.';
+  }
+
+  @override
+  String get error_loan_other_account =>
+      'This loan is debited from another account.';
 }

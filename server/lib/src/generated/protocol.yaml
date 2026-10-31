@@ -59,6 +59,8 @@ loan:
   - create:
   - update:
   - createFromTransaction:
+  - attachTransaction:
+  - undoAttach:
   - undoCreate:
   - delete:
 notification:

@@ -3654,6 +3654,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Classer'**
   String get classifyNow;
+
+  /// No description provided for @loanAttachTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance de quel crédit ?'**
+  String get loanAttachTitle;
+
+  /// No description provided for @loanAttachHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez un crédit déjà saisi : ce prélèvement y sera rattaché et les suivants seront classés automatiquement.'**
+  String get loanAttachHelp;
+
+  /// No description provided for @loanAttachNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déclarer un nouveau crédit'**
+  String get loanAttachNew;
+
+  /// No description provided for @loanAttachDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prélèvement rattaché au crédit : {linked} échéances rattachées, {others} autres opérations classées.'**
+  String loanAttachDone(int linked, int others);
+
+  /// No description provided for @error_loan_other_account.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce crédit est prélevé sur un autre compte.'**
+  String get error_loan_other_account;
 }
 
 class _AppLocalizationsDelegate

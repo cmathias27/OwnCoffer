@@ -838,6 +838,41 @@ class EndpointLoan extends _isc.EndpointRef {
     },
   );
 
+  /// "This is an instalment of that loan": attaches a past debit to a loan
+  /// already entered. The debit is linked to the nearest instalment and
+  /// classified in the loan's category; a loan without an account takes the
+  /// debit's, one without a recognised label takes the debit's (and a rule
+  /// classifying the next ones). Other past instalments found are linked too.
+  _ida.Future<_i04nbqtd.LoanFromOperation> attachTransaction(
+    int loanId,
+    int transactionId,
+  ) => caller.callServerEndpoint<_i04nbqtd.LoanFromOperation>(
+    'loan',
+    'attachTransaction',
+    {
+      'loanId': loanId,
+      'transactionId': transactionId,
+    },
+  );
+
+  /// Undo of [attachTransaction]: unlinks the debit from the loan and, when
+  /// the attachment created the loan's rule ([ruleId]), removes it and
+  /// classifies again what it had classified (the app restores the debit's
+  /// own classification).
+  _ida.Future<int> undoAttach(
+    int loanId,
+    int transactionId, {
+    int? ruleId,
+  }) => caller.callServerEndpoint<int>(
+    'loan',
+    'undoAttach',
+    {
+      'loanId': loanId,
+      'transactionId': transactionId,
+      'ruleId': ruleId,
+    },
+  );
+
   /// Undo of "this is a loan instalment": removes the loan, its planned
   /// instalments and its rule, unlinks its instalments and classifies again
   /// the operations the rule had classified (the app restores the declared

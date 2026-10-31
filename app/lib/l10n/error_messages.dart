@@ -47,6 +47,7 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'loan_terms_invalid' => l.error_loan_terms_invalid,
   'loan_needs_debit' => l.error_loan_needs_debit,
   'split_invalid' => l.error_split_invalid,
+  'loan_other_account' => l.error_loan_other_account,
   'invalid_month_start_day' => l.error_invalid_month_start_day,
   // File format errors of shared/ come prefixed with `import_`.
   _ when code.startsWith('import_') => importFormatText(l, code.substring(7)),

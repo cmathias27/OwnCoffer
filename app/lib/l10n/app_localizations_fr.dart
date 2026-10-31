@@ -2229,4 +2229,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get classifyNow => 'Classer';
+
+  @override
+  String get loanAttachTitle => 'Échéance de quel crédit ?';
+
+  @override
+  String get loanAttachHelp =>
+      'Choisissez un crédit déjà saisi : ce prélèvement y sera rattaché et les suivants seront classés automatiquement.';
+
+  @override
+  String get loanAttachNew => 'Déclarer un nouveau crédit';
+
+  @override
+  String loanAttachDone(int linked, int others) {
+    return 'Prélèvement rattaché au crédit : $linked échéances rattachées, $others autres opérations classées.';
+  }
+
+  @override
+  String get error_loan_other_account =>
+      'Ce crédit est prélevé sur un autre compte.';
 }
