@@ -14,6 +14,10 @@
 import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
 import 'package:owncoffer_server/src/generated/admin_audit_info.dart'
     as _i1g569d8;
+import 'package:owncoffer_server/src/generated/admin_group_info.dart'
+    as _iykon2ev;
+import 'package:owncoffer_server/src/generated/admin_invitation_info.dart'
+    as _i9lpyifc;
 import 'package:owncoffer_server/src/generated/admin_user_info.dart'
     as _i3ew1lpl;
 import 'package:owncoffer_server/src/generated/balance_check.dart' as _i0mjy83n;
@@ -50,7 +54,9 @@ import 'account_access.dart' as _idkoqesg;
 import 'account_kind.dart' as _ifkquxga;
 import 'account_visibility.dart' as _ioxxcdxl;
 import 'admin_audit_info.dart' as _ie0chd06;
+import 'admin_group_info.dart' as _ixpxctu5;
 import 'admin_health.dart' as _ihbeufm3;
+import 'admin_invitation_info.dart' as _ib01m0m7;
 import 'admin_stats.dart' as _iqygks5s;
 import 'admin_user_info.dart' as _is8wfuq8;
 import 'audit_entry.dart' as _i1613bfs;
@@ -131,7 +137,9 @@ export 'account_access.dart';
 export 'account_kind.dart';
 export 'account_visibility.dart';
 export 'admin_audit_info.dart';
+export 'admin_group_info.dart';
 export 'admin_health.dart';
+export 'admin_invitation_info.dart';
 export 'admin_stats.dart';
 export 'admin_user_info.dart';
 export 'audit_entry.dart';
@@ -2649,8 +2657,14 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ie0chd06.AdminAuditInfo) {
       return _ie0chd06.AdminAuditInfo.fromJson(data) as T;
     }
+    if (t == _ixpxctu5.AdminGroupInfo) {
+      return _ixpxctu5.AdminGroupInfo.fromJson(data) as T;
+    }
     if (t == _ihbeufm3.AdminHealth) {
       return _ihbeufm3.AdminHealth.fromJson(data) as T;
+    }
+    if (t == _ib01m0m7.AdminInvitationInfo) {
+      return _ib01m0m7.AdminInvitationInfo.fromJson(data) as T;
     }
     if (t == _iqygks5s.AdminStats) {
       return _iqygks5s.AdminStats.fromJson(data) as T;
@@ -2898,8 +2912,18 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _ie0chd06.AdminAuditInfo.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_ixpxctu5.AdminGroupInfo?>()) {
+      return (data != null ? _ixpxctu5.AdminGroupInfo.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_ihbeufm3.AdminHealth?>()) {
       return (data != null ? _ihbeufm3.AdminHealth.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ib01m0m7.AdminInvitationInfo?>()) {
+      return (data != null
+              ? _ib01m0m7.AdminInvitationInfo.fromJson(data)
+              : null)
+          as T;
     }
     if (t == _is.getType<_iqygks5s.AdminStats?>()) {
       return (data != null ? _iqygks5s.AdminStats.fromJson(data) : null) as T;
@@ -3337,6 +3361,18 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_iykon2ev.AdminGroupInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iykon2ev.AdminGroupInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i9lpyifc.AdminInvitationInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_i9lpyifc.AdminInvitationInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ivm4hoam.BankTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ivm4hoam.BankTransaction>(e))
@@ -3443,7 +3479,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ifkquxga.AccountKind => 'AccountKind',
       _ioxxcdxl.AccountVisibility => 'AccountVisibility',
       _ie0chd06.AdminAuditInfo => 'AdminAuditInfo',
+      _ixpxctu5.AdminGroupInfo => 'AdminGroupInfo',
       _ihbeufm3.AdminHealth => 'AdminHealth',
+      _ib01m0m7.AdminInvitationInfo => 'AdminInvitationInfo',
       _iqygks5s.AdminStats => 'AdminStats',
       _is8wfuq8.AdminUserInfo => 'AdminUserInfo',
       _i1613bfs.AuditEntry => 'AuditEntry',
@@ -3544,8 +3582,12 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'AccountVisibility';
       case _ie0chd06.AdminAuditInfo():
         return 'AdminAuditInfo';
+      case _ixpxctu5.AdminGroupInfo():
+        return 'AdminGroupInfo';
       case _ihbeufm3.AdminHealth():
         return 'AdminHealth';
+      case _ib01m0m7.AdminInvitationInfo():
+        return 'AdminInvitationInfo';
       case _iqygks5s.AdminStats():
         return 'AdminStats';
       case _is8wfuq8.AdminUserInfo():
@@ -3738,8 +3780,14 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'AdminAuditInfo') {
       return deserialize<_ie0chd06.AdminAuditInfo>(data['data']);
     }
+    if (dataClassName == 'AdminGroupInfo') {
+      return deserialize<_ixpxctu5.AdminGroupInfo>(data['data']);
+    }
     if (dataClassName == 'AdminHealth') {
       return deserialize<_ihbeufm3.AdminHealth>(data['data']);
+    }
+    if (dataClassName == 'AdminInvitationInfo') {
+      return deserialize<_ib01m0m7.AdminInvitationInfo>(data['data']);
     }
     if (dataClassName == 'AdminStats') {
       return deserialize<_iqygks5s.AdminStats>(data['data']);

@@ -743,5 +743,15 @@
   "adminBackupBefore": "Before update {version}",
   "adminRestoreTitle": "Restore a backup",
   "adminRestoreHelp": "On the server only, in the OwnCoffer folder: restoring replaces all current data. Back up first.",
-  "error_host_bridge_missing": "The folder shared with the host (docker/state) is not reachable."
+  "error_host_bridge_missing": "The folder shared with the host (docker/state) is not reachable.",
+  "adminTabInvitations": "Invitations",
+  "adminInvitationsHelp": "Pending invitations of every group. As the server administrator you can invite into any group; the person receives a link by email, valid for 7 days.",
+  "adminGroups": "Groups of the server",
+  "adminGroupSize": "{members} member(s) · {accounts} bank account(s)",
+  "adminInvitationsPending": "Pending invitations",
+  "adminInvitationsEmpty": "No pending invitation.",
+  "adminInvitedBy": "sent by {email}",
+  "adminInvitationExpires": "valid until {date}",
+  "adminInvitationRevoked": "Invitation revoked: the link no longer works.",
+  "error_invitation_not_pending": "This invitation is no longer pending."
 }

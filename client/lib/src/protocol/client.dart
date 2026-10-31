@@ -19,7 +19,11 @@ import 'package:owncoffer_client/src/protocol/account_visibility.dart'
     as _i33sijhq;
 import 'package:owncoffer_client/src/protocol/admin_audit_info.dart'
     as _icr6cafh;
+import 'package:owncoffer_client/src/protocol/admin_group_info.dart'
+    as _iq49mcaz;
 import 'package:owncoffer_client/src/protocol/admin_health.dart' as _in646bd3;
+import 'package:owncoffer_client/src/protocol/admin_invitation_info.dart'
+    as _idjaxr3o;
 import 'package:owncoffer_client/src/protocol/admin_stats.dart' as _ip1w2kia;
 import 'package:owncoffer_client/src/protocol/admin_user_info.dart'
     as _i4kcqb5h;
@@ -458,6 +462,45 @@ class EndpointAdmin extends _isc.EndpointRef {
       'offset': offset,
     },
   );
+
+  /// Groups of the server, by name, with their size.
+  _ida.Future<List<_iq49mcaz.AdminGroupInfo>> groups() =>
+      caller.callServerEndpoint<List<_iq49mcaz.AdminGroupInfo>>(
+        'admin',
+        'groups',
+        {},
+      );
+
+  /// Pending invitations of every group, oldest first.
+  _ida.Future<List<_idjaxr3o.AdminInvitationInfo>> invitations() =>
+      caller.callServerEndpoint<List<_idjaxr3o.AdminInvitationInfo>>(
+        'admin',
+        'invitations',
+        {},
+      );
+
+  /// Invites [email] into any group of the server (the link is emailed).
+  _ida.Future<_idjaxr3o.AdminInvitationInfo> invite(
+    int groupId,
+    String email,
+    _ibbiwcdo.MemberRole role,
+  ) => caller.callServerEndpoint<_idjaxr3o.AdminInvitationInfo>(
+    'admin',
+    'invite',
+    {
+      'groupId': groupId,
+      'email': email,
+      'role': role,
+    },
+  );
+
+  /// Revokes a pending invitation of any group: its link stops working.
+  _ida.Future<void> revokeInvitation(int invitationId) =>
+      caller.callServerEndpoint<void>(
+        'admin',
+        'revokeInvitation',
+        {'invitationId': invitationId},
+      );
 
   /// Backups kept on the host, as reported by its scripts.
   _ida.Future<_il220tje.BackupOverview> backups() =>

@@ -26,6 +26,10 @@ admin:
   - health:
   - stats:
   - audit:
+  - groups:
+  - invitations:
+  - invite:
+  - revokeInvitation:
   - backups:
   - requestBackup:
   - sendTestEmail:

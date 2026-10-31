@@ -2781,4 +2781,43 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_host_bridge_missing =>
       'The folder shared with the host (docker/state) is not reachable.';
+
+  @override
+  String get adminTabInvitations => 'Invitations';
+
+  @override
+  String get adminInvitationsHelp =>
+      'Pending invitations of every group. As the server administrator you can invite into any group; the person receives a link by email, valid for 7 days.';
+
+  @override
+  String get adminGroups => 'Groups of the server';
+
+  @override
+  String adminGroupSize(int members, int accounts) {
+    return '$members member(s) · $accounts bank account(s)';
+  }
+
+  @override
+  String get adminInvitationsPending => 'Pending invitations';
+
+  @override
+  String get adminInvitationsEmpty => 'No pending invitation.';
+
+  @override
+  String adminInvitedBy(String email) {
+    return 'sent by $email';
+  }
+
+  @override
+  String adminInvitationExpires(String date) {
+    return 'valid until $date';
+  }
+
+  @override
+  String get adminInvitationRevoked =>
+      'Invitation revoked: the link no longer works.';
+
+  @override
+  String get error_invitation_not_pending =>
+      'This invitation is no longer pending.';
 }

@@ -2,6 +2,17 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.9 (31 octobre 2026)
+
+### Administration du serveur : invitations
+
+- Nouvel onglet **Invitations**, à côté de l'onglet Utilisateurs :
+  - toutes les invitations en attente, **de tous les groupes** : adresse, groupe et rôle, qui l'a envoyée, date de fin de validité ;
+  - bouton **« Révoquer »** : le lien cesse de marcher ;
+  - bouton **« Inviter »** : l'administrateur du serveur peut inviter dans n'importe quel groupe, même un groupe dont il n'est pas membre. La personne reçoit le lien par courriel, valable 7 jours ;
+  - liste des groupes du serveur avec leur nombre de membres et de comptes bancaires.
+- Les administrateurs de groupe continuent d'inviter depuis la page Membres de leur groupe.
+
 ## 0.3.8 (31 octobre 2026)
 
 ### Administration du serveur : sauvegardes

@@ -4566,6 +4566,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le dossier d\'échange avec le serveur hôte (docker/state) n\'est pas accessible.'**
   String get error_host_bridge_missing;
+
+  /// No description provided for @adminTabInvitations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitations'**
+  String get adminTabInvitations;
+
+  /// No description provided for @adminInvitationsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les invitations en attente de tous les groupes. En tant qu\'administrateur du serveur, vous pouvez inviter dans n\'importe quel groupe ; la personne reçoit un lien par courriel, valable 7 jours.'**
+  String get adminInvitationsHelp;
+
+  /// No description provided for @adminGroups.
+  ///
+  /// In fr, this message translates to:
+  /// **'Groupes du serveur'**
+  String get adminGroups;
+
+  /// No description provided for @adminGroupSize.
+  ///
+  /// In fr, this message translates to:
+  /// **'{members} membre(s) · {accounts} compte(s) bancaire(s)'**
+  String adminGroupSize(int members, int accounts);
+
+  /// No description provided for @adminInvitationsPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitations en attente'**
+  String get adminInvitationsPending;
+
+  /// No description provided for @adminInvitationsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune invitation en attente.'**
+  String get adminInvitationsEmpty;
+
+  /// No description provided for @adminInvitedBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'envoyée par {email}'**
+  String adminInvitedBy(String email);
+
+  /// No description provided for @adminInvitationExpires.
+  ///
+  /// In fr, this message translates to:
+  /// **'valable jusqu\'au {date}'**
+  String adminInvitationExpires(String date);
+
+  /// No description provided for @adminInvitationRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation révoquée : le lien ne marche plus.'**
+  String get adminInvitationRevoked;
+
+  /// No description provided for @error_invitation_not_pending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette invitation n\'est plus en attente.'**
+  String get error_invitation_not_pending;
 }
 
 class _AppLocalizationsDelegate

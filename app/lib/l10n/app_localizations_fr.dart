@@ -2797,4 +2797,43 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_host_bridge_missing =>
       'Le dossier d\'échange avec le serveur hôte (docker/state) n\'est pas accessible.';
+
+  @override
+  String get adminTabInvitations => 'Invitations';
+
+  @override
+  String get adminInvitationsHelp =>
+      'Les invitations en attente de tous les groupes. En tant qu\'administrateur du serveur, vous pouvez inviter dans n\'importe quel groupe ; la personne reçoit un lien par courriel, valable 7 jours.';
+
+  @override
+  String get adminGroups => 'Groupes du serveur';
+
+  @override
+  String adminGroupSize(int members, int accounts) {
+    return '$members membre(s) · $accounts compte(s) bancaire(s)';
+  }
+
+  @override
+  String get adminInvitationsPending => 'Invitations en attente';
+
+  @override
+  String get adminInvitationsEmpty => 'Aucune invitation en attente.';
+
+  @override
+  String adminInvitedBy(String email) {
+    return 'envoyée par $email';
+  }
+
+  @override
+  String adminInvitationExpires(String date) {
+    return 'valable jusqu\'au $date';
+  }
+
+  @override
+  String get adminInvitationRevoked =>
+      'Invitation révoquée : le lien ne marche plus.';
+
+  @override
+  String get error_invitation_not_pending =>
+      'Cette invitation n\'est plus en attente.';
 }

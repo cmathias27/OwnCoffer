@@ -2118,5 +2118,39 @@
   },
   "adminRestoreTitle": "Restaurer une sauvegarde",
   "adminRestoreHelp": "Sur le serveur seulement, dans le dossier d'OwnCoffer : restaurer remplace toutes les données actuelles. Faites d'abord une sauvegarde.",
-  "error_host_bridge_missing": "Le dossier d'échange avec le serveur hôte (docker/state) n'est pas accessible."
+  "error_host_bridge_missing": "Le dossier d'échange avec le serveur hôte (docker/state) n'est pas accessible.",
+  "adminTabInvitations": "Invitations",
+  "adminInvitationsHelp": "Les invitations en attente de tous les groupes. En tant qu'administrateur du serveur, vous pouvez inviter dans n'importe quel groupe ; la personne reçoit un lien par courriel, valable 7 jours.",
+  "adminGroups": "Groupes du serveur",
+  "adminGroupSize": "{members} membre(s) · {accounts} compte(s) bancaire(s)",
+  "@adminGroupSize": {
+    "placeholders": {
+      "members": {
+        "type": "int"
+      },
+      "accounts": {
+        "type": "int"
+      }
+    }
+  },
+  "adminInvitationsPending": "Invitations en attente",
+  "adminInvitationsEmpty": "Aucune invitation en attente.",
+  "adminInvitedBy": "envoyée par {email}",
+  "@adminInvitedBy": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "adminInvitationExpires": "valable jusqu'au {date}",
+  "@adminInvitationExpires": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminInvitationRevoked": "Invitation révoquée : le lien ne marche plus.",
+  "error_invitation_not_pending": "Cette invitation n'est plus en attente."
 }
