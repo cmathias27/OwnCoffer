@@ -2,7 +2,7 @@
 
 **Vos comptes bancaires, chez vous.** Application libre et gratuite de gestion de comptes bancaires, auto-hébergée, pour une personne, un couple ou une famille.
 
-> **Statut : en conception.** Aucun code n'est encore publié. Le projet avance phase par phase, voir le [roadbook](docs/ROADBOOK.md).
+> **Statut : alpha 0.1.** Première version utilisable, pour un usage personnel : import des relevés Caisse d'Épargne, classement, solde prévu et alerte de découvert. Installation : [docs/INSTALLATION.md](docs/INSTALLATION.md) ; nouveautés : [CHANGELOG.md](CHANGELOG.md) ; suite : [roadbook](docs/ROADBOOK.md).
 
 ## Ce que fera OwnCoffer
 

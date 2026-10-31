@@ -111,6 +111,8 @@ Objectif : se connecter en sécurité, créer des groupes, inviter des membres ;
 
 Objectif : la plus petite version utile, pour votre usage personnel (décision 0010). Fin de phase = **alpha 0.1**, utilisée un mois avant d'ajouter quoi que ce soit.
 
+**Statut** : toutes les tâches sont faites ; alpha 0.1 publiée le 31 octobre 2026 ([CHANGELOG](../CHANGELOG.md)). Reste la validation ci-dessous.
+
 - [x] Comptes bancaires : création, solde initial, visibilité
 - [x] Lecture des exports **Caisse d'Épargne** (format « Money » QIF d'abord, puis OFX et CSV si proposés) dans un module dédié de `shared/`, testée sur des fichiers fictifs reproduisant la structure réelle et sur des fichiers mal formés (accents, virgule décimale, dates françaises)
 - [x] Écran d'import : aperçu, compte reconnu (OFX), doublons écartés par empreinte, historique, annulation

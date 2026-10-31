@@ -8,7 +8,7 @@ OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de 
 - Fonctionnalités détaillées : `docs/CAHIER_DES_CHARGES.md`.
 - Décisions d'architecture : `docs/decisions/` — à respecter ; pour en changer une, écrire une nouvelle décision.
 
-**Phase actuelle : 1 (fondations techniques)**, démarrée à la demande de l'utilisateur le 30 octobre 2026. Le cœur financier (`shared/` : import, doublons, classement, solde prévu) est développé en avance car prioritaire : il doit être fiable avant tout le reste.
+**Phase actuelle : validation de l'alpha 0.1** (phase 3 terminée le 31 octobre 2026, notes dans `CHANGELOG.md`). L'utilisateur l'utilise un mois sur ses vrais relevés (#20) : corriger ce qu'il remonte, ne pas commencer la phase 4 avant la fin de cette période.
 
 **Objectif prioritaire : l'alpha minimale (décision 0010)** — import Caisse d'Épargne, opérations, classement par règles, solde prévu, alerte de découvert. Ne rien ajouter au-delà avant que l'alpha soit utilisée un mois.
 
@@ -51,6 +51,7 @@ docs/     cahier des charges, roadbook, décisions
 - Après toute modification de `server/lib` (points d'accès, modèles `.spy.yaml`) : `serverpod generate`, puis `serverpod create-migration` si un modèle de table a changé.
 - `inSet` attend un `Set<T>` explicitement typé (`final Set<int> ids = {...}`).
 - Avant chaque push : `./tool/check.sh` (mêmes vérifications que la CI).
+- Publier une version : mettre à jour `CHANGELOG.md`, `app/pubspec.yaml` et `OWNCOFFER_TAG` de `docker/.env.example`, puis l'étiquette `vX.Y.Z` sur `main` (la CI publie l'image `:X.Y.Z`).
 
 ## Façon de travailler
 
