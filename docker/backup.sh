@@ -22,4 +22,5 @@ fi
 mv "$file.part" "$file"
 
 ls -1t backups/owncoffer-*.dump | tail -n +31 | xargs -r rm -f
-echo "$file"
+# Absolute path: callers may run from another directory.
+echo "$(pwd)/$file"

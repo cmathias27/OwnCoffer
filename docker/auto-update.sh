@@ -58,6 +58,11 @@ set_tag() { sed -i "s/^OWNCOFFER_TAG=.*/OWNCOFFER_TAG=$1/" docker/.env; }
 log "$current -> $latest: backup"
 dump=$(docker/backup.sh "before-$version")
 log "backup: $dump"
+# The rollback restores this file: it must be readable before going on.
+if [[ ! -s $dump ]]; then
+  log "backup not found ($dump): nothing changed"
+  exit 1
+fi
 
 git -c advice.detachedHead=false checkout --quiet "$latest"
 set_tag "$version"
@@ -72,6 +77,10 @@ log "$latest does not answer: back to $current and to the backup"
 compose logs --tail 80 owncoffer >&2 || true
 git -c advice.detachedHead=false checkout --quiet "$current"
 set_tag "${current#v}"
+if [[ ! -s $dump ]]; then
+  log "ROLLBACK STOPPED: backup $dump missing; database left as is"
+  exit 1
+fi
 compose stop owncoffer
 compose up -d postgres
 # Empty schema first: tables added by the failed version must not remain.
