@@ -894,5 +894,311 @@
       }
     }
   },
-  "groupCreateTitle": "Créer votre foyer"
+  "groupCreateTitle": "Créer votre foyer",
+  "navBudget": "Budget",
+  "navLoans": "Crédits",
+  "navMore": "Plus",
+  "allAccounts": "Tous les comptes",
+  "moreActions": "Plus d'actions",
+  "optional": "Facultatif",
+  "fieldRequired": "Champ obligatoire.",
+  "filterCategory": "Catégorie",
+  "periodWeek": "Semaine",
+  "periodMonth": "Mois",
+  "periodYear": "Année",
+  "periodPrevious": "Période précédente",
+  "periodNext": "Période suivante",
+  "budgetIncome": "Revenus",
+  "budgetExpenses": "Dépenses",
+  "budgetSavings": "Épargne",
+  "budgetNet": "Reste",
+  "budgetDeltaPrevious": "{percent} % par rapport à la période précédente",
+  "@budgetDeltaPrevious": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetHistoryTitle": "Revenus et dépenses",
+  "budgetHistorySemantic": "Revenus et dépenses des six dernières périodes",
+  "rankingExpenses": "Classement des dépenses",
+  "rankingIncome": "Classement des revenus",
+  "rankingEmpty": "Rien sur cette période.",
+  "rankingShare": "{percent} % du total",
+  "@rankingShare": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingPrevious": "avant : {amount}",
+  "@rankingPrevious": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingAverage": "moyenne : {amount}",
+  "@rankingAverage": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingOperations": "Voir les opérations",
+  "goalAdd": "Objectif",
+  "goalSet": "Fixer un objectif",
+  "goalEdit": "Modifier l'objectif",
+  "goalRemove": "Supprimer l'objectif",
+  "goalTitle": "Objectif : {category}",
+  "@goalTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "goalHelp": "Montant maximum à dépenser chaque mois dans cette catégorie, sous-catégories comprises.",
+  "goalAmountLabel": "Montant par mois",
+  "goalSuggestion": "Suggestion : {amount} (moyenne des 3 mois précédents : {average})",
+  "@goalSuggestion": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "goalOk": "Dans l'objectif",
+  "goalWarning": "Bientôt atteint",
+  "goalOver": "Dépassé",
+  "goalProgress": "{percent} % de {goal}",
+  "@goalProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "goalLeft": "reste {amount}",
+  "@goalLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "goalExceeded": "{amount} de trop",
+  "@goalExceeded": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthStartTitle": "Début du mois",
+  "monthStartHelp": "Le jour où commence votre mois de budget, par exemple le jour de la paie. Le budget, le classement des dépenses et les objectifs l'utilisent pour tout le foyer.",
+  "monthStartLabel": "Le mois commence",
+  "monthStartFirst": "Le 1er (mois du calendrier)",
+  "monthStartDay": "Le {day}",
+  "@monthStartDay": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "subscriptionsTitle": "Abonnements",
+  "subscriptionsMonthly": "Par mois",
+  "subscriptionsYearly": "Par an",
+  "subscriptionsHelp": "Les opérations prévues marquées comme abonnements, sur les comptes que vous voyez. Les montants annuels et hebdomadaires sont ramenés au mois.",
+  "subscriptionsEmpty": "Aucun abonnement. Dans la fiche d'une opération, « C'est un abonnement » l'ajoute ici.",
+  "subscriptionNext": "prochain : {date}",
+  "@subscriptionNext": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionPerMonth": "{amount} / mois",
+  "@subscriptionPerMonth": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionUnmark": "Ne plus compter comme abonnement",
+  "subscriptionUnmarkHelp": "Reste une opération prévue dans les prévisions.",
+  "subscriptionStop": "Abonnement résilié",
+  "subscriptionStopHelp": "Supprime l'opération prévue : elle ne compte plus dans les prévisions.",
+  "subscriptionSwitch": "Abonnement",
+  "subscriptionSwitchHelp": "Apparaît dans la liste des abonnements.",
+  "subscriptionFromOperation": "C'est un abonnement",
+  "subscriptionMarkPlanned": "Marquer comme abonnement",
+  "subscriptionCreated": "Abonnement « {label} » ajouté, prochain prélèvement le {date}.",
+  "@subscriptionCreated": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "loansRemaining": "Reste à rembourser",
+  "loansMonthly": "Mensualités",
+  "loansDebtRatio": "Taux d'endettement",
+  "loansDebtRatioUnknown": "Pas de revenus classés sur les 3 derniers mois.",
+  "loansDebtRatioOk": "Sous les 35 % conseillés",
+  "loansDebtRatioHigh": "Au-dessus des 35 % conseillés",
+  "loansDebtRatioBasis": "revenus moyens : {amount} / mois",
+  "@loansDebtRatioBasis": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "loansEmpty": "Aucun crédit. Ajoutez-en un pour suivre ce qu'il reste à rembourser.",
+  "loansDisclaimer": "Calculs indicatifs à taux fixe et mensualités constantes : en cas d'écart, le tableau d'amortissement de la banque fait foi.",
+  "loanAdd": "Ajouter un crédit",
+  "loanEdit": "Modifier le crédit",
+  "loanDelete": "Supprimer le crédit",
+  "loanDeleteConfirm": "Supprimer ce crédit ? Ses échéances prévues sont retirées des prévisions.",
+  "loanKind": "Type de crédit",
+  "loanKindMortgage": "Immobilier",
+  "loanKindCar": "Auto",
+  "loanKindConsumer": "Consommation",
+  "loanKindStudent": "Étudiant",
+  "loanKindPersonal": "Prêt entre particuliers",
+  "loanKindOther": "Autre",
+  "loanLender": "Organisme",
+  "loanLabel": "Nom",
+  "loanLabelHint": "Maison, voiture…",
+  "loanPrincipal": "Capital emprunté",
+  "loanRate": "Taux nominal",
+  "loanRateHelp": "Par an, par exemple 3,45",
+  "loanRateInvalid": "Taux entre 0 et 50 %, trois décimales au plus.",
+  "loanApr": "TAEG",
+  "loanDuration": "Durée",
+  "loanDurationMonths": "Durée en mois",
+  "loanDurationHelp": "240 mois = 20 ans",
+  "loanDurationInvalid": "Entre 1 et 600 mois.",
+  "loanMonths": "{count} mois",
+  "@loanMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loanFirstDue": "Date de la première échéance",
+  "loanInsurance": "Assurance par mois",
+  "loanInsuranceMonthly": "Assurance par mois",
+  "loanFees": "Frais de dossier",
+  "loanAccount": "Compte de prélèvement",
+  "loanAccountHelp": "Les échéances deviennent des opérations prévues sur ce compte : elles comptent dans le solde prévu et sont rapprochées des prélèvements réels.",
+  "loanNoAccount": "Aucun",
+  "loanPayment": "Mensualité (hors assurance)",
+  "loanPreview": "Mensualité : {payment} hors assurance, {total} avec.",
+  "@loanPreview": {
+    "placeholders": {
+      "payment": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "loanPreviewEmpty": "Saisissez le capital, le taux et la durée pour voir la mensualité.",
+  "loanRemainingShort": "restant dû",
+  "loanRepaid": "{percent} % remboursé",
+  "@loanRepaid": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "loanInstallments": "{paid} / {total} échéances",
+  "@loanInstallments": {
+    "placeholders": {
+      "paid": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "loanNext": "prochaine le {date} : {amount}",
+  "@loanNext": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "loanFinished": "remboursé",
+  "loanEnd": "fin le {date}",
+  "@loanEnd": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "loanInterestPaid": "Intérêts déjà payés",
+  "loanInterestLeft": "Intérêts restant à payer",
+  "loanCost": "Coût total (intérêts, assurance, frais)",
+  "loanSimulationTitle": "Remboursement anticipé",
+  "loanSimulationHelp": "Si je rembourse ce montant maintenant, en gardant la même mensualité.",
+  "loanSimulationAmount": "Montant",
+  "loanSimulate": "Simuler",
+  "loanSimulationSaved": "Intérêts économisés",
+  "loanSimulationEnd": "Nouvelle date de fin",
+  "loanSimulationRepaid": "Crédit soldé",
+  "loanSimulationLeft": "Échéances restantes",
+  "loanScheduleTitle": "Tableau d'amortissement",
+  "loanYearSummary": "Capital {principal} · intérêts {interest} · restant dû {remaining}",
+  "@loanYearSummary": {
+    "placeholders": {
+      "principal": {
+        "type": "String"
+      },
+      "interest": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "loanColNumber": "N°",
+  "loanColDate": "Date",
+  "loanColPayment": "Mensualité",
+  "loanColPrincipal": "Capital",
+  "loanColInterest": "Intérêts",
+  "loanColInsurance": "Assurance",
+  "loanColRemaining": "Restant dû",
+  "error_goal_expense_only": "Un objectif se fixe sur une catégorie de dépenses.",
+  "error_loan_access_denied": "Ce crédit n'existe pas ou vous n'y avez pas accès.",
+  "error_loan_terms_invalid": "Conditions du crédit impossibles : vérifiez le capital, le taux et la durée.",
+  "error_invalid_month_start_day": "Le mois doit commencer entre le 1er et le 28."
 }

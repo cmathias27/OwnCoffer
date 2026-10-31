@@ -8,9 +8,11 @@ import '../l10n/app_localizations.dart';
 import '../state/session.dart';
 import '../widgets/form_card.dart';
 import 'accounts_screen.dart';
+import 'budget_screen.dart';
 import 'categories_screen.dart';
 import 'forecast_screen.dart';
 import 'import_screen.dart';
+import 'loans_screen.dart';
 import 'members_screen.dart';
 import 'notifications_screen.dart';
 import 'operations_screen.dart';
@@ -35,6 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
   final _accountsKey = GlobalKey<AccountsScreenState>();
   final _forecastKey = GlobalKey<ForecastScreenState>();
   final _categoriesKey = GlobalKey<CategoriesScreenState>();
+  final _budgetKey = GlobalKey<BudgetScreenState>();
+  final _loansKey = GlobalKey<LoansScreenState>();
+
+  /// Tabs in display order (indexes of the stack below): budget next to the
+  /// operations, loans next to the forecast.
+  static const _order = [0, 1, 5, 2, 6, 3, 4];
+
+  /// Tabs of the phone's bottom bar; the others are under "More".
+  static const _phoneTabs = 4;
 
   @override
   void initState() {
@@ -103,8 +114,36 @@ class _HomeScreenState extends State<HomeScreen> {
     if (i == 0) _accountsKey.currentState?.reload();
     if (i == 2) _forecastKey.currentState?.reload();
     if (i == 4) _categoriesKey.currentState?.reload();
+    if (i == 5) _budgetKey.currentState?.reload();
+    if (i == 6) _loansKey.currentState?.reload();
     _loadAccounts();
     _loadUnread();
+  }
+
+  /// Phone: the tabs that do not fit in the bottom bar.
+  Future<void> _more(
+    BuildContext context,
+    List<(IconData, String)> destinations,
+  ) async {
+    final picked = await showModalBottomSheet<int>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = _phoneTabs; i < destinations.length; i++)
+              ListTile(
+                leading: Icon(destinations[i].$1),
+                title: Text(destinations[i].$2),
+                selected: _order[i] == _tab,
+                onTap: () => Navigator.of(context).pop(_order[i]),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (picked != null) _selectTab(picked);
   }
 
   @override
@@ -114,13 +153,17 @@ class _HomeScreenState extends State<HomeScreen> {
     final current = s.currentGroup;
     final wide = MediaQuery.sizeOf(context).width >= 840;
 
-    final destinations = [
+    final tabs = [
       (Icons.account_balance_wallet_outlined, l.navAccounts),
       (Icons.receipt_long_outlined, l.navOperations),
       (Icons.show_chart, l.navForecast),
       (Icons.upload_file_outlined, l.navImport),
       (Icons.label_outline, l.navCategories),
+      (Icons.pie_chart_outline, l.navBudget),
+      (Icons.account_balance_outlined, l.navLoans),
     ];
+    final destinations = [for (final i in _order) tabs[i]];
+    final shown = _order.indexOf(_tab);
 
     final Widget body = current == null
         ? _CreateGroup(session: s)
@@ -160,6 +203,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               CategoriesScreen(key: _categoriesKey, membership: current),
+              BudgetScreen(
+                key: _budgetKey,
+                membership: current,
+                accounts: _accounts,
+              ),
+              LoansScreen(
+                key: _loansKey,
+                membership: current,
+                accounts: _accounts,
+                onChanged: () {
+                  setState(() => _imports++);
+                  _forecastKey.currentState?.reload();
+                  _accountsKey.currentState?.reload();
+                },
+              ),
             ],
           );
 
@@ -226,8 +284,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ? Row(
               children: [
                 NavigationRail(
-                  selectedIndex: _tab,
-                  onDestinationSelected: _selectTab,
+                  selectedIndex: shown,
+                  onDestinationSelected: (i) => _selectTab(_order[i]),
                   labelType: NavigationRailLabelType.all,
                   destinations: [
                     for (final (icon, label) in destinations)
@@ -245,11 +303,19 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: wide || current == null
           ? null
           : NavigationBar(
-              selectedIndex: _tab,
-              onDestinationSelected: _selectTab,
+              selectedIndex: shown < _phoneTabs ? shown : _phoneTabs,
+              onDestinationSelected: (i) => i < _phoneTabs
+                  ? _selectTab(_order[i])
+                  : _more(context, destinations),
               destinations: [
-                for (final (icon, label) in destinations)
+                for (final (icon, label) in destinations.take(_phoneTabs))
                   NavigationDestination(icon: Icon(icon), label: label),
+                NavigationDestination(
+                  icon: const Icon(Icons.more_horiz),
+                  label: shown >= _phoneTabs
+                      ? destinations[shown].$2
+                      : l.navMore,
+                ),
               ],
             ),
     );
