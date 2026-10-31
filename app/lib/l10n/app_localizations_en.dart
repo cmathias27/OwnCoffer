@@ -2820,4 +2820,108 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_invitation_not_pending =>
       'This invitation is no longer pending.';
+
+  @override
+  String get adminTabUpdates => 'Updates';
+
+  @override
+  String adminVersionRunning(String version) {
+    return 'Running version: $version';
+  }
+
+  @override
+  String get adminUpdatesUnavailable =>
+      'The host has not reported the update state yet (docker/state missing, or the update script has not run yet). It runs every 15 minutes; to set it up now, run as root in the OwnCoffer folder:';
+
+  @override
+  String get adminUpToDate => 'OwnCoffer is up to date.';
+
+  @override
+  String adminUpdateAvailable(String version) {
+    return 'New version available: $version';
+  }
+
+  @override
+  String adminUpdateChecked(String date) {
+    return 'Last check: $date';
+  }
+
+  @override
+  String adminUpdateFailedVersion(String version) {
+    return 'Version $version did not start: the server went back to the previous version with the backup. It is no longer retried automatically; you can install it by hand.';
+  }
+
+  @override
+  String adminInstallNow(String version) {
+    return 'Install $version';
+  }
+
+  @override
+  String get adminInstall => 'Install';
+
+  @override
+  String adminInstallTitle(String version) {
+    return 'Install $version now?';
+  }
+
+  @override
+  String get adminInstallHelp =>
+      'The server backs up first, installs the version, then checks it answers; otherwise it goes back to the current version with the backup. The app is unavailable for about a minute; reload the page afterwards.';
+
+  @override
+  String get adminCheckNow => 'Check now';
+
+  @override
+  String get adminUpdatePending => 'Requested, running on the server…';
+
+  @override
+  String get adminAutoUpdate => 'Automatic updates';
+
+  @override
+  String get adminAutoUpdateOn =>
+      'Each published version is installed within 15 minutes, after a backup.';
+
+  @override
+  String get adminAutoUpdateOff =>
+      'Off: new versions are shown here and wait for you to install them.';
+
+  @override
+  String get adminAutoUpdateSavedOn => 'Automatic updates on.';
+
+  @override
+  String get adminAutoUpdateSavedOff => 'Automatic updates off.';
+
+  @override
+  String get adminCheckRequested =>
+      'Check requested: the result shows within seconds.';
+
+  @override
+  String adminInstallRequested(String version) {
+    return 'Installation of $version requested: the app restarts within minutes.';
+  }
+
+  @override
+  String get adminReleasesUpcoming => 'Coming';
+
+  @override
+  String get adminReleasesInstalled => 'Notes of the installed versions';
+
+  @override
+  String get adminUpdateHistory => 'History';
+
+  @override
+  String get adminUpdateInstalled => 'installed';
+
+  @override
+  String get adminUpdateRollback => 'rolled back';
+
+  @override
+  String get adminUpdateRollbackFailed => 'rollback failed';
+
+  @override
+  String get adminUpdateRefused => 'refused';
+
+  @override
+  String get error_invalid_version =>
+      'Invalid version: only a published version newer than the installed one can be installed.';
 }

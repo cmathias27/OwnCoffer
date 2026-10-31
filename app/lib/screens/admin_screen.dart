@@ -7,6 +7,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/admin_backups.dart';
 import '../widgets/admin_invitations.dart';
+import '../widgets/admin_updates.dart';
 
 /// Server administration (server administrator only): health, figures,
 /// accounts, banned IPs and the audit log. Never a group's financial data.
@@ -24,6 +25,7 @@ class _AdminScreenState extends State<AdminScreen> {
   List<IpBanInfo> _bans = [];
   List<AdminAuditInfo> _audit = [];
   BackupOverview? _backups;
+  UpdateOverview? _updates;
   List<AdminInvitationInfo> _invitations = [];
   List<AdminGroupInfo> _groups = [];
   String? _error;
@@ -42,6 +44,7 @@ class _AdminScreenState extends State<AdminScreen> {
       final bans = await client.admin.bannedIps();
       final audit = await client.admin.audit(limit: 100);
       final backups = await client.admin.backups();
+      final updates = await client.admin.updates();
       final invitations = await client.admin.invitations();
       final groups = await client.admin.groups();
       if (!mounted) return;
@@ -52,6 +55,7 @@ class _AdminScreenState extends State<AdminScreen> {
         _bans = bans;
         _audit = audit;
         _backups = backups;
+        _updates = updates;
         _invitations = invitations;
         _groups = groups;
         _error = null;
@@ -79,7 +83,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return DefaultTabController(
-      length: 6,
+      length: 7,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.adminTitle),
@@ -94,6 +98,7 @@ class _AdminScreenState extends State<AdminScreen> {
             isScrollable: true,
             tabs: [
               Tab(text: l.adminTabHealth),
+              Tab(text: l.adminTabUpdates),
               Tab(text: l.adminTabBackups),
               Tab(text: l.adminTabUsers),
               Tab(text: l.adminTabInvitations),
@@ -131,6 +136,21 @@ class _AdminScreenState extends State<AdminScreen> {
                         );
                       }
                     },
+                  ),
+                  AdminUpdatesView(
+                    overview: _updates!,
+                    onAuto: (on) => _act(
+                      () => client.admin.setAutoUpdate(on),
+                      on ? l.adminAutoUpdateSavedOn : l.adminAutoUpdateSavedOff,
+                    ),
+                    onCheck: () => _act(
+                      () => client.admin.requestUpdateCheck(),
+                      l.adminCheckRequested,
+                    ),
+                    onInstall: (v) => _act(
+                      () => client.admin.requestInstall(v),
+                      l.adminInstallRequested(v),
+                    ),
                   ),
                   AdminBackupsView(
                     overview: _backups!,

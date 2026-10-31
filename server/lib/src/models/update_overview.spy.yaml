@@ -1,0 +1,24 @@
+### Versions and updates, as reported by the host scripts through
+### docker/state/ (server administrator only).
+class: UpdateOverview
+fields:
+  ### The shared folder is mounted and the update script wrote its state.
+  available: bool
+  ### Version running now (the app bundled in the image).
+  runningVersion: String
+  ### Installed and newest published versions seen by the host (vX.Y.Z).
+  current: String?
+  latest: String?
+  checkedAt: DateTime?
+  ### Automatic updates on (the page's choice; on by default).
+  auto: bool
+  ### A version that failed and was rolled back; not retried automatically.
+  failedVersion: String?
+  ### Why nothing was installed at the last check, if anything to say.
+  message: String?
+  ### A check or an installation was asked for and not yet carried out.
+  requestPending: bool
+  ### Newest first.
+  history: List<UpdateHistoryEntry>
+  ### Release notes, newest first (from the newest version's CHANGELOG).
+  releases: List<ReleaseNotes>

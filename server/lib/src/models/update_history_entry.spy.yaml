@@ -1,0 +1,8 @@
+### One update attempt: installed, rollback, rollback-failed, refused.
+class: UpdateHistoryEntry
+fields:
+  at: DateTime
+  fromVersion: String
+  toVersion: String
+  result: String
+  message: String?

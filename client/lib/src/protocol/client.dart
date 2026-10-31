@@ -94,6 +94,8 @@ import 'package:owncoffer_client/src/protocol/transaction_split.dart'
     as _idy91hap;
 import 'package:owncoffer_client/src/protocol/two_factor_status.dart'
     as _is1jzs1l;
+import 'package:owncoffer_client/src/protocol/update_overview.dart'
+    as _ighiaz9s;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -517,6 +519,38 @@ class EndpointAdmin extends _isc.EndpointRef {
     'requestBackup',
     {},
   );
+
+  /// Versions, automatic updates, history and release notes.
+  _ida.Future<_ighiaz9s.UpdateOverview> updates() =>
+      caller.callServerEndpoint<_ighiaz9s.UpdateOverview>(
+        'admin',
+        'updates',
+        {},
+      );
+
+  /// Turns automatic updates on or off (read by the host at each run).
+  _ida.Future<void> setAutoUpdate(bool on) => caller.callServerEndpoint<void>(
+    'admin',
+    'setAutoUpdate',
+    {'on': on},
+  );
+
+  /// Asks the host to look for a new version now.
+  _ida.Future<void> requestUpdateCheck() => caller.callServerEndpoint<void>(
+    'admin',
+    'requestUpdateCheck',
+    {},
+  );
+
+  /// Asks the host to install [version] (a published vX.Y.Z newer than the
+  /// installed one; the host checks it again, backs up first and rolls back
+  /// if the new version does not start).
+  _ida.Future<void> requestInstall(String version) =>
+      caller.callServerEndpoint<void>(
+        'admin',
+        'requestInstall',
+        {'version': version},
+      );
 
   /// Sends a test email to the administrator; returns the address. Without
   /// SMTP configuration it is written to the server log.

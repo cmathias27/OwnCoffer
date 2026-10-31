@@ -2836,4 +2836,109 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_invitation_not_pending =>
       'Cette invitation n\'est plus en attente.';
+
+  @override
+  String get adminTabUpdates => 'Mises à jour';
+
+  @override
+  String adminVersionRunning(String version) {
+    return 'Version en service : $version';
+  }
+
+  @override
+  String get adminUpdatesUnavailable =>
+      'Le serveur hôte n\'a pas encore donné l\'état des mises à jour (dossier docker/state absent, ou script de mise à jour pas encore passé). Il passe toutes les 15 minutes ; pour l\'installer tout de suite, lancez en root dans le dossier d\'OwnCoffer :';
+
+  @override
+  String get adminUpToDate => 'OwnCoffer est à jour.';
+
+  @override
+  String adminUpdateAvailable(String version) {
+    return 'Nouvelle version disponible : $version';
+  }
+
+  @override
+  String adminUpdateChecked(String date) {
+    return 'Dernière vérification : $date';
+  }
+
+  @override
+  String adminUpdateFailedVersion(String version) {
+    return 'La version $version n\'a pas démarré : le serveur est revenu à la version précédente avec la sauvegarde. Elle n\'est plus réessayée automatiquement ; vous pouvez la réinstaller à la main.';
+  }
+
+  @override
+  String adminInstallNow(String version) {
+    return 'Installer $version';
+  }
+
+  @override
+  String get adminInstall => 'Installer';
+
+  @override
+  String adminInstallTitle(String version) {
+    return 'Installer $version maintenant ?';
+  }
+
+  @override
+  String get adminInstallHelp =>
+      'Le serveur fait d\'abord une sauvegarde, installe la version, puis vérifie qu\'elle répond ; sinon il revient à la version actuelle avec la sauvegarde. L\'application est indisponible environ une minute ; rechargez la page ensuite.';
+
+  @override
+  String get adminCheckNow => 'Vérifier maintenant';
+
+  @override
+  String get adminUpdatePending => 'Demandé, en cours sur le serveur…';
+
+  @override
+  String get adminAutoUpdate => 'Mises à jour automatiques';
+
+  @override
+  String get adminAutoUpdateOn =>
+      'Chaque version publiée est installée dans les 15 minutes, après une sauvegarde.';
+
+  @override
+  String get adminAutoUpdateOff =>
+      'Désactivées : les nouvelles versions sont signalées ici et attendent que vous les installiez.';
+
+  @override
+  String get adminAutoUpdateSavedOn => 'Mises à jour automatiques activées.';
+
+  @override
+  String get adminAutoUpdateSavedOff =>
+      'Mises à jour automatiques désactivées.';
+
+  @override
+  String get adminCheckRequested =>
+      'Vérification demandée : le résultat apparaît dans quelques secondes.';
+
+  @override
+  String adminInstallRequested(String version) {
+    return 'Installation de $version demandée : l\'application redémarre dans quelques minutes.';
+  }
+
+  @override
+  String get adminReleasesUpcoming => 'À venir';
+
+  @override
+  String get adminReleasesInstalled => 'Notes des versions installées';
+
+  @override
+  String get adminUpdateHistory => 'Historique';
+
+  @override
+  String get adminUpdateInstalled => 'installée';
+
+  @override
+  String get adminUpdateRollback => 'retour à la version précédente';
+
+  @override
+  String get adminUpdateRollbackFailed => 'retour en arrière en échec';
+
+  @override
+  String get adminUpdateRefused => 'refusée';
+
+  @override
+  String get error_invalid_version =>
+      'Version invalide : seule une version publiée plus récente que celle installée peut être installée.';
 }

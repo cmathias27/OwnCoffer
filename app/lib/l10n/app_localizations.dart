@@ -4626,6 +4626,174 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cette invitation n\'est plus en attente.'**
   String get error_invitation_not_pending;
+
+  /// No description provided for @adminTabUpdates.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mises à jour'**
+  String get adminTabUpdates;
+
+  /// No description provided for @adminVersionRunning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version en service : {version}'**
+  String adminVersionRunning(String version);
+
+  /// No description provided for @adminUpdatesUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le serveur hôte n\'a pas encore donné l\'état des mises à jour (dossier docker/state absent, ou script de mise à jour pas encore passé). Il passe toutes les 15 minutes ; pour l\'installer tout de suite, lancez en root dans le dossier d\'OwnCoffer :'**
+  String get adminUpdatesUnavailable;
+
+  /// No description provided for @adminUpToDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'OwnCoffer est à jour.'**
+  String get adminUpToDate;
+
+  /// No description provided for @adminUpdateAvailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle version disponible : {version}'**
+  String adminUpdateAvailable(String version);
+
+  /// No description provided for @adminUpdateChecked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière vérification : {date}'**
+  String adminUpdateChecked(String date);
+
+  /// No description provided for @adminUpdateFailedVersion.
+  ///
+  /// In fr, this message translates to:
+  /// **'La version {version} n\'a pas démarré : le serveur est revenu à la version précédente avec la sauvegarde. Elle n\'est plus réessayée automatiquement ; vous pouvez la réinstaller à la main.'**
+  String adminUpdateFailedVersion(String version);
+
+  /// No description provided for @adminInstallNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Installer {version}'**
+  String adminInstallNow(String version);
+
+  /// No description provided for @adminInstall.
+  ///
+  /// In fr, this message translates to:
+  /// **'Installer'**
+  String get adminInstall;
+
+  /// No description provided for @adminInstallTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Installer {version} maintenant ?'**
+  String adminInstallTitle(String version);
+
+  /// No description provided for @adminInstallHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le serveur fait d\'abord une sauvegarde, installe la version, puis vérifie qu\'elle répond ; sinon il revient à la version actuelle avec la sauvegarde. L\'application est indisponible environ une minute ; rechargez la page ensuite.'**
+  String get adminInstallHelp;
+
+  /// No description provided for @adminCheckNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier maintenant'**
+  String get adminCheckNow;
+
+  /// No description provided for @adminUpdatePending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demandé, en cours sur le serveur…'**
+  String get adminUpdatePending;
+
+  /// No description provided for @adminAutoUpdate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mises à jour automatiques'**
+  String get adminAutoUpdate;
+
+  /// No description provided for @adminAutoUpdateOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque version publiée est installée dans les 15 minutes, après une sauvegarde.'**
+  String get adminAutoUpdateOn;
+
+  /// No description provided for @adminAutoUpdateOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivées : les nouvelles versions sont signalées ici et attendent que vous les installiez.'**
+  String get adminAutoUpdateOff;
+
+  /// No description provided for @adminAutoUpdateSavedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mises à jour automatiques activées.'**
+  String get adminAutoUpdateSavedOn;
+
+  /// No description provided for @adminAutoUpdateSavedOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mises à jour automatiques désactivées.'**
+  String get adminAutoUpdateSavedOff;
+
+  /// No description provided for @adminCheckRequested.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification demandée : le résultat apparaît dans quelques secondes.'**
+  String get adminCheckRequested;
+
+  /// No description provided for @adminInstallRequested.
+  ///
+  /// In fr, this message translates to:
+  /// **'Installation de {version} demandée : l\'application redémarre dans quelques minutes.'**
+  String adminInstallRequested(String version);
+
+  /// No description provided for @adminReleasesUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get adminReleasesUpcoming;
+
+  /// No description provided for @adminReleasesInstalled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notes des versions installées'**
+  String get adminReleasesInstalled;
+
+  /// No description provided for @adminUpdateHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique'**
+  String get adminUpdateHistory;
+
+  /// No description provided for @adminUpdateInstalled.
+  ///
+  /// In fr, this message translates to:
+  /// **'installée'**
+  String get adminUpdateInstalled;
+
+  /// No description provided for @adminUpdateRollback.
+  ///
+  /// In fr, this message translates to:
+  /// **'retour à la version précédente'**
+  String get adminUpdateRollback;
+
+  /// No description provided for @adminUpdateRollbackFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'retour en arrière en échec'**
+  String get adminUpdateRollbackFailed;
+
+  /// No description provided for @adminUpdateRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'refusée'**
+  String get adminUpdateRefused;
+
+  /// No description provided for @error_invalid_version.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version invalide : seule une version publiée plus récente que celle installée peut être installée.'**
+  String get error_invalid_version;
 }
 
 class _AppLocalizationsDelegate

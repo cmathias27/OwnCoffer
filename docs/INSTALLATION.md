@@ -94,6 +94,13 @@ Pour recevoir chaque **version publiée** sans intervenir, installez les unités
 
 Le script refuse d'agir si des fichiers suivis par git ont été modifiés à la main dans le dossier d'installation : réglez tout dans `docker/.env`.
 
+Depuis la page **Administration du serveur** (onglet Mises à jour), l'administrateur voit la version en service et la dernière publiée, lit les notes des versions à venir et installées, et consulte l'historique (installée, retour en arrière, refusée). Il peut aussi :
+
+- **désactiver les mises à jour automatiques** : le choix est écrit dans `docker/state/settings` (`auto=false`) ; le script vérifie toujours les nouvelles versions, mais n'installe plus rien seul ;
+- **vérifier maintenant** ou **installer une version** publiée plus récente : `docker/handle-requests.sh` lance `docker/auto-update.sh --check` ou `--install vX.Y.Z`, avec la même sauvegarde préalable et le même retour en arrière. Une version qui a échoué n'est plus réessayée automatiquement, mais peut être réinstallée à la main.
+
+Le script s'utilise aussi en ligne de commande : `./docker/auto-update.sh --check`, `./docker/auto-update.sh --install v0.3.10`.
+
 ## Image privée
 
 Si `docker compose pull` répond `denied` ou `unauthorized`, l'image `ghcr.io/cmathias27/owncoffer` n'est pas publique : rendez le paquet public dans GitHub (Packages, owncoffer, Package settings), ou connectez-vous avec `docker login ghcr.io` et un jeton ayant le droit `read:packages`.

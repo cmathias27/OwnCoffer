@@ -2,6 +2,21 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.10 (31 octobre 2026)
+
+### Administration du serveur : mises à jour
+
+- Nouvel onglet **Mises à jour** :
+  - version en service, dernière version publiée et date de la dernière vérification ;
+  - interrupteur **« Mises à jour automatiques »**. Désactivées, les nouvelles versions sont signalées et attendent qu'on les installe ;
+  - bouton **« Installer vX.Y.Z »**, après confirmation. Le serveur sauvegarde d'abord, installe, vérifie que l'application répond, et sinon revient à la version précédente avec la sauvegarde. Bouton **« Vérifier maintenant »** ;
+  - **notes des versions** à venir (dépliées) et installées, tirées du CHANGELOG de la dernière version ;
+  - **historique** : installée, retour en arrière, refusée ;
+  - une version qui n'a pas démarré est signalée. Elle n'est plus réessayée automatiquement, mais peut être réinstallée à la main.
+- Sur le serveur, `docker/auto-update.sh` accepte `--check` et `--install vX.Y.Z`. Il ne tourne qu'en un exemplaire à la fois et s'exécute depuis une copie de lui-même.
+
+L'administration du serveur est complète : santé et chiffres, mises à jour, sauvegardes, utilisateurs, invitations, IP bloquées et journal.
+
 ## 0.3.9 (31 octobre 2026)
 
 ### Administration du serveur : invitations
