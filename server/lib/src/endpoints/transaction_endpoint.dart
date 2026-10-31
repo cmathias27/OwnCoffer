@@ -27,6 +27,7 @@ class TransactionEndpoint extends Endpoint {
     DateTime? from,
     DateTime? to,
     String? search,
+    String? sameLabel,
     int? categoryId,
     bool? includeSubcategories,
     bool? toClassify,
@@ -36,6 +37,10 @@ class TransactionEndpoint extends Endpoint {
   }) async {
     final account = await Access.requireAccount(session, accountId);
     final pattern = _likePattern(search);
+    // Same provider: same cleaned label (e.g. every `EDF` debit).
+    final provider = sameLabel == null || sameLabel.trim().isEmpty
+        ? null
+        : sameLabel.trim();
     final Set<int> categoryIds = {};
     if (categoryId != null) {
       categoryIds.add(categoryId);
@@ -56,6 +61,7 @@ class TransactionEndpoint extends Endpoint {
       if (from != null) e = e & (t.date >= _day(from));
       if (to != null) e = e & (t.date <= _day(to));
       if (categoryIds.isNotEmpty) e = e & t.categoryId.inSet(categoryIds);
+      if (provider != null) e = e & t.cleanLabel.equals(provider);
       if (toClassify == true) e = e & t.categoryId.equals(null);
       if (uncleared == true) e = e & t.cleared.equals(false);
       if (pattern != null) {
@@ -77,7 +83,12 @@ class TransactionEndpoint extends Endpoint {
       limit: (limit ?? 100).clamp(1, _maxPage),
       offset: (offset ?? 0).clamp(0, 1 << 30),
     );
-    return TransactionPage(items: items, total: total);
+    int? sum;
+    if (provider != null) {
+      final all = await BankTransaction.db.find(session, where: where);
+      sum = all.fold<int>(0, (a, t) => a + t.amountCents);
+    }
+    return TransactionPage(items: items, total: total, amountSumCents: sum);
   }
 
   /// Manual entry (cash, a cheque not yet on the statement…). Classified by
@@ -292,40 +303,10 @@ class TransactionEndpoint extends Endpoint {
         createdBy: Access.userId(session),
       ),
     );
-    final matcher = core.GroupRule<int>(
-      id: rule.id!,
-      categoryId: categoryId,
-      pattern: pattern,
-      matchType: core.MatchType.values.byName(type.name),
-      direction: core.Direction.values.byName(rule.direction.name),
-    );
     final visible = await Access.visibleAccounts(session, account.groupId);
-    final Set<int> ids = {for (final a in visible) a.id!};
-    final candidates = await BankTransaction.db.find(
-      session,
-      where: (x) =>
-          x.accountId.inSet(ids) &
-          x.deletedAt.equals(null) &
-          x.categorySource.notEquals(CategorySource.manual),
-    );
-    final now = DateTime.now().toUtc();
-    final changed = [
-      for (final x in candidates)
-        if (matcher.matches(
-          core.CleanedLabel(
-            x.cleanLabel,
-            core.normalizeForMatch('${x.rawLabel} ${x.memo ?? ''}'),
-            core.OperationKind.other,
-          ),
-          x.amountCents,
-        ))
-          x.copyWith(
-            categoryId: categoryId,
-            categorySource: CategorySource.groupRule,
-            categoryRuleRef: '${rule.id}',
-            updatedAt: now,
-          ),
-    ];
+    final changed = await ClassificationService.applyRule(session, rule, {
+      for (final a in visible) a.id!,
+    });
     // The corrected operation itself is the user's explicit choice.
     await BankTransaction.db.updateRow(
       session,
@@ -333,14 +314,10 @@ class TransactionEndpoint extends Endpoint {
         categoryId: categoryId,
         categorySource: CategorySource.manual,
         categoryRuleRef: null,
-        updatedAt: now,
+        updatedAt: DateTime.now().toUtc(),
       ),
     );
-    final others = [
-      for (final x in changed)
-        if (x.id != t.id) x,
-    ];
-    if (others.isNotEmpty) await BankTransaction.db.update(session, others);
+    final others = changed.where((x) => x.id != t.id).length;
     await Audit.log(
       session,
       groupId: account.groupId,
@@ -349,7 +326,7 @@ class TransactionEndpoint extends Endpoint {
       rowId: rule.id,
       after: rule,
     );
-    return RuleApplication(rule: rule, reclassifiedCount: others.length);
+    return RuleApplication(rule: rule, reclassifiedCount: others);
   }
 
   // --- helpers --------------------------------------------------------------

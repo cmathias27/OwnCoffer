@@ -82,4 +82,58 @@ abstract final class ClassificationService {
 
   static CategorySource toDb(core.CategorySource s) =>
       CategorySource.values.byName(s.name);
+
+  /// Applies a new group [rule] at once to the operations of [accountIds]
+  /// not classified by hand; returns the operations it reclassified.
+  static Future<List<BankTransaction>> applyRule(
+    Session session,
+    Rule rule,
+    Set<int> accountIds, {
+    Transaction? transaction,
+  }) async {
+    if (accountIds.isEmpty) return [];
+    final matcher = core.GroupRule<int>(
+      id: rule.id!,
+      categoryId: rule.categoryId,
+      pattern: rule.pattern,
+      matchType: core.MatchType.values.byName(rule.matchType.name),
+      direction: core.Direction.values.byName(rule.direction.name),
+      minAbsCents: rule.minAbsCents,
+      maxAbsCents: rule.maxAbsCents,
+    );
+    final candidates = await BankTransaction.db.find(
+      session,
+      where: (x) =>
+          x.accountId.inSet(accountIds) &
+          x.deletedAt.equals(null) &
+          x.categorySource.notEquals(CategorySource.manual),
+      transaction: transaction,
+    );
+    final now = DateTime.now().toUtc();
+    final changed = [
+      for (final x in candidates)
+        if (matcher.matches(
+          core.CleanedLabel(
+            x.cleanLabel,
+            core.normalizeForMatch('${x.rawLabel} ${x.memo ?? ''}'),
+            core.OperationKind.other,
+          ),
+          x.amountCents,
+        ))
+          x.copyWith(
+            categoryId: rule.categoryId,
+            categorySource: CategorySource.groupRule,
+            categoryRuleRef: '${rule.id}',
+            updatedAt: now,
+          ),
+    ];
+    if (changed.isNotEmpty) {
+      await BankTransaction.db.update(
+        session,
+        changed,
+        transaction: transaction,
+      );
+    }
+    return changed;
+  }
 }

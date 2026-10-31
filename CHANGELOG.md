@@ -2,6 +2,20 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.2.1 (31 octobre 2026)
+
+### Crédits déclarés depuis une opération
+
+- Dans la fiche d'un prélèvement : **« C'est une échéance de crédit »** ouvre le formulaire du crédit prérempli (organisme, compte, date, catégorie).
+- **Capital calculé à partir du prélèvement** : avec le taux, la durée et l'assurance, le capital est déduit de la mensualité constatée. Avec la date de ce prélèvement et la durée restante, on obtient le capital restant dû sans connaître le contrat d'origine. Un avertissement s'affiche si la mensualité calculée s'écarte de plus de 5 % du prélèvement.
+- Les prélèvements sont reconnus à leur libellé : une **règle de classement** est créée dans la catégorie du crédit (par défaut celle de son type, par exemple Crédit immobilier), avec une fourchette de ±20 % sur le montant pour ne pas prendre les autres prélèvements du même organisme. Les opérations déjà importées sont classées tout de suite, sauf celles classées à la main.
+- Les **échéances passées** retrouvées sur le compte sont rattachées au crédit, et les prochaines le seront à l'import. Une opération prévue créée auparavant pour ces prélèvements est remplacée par celle du crédit.
+- Changer la catégorie du crédit change celle de sa règle. Supprimer le crédit supprime sa règle, et les opérations gardent leur catégorie.
+
+### Opérations
+
+- Dans la fiche d'une opération : **« Autres paiements de ce prestataire »** liste les opérations du compte qui ont le même libellé nettoyé, avec leur nombre, leur total et leur moyenne. Le filtre se retire d'un clic.
+
 ## 0.2.0 (31 octobre 2026)
 
 Ajouts demandés pendant le mois d'essai de l'alpha.

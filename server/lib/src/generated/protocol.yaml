@@ -54,6 +54,7 @@ loan:
   - simulate:
   - create:
   - update:
+  - createFromTransaction:
   - delete:
 notification:
   - list:

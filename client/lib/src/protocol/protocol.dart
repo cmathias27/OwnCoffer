@@ -64,6 +64,7 @@ import 'invalid_input_exception.dart' as _ijc83d8f;
 import 'invitation_info.dart' as _i9hwipt6;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'loan.dart' as _i7jednjp;
+import 'loan_from_operation.dart' as _ibgzxro1;
 import 'loan_info.dart' as _ijbwwnsd;
 import 'loan_installment.dart' as _ics9k3ng;
 import 'loan_kind.dart' as _i1700pxx;
@@ -116,6 +117,7 @@ export 'invalid_input_exception.dart';
 export 'invitation_info.dart';
 export 'ip_ban_info.dart';
 export 'loan.dart';
+export 'loan_from_operation.dart';
 export 'loan_info.dart';
 export 'loan_installment.dart';
 export 'loan_kind.dart';
@@ -261,6 +263,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _i7jednjp.Loan) {
       return _i7jednjp.Loan.fromJson(data) as T;
+    }
+    if (t == _ibgzxro1.LoanFromOperation) {
+      return _ibgzxro1.LoanFromOperation.fromJson(data) as T;
     }
     if (t == _ijbwwnsd.LoanInfo) {
       return _ijbwwnsd.LoanInfo.fromJson(data) as T;
@@ -437,6 +442,10 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_i7jednjp.Loan?>()) {
       return (data != null ? _i7jednjp.Loan.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ibgzxro1.LoanFromOperation?>()) {
+      return (data != null ? _ibgzxro1.LoanFromOperation.fromJson(data) : null)
+          as T;
     }
     if (t == _isc.getType<_ijbwwnsd.LoanInfo?>()) {
       return (data != null ? _ijbwwnsd.LoanInfo.fromJson(data) : null) as T;
@@ -725,6 +734,7 @@ class Protocol extends _isc.SerializationManager {
       _i9hwipt6.InvitationInfo => 'InvitationInfo',
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _i7jednjp.Loan => 'Loan',
+      _ibgzxro1.LoanFromOperation => 'LoanFromOperation',
       _ijbwwnsd.LoanInfo => 'LoanInfo',
       _ics9k3ng.LoanInstallment => 'LoanInstallment',
       _i1700pxx.LoanKind => 'LoanKind',
@@ -820,6 +830,8 @@ class Protocol extends _isc.SerializationManager {
         return 'IpBanInfo';
       case _i7jednjp.Loan():
         return 'Loan';
+      case _ibgzxro1.LoanFromOperation():
+        return 'LoanFromOperation';
       case _ijbwwnsd.LoanInfo():
         return 'LoanInfo';
       case _ics9k3ng.LoanInstallment():
@@ -974,6 +986,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'Loan') {
       return deserialize<_i7jednjp.Loan>(data['data']);
+    }
+    if (dataClassName == 'LoanFromOperation') {
+      return deserialize<_ibgzxro1.LoanFromOperation>(data['data']);
     }
     if (dataClassName == 'LoanInfo') {
       return deserialize<_ijbwwnsd.LoanInfo>(data['data']);

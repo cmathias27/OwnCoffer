@@ -40,6 +40,8 @@ import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/loan.dart' as _i2yv792g;
+import 'package:owncoffer_server/src/generated/loan_from_operation.dart'
+    as _iqwwu4ga;
 import 'package:owncoffer_server/src/generated/loan_info.dart' as _io3uq7xs;
 import 'package:owncoffer_server/src/generated/loan_installment.dart'
     as _ictm0roz;
@@ -1987,6 +1989,41 @@ class _LoanEndpoint {
     });
   }
 
+  _ida.Future<_iqwwu4ga.LoanFromOperation> createFromTransaction(
+    _ist.TestSessionBuilder sessionBuilder,
+    int transactionId,
+    _i2yv792g.Loan loan,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'createFromTransaction',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'createFromTransaction',
+          parameters: _ist.testObjectToJson({
+            'transactionId': transactionId,
+            'loan': loan,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iqwwu4ga.LoanFromOperation>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<void> delete(
     _ist.TestSessionBuilder sessionBuilder,
     int loanId,
@@ -2798,6 +2835,7 @@ class _TransactionEndpoint {
     DateTime? from,
     DateTime? to,
     String? search,
+    String? sameLabel,
     int? categoryId,
     bool? includeSubcategories,
     bool? toClassify,
@@ -2821,6 +2859,7 @@ class _TransactionEndpoint {
             'from': from,
             'to': to,
             'search': search,
+            'sameLabel': sameLabel,
             'categoryId': categoryId,
             'includeSubcategories': includeSubcategories,
             'toClassify': toClassify,

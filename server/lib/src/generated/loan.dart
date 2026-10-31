@@ -33,6 +33,8 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
     int? feesCents,
     this.categoryId,
     this.scheduledId,
+    this.matchPattern,
+    this.ruleId,
     DateTime? createdAt,
     this.deletedAt,
   }) : insuranceMonthlyCents = insuranceMonthlyCents ?? 0,
@@ -55,6 +57,8 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
     int? feesCents,
     int? categoryId,
     int? scheduledId,
+    String? matchPattern,
+    int? ruleId,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _LoanImpl;
@@ -78,6 +82,8 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
       feesCents: jsonSerialization['feesCents'] as int?,
       categoryId: jsonSerialization['categoryId'] as int?,
       scheduledId: jsonSerialization['scheduledId'] as int?,
+      matchPattern: jsonSerialization['matchPattern'] as String?,
+      ruleId: jsonSerialization['ruleId'] as int?,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _is.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -128,6 +134,14 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
   /// Planned operation of the instalments, when an account is chosen.
   int? scheduledId;
 
+  /// Bank label (normalised) of the instalments, when the loan was declared
+  /// from one of its debits; otherwise the lender's name is used.
+  String? matchPattern;
+
+  /// Group rule classifying the instalments, created with the loan when it
+  /// is declared from an operation.
+  int? ruleId;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -154,6 +168,8 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
     int? feesCents,
     int? categoryId,
     int? scheduledId,
+    String? matchPattern,
+    int? ruleId,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -176,6 +192,8 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'feesCents': feesCents,
       if (categoryId != null) 'categoryId': categoryId,
       if (scheduledId != null) 'scheduledId': scheduledId,
+      if (matchPattern != null) 'matchPattern': matchPattern,
+      if (ruleId != null) 'ruleId': ruleId,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -200,6 +218,8 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'feesCents': feesCents,
       if (categoryId != null) 'categoryId': categoryId,
       if (scheduledId != null) 'scheduledId': scheduledId,
+      if (matchPattern != null) 'matchPattern': matchPattern,
+      if (ruleId != null) 'ruleId': ruleId,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -252,6 +272,8 @@ class _LoanImpl extends Loan {
     int? feesCents,
     int? categoryId,
     int? scheduledId,
+    String? matchPattern,
+    int? ruleId,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -270,6 +292,8 @@ class _LoanImpl extends Loan {
          feesCents: feesCents,
          categoryId: categoryId,
          scheduledId: scheduledId,
+         matchPattern: matchPattern,
+         ruleId: ruleId,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -294,6 +318,8 @@ class _LoanImpl extends Loan {
     int? feesCents,
     Object? categoryId = _Undefined,
     Object? scheduledId = _Undefined,
+    Object? matchPattern = _Undefined,
+    Object? ruleId = _Undefined,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -314,6 +340,8 @@ class _LoanImpl extends Loan {
       feesCents: feesCents ?? this.feesCents,
       categoryId: categoryId is int? ? categoryId : this.categoryId,
       scheduledId: scheduledId is int? ? scheduledId : this.scheduledId,
+      matchPattern: matchPattern is String? ? matchPattern : this.matchPattern,
+      ruleId: ruleId is int? ? ruleId : this.ruleId,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );
@@ -396,6 +424,17 @@ class LoanUpdateTable extends _is.UpdateTable<LoanTable> {
     value,
   );
 
+  _is.ColumnValue<String, String> matchPattern(String? value) =>
+      _is.ColumnValue(
+        table.matchPattern,
+        value,
+      );
+
+  _is.ColumnValue<int, int> ruleId(int? value) => _is.ColumnValue(
+    table.ruleId,
+    value,
+  );
+
   _is.ColumnValue<DateTime, DateTime> createdAt(DateTime value) =>
       _is.ColumnValue(
         table.createdAt,
@@ -471,6 +510,14 @@ class LoanTable extends _is.Table<int?> {
       'scheduledId',
       this,
     );
+    matchPattern = _is.ColumnString(
+      'matchPattern',
+      this,
+    );
+    ruleId = _is.ColumnInt(
+      'ruleId',
+      this,
+    );
     createdAt = _is.ColumnDateTime(
       'createdAt',
       this,
@@ -518,6 +565,14 @@ class LoanTable extends _is.Table<int?> {
   /// Planned operation of the instalments, when an account is chosen.
   late final _is.ColumnInt scheduledId;
 
+  /// Bank label (normalised) of the instalments, when the loan was declared
+  /// from one of its debits; otherwise the lender's name is used.
+  late final _is.ColumnString matchPattern;
+
+  /// Group rule classifying the instalments, created with the loan when it
+  /// is declared from an operation.
+  late final _is.ColumnInt ruleId;
+
   late final _is.ColumnDateTime createdAt;
 
   late final _is.ColumnDateTime deletedAt;
@@ -539,6 +594,8 @@ class LoanTable extends _is.Table<int?> {
     feesCents,
     categoryId,
     scheduledId,
+    matchPattern,
+    ruleId,
     createdAt,
     deletedAt,
   ];

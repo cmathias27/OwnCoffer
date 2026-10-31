@@ -121,6 +121,27 @@ void main() {
         categoryId: await category('food.groceries'),
       );
       expect(groceries.total, greaterThanOrEqualTo(2));
+      expect(groceries.amountSumCents, isNull);
+
+      final label = search.items.first.cleanLabel;
+      final same = await endpoints.transaction.list(
+        as(alice),
+        account.id!,
+        sameLabel: label,
+      );
+      expect(same.total, greaterThanOrEqualTo(1));
+      expect(same.items.every((t) => t.cleanLabel == label), isTrue);
+      expect(
+        same.amountSumCents,
+        same.items.fold<int>(0, (a, t) => a + t.amountCents),
+      );
+      final none = await endpoints.transaction.list(
+        as(alice),
+        account.id!,
+        sameLabel: label.substring(0, 2),
+      );
+      expect(none.total, 0, reason: 'exact label, not a search');
+      expect(none.amountSumCents, 0);
     });
 
     test(

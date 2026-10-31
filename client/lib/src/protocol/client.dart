@@ -38,6 +38,8 @@ import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/loan.dart' as _ig538h6x;
+import 'package:owncoffer_client/src/protocol/loan_from_operation.dart'
+    as _i04nbqtd;
 import 'package:owncoffer_client/src/protocol/loan_info.dart' as _iwrqx7d4;
 import 'package:owncoffer_client/src/protocol/loan_installment.dart'
     as _i18weoko;
@@ -752,6 +754,24 @@ class EndpointLoan extends _isc.EndpointRef {
         {'loan': loan},
       );
 
+  /// "This is a loan instalment": declares a loan from one of its debits.
+  /// The loan is debited from the operation's account; its instalments are
+  /// recognised by the operation's label (planned operation and a group
+  /// rule classifying them in the loan's category, by default the standard
+  /// category of its kind). Past debits that match an instalment are linked
+  /// to it; the operation itself is classified as chosen by the user.
+  _ida.Future<_i04nbqtd.LoanFromOperation> createFromTransaction(
+    int transactionId,
+    _ig538h6x.Loan loan,
+  ) => caller.callServerEndpoint<_i04nbqtd.LoanFromOperation>(
+    'loan',
+    'createFromTransaction',
+    {
+      'transactionId': transactionId,
+      'loan': loan,
+    },
+  );
+
   /// Moves the loan to the trash and stops its planned instalments.
   _ida.Future<void> delete(int loanId) => caller.callServerEndpoint<void>(
     'loan',
@@ -1075,6 +1095,7 @@ class EndpointTransaction extends _isc.EndpointRef {
     DateTime? from,
     DateTime? to,
     String? search,
+    String? sameLabel,
     int? categoryId,
     bool? includeSubcategories,
     bool? toClassify,
@@ -1089,6 +1110,7 @@ class EndpointTransaction extends _isc.EndpointRef {
       'from': from,
       'to': to,
       'search': search,
+      'sameLabel': sameLabel,
       'categoryId': categoryId,
       'includeSubcategories': includeSubcategories,
       'toClassify': toClassify,

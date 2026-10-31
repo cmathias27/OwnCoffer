@@ -20,11 +20,13 @@ abstract class TransactionPage
   TransactionPage._({
     required this.items,
     required this.total,
+    this.amountSumCents,
   });
 
   factory TransactionPage({
     required List<_i0mjlwv3.BankTransaction> items,
     required int total,
+    int? amountSumCents,
   }) = _TransactionPageImpl;
 
   factory TransactionPage.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -33,6 +35,7 @@ abstract class TransactionPage
         jsonSerialization['items'],
       ),
       total: jsonSerialization['total'] as int,
+      amountSumCents: jsonSerialization['amountSumCents'] as int?,
     );
   }
 
@@ -40,12 +43,17 @@ abstract class TransactionPage
 
   int total;
 
+  /// Sum of the matching operations, given with a provider filter
+  /// (`sameLabel`) only.
+  int? amountSumCents;
+
   /// Returns a shallow copy of this [TransactionPage]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
   TransactionPage copyWith({
     List<_i0mjlwv3.BankTransaction>? items,
     int? total,
+    int? amountSumCents,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -53,6 +61,7 @@ abstract class TransactionPage
       '__className__': 'TransactionPage',
       'items': items.toJson(valueToJson: (v) => v.toJson()),
       'total': total,
+      if (amountSumCents != null) 'amountSumCents': amountSumCents,
     };
   }
 
@@ -62,6 +71,7 @@ abstract class TransactionPage
       '__className__': 'TransactionPage',
       'items': items.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'total': total,
+      if (amountSumCents != null) 'amountSumCents': amountSumCents,
     };
   }
 
@@ -71,13 +81,17 @@ abstract class TransactionPage
   }
 }
 
+class _Undefined {}
+
 class _TransactionPageImpl extends TransactionPage {
   _TransactionPageImpl({
     required List<_i0mjlwv3.BankTransaction> items,
     required int total,
+    int? amountSumCents,
   }) : super._(
          items: items,
          total: total,
+         amountSumCents: amountSumCents,
        );
 
   /// Returns a shallow copy of this [TransactionPage]
@@ -87,10 +101,14 @@ class _TransactionPageImpl extends TransactionPage {
   TransactionPage copyWith({
     List<_i0mjlwv3.BankTransaction>? items,
     int? total,
+    Object? amountSumCents = _Undefined,
   }) {
     return TransactionPage(
       items: items ?? this.items.map((e0) => e0.copyWith()).toList(),
       total: total ?? this.total,
+      amountSumCents: amountSumCents is int?
+          ? amountSumCents
+          : this.amountSumCents,
     );
   }
 }

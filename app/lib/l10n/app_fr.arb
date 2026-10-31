@@ -1200,5 +1200,70 @@
   "error_goal_expense_only": "Un objectif se fixe sur une catégorie de dépenses.",
   "error_loan_access_denied": "Ce crédit n'existe pas ou vous n'y avez pas accès.",
   "error_loan_terms_invalid": "Conditions du crédit impossibles : vérifiez le capital, le taux et la durée.",
-  "error_invalid_month_start_day": "Le mois doit commencer entre le 1er et le 28."
+  "error_invalid_month_start_day": "Le mois doit commencer entre le 1er et le 28.",
+  "loanFromOperation": "C'est une échéance de crédit",
+  "loanFromOperationTitle": "Déclarer le crédit",
+  "loanFromOperationIntro": "Les prochains prélèvements « {label} » seront reconnus comme les échéances de ce crédit et classés automatiquement.",
+  "@loanFromOperationIntro": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "loanObservedInstalment": "Prélèvement constaté : {amount} (assurance comprise)",
+  "@loanObservedInstalment": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "loanDeducePrincipal": "Calculer le capital à partir de ce prélèvement",
+  "loanDeduceNeedsTerms": "Indiquez d'abord le taux et la durée.",
+  "loanInstalmentMismatch": "La mensualité calculée ({amount}) s'écarte de plus de 5 % du prélèvement : vérifiez le capital, le taux, la durée et l'assurance.",
+  "@loanInstalmentMismatch": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "loanFirstDueFromOperationHelp": "Date de la toute première échéance. Si vous ne la connaissez pas, gardez celle de ce prélèvement et indiquez la durée restante : le capital calculé sera alors le capital restant dû.",
+  "loanCategoryDefaultHelp": "Sans choix, la catégorie du type de crédit est utilisée (par exemple Crédit immobilier).",
+  "loanFromOperationDone": "Crédit créé : {linked} échéances rattachées, {others} autres opérations classées.",
+  "@loanFromOperationDone": {
+    "placeholders": {
+      "linked": {
+        "type": "int"
+      },
+      "others": {
+        "type": "int"
+      }
+    }
+  },
+  "error_loan_needs_debit": "Un crédit se déclare depuis un prélèvement.",
+  "sameProvider": "Autres paiements de ce prestataire",
+  "sameProviderFilter": "Prestataire : {label}",
+  "@sameProviderFilter": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "sameProviderSummary": "{count} opérations · total {total} · moyenne {average}",
+  "@sameProviderSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  }
 }

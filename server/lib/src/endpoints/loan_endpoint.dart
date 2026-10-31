@@ -3,6 +3,8 @@ import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
 import '../finance/alert_service.dart';
+import '../finance/classification_service.dart';
+import '../finance/forecast_service.dart';
 import '../finance/spending_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
@@ -104,10 +106,13 @@ class LoanEndpoint extends Endpoint {
         clean.copyWith(
           id: current.id,
           scheduledId: current.scheduledId,
+          matchPattern: current.matchPattern,
+          ruleId: current.ruleId,
           createdAt: current.createdAt,
         ),
         transaction: tx,
       );
+      await _followCategory(session, row, tx);
       return _syncSchedule(session, row, tx);
     });
     await _afterChange(session, saved, previousAccountId: current.accountId);
@@ -123,6 +128,132 @@ class LoanEndpoint extends Endpoint {
     return _info(saved, _today());
   }
 
+  /// "This is a loan instalment": declares a loan from one of its debits.
+  /// The loan is debited from the operation's account; its instalments are
+  /// recognised by the operation's label (planned operation and a group
+  /// rule classifying them in the loan's category, by default the standard
+  /// category of its kind). Past debits that match an instalment are linked
+  /// to it; the operation itself is classified as chosen by the user.
+  Future<LoanFromOperation> createFromTransaction(
+    Session session,
+    int transactionId,
+    Loan loan,
+  ) async {
+    final t = await BankTransaction.db.findById(session, transactionId);
+    if (t == null || t.deletedAt != null) {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    final Account account;
+    try {
+      account = await Access.requireAccount(session, t.accountId, write: true);
+    } on AccessDeniedException {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    if (t.amountCents >= 0) {
+      throw InvalidInputException(code: 'loan_needs_debit');
+    }
+    final groupId = account.groupId;
+    await Access.requireMember(session, groupId, min: MemberRole.user);
+    final pattern = core.normalizeForMatch(t.cleanLabel.toUpperCase());
+    if (pattern.isEmpty) {
+      throw InvalidInputException(code: 'invalid_pattern', field: 'pattern');
+    }
+    var clean = await _validated(
+      session,
+      groupId,
+      loan.copyWith(accountId: account.id),
+    );
+    final categoryId =
+        clean.categoryId ??
+        await _standardCategory(session, groupId, clean.kind) ??
+        t.categoryId;
+    clean = clean.copyWith(categoryId: categoryId, matchPattern: pattern);
+    final visible = await Access.visibleAccounts(session, groupId);
+    final Set<int> visibleIds = {for (final a in visible) a.id!};
+
+    final (saved, reclassified, linked) = await session.db.transaction((
+      tx,
+    ) async {
+      var row = await Loan.db.insertRow(session, clean, transaction: tx);
+      var reclassified = 0;
+      if (categoryId != null) {
+        final debit = -t.amountCents;
+        final rule = await Rule.db.insertRow(
+          session,
+          Rule(
+            groupId: groupId,
+            categoryId: categoryId,
+            matchType: RuleMatchType.startsWith,
+            pattern: pattern,
+            direction: RuleDirection.debit,
+            // Room for insurance changes and the last instalment, while
+            // leaving apart other debits of the same lender.
+            minAbsCents: debit * 8 ~/ 10,
+            maxAbsCents: debit * 12 ~/ 10,
+            createdBy: Access.userId(session),
+          ),
+          transaction: tx,
+        );
+        row = await Loan.db.updateRow(
+          session,
+          row.copyWith(ruleId: rule.id),
+          transaction: tx,
+        );
+        final changed = await ClassificationService.applyRule(
+          session,
+          rule,
+          visibleIds,
+          transaction: tx,
+        );
+        reclassified = changed.where((x) => x.id != t.id).length;
+        await BankTransaction.db.updateRow(
+          session,
+          t.copyWith(
+            categoryId: categoryId,
+            categorySource: CategorySource.manual,
+            categoryRuleRef: null,
+            updatedAt: DateTime.now().toUtc(),
+          ),
+          transaction: tx,
+        );
+      }
+      // A planned operation the user had made for these debits is replaced
+      // by the loan's own.
+      final previous = t.scheduledId;
+      if (previous != null) {
+        final s = await ScheduledTransaction.db.findById(
+          session,
+          previous,
+          transaction: tx,
+        );
+        if (s != null && s.deletedAt == null && s.accountId == account.id) {
+          await ScheduledTransaction.db.updateRow(
+            session,
+            s.copyWith(deletedAt: DateTime.now().toUtc()),
+            transaction: tx,
+          );
+        }
+      }
+      row = await _syncSchedule(session, row, tx, includePast: true);
+      final linked = await _linkPast(session, row, previous, tx);
+      return (row, reclassified, linked);
+    });
+    await _afterChange(session, saved);
+    await Audit.log(
+      session,
+      groupId: groupId,
+      action: 'create_from_transaction',
+      entity: 'loan',
+      rowId: saved.id,
+      after: saved,
+    );
+    return LoanFromOperation(
+      info: _info(saved, _today()),
+      reclassifiedCount: reclassified,
+      linkedCount: linked,
+    );
+  }
+
   /// Moves the loan to the trash and stops its planned instalments.
   Future<void> delete(Session session, int loanId) async {
     final current = await _find(session, loanId, write: true);
@@ -130,9 +261,21 @@ class LoanEndpoint extends Endpoint {
       await _dropScheduled(session, current, tx);
       await Loan.db.updateRow(
         session,
-        current.copyWith(deletedAt: DateTime.now().toUtc(), scheduledId: null),
+        current.copyWith(
+          deletedAt: DateTime.now().toUtc(),
+          scheduledId: null,
+          ruleId: null,
+        ),
         transaction: tx,
       );
+      // Operations already classified keep their category.
+      if (current.ruleId != null) {
+        await Rule.db.deleteWhere(
+          session,
+          where: (r) => r.id.equals(current.ruleId),
+          transaction: tx,
+        );
+      }
     });
     await _afterChange(session, current);
     await Audit.log(
@@ -293,8 +436,9 @@ class LoanEndpoint extends Endpoint {
   static Future<Loan> _syncSchedule(
     Session session,
     Loan loan,
-    Transaction tx,
-  ) async {
+    Transaction tx, {
+    bool includePast = false,
+  }) async {
     await _dropScheduled(session, loan, tx);
     final status = core.loanStatus(
       _terms(loan),
@@ -302,7 +446,7 @@ class LoanEndpoint extends Endpoint {
       _today(),
     );
     final next = status.next;
-    if (loan.accountId == null || next == null) {
+    if (loan.accountId == null || (next == null && !includePast)) {
       return Loan.db.updateRow(
         session,
         loan.copyWith(scheduledId: null),
@@ -326,8 +470,10 @@ class LoanEndpoint extends Endpoint {
         frequency: ScheduleFrequency.monthly,
         startDate: loan.firstDueDate,
         occurrenceCount: loan.durationMonths,
-        nextDue: next.date.toDb(),
-        matchPattern: core.normalizeForMatch(loan.lender.toUpperCase()),
+        nextDue: (next?.date ?? _today().addDays(1)).toDb(),
+        matchPattern:
+            loan.matchPattern ??
+            core.normalizeForMatch(loan.lender.toUpperCase()),
         dateToleranceDays: 5,
         // The last instalment settles the rounding.
         amountTolerancePercent: 5,
@@ -359,6 +505,109 @@ class LoanEndpoint extends Endpoint {
       s.copyWith(deletedAt: DateTime.now().toUtc()),
       transaction: tx,
     );
+  }
+
+  /// Standard category of a loan kind, when the group has it.
+  static Future<int?> _standardCategory(
+    Session session,
+    int groupId,
+    LoanKind kind,
+  ) async {
+    final code = switch (kind) {
+      LoanKind.mortgage => 'housing.mortgage',
+      LoanKind.car => 'transport.vehicle_loan',
+      _ => 'banking.consumer_loan',
+    };
+    final c = await Category.db.findFirstRow(
+      session,
+      where: (c) =>
+          c.groupId.equals(groupId) &
+          c.standardCode.equals(code) &
+          c.deletedAt.equals(null),
+      orderBy: (c) => c.id,
+    );
+    return c?.id;
+  }
+
+  /// The loan's rule follows a change of its category.
+  static Future<void> _followCategory(
+    Session session,
+    Loan loan,
+    Transaction tx,
+  ) async {
+    final id = loan.ruleId;
+    final categoryId = loan.categoryId;
+    if (id == null || categoryId == null) return;
+    final rule = await Rule.db.findById(session, id, transaction: tx);
+    if (rule == null || rule.categoryId == categoryId) return;
+    await Rule.db.updateRow(
+      session,
+      rule.copyWith(categoryId: categoryId),
+      transaction: tx,
+    );
+  }
+
+  /// Links the past debits of the loan's account that match an instalment
+  /// (label, date and amount within the planned operation's tolerances) and
+  /// are not linked to another planned operation. Returns how many.
+  static Future<int> _linkPast(
+    Session session,
+    Loan loan,
+    int? replacedScheduledId,
+    Transaction tx,
+  ) async {
+    final id = loan.scheduledId;
+    if (id == null) return 0;
+    var scheduled = (await ScheduledTransaction.db.findById(
+      session,
+      id,
+      transaction: tx,
+    ))!;
+    final schedule = core.amortize(_terms(loan));
+    final today = _today();
+    final ops = await BankTransaction.db.find(
+      session,
+      where: (x) =>
+          x.accountId.equals(loan.accountId!) &
+          x.deletedAt.equals(null) &
+          (x.amountCents < 0),
+      orderBy: (x) => x.date,
+      transaction: tx,
+    );
+    final used = <int>{};
+    var count = 0;
+    for (final x in ops) {
+      if (x.scheduledId != null && x.scheduledId != replacedScheduledId) {
+        continue;
+      }
+      final day = x.date.toLocalDate();
+      if (day > today) continue;
+      final label = ForecastService.realOf(x).label;
+      if (!core.containsWords(label.full, scheduled.matchPattern)) continue;
+      final i = schedule.indexWhere(
+        (s) =>
+            !used.contains(s.number) &&
+            (s.date.daysUntil(day)).abs() <= scheduled.dateToleranceDays &&
+            (x.amountCents.abs() - s.totalCents).abs() * 100 <=
+                s.totalCents * scheduled.amountTolerancePercent,
+      );
+      if (i < 0) continue;
+      used.add(schedule[i].number);
+      await ForecastService.link(
+        session,
+        scheduled,
+        schedule[i].date,
+        x,
+        tx: tx,
+      );
+      scheduled = (await ScheduledTransaction.db.findById(
+        session,
+        id,
+        transaction: tx,
+      ))!;
+      count++;
+    }
+    return count;
   }
 
   /// Forecast alerts of the accounts whose planned instalments changed.

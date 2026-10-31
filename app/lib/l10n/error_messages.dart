@@ -45,6 +45,7 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'goal_expense_only' => l.error_goal_expense_only,
   'loan_access_denied' => l.error_loan_access_denied,
   'loan_terms_invalid' => l.error_loan_terms_invalid,
+  'loan_needs_debit' => l.error_loan_needs_debit,
   'invalid_month_start_day' => l.error_invalid_month_start_day,
   // File format errors of shared/ come prefixed with `import_`.
   _ when code.startsWith('import_') => importFormatText(l, code.substring(7)),
