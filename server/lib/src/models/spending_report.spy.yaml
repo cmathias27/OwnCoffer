@@ -1,0 +1,18 @@
+### Income, expenses and their split by category over one period, with the
+### previous periods for comparison.
+class: SpendingReport
+fields:
+  period: BudgetPeriod
+  ### First and last day (UTC midnight).
+  start: DateTime
+  last: DateTime
+  incomeCents: int
+  expenseCents: int
+  savingsCents: int
+  netCents: int
+  unclassifiedCount: int
+  unclassifiedInCents: int
+  unclassifiedOutCents: int
+  categories: List<CategoryFlow>
+  ### Six periods, oldest first, the current one last.
+  history: List<PeriodTotals>

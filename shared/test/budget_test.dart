@@ -30,6 +30,41 @@ void main() {
     });
   });
 
+  test('a month may start on pay day', () {
+    final m = Period.containing(
+      PeriodKind.month,
+      LocalDate(2026, 10, 31),
+      monthStartDay: 27,
+    );
+    expect(m.start, LocalDate(2026, 10, 27));
+    expect(m.last, LocalDate(2026, 11, 26));
+    final before = Period.containing(
+      PeriodKind.month,
+      LocalDate(2026, 1, 26),
+      monthStartDay: 27,
+    );
+    expect(before.start, LocalDate(2025, 12, 27));
+    expect(before.shift(2).start, LocalDate(2026, 2, 27));
+    expect(before.shift(2).last, LocalDate(2026, 3, 26));
+    expect(
+      Period.containing(
+        PeriodKind.week,
+        LocalDate(2026, 10, 31),
+        monthStartDay: 27,
+      ).start,
+      LocalDate(2026, 10, 26),
+      reason: 'weeks are not affected',
+    );
+    expect(
+      () => Period.containing(
+        PeriodKind.month,
+        LocalDate(2026, 1, 1),
+        monthStartDay: 29,
+      ),
+      throwsArgumentError,
+    );
+  });
+
   group('spending summary', () {
     const food = 1, groceries = 2, restaurants = 3, salary = 4;
     const savings = 5, transfers = 6;

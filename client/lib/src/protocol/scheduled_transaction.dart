@@ -31,12 +31,14 @@ abstract class ScheduledTransaction
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
+    bool? subscription,
     DateTime? createdAt,
     this.deletedAt,
   }) : interval = interval ?? 1,
        matchPattern = matchPattern ?? '',
        dateToleranceDays = dateToleranceDays ?? 5,
        amountTolerancePercent = amountTolerancePercent ?? 0,
+       subscription = subscription ?? false,
        createdAt = createdAt ?? DateTime.now();
 
   factory ScheduledTransaction({
@@ -54,6 +56,7 @@ abstract class ScheduledTransaction
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
+    bool? subscription,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _ScheduledTransactionImpl;
@@ -85,6 +88,9 @@ abstract class ScheduledTransaction
       dateToleranceDays: jsonSerialization['dateToleranceDays'] as int?,
       amountTolerancePercent:
           jsonSerialization['amountTolerancePercent'] as int?,
+      subscription: jsonSerialization['subscription'] == null
+          ? null
+          : _isc.BoolJsonExtension.fromJson(jsonSerialization['subscription']),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -126,6 +132,9 @@ abstract class ScheduledTransaction
 
   int amountTolerancePercent;
 
+  /// Shown in the subscriptions list (streaming, phone, gym…).
+  bool subscription;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -148,6 +157,7 @@ abstract class ScheduledTransaction
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
+    bool? subscription,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -169,6 +179,7 @@ abstract class ScheduledTransaction
       'matchPattern': matchPattern,
       'dateToleranceDays': dateToleranceDays,
       'amountTolerancePercent': amountTolerancePercent,
+      'subscription': subscription,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -192,6 +203,7 @@ abstract class ScheduledTransaction
       'matchPattern': matchPattern,
       'dateToleranceDays': dateToleranceDays,
       'amountTolerancePercent': amountTolerancePercent,
+      'subscription': subscription,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -221,6 +233,7 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
+    bool? subscription,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -238,6 +251,7 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
          matchPattern: matchPattern,
          dateToleranceDays: dateToleranceDays,
          amountTolerancePercent: amountTolerancePercent,
+         subscription: subscription,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -261,6 +275,7 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
+    bool? subscription,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -282,6 +297,7 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
       dateToleranceDays: dateToleranceDays ?? this.dateToleranceDays,
       amountTolerancePercent:
           amountTolerancePercent ?? this.amountTolerancePercent,
+      subscription: subscription ?? this.subscription,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );

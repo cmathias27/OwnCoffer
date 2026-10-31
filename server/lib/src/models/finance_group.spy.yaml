@@ -8,5 +8,8 @@ fields:
   ### Version of the standard catalogue its categories were last updated to
   ### (see updateStandardCategories).
   standardCatalogVersion: int, default=1
+  ### Day the budget month starts (1 to 28, e.g. pay day): budget, goals and
+  ### spending ranking use months from this day.
+  monthStartDay: int, default=1
   createdBy: UuidValue
   createdAt: DateTime, default=now

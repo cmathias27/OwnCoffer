@@ -1,0 +1,18 @@
+### A loan and where it stands today.
+class: LoanInfo
+fields:
+  loan: Loan
+  ### Capital + interest of a regular instalment.
+  paymentCents: int
+  paidCount: int
+  totalCount: int
+  remainingCents: int
+  principalPaidCents: int
+  interestPaidCents: int
+  interestRemainingCents: int
+  insuranceRemainingCents: int
+  ### Interest, insurance and fees over the whole loan.
+  costCents: int
+  repaidPerMille: int
+  nextDueDate: DateTime?
+  endDate: DateTime

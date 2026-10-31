@@ -1,0 +1,15 @@
+### Monthly spending goal of a category (its sub-categories included).
+class: Goal
+table: goals
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  categoryId: int, relation(parent=categories, onDelete=Cascade)
+  amountCents: int
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+indexes:
+  goals_category_idx:
+    fields: categoryId
+    unique: true
+  goals_group_idx:
+    fields: groupId

@@ -1,0 +1,6 @@
+enum: BudgetPeriod
+serialized: byName
+values:
+  - week
+  - month
+  - year

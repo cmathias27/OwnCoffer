@@ -1,0 +1,9 @@
+class: LoanInstallment
+fields:
+  number: int
+  date: DateTime
+  paymentCents: int
+  principalCents: int
+  interestCents: int
+  insuranceCents: int
+  remainingCents: int

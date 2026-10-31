@@ -19,13 +19,17 @@ import 'package:owncoffer_client/src/protocol/account_visibility.dart'
     as _i33sijhq;
 import 'package:owncoffer_client/src/protocol/bank_transaction.dart'
     as _ivksw0b3;
+import 'package:owncoffer_client/src/protocol/budget_period.dart' as _iff4p9sd;
 import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
 import 'package:owncoffer_client/src/protocol/category_kind.dart' as _ig2tt18e;
 import 'package:owncoffer_client/src/protocol/csv_columns.dart' as _irbioy6y;
+import 'package:owncoffer_client/src/protocol/early_repayment.dart'
+    as _i0heeame;
 import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
 import 'package:owncoffer_client/src/protocol/forecast_result.dart'
     as _ip0wp7v2;
 import 'package:owncoffer_client/src/protocol/frequency.dart' as _i1mv9fwy;
+import 'package:owncoffer_client/src/protocol/goal.dart' as _ita8uvsc;
 import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
@@ -33,6 +37,11 @@ import 'package:owncoffer_client/src/protocol/import_preview.dart' as _ikjuebnd;
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
+import 'package:owncoffer_client/src/protocol/loan.dart' as _ig538h6x;
+import 'package:owncoffer_client/src/protocol/loan_info.dart' as _iwrqx7d4;
+import 'package:owncoffer_client/src/protocol/loan_installment.dart'
+    as _i18weoko;
+import 'package:owncoffer_client/src/protocol/loan_overview.dart' as _i1y07bmb;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
@@ -47,8 +56,12 @@ import 'package:owncoffer_client/src/protocol/rule_test_result.dart'
 import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
     as _ibpr6881;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
+import 'package:owncoffer_client/src/protocol/spending_report.dart'
+    as _isyymxi6;
 import 'package:owncoffer_client/src/protocol/statement_import.dart'
     as _i5x9swls;
+import 'package:owncoffer_client/src/protocol/subscription_overview.dart'
+    as _i0jm8pub;
 import 'package:owncoffer_client/src/protocol/totp_enrollment.dart'
     as _iy6m3xur;
 import 'package:owncoffer_client/src/protocol/transaction_page.dart'
@@ -342,6 +355,54 @@ class EndpointAdmin extends _isc.EndpointRef {
   );
 }
 
+/// Income and expenses by category over a week, a month or a year, computed
+/// by the shared engine on the accounts the user may see.
+/// {@category Endpoint}
+class EndpointAnalysis extends _isc.EndpointRef {
+  EndpointAnalysis(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'analysis';
+
+  _ida.Future<_isyymxi6.SpendingReport> report(
+    int groupId,
+    _iff4p9sd.BudgetPeriod period,
+    DateTime date, {
+    int? accountId,
+  }) => caller.callServerEndpoint<_isyymxi6.SpendingReport>(
+    'analysis',
+    'report',
+    {
+      'groupId': groupId,
+      'period': period,
+      'date': date,
+      'accountId': accountId,
+    },
+  );
+
+  /// The operations behind a figure of the report: one category (its
+  /// sub-categories included) or the unclassified ones, largest first.
+  _ida.Future<List<_ivksw0b3.BankTransaction>> operations(
+    int groupId,
+    _iff4p9sd.BudgetPeriod period,
+    DateTime date, {
+    int? categoryId,
+    bool? unclassified,
+    int? accountId,
+  }) => caller.callServerEndpoint<List<_ivksw0b3.BankTransaction>>(
+    'analysis',
+    'operations',
+    {
+      'groupId': groupId,
+      'period': period,
+      'date': date,
+      'categoryId': categoryId,
+      'unclassified': unclassified,
+      'accountId': accountId,
+    },
+  );
+}
+
 /// Categories of a group, linked to the standard catalogue.
 /// {@category Endpoint}
 class EndpointCategory extends _isc.EndpointRef {
@@ -404,6 +465,49 @@ class EndpointCategory extends _isc.EndpointRef {
   );
 }
 
+/// Monthly spending goals per category.
+/// {@category Endpoint}
+class EndpointGoal extends _isc.EndpointRef {
+  EndpointGoal(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'goal';
+
+  _ida.Future<List<_ita8uvsc.Goal>> list(int groupId) =>
+      caller.callServerEndpoint<List<_ita8uvsc.Goal>>(
+        'goal',
+        'list',
+        {'groupId': groupId},
+      );
+
+  /// Creates or changes the goal of an expense category.
+  _ida.Future<_ita8uvsc.Goal> set(
+    int groupId,
+    int categoryId,
+    int amountCents,
+  ) => caller.callServerEndpoint<_ita8uvsc.Goal>(
+    'goal',
+    'set',
+    {
+      'groupId': groupId,
+      'categoryId': categoryId,
+      'amountCents': amountCents,
+    },
+  );
+
+  _ida.Future<void> remove(
+    int groupId,
+    int categoryId,
+  ) => caller.callServerEndpoint<void>(
+    'goal',
+    'remove',
+    {
+      'groupId': groupId,
+      'categoryId': categoryId,
+    },
+  );
+}
+
 /// Groups of the current user and their members.
 /// {@category Endpoint}
 class EndpointGroup extends _isc.EndpointRef {
@@ -437,6 +541,19 @@ class EndpointGroup extends _isc.EndpointRef {
     {
       'groupId': groupId,
       'name': name,
+    },
+  );
+
+  /// Day the budget month starts (1 to 28; 1 = calendar months).
+  _ida.Future<_izr9v441.FinanceGroup> setMonthStartDay(
+    int groupId,
+    int day,
+  ) => caller.callServerEndpoint<_izr9v441.FinanceGroup>(
+    'group',
+    'setMonthStartDay',
+    {
+      'groupId': groupId,
+      'day': day,
     },
   );
 
@@ -578,6 +695,69 @@ class EndpointInvitation extends _isc.EndpointRef {
         'accept',
         {'token': token},
       );
+}
+
+/// Loans: entry, amortisation schedule, where they stand, early repayment
+/// simulation. With an account, the instalments become a planned operation
+/// (forecast and reconciliation with the real debits).
+/// {@category Endpoint}
+class EndpointLoan extends _isc.EndpointRef {
+  EndpointLoan(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'loan';
+
+  _ida.Future<_i1y07bmb.LoanOverview> overview(int groupId) =>
+      caller.callServerEndpoint<_i1y07bmb.LoanOverview>(
+        'loan',
+        'overview',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<List<_i18weoko.LoanInstallment>> schedule(int loanId) =>
+      caller.callServerEndpoint<List<_i18weoko.LoanInstallment>>(
+        'loan',
+        'schedule',
+        {'loanId': loanId},
+      );
+
+  _ida.Future<_i0heeame.EarlyRepayment> simulate(
+    int loanId,
+    int amountCents,
+  ) => caller.callServerEndpoint<_i0heeame.EarlyRepayment>(
+    'loan',
+    'simulate',
+    {
+      'loanId': loanId,
+      'amountCents': amountCents,
+    },
+  );
+
+  _ida.Future<_iwrqx7d4.LoanInfo> create(
+    int groupId,
+    _ig538h6x.Loan loan,
+  ) => caller.callServerEndpoint<_iwrqx7d4.LoanInfo>(
+    'loan',
+    'create',
+    {
+      'groupId': groupId,
+      'loan': loan,
+    },
+  );
+
+  _ida.Future<_iwrqx7d4.LoanInfo> update(_ig538h6x.Loan loan) =>
+      caller.callServerEndpoint<_iwrqx7d4.LoanInfo>(
+        'loan',
+        'update',
+        {'loan': loan},
+      );
+
+  /// Moves the loan to the trash and stops its planned instalments.
+  _ida.Future<void> delete(int loanId) => caller.callServerEndpoint<void>(
+    'loan',
+    'delete',
+    {'loanId': loanId},
+  );
 }
 
 /// The current user's notifications.
@@ -733,6 +913,7 @@ class EndpointScheduled extends _isc.EndpointRef {
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
+    bool? subscription,
   }) => caller.callServerEndpoint<_ibpr6881.ScheduledTransaction>(
     'scheduled',
     'create',
@@ -749,6 +930,7 @@ class EndpointScheduled extends _isc.EndpointRef {
       'matchPattern': matchPattern,
       'dateToleranceDays': dateToleranceDays,
       'amountTolerancePercent': amountTolerancePercent,
+      'subscription': subscription,
     },
   );
 
@@ -761,6 +943,7 @@ class EndpointScheduled extends _isc.EndpointRef {
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
+    bool? subscription,
   }) => caller.callServerEndpoint<_ibpr6881.ScheduledTransaction>(
     'scheduled',
     'update',
@@ -773,6 +956,7 @@ class EndpointScheduled extends _isc.EndpointRef {
       'matchPattern': matchPattern,
       'dateToleranceDays': dateToleranceDays,
       'amountTolerancePercent': amountTolerancePercent,
+      'subscription': subscription,
     },
   );
 
@@ -780,6 +964,31 @@ class EndpointScheduled extends _isc.EndpointRef {
     'scheduled',
     'delete',
     {'scheduledId': scheduledId},
+  );
+
+  /// Subscriptions of the accounts the user may see, with their monthly
+  /// cost. Ended ones (last occurrence passed) are left out.
+  _ida.Future<_i0jm8pub.SubscriptionOverview> subscriptions(int groupId) =>
+      caller.callServerEndpoint<_i0jm8pub.SubscriptionOverview>(
+        'scheduled',
+        'subscriptions',
+        {'groupId': groupId},
+      );
+
+  /// "This is a subscription": a planned operation repeating [transactionId]
+  /// (same amount, label and category) from its date, the operation itself
+  /// being its first occurrence. Later debits are matched on the label, with
+  /// a 10 % amount tolerance for price changes.
+  _ida.Future<_ibpr6881.ScheduledTransaction> subscribeFrom(
+    int transactionId, {
+    _i1mv9fwy.ScheduleFrequency? frequency,
+  }) => caller.callServerEndpoint<_ibpr6881.ScheduledTransaction>(
+    'scheduled',
+    'subscribeFrom',
+    {
+      'transactionId': transactionId,
+      'frequency': frequency,
+    },
   );
 
   /// The next occurrence will not happen (or was paid otherwise): skip it.
@@ -867,6 +1076,7 @@ class EndpointTransaction extends _isc.EndpointRef {
     DateTime? to,
     String? search,
     int? categoryId,
+    bool? includeSubcategories,
     bool? toClassify,
     bool? uncleared,
     int? limit,
@@ -880,6 +1090,7 @@ class EndpointTransaction extends _isc.EndpointRef {
       'to': to,
       'search': search,
       'categoryId': categoryId,
+      'includeSubcategories': includeSubcategories,
       'toClassify': toClassify,
       'uncleared': uncleared,
       'limit': limit,
@@ -1085,10 +1296,13 @@ class Client extends _isc.ServerpodClientShared {
     jwtRefresh = EndpointJwtRefresh(this);
     account = EndpointAccount(this);
     admin = EndpointAdmin(this);
+    analysis = EndpointAnalysis(this);
     category = EndpointCategory(this);
+    goal = EndpointGoal(this);
     group = EndpointGroup(this);
     import = EndpointImport(this);
     invitation = EndpointInvitation(this);
+    loan = EndpointLoan(this);
     notification = EndpointNotification(this);
     rule = EndpointRule(this);
     scheduled = EndpointScheduled(this);
@@ -1106,13 +1320,19 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointAdmin admin;
 
+  late final EndpointAnalysis analysis;
+
   late final EndpointCategory category;
+
+  late final EndpointGoal goal;
 
   late final EndpointGroup group;
 
   late final EndpointImport import;
 
   late final EndpointInvitation invitation;
+
+  late final EndpointLoan loan;
 
   late final EndpointNotification notification;
 
@@ -1134,10 +1354,13 @@ class Client extends _isc.ServerpodClientShared {
     'jwtRefresh': jwtRefresh,
     'account': account,
     'admin': admin,
+    'analysis': analysis,
     'category': category,
+    'goal': goal,
     'group': group,
     'import': import,
     'invitation': invitation,
+    'loan': loan,
     'notification': notification,
     'rule': rule,
     'scheduled': scheduled,

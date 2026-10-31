@@ -1,0 +1,7 @@
+### Early repayment simulation, keeping the instalment.
+class: EarlyRepayment
+fields:
+  amountCents: int
+  interestSavedCents: int
+  installmentsLeft: int
+  endDate: DateTime?

@@ -1,0 +1,31 @@
+### A fixed-rate loan with constant monthly instalments. The schedule is
+### computed (shared/loans), never stored; indicative, the bank's table
+### prevails.
+class: Loan
+table: loans
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  ### Account debited; restricted accounts hide the loan from other members.
+  accountId: int?, relation(parent=accounts, onDelete=SetNull)
+  kind: LoanKind
+  ### Bank or organisation.
+  lender: String
+  ### What it pays for ("Maison", "Voiture").
+  label: String?
+  principalCents: int
+  ### Nominal annual rate in thousandths of a percent: 3.45 % = 3450.
+  annualRateMilli: int
+  ### APR (TAEG), for information.
+  aprMilli: int?
+  durationMonths: int
+  firstDueDate: DateTime
+  insuranceMonthlyCents: int, default=0
+  feesCents: int, default=0
+  categoryId: int?, relation(parent=categories, onDelete=SetNull)
+  ### Planned operation of the instalments, when an account is chosen.
+  scheduledId: int?, relation(parent=scheduled_transactions, onDelete=SetNull)
+  createdAt: DateTime, default=now
+  deletedAt: DateTime?
+indexes:
+  loans_group_idx:
+    fields: groupId

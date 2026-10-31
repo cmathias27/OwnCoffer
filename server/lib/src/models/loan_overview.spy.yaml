@@ -1,0 +1,10 @@
+class: LoanOverview
+fields:
+  loans: List<LoanInfo>
+  totalRemainingCents: int
+  ### Instalments and insurance of the loans still running, per month.
+  totalMonthlyCents: int
+  ### Average income of the three last complete months (visible accounts).
+  monthlyIncomeCents: int
+  ### Instalments / income, in per mille; null without income.
+  debtRatioPerMille: int?

@@ -14,9 +14,11 @@ import 'dart:typed_data' as _idt;
 import 'package:owncoffer_server/src/generated/account_kind.dart' as _ihbhvzqt;
 import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
+import 'package:owncoffer_server/src/generated/budget_period.dart' as _imscipj7;
 import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
 import 'package:owncoffer_server/src/generated/csv_columns.dart' as _iytxq8gu;
 import 'package:owncoffer_server/src/generated/frequency.dart' as _iugtcrzz;
+import 'package:owncoffer_server/src/generated/loan.dart' as _i2yv792g;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/rule_direction.dart'
     as _ini8nmtb;
@@ -31,10 +33,13 @@ import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
 import '../endpoints/account_endpoint.dart' as _iaho7ul5;
 import '../endpoints/admin_endpoint.dart' as _i5t1w2d2;
+import '../endpoints/analysis_endpoint.dart' as _i0sl0qub;
 import '../endpoints/category_endpoint.dart' as _ioevag4g;
+import '../endpoints/goal_endpoint.dart' as _i2k4izhk;
 import '../endpoints/group_endpoint.dart' as _iknqvl2r;
 import '../endpoints/import_endpoint.dart' as _i51ek8od;
 import '../endpoints/invitation_endpoint.dart' as _iipval89;
+import '../endpoints/loan_endpoint.dart' as _imitaxsf;
 import '../endpoints/notification_endpoint.dart' as _ihb11yhk;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
@@ -70,10 +75,22 @@ class Endpoints extends _is.EndpointDispatch {
           'admin',
           null,
         ),
+      'analysis': _i0sl0qub.AnalysisEndpoint()
+        ..initialize(
+          server,
+          'analysis',
+          null,
+        ),
       'category': _ioevag4g.CategoryEndpoint()
         ..initialize(
           server,
           'category',
+          null,
+        ),
+      'goal': _i2k4izhk.GoalEndpoint()
+        ..initialize(
+          server,
+          'goal',
           null,
         ),
       'group': _iknqvl2r.GroupEndpoint()
@@ -92,6 +109,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'invitation',
+          null,
+        ),
+      'loan': _imitaxsf.LoanEndpoint()
+        ..initialize(
+          server,
+          'loan',
           null,
         ),
       'notification': _ihb11yhk.NotificationEndpoint()
@@ -569,6 +592,98 @@ class Endpoints extends _is.EndpointDispatch {
         ),
       },
     );
+    connectors['analysis'] = _is.EndpointConnector(
+      name: 'analysis',
+      endpoint: endpoints['analysis']!,
+      methodConnectors: {
+        'report': _is.MethodConnector(
+          name: 'report',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'period': _is.ParameterDescription(
+              name: 'period',
+              type: _is.getType<_imscipj7.BudgetPeriod>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['analysis'] as _i0sl0qub.AnalysisEndpoint).report(
+                    session,
+                    params['groupId'],
+                    params['period'],
+                    params['date'],
+                    accountId: params['accountId'],
+                  ),
+        ),
+        'operations': _is.MethodConnector(
+          name: 'operations',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'period': _is.ParameterDescription(
+              name: 'period',
+              type: _is.getType<_imscipj7.BudgetPeriod>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'unclassified': _is.ParameterDescription(
+              name: 'unclassified',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['analysis'] as _i0sl0qub.AnalysisEndpoint)
+                  .operations(
+                    session,
+                    params['groupId'],
+                    params['period'],
+                    params['date'],
+                    categoryId: params['categoryId'],
+                    unclassified: params['unclassified'],
+                    accountId: params['accountId'],
+                  ),
+        ),
+      },
+    );
     connectors['category'] = _is.EndpointConnector(
       name: 'category',
       endpoint: endpoints['category']!,
@@ -699,6 +814,84 @@ class Endpoints extends _is.EndpointDispatch {
         ),
       },
     );
+    connectors['goal'] = _is.EndpointConnector(
+      name: 'goal',
+      endpoint: endpoints['goal']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['goal'] as _i2k4izhk.GoalEndpoint).list(
+                session,
+                params['groupId'],
+              ),
+        ),
+        'set': _is.MethodConnector(
+          name: 'set',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['goal'] as _i2k4izhk.GoalEndpoint).set(
+                session,
+                params['groupId'],
+                params['categoryId'],
+                params['amountCents'],
+              ),
+        ),
+        'remove': _is.MethodConnector(
+          name: 'remove',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['goal'] as _i2k4izhk.GoalEndpoint).remove(
+                session,
+                params['groupId'],
+                params['categoryId'],
+              ),
+        ),
+      },
+    );
     connectors['group'] = _is.EndpointConnector(
       name: 'group',
       endpoint: endpoints['group']!,
@@ -754,6 +947,31 @@ class Endpoints extends _is.EndpointDispatch {
                 params['groupId'],
                 params['name'],
               ),
+        ),
+        'setMonthStartDay': _is.MethodConnector(
+          name: 'setMonthStartDay',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'day': _is.ParameterDescription(
+              name: 'day',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['group'] as _iknqvl2r.GroupEndpoint)
+                  .setMonthStartDay(
+                    session,
+                    params['groupId'],
+                    params['day'],
+                  ),
         ),
         'members': _is.MethodConnector(
           name: 'members',
@@ -1046,6 +1264,132 @@ class Endpoints extends _is.EndpointDispatch {
                         session,
                         params['token'],
                       ),
+        ),
+      },
+    );
+    connectors['loan'] = _is.EndpointConnector(
+      name: 'loan',
+      endpoint: endpoints['loan']!,
+      methodConnectors: {
+        'overview': _is.MethodConnector(
+          name: 'overview',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint).overview(
+                session,
+                params['groupId'],
+              ),
+        ),
+        'schedule': _is.MethodConnector(
+          name: 'schedule',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint).schedule(
+                session,
+                params['loanId'],
+              ),
+        ),
+        'simulate': _is.MethodConnector(
+          name: 'simulate',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint).simulate(
+                session,
+                params['loanId'],
+                params['amountCents'],
+              ),
+        ),
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'loan': _is.ParameterDescription(
+              name: 'loan',
+              type: _is.getType<_i2yv792g.Loan>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint).create(
+                session,
+                params['groupId'],
+                params['loan'],
+              ),
+        ),
+        'update': _is.MethodConnector(
+          name: 'update',
+          params: {
+            'loan': _is.ParameterDescription(
+              name: 'loan',
+              type: _is.getType<_i2yv792g.Loan>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint).update(
+                session,
+                params['loan'],
+              ),
+        ),
+        'delete': _is.MethodConnector(
+          name: 'delete',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint).delete(
+                session,
+                params['loanId'],
+              ),
         ),
       },
     );
@@ -1407,6 +1751,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'subscription': _is.ParameterDescription(
+              name: 'subscription',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -1427,6 +1776,7 @@ class Endpoints extends _is.EndpointDispatch {
                     matchPattern: params['matchPattern'],
                     dateToleranceDays: params['dateToleranceDays'],
                     amountTolerancePercent: params['amountTolerancePercent'],
+                    subscription: params['subscription'],
                   ),
         ),
         'update': _is.MethodConnector(
@@ -1472,6 +1822,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'subscription': _is.ParameterDescription(
+              name: 'subscription',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -1488,6 +1843,7 @@ class Endpoints extends _is.EndpointDispatch {
                     matchPattern: params['matchPattern'],
                     dateToleranceDays: params['dateToleranceDays'],
                     amountTolerancePercent: params['amountTolerancePercent'],
+                    subscription: params['subscription'],
                   ),
         ),
         'delete': _is.MethodConnector(
@@ -1507,6 +1863,50 @@ class Endpoints extends _is.EndpointDispatch {
                   .delete(
                     session,
                     params['scheduledId'],
+                  ),
+        ),
+        'subscriptions': _is.MethodConnector(
+          name: 'subscriptions',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .subscriptions(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'subscribeFrom': _is.MethodConnector(
+          name: 'subscribeFrom',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'frequency': _is.ParameterDescription(
+              name: 'frequency',
+              type: _is.getType<_iugtcrzz.ScheduleFrequency?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .subscribeFrom(
+                    session,
+                    params['transactionId'],
+                    frequency: params['frequency'],
                   ),
         ),
         'skipNext': _is.MethodConnector(
@@ -1665,6 +2065,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'includeSubcategories': _is.ParameterDescription(
+              name: 'includeSubcategories',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
             'toClassify': _is.ParameterDescription(
               name: 'toClassify',
               type: _is.getType<bool?>(),
@@ -1699,6 +2104,7 @@ class Endpoints extends _is.EndpointDispatch {
                         to: params['to'],
                         search: params['search'],
                         categoryId: params['categoryId'],
+                        includeSubcategories: params['includeSubcategories'],
                         toClassify: params['toClassify'],
                         uncleared: params['uncleared'],
                         limit: params['limit'],
