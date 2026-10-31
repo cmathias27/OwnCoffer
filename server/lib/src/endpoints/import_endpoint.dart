@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
 import '../finance/alert_service.dart';
@@ -69,18 +68,7 @@ class ImportEndpoint extends Endpoint {
       Access.userId(session),
     );
     // Fresh operations: check the forecast now rather than at the next hour.
-    try {
-      await AlertService.checkAccount(
-        session,
-        account,
-        core.LocalDate.fromDateTime(DateTime.now().toUtc()),
-      );
-    } on Object catch (e) {
-      session.log(
-        '[alert] after import: ${e.runtimeType}',
-        level: LogLevel.error,
-      );
-    }
+    await AlertService.checkAfterChange(session, account);
     await Audit.log(
       session,
       groupId: account.groupId,

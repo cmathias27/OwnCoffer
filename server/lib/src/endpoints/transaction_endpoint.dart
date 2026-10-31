@@ -2,6 +2,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
+import '../finance/alert_service.dart';
 import '../finance/classification_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
@@ -113,6 +114,7 @@ class TransactionEndpoint extends Endpoint {
       ),
     );
     await _audit(session, account, 'create', saved.id, after: saved);
+    await AlertService.checkAfterChange(session, account);
     return saved;
   }
 
