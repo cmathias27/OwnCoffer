@@ -534,5 +534,179 @@
         "type": "String"
       }
     }
-  }
+  },
+  "forecastTitle": "Solde prévu",
+  "forecastUnavailable": "Prévision indisponible pour l'instant.",
+  "horizonDays": "{count} j",
+  "@horizonDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "horizonYear": "1 an",
+  "forecastCurrent": "Solde actuel : {amount}",
+  "@forecastCurrent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastEnd": "Le {date} : {amount}",
+  "@forecastEnd": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastThresholdLine": "Seuil d'alerte : {amount}",
+  "@forecastThresholdLine": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastChartLabel": "Courbe du solde prévu jour par jour",
+  "forecastLowestMark": "Point bas",
+  "forecastProposals": "À confirmer",
+  "forecastProposalText": "{operation} du {date} réalise-t-elle « {planned} » prévue le {due} ?",
+  "@forecastProposalText": {
+    "placeholders": {
+      "operation": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      },
+      "planned": {
+        "type": "String"
+      },
+      "due": {
+        "type": "String"
+      }
+    }
+  },
+  "confirm": "Confirmer",
+  "forecastMatched": "Rapprochement confirmé.",
+  "forecastMissed": "Non arrivées",
+  "forecastMissedText": "Prévue le {date}, toujours pas sur le compte.",
+  "@forecastMissedText": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSkip": "Ne plus l'attendre",
+  "forecastSkipped": "Échéance ignorée.",
+  "forecastAutoReconciled": "{count, plural, =1{1 opération reliée automatiquement à son échéance prévue.} other{{count} opérations reliées automatiquement à leur échéance prévue.}}",
+  "@forecastAutoReconciled": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "forecastUpcoming": "À venir",
+  "forecastNoUpcoming": "Aucune opération prévue sur cette période.",
+  "forecastLate": "en retard, prévue le {date}",
+  "@forecastLate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastBalanceAfter": "solde : {amount}",
+  "@forecastBalanceAfter": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "scheduledTitle": "Opérations prévues",
+  "scheduledEmpty": "Aucune opération prévue. Ajoutez votre loyer, votre salaire, vos abonnements…",
+  "scheduledAdd": "Ajouter une opération prévue",
+  "scheduledEdit": "Modifier l'opération prévue",
+  "scheduledDelete": "Supprimer",
+  "scheduledDeleteConfirm": "Supprimer « {label} » ? Les prévisions ne la compteront plus.",
+  "@scheduledDeleteConfirm": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "frequencyLabel": "Fréquence",
+  "frequencyOnce": "Une fois",
+  "frequencyWeekly": "Toutes les semaines",
+  "frequencyMonthly": "Tous les mois",
+  "frequencyYearly": "Tous les ans",
+  "everyWeeks": "{count, plural, =1{Chaque semaine} other{Toutes les {count} semaines}}",
+  "@everyWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyMonths": "{count, plural, =1{Chaque mois} other{Tous les {count} mois}}",
+  "@everyMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyYears": "{count, plural, =1{Chaque année} other{Tous les {count} ans}}",
+  "@everyYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "intervalLabel": "Intervalle",
+  "intervalHelp": "2 = toutes les deux semaines, deux mois…",
+  "startDateLabel": "Première échéance",
+  "endDateLabel": "Dernière échéance (facultatif)",
+  "noEndDate": "Sans fin",
+  "onceOn": "Le {date}",
+  "@onceOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "fromDate": "à partir du {date}",
+  "@fromDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "untilDate": "jusqu'au {date}",
+  "@untilDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "matchPatternLabel": "Libellé bancaire à reconnaître (facultatif)",
+  "matchPatternHelp": "Ex. : LOYER. Sert à relier l'opération réelle à l'échéance prévue.",
+  "dateToleranceLabel": "Tolérance de date (jours)",
+  "amountToleranceLabel": "Tolérance de montant (%)",
+  "toleranceInvalid": "Nombre entier attendu.",
+  "scheduledLockedHelp": "La fréquence et la première échéance ne se modifient pas : supprimez et recréez l'opération prévue."
 }

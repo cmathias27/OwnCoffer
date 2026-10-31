@@ -1573,6 +1573,311 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ligne {number} : {sample}'**
   String csvRowSample(int number, String sample);
+
+  /// No description provided for @forecastTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde prévu'**
+  String get forecastTitle;
+
+  /// No description provided for @forecastUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévision indisponible pour l\'instant.'**
+  String get forecastUnavailable;
+
+  /// No description provided for @horizonDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} j'**
+  String horizonDays(int count);
+
+  /// No description provided for @horizonYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'1 an'**
+  String get horizonYear;
+
+  /// No description provided for @forecastCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde actuel : {amount}'**
+  String forecastCurrent(String amount);
+
+  /// No description provided for @forecastEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le {date} : {amount}'**
+  String forecastEnd(String date, String amount);
+
+  /// No description provided for @forecastThresholdLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuil d\'alerte : {amount}'**
+  String forecastThresholdLine(String amount);
+
+  /// No description provided for @forecastChartLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Courbe du solde prévu jour par jour'**
+  String get forecastChartLabel;
+
+  /// No description provided for @forecastLowestMark.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point bas'**
+  String get forecastLowestMark;
+
+  /// No description provided for @forecastProposals.
+  ///
+  /// In fr, this message translates to:
+  /// **'À confirmer'**
+  String get forecastProposals;
+
+  /// No description provided for @forecastProposalText.
+  ///
+  /// In fr, this message translates to:
+  /// **'{operation} du {date} réalise-t-elle « {planned} » prévue le {due} ?'**
+  String forecastProposalText(
+    String operation,
+    String date,
+    String planned,
+    String due,
+  );
+
+  /// No description provided for @confirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer'**
+  String get confirm;
+
+  /// No description provided for @forecastMatched.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rapprochement confirmé.'**
+  String get forecastMatched;
+
+  /// No description provided for @forecastMissed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non arrivées'**
+  String get forecastMissed;
+
+  /// No description provided for @forecastMissedText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévue le {date}, toujours pas sur le compte.'**
+  String forecastMissedText(String date);
+
+  /// No description provided for @forecastSkip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ne plus l\'attendre'**
+  String get forecastSkip;
+
+  /// No description provided for @forecastSkipped.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance ignorée.'**
+  String get forecastSkipped;
+
+  /// No description provided for @forecastAutoReconciled.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération reliée automatiquement à son échéance prévue.} other{{count} opérations reliées automatiquement à leur échéance prévue.}}'**
+  String forecastAutoReconciled(int count);
+
+  /// No description provided for @forecastUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get forecastUpcoming;
+
+  /// No description provided for @forecastNoUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération prévue sur cette période.'**
+  String get forecastNoUpcoming;
+
+  /// No description provided for @forecastLate.
+  ///
+  /// In fr, this message translates to:
+  /// **'en retard, prévue le {date}'**
+  String forecastLate(String date);
+
+  /// No description provided for @forecastBalanceAfter.
+  ///
+  /// In fr, this message translates to:
+  /// **'solde : {amount}'**
+  String forecastBalanceAfter(String amount);
+
+  /// No description provided for @scheduledTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations prévues'**
+  String get scheduledTitle;
+
+  /// No description provided for @scheduledEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération prévue. Ajoutez votre loyer, votre salaire, vos abonnements…'**
+  String get scheduledEmpty;
+
+  /// No description provided for @scheduledAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une opération prévue'**
+  String get scheduledAdd;
+
+  /// No description provided for @scheduledEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier l\'opération prévue'**
+  String get scheduledEdit;
+
+  /// No description provided for @scheduledDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get scheduledDelete;
+
+  /// No description provided for @scheduledDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer « {label} » ? Les prévisions ne la compteront plus.'**
+  String scheduledDeleteConfirm(String label);
+
+  /// No description provided for @frequencyLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fréquence'**
+  String get frequencyLabel;
+
+  /// No description provided for @frequencyOnce.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une fois'**
+  String get frequencyOnce;
+
+  /// No description provided for @frequencyWeekly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les semaines'**
+  String get frequencyWeekly;
+
+  /// No description provided for @frequencyMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les mois'**
+  String get frequencyMonthly;
+
+  /// No description provided for @frequencyYearly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les ans'**
+  String get frequencyYearly;
+
+  /// No description provided for @everyWeeks.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Chaque semaine} other{Toutes les {count} semaines}}'**
+  String everyWeeks(int count);
+
+  /// No description provided for @everyMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Chaque mois} other{Tous les {count} mois}}'**
+  String everyMonths(int count);
+
+  /// No description provided for @everyYears.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Chaque année} other{Tous les {count} ans}}'**
+  String everyYears(int count);
+
+  /// No description provided for @intervalLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Intervalle'**
+  String get intervalLabel;
+
+  /// No description provided for @intervalHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'2 = toutes les deux semaines, deux mois…'**
+  String get intervalHelp;
+
+  /// No description provided for @startDateLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Première échéance'**
+  String get startDateLabel;
+
+  /// No description provided for @endDateLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière échéance (facultatif)'**
+  String get endDateLabel;
+
+  /// No description provided for @noEndDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans fin'**
+  String get noEndDate;
+
+  /// No description provided for @onceOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le {date}'**
+  String onceOn(String date);
+
+  /// No description provided for @fromDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'à partir du {date}'**
+  String fromDate(String date);
+
+  /// No description provided for @untilDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'jusqu\'au {date}'**
+  String untilDate(String date);
+
+  /// No description provided for @matchPatternLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libellé bancaire à reconnaître (facultatif)'**
+  String get matchPatternLabel;
+
+  /// No description provided for @matchPatternHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. : LOYER. Sert à relier l\'opération réelle à l\'échéance prévue.'**
+  String get matchPatternHelp;
+
+  /// No description provided for @dateToleranceLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tolérance de date (jours)'**
+  String get dateToleranceLabel;
+
+  /// No description provided for @amountToleranceLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tolérance de montant (%)'**
+  String get amountToleranceLabel;
+
+  /// No description provided for @toleranceInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre entier attendu.'**
+  String get toleranceInvalid;
+
+  /// No description provided for @scheduledLockedHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La fréquence et la première échéance ne se modifient pas : supprimez et recréez l\'opération prévue.'**
+  String get scheduledLockedHelp;
 }
 
 class _AppLocalizationsDelegate

@@ -937,4 +937,219 @@ class AppLocalizationsFr extends AppLocalizations {
   String csvRowSample(int number, String sample) {
     return 'Ligne $number : $sample';
   }
+
+  @override
+  String get forecastTitle => 'Solde prévu';
+
+  @override
+  String get forecastUnavailable => 'Prévision indisponible pour l\'instant.';
+
+  @override
+  String horizonDays(int count) {
+    return '$count j';
+  }
+
+  @override
+  String get horizonYear => '1 an';
+
+  @override
+  String forecastCurrent(String amount) {
+    return 'Solde actuel : $amount';
+  }
+
+  @override
+  String forecastEnd(String date, String amount) {
+    return 'Le $date : $amount';
+  }
+
+  @override
+  String forecastThresholdLine(String amount) {
+    return 'Seuil d\'alerte : $amount';
+  }
+
+  @override
+  String get forecastChartLabel => 'Courbe du solde prévu jour par jour';
+
+  @override
+  String get forecastLowestMark => 'Point bas';
+
+  @override
+  String get forecastProposals => 'À confirmer';
+
+  @override
+  String forecastProposalText(
+    String operation,
+    String date,
+    String planned,
+    String due,
+  ) {
+    return '$operation du $date réalise-t-elle « $planned » prévue le $due ?';
+  }
+
+  @override
+  String get confirm => 'Confirmer';
+
+  @override
+  String get forecastMatched => 'Rapprochement confirmé.';
+
+  @override
+  String get forecastMissed => 'Non arrivées';
+
+  @override
+  String forecastMissedText(String date) {
+    return 'Prévue le $date, toujours pas sur le compte.';
+  }
+
+  @override
+  String get forecastSkip => 'Ne plus l\'attendre';
+
+  @override
+  String get forecastSkipped => 'Échéance ignorée.';
+
+  @override
+  String forecastAutoReconciled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count opérations reliées automatiquement à leur échéance prévue.',
+      one: '1 opération reliée automatiquement à son échéance prévue.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get forecastUpcoming => 'À venir';
+
+  @override
+  String get forecastNoUpcoming => 'Aucune opération prévue sur cette période.';
+
+  @override
+  String forecastLate(String date) {
+    return 'en retard, prévue le $date';
+  }
+
+  @override
+  String forecastBalanceAfter(String amount) {
+    return 'solde : $amount';
+  }
+
+  @override
+  String get scheduledTitle => 'Opérations prévues';
+
+  @override
+  String get scheduledEmpty =>
+      'Aucune opération prévue. Ajoutez votre loyer, votre salaire, vos abonnements…';
+
+  @override
+  String get scheduledAdd => 'Ajouter une opération prévue';
+
+  @override
+  String get scheduledEdit => 'Modifier l\'opération prévue';
+
+  @override
+  String get scheduledDelete => 'Supprimer';
+
+  @override
+  String scheduledDeleteConfirm(String label) {
+    return 'Supprimer « $label » ? Les prévisions ne la compteront plus.';
+  }
+
+  @override
+  String get frequencyLabel => 'Fréquence';
+
+  @override
+  String get frequencyOnce => 'Une fois';
+
+  @override
+  String get frequencyWeekly => 'Toutes les semaines';
+
+  @override
+  String get frequencyMonthly => 'Tous les mois';
+
+  @override
+  String get frequencyYearly => 'Tous les ans';
+
+  @override
+  String everyWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Toutes les $count semaines',
+      one: 'Chaque semaine',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String everyMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tous les $count mois',
+      one: 'Chaque mois',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String everyYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tous les $count ans',
+      one: 'Chaque année',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get intervalLabel => 'Intervalle';
+
+  @override
+  String get intervalHelp => '2 = toutes les deux semaines, deux mois…';
+
+  @override
+  String get startDateLabel => 'Première échéance';
+
+  @override
+  String get endDateLabel => 'Dernière échéance (facultatif)';
+
+  @override
+  String get noEndDate => 'Sans fin';
+
+  @override
+  String onceOn(String date) {
+    return 'Le $date';
+  }
+
+  @override
+  String fromDate(String date) {
+    return 'à partir du $date';
+  }
+
+  @override
+  String untilDate(String date) {
+    return 'jusqu\'au $date';
+  }
+
+  @override
+  String get matchPatternLabel => 'Libellé bancaire à reconnaître (facultatif)';
+
+  @override
+  String get matchPatternHelp =>
+      'Ex. : LOYER. Sert à relier l\'opération réelle à l\'échéance prévue.';
+
+  @override
+  String get dateToleranceLabel => 'Tolérance de date (jours)';
+
+  @override
+  String get amountToleranceLabel => 'Tolérance de montant (%)';
+
+  @override
+  String get toleranceInvalid => 'Nombre entier attendu.';
+
+  @override
+  String get scheduledLockedHelp =>
+      'La fréquence et la première échéance ne se modifient pas : supprimez et recréez l\'opération prévue.';
 }

@@ -161,6 +161,11 @@ class _AccountCard extends StatelessWidget {
                     ),
                 ],
               ),
+              if (f == null)
+                Text(
+                  l.forecastUnavailable,
+                  style: TextStyle(color: theme.colorScheme.error),
+                ),
               if (f != null) ...[
                 Text(
                   context.money(
