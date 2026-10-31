@@ -30,7 +30,9 @@ String generate(String yamlText) {
       'kind: StandardKind.$thisType, '
       'fr: ${q(name['fr'])}, en: ${q(name['en'])}, '
       'icon: ${thisIcon == null ? 'null' : q(thisIcon)}'
-      '${c['deprecated'] == true ? ', deprecated: true' : ''}),',
+      '${c['deprecated'] == true ? ', deprecated: true' : ''}'
+      '${c['replaced_by'] == null ? '' : ', replacedBy: ${q(c['replaced_by'])}'}'
+      '${c['since'] == null ? '' : ', since: ${c['since']}'}),',
     );
     for (final child in (c['children'] as YamlList?) ?? const []) {
       emit(

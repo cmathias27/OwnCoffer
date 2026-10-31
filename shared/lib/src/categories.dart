@@ -29,6 +29,14 @@ class StandardCategoryDef {
   final String? icon;
   final bool deprecated;
 
+  /// For a deprecated entry: the entry that takes over its categories when
+  /// existing groups are updated to a new catalogue version.
+  final String? replacedBy;
+
+  /// Catalogue version that added the entry: groups created earlier receive
+  /// it when they are updated.
+  final int since;
+
   const StandardCategoryDef(
     this.id, {
     required this.parent,
@@ -37,6 +45,8 @@ class StandardCategoryDef {
     required this.en,
     required this.icon,
     this.deprecated = false,
+    this.replacedBy,
+    this.since = 1,
   });
 
   String name(String languageCode) => languageCode == 'fr' ? fr : en;

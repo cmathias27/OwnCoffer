@@ -4,6 +4,7 @@ import 'package:serverpod_auth_idp_server/core.dart';
 
 import 'src/auth/email_config.dart';
 import 'src/cache_busting.dart';
+import 'src/endpoints/category_endpoint.dart';
 import 'src/finance/alert_service.dart';
 import 'src/generated/serverpod.dart';
 import 'src/onboarding/onboarding.dart';
@@ -113,6 +114,8 @@ void run(List<String> args) async {
   try {
     await Onboarding.announceSetupIfNeeded(session);
     await IpGuard.instance.load(session);
+    // New standard categories reach the existing groups.
+    await updateAllStandardCategories(session);
   } finally {
     await session.close();
   }

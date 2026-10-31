@@ -168,3 +168,94 @@ Future<void> createDefaultCategories(
     idOf[def.id] = row.id!;
   }
 }
+
+/// Brings the categories of every group up to the current standard
+/// catalogue, once per catalogue version (run at server start).
+Future<void> updateAllStandardCategories(Session session) async {
+  final groups = await FinanceGroup.db.find(
+    session,
+    where: (g) => g.standardCatalogVersion < core.standardCatalogVersion,
+  );
+  for (final g in groups) {
+    await session.db.transaction(
+      (tx) => updateStandardCategories(session, g, transaction: tx),
+    );
+  }
+}
+
+/// Adds to [group] the standard categories introduced after its catalogue
+/// version. A category whose standard entry was replaced (e.g. `family.pets`
+/// by `pets.other`) is moved and relinked rather than duplicated, so its
+/// operations, rules and custom name are kept. Categories the group already
+/// links to, archived ones included, are never recreated.
+Future<void> updateStandardCategories(
+  Session session,
+  FinanceGroup group, {
+  Transaction? transaction,
+}) async {
+  final from = group.standardCatalogVersion;
+  final rows = await Category.db.find(
+    session,
+    where: (c) => c.groupId.equals(group.id!),
+    orderBy: (c) => c.id,
+    transaction: transaction,
+  );
+  final byCode = <String, Category>{};
+  for (final c in rows) {
+    final code = c.standardCode;
+    if (code != null) byCode.putIfAbsent(code, () => c);
+  }
+  for (final def in core.standardCategories) {
+    if (def.deprecated || def.since <= from || byCode.containsKey(def.id)) {
+      continue;
+    }
+    int? parentId;
+    if (def.parent != null) {
+      final parent = byCode[def.parent];
+      // The parent was archived: the group does not want this branch.
+      if (parent == null || parent.deletedAt != null) continue;
+      parentId = parent.id;
+    }
+    final replaced = [
+      for (final old in core.standardCategories)
+        if (old.replacedBy == def.id && byCode[old.id]?.deletedAt == null)
+          byCode[old.id],
+    ].nonNulls.firstOrNull;
+    final Category saved;
+    if (replaced != null) {
+      saved = await Category.db.updateRow(
+        session,
+        replaced.copyWith(parentId: parentId, standardCode: def.id),
+        transaction: transaction,
+      );
+      await Audit.log(
+        session,
+        groupId: group.id,
+        action: 'catalog_relink',
+        entity: 'category',
+        rowId: saved.id,
+        before: replaced,
+        after: saved,
+        transaction: transaction,
+      );
+    } else {
+      saved = await Category.db.insertRow(
+        session,
+        Category(
+          groupId: group.id!,
+          parentId: parentId,
+          kind: CategoryKind.values.byName(def.kind.name),
+          standardCode: def.id,
+          icon: def.icon,
+        ),
+        transaction: transaction,
+      );
+    }
+    byCode[def.id] = saved;
+  }
+  await FinanceGroup.db.updateRow(
+    session,
+    group.copyWith(standardCatalogVersion: core.standardCatalogVersion),
+    transaction: transaction,
+  );
+}

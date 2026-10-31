@@ -53,10 +53,10 @@ void main() {
         );
 
     test(
-      'a new group gets the 90 standard categories, linked and nested',
+      'a new group gets the 96 standard categories, linked and nested',
       () async {
         final cats = await endpoints.category.list(as(alice), groupA);
-        expect(cats, hasLength(90));
+        expect(cats, hasLength(96));
         final groceries = cats.firstWhere(
           (c) => c.standardCode == 'food.groceries',
         );
@@ -264,7 +264,7 @@ void main() {
       test('readers can read but not change', () async {
         expect(
           await endpoints.category.list(as(reader), groupA),
-          hasLength(90),
+          hasLength(96),
         );
         final c = await standard(groupA, 'food');
         await expectLater(
