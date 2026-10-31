@@ -2,6 +2,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
+import '../finance/alert_service.dart';
 import '../finance/forecast_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
@@ -68,6 +69,7 @@ class ScheduledEndpoint extends Endpoint {
       ),
     );
     final saved = await ScheduledTransaction.db.insertRow(session, row);
+    await AlertService.checkAfterChange(session, account);
     await Audit.log(
       session,
       groupId: account.groupId,
@@ -108,6 +110,7 @@ class ScheduledEndpoint extends Endpoint {
       ),
     );
     final saved = await ScheduledTransaction.db.updateRow(session, next);
+    await AlertService.checkAfterChange(session, account);
     await Audit.log(
       session,
       groupId: account.groupId,

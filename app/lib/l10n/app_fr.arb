@@ -821,5 +821,40 @@
     }
   },
   "testerNone": "Aucune règle ne s'applique : l'opération serait « À classer ».",
-  "testerRuleOpen": "Voir la règle"
+  "testerRuleOpen": "Voir la règle",
+  "notificationsTitle": "Notifications",
+  "notificationsEmpty": "Aucune notification.",
+  "notificationsMarkAll": "Tout marquer comme lu",
+  "notificationsUnread": "{count, plural, =0{Notifications} =1{Notifications : 1 non lue} other{Notifications : {count} non lues}}",
+  "@notificationsUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifOverdraftTitle": "{account} : découvert prévu le {date}",
+  "@notifOverdraftTitle": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOverdraftBody": "Solde prévu ce jour-là au moment de l'alerte : {balance} (seuil {threshold}).",
+  "@notifOverdraftBody": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "threshold": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUnknown": "Notification",
+  "notifOpenForecast": "Voir les prévisions"
 }

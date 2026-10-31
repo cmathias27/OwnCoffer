@@ -2148,6 +2148,54 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Voir la règle'**
   String get testerRuleOpen;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune notification.'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsMarkAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout marquer comme lu'**
+  String get notificationsMarkAll;
+
+  /// No description provided for @notificationsUnread.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Notifications} =1{Notifications : 1 non lue} other{Notifications : {count} non lues}}'**
+  String notificationsUnread(int count);
+
+  /// No description provided for @notifOverdraftTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{account} : découvert prévu le {date}'**
+  String notifOverdraftTitle(String account, String date);
+
+  /// No description provided for @notifOverdraftBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde prévu ce jour-là au moment de l\'alerte : {balance} (seuil {threshold}).'**
+  String notifOverdraftBody(String balance, String threshold);
+
+  /// No description provided for @notifUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notification'**
+  String get notifUnknown;
+
+  /// No description provided for @notifOpenForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les prévisions'**
+  String get notifOpenForecast;
 }
 
 class _AppLocalizationsDelegate

@@ -75,8 +75,9 @@ void main() {
     });
 
     test('one notification and one email per member, only once', () async {
+      // Planning the rent checks the forecast at once.
       await planRent();
-      expect(await AlertService.checkAccount(db, account, today), 2);
+      expect(await AppNotification.db.count(db), 2);
       expect(mail.outbox.map((m) => m.to).toSet(), {
         'alice@example.org',
         'bob@example.org',
@@ -96,6 +97,18 @@ void main() {
       expect(await endpoints.notification.unreadCount(as(bob)), 1);
       await endpoints.notification.markRead(as(bob), mine.single.id!);
       expect(await endpoints.notification.unreadCount(as(bob)), 0);
+    });
+
+    test('a manual operation is checked at once too', () async {
+      await endpoints.transaction.create(
+        as(alice),
+        account.id!,
+        todayUtc,
+        -40000,
+        'Achat exemple',
+      );
+      expect(await AppNotification.db.count(db), 2);
+      expect(mail.outbox, hasLength(2));
     });
 
     test('restricted account: only admins and users given access', () async {

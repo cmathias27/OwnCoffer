@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
@@ -9,6 +11,7 @@ import 'categories_screen.dart';
 import 'forecast_screen.dart';
 import 'import_screen.dart';
 import 'members_screen.dart';
+import 'notifications_screen.dart';
 import 'operations_screen.dart';
 import 'security_screen.dart';
 
@@ -26,6 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Account> _accounts = [];
   Account? _openAccount;
   var _imports = 0;
+  var _unread = 0;
+  Timer? _unreadTimer;
   final _accountsKey = GlobalKey<AccountsScreenState>();
   final _forecastKey = GlobalKey<ForecastScreenState>();
   final _categoriesKey = GlobalKey<CategoriesScreenState>();
@@ -34,6 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadAccounts();
+    _loadUnread();
+    // The server checks forecasts every hour; a light refresh of the badge.
+    _unreadTimer = Timer.periodic(
+      const Duration(minutes: 2),
+      (_) => _loadUnread(),
+    );
     final joined = widget.session.joinedGroupName;
     if (joined != null) {
       widget.session.joinedGroupName = null;
@@ -50,6 +61,35 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    _unreadTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadUnread() async {
+    try {
+      final n = await client.notification.unreadCount();
+      if (mounted && n != _unread) setState(() => _unread = n);
+    } on Object {
+      // Offline or signed out: the badge keeps its last value.
+    }
+  }
+
+  Future<void> _openNotifications() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => NotificationsScreen(
+          onOpenForecast: (accountId) {
+            setState(() => _tab = 2);
+            _forecastKey.currentState?.showAccount(accountId);
+          },
+        ),
+      ),
+    );
+    await _loadUnread();
+  }
+
   Future<void> _loadAccounts() async {
     final g = widget.session.currentGroup;
     if (g == null) return;
@@ -63,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (i == 2) _forecastKey.currentState?.reload();
     if (i == 4) _categoriesKey.currentState?.reload();
     _loadAccounts();
+    _loadUnread();
   }
 
   @override
@@ -148,6 +189,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
               ],
             ),
+          IconButton(
+            tooltip: l.notificationsUnread(_unread),
+            onPressed: _openNotifications,
+            icon: Badge(
+              isLabelVisible: _unread > 0,
+              label: Text('$_unread'),
+              child: Icon(
+                _unread > 0
+                    ? Icons.notifications_active_outlined
+                    : Icons.notifications_none,
+              ),
+            ),
+          ),
           if (current != null)
             IconButton(
               tooltip: l.menuMembers,

@@ -18,6 +18,24 @@ import 'forecast_service.dart';
 abstract final class AlertService {
   static const overdraftType = 'overdraft_forecast';
 
+  /// After a change that moves the forecast (import, planned or manual
+  /// operation): checks at once rather than at the next hourly run. A failure
+  /// is logged, never returned to the caller whose change is already saved.
+  static Future<void> checkAfterChange(Session session, Account account) async {
+    try {
+      await checkAccount(
+        session,
+        account,
+        core.LocalDate.fromDateTime(DateTime.now().toUtc()),
+      );
+    } on Object catch (e) {
+      session.log(
+        '[alert] after change: ${e.runtimeType}',
+        level: LogLevel.error,
+      );
+    }
+  }
+
   /// Checks one account; returns the number of new notifications.
   static Future<int> checkAccount(
     Session session,
