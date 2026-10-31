@@ -1,0 +1,9 @@
+### What the classification would do for a label, without writing anything.
+class: RuleTestResult
+fields:
+  cleanLabel: String
+  operationKind: String
+  categoryId: int?
+  source: CategorySource
+  ### Group rule id or community rule id, when a rule matched.
+  ruleRef: String?

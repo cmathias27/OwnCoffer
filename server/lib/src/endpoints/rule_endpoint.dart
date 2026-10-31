@@ -1,6 +1,7 @@
 import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
+import '../finance/classification_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
@@ -115,6 +116,36 @@ class RuleEndpoint extends Endpoint {
       entity: 'rule',
       rowId: ruleId,
       before: current,
+    );
+  }
+
+  /// Rule tester: how a bank label would be cleaned and classified now
+  /// (group rules → community rules → history). Writes nothing.
+  Future<RuleTestResult> tryLabel(
+    Session session,
+    int groupId,
+    String label,
+    int amountCents,
+  ) async {
+    await Access.requireMember(session, groupId);
+    final text = label.trim();
+    if (text.isEmpty || text.length > 200) {
+      throw InvalidInputException(code: 'invalid_name', field: 'label');
+    }
+    if (amountCents == 0 || amountCents.abs() > 100000000000000) {
+      throw InvalidInputException(code: 'amount_out_of_range');
+    }
+    final cleaned = core.cleanCaisseEpargneLabel(text);
+    final c = (await ClassificationService.forGroup(
+      session,
+      groupId,
+    )).classify(cleaned, amountCents);
+    return RuleTestResult(
+      cleanLabel: cleaned.display,
+      operationKind: cleaned.kind.name,
+      categoryId: c.categoryId,
+      source: ClassificationService.toDb(c.source),
+      ruleRef: c.ruleId?.toString(),
     );
   }
 

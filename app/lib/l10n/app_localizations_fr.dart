@@ -1152,4 +1152,159 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get scheduledLockedHelp =>
       'La fréquence et la première échéance ne se modifient pas : supprimez et recréez l\'opération prévue.';
+
+  @override
+  String get categoriesTab => 'Catégories';
+
+  @override
+  String get rulesTab => 'Règles';
+
+  @override
+  String get categoryAdd => 'Ajouter une catégorie';
+
+  @override
+  String get categoryEdit => 'Modifier la catégorie';
+
+  @override
+  String get categoryName => 'Nom';
+
+  @override
+  String get categoryParent => 'Catégorie parente';
+
+  @override
+  String get categoryNoParent => 'Aucune (catégorie principale)';
+
+  @override
+  String get categoryKindLabel => 'Type';
+
+  @override
+  String get kindIncome => 'Revenu';
+
+  @override
+  String get kindExpense => 'Dépense';
+
+  @override
+  String get kindTransfer => 'Virement interne';
+
+  @override
+  String categoryStandardName(String name) {
+    return 'Nom standard : $name';
+  }
+
+  @override
+  String get categoryResetName => 'Revenir au nom standard';
+
+  @override
+  String get categoryStandardHelp =>
+      'Reliée au catalogue standard : les règles communautaires continuent de la remplir, même renommée.';
+
+  @override
+  String get categoryArchive => 'Archiver';
+
+  @override
+  String categoryArchiveConfirm(String name) {
+    return 'Archiver « $name » ? Elle ne sera plus proposée ; les opérations déjà classées la gardent.';
+  }
+
+  @override
+  String get ruleAdd => 'Ajouter une règle';
+
+  @override
+  String get ruleEdit => 'Modifier la règle';
+
+  @override
+  String get rulesEmpty =>
+      'Aucune règle du groupe. Créez-en une ici ou avec « Toujours classer ainsi » sur une opération.';
+
+  @override
+  String get rulePattern => 'Texte recherché dans le libellé';
+
+  @override
+  String get ruleMatchType => 'Correspondance';
+
+  @override
+  String get matchContains => 'contient';
+
+  @override
+  String get matchStartsWith => 'commence par';
+
+  @override
+  String get matchEquals => 'est exactement';
+
+  @override
+  String get ruleDirection => 'Sens';
+
+  @override
+  String get directionAny => 'Débit ou crédit';
+
+  @override
+  String get directionDebit => 'Débit seulement';
+
+  @override
+  String get directionCredit => 'Crédit seulement';
+
+  @override
+  String get ruleMinAmount => 'Montant minimum (facultatif)';
+
+  @override
+  String get ruleMaxAmount => 'Montant maximum (facultatif)';
+
+  @override
+  String get rulePriority => 'Priorité';
+
+  @override
+  String get rulePriorityHelp => 'La plus petite passe en premier.';
+
+  @override
+  String get ruleEnabled => 'Active';
+
+  @override
+  String get ruleDelete => 'Supprimer';
+
+  @override
+  String ruleSummary(String match, String pattern, String category) {
+    return 'Libellé $match « $pattern » → $category';
+  }
+
+  @override
+  String ruleAmounts(String min, String max) {
+    return 'entre $min et $max';
+  }
+
+  @override
+  String ruleAmountFrom(String min) {
+    return 'à partir de $min';
+  }
+
+  @override
+  String ruleAmountUpTo(String max) {
+    return 'jusqu\'à $max';
+  }
+
+  @override
+  String get testerTitle => 'Tester un libellé';
+
+  @override
+  String get testerHelp =>
+      'Collez un libellé de votre relevé : OwnCoffer montre comment il le nettoie et le classe, sans rien enregistrer.';
+
+  @override
+  String get testerRun => 'Tester';
+
+  @override
+  String testerCleaned(String label) {
+    return 'Libellé court : $label';
+  }
+
+  @override
+  String testerResult(String category, String source) {
+    return 'Catégorie : $category ($source)';
+  }
+
+  @override
+  String get testerNone =>
+      'Aucune règle ne s\'applique : l\'opération serait « À classer ».';
+
+  @override
+  String get testerRuleOpen => 'Voir la règle';
 }

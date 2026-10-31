@@ -68,6 +68,7 @@ import 'rule.dart' as _ivw87pdb;
 import 'rule_application.dart' as _ie66uvh9;
 import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
+import 'rule_test_result.dart' as _ipgrn6yw;
 import 'scheduled_transaction.dart' as _ifol8nrg;
 import 'setup_status.dart' as _iw7q1xsb;
 import 'statement_import.dart' as _ia7wudj2;
@@ -112,6 +113,7 @@ export 'rule.dart';
 export 'rule_application.dart';
 export 'rule_direction.dart';
 export 'rule_match_type.dart';
+export 'rule_test_result.dart';
 export 'scheduled_transaction.dart';
 export 'setup_status.dart';
 export 'statement_import.dart';
@@ -2003,6 +2005,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ibgrh3pe.RuleMatchType) {
       return _ibgrh3pe.RuleMatchType.fromJson(data) as T;
     }
+    if (t == _ipgrn6yw.RuleTestResult) {
+      return _ipgrn6yw.RuleTestResult.fromJson(data) as T;
+    }
     if (t == _ifol8nrg.ScheduledTransaction) {
       return _ifol8nrg.ScheduledTransaction.fromJson(data) as T;
     }
@@ -2162,6 +2167,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_ibgrh3pe.RuleMatchType?>()) {
       return (data != null ? _ibgrh3pe.RuleMatchType.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ipgrn6yw.RuleTestResult?>()) {
+      return (data != null ? _ipgrn6yw.RuleTestResult.fromJson(data) : null)
           as T;
     }
     if (t == _is.getType<_ifol8nrg.ScheduledTransaction?>()) {
@@ -2355,6 +2364,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ie66uvh9.RuleApplication => 'RuleApplication',
       _i13yq1r7.RuleDirection => 'RuleDirection',
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
+      _ipgrn6yw.RuleTestResult => 'RuleTestResult',
       _ifol8nrg.ScheduledTransaction => 'ScheduledTransaction',
       _iw7q1xsb.SetupStatus => 'SetupStatus',
       _ia7wudj2.StatementImport => 'StatementImport',
@@ -2450,6 +2460,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'RuleDirection';
       case _ibgrh3pe.RuleMatchType():
         return 'RuleMatchType';
+      case _ipgrn6yw.RuleTestResult():
+        return 'RuleTestResult';
       case _ifol8nrg.ScheduledTransaction():
         return 'ScheduledTransaction';
       case _iw7q1xsb.SetupStatus():
@@ -2600,6 +2612,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'RuleMatchType') {
       return deserialize<_ibgrh3pe.RuleMatchType>(data['data']);
+    }
+    if (dataClassName == 'RuleTestResult') {
+      return deserialize<_ipgrn6yw.RuleTestResult>(data['data']);
     }
     if (dataClassName == 'ScheduledTransaction') {
       return deserialize<_ifol8nrg.ScheduledTransaction>(data['data']);

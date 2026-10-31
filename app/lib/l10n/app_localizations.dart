@@ -1878,6 +1878,276 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'La fréquence et la première échéance ne se modifient pas : supprimez et recréez l\'opération prévue.'**
   String get scheduledLockedHelp;
+
+  /// No description provided for @categoriesTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories'**
+  String get categoriesTab;
+
+  /// No description provided for @rulesTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règles'**
+  String get rulesTab;
+
+  /// No description provided for @categoryAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une catégorie'**
+  String get categoryAdd;
+
+  /// No description provided for @categoryEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la catégorie'**
+  String get categoryEdit;
+
+  /// No description provided for @categoryName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get categoryName;
+
+  /// No description provided for @categoryParent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie parente'**
+  String get categoryParent;
+
+  /// No description provided for @categoryNoParent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune (catégorie principale)'**
+  String get categoryNoParent;
+
+  /// No description provided for @categoryKindLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type'**
+  String get categoryKindLabel;
+
+  /// No description provided for @kindIncome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenu'**
+  String get kindIncome;
+
+  /// No description provided for @kindExpense.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépense'**
+  String get kindExpense;
+
+  /// No description provided for @kindTransfer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Virement interne'**
+  String get kindTransfer;
+
+  /// No description provided for @categoryStandardName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom standard : {name}'**
+  String categoryStandardName(String name);
+
+  /// No description provided for @categoryResetName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenir au nom standard'**
+  String get categoryResetName;
+
+  /// No description provided for @categoryStandardHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reliée au catalogue standard : les règles communautaires continuent de la remplir, même renommée.'**
+  String get categoryStandardHelp;
+
+  /// No description provided for @categoryArchive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archiver'**
+  String get categoryArchive;
+
+  /// No description provided for @categoryArchiveConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archiver « {name} » ? Elle ne sera plus proposée ; les opérations déjà classées la gardent.'**
+  String categoryArchiveConfirm(String name);
+
+  /// No description provided for @ruleAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une règle'**
+  String get ruleAdd;
+
+  /// No description provided for @ruleEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la règle'**
+  String get ruleEdit;
+
+  /// No description provided for @rulesEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune règle du groupe. Créez-en une ici ou avec « Toujours classer ainsi » sur une opération.'**
+  String get rulesEmpty;
+
+  /// No description provided for @rulePattern.
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte recherché dans le libellé'**
+  String get rulePattern;
+
+  /// No description provided for @ruleMatchType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Correspondance'**
+  String get ruleMatchType;
+
+  /// No description provided for @matchContains.
+  ///
+  /// In fr, this message translates to:
+  /// **'contient'**
+  String get matchContains;
+
+  /// No description provided for @matchStartsWith.
+  ///
+  /// In fr, this message translates to:
+  /// **'commence par'**
+  String get matchStartsWith;
+
+  /// No description provided for @matchEquals.
+  ///
+  /// In fr, this message translates to:
+  /// **'est exactement'**
+  String get matchEquals;
+
+  /// No description provided for @ruleDirection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sens'**
+  String get ruleDirection;
+
+  /// No description provided for @directionAny.
+  ///
+  /// In fr, this message translates to:
+  /// **'Débit ou crédit'**
+  String get directionAny;
+
+  /// No description provided for @directionDebit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Débit seulement'**
+  String get directionDebit;
+
+  /// No description provided for @directionCredit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédit seulement'**
+  String get directionCredit;
+
+  /// No description provided for @ruleMinAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant minimum (facultatif)'**
+  String get ruleMinAmount;
+
+  /// No description provided for @ruleMaxAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant maximum (facultatif)'**
+  String get ruleMaxAmount;
+
+  /// No description provided for @rulePriority.
+  ///
+  /// In fr, this message translates to:
+  /// **'Priorité'**
+  String get rulePriority;
+
+  /// No description provided for @rulePriorityHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La plus petite passe en premier.'**
+  String get rulePriorityHelp;
+
+  /// No description provided for @ruleEnabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Active'**
+  String get ruleEnabled;
+
+  /// No description provided for @ruleDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get ruleDelete;
+
+  /// No description provided for @ruleSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libellé {match} « {pattern} » → {category}'**
+  String ruleSummary(String match, String pattern, String category);
+
+  /// No description provided for @ruleAmounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'entre {min} et {max}'**
+  String ruleAmounts(String min, String max);
+
+  /// No description provided for @ruleAmountFrom.
+  ///
+  /// In fr, this message translates to:
+  /// **'à partir de {min}'**
+  String ruleAmountFrom(String min);
+
+  /// No description provided for @ruleAmountUpTo.
+  ///
+  /// In fr, this message translates to:
+  /// **'jusqu\'à {max}'**
+  String ruleAmountUpTo(String max);
+
+  /// No description provided for @testerTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tester un libellé'**
+  String get testerTitle;
+
+  /// No description provided for @testerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Collez un libellé de votre relevé : OwnCoffer montre comment il le nettoie et le classe, sans rien enregistrer.'**
+  String get testerHelp;
+
+  /// No description provided for @testerRun.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tester'**
+  String get testerRun;
+
+  /// No description provided for @testerCleaned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libellé court : {label}'**
+  String testerCleaned(String label);
+
+  /// No description provided for @testerResult.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie : {category} ({source})'**
+  String testerResult(String category, String source);
+
+  /// No description provided for @testerNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune règle ne s\'applique : l\'opération serait « À classer ».'**
+  String get testerNone;
+
+  /// No description provided for @testerRuleOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la règle'**
+  String get testerRuleOpen;
 }
 
 class _AppLocalizationsDelegate

@@ -42,6 +42,8 @@ import 'package:owncoffer_client/src/protocol/rule_application.dart'
 import 'package:owncoffer_client/src/protocol/rule_direction.dart' as _idnlspx6;
 import 'package:owncoffer_client/src/protocol/rule_match_type.dart'
     as _iko98d6o;
+import 'package:owncoffer_client/src/protocol/rule_test_result.dart'
+    as _ilhr3r4a;
 import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
     as _ibpr6881;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
@@ -684,6 +686,22 @@ class EndpointRule extends _isc.EndpointRef {
     'rule',
     'delete',
     {'ruleId': ruleId},
+  );
+
+  /// Rule tester: how a bank label would be cleaned and classified now
+  /// (group rules → community rules → history). Writes nothing.
+  _ida.Future<_ilhr3r4a.RuleTestResult> tryLabel(
+    int groupId,
+    String label,
+    int amountCents,
+  ) => caller.callServerEndpoint<_ilhr3r4a.RuleTestResult>(
+    'rule',
+    'tryLabel',
+    {
+      'groupId': groupId,
+      'label': label,
+      'amountCents': amountCents,
+    },
   );
 }
 

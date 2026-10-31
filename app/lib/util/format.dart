@@ -40,6 +40,10 @@ extension Formatting on BuildContext {
     return def?.name(_lang) ?? '?';
   }
 
+  /// The standard catalogue's name of a category, in the user's language.
+  String? standardName(Category c) =>
+      core.standardCategoriesById[c.standardCode]?.name(_lang);
+
   String categorySourceName(CategorySource s) {
     final l = AppLocalizations.of(this);
     return switch (s) {

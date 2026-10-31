@@ -1145,4 +1145,159 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get scheduledLockedHelp =>
       'Frequency and first occurrence cannot be changed: delete and create the planned operation again.';
+
+  @override
+  String get categoriesTab => 'Categories';
+
+  @override
+  String get rulesTab => 'Rules';
+
+  @override
+  String get categoryAdd => 'Add a category';
+
+  @override
+  String get categoryEdit => 'Edit the category';
+
+  @override
+  String get categoryName => 'Name';
+
+  @override
+  String get categoryParent => 'Parent category';
+
+  @override
+  String get categoryNoParent => 'None (main category)';
+
+  @override
+  String get categoryKindLabel => 'Type';
+
+  @override
+  String get kindIncome => 'Income';
+
+  @override
+  String get kindExpense => 'Expense';
+
+  @override
+  String get kindTransfer => 'Internal transfer';
+
+  @override
+  String categoryStandardName(String name) {
+    return 'Standard name: $name';
+  }
+
+  @override
+  String get categoryResetName => 'Back to the standard name';
+
+  @override
+  String get categoryStandardHelp =>
+      'Linked to the standard catalogue: community rules keep filling it, even renamed.';
+
+  @override
+  String get categoryArchive => 'Archive';
+
+  @override
+  String categoryArchiveConfirm(String name) {
+    return 'Archive “$name”? It will no longer be offered; operations already classified keep it.';
+  }
+
+  @override
+  String get ruleAdd => 'Add a rule';
+
+  @override
+  String get ruleEdit => 'Edit the rule';
+
+  @override
+  String get rulesEmpty =>
+      'No group rule. Create one here or with “Always classify like this” on an operation.';
+
+  @override
+  String get rulePattern => 'Text searched in the label';
+
+  @override
+  String get ruleMatchType => 'Match';
+
+  @override
+  String get matchContains => 'contains';
+
+  @override
+  String get matchStartsWith => 'starts with';
+
+  @override
+  String get matchEquals => 'is exactly';
+
+  @override
+  String get ruleDirection => 'Direction';
+
+  @override
+  String get directionAny => 'Debit or credit';
+
+  @override
+  String get directionDebit => 'Debit only';
+
+  @override
+  String get directionCredit => 'Credit only';
+
+  @override
+  String get ruleMinAmount => 'Minimum amount (optional)';
+
+  @override
+  String get ruleMaxAmount => 'Maximum amount (optional)';
+
+  @override
+  String get rulePriority => 'Priority';
+
+  @override
+  String get rulePriorityHelp => 'The smallest goes first.';
+
+  @override
+  String get ruleEnabled => 'Enabled';
+
+  @override
+  String get ruleDelete => 'Delete';
+
+  @override
+  String ruleSummary(String match, String pattern, String category) {
+    return 'Label $match “$pattern” → $category';
+  }
+
+  @override
+  String ruleAmounts(String min, String max) {
+    return 'between $min and $max';
+  }
+
+  @override
+  String ruleAmountFrom(String min) {
+    return 'from $min';
+  }
+
+  @override
+  String ruleAmountUpTo(String max) {
+    return 'up to $max';
+  }
+
+  @override
+  String get testerTitle => 'Test a label';
+
+  @override
+  String get testerHelp =>
+      'Paste a label from your statement: OwnCoffer shows how it cleans and classifies it, without saving anything.';
+
+  @override
+  String get testerRun => 'Test';
+
+  @override
+  String testerCleaned(String label) {
+    return 'Short label: $label';
+  }
+
+  @override
+  String testerResult(String category, String source) {
+    return 'Category: $category ($source)';
+  }
+
+  @override
+  String get testerNone =>
+      'No rule applies: the operation would be “To classify”.';
+
+  @override
+  String get testerRuleOpen => 'Show the rule';
 }

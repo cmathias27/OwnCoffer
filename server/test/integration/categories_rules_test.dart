@@ -152,8 +152,60 @@ void main() {
       expect(await endpoints.rule.list(as(alice), groupA), isEmpty);
     });
 
+    test('rule tester: group rule first, then community rule', () async {
+      final groceries = await standard(groupA, 'food.groceries');
+      final community = await endpoints.rule.tryLabel(
+        as(alice),
+        groupA,
+        'CB CARREFOUR MARKET FACT 281026',
+        -4512,
+      );
+      expect(community.cleanLabel, 'CARREFOUR MARKET');
+      expect(community.operationKind, 'card');
+      expect(community.categoryId, groceries.id);
+      expect(community.source, CategorySource.communityRule);
+
+      final shopping = await standard(groupA, 'shopping');
+      final rule = await endpoints.rule.create(
+        as(alice),
+        groupA,
+        shopping.id!,
+        'CARREFOUR',
+        RuleMatchType.startsWith,
+      );
+      final group = await endpoints.rule.tryLabel(
+        as(alice),
+        groupA,
+        'CB CARREFOUR MARKET FACT 281026',
+        -4512,
+      );
+      expect(group.categoryId, shopping.id);
+      expect(group.source, CategorySource.groupRule);
+      expect(group.ruleRef, '${rule.id}');
+
+      final none = await endpoints.rule.tryLabel(
+        as(alice),
+        groupA,
+        'VIR SEPA RECU EXEMPLE',
+        1000,
+      );
+      expect(none.categoryId, isNull);
+      expect(none.source, CategorySource.none);
+      await expectLater(
+        endpoints.rule.tryLabel(as(alice), groupA, '  ', -1),
+        throwsA(isA<InvalidInputException>()),
+      );
+    });
+
     group('isolation (decision 0016)', () {
       final denied = throwsA(isA<AccessDeniedException>());
+
+      test('another group cannot use the rule tester', () async {
+        await expectLater(
+          endpoints.rule.tryLabel(as(mallory), groupA, 'CB EXEMPLE', -100),
+          denied,
+        );
+      });
 
       test('another group cannot read or change categories', () async {
         final c = await standard(groupA, 'food');

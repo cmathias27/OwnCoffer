@@ -1289,6 +1289,36 @@ class Endpoints extends _is.EndpointDispatch {
                 params['ruleId'],
               ),
         ),
+        'tryLabel': _is.MethodConnector(
+          name: 'tryLabel',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'label': _is.ParameterDescription(
+              name: 'label',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['rule'] as _i1yhvvjn.RuleEndpoint).tryLabel(
+                session,
+                params['groupId'],
+                params['label'],
+                params['amountCents'],
+              ),
+        ),
       },
     );
     connectors['scheduled'] = _is.EndpointConnector(
