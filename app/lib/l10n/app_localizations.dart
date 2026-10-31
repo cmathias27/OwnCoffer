@@ -4074,6 +4074,396 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Calculé par le moteur de prévision : opérations prévues seulement. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais.'**
   String get purchaseHowPlanned;
+
+  /// No description provided for @adminTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Administration du serveur'**
+  String get adminTitle;
+
+  /// No description provided for @adminRefresh.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actualiser'**
+  String get adminRefresh;
+
+  /// No description provided for @adminTabHealth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Santé et chiffres'**
+  String get adminTabHealth;
+
+  /// No description provided for @adminTabUsers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisateurs'**
+  String get adminTabUsers;
+
+  /// No description provided for @adminTabSecurity.
+  ///
+  /// In fr, this message translates to:
+  /// **'IP bloquées'**
+  String get adminTabSecurity;
+
+  /// No description provided for @adminTabAudit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Journal'**
+  String get adminTabAudit;
+
+  /// No description provided for @adminHealth.
+  ///
+  /// In fr, this message translates to:
+  /// **'État du serveur'**
+  String get adminHealth;
+
+  /// No description provided for @adminVersion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version installée'**
+  String get adminVersion;
+
+  /// No description provided for @adminUptime.
+  ///
+  /// In fr, this message translates to:
+  /// **'En marche depuis'**
+  String get adminUptime;
+
+  /// No description provided for @adminUptimeValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days} j {hours} h'**
+  String adminUptimeValue(int days, int hours);
+
+  /// No description provided for @adminDatabase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Base de données'**
+  String get adminDatabase;
+
+  /// No description provided for @adminUnreachable.
+  ///
+  /// In fr, this message translates to:
+  /// **'injoignable'**
+  String get adminUnreachable;
+
+  /// No description provided for @adminOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'OK'**
+  String get adminOk;
+
+  /// No description provided for @adminFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'en échec'**
+  String get adminFailed;
+
+  /// No description provided for @adminNotYet.
+  ///
+  /// In fr, this message translates to:
+  /// **'pas encore'**
+  String get adminNotYet;
+
+  /// No description provided for @adminDocuments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Documents stockés'**
+  String get adminDocuments;
+
+  /// No description provided for @adminAlertsJob.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière vérification des alertes'**
+  String get adminAlertsJob;
+
+  /// No description provided for @adminClock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Horloge du serveur'**
+  String get adminClock;
+
+  /// No description provided for @adminClockDrift.
+  ///
+  /// In fr, this message translates to:
+  /// **'écart de {seconds} s avec cet appareil'**
+  String adminClockDrift(int seconds);
+
+  /// No description provided for @adminEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi des courriels'**
+  String get adminEmail;
+
+  /// No description provided for @adminEmailSmtp.
+  ///
+  /// In fr, this message translates to:
+  /// **'serveur SMTP configuré'**
+  String get adminEmailSmtp;
+
+  /// No description provided for @adminEmailLog.
+  ///
+  /// In fr, this message translates to:
+  /// **'non configuré : écrits dans le journal du serveur'**
+  String get adminEmailLog;
+
+  /// No description provided for @adminTestEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer un courriel de test'**
+  String get adminTestEmail;
+
+  /// No description provided for @adminTestEmailSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Courriel de test envoyé à {email}.'**
+  String adminTestEmailSent(String email);
+
+  /// No description provided for @adminTestEmailLogged.
+  ///
+  /// In fr, this message translates to:
+  /// **'SMTP non configuré : le courriel de test est écrit dans le journal du serveur.'**
+  String get adminTestEmailLogged;
+
+  /// No description provided for @adminPublicUrl.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse publique'**
+  String get adminPublicUrl;
+
+  /// No description provided for @adminStats.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffres du serveur (aucun montant)'**
+  String get adminStats;
+
+  /// No description provided for @adminStatUsers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes utilisateurs'**
+  String get adminStatUsers;
+
+  /// No description provided for @adminStatUsersValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} · double authentification : {twoFactor} · bloqués : {blocked}'**
+  String adminStatUsersValue(int count, int twoFactor, int blocked);
+
+  /// No description provided for @adminStatGroups.
+  ///
+  /// In fr, this message translates to:
+  /// **'Groupes (foyers)'**
+  String get adminStatGroups;
+
+  /// No description provided for @adminStatAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes bancaires'**
+  String get adminStatAccounts;
+
+  /// No description provided for @adminStatOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations'**
+  String get adminStatOperations;
+
+  /// No description provided for @adminStatOperationsValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} · {recent} ajoutées en 30 jours'**
+  String adminStatOperationsValue(int count, int recent);
+
+  /// No description provided for @adminStatImports.
+  ///
+  /// In fr, this message translates to:
+  /// **'Imports en 30 jours'**
+  String get adminStatImports;
+
+  /// No description provided for @adminStatRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règles des groupes'**
+  String get adminStatRules;
+
+  /// No description provided for @adminStatInvitations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitations en attente'**
+  String get adminStatInvitations;
+
+  /// No description provided for @adminStatAuto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classement automatique (90 jours)'**
+  String get adminStatAuto;
+
+  /// No description provided for @adminStatAutoHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations importées : {auto} classées automatiquement, {manual} à la main, {none} à classer. Objectif de l\'alpha : 70 % (décision 0014).'**
+  String adminStatAutoHelp(int auto, int manual, int none);
+
+  /// No description provided for @adminUsersHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les comptes du serveur. Un compte bloqué est déconnecté partout et ne peut plus se connecter ; ses données restent intactes.'**
+  String get adminUsersHelp;
+
+  /// No description provided for @adminServerAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'administrateur du serveur'**
+  String get adminServerAdmin;
+
+  /// No description provided for @adminTwoFactorOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'double authentification'**
+  String get adminTwoFactorOn;
+
+  /// No description provided for @adminTwoFactorOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'sans double authentification'**
+  String get adminTwoFactorOff;
+
+  /// No description provided for @adminCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'créé le {date}'**
+  String adminCreated(String date);
+
+  /// No description provided for @adminLastActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'actif le {date}'**
+  String adminLastActive(String date);
+
+  /// No description provided for @adminNeverActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'jamais connecté'**
+  String get adminNeverActive;
+
+  /// No description provided for @adminBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'bloqué'**
+  String get adminBlocked;
+
+  /// No description provided for @adminBlock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bloquer'**
+  String get adminBlock;
+
+  /// No description provided for @adminUnblock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Débloquer'**
+  String get adminUnblock;
+
+  /// No description provided for @adminBlockTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bloquer {email} ?'**
+  String adminBlockTitle(String email);
+
+  /// No description provided for @adminBlockHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le compte sera déconnecté dans les minutes qui viennent et ne pourra plus se connecter. Rien n\'est supprimé ; vous pourrez le débloquer.'**
+  String get adminBlockHelp;
+
+  /// No description provided for @adminUserBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte bloqué.'**
+  String get adminUserBlocked;
+
+  /// No description provided for @adminUserUnblocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte débloqué.'**
+  String get adminUserUnblocked;
+
+  /// No description provided for @adminBansHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresses IP bloquées après trop d\'échecs de connexion. La durée double à chaque récidive.'**
+  String get adminBansHelp;
+
+  /// No description provided for @adminBansEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune adresse bloquée.'**
+  String get adminBansEmpty;
+
+  /// No description provided for @adminBanUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'jusqu\'au {date} · {count}ᵉ blocage'**
+  String adminBanUntil(String date, int count);
+
+  /// No description provided for @adminUnban.
+  ///
+  /// In fr, this message translates to:
+  /// **'Débloquer'**
+  String get adminUnban;
+
+  /// No description provided for @adminUnbanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse débloquée.'**
+  String get adminUnbanned;
+
+  /// No description provided for @adminAuditHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les 100 dernières actions sensibles : qui, quoi, quand. Le contenu des changements n\'est pas montré (il peut contenir les données d\'un foyer).'**
+  String get adminAuditHelp;
+
+  /// No description provided for @adminAuditEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien pour l\'instant.'**
+  String get adminAuditEmpty;
+
+  /// No description provided for @adminAuditGroup.
+  ///
+  /// In fr, this message translates to:
+  /// **'groupe n° {id}'**
+  String adminAuditGroup(int id);
+
+  /// No description provided for @adminSystem.
+  ///
+  /// In fr, this message translates to:
+  /// **'serveur'**
+  String get adminSystem;
+
+  /// No description provided for @menuAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Administration du serveur'**
+  String get menuAdmin;
+
+  /// No description provided for @error_cannot_block_self.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous ne pouvez pas bloquer votre propre compte.'**
+  String get error_cannot_block_self;
+
+  /// No description provided for @error_user_not_found.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte introuvable.'**
+  String get error_user_not_found;
+
+  /// No description provided for @error_mail_failed.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'envoi du courriel a échoué : vérifiez les réglages SMTP dans docker/.env et le journal du serveur.'**
+  String get error_mail_failed;
 }
 
 class _AppLocalizationsDelegate

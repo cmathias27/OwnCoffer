@@ -1,0 +1,18 @@
+### Figures of the whole server, never amounts (server administrator only).
+class: AdminStats
+fields:
+  users: int
+  blockedUsers: int
+  twoFactorUsers: int
+  groups: int
+  accounts: int
+  operations: int
+  operationsLast30Days: int
+  importsLast30Days: int
+  rules: int
+  pendingInvitations: int
+  ### Imported operations of the last 90 days by how they were classified
+  ### (decision 0014: target 70 % automatic).
+  classifiedAutomatically: int
+  classifiedManually: int
+  unclassified: int

@@ -141,6 +141,8 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 - [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois — *en partie dans la 0.2.0 : crédits à taux fixe, tableau calculé, échéances prévues, remboursement anticipé simulé, taux d'endettement ; crédit déclaré depuis une opération (0.2.1), paiements en plusieurs fois (0.3.0) ; restent les événements (renégociation, taux variable) et le crédit renouvelable*
 - [x] Page Opérations : **mettre en évidence les abonnements** (repère sur chaque opération rattachée à un abonnement, filtre « Abonnements », lien vers la liste des abonnements) — demandé le 31 octobre 2026
 - [ ] Revue de fin de mois et détection d'anomalies — *en partie dans la 0.3.0 : revue du mois*
+- [ ] **Page d'administration du serveur** (demandée le 31 octobre 2026) : santé, chiffres sans montant, comptes (bloquer), IP bloquées, journal — *0.3.7* ; restent les sauvegardes (liste, état de la nuit, sauvegarde à la demande) et les mises à jour (automatiques ou non, installation à la demande, notes de version), qui passent par un dossier d'échange avec l'hôte
+- [ ] **Factures** (demandées le 31 octobre 2026) : jointes à une opération (PDF, image, photo recadrée), page Factures avec noms automatiques et export ZIP, factures à rattacher avec propositions, fin de garantie et rappel, envoi par courriel ; en mode serveur comme en mode autonome
 - [ ] Onglet Feedback
 
 **Conseiller et IA**

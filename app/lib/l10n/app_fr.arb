@@ -1907,5 +1907,168 @@
   "purchaseChoose": "Choisir et enregistrer",
   "purchaseSaved": "Achat enregistré dans les opérations prévues.",
   "purchaseHowVariable": "Calculé par le moteur de prévision : opérations prévues et dépenses variables estimées. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais.",
-  "purchaseHowPlanned": "Calculé par le moteur de prévision : opérations prévues seulement. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais."
+  "purchaseHowPlanned": "Calculé par le moteur de prévision : opérations prévues seulement. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais.",
+  "adminTitle": "Administration du serveur",
+  "adminRefresh": "Actualiser",
+  "adminTabHealth": "Santé et chiffres",
+  "adminTabUsers": "Utilisateurs",
+  "adminTabSecurity": "IP bloquées",
+  "adminTabAudit": "Journal",
+  "adminHealth": "État du serveur",
+  "adminVersion": "Version installée",
+  "adminUptime": "En marche depuis",
+  "adminUptimeValue": "{days} j {hours} h",
+  "@adminUptimeValue": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "adminDatabase": "Base de données",
+  "adminUnreachable": "injoignable",
+  "adminOk": "OK",
+  "adminFailed": "en échec",
+  "adminNotYet": "pas encore",
+  "adminDocuments": "Documents stockés",
+  "adminAlertsJob": "Dernière vérification des alertes",
+  "adminClock": "Horloge du serveur",
+  "adminClockDrift": "écart de {seconds} s avec cet appareil",
+  "@adminClockDrift": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "adminEmail": "Envoi des courriels",
+  "adminEmailSmtp": "serveur SMTP configuré",
+  "adminEmailLog": "non configuré : écrits dans le journal du serveur",
+  "adminTestEmail": "Envoyer un courriel de test",
+  "adminTestEmailSent": "Courriel de test envoyé à {email}.",
+  "@adminTestEmailSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTestEmailLogged": "SMTP non configuré : le courriel de test est écrit dans le journal du serveur.",
+  "adminPublicUrl": "Adresse publique",
+  "adminStats": "Chiffres du serveur (aucun montant)",
+  "adminStatUsers": "Comptes utilisateurs",
+  "adminStatUsersValue": "{count} · double authentification : {twoFactor} · bloqués : {blocked}",
+  "@adminStatUsersValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "twoFactor": {
+        "type": "int"
+      },
+      "blocked": {
+        "type": "int"
+      }
+    }
+  },
+  "adminStatGroups": "Groupes (foyers)",
+  "adminStatAccounts": "Comptes bancaires",
+  "adminStatOperations": "Opérations",
+  "adminStatOperationsValue": "{count} · {recent} ajoutées en 30 jours",
+  "@adminStatOperationsValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "recent": {
+        "type": "int"
+      }
+    }
+  },
+  "adminStatImports": "Imports en 30 jours",
+  "adminStatRules": "Règles des groupes",
+  "adminStatInvitations": "Invitations en attente",
+  "adminStatAuto": "Classement automatique (90 jours)",
+  "adminStatAutoHelp": "Opérations importées : {auto} classées automatiquement, {manual} à la main, {none} à classer. Objectif de l'alpha : 70 % (décision 0014).",
+  "@adminStatAutoHelp": {
+    "placeholders": {
+      "auto": {
+        "type": "int"
+      },
+      "manual": {
+        "type": "int"
+      },
+      "none": {
+        "type": "int"
+      }
+    }
+  },
+  "adminUsersHelp": "Tous les comptes du serveur. Un compte bloqué est déconnecté partout et ne peut plus se connecter ; ses données restent intactes.",
+  "adminServerAdmin": "administrateur du serveur",
+  "adminTwoFactorOn": "double authentification",
+  "adminTwoFactorOff": "sans double authentification",
+  "adminCreated": "créé le {date}",
+  "@adminCreated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminLastActive": "actif le {date}",
+  "@adminLastActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminNeverActive": "jamais connecté",
+  "adminBlocked": "bloqué",
+  "adminBlock": "Bloquer",
+  "adminUnblock": "Débloquer",
+  "adminBlockTitle": "Bloquer {email} ?",
+  "@adminBlockTitle": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "adminBlockHelp": "Le compte sera déconnecté dans les minutes qui viennent et ne pourra plus se connecter. Rien n'est supprimé ; vous pourrez le débloquer.",
+  "adminUserBlocked": "Compte bloqué.",
+  "adminUserUnblocked": "Compte débloqué.",
+  "adminBansHelp": "Adresses IP bloquées après trop d'échecs de connexion. La durée double à chaque récidive.",
+  "adminBansEmpty": "Aucune adresse bloquée.",
+  "adminBanUntil": "jusqu'au {date} · {count}ᵉ blocage",
+  "@adminBanUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminUnban": "Débloquer",
+  "adminUnbanned": "Adresse débloquée.",
+  "adminAuditHelp": "Les 100 dernières actions sensibles : qui, quoi, quand. Le contenu des changements n'est pas montré (il peut contenir les données d'un foyer).",
+  "adminAuditEmpty": "Rien pour l'instant.",
+  "adminAuditGroup": "groupe n° {id}",
+  "@adminAuditGroup": {
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "adminSystem": "serveur",
+  "menuAdmin": "Administration du serveur",
+  "error_cannot_block_self": "Vous ne pouvez pas bloquer votre propre compte.",
+  "error_user_not_found": "Compte introuvable.",
+  "error_mail_failed": "L'envoi du courriel a échoué : vérifiez les réglages SMTP dans docker/.env et le journal du serveur."
 }

@@ -615,6 +615,16 @@ class Endpoints extends _is.EndpointDispatch {
       name: 'admin',
       endpoint: endpoints['admin']!,
       methodConnectors: {
+        'isServerAdmin': _is.MethodConnector(
+          name: 'isServerAdmin',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .isServerAdmin(session),
+        ),
         'bannedIps': _is.MethodConnector(
           name: 'bannedIps',
           params: {},
@@ -643,6 +653,98 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['ip'],
                   ),
+        ),
+        'users': _is.MethodConnector(
+          name: 'users',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).users(
+                session,
+              ),
+        ),
+        'setBlocked': _is.MethodConnector(
+          name: 'setBlocked',
+          params: {
+            'authUserId': _is.ParameterDescription(
+              name: 'authUserId',
+              type: _is.getType<_is.UuidValue>(),
+              nullable: false,
+            ),
+            'blocked': _is.ParameterDescription(
+              name: 'blocked',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).setBlocked(
+                    session,
+                    params['authUserId'],
+                    params['blocked'],
+                  ),
+        ),
+        'health': _is.MethodConnector(
+          name: 'health',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).health(
+                session,
+              ),
+        ),
+        'stats': _is.MethodConnector(
+          name: 'stats',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).stats(
+                session,
+              ),
+        ),
+        'audit': _is.MethodConnector(
+          name: 'audit',
+          params: {
+            'limit': _is.ParameterDescription(
+              name: 'limit',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'offset': _is.ParameterDescription(
+              name: 'offset',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).audit(
+                session,
+                limit: params['limit'],
+                offset: params['offset'],
+              ),
+        ),
+        'sendTestEmail': _is.MethodConnector(
+          name: 'sendTestEmail',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .sendTestEmail(session),
         ),
       },
     );

@@ -12,6 +12,10 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
+import 'package:owncoffer_client/src/protocol/admin_audit_info.dart'
+    as _icr6cafh;
+import 'package:owncoffer_client/src/protocol/admin_user_info.dart'
+    as _i4kcqb5h;
 import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
 import 'package:owncoffer_client/src/protocol/bank_transaction.dart'
     as _ivksw0b3;
@@ -44,6 +48,10 @@ import 'account.dart' as _iulmo8pc;
 import 'account_access.dart' as _idkoqesg;
 import 'account_kind.dart' as _ifkquxga;
 import 'account_visibility.dart' as _ioxxcdxl;
+import 'admin_audit_info.dart' as _ie0chd06;
+import 'admin_health.dart' as _ihbeufm3;
+import 'admin_stats.dart' as _iqygks5s;
+import 'admin_user_info.dart' as _is8wfuq8;
 import 'balance_check.dart' as _ip4e316z;
 import 'bank_transaction.dart' as _i0mjlwv3;
 import 'budget_period.dart' as _ixjzi4yl;
@@ -114,6 +122,10 @@ export 'account.dart';
 export 'account_access.dart';
 export 'account_kind.dart';
 export 'account_visibility.dart';
+export 'admin_audit_info.dart';
+export 'admin_health.dart';
+export 'admin_stats.dart';
+export 'admin_user_info.dart';
 export 'balance_check.dart';
 export 'bank_transaction.dart';
 export 'budget_period.dart';
@@ -229,6 +241,18 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ioxxcdxl.AccountVisibility) {
       return _ioxxcdxl.AccountVisibility.fromJson(data) as T;
+    }
+    if (t == _ie0chd06.AdminAuditInfo) {
+      return _ie0chd06.AdminAuditInfo.fromJson(data) as T;
+    }
+    if (t == _ihbeufm3.AdminHealth) {
+      return _ihbeufm3.AdminHealth.fromJson(data) as T;
+    }
+    if (t == _iqygks5s.AdminStats) {
+      return _iqygks5s.AdminStats.fromJson(data) as T;
+    }
+    if (t == _is8wfuq8.AdminUserInfo) {
+      return _is8wfuq8.AdminUserInfo.fromJson(data) as T;
     }
     if (t == _ip4e316z.BalanceCheck) {
       return _ip4e316z.BalanceCheck.fromJson(data) as T;
@@ -443,6 +467,20 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_ioxxcdxl.AccountVisibility?>()) {
       return (data != null ? _ioxxcdxl.AccountVisibility.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ie0chd06.AdminAuditInfo?>()) {
+      return (data != null ? _ie0chd06.AdminAuditInfo.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ihbeufm3.AdminHealth?>()) {
+      return (data != null ? _ihbeufm3.AdminHealth.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iqygks5s.AdminStats?>()) {
+      return (data != null ? _iqygks5s.AdminStats.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_is8wfuq8.AdminUserInfo?>()) {
+      return (data != null ? _is8wfuq8.AdminUserInfo.fromJson(data) : null)
           as T;
     }
     if (t == _isc.getType<_ip4e316z.BalanceCheck?>()) {
@@ -699,6 +737,15 @@ class Protocol extends _isc.SerializationManager {
               : null)
           as T;
     }
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
+    }
+    if (t == List<_insyygng.MemberRole>) {
+      return (data as List)
+              .map((e) => deserialize<_insyygng.MemberRole>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_itcb21m0.CalendarItem>) {
       return (data as List)
               .map((e) => deserialize<_itcb21m0.CalendarItem>(e))
@@ -825,6 +872,18 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_i4kcqb5h.AdminUserInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_i4kcqb5h.AdminUserInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_icr6cafh.AdminAuditInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_icr6cafh.AdminAuditInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ivksw0b3.BankTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ivksw0b3.BankTransaction>(e))
@@ -927,6 +986,10 @@ class Protocol extends _isc.SerializationManager {
       _idkoqesg.AccountAccess => 'AccountAccess',
       _ifkquxga.AccountKind => 'AccountKind',
       _ioxxcdxl.AccountVisibility => 'AccountVisibility',
+      _ie0chd06.AdminAuditInfo => 'AdminAuditInfo',
+      _ihbeufm3.AdminHealth => 'AdminHealth',
+      _iqygks5s.AdminStats => 'AdminStats',
+      _is8wfuq8.AdminUserInfo => 'AdminUserInfo',
       _ip4e316z.BalanceCheck => 'BalanceCheck',
       _i0mjlwv3.BankTransaction => 'BankTransaction',
       _ixjzi4yl.BudgetPeriod => 'BudgetPeriod',
@@ -1016,6 +1079,14 @@ class Protocol extends _isc.SerializationManager {
         return 'AccountKind';
       case _ioxxcdxl.AccountVisibility():
         return 'AccountVisibility';
+      case _ie0chd06.AdminAuditInfo():
+        return 'AdminAuditInfo';
+      case _ihbeufm3.AdminHealth():
+        return 'AdminHealth';
+      case _iqygks5s.AdminStats():
+        return 'AdminStats';
+      case _is8wfuq8.AdminUserInfo():
+        return 'AdminUserInfo';
       case _ip4e316z.BalanceCheck():
         return 'BalanceCheck';
       case _i0mjlwv3.BankTransaction():
@@ -1182,6 +1253,18 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'AccountVisibility') {
       return deserialize<_ioxxcdxl.AccountVisibility>(data['data']);
+    }
+    if (dataClassName == 'AdminAuditInfo') {
+      return deserialize<_ie0chd06.AdminAuditInfo>(data['data']);
+    }
+    if (dataClassName == 'AdminHealth') {
+      return deserialize<_ihbeufm3.AdminHealth>(data['data']);
+    }
+    if (dataClassName == 'AdminStats') {
+      return deserialize<_iqygks5s.AdminStats>(data['data']);
+    }
+    if (dataClassName == 'AdminUserInfo') {
+      return deserialize<_is8wfuq8.AdminUserInfo>(data['data']);
     }
     if (dataClassName == 'BalanceCheck') {
       return deserialize<_ip4e316z.BalanceCheck>(data['data']);

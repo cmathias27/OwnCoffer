@@ -2,6 +2,20 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.7 (31 octobre 2026)
+
+### Administration du serveur
+
+- Nouveau bouton **« Administration du serveur »** dans la barre du haut, visible seulement par l'administrateur du serveur.
+- **Santé et chiffres** :
+  - version installée, durée de fonctionnement, base de données (joignable, taille), place des documents ;
+  - dernière vérification des alertes, écart d'horloge, envoi des courriels (SMTP ou journal), avec un bouton « Envoyer un courriel de test ».
+  - Chiffres du serveur, sans aucun montant : comptes utilisateurs (double authentification, bloqués), groupes, comptes bancaires, opérations, imports, règles, invitations en attente, et **taux de classement automatique** des 90 derniers jours par rapport à la cible de 70 %.
+- **Utilisateurs** : tous les comptes avec leurs groupes et rôles, double authentification, date de création et dernière activité. On peut **bloquer** un compte (il est déconnecté dans les minutes qui suivent et ne peut plus se connecter, rien n'est supprimé) ou le débloquer.
+- **IP bloquées** après trop d'échecs de connexion, avec un bouton pour les débloquer.
+- **Journal** des 100 dernières actions sensibles : qui, quoi, quand. Le contenu des changements n'est pas montré.
+- À venir : les sauvegardes et les mises à jour (automatiques ou non, à la demande, notes de version).
+
 ## 0.3.6 (31 octobre 2026)
 
 ### Simulateur d'achat

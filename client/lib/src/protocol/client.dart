@@ -17,6 +17,12 @@ import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
 import 'package:owncoffer_client/src/protocol/account_kind.dart' as _ighjli9i;
 import 'package:owncoffer_client/src/protocol/account_visibility.dart'
     as _i33sijhq;
+import 'package:owncoffer_client/src/protocol/admin_audit_info.dart'
+    as _icr6cafh;
+import 'package:owncoffer_client/src/protocol/admin_health.dart' as _in646bd3;
+import 'package:owncoffer_client/src/protocol/admin_stats.dart' as _ip1w2kia;
+import 'package:owncoffer_client/src/protocol/admin_user_info.dart'
+    as _i4kcqb5h;
 import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
 import 'package:owncoffer_client/src/protocol/bank_transaction.dart'
     as _ivksw0b3;
@@ -372,13 +378,22 @@ class EndpointAccount extends _isc.EndpointRef {
       );
 }
 
-/// Server administration (server administrator only).
+/// Server administration (server administrator only): accounts, health,
+/// figures, audit log, banned IPs. Nothing here shows a group's financial
+/// data: figures are counts, never amounts.
 /// {@category Endpoint}
 class EndpointAdmin extends _isc.EndpointRef {
   EndpointAdmin(_isc.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'admin';
+
+  /// Whether the signed-in user may open the administration page.
+  _ida.Future<bool> isServerAdmin() => caller.callServerEndpoint<bool>(
+    'admin',
+    'isServerAdmin',
+    {},
+  );
 
   _ida.Future<List<_ivw6xhv3.IpBanInfo>> bannedIps() =>
       caller.callServerEndpoint<List<_ivw6xhv3.IpBanInfo>>(
@@ -391,6 +406,63 @@ class EndpointAdmin extends _isc.EndpointRef {
     'admin',
     'unbanIp',
     {'ip': ip},
+  );
+
+  /// Every account of the server, oldest first.
+  _ida.Future<List<_i4kcqb5h.AdminUserInfo>> users() =>
+      caller.callServerEndpoint<List<_i4kcqb5h.AdminUserInfo>>(
+        'admin',
+        'users',
+        {},
+      );
+
+  /// Blocks (or unblocks) an account. A blocked account is signed out
+  /// everywhere and cannot sign in. The administrator cannot block himself.
+  _ida.Future<void> setBlocked(
+    _isc.UuidValue authUserId,
+    bool blocked,
+  ) => caller.callServerEndpoint<void>(
+    'admin',
+    'setBlocked',
+    {
+      'authUserId': authUserId,
+      'blocked': blocked,
+    },
+  );
+
+  _ida.Future<_in646bd3.AdminHealth> health() =>
+      caller.callServerEndpoint<_in646bd3.AdminHealth>(
+        'admin',
+        'health',
+        {},
+      );
+
+  _ida.Future<_ip1w2kia.AdminStats> stats() =>
+      caller.callServerEndpoint<_ip1w2kia.AdminStats>(
+        'admin',
+        'stats',
+        {},
+      );
+
+  /// The audit log, newest first: who did what and when, without the data.
+  _ida.Future<List<_icr6cafh.AdminAuditInfo>> audit({
+    int? limit,
+    int? offset,
+  }) => caller.callServerEndpoint<List<_icr6cafh.AdminAuditInfo>>(
+    'admin',
+    'audit',
+    {
+      'limit': limit,
+      'offset': offset,
+    },
+  );
+
+  /// Sends a test email to the administrator; returns the address. Without
+  /// SMTP configuration it is written to the server log.
+  _ida.Future<String> sendTestEmail() => caller.callServerEndpoint<String>(
+    'admin',
+    'sendTestEmail',
+    {},
   );
 }
 

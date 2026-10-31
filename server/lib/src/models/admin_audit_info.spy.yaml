@@ -1,0 +1,10 @@
+### One line of the audit log for the server administrator: who did what
+### and when, without the before / after snapshots (they may hold a group's
+### data).
+class: AdminAuditInfo
+fields:
+  createdAt: DateTime
+  action: String
+  entity: String
+  email: String?
+  groupId: int?

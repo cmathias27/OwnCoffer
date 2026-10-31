@@ -174,10 +174,16 @@ abstract final class AlertService {
 
   static Timer? _timer;
 
+  /// Last run of the hourly job and whether it went through (admin page).
+  static DateTime? lastRunAt;
+  static bool? lastRunOk;
+
   /// Starts the hourly check (first run one minute after start-up).
   static void start(Serverpod pod) {
     Future<void> run() async {
       final session = await pod.createSession(enableLogging: false);
+      lastRunAt = DateTime.now().toUtc();
+      lastRunOk = false;
       try {
         final n = await checkAll(
           session,
@@ -189,6 +195,7 @@ abstract final class AlertService {
           core.LocalDate.fromDateTime(DateTime.now().toUtc()),
         );
         if (g > 0) session.log('[alert] $g goal notification(s)');
+        lastRunOk = true;
       } finally {
         await session.close();
       }
