@@ -851,5 +851,15 @@
   "invoiceAttachLater": "Later",
   "invoiceAttached": "Invoice attached: {name}",
   "invoicesWaitingForThis": "Waiting invoices that could be this one's",
-  "invoiceAttachHere": "Attach here"
+  "invoiceAttachHere": "Attach here",
+  "scanTitle": "Crop the invoice",
+  "scanHelp": "Drag the 4 corners onto the invoice's: only the invoice is kept, straightened as by a scanner. All done on this device.",
+  "scanLoading": "Reading the photo…",
+  "scanUnreadable": "This image cannot be read here to crop it.",
+  "scanFailed": "Cropping failed. Keep the photo as it is, or try again with other corners.",
+  "scanKeepAsIs": "Keep as it is",
+  "scanEnhance": "Make it easier to read (white paper, dark text)",
+  "scanWholePhoto": "Whole photo",
+  "scanDetectAgain": "Corners found",
+  "scanApply": "Crop"
 }

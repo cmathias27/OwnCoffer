@@ -2413,5 +2413,15 @@
     }
   },
   "invoicesWaitingForThis": "Factures en attente qui pourraient être celle-ci",
-  "invoiceAttachHere": "Rattacher ici"
+  "invoiceAttachHere": "Rattacher ici",
+  "scanTitle": "Recadrer la facture",
+  "scanHelp": "Faites glisser les 4 coins sur ceux de la facture : seule la facture est gardée, redressée comme par un scanner. Tout se fait sur cet appareil.",
+  "scanLoading": "Lecture de la photo…",
+  "scanUnreadable": "Cette image ne peut pas être lue ici pour la recadrer.",
+  "scanFailed": "Le recadrage a échoué. Gardez la photo telle quelle, ou réessayez avec d'autres coins.",
+  "scanKeepAsIs": "Garder telle quelle",
+  "scanEnhance": "Améliorer la lisibilité (fond blanc, texte foncé)",
+  "scanWholePhoto": "Toute la photo",
+  "scanDetectAgain": "Coins trouvés",
+  "scanApply": "Recadrer"
 }

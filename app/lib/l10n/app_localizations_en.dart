@@ -3185,4 +3185,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invoiceAttachHere => 'Attach here';
+
+  @override
+  String get scanTitle => 'Crop the invoice';
+
+  @override
+  String get scanHelp =>
+      'Drag the 4 corners onto the invoice\'s: only the invoice is kept, straightened as by a scanner. All done on this device.';
+
+  @override
+  String get scanLoading => 'Reading the photo…';
+
+  @override
+  String get scanUnreadable => 'This image cannot be read here to crop it.';
+
+  @override
+  String get scanFailed =>
+      'Cropping failed. Keep the photo as it is, or try again with other corners.';
+
+  @override
+  String get scanKeepAsIs => 'Keep as it is';
+
+  @override
+  String get scanEnhance => 'Make it easier to read (white paper, dark text)';
+
+  @override
+  String get scanWholePhoto => 'Whole photo';
+
+  @override
+  String get scanDetectAgain => 'Corners found';
+
+  @override
+  String get scanApply => 'Crop';
 }
