@@ -259,7 +259,8 @@ class ForecastScreenState extends State<ForecastScreen> {
                         ),
                         lowestLabel: l.forecastLowestMark,
                         semanticLabel: l.forecastChartLabel,
-                        money: (c) => money(c - c.remainder(100)),
+                        money: money,
+                        axisMoney: (c) => money(c - c.remainder(100)),
                         day: context.shortDay,
                       ),
                       if (f.autoReconciledCount > 0)

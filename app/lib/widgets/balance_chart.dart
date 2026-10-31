@@ -13,7 +13,12 @@ class BalanceChart extends StatefulWidget {
   final String thresholdLabel;
   final String lowestLabel;
   final String semanticLabel;
+
+  /// Exact amount, for the tooltip.
   final String Function(int cents) money;
+
+  /// Rounded amount, for the axis.
+  final String Function(int cents) axisMoney;
   final String Function(DateTime date) day;
 
   const BalanceChart({
@@ -24,6 +29,7 @@ class BalanceChart extends StatefulWidget {
     required this.lowestLabel,
     required this.semanticLabel,
     required this.money,
+    required this.axisMoney,
     required this.day,
   });
 
@@ -65,6 +71,7 @@ class _BalanceChartState extends State<BalanceChart> {
                   thresholdLabel: widget.thresholdLabel,
                   lowestLabel: widget.lowestLabel,
                   money: widget.money,
+                  axisMoney: widget.axisMoney,
                   day: widget.day,
                   hover: _hover,
                   line: theme.colorScheme.primary,
@@ -97,6 +104,7 @@ class _ChartPainter extends CustomPainter {
   final String thresholdLabel;
   final String lowestLabel;
   final String Function(int) money;
+  final String Function(int) axisMoney;
   final String Function(DateTime) day;
   final int? hover;
   final Color line, critical, grid, surface, ink, muted, tooltipBg, tooltipInk;
@@ -107,6 +115,7 @@ class _ChartPainter extends CustomPainter {
     required this.thresholdLabel,
     required this.lowestLabel,
     required this.money,
+    required this.axisMoney,
     required this.day,
     required this.hover,
     required this.line,
@@ -150,7 +159,7 @@ class _ChartPainter extends CustomPainter {
       final v = lo + (hi - lo) * k ~/ 2;
       final gy = y(v);
       canvas.drawLine(Offset(plot.left, gy), Offset(plot.right, gy), gridPaint);
-      final t = _text(money(v), muted);
+      final t = _text(axisMoney(v), muted);
       t.paint(canvas, Offset(plot.left - t.width - 8, gy - t.height / 2));
     }
     for (final i in {0, (n - 1) ~/ 2, n - 1}) {
