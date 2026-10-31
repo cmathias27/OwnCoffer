@@ -2523,8 +2523,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminUptime => 'Running for';
 
   @override
-  String adminUptimeValue(int days, int hours) {
+  String adminUptimeDays(int days, int hours) {
     return '$days d $hours h';
+  }
+
+  @override
+  String adminUptimeHours(int hours, int minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String adminUptimeMinutes(int minutes) {
+    return '$minutes min';
   }
 
   @override

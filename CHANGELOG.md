@@ -2,6 +2,12 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.12 (31 octobre 2026)
+
+### Corrections
+
+- Administration du serveur : la **durée de fonctionnement** restait toujours proche de zéro, car l'heure de démarrage était relevée au premier affichage de la page et non au démarrage du serveur. Elle est maintenant juste, et s'affiche en heures et minutes pendant le premier jour.
+
 ## 0.3.11 (31 octobre 2026)
 
 ### Factures

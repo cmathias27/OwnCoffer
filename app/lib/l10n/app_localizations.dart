@@ -4129,11 +4129,23 @@ abstract class AppLocalizations {
   /// **'En marche depuis'**
   String get adminUptime;
 
-  /// No description provided for @adminUptimeValue.
+  /// No description provided for @adminUptimeDays.
   ///
   /// In fr, this message translates to:
   /// **'{days} j {hours} h'**
-  String adminUptimeValue(int days, int hours);
+  String adminUptimeDays(int days, int hours);
+
+  /// No description provided for @adminUptimeHours.
+  ///
+  /// In fr, this message translates to:
+  /// **'{hours} h {minutes} min'**
+  String adminUptimeHours(int hours, int minutes);
+
+  /// No description provided for @adminUptimeMinutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'{minutes} min'**
+  String adminUptimeMinutes(int minutes);
 
   /// No description provided for @adminDatabase.
   ///

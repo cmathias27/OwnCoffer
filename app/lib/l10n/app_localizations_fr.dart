@@ -2536,8 +2536,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get adminUptime => 'En marche depuis';
 
   @override
-  String adminUptimeValue(int days, int hours) {
+  String adminUptimeDays(int days, int hours) {
     return '$days j $hours h';
+  }
+
+  @override
+  String adminUptimeHours(int hours, int minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String adminUptimeMinutes(int minutes) {
+    return '$minutes min';
   }
 
   @override
