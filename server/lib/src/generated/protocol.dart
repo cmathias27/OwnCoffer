@@ -12,6 +12,10 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
+import 'package:owncoffer_server/src/generated/admin_audit_info.dart'
+    as _i1g569d8;
+import 'package:owncoffer_server/src/generated/admin_user_info.dart'
+    as _i3ew1lpl;
 import 'package:owncoffer_server/src/generated/balance_check.dart' as _i0mjy83n;
 import 'package:owncoffer_server/src/generated/bank_transaction.dart'
     as _ivm4hoam;
@@ -45,6 +49,10 @@ import 'account.dart' as _iulmo8pc;
 import 'account_access.dart' as _idkoqesg;
 import 'account_kind.dart' as _ifkquxga;
 import 'account_visibility.dart' as _ioxxcdxl;
+import 'admin_audit_info.dart' as _ie0chd06;
+import 'admin_health.dart' as _ihbeufm3;
+import 'admin_stats.dart' as _iqygks5s;
+import 'admin_user_info.dart' as _is8wfuq8;
 import 'audit_entry.dart' as _i1613bfs;
 import 'backup_code.dart' as _i0b7vj86;
 import 'balance_check.dart' as _ip4e316z;
@@ -120,6 +128,10 @@ export 'account.dart';
 export 'account_access.dart';
 export 'account_kind.dart';
 export 'account_visibility.dart';
+export 'admin_audit_info.dart';
+export 'admin_health.dart';
+export 'admin_stats.dart';
+export 'admin_user_info.dart';
 export 'audit_entry.dart';
 export 'backup_code.dart';
 export 'balance_check.dart';
@@ -2630,6 +2642,18 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ioxxcdxl.AccountVisibility) {
       return _ioxxcdxl.AccountVisibility.fromJson(data) as T;
     }
+    if (t == _ie0chd06.AdminAuditInfo) {
+      return _ie0chd06.AdminAuditInfo.fromJson(data) as T;
+    }
+    if (t == _ihbeufm3.AdminHealth) {
+      return _ihbeufm3.AdminHealth.fromJson(data) as T;
+    }
+    if (t == _iqygks5s.AdminStats) {
+      return _iqygks5s.AdminStats.fromJson(data) as T;
+    }
+    if (t == _is8wfuq8.AdminUserInfo) {
+      return _is8wfuq8.AdminUserInfo.fromJson(data) as T;
+    }
     if (t == _i1613bfs.AuditEntry) {
       return _i1613bfs.AuditEntry.fromJson(data) as T;
     }
@@ -2858,6 +2882,20 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_ioxxcdxl.AccountVisibility?>()) {
       return (data != null ? _ioxxcdxl.AccountVisibility.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ie0chd06.AdminAuditInfo?>()) {
+      return (data != null ? _ie0chd06.AdminAuditInfo.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ihbeufm3.AdminHealth?>()) {
+      return (data != null ? _ihbeufm3.AdminHealth.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iqygks5s.AdminStats?>()) {
+      return (data != null ? _iqygks5s.AdminStats.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_is8wfuq8.AdminUserInfo?>()) {
+      return (data != null ? _is8wfuq8.AdminUserInfo.fromJson(data) : null)
           as T;
     }
     if (t == _is.getType<_i1613bfs.AuditEntry?>()) {
@@ -3129,6 +3167,15 @@ class Protocol extends _is.DatabaseSerializationManager {
               : null)
           as T;
     }
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
+    }
+    if (t == List<_insyygng.MemberRole>) {
+      return (data as List)
+              .map((e) => deserialize<_insyygng.MemberRole>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_itcb21m0.CalendarItem>) {
       return (data as List)
               .map((e) => deserialize<_itcb21m0.CalendarItem>(e))
@@ -3255,6 +3302,18 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_i3ew1lpl.AdminUserInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_i3ew1lpl.AdminUserInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i1g569d8.AdminAuditInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_i1g569d8.AdminAuditInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ivm4hoam.BankTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ivm4hoam.BankTransaction>(e))
@@ -3360,6 +3419,10 @@ class Protocol extends _is.DatabaseSerializationManager {
       _idkoqesg.AccountAccess => 'AccountAccess',
       _ifkquxga.AccountKind => 'AccountKind',
       _ioxxcdxl.AccountVisibility => 'AccountVisibility',
+      _ie0chd06.AdminAuditInfo => 'AdminAuditInfo',
+      _ihbeufm3.AdminHealth => 'AdminHealth',
+      _iqygks5s.AdminStats => 'AdminStats',
+      _is8wfuq8.AdminUserInfo => 'AdminUserInfo',
       _i1613bfs.AuditEntry => 'AuditEntry',
       _i0b7vj86.BackupCode => 'BackupCode',
       _ip4e316z.BalanceCheck => 'BalanceCheck',
@@ -3454,6 +3517,14 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'AccountKind';
       case _ioxxcdxl.AccountVisibility():
         return 'AccountVisibility';
+      case _ie0chd06.AdminAuditInfo():
+        return 'AdminAuditInfo';
+      case _ihbeufm3.AdminHealth():
+        return 'AdminHealth';
+      case _iqygks5s.AdminStats():
+        return 'AdminStats';
+      case _is8wfuq8.AdminUserInfo():
+        return 'AdminUserInfo';
       case _i1613bfs.AuditEntry():
         return 'AuditEntry';
       case _i0b7vj86.BackupCode():
@@ -3634,6 +3705,18 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'AccountVisibility') {
       return deserialize<_ioxxcdxl.AccountVisibility>(data['data']);
+    }
+    if (dataClassName == 'AdminAuditInfo') {
+      return deserialize<_ie0chd06.AdminAuditInfo>(data['data']);
+    }
+    if (dataClassName == 'AdminHealth') {
+      return deserialize<_ihbeufm3.AdminHealth>(data['data']);
+    }
+    if (dataClassName == 'AdminStats') {
+      return deserialize<_iqygks5s.AdminStats>(data['data']);
+    }
+    if (dataClassName == 'AdminUserInfo') {
+      return deserialize<_is8wfuq8.AdminUserInfo>(data['data']);
     }
     if (dataClassName == 'AuditEntry') {
       return deserialize<_i1613bfs.AuditEntry>(data['data']);

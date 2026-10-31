@@ -18,8 +18,15 @@ account:
   - checkBalance:
   - balanceChecks:
 admin:
+  - isServerAdmin:
   - bannedIps:
   - unbanIp:
+  - users:
+  - setBlocked:
+  - health:
+  - stats:
+  - audit:
+  - sendTestEmail:
 analysis:
   - report:
   - operations:

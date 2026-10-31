@@ -1,0 +1,15 @@
+### An account of the server, as shown to the server administrator (no
+### financial data).
+class: AdminUserInfo
+fields:
+  authUserId: UuidValue
+  email: String?
+  createdAt: DateTime
+  ### Last session refresh (sign-in or use of the app), if any.
+  lastActiveAt: DateTime?
+  twoFactor: bool
+  blocked: bool
+  serverAdmin: bool
+  ### Groups and roles, same order.
+  groupNames: List<String>
+  roles: List<MemberRole>

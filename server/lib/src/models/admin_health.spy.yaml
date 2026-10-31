@@ -1,0 +1,16 @@
+### State of the server (server administrator only).
+class: AdminHealth
+fields:
+  ### Installed version ("dev" outside a published image).
+  version: String
+  startedAt: DateTime
+  serverTime: DateTime
+  databaseOk: bool
+  databaseBytes: int?
+  ### Documents kept in the database (loan documents).
+  documentsBytes: int
+  smtpConfigured: bool
+  publicUrl: String
+  ### Last run of the hourly alert job, and whether it went through.
+  alertsRunAt: DateTime?
+  alertsRunOk: bool?

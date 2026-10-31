@@ -2507,4 +2507,229 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get purchaseHowPlanned =>
       'Calculé par le moteur de prévision : opérations prévues seulement. En plusieurs fois : mensualités arrondies au centime supérieur, la dernière ajuste ; sans frais.';
+
+  @override
+  String get adminTitle => 'Administration du serveur';
+
+  @override
+  String get adminRefresh => 'Actualiser';
+
+  @override
+  String get adminTabHealth => 'Santé et chiffres';
+
+  @override
+  String get adminTabUsers => 'Utilisateurs';
+
+  @override
+  String get adminTabSecurity => 'IP bloquées';
+
+  @override
+  String get adminTabAudit => 'Journal';
+
+  @override
+  String get adminHealth => 'État du serveur';
+
+  @override
+  String get adminVersion => 'Version installée';
+
+  @override
+  String get adminUptime => 'En marche depuis';
+
+  @override
+  String adminUptimeValue(int days, int hours) {
+    return '$days j $hours h';
+  }
+
+  @override
+  String get adminDatabase => 'Base de données';
+
+  @override
+  String get adminUnreachable => 'injoignable';
+
+  @override
+  String get adminOk => 'OK';
+
+  @override
+  String get adminFailed => 'en échec';
+
+  @override
+  String get adminNotYet => 'pas encore';
+
+  @override
+  String get adminDocuments => 'Documents stockés';
+
+  @override
+  String get adminAlertsJob => 'Dernière vérification des alertes';
+
+  @override
+  String get adminClock => 'Horloge du serveur';
+
+  @override
+  String adminClockDrift(int seconds) {
+    return 'écart de $seconds s avec cet appareil';
+  }
+
+  @override
+  String get adminEmail => 'Envoi des courriels';
+
+  @override
+  String get adminEmailSmtp => 'serveur SMTP configuré';
+
+  @override
+  String get adminEmailLog =>
+      'non configuré : écrits dans le journal du serveur';
+
+  @override
+  String get adminTestEmail => 'Envoyer un courriel de test';
+
+  @override
+  String adminTestEmailSent(String email) {
+    return 'Courriel de test envoyé à $email.';
+  }
+
+  @override
+  String get adminTestEmailLogged =>
+      'SMTP non configuré : le courriel de test est écrit dans le journal du serveur.';
+
+  @override
+  String get adminPublicUrl => 'Adresse publique';
+
+  @override
+  String get adminStats => 'Chiffres du serveur (aucun montant)';
+
+  @override
+  String get adminStatUsers => 'Comptes utilisateurs';
+
+  @override
+  String adminStatUsersValue(int count, int twoFactor, int blocked) {
+    return '$count · double authentification : $twoFactor · bloqués : $blocked';
+  }
+
+  @override
+  String get adminStatGroups => 'Groupes (foyers)';
+
+  @override
+  String get adminStatAccounts => 'Comptes bancaires';
+
+  @override
+  String get adminStatOperations => 'Opérations';
+
+  @override
+  String adminStatOperationsValue(int count, int recent) {
+    return '$count · $recent ajoutées en 30 jours';
+  }
+
+  @override
+  String get adminStatImports => 'Imports en 30 jours';
+
+  @override
+  String get adminStatRules => 'Règles des groupes';
+
+  @override
+  String get adminStatInvitations => 'Invitations en attente';
+
+  @override
+  String get adminStatAuto => 'Classement automatique (90 jours)';
+
+  @override
+  String adminStatAutoHelp(int auto, int manual, int none) {
+    return 'Opérations importées : $auto classées automatiquement, $manual à la main, $none à classer. Objectif de l\'alpha : 70 % (décision 0014).';
+  }
+
+  @override
+  String get adminUsersHelp =>
+      'Tous les comptes du serveur. Un compte bloqué est déconnecté partout et ne peut plus se connecter ; ses données restent intactes.';
+
+  @override
+  String get adminServerAdmin => 'administrateur du serveur';
+
+  @override
+  String get adminTwoFactorOn => 'double authentification';
+
+  @override
+  String get adminTwoFactorOff => 'sans double authentification';
+
+  @override
+  String adminCreated(String date) {
+    return 'créé le $date';
+  }
+
+  @override
+  String adminLastActive(String date) {
+    return 'actif le $date';
+  }
+
+  @override
+  String get adminNeverActive => 'jamais connecté';
+
+  @override
+  String get adminBlocked => 'bloqué';
+
+  @override
+  String get adminBlock => 'Bloquer';
+
+  @override
+  String get adminUnblock => 'Débloquer';
+
+  @override
+  String adminBlockTitle(String email) {
+    return 'Bloquer $email ?';
+  }
+
+  @override
+  String get adminBlockHelp =>
+      'Le compte sera déconnecté dans les minutes qui viennent et ne pourra plus se connecter. Rien n\'est supprimé ; vous pourrez le débloquer.';
+
+  @override
+  String get adminUserBlocked => 'Compte bloqué.';
+
+  @override
+  String get adminUserUnblocked => 'Compte débloqué.';
+
+  @override
+  String get adminBansHelp =>
+      'Adresses IP bloquées après trop d\'échecs de connexion. La durée double à chaque récidive.';
+
+  @override
+  String get adminBansEmpty => 'Aucune adresse bloquée.';
+
+  @override
+  String adminBanUntil(String date, int count) {
+    return 'jusqu\'au $date · $countᵉ blocage';
+  }
+
+  @override
+  String get adminUnban => 'Débloquer';
+
+  @override
+  String get adminUnbanned => 'Adresse débloquée.';
+
+  @override
+  String get adminAuditHelp =>
+      'Les 100 dernières actions sensibles : qui, quoi, quand. Le contenu des changements n\'est pas montré (il peut contenir les données d\'un foyer).';
+
+  @override
+  String get adminAuditEmpty => 'Rien pour l\'instant.';
+
+  @override
+  String adminAuditGroup(int id) {
+    return 'groupe n° $id';
+  }
+
+  @override
+  String get adminSystem => 'serveur';
+
+  @override
+  String get menuAdmin => 'Administration du serveur';
+
+  @override
+  String get error_cannot_block_self =>
+      'Vous ne pouvez pas bloquer votre propre compte.';
+
+  @override
+  String get error_user_not_found => 'Compte introuvable.';
+
+  @override
+  String get error_mail_failed =>
+      'L\'envoi du courriel a échoué : vérifiez les réglages SMTP dans docker/.env et le journal du serveur.';
 }

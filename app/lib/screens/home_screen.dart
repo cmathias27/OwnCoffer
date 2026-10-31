@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../state/session.dart';
 import '../widgets/form_card.dart';
 import 'accounts_screen.dart';
+import 'admin_screen.dart';
 import 'budget_screen.dart';
 import 'categories_screen.dart';
 import 'forecast_screen.dart';
@@ -28,6 +29,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  /// Shows the server administration button.
+  var _isServerAdmin = false;
   var _tab = 0;
   List<Account> _accounts = [];
   Account? _openAccount;
@@ -51,6 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadAccounts();
+    client.admin.isServerAdmin().then((v) {
+      if (mounted && v) setState(() => _isServerAdmin = true);
+    }, onError: (_) {});
     _loadUnread();
     // The server checks forecasts every hour; a light refresh of the badge.
     _unreadTimer = Timer.periodic(
@@ -264,6 +270,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute<void>(
                   builder: (_) => MembersScreen(membership: current),
                 ),
+              ),
+            ),
+          if (_isServerAdmin)
+            IconButton(
+              tooltip: l.menuAdmin,
+              icon: const Icon(Icons.admin_panel_settings_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => const AdminScreen()),
               ),
             ),
           IconButton(
