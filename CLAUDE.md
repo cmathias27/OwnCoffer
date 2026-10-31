@@ -45,6 +45,11 @@ docs/     cahier des charges, roadbook, décisions
 - **Licences** : toute dépendance ajoutée doit être compatible AGPL-3.0.
 - Une seule banque au départ : **Caisse d'Épargne** (décision 0003) ; isoler ses particularités dans un module dédié.
 
+## Instance de l'utilisateur (ne jamais y toucher)
+
+- L'instance réelle tourne dans `/opt/docker/owncoffer` (projet Docker `owncoffer`, port 8095) avec les vraies données bancaires. **Ne jamais** y lancer de commande (`down`, `exec`, `psql`, `restart`, édition de fichiers) ni lire ses données ou ses sauvegardes. Seule la tâche systemd `owncoffer-update` la met à jour, avec les versions publiées.
+- Les essais locaux utilisent **toujours** un autre projet : `docker compose -p owncoffer-test --env-file docker/.env.test …` (port 18080) et une image locale `:dev-local`, jamais `docker compose -f docker/compose.yaml` seul (son nom de projet est `owncoffer`).
+
 ## Pièges connus (Serverpod 4)
 
 - Un paramètre nommé **avec valeur par défaut** dans un point d'accès devient **obligatoire** côté client : utiliser un type nullable sans valeur par défaut (`bool? x`) et appliquer la valeur par défaut dans le corps.
