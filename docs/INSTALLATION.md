@@ -48,7 +48,9 @@ Les migrations de la base s'appliquent automatiquement au démarrage.
 ./docker/backup.sh            # écrit docker/backups/owncoffer-<date>-manual.dump
 ```
 
-Avec les mises à jour automatiques (plus bas), une sauvegarde est faite chaque nuit et avant chaque mise à jour. Les 30 dernières sont gardées **sur le même serveur** : copiez régulièrement `docker/backups/` ailleurs.
+Avec les mises à jour automatiques (plus bas), une sauvegarde est faite chaque nuit et avant chaque mise à jour. Sont gardées **sur le même serveur** les 30 dernières de nuit, les 10 dernières manuelles et les 10 dernières d'avant mise à jour : copiez régulièrement `docker/backups/` ailleurs.
+
+La page **Administration du serveur** de l'application (onglet Sauvegardes) montre leur liste, signale une sauvegarde de nuit manquante ou en échec, et permet d'en demander une tout de suite (une toutes les 10 minutes au plus). Elle ne permet ni de télécharger ni de restaurer une sauvegarde : cela se fait sur le serveur.
 
 Le fichier contient vos opérations bancaires : rangez-le dans un endroit chiffré, jamais dans le dépôt. Gardez aussi une copie de `docker/.env`, sans laquelle la double authentification ne se déchiffre plus.
 
@@ -77,7 +79,7 @@ Les migrations de la base s'appliquent au démarrage.
 
 ## Mises à jour automatiques (recommandé)
 
-Pour recevoir chaque **version publiée** sans intervenir, installez les deux minuteries systemd (en root, depuis le dossier d'installation) :
+Pour recevoir chaque **version publiée** sans intervenir, installez les unités systemd (en root, depuis le dossier d'installation) :
 
 ```sh
 ./docker/install-auto-update.sh
@@ -85,7 +87,10 @@ Pour recevoir chaque **version publiée** sans intervenir, installez les deux mi
 
 - `owncoffer-update.timer`, toutes les 15 minutes : si une nouvelle version `vX.Y.Z` est publiée et son image disponible, `docker/auto-update.sh` **sauvegarde la base**, passe les fichiers et l'image à cette version, redémarre et vérifie que l'API répond. Sinon, il **revient à la version précédente et restaure la sauvegarde**, puis n'essaie plus cette version : il attend la suivante. L'image `edge` (développement) n'est jamais installée ainsi.
 - `owncoffer-backup.timer`, chaque nuit à 3 h 30 : sauvegarde dans `docker/backups/` (30 dernières gardées, dossier lisible par root seulement).
-- Journal : `journalctl -u owncoffer-update -u owncoffer-backup`.
+- `owncoffer-request.path` : dès que la page d'administration dépose une demande dans `docker/state/`, `docker/handle-requests.sh` l'exécute. Seules des actions prévues à l'avance sont possibles (une sauvegarde), quel que soit le contenu des fichiers.
+- `docker/state/` est le **dossier d'échange** entre l'hôte et l'application (monté dans le conteneur, appartenant à l'utilisateur 10001 de l'image) : les scripts y écrivent la liste des sauvegardes et leur résultat, l'application y dépose ses demandes. Il ne contient jamais de données bancaires.
+- Journal : `journalctl -u owncoffer-update -u owncoffer-backup -u owncoffer-request`.
+- Une installation antérieure à la 0.3.8 reçoit `owncoffer-request.path` et le dossier d'échange toute seule, à la mise à jour automatique suivante. Pour ne pas attendre : relancez `./docker/install-auto-update.sh`, que l'on peut lancer autant de fois qu'on veut.
 
 Le script refuse d'agir si des fichiers suivis par git ont été modifiés à la main dans le dossier d'installation : réglez tout dans `docker/.env`.
 

@@ -13,6 +13,7 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'cannot_block_self' => l.error_cannot_block_self,
   'user_not_found' => l.error_user_not_found,
   'mail_failed' => l.error_mail_failed,
+  'host_bridge_missing' => l.error_host_bridge_missing,
   'invalid_name' => l.error_invalid_name,
   'invalid_email' => l.error_invalid_email,
   'amount_out_of_range' => l.error_amount_out_of_range,

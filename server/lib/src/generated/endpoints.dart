@@ -736,6 +736,26 @@ class Endpoints extends _is.EndpointDispatch {
                 offset: params['offset'],
               ),
         ),
+        'backups': _is.MethodConnector(
+          name: 'backups',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .backups(session),
+        ),
+        'requestBackup': _is.MethodConnector(
+          name: 'requestBackup',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .requestBackup(session),
+        ),
         'sendTestEmail': _is.MethodConnector(
           name: 'sendTestEmail',
           params: {},

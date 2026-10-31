@@ -52,6 +52,8 @@ import 'admin_audit_info.dart' as _ie0chd06;
 import 'admin_health.dart' as _ihbeufm3;
 import 'admin_stats.dart' as _iqygks5s;
 import 'admin_user_info.dart' as _is8wfuq8;
+import 'backup_info.dart' as _i73uehc4;
+import 'backup_overview.dart' as _in8hkpoa;
 import 'balance_check.dart' as _ip4e316z;
 import 'bank_transaction.dart' as _i0mjlwv3;
 import 'budget_period.dart' as _ixjzi4yl;
@@ -126,6 +128,8 @@ export 'admin_audit_info.dart';
 export 'admin_health.dart';
 export 'admin_stats.dart';
 export 'admin_user_info.dart';
+export 'backup_info.dart';
+export 'backup_overview.dart';
 export 'balance_check.dart';
 export 'bank_transaction.dart';
 export 'budget_period.dart';
@@ -253,6 +257,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _is8wfuq8.AdminUserInfo) {
       return _is8wfuq8.AdminUserInfo.fromJson(data) as T;
+    }
+    if (t == _i73uehc4.BackupInfo) {
+      return _i73uehc4.BackupInfo.fromJson(data) as T;
+    }
+    if (t == _in8hkpoa.BackupOverview) {
+      return _in8hkpoa.BackupOverview.fromJson(data) as T;
     }
     if (t == _ip4e316z.BalanceCheck) {
       return _ip4e316z.BalanceCheck.fromJson(data) as T;
@@ -481,6 +491,13 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_is8wfuq8.AdminUserInfo?>()) {
       return (data != null ? _is8wfuq8.AdminUserInfo.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_i73uehc4.BackupInfo?>()) {
+      return (data != null ? _i73uehc4.BackupInfo.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_in8hkpoa.BackupOverview?>()) {
+      return (data != null ? _in8hkpoa.BackupOverview.fromJson(data) : null)
           as T;
     }
     if (t == _isc.getType<_ip4e316z.BalanceCheck?>()) {
@@ -746,6 +763,12 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_i73uehc4.BackupInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_i73uehc4.BackupInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_itcb21m0.CalendarItem>) {
       return (data as List)
               .map((e) => deserialize<_itcb21m0.CalendarItem>(e))
@@ -990,6 +1013,8 @@ class Protocol extends _isc.SerializationManager {
       _ihbeufm3.AdminHealth => 'AdminHealth',
       _iqygks5s.AdminStats => 'AdminStats',
       _is8wfuq8.AdminUserInfo => 'AdminUserInfo',
+      _i73uehc4.BackupInfo => 'BackupInfo',
+      _in8hkpoa.BackupOverview => 'BackupOverview',
       _ip4e316z.BalanceCheck => 'BalanceCheck',
       _i0mjlwv3.BankTransaction => 'BankTransaction',
       _ixjzi4yl.BudgetPeriod => 'BudgetPeriod',
@@ -1087,6 +1112,10 @@ class Protocol extends _isc.SerializationManager {
         return 'AdminStats';
       case _is8wfuq8.AdminUserInfo():
         return 'AdminUserInfo';
+      case _i73uehc4.BackupInfo():
+        return 'BackupInfo';
+      case _in8hkpoa.BackupOverview():
+        return 'BackupOverview';
       case _ip4e316z.BalanceCheck():
         return 'BalanceCheck';
       case _i0mjlwv3.BankTransaction():
@@ -1265,6 +1294,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'AdminUserInfo') {
       return deserialize<_is8wfuq8.AdminUserInfo>(data['data']);
+    }
+    if (dataClassName == 'BackupInfo') {
+      return deserialize<_i73uehc4.BackupInfo>(data['data']);
+    }
+    if (dataClassName == 'BackupOverview') {
+      return deserialize<_in8hkpoa.BackupOverview>(data['data']);
     }
     if (dataClassName == 'BalanceCheck') {
       return deserialize<_ip4e316z.BalanceCheck>(data['data']);

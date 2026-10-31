@@ -13,6 +13,13 @@ cd "$(dirname "$0")/.."
 log() { echo "[owncoffer-update] $*"; }
 compose() { docker compose -f docker/compose.yaml "$@"; }
 
+# Installations made before the administration page (0.3.8) lack the
+# request unit and the shared folder: add them once (we run as root).
+if [[ $(id -u) == 0 && ! -f /etc/systemd/system/owncoffer-request.path ]]; then
+  log "installing the units of the administration page"
+  docker/install-auto-update.sh --quiet || log "could not install them"
+fi
+
 # The installed version is the image tag in docker/.env (this script keeps
 # it in step with the files); "edge" or a custom tag is never touched.
 current="v$(sed -n 's/^OWNCOFFER_TAG=//p' docker/.env)"

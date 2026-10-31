@@ -1,0 +1,16 @@
+### Backups as reported by the host scripts through docker/state/.
+class: BackupOverview
+fields:
+  ### The shared folder is mounted (false: older installation, or a
+  ### development server).
+  available: bool
+  ### Newest first.
+  backups: List<BackupInfo>
+  lastAt: DateTime?
+  lastLabel: String?
+  lastOk: bool?
+  lastMessage: String?
+  ### Newest nightly backup.
+  lastDailyAt: DateTime?
+  ### A manual backup was asked for and not yet carried out.
+  requestPending: bool

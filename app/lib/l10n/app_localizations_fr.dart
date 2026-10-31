@@ -2732,4 +2732,69 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_mail_failed =>
       'L\'envoi du courriel a échoué : vérifiez les réglages SMTP dans docker/.env et le journal du serveur.';
+
+  @override
+  String get adminTabBackups => 'Sauvegardes';
+
+  @override
+  String get adminBackupsUnavailable =>
+      'Le dossier d\'échange avec le serveur hôte (docker/state) n\'est pas monté. Il est installé tout seul par la prochaine mise à jour automatique, ou tout de suite avec cette commande lancée en root dans le dossier d\'OwnCoffer :';
+
+  @override
+  String get adminBackupNoNightly =>
+      'Aucune sauvegarde de nuit pour l\'instant.';
+
+  @override
+  String adminBackupNightlyOk(String date) {
+    return 'Dernière sauvegarde de nuit : $date';
+  }
+
+  @override
+  String adminBackupNightlyLate(String date) {
+    return 'Pas de sauvegarde de nuit depuis le $date : vérifiez owncoffer-backup.timer.';
+  }
+
+  @override
+  String adminBackupLastFailed(String date, String message) {
+    return 'La dernière sauvegarde a échoué ($date) : $message';
+  }
+
+  @override
+  String get adminBackupNow => 'Sauvegarder maintenant';
+
+  @override
+  String get adminBackupPending => 'Demandée, en cours sur le serveur…';
+
+  @override
+  String get adminBackupRequested =>
+      'Sauvegarde demandée : elle apparaît ici dans quelques secondes (une toutes les 10 minutes au plus).';
+
+  @override
+  String get adminBackupsHelp =>
+      'Gardées sur le même serveur, dans docker/backups/ : 30 de nuit, 10 manuelles, 10 avant mise à jour. Copiez-les régulièrement ailleurs (disque, autre machine).';
+
+  @override
+  String get adminBackupsEmpty => 'Aucune sauvegarde.';
+
+  @override
+  String get adminBackupDaily => 'De nuit';
+
+  @override
+  String get adminBackupManual => 'Manuelle';
+
+  @override
+  String adminBackupBefore(String version) {
+    return 'Avant la mise à jour $version';
+  }
+
+  @override
+  String get adminRestoreTitle => 'Restaurer une sauvegarde';
+
+  @override
+  String get adminRestoreHelp =>
+      'Sur le serveur seulement, dans le dossier d\'OwnCoffer : restaurer remplace toutes les données actuelles. Faites d\'abord une sauvegarde.';
+
+  @override
+  String get error_host_bridge_missing =>
+      'Le dossier d\'échange avec le serveur hôte (docker/state) n\'est pas accessible.';
 }

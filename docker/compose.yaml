@@ -51,6 +51,11 @@ services:
       OWNCOFFER_BAN_WINDOW_MINUTES: ${OWNCOFFER_BAN_WINDOW_MINUTES:-15}
       OWNCOFFER_BAN_MINUTES: ${OWNCOFFER_BAN_MINUTES:-60}
       OWNCOFFER_RATE_LIMIT_PER_MINUTE: ${OWNCOFFER_RATE_LIMIT_PER_MINUTE:-600}
+      OWNCOFFER_STATE_DIR: /app/state
+    volumes:
+      # Shared with the host scripts (administration page): backups list,
+      # update state, requests. Never bank data.
+      - ./state:/app/state
     networks: [owncoffer]
 
   postgres:

@@ -726,5 +726,22 @@
   "menuAdmin": "Server administration",
   "error_cannot_block_self": "You cannot block your own account.",
   "error_user_not_found": "Account not found.",
-  "error_mail_failed": "Sending the email failed: check the SMTP settings in docker/.env and the server log."
+  "error_mail_failed": "Sending the email failed: check the SMTP settings in docker/.env and the server log.",
+  "adminTabBackups": "Backups",
+  "adminBackupsUnavailable": "The folder shared with the host (docker/state) is not mounted. The next automatic update installs it, or run this command as root in the OwnCoffer folder now:",
+  "adminBackupNoNightly": "No nightly backup yet.",
+  "adminBackupNightlyOk": "Last nightly backup: {date}",
+  "adminBackupNightlyLate": "No nightly backup since {date}: check owncoffer-backup.timer.",
+  "adminBackupLastFailed": "The last backup failed ({date}): {message}",
+  "adminBackupNow": "Back up now",
+  "adminBackupPending": "Requested, running on the server…",
+  "adminBackupRequested": "Backup requested: it shows here within seconds (at most one every 10 minutes).",
+  "adminBackupsHelp": "Kept on the same server, in docker/backups/: 30 nightly, 10 manual, 10 before an update. Copy them elsewhere regularly (disk, another machine).",
+  "adminBackupsEmpty": "No backup.",
+  "adminBackupDaily": "Nightly",
+  "adminBackupManual": "Manual",
+  "adminBackupBefore": "Before update {version}",
+  "adminRestoreTitle": "Restore a backup",
+  "adminRestoreHelp": "On the server only, in the OwnCoffer folder: restoring replaces all current data. Back up first.",
+  "error_host_bridge_missing": "The folder shared with the host (docker/state) is not reachable."
 }

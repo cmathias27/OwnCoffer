@@ -6,6 +6,7 @@ import 'package:serverpod_auth_idp_server/core.dart';
 
 import '../finance/alert_service.dart';
 import '../generated/protocol.dart';
+import '../host/host_state.dart';
 import '../mail/mail_service.dart';
 import '../onboarding/onboarding.dart';
 import '../security/access.dart';
@@ -251,6 +252,24 @@ class AdminEndpoint extends Endpoint {
           groupId: a.groupId,
         ),
     ];
+  }
+
+  /// Backups kept on the host, as reported by its scripts.
+  Future<BackupOverview> backups(Session session) async {
+    await _requireServerAdmin(session);
+    return HostState.instance.backups();
+  }
+
+  /// Asks the host for a backup now (carried out within seconds by
+  /// docker/handle-requests.sh; at most one every 10 minutes).
+  Future<void> requestBackup(Session session) async {
+    await _requireServerAdmin(session);
+    try {
+      HostState.instance.request('backup');
+    } on FileSystemException {
+      throw InvalidInputException(code: 'host_bridge_missing');
+    }
+    await _audit(session, 'request_backup', 'host', 'backup');
   }
 
   /// Sends a test email to the administrator; returns the address. Without

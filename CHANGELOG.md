@@ -2,6 +2,20 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.8 (31 octobre 2026)
+
+### Administration du serveur : sauvegardes
+
+- Nouvel onglet **Sauvegardes** :
+  - date de la dernière sauvegarde de nuit, en rouge si elle a plus de 36 heures ou si la dernière sauvegarde a échoué (avec la raison) ;
+  - bouton **« Sauvegarder maintenant »**, une sauvegarde toutes les 10 minutes au plus ;
+  - liste des sauvegardes (de nuit, manuelles, avant mise à jour) avec leur date et leur taille ;
+  - comment restaurer : sur le serveur seulement, la commande est donnée.
+- Les sauvegardes ne sont ni téléchargeables ni restaurables depuis le web : elles contiennent toutes les données bancaires.
+- Sont gardées les 30 dernières de nuit, les 10 dernières manuelles et les 10 dernières d'avant mise à jour, pour que des sauvegardes manuelles ne fassent jamais disparaître celles de nuit.
+- **Sur le serveur**, un dossier d'échange `docker/state/` relie l'application aux scripts de l'hôte, sans jamais contenir de données bancaires. Une unité systemd `owncoffer-request.path` exécute aussitôt les demandes de la page. Avec les mises à jour automatiques, l'ensemble s'installe tout seul à la mise à jour suivante ; sinon, relancez `sudo ./docker/install-auto-update.sh`.
+- L'utilisateur de l'image a désormais un identifiant fixe (10001), à qui le dossier d'échange appartient.
+
 ## 0.3.7 (31 octobre 2026)
 
 ### Administration du serveur
