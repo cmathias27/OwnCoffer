@@ -54,15 +54,19 @@ class AnalysisEndpoint extends Endpoint {
     final now = history.last.$2;
     final previous = history[history.length - 2].$2;
     final earlier = history.sublist(history.length - 4, history.length - 1);
-    final goals = period == BudgetPeriod.month
-        ? {
-            for (final g in await Goal.db.find(
-              session,
-              where: (g) => g.groupId.equals(groupId),
-            ))
-              g.categoryId: g.amountCents,
-          }
-        : const <int, int>{};
+    final goalRows = period == BudgetPeriod.month
+        ? await Goal.db.find(session, where: (g) => g.groupId.equals(groupId))
+        : const <Goal>[];
+    final goals = {for (final g in goalRows) g.categoryId: g.amountCents};
+    final projections = await SpendingService.projections(
+      session,
+      goalRows,
+      categories,
+      ids,
+      ops,
+      current,
+      core.LocalDate.fromDateTime(DateTime.now().toUtc()),
+    );
 
     final shown = {...now.totals.keys, ...previous.totals.keys, ...goals.keys};
     return SpendingReport(
@@ -87,6 +91,8 @@ class AnalysisEndpoint extends Endpoint {
                 earlier.fold(0, (a, s) => a + (s.$2.totals[id] ?? 0)) ~/
                 earlier.length,
             goalCents: goals[id],
+            projectedCents: projections[id]?.projectedCents,
+            projectedOverDate: projections[id]?.overDate?.toDb(),
           ),
       ],
       history: [

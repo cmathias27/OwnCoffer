@@ -227,8 +227,9 @@ void main() {
             10000,
           );
           await op(shared, month(0), -8500, category: 'food.groceries');
-          expect(await GoalAlertService.checkGroup(db, groupA, today), 3);
-          expect(await GoalAlertService.checkGroup(db, groupA, today), 0);
+          // Last day of the month: no pace left, so no early alert.
+          expect(await GoalAlertService.checkGroup(db, groupA, monthLast), 3);
+          expect(await GoalAlertService.checkGroup(db, groupA, monthLast), 0);
           final warnings = await AppNotification.db.find(
             db,
             where: (n) => n.type.equals(GoalAlertService.warningType),
@@ -241,7 +242,7 @@ void main() {
 
           // Over the goal only with the restricted account: admins see it.
           await op(restricted, month(0), -3000, category: 'food.groceries');
-          expect(await GoalAlertService.checkGroup(db, groupA, today), 1);
+          expect(await GoalAlertService.checkGroup(db, groupA, monthLast), 1);
           final over = await AppNotification.db.find(
             db,
             where: (n) => n.type.equals(GoalAlertService.overType),
@@ -253,6 +254,101 @@ void main() {
             where: (n) => n.authUserId.equals(mallory),
           );
           expect(mine, 0);
+        },
+      );
+      test('early alert: at this pace, once, with the expected day', () async {
+        await endpoints.goal.set(
+          as(bob),
+          groupA,
+          cats['food.groceries']!,
+          10000,
+        );
+        await op(shared, month(0), -4000, category: 'food.groceries');
+        final day10 = core.LocalDate(now.year, now.month, 10);
+        // 40 € in 10 days: 4 € a day, over 100 € from the 26th.
+        expect(await GoalAlertService.checkGroup(db, groupA, day10), 3);
+        expect(await GoalAlertService.checkGroup(db, groupA, day10), 0);
+        final early = await AppNotification.db.find(
+          db,
+          where: (n) => n.type.equals(GoalAlertService.forecastType),
+        );
+        expect({for (final n in early) n.authUserId}, {alice, bob, reader});
+        expect(
+          early.first.data,
+          contains('"overDate":"${core.LocalDate(now.year, now.month, 26)}"'),
+        );
+        expect(
+          await AppNotification.db.count(
+            db,
+            where: (n) => n.type.notEquals(GoalAlertService.forecastType),
+          ),
+          0,
+          reason: 'still under 80 %',
+        );
+      });
+
+      test('early alert: a planned operation of the category counts, a '
+          'single purchase in the first days does not', () async {
+        await endpoints.goal.set(
+          as(bob),
+          groupA,
+          cats['food.groceries']!,
+          10000,
+        );
+        await op(shared, month(0), -6000, category: 'food.groceries');
+        final day3 = core.LocalDate(now.year, now.month, 3);
+        expect(await GoalAlertService.checkGroup(db, groupA, day3), 0);
+        await endpoints.scheduled.create(
+          as(alice),
+          shared.id!,
+          -5000,
+          'PANIER BIO',
+          ScheduleFrequency.monthly,
+          DateTime.utc(now.year, now.month, 20),
+          categoryId: cats['food.groceries'],
+        );
+        // Creating it already checked the goals on the real date.
+        await AppNotification.db.deleteWhere(
+          db,
+          where: (n) => n.id.notEquals(null),
+        );
+        expect(await GoalAlertService.checkGroup(db, groupA, day3), 3);
+        final n = await AppNotification.db.findFirstRow(
+          db,
+          where: (n) => n.type.equals(GoalAlertService.forecastType),
+        );
+        expect(
+          n!.data,
+          contains('"overDate":"${core.LocalDate(now.year, now.month, 20)}"'),
+        );
+        expect(n.data, contains('"projectedCents":11000'));
+      });
+
+      test(
+        'the month report gives the projection of goal categories',
+        () async {
+          await endpoints.goal.set(
+            as(bob),
+            groupA,
+            cats['food.groceries']!,
+            10000,
+          );
+          await op(shared, month(0), -2000, category: 'food.groceries');
+          await op(shared, month(0), -1500, category: 'transport.fuel');
+          final r = await endpoints.analysis.report(
+            as(alice),
+            groupA,
+            BudgetPeriod.month,
+            month(0),
+          );
+          final food = r.categories.firstWhere(
+            (f) => f.categoryId == cats['food.groceries'],
+          );
+          expect(food.projectedCents, greaterThanOrEqualTo(2000));
+          final fuel = r.categories.firstWhere(
+            (f) => f.categoryId == cats['transport.fuel'],
+          );
+          expect(fuel.projectedCents, isNull, reason: 'no goal');
         },
       );
     });

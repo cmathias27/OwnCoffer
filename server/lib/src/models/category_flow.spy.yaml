@@ -11,3 +11,8 @@ fields:
   averageCents: int
   ### Monthly goal (month view only).
   goalCents: int?
+  ### Spending expected at the end of the current month, goal categories
+  ### only (planned operations and the current pace).
+  projectedCents: int?
+  ### First day the goal should be exceeded at this pace, if it should.
+  projectedOverDate: DateTime?

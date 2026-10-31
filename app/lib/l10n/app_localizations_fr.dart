@@ -1528,6 +1528,16 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String goalProjection(String amount) {
+    return 'À ce rythme : $amount en fin de mois';
+  }
+
+  @override
+  String goalProjectionOver(String amount, String date) {
+    return 'À ce rythme : $amount de trop, dépassement vers le $date';
+  }
+
+  @override
   String get monthStartTitle => 'Début du mois';
 
   @override
@@ -2142,6 +2152,16 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String notifGoalBody(String spent, String goal) {
     return '$spent dépensés pour un objectif de $goal ce mois-ci.';
+  }
+
+  @override
+  String notifGoalForecastTitle(String category, String date) {
+    return 'Objectif « $category » : dépassement prévu vers le $date';
+  }
+
+  @override
+  String notifGoalForecastBody(String spent, String goal, String projected) {
+    return '$spent dépensés pour un objectif de $goal ; à ce rythme, $projected en fin de mois.';
   }
 
   @override

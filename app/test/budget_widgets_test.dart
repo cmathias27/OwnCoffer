@@ -138,4 +138,45 @@ void main() {
     expect(find.textContaining('de plus que vos revenus'), findsOneWidget);
     expect(find.byIcon(Icons.error), findsOneWidget);
   });
+
+  testWidgets('goal meter: projection, and the day it should be exceeded', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        Column(
+          children: [
+            const GoalMeter(
+              spentCents: 20000,
+              goalCents: 50000,
+              projectedCents: 40000,
+            ),
+            GoalMeter(
+              spentCents: 30000,
+              goalCents: 50000,
+              projectedCents: 62000,
+              projectedOverDate: DateTime.utc(2026, 10, 26),
+            ),
+            const GoalMeter(
+              spentCents: 60000,
+              goalCents: 50000,
+              projectedCents: 70000,
+            ),
+          ],
+        ),
+      ),
+    );
+    expect(tester.takeException(), isNull);
+    expect(find.textContaining('400,00\u00a0€ en fin de mois'), findsOneWidget);
+    expect(
+      find.textContaining('120,00\u00a0€ de trop, dépassement vers le'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('26'), findsWidgets);
+    expect(
+      find.textContaining('À ce rythme'),
+      findsNWidgets(2),
+      reason: 'not once the goal is exceeded',
+    );
+  });
 }

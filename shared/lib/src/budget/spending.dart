@@ -21,11 +21,16 @@ class SpendingOperation {
   /// the other side cancels it.
   final bool internalTransfer;
 
+  /// Realises a planned operation (rent, subscription…): left out of the
+  /// spending pace, as its next occurrences are counted on their own.
+  final bool planned;
+
   const SpendingOperation(
     this.date,
     this.amountCents, {
     this.categoryId,
     this.internalTransfer = false,
+    this.planned = false,
   });
 }
 

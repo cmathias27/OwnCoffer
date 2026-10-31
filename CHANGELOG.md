@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.4 (31 octobre 2026)
+
+### Objectifs
+
+- **Projection en fin de mois** sous chaque jauge d'objectif de la page Budget : « À ce rythme : 380 € en fin de mois », ou, si l'objectif risque d'être dépassé, « À ce rythme : 120 € de trop, dépassement vers le 26 » en rouge.
+- Le calcul additionne ce qui est déjà dépensé, les opérations prévues de la catégorie encore attendues ce mois-ci, et le rythme des autres dépenses de la catégorie (dépensé depuis le début du mois ÷ jours écoulés, pour chaque jour restant). Le rythme n'est compté qu'après 7 jours, pour qu'un gros achat en début de mois ne soit pas multiplié.
+- **Alerte anticipée** : une notification « dépassement prévu vers le … » arrive dès que la projection annonce un dépassement, une seule fois par objectif et par mois, en plus des alertes à 80 % et 100 %.
+
 ## 0.3.3 (31 octobre 2026)
 
 ### Opérations

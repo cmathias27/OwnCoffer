@@ -2503,6 +2503,18 @@ abstract class AppLocalizations {
   /// **'{amount} de trop'**
   String goalExceeded(String amount);
 
+  /// No description provided for @goalProjection.
+  ///
+  /// In fr, this message translates to:
+  /// **'À ce rythme : {amount} en fin de mois'**
+  String goalProjection(String amount);
+
+  /// No description provided for @goalProjectionOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'À ce rythme : {amount} de trop, dépassement vers le {date}'**
+  String goalProjectionOver(String amount, String date);
+
   /// No description provided for @monthStartTitle.
   ///
   /// In fr, this message translates to:
@@ -3528,6 +3540,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{spent} dépensés pour un objectif de {goal} ce mois-ci.'**
   String notifGoalBody(String spent, String goal);
+
+  /// No description provided for @notifGoalForecastTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif « {category} » : dépassement prévu vers le {date}'**
+  String notifGoalForecastTitle(String category, String date);
+
+  /// No description provided for @notifGoalForecastBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{spent} dépensés pour un objectif de {goal} ; à ce rythme, {projected} en fin de mois.'**
+  String notifGoalForecastBody(String spent, String goal, String projected);
 
   /// No description provided for @loanKindInstallments.
   ///

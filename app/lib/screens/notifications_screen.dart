@@ -115,6 +115,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         Icons.flag,
                         color: ChartColors.critical,
                       ),
+                      'goal_forecast' => const Icon(
+                        Icons.trending_up,
+                        color: ChartColors.warning,
+                      ),
                       _ => const Icon(Icons.notifications_none),
                     },
                     title: Text(
@@ -149,7 +153,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   static (String, String?) _texts(BuildContext context, AppNotification n) {
     final l = AppLocalizations.of(context);
-    if (n.type == 'goal_warning' || n.type == 'goal_over') {
+    if (n.type == 'goal_warning' ||
+        n.type == 'goal_over' ||
+        n.type == 'goal_forecast') {
       try {
         final d = jsonDecode(n.data) as Map<String, dynamic>;
         final name = context.categoryName(
@@ -160,6 +166,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             kind: CategoryKind.expense,
           ),
         );
+        if (n.type == 'goal_forecast') {
+          return (
+            l.notifGoalForecastTitle(
+              name,
+              context.day(DateTime.parse(d['overDate'] as String)),
+            ),
+            l.notifGoalForecastBody(
+              context.money(d['spentCents'] as int),
+              context.money(d['goalCents'] as int),
+              context.money(d['projectedCents'] as int),
+            ),
+          );
+        }
         return (
           n.type == 'goal_over'
               ? l.notifGoalOverTitle(name)
