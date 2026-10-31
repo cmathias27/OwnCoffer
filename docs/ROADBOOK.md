@@ -118,7 +118,7 @@ Objectif : la plus petite version utile, pour votre usage personnel (décision 0
 - [ ] Libellés nettoyés (« PRLV SEPA EDF SA REF… » devient « EDF »)
 - [ ] Classement : catégories reliées au catalogue standard (fait), règles du groupe (API faite), historique, source de la catégorie affichée
 - [x] Règles communautaires v0 : 154 règles pour les grandes enseignes (dans `shared/` pour l'alpha ; dépôt séparé `owncoffer-rules` plus tard)
-- [x] Opérations prévues récurrentes (loyer, salaire, abonnements) et **solde prévu** à 30 jours (côté serveur ; écrans à venir)
+- [x] Opérations prévues récurrentes (loyer, salaire, abonnements) et **solde prévu** à 30 jours, avec son écran (courbe, à venir, rapprochements)
 - [x] **Alerte de découvert prévu**, dans l'app et par email (côté serveur ; écran des notifications à venir)
 
 **Validation** : trois mois de relevés Caisse d'Épargne importés sans doublon ni erreur de montant ; la cible de classement automatique est atteinte ; l'alpha est utilisée un mois.
