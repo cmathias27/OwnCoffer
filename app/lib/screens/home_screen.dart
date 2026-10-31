@@ -269,7 +269,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          if (current != null)
+          // The server administrator finds members and security in the
+          // administration page.
+          if (current != null && !_isServerAdmin)
             IconButton(
               tooltip: l.menuMembers,
               icon: const Icon(Icons.people_outline),
@@ -284,16 +286,19 @@ class _HomeScreenState extends State<HomeScreen> {
               tooltip: l.menuAdmin,
               icon: const Icon(Icons.admin_panel_settings_outlined),
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => const AdminScreen()),
+                MaterialPageRoute<void>(
+                  builder: (_) => AdminScreen(membership: current),
+                ),
               ),
             ),
-          IconButton(
-            tooltip: l.menuSecurity,
-            icon: const Icon(Icons.shield_outlined),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const SecurityScreen()),
+          if (!_isServerAdmin)
+            IconButton(
+              tooltip: l.menuSecurity,
+              icon: const Icon(Icons.shield_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => const SecurityScreen()),
+              ),
             ),
-          ),
           IconButton(
             tooltip: l.signOut,
             icon: const Icon(Icons.logout),

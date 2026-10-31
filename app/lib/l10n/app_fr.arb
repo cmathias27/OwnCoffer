@@ -1952,7 +1952,7 @@
   "adminOk": "OK",
   "adminFailed": "en échec",
   "adminNotYet": "pas encore",
-  "adminDocuments": "Documents stockés",
+  "adminDocuments": "Documents et factures stockés",
   "adminAlertsJob": "Dernière vérification des alertes",
   "adminClock": "Horloge du serveur",
   "adminClockDrift": "écart de {seconds} s avec cet appareil",
@@ -2363,5 +2363,15 @@
   "notifWarrantyBody": "La facture est dans la page Factures.",
   "error_invoice_access_denied": "Facture introuvable ou non accessible.",
   "error_mail_not_configured": "L'envoi de courriels n'est pas configuré sur ce serveur (réglages SMTP de docker/.env).",
-  "error_send_limit": "Limite atteinte : 20 envois par jour. Réessayez demain."
+  "error_send_limit": "Limite atteinte : 20 envois par jour. Réessayez demain.",
+  "adminTabMembers": "Membres du groupe",
+  "adminTabMySecurity": "Ma sécurité",
+  "adminMembersOf": "Membres de « {group} »",
+  "@adminMembersOf": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -679,7 +679,7 @@
   "adminOk": "OK",
   "adminFailed": "failed",
   "adminNotYet": "not yet",
-  "adminDocuments": "Stored documents",
+  "adminDocuments": "Stored documents and invoices",
   "adminAlertsJob": "Last alert check",
   "adminClock": "Server clock",
   "adminClockDrift": "{seconds} s from this device",
@@ -829,5 +829,8 @@
   "notifWarrantyBody": "The invoice is in the Invoices page.",
   "error_invoice_access_denied": "Invoice not found or not accessible.",
   "error_mail_not_configured": "Sending emails is not set up on this server (SMTP settings in docker/.env).",
-  "error_send_limit": "Limit reached: 20 emails a day. Try again tomorrow."
+  "error_send_limit": "Limit reached: 20 emails a day. Try again tomorrow.",
+  "adminTabMembers": "Group members",
+  "adminTabMySecurity": "My security",
+  "adminMembersOf": "Members of \"{group}\""
 }

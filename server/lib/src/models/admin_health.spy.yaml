@@ -7,7 +7,7 @@ fields:
   serverTime: DateTime
   databaseOk: bool
   databaseBytes: int?
-  ### Documents kept in the database (loan documents).
+  ### Files kept in the database (loan documents and invoices).
   documentsBytes: int
   smtpConfigured: bool
   publicUrl: String

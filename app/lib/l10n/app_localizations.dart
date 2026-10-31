@@ -4180,7 +4180,7 @@ abstract class AppLocalizations {
   /// No description provided for @adminDocuments.
   ///
   /// In fr, this message translates to:
-  /// **'Documents stockés'**
+  /// **'Documents et factures stockés'**
   String get adminDocuments;
 
   /// No description provided for @adminAlertsJob.
@@ -5082,6 +5082,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Limite atteinte : 20 envois par jour. Réessayez demain.'**
   String get error_send_limit;
+
+  /// No description provided for @adminTabMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membres du groupe'**
+  String get adminTabMembers;
+
+  /// No description provided for @adminTabMySecurity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ma sécurité'**
+  String get adminTabMySecurity;
+
+  /// No description provided for @adminMembersOf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membres de « {group} »'**
+  String adminMembersOf(String group);
 }
 
 class _AppLocalizationsDelegate

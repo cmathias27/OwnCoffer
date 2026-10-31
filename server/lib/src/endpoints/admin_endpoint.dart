@@ -152,6 +152,9 @@ class AdminEndpoint extends Endpoint {
       for (final d in await LoanDocument.db.find(session)) {
         documents += d.sizeBytes;
       }
+      for (final i in await Invoice.db.find(session)) {
+        documents += i.sizeBytes;
+      }
     }
     return AdminHealth(
       version: _version(),

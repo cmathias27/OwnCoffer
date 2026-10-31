@@ -8,11 +8,17 @@ import '../util/format.dart';
 import '../widgets/admin_backups.dart';
 import '../widgets/admin_invitations.dart';
 import '../widgets/admin_updates.dart';
+import 'members_screen.dart';
+import 'security_screen.dart';
 
 /// Server administration (server administrator only): health, figures,
 /// accounts, banned IPs and the audit log. Never a group's financial data.
+/// Also the members of the current group and the administrator's own
+/// security (two-factor authentication), which are only here for them.
 class AdminScreen extends StatefulWidget {
-  const AdminScreen({super.key});
+  /// The group open in the app: its members tab (none without a group).
+  final GroupMembership? membership;
+  const AdminScreen({super.key, this.membership});
 
   @override
   State<AdminScreen> createState() => _AdminScreenState();
@@ -82,8 +88,9 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final membership = widget.membership;
     return DefaultTabController(
-      length: 7,
+      length: membership == null ? 8 : 9,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.adminTitle),
@@ -102,6 +109,8 @@ class _AdminScreenState extends State<AdminScreen> {
               Tab(text: l.adminTabBackups),
               Tab(text: l.adminTabUsers),
               Tab(text: l.adminTabInvitations),
+              if (membership != null) Tab(text: l.adminTabMembers),
+              Tab(text: l.adminTabMySecurity),
               Tab(text: l.adminTabSecurity),
               Tab(text: l.adminTabAudit),
             ],
@@ -171,6 +180,9 @@ class _AdminScreenState extends State<AdminScreen> {
                     groups: _groups,
                     onChanged: _load,
                   ),
+                  if (membership != null)
+                    MembersScreen(membership: membership, embedded: true),
+                  const SecurityScreen(embedded: true),
                   _BansView(
                     bans: _bans,
                     onUnban: (ip) =>

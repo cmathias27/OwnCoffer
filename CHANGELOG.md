@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.13 (31 octobre 2026)
+
+### Administration du serveur
+
+- Les pages **Membres** et **Sécurité** sont maintenant des onglets de la page d'administration : « Membres du groupe » (membres du groupe ouvert, invitations) et « Ma sécurité » (double authentification). Pour l'administrateur du serveur, les deux boutons de la barre du haut disparaissent.
+- Les autres utilisateurs, qui n'ont pas accès à l'administration, gardent ces deux boutons pour gérer leur propre sécurité.
+- Santé du serveur : la taille des documents stockés compte maintenant aussi les factures.
+
 ## 0.3.12 (31 octobre 2026)
 
 ### Corrections
