@@ -2941,4 +2941,178 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_invalid_version =>
       'Version invalide : seule une version publiée plus récente que celle installée peut être installée.';
+
+  @override
+  String get navInvoices => 'Factures';
+
+  @override
+  String get invoicesTitle => 'Factures';
+
+  @override
+  String get invoicesIntro =>
+      'Les factures et tickets joints aux opérations, nommés d\'après l\'opération (date, libellé, montant). Pour en ajouter une, ouvrez l\'opération dans la page Opérations.';
+
+  @override
+  String get invoicesSearch => 'Rechercher (nom, libellé, compte)';
+
+  @override
+  String get invoicesAllYears => 'Toutes les années';
+
+  @override
+  String get invoicesWarrantyFilter => 'Garantie en cours';
+
+  @override
+  String get invoicesExport => 'Exporter en ZIP';
+
+  @override
+  String invoicesExporting(int done, int total) {
+    return 'Export… $done/$total';
+  }
+
+  @override
+  String get invoicesZipName => 'Factures.zip';
+
+  @override
+  String invoicesZipNameYear(String year) {
+    return 'Factures $year.zip';
+  }
+
+  @override
+  String get invoicesEmpty => 'Aucune facture pour l\'instant.';
+
+  @override
+  String invoicesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count factures',
+      one: '1 facture',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get invoicesOfOperation => 'Factures';
+
+  @override
+  String get invoicesNone => 'Aucune facture jointe.';
+
+  @override
+  String get invoiceAttach => 'Joindre une facture';
+
+  @override
+  String get invoiceTakePhoto => 'Prendre en photo';
+
+  @override
+  String invoiceAdded(String name) {
+    return 'Facture ajoutée : $name';
+  }
+
+  @override
+  String get invoiceBadge => 'Facture jointe';
+
+  @override
+  String get invoiceUnattached => 'Sans opération';
+
+  @override
+  String get invoiceActions => 'Actions';
+
+  @override
+  String get invoiceOpen => 'Ouvrir';
+
+  @override
+  String get invoiceEdit => 'Description et garantie';
+
+  @override
+  String get invoiceSend => 'Envoyer par courriel';
+
+  @override
+  String get invoiceDelete => 'Supprimer';
+
+  @override
+  String invoiceDeleteConfirm(String name) {
+    return 'Supprimer la facture « $name » ?';
+  }
+
+  @override
+  String get invoiceLabel => 'Description';
+
+  @override
+  String get invoiceLabelHint => 'Lave-linge, réparation voiture…';
+
+  @override
+  String get invoiceLabelHelp => 'Ajoutée au nom de la facture.';
+
+  @override
+  String get invoiceWarranty => 'Fin de garantie';
+
+  @override
+  String get invoiceWarrantyNone => 'Pas de garantie suivie.';
+
+  @override
+  String invoiceWarrantyUntil(String date) {
+    return 'Garantie jusqu\'au $date';
+  }
+
+  @override
+  String invoiceWarrantyOver(String date) {
+    return 'Garantie terminée le $date';
+  }
+
+  @override
+  String invoiceWarrantyYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ans',
+      one: '1 an',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get invoiceWarrantyPick => 'Choisir une date';
+
+  @override
+  String get invoiceWarrantyClear => 'Aucune';
+
+  @override
+  String get invoiceWarrantyHelp =>
+      'Comptée à partir de la date de l\'opération. Un rappel arrive dans les notifications et par courriel un mois avant la fin.';
+
+  @override
+  String get invoiceSendTo => 'Adresse du destinataire';
+
+  @override
+  String get invoiceSendMessage => 'Message (facultatif)';
+
+  @override
+  String get invoiceSendHelp =>
+      'La facture part en pièce jointe, depuis l\'adresse du serveur OwnCoffer.';
+
+  @override
+  String get invoiceSendAction => 'Envoyer';
+
+  @override
+  String get invoiceSent => 'Facture envoyée.';
+
+  @override
+  String notifWarrantyTitle(String name, String date) {
+    return 'Garantie de « $name » : fin le $date';
+  }
+
+  @override
+  String get notifWarrantyBody => 'La facture est dans la page Factures.';
+
+  @override
+  String get error_invoice_access_denied =>
+      'Facture introuvable ou non accessible.';
+
+  @override
+  String get error_mail_not_configured =>
+      'L\'envoi de courriels n\'est pas configuré sur ce serveur (réglages SMTP de docker/.env).';
+
+  @override
+  String get error_send_limit =>
+      'Limite atteinte : 20 envois par jour. Réessayez demain.';
 }

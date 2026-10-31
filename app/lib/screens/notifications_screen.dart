@@ -119,6 +119,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         Icons.trending_up,
                         color: ChartColors.warning,
                       ),
+                      'warranty_ending' => const Icon(
+                        Icons.verified_user_outlined,
+                        color: ChartColors.warning,
+                      ),
                       _ => const Icon(Icons.notifications_none),
                     },
                     title: Text(
@@ -187,6 +191,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             context.money(d['spentCents'] as int),
             context.money(d['goalCents'] as int),
           ),
+        );
+      } on Object {
+        return (l.notifUnknown, null);
+      }
+    }
+    if (n.type == 'warranty_ending') {
+      try {
+        final d = jsonDecode(n.data) as Map<String, dynamic>;
+        return (
+          l.notifWarrantyTitle(
+            d['name'] as String,
+            context.day(DateTime.parse(d['until'] as String)),
+          ),
+          l.notifWarrantyBody,
         );
       } on Object {
         return (l.notifUnknown, null);

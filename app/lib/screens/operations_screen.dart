@@ -9,6 +9,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../util/web_search.dart';
 import '../widgets/category_field.dart';
+import '../widgets/invoices.dart';
 import '../widgets/split_dialog.dart';
 import '../widgets/undo.dart';
 import 'loans_screen.dart';
@@ -42,6 +43,9 @@ class _OperationsScreenState extends State<OperationsScreen> {
 
   /// Subscriptions of the account, by id: their operations are marked.
   Map<int, ScheduledTransaction> _subscriptions = {};
+
+  /// Operations with at least one invoice: marked with a clip.
+  final Set<int> _withInvoices = {};
   int? _categoryFilter;
 
   /// Cleaned label of the provider whose operations are listed.
@@ -76,6 +80,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
 
   Future<void> _reload() async {
     _items.clear();
+    _withInvoices.clear();
     _total = 0;
     await _more();
   }
@@ -103,6 +108,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
         _total = page.total;
         _providerSum = page.amountSumCents;
         _subscriptions = {for (final s in page.subscriptions) s.id!: s};
+        _withInvoices.addAll(page.withInvoices);
       });
     } on Object catch (e) {
       if (mounted) {
@@ -153,6 +159,11 @@ class _OperationsScreenState extends State<OperationsScreen> {
               currency: _account!.currency,
               canWrite: _canWrite,
               onChanged: _replace,
+              onHasInvoices: (has) => setState(
+                () => has
+                    ? _withInvoices.add(t.id!)
+                    : _withInvoices.remove(t.id!),
+              ),
               onSameProvider: () {
                 Navigator.of(context).pop();
                 setState(() => _provider = t.cleanLabel);
@@ -370,6 +381,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
                         subscription: _subscriptions.containsKey(
                           _items[i].scheduledId,
                         ),
+                        hasInvoice: _withInvoices.contains(_items[i].id),
                         currency: account?.currency ?? 'EUR',
                         onTap: () => _open(_items[i]),
                       );
@@ -388,6 +400,9 @@ class _OperationTile extends StatelessWidget {
 
   /// Realises a subscription: marked with an icon and a word.
   final bool subscription;
+
+  /// Has an invoice: marked with a clip.
+  final bool hasInvoice;
   final String currency;
   final VoidCallback onTap;
 
@@ -395,6 +410,7 @@ class _OperationTile extends StatelessWidget {
     required this.operation,
     required this.category,
     required this.subscription,
+    required this.hasInvoice,
     required this.currency,
     required this.onTap,
   });
@@ -427,6 +443,15 @@ class _OperationTile extends StatelessWidget {
               size: 16,
               color: theme.colorScheme.primary,
               semanticLabel: l.subscriptionBadge,
+            ),
+          ],
+          if (hasInvoice) ...[
+            const SizedBox(width: 6),
+            Icon(
+              Icons.attach_file,
+              size: 16,
+              color: theme.colorScheme.secondary,
+              semanticLabel: l.invoiceBadge,
             ),
           ],
         ],
@@ -484,6 +509,9 @@ class _OperationSheet extends StatefulWidget {
   final bool canWrite;
   final void Function(BankTransaction) onChanged;
 
+  /// Whether the operation has invoices, after one is added or deleted.
+  final ValueChanged<bool> onHasInvoices;
+
   /// Lists the operations with the same cleaned label (closes the sheet).
   final VoidCallback onSameProvider;
   final ScrollController scrollController;
@@ -500,6 +528,7 @@ class _OperationSheet extends StatefulWidget {
     required this.currency,
     required this.canWrite,
     required this.onChanged,
+    required this.onHasInvoices,
     required this.onSameProvider,
     required this.scrollController,
   });
@@ -951,6 +980,11 @@ class _OperationSheetState extends State<_OperationSheet> {
           decoration: InputDecoration(labelText: l.noteLabel),
           onSubmitted: (v) =>
               _do(() => client.transaction.update(t.id!, note: v)),
+        ),
+        InvoiceSection(
+          transactionId: t.id!,
+          canWrite: widget.canWrite,
+          onHasInvoices: widget.onHasInvoices,
         ),
         if (_error != null)
           Padding(

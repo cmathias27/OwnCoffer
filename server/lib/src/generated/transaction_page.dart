@@ -23,6 +23,7 @@ abstract class TransactionPage
     required this.total,
     this.amountSumCents,
     required this.subscriptions,
+    required this.withInvoices,
   });
 
   factory TransactionPage({
@@ -30,6 +31,7 @@ abstract class TransactionPage
     required int total,
     int? amountSumCents,
     required List<_ifol8nrg.ScheduledTransaction> subscriptions,
+    required List<int> withInvoices,
   }) = _TransactionPageImpl;
 
   factory TransactionPage.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -43,6 +45,9 @@ abstract class TransactionPage
           .deserialize<List<_ifol8nrg.ScheduledTransaction>>(
             jsonSerialization['subscriptions'],
           ),
+      withInvoices: _itdod8fx.Protocol().deserialize<List<int>>(
+        jsonSerialization['withInvoices'],
+      ),
     );
   }
 
@@ -58,6 +63,9 @@ abstract class TransactionPage
   /// ones included), to mark the operations they realised.
   List<_ifol8nrg.ScheduledTransaction> subscriptions;
 
+  /// Operations of [items] with at least one invoice (marked in the list).
+  List<int> withInvoices;
+
   /// Returns a shallow copy of this [TransactionPage]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -66,6 +74,7 @@ abstract class TransactionPage
     int? total,
     int? amountSumCents,
     List<_ifol8nrg.ScheduledTransaction>? subscriptions,
+    List<int>? withInvoices,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -75,6 +84,7 @@ abstract class TransactionPage
       'total': total,
       if (amountSumCents != null) 'amountSumCents': amountSumCents,
       'subscriptions': subscriptions.toJson(valueToJson: (v) => v.toJson()),
+      'withInvoices': withInvoices.toJson(),
     };
   }
 
@@ -88,6 +98,7 @@ abstract class TransactionPage
       'subscriptions': subscriptions.toJson(
         valueToJson: (v) => v.toJsonForProtocol(),
       ),
+      'withInvoices': withInvoices.toJson(),
     };
   }
 
@@ -105,11 +116,13 @@ class _TransactionPageImpl extends TransactionPage {
     required int total,
     int? amountSumCents,
     required List<_ifol8nrg.ScheduledTransaction> subscriptions,
+    required List<int> withInvoices,
   }) : super._(
          items: items,
          total: total,
          amountSumCents: amountSumCents,
          subscriptions: subscriptions,
+         withInvoices: withInvoices,
        );
 
   /// Returns a shallow copy of this [TransactionPage]
@@ -121,6 +134,7 @@ class _TransactionPageImpl extends TransactionPage {
     int? total,
     Object? amountSumCents = _Undefined,
     List<_ifol8nrg.ScheduledTransaction>? subscriptions,
+    List<int>? withInvoices,
   }) {
     return TransactionPage(
       items: items ?? this.items.map((e0) => e0.copyWith()).toList(),
@@ -131,6 +145,7 @@ class _TransactionPageImpl extends TransactionPage {
       subscriptions:
           subscriptions ??
           this.subscriptions.map((e0) => e0.copyWith()).toList(),
+      withInvoices: withInvoices ?? this.withInvoices.map((e0) => e0).toList(),
     );
   }
 }

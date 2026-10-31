@@ -68,7 +68,12 @@ class TransactionEndpoint extends Endpoint {
     );
     final Set<int> subIds = {for (final s in subs) s.id!};
     if (subscriptions == true && subIds.isEmpty) {
-      return TransactionPage(items: [], total: 0, subscriptions: subs);
+      return TransactionPage(
+        items: [],
+        total: 0,
+        subscriptions: subs,
+        withInvoices: [],
+      );
     }
     final Set<int> splitIds = await SpendingService.splitTransactionsIn(
       session,
@@ -113,11 +118,22 @@ class TransactionEndpoint extends Endpoint {
       final all = await BankTransaction.db.find(session, where: where);
       sum = all.fold<int>(0, (a, t) => a + t.amountCents);
     }
+    final Set<int> itemIds = {for (final t in items) t.id!};
+    final withInvoices = itemIds.isEmpty
+        ? <int>{}
+        : {
+            for (final i in await Invoice.db.find(
+              session,
+              where: (i) => i.transactionId.inSet(itemIds),
+            ))
+              i.transactionId!,
+          };
     return TransactionPage(
       items: items,
       total: total,
       amountSumCents: sum,
       subscriptions: subs,
+      withInvoices: withInvoices.toList(),
     );
   }
 

@@ -9,3 +9,5 @@ fields:
   ### Subscriptions of the account (planned operations marked as such, ended
   ### ones included), to mark the operations they realised.
   subscriptions: List<ScheduledTransaction>
+  ### Operations of [items] with at least one invoice (marked in the list).
+  withInvoices: List<int>

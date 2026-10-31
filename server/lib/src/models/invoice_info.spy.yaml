@@ -1,0 +1,12 @@
+### An invoice with what is needed to show it: its name built from the
+### operation, and the operation itself.
+class: InvoiceInfo
+fields:
+  invoice: Invoice
+  ### Name to open, save or export it under.
+  name: String
+  transactionDate: DateTime?
+  transactionLabel: String?
+  amountCents: int?
+  currency: String?
+  accountName: String?
