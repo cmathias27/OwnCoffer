@@ -8,9 +8,7 @@ OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de 
 - Fonctionnalités détaillées : `docs/CAHIER_DES_CHARGES.md`.
 - Décisions d'architecture : `docs/decisions/` — à respecter ; pour en changer une, écrire une nouvelle décision.
 
-**Phase actuelle : validation de l'alpha 0.1** (phase 3 terminée le 31 octobre 2026, notes dans `CHANGELOG.md`). L'utilisateur l'utilise un mois sur ses vrais relevés (#20) : corriger ce qu'il remonte, ne pas commencer la phase 4 avant la fin de cette période. Exception demandée explicitement par l'utilisateur le 31 octobre 2026 : budget et classement des dépenses (semaine, mois, année, début du mois réglable), objectifs par catégorie, abonnements et crédits (0.2.0) ; puis, le même jour, reste à vivre, alertes d'objectif, paiements en plusieurs fois, calendrier des échéances, revue du mois, ventilation, solde de contrôle et bouton « Annuler » (0.3.0) ; le reste de la phase 4 attend toujours la fin du mois d'essai.
-
-**Objectif prioritaire : l'alpha minimale (décision 0010)** — import Caisse d'Épargne, opérations, classement par règles, solde prévu, alerte de découvert. Ne rien ajouter au-delà avant que l'alpha soit utilisée un mois.
+**Phase actuelle : phase 4 — Prévoir, piloter et IA** (commencée le 31 octobre 2026 à la demande de l'utilisateur, sans attendre la fin du mois d'essai de l'alpha ; versions 0.2.0 à 0.3.x déjà publiées, notes dans `CHANGELOG.md`). Continuer à corriger en priorité ce que l'utilisateur remonte de son usage réel (#20). Ordre convenu : abonnements mis en évidence dans la page Opérations ; dépenses variables et alerte anticipée d'objectif ; simulateur d'achat ; accueil et tableau de bord ; corbeille, import groupé, frais bancaires ; puis circuit des propositions (décision 0009), « Mon conseiller » sans IA, et enfin la passerelle IA.
 
 ## Pile technique décidée
 

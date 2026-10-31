@@ -1600,6 +1600,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get subscriptionMarkPlanned => 'Marquer comme abonnement';
 
   @override
+  String get filterSubscriptions => 'Abonnements';
+
+  @override
+  String get subscriptionsOpen => 'Liste des abonnements';
+
+  @override
+  String get subscriptionBadge => 'Abonnement';
+
+  @override
+  String subscriptionOfOperation(String label) {
+    return 'Abonnement « $label »';
+  }
+
+  @override
   String subscriptionCreated(String label, String date) {
     return 'Abonnement « $label » ajouté, prochain prélèvement le $date.';
   }

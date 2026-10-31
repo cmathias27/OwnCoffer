@@ -33,6 +33,7 @@ class TransactionEndpoint extends Endpoint {
     bool? includeSubcategories,
     bool? toClassify,
     bool? uncleared,
+    bool? subscriptions,
     int? limit,
     int? offset,
   }) async {
@@ -57,6 +58,18 @@ class TransactionEndpoint extends Endpoint {
         );
       }
     }
+    final subs = await ScheduledTransaction.db.find(
+      session,
+      where: (s) =>
+          s.accountId.equals(accountId) &
+          s.deletedAt.equals(null) &
+          s.subscription.equals(true),
+      orderBy: (s) => s.label,
+    );
+    final Set<int> subIds = {for (final s in subs) s.id!};
+    if (subscriptions == true && subIds.isEmpty) {
+      return TransactionPage(items: [], total: 0, subscriptions: subs);
+    }
     final Set<int> splitIds = await SpendingService.splitTransactionsIn(
       session,
       categoryIds,
@@ -75,6 +88,7 @@ class TransactionEndpoint extends Endpoint {
       if (provider != null) e = e & t.cleanLabel.equals(provider);
       if (toClassify == true) e = e & t.categoryId.equals(null);
       if (uncleared == true) e = e & t.cleared.equals(false);
+      if (subscriptions == true) e = e & t.scheduledId.inSet(subIds);
       if (pattern != null) {
         e =
             e &
@@ -99,7 +113,12 @@ class TransactionEndpoint extends Endpoint {
       final all = await BankTransaction.db.find(session, where: where);
       sum = all.fold<int>(0, (a, t) => a + t.amountCents);
     }
-    return TransactionPage(items: items, total: total, amountSumCents: sum);
+    return TransactionPage(
+      items: items,
+      total: total,
+      amountSumCents: sum,
+      subscriptions: subs,
+    );
   }
 
   /// Manual entry (cash, a cheque not yet on the statement…). Classified by

@@ -2452,6 +2452,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<bool?>(),
               nullable: true,
             ),
+            'subscriptions': _is.ParameterDescription(
+              name: 'subscriptions',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
             'limit': _is.ParameterDescription(
               name: 'limit',
               type: _is.getType<int?>(),
@@ -2480,6 +2485,7 @@ class Endpoints extends _is.EndpointDispatch {
                         includeSubcategories: params['includeSubcategories'],
                         toClassify: params['toClassify'],
                         uncleared: params['uncleared'],
+                        subscriptions: params['subscriptions'],
                         limit: params['limit'],
                         offset: params['offset'],
                       ),

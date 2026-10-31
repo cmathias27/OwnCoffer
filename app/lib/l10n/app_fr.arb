@@ -1046,6 +1046,17 @@
   "subscriptionSwitchHelp": "Apparaît dans la liste des abonnements.",
   "subscriptionFromOperation": "C'est un abonnement",
   "subscriptionMarkPlanned": "Marquer comme abonnement",
+  "filterSubscriptions": "Abonnements",
+  "subscriptionsOpen": "Liste des abonnements",
+  "subscriptionBadge": "Abonnement",
+  "subscriptionOfOperation": "Abonnement « {label} »",
+  "@subscriptionOfOperation": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "subscriptionCreated": "Abonnement « {label} » ajouté, prochain prélèvement le {date}.",
   "@subscriptionCreated": {
     "placeholders": {

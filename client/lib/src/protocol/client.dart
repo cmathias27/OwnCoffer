@@ -1285,6 +1285,7 @@ class EndpointTransaction extends _isc.EndpointRef {
     bool? includeSubcategories,
     bool? toClassify,
     bool? uncleared,
+    bool? subscriptions,
     int? limit,
     int? offset,
   }) => caller.callServerEndpoint<_ioa38wkb.TransactionPage>(
@@ -1300,6 +1301,7 @@ class EndpointTransaction extends _isc.EndpointRef {
       'includeSubcategories': includeSubcategories,
       'toClassify': toClassify,
       'uncleared': uncleared,
+      'subscriptions': subscriptions,
       'limit': limit,
       'offset': offset,
     },

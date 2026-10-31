@@ -13,6 +13,7 @@
 import 'package:owncoffer_server/src/generated/protocol.dart' as _itdod8fx;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'bank_transaction.dart' as _i0mjlwv3;
+import 'scheduled_transaction.dart' as _ifol8nrg;
 
 /// One page of operations, newest first.
 abstract class TransactionPage
@@ -21,12 +22,14 @@ abstract class TransactionPage
     required this.items,
     required this.total,
     this.amountSumCents,
+    required this.subscriptions,
   });
 
   factory TransactionPage({
     required List<_i0mjlwv3.BankTransaction> items,
     required int total,
     int? amountSumCents,
+    required List<_ifol8nrg.ScheduledTransaction> subscriptions,
   }) = _TransactionPageImpl;
 
   factory TransactionPage.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -36,6 +39,10 @@ abstract class TransactionPage
       ),
       total: jsonSerialization['total'] as int,
       amountSumCents: jsonSerialization['amountSumCents'] as int?,
+      subscriptions: _itdod8fx.Protocol()
+          .deserialize<List<_ifol8nrg.ScheduledTransaction>>(
+            jsonSerialization['subscriptions'],
+          ),
     );
   }
 
@@ -47,6 +54,10 @@ abstract class TransactionPage
   /// (`sameLabel`) only.
   int? amountSumCents;
 
+  /// Subscriptions of the account (planned operations marked as such, ended
+  /// ones included), to mark the operations they realised.
+  List<_ifol8nrg.ScheduledTransaction> subscriptions;
+
   /// Returns a shallow copy of this [TransactionPage]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -54,6 +65,7 @@ abstract class TransactionPage
     List<_i0mjlwv3.BankTransaction>? items,
     int? total,
     int? amountSumCents,
+    List<_ifol8nrg.ScheduledTransaction>? subscriptions,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -62,6 +74,7 @@ abstract class TransactionPage
       'items': items.toJson(valueToJson: (v) => v.toJson()),
       'total': total,
       if (amountSumCents != null) 'amountSumCents': amountSumCents,
+      'subscriptions': subscriptions.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -72,6 +85,9 @@ abstract class TransactionPage
       'items': items.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'total': total,
       if (amountSumCents != null) 'amountSumCents': amountSumCents,
+      'subscriptions': subscriptions.toJson(
+        valueToJson: (v) => v.toJsonForProtocol(),
+      ),
     };
   }
 
@@ -88,10 +104,12 @@ class _TransactionPageImpl extends TransactionPage {
     required List<_i0mjlwv3.BankTransaction> items,
     required int total,
     int? amountSumCents,
+    required List<_ifol8nrg.ScheduledTransaction> subscriptions,
   }) : super._(
          items: items,
          total: total,
          amountSumCents: amountSumCents,
+         subscriptions: subscriptions,
        );
 
   /// Returns a shallow copy of this [TransactionPage]
@@ -102,6 +120,7 @@ class _TransactionPageImpl extends TransactionPage {
     List<_i0mjlwv3.BankTransaction>? items,
     int? total,
     Object? amountSumCents = _Undefined,
+    List<_ifol8nrg.ScheduledTransaction>? subscriptions,
   }) {
     return TransactionPage(
       items: items ?? this.items.map((e0) => e0.copyWith()).toList(),
@@ -109,6 +128,9 @@ class _TransactionPageImpl extends TransactionPage {
       amountSumCents: amountSumCents is int?
           ? amountSumCents
           : this.amountSumCents,
+      subscriptions:
+          subscriptions ??
+          this.subscriptions.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
