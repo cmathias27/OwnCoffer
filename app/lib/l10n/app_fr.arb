@@ -1917,13 +1917,32 @@
   "adminHealth": "État du serveur",
   "adminVersion": "Version installée",
   "adminUptime": "En marche depuis",
-  "adminUptimeValue": "{days} j {hours} h",
-  "@adminUptimeValue": {
+  "adminUptimeDays": "{days} j {hours} h",
+  "@adminUptimeDays": {
     "placeholders": {
       "days": {
         "type": "int"
       },
       "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "adminUptimeHours": "{hours} h {minutes} min",
+  "@adminUptimeHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "adminUptimeMinutes": "{minutes} min",
+  "@adminUptimeMinutes": {
+    "placeholders": {
+      "minutes": {
         "type": "int"
       }
     }

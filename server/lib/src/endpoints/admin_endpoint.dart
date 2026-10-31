@@ -25,7 +25,10 @@ class AdminEndpoint extends Endpoint {
   @override
   Set<Scope> get requiredScopes => {accessScope};
 
-  static final _startedAt = DateTime.now().toUtc();
+  /// When the server started: set by `run` at start-up. A static field
+  /// alone would be initialised at its first read, the first time the
+  /// page is opened, and the uptime would always look like zero.
+  static DateTime startedAt = DateTime.now().toUtc();
 
   Future<void> _requireServerAdmin(Session session) async {
     if (!await Onboarding.isServerAdmin(session, Access.userId(session))) {
@@ -152,7 +155,7 @@ class AdminEndpoint extends Endpoint {
     }
     return AdminHealth(
       version: _version(),
-      startedAt: _startedAt,
+      startedAt: startedAt,
       serverTime: DateTime.now().toUtc(),
       databaseOk: dbOk,
       databaseBytes: dbBytes,

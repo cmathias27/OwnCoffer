@@ -273,7 +273,11 @@ class AdminHealthView extends StatelessWidget {
           row(
             Icons.timer_outlined,
             l.adminUptime,
-            l.adminUptimeValue(uptime.inDays, uptime.inHours % 24),
+            uptime.inDays > 0
+                ? l.adminUptimeDays(uptime.inDays, uptime.inHours % 24)
+                : uptime.inHours > 0
+                ? l.adminUptimeHours(uptime.inHours, uptime.inMinutes % 60)
+                : l.adminUptimeMinutes(uptime.inMinutes),
           ),
           row(
             Icons.storage,

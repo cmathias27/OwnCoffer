@@ -66,4 +66,58 @@ void main() {
     await tester.tap(find.text('Envoyer un courriel de test'));
     expect(tested, 1);
   });
+
+  testWidgets('admin health: uptime under a day in hours and minutes', (
+    tester,
+  ) async {
+    Future<void> show(Duration up) async {
+      final now = DateTime.now().toUtc();
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('fr'),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: AdminHealthView(
+              health: AdminHealth(
+                version: '0.3.12',
+                startedAt: now.subtract(up),
+                serverTime: now,
+                databaseOk: true,
+                documentsBytes: 0,
+                smtpConfigured: true,
+                publicUrl: '',
+              ),
+              stats: AdminStats(
+                users: 1,
+                blockedUsers: 0,
+                twoFactorUsers: 0,
+                groups: 1,
+                accounts: 1,
+                operations: 0,
+                operationsLast30Days: 0,
+                importsLast30Days: 0,
+                rules: 0,
+                pendingInvitations: 0,
+                classifiedAutomatically: 0,
+                classifiedManually: 0,
+                unclassified: 0,
+              ),
+              onTestEmail: () {},
+            ),
+          ),
+        ),
+      );
+    }
+
+    await show(const Duration(hours: 5, minutes: 7, seconds: 3));
+    expect(find.text('5 h 7 min'), findsOneWidget);
+    await show(const Duration(minutes: 12));
+    expect(find.text('12 min'), findsOneWidget);
+  });
 }
