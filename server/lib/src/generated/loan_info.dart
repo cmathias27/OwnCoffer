@@ -20,6 +20,7 @@ abstract class LoanInfo
   LoanInfo._({
     required this.loan,
     required this.paymentCents,
+    required this.paymentIsActual,
     required this.paidCount,
     required this.totalCount,
     required this.remainingCents,
@@ -36,6 +37,7 @@ abstract class LoanInfo
   factory LoanInfo({
     required _i7jednjp.Loan loan,
     required int paymentCents,
+    required bool paymentIsActual,
     required int paidCount,
     required int totalCount,
     required int remainingCents,
@@ -55,6 +57,9 @@ abstract class LoanInfo
         jsonSerialization['loan'],
       ),
       paymentCents: jsonSerialization['paymentCents'] as int,
+      paymentIsActual: _is.BoolJsonExtension.fromJson(
+        jsonSerialization['paymentIsActual'],
+      ),
       paidCount: jsonSerialization['paidCount'] as int,
       totalCount: jsonSerialization['totalCount'] as int,
       remainingCents: jsonSerialization['remainingCents'] as int,
@@ -79,6 +84,10 @@ abstract class LoanInfo
 
   /// Capital + interest of a regular instalment.
   int paymentCents;
+
+  /// The instalment is the one debited (entered or taken from a debit),
+  /// not computed: the other figures are estimates based on it.
+  bool paymentIsActual;
 
   int paidCount;
 
@@ -109,6 +118,7 @@ abstract class LoanInfo
   LoanInfo copyWith({
     _i7jednjp.Loan? loan,
     int? paymentCents,
+    bool? paymentIsActual,
     int? paidCount,
     int? totalCount,
     int? remainingCents,
@@ -127,6 +137,7 @@ abstract class LoanInfo
       '__className__': 'LoanInfo',
       'loan': loan.toJson(),
       'paymentCents': paymentCents,
+      'paymentIsActual': paymentIsActual,
       'paidCount': paidCount,
       'totalCount': totalCount,
       'remainingCents': remainingCents,
@@ -147,6 +158,7 @@ abstract class LoanInfo
       '__className__': 'LoanInfo',
       'loan': loan.toJsonForProtocol(),
       'paymentCents': paymentCents,
+      'paymentIsActual': paymentIsActual,
       'paidCount': paidCount,
       'totalCount': totalCount,
       'remainingCents': remainingCents,
@@ -173,6 +185,7 @@ class _LoanInfoImpl extends LoanInfo {
   _LoanInfoImpl({
     required _i7jednjp.Loan loan,
     required int paymentCents,
+    required bool paymentIsActual,
     required int paidCount,
     required int totalCount,
     required int remainingCents,
@@ -187,6 +200,7 @@ class _LoanInfoImpl extends LoanInfo {
   }) : super._(
          loan: loan,
          paymentCents: paymentCents,
+         paymentIsActual: paymentIsActual,
          paidCount: paidCount,
          totalCount: totalCount,
          remainingCents: remainingCents,
@@ -207,6 +221,7 @@ class _LoanInfoImpl extends LoanInfo {
   LoanInfo copyWith({
     _i7jednjp.Loan? loan,
     int? paymentCents,
+    bool? paymentIsActual,
     int? paidCount,
     int? totalCount,
     int? remainingCents,
@@ -222,6 +237,7 @@ class _LoanInfoImpl extends LoanInfo {
     return LoanInfo(
       loan: loan ?? this.loan.copyWith(),
       paymentCents: paymentCents ?? this.paymentCents,
+      paymentIsActual: paymentIsActual ?? this.paymentIsActual,
       paidCount: paidCount ?? this.paidCount,
       totalCount: totalCount ?? this.totalCount,
       remainingCents: remainingCents ?? this.remainingCents,

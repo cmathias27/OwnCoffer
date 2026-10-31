@@ -1665,5 +1665,67 @@
         "type": "int"
       }
     }
+  },
+  "loanActualPayment": "Mensualité prélevée (assurance comprise)",
+  "loanActualPaymentHelp": "Le montant réellement prélevé chaque mois : c'est la seule valeur certaine. Le capital restant, les intérêts et la date de fin en sont déduits.",
+  "loanActualPreview": "Avec {amount} prélevés par mois, le crédit serait remboursé en {months} mois.",
+  "@loanActualPreview": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "loanPaymentActual": "Mensualité (prélevée)",
+  "loanPaymentComputed": "Mensualité (calculée)",
+  "loanEstimatedDuration": "Durée estimée",
+  "loanEstimatesNote": "La mensualité prélevée est la seule valeur certaine : le capital restant, les intérêts et la date de fin sont des estimations calculées à partir d'elle. Le tableau d'amortissement de votre banque fait foi.",
+  "loanEstimatesNoteComputed": "Mensualité calculée à partir du capital, du taux et de la durée : indiquez la mensualité prélevée pour des estimations plus justes. Le tableau d'amortissement de votre banque fait foi.",
+  "loanDocumentsTitle": "Documents du crédit",
+  "loanDocumentsHelp": "Tableau d'amortissement, offre de prêt, captures d'écran… Ils restent sur votre serveur (PDF, image, CSV, tableur ; 10 Mo au plus).",
+  "loanDocumentsEmpty": "Aucun document.",
+  "loanDocumentAdd": "Ajouter un document",
+  "loanDocumentAdded": "Document ajouté.",
+  "loanDocumentDelete": "Supprimer le document",
+  "loanDocumentDeleteConfirm": "Supprimer « {name} » du serveur ? Cette action est définitive.",
+  "@loanDocumentDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "loanDocumentInfo": "{size} · ajouté le {date}",
+  "@loanDocumentInfo": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "error_document_too_large": "Le document est vide ou dépasse 10 Mo.",
+  "error_document_type": "Type de document non accepté : PDF, image (PNG, JPEG, WebP), CSV, texte ou tableur (XLSX, ODS).",
+  "error_document_limit": "Ce crédit a déjà 30 documents : supprimez-en avant d'en ajouter.",
+  "sizeMb": "{value} Mo",
+  "@sizeMb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "sizeKb": "{value} ko",
+  "@sizeKb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   }
 }

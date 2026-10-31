@@ -1,0 +1,15 @@
+### A document of a loan kept on the server: amortisation table, offer,
+### screenshot… Stored in the database (so in the backups), never sent
+### anywhere else.
+class: LoanDocument
+table: loan_documents
+fields:
+  loanId: int, relation(parent=loans, onDelete=Cascade)
+  fileName: String
+  mimeType: String
+  sizeBytes: int
+  uploadedBy: UuidValue?
+  createdAt: DateTime, default=now
+indexes:
+  loan_documents_loan_idx:
+    fields: loanId

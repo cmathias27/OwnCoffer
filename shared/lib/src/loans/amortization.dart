@@ -20,12 +20,20 @@ class LoanTerms {
   /// Borrower insurance per instalment, fixed.
   final int insuranceMonthlyCents;
 
+  /// The instalment actually debited (capital + interest, insurance
+  /// excluded), when known: the only figure that is certain. The schedule
+  /// then follows it until the capital is repaid, and the number of
+  /// instalments is an estimate; without it the instalment is computed from
+  /// the principal, the rate and [months].
+  final int? paymentCents;
+
   LoanTerms({
     required this.principalCents,
     required this.annualRateMilli,
     required this.months,
     required this.firstDue,
     this.insuranceMonthlyCents = 0,
+    this.paymentCents,
   }) {
     if (principalCents <= 0 || principalCents > maxLoanPrincipalCents) {
       throw ArgumentError.value(principalCents, 'principalCents');
@@ -40,7 +48,24 @@ class LoanTerms {
         insuranceMonthlyCents > maxLoanPrincipalCents) {
       throw ArgumentError.value(insuranceMonthlyCents, 'insuranceMonthlyCents');
     }
+    final p = paymentCents;
+    // The instalment must at least cover the first month's interest, or the
+    // loan would never be repaid.
+    if (p != null &&
+        (p <= 0 ||
+            p > maxLoanPrincipalCents ||
+            p <= _monthInterest(principalCents, annualRateMilli))) {
+      throw ArgumentError.value(p, 'paymentCents');
+    }
   }
+
+  /// The instalment: the actual one, or the one computed.
+  int get payment =>
+      paymentCents ?? loanPaymentCents(principalCents, annualRateMilli, months);
+
+  /// Last instalment number allowed: the contract's duration, or (with the
+  /// actual instalment) as long as it takes, within the supported limit.
+  int get _lastNumber => paymentCents == null ? months : maxLoanMonths;
 }
 
 class Installment {
@@ -119,17 +144,14 @@ int _monthInterest(int remainingCents, int annualRateMilli) =>
     (remainingCents * annualRateMilli + 600000) ~/ 1200000;
 
 List<Installment> amortize(LoanTerms t) {
-  final payment = loanPaymentCents(
-    t.principalCents,
-    t.annualRateMilli,
-    t.months,
-  );
+  final payment = t.payment;
+  final last = t._lastNumber;
   final result = <Installment>[];
   var remaining = t.principalCents;
-  for (var k = 1; k <= t.months && remaining > 0; k++) {
+  for (var k = 1; k <= last && remaining > 0; k++) {
     final interest = _monthInterest(remaining, t.annualRateMilli);
     var capital = payment - interest;
-    if (k == t.months || capital > remaining) capital = remaining;
+    if (k == last || capital > remaining) capital = remaining;
     remaining -= capital;
     result.add(
       Installment(
@@ -241,20 +263,17 @@ LoanStatus loanStatus(
       interestSavedCents: status.interestRemainingCents,
     );
   }
-  final payment = loanPaymentCents(
-    terms.principalCents,
-    terms.annualRateMilli,
-    terms.months,
-  );
+  final payment = terms.payment;
+  final last = terms._lastNumber;
   final result = <Installment>[];
   var remaining = left;
   var k = status.paidCount;
   var interestTotal = 0;
-  while (remaining > 0 && k < terms.months) {
+  while (remaining > 0 && k < last) {
     k++;
     final interest = _monthInterest(remaining, terms.annualRateMilli);
     var capital = payment - interest;
-    if (capital > remaining || k == terms.months) capital = remaining;
+    if (capital > remaining || k == last) capital = remaining;
     remaining -= capital;
     interestTotal += interest;
     result.add(

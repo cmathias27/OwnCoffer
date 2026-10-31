@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.1 (31 octobre 2026)
+
+### Crédits
+
+- **La mensualité prélevée fait foi** : un nouveau champ « Mensualité prélevée (assurance comprise) » est rempli tout seul quand le crédit est déclaré ou rattaché depuis un prélèvement. Le tableau d'amortissement, le capital restant, les intérêts, la date de fin et les échéances prévues partent de ce montant. La durée qui en découle est affichée comme une estimation. Sans ce montant, la mensualité est calculée comme avant et présentée comme telle.
+- La fiche du crédit indique si la mensualité est prélevée ou calculée, et rappelle que le reste est estimé et que le tableau de la banque fait foi.
+- **Documents du crédit** : tableau d'amortissement, offre de prêt, captures d'écran (PDF, image, CSV, texte ou tableur, 10 Mo au plus, 30 par crédit) sont gardés sur le serveur. On les ouvre ou les télécharge depuis la fiche du crédit quand on veut. Ils sont stockés dans la base de données, donc compris dans les sauvegardes, et ne sont envoyés nulle part ailleurs.
+- Plus tard (phase 4, avec l'IA en option) : lire ces documents pour proposer les conditions du crédit à valider.
+
 ## 0.3.0 (31 octobre 2026)
 
 Suite des ajouts demandés pendant le mois d'essai : on peut annuler une action, et la page Budget s'enrichit.

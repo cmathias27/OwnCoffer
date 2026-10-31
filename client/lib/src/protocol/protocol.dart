@@ -22,6 +22,7 @@ import 'package:owncoffer_client/src/protocol/group_membership.dart'
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
+import 'package:owncoffer_client/src/protocol/loan_document.dart' as _ixzu9i3x;
 import 'package:owncoffer_client/src/protocol/loan_installment.dart'
     as _i18weoko;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
@@ -72,6 +73,8 @@ import 'invitation_info.dart' as _i9hwipt6;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'left_to_live_report.dart' as _ibb3lpoc;
 import 'loan.dart' as _i7jednjp;
+import 'loan_document.dart' as _ixhwb2ta;
+import 'loan_document_blob.dart' as _i05ovdfs;
 import 'loan_from_operation.dart' as _ibgzxro1;
 import 'loan_info.dart' as _ijbwwnsd;
 import 'loan_installment.dart' as _ics9k3ng;
@@ -134,6 +137,8 @@ export 'invitation_info.dart';
 export 'ip_ban_info.dart';
 export 'left_to_live_report.dart';
 export 'loan.dart';
+export 'loan_document.dart';
+export 'loan_document_blob.dart';
 export 'loan_from_operation.dart';
 export 'loan_info.dart';
 export 'loan_installment.dart';
@@ -299,6 +304,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _i7jednjp.Loan) {
       return _i7jednjp.Loan.fromJson(data) as T;
+    }
+    if (t == _ixhwb2ta.LoanDocument) {
+      return _ixhwb2ta.LoanDocument.fromJson(data) as T;
+    }
+    if (t == _i05ovdfs.LoanDocumentBlob) {
+      return _i05ovdfs.LoanDocumentBlob.fromJson(data) as T;
     }
     if (t == _ibgzxro1.LoanFromOperation) {
       return _ibgzxro1.LoanFromOperation.fromJson(data) as T;
@@ -507,6 +518,13 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_i7jednjp.Loan?>()) {
       return (data != null ? _i7jednjp.Loan.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ixhwb2ta.LoanDocument?>()) {
+      return (data != null ? _ixhwb2ta.LoanDocument.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i05ovdfs.LoanDocumentBlob?>()) {
+      return (data != null ? _i05ovdfs.LoanDocumentBlob.fromJson(data) : null)
+          as T;
     }
     if (t == _isc.getType<_ibgzxro1.LoanFromOperation?>()) {
       return (data != null ? _ibgzxro1.LoanFromOperation.fromJson(data) : null)
@@ -779,6 +797,12 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ixzu9i3x.LoanDocument>) {
+      return (data as List)
+              .map((e) => deserialize<_ixzu9i3x.LoanDocument>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_igwx4n0s.AppNotification>) {
       return (data as List)
               .map((e) => deserialize<_igwx4n0s.AppNotification>(e))
@@ -849,6 +873,8 @@ class Protocol extends _isc.SerializationManager {
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _ibb3lpoc.LeftToLiveReport => 'LeftToLiveReport',
       _i7jednjp.Loan => 'Loan',
+      _ixhwb2ta.LoanDocument => 'LoanDocument',
+      _i05ovdfs.LoanDocumentBlob => 'LoanDocumentBlob',
       _ibgzxro1.LoanFromOperation => 'LoanFromOperation',
       _ijbwwnsd.LoanInfo => 'LoanInfo',
       _ics9k3ng.LoanInstallment => 'LoanInstallment',
@@ -959,6 +985,10 @@ class Protocol extends _isc.SerializationManager {
         return 'LeftToLiveReport';
       case _i7jednjp.Loan():
         return 'Loan';
+      case _ixhwb2ta.LoanDocument():
+        return 'LoanDocument';
+      case _i05ovdfs.LoanDocumentBlob():
+        return 'LoanDocumentBlob';
       case _ibgzxro1.LoanFromOperation():
         return 'LoanFromOperation';
       case _ijbwwnsd.LoanInfo():
@@ -1138,6 +1168,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'Loan') {
       return deserialize<_i7jednjp.Loan>(data['data']);
+    }
+    if (dataClassName == 'LoanDocument') {
+      return deserialize<_ixhwb2ta.LoanDocument>(data['data']);
+    }
+    if (dataClassName == 'LoanDocumentBlob') {
+      return deserialize<_i05ovdfs.LoanDocumentBlob>(data['data']);
     }
     if (dataClassName == 'LoanFromOperation') {
       return deserialize<_ibgzxro1.LoanFromOperation>(data['data']);

@@ -18,6 +18,9 @@ fields:
   ### APR (TAEG), for information.
   aprMilli: int?
   durationMonths: int
+  ### Instalment actually debited, insurance excluded (the only certain
+  ### figure): the schedule follows it, the rest is estimated.
+  paymentCents: int?
   firstDueDate: DateTime
   insuranceMonthlyCents: int, default=0
   feesCents: int, default=0

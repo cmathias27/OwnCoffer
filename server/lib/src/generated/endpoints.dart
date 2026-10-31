@@ -1436,6 +1436,94 @@ class Endpoints extends _is.EndpointDispatch {
                     params['loanId'],
                   ),
         ),
+        'documents': _is.MethodConnector(
+          name: 'documents',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['loan'] as _imitaxsf.LoanEndpoint).documents(
+                    session,
+                    params['loanId'],
+                  ),
+        ),
+        'uploadDocument': _is.MethodConnector(
+          name: 'uploadDocument',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'fileName': _is.ParameterDescription(
+              name: 'fileName',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'file': _is.ParameterDescription(
+              name: 'file',
+              type: _is.getType<_idt.ByteData>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['loan'] as _imitaxsf.LoanEndpoint).uploadDocument(
+                    session,
+                    params['loanId'],
+                    params['fileName'],
+                    params['file'],
+                  ),
+        ),
+        'downloadDocument': _is.MethodConnector(
+          name: 'downloadDocument',
+          params: {
+            'documentId': _is.ParameterDescription(
+              name: 'documentId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint)
+                  .downloadDocument(
+                    session,
+                    params['documentId'],
+                  ),
+        ),
+        'deleteDocument': _is.MethodConnector(
+          name: 'deleteDocument',
+          params: {
+            'documentId': _is.ParameterDescription(
+              name: 'documentId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['loan'] as _imitaxsf.LoanEndpoint).deleteDocument(
+                    session,
+                    params['documentId'],
+                  ),
+        ),
         'simulate': _is.MethodConnector(
           name: 'simulate',
           params: {

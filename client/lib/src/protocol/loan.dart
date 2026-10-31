@@ -29,6 +29,7 @@ abstract class Loan
     required this.annualRateMilli,
     this.aprMilli,
     required this.durationMonths,
+    this.paymentCents,
     required this.firstDueDate,
     int? insuranceMonthlyCents,
     int? feesCents,
@@ -53,6 +54,7 @@ abstract class Loan
     required int annualRateMilli,
     int? aprMilli,
     required int durationMonths,
+    int? paymentCents,
     required DateTime firstDueDate,
     int? insuranceMonthlyCents,
     int? feesCents,
@@ -76,6 +78,7 @@ abstract class Loan
       annualRateMilli: jsonSerialization['annualRateMilli'] as int,
       aprMilli: jsonSerialization['aprMilli'] as int?,
       durationMonths: jsonSerialization['durationMonths'] as int,
+      paymentCents: jsonSerialization['paymentCents'] as int?,
       firstDueDate: _isc.DateTimeJsonExtension.fromJson(
         jsonSerialization['firstDueDate'],
       ),
@@ -122,6 +125,10 @@ abstract class Loan
 
   int durationMonths;
 
+  /// Instalment actually debited, insurance excluded (the only certain
+  /// figure): the schedule follows it, the rest is estimated.
+  int? paymentCents;
+
   DateTime firstDueDate;
 
   int insuranceMonthlyCents;
@@ -159,6 +166,7 @@ abstract class Loan
     int? annualRateMilli,
     int? aprMilli,
     int? durationMonths,
+    int? paymentCents,
     DateTime? firstDueDate,
     int? insuranceMonthlyCents,
     int? feesCents,
@@ -183,6 +191,7 @@ abstract class Loan
       'annualRateMilli': annualRateMilli,
       if (aprMilli != null) 'aprMilli': aprMilli,
       'durationMonths': durationMonths,
+      if (paymentCents != null) 'paymentCents': paymentCents,
       'firstDueDate': firstDueDate.toJson(),
       'insuranceMonthlyCents': insuranceMonthlyCents,
       'feesCents': feesCents,
@@ -209,6 +218,7 @@ abstract class Loan
       'annualRateMilli': annualRateMilli,
       if (aprMilli != null) 'aprMilli': aprMilli,
       'durationMonths': durationMonths,
+      if (paymentCents != null) 'paymentCents': paymentCents,
       'firstDueDate': firstDueDate.toJson(),
       'insuranceMonthlyCents': insuranceMonthlyCents,
       'feesCents': feesCents,
@@ -241,6 +251,7 @@ class _LoanImpl extends Loan {
     required int annualRateMilli,
     int? aprMilli,
     required int durationMonths,
+    int? paymentCents,
     required DateTime firstDueDate,
     int? insuranceMonthlyCents,
     int? feesCents,
@@ -261,6 +272,7 @@ class _LoanImpl extends Loan {
          annualRateMilli: annualRateMilli,
          aprMilli: aprMilli,
          durationMonths: durationMonths,
+         paymentCents: paymentCents,
          firstDueDate: firstDueDate,
          insuranceMonthlyCents: insuranceMonthlyCents,
          feesCents: feesCents,
@@ -287,6 +299,7 @@ class _LoanImpl extends Loan {
     int? annualRateMilli,
     Object? aprMilli = _Undefined,
     int? durationMonths,
+    Object? paymentCents = _Undefined,
     DateTime? firstDueDate,
     int? insuranceMonthlyCents,
     int? feesCents,
@@ -308,6 +321,7 @@ class _LoanImpl extends Loan {
       annualRateMilli: annualRateMilli ?? this.annualRateMilli,
       aprMilli: aprMilli is int? ? aprMilli : this.aprMilli,
       durationMonths: durationMonths ?? this.durationMonths,
+      paymentCents: paymentCents is int? ? paymentCents : this.paymentCents,
       firstDueDate: firstDueDate ?? this.firstDueDate,
       insuranceMonthlyCents:
           insuranceMonthlyCents ?? this.insuranceMonthlyCents,
