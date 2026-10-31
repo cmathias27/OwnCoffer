@@ -20,7 +20,7 @@ services:
     networks: [owncoffer]
 
   owncoffer:
-    image: ghcr.io/cmathias27/owncoffer:${OWNCOFFER_TAG:-edge}
+    image: ${OWNCOFFER_IMAGE:-ghcr.io/cmathias27/owncoffer}:${OWNCOFFER_TAG:-edge}
     build:
       context: ..
       dockerfile: docker/Dockerfile
