@@ -500,14 +500,6 @@
   "csvTab": "Tabulation",
   "csvHeaderRow": "Ligne d'en-tête",
   "csvNoHeader": "Aucune",
-  "csvRow": "Ligne {number}",
-  "@csvRow": {
-    "placeholders": {
-      "number": {
-        "type": "int"
-      }
-    }
-  },
   "csvDate": "Date",
   "csvLabel": "Libellé",
   "csvMemo": "Détail (facultatif)",
@@ -531,5 +523,16 @@
   },
   "csvMonthFirst": "Dates au format mois/jour/année (américain)",
   "csvIncomplete": "Choisissez au moins la date, le libellé et un montant.",
-  "validate": "Valider"
+  "validate": "Valider",
+  "csvRowSample": "Ligne {number} : {sample}",
+  "@csvRowSample": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "sample": {
+        "type": "String"
+      }
+    }
+  }
 }

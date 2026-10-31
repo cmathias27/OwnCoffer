@@ -736,7 +736,7 @@ class _CsvColumnsDialogState extends State<_CsvColumnsDialog> {
                     DropdownMenuItem(
                       value: i,
                       child: Text(
-                        '${l.csvRow(i + 1)} : ${_rows[i].join(' | ')}',
+                        l.csvRowSample(i + 1, _rows[i].join(' | ')),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

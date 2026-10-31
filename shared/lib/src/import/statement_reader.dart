@@ -21,8 +21,23 @@ StatementFormat? detectStatementFormat(List<int> bytes) {
       (upper.startsWith('<?XML') && upper.contains('OFX'))) {
     return StatementFormat.ofx;
   }
-  if (detectCsvMapping(head) != null) return StatementFormat.csv;
+  if (detectCsvMapping(head) != null || _looksTabular(head, bytes.length)) {
+    // Unrecognised columns: parseCsv asks for them (`csv_columns_unknown`).
+    return StatementFormat.csv;
+  }
   return null;
+}
+
+/// At least two rows with the same number of columns (two or more).
+bool _looksTabular(String head, int totalBytes) {
+  final rows = splitCsv(
+    head,
+    detectDelimiter(head),
+  ).where((r) => r.any((c) => c.trim().isNotEmpty)).toList();
+  // The last row of a truncated head may be cut in the middle.
+  if (totalBytes > 4096 && rows.length > 2) rows.removeLast();
+  if (rows.length < 2 || rows.first.length < 2) return false;
+  return rows.every((r) => r.length == rows.first.length);
 }
 
 /// Reads a bank file of any supported format.

@@ -882,11 +882,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get csvNoHeader => 'None';
 
   @override
-  String csvRow(int number) {
-    return 'Row $number';
-  }
-
-  @override
   String get csvDate => 'Date';
 
   @override
@@ -930,4 +925,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validate => 'Validate';
+
+  @override
+  String csvRowSample(int number, String sample) {
+    return 'Row $number: $sample';
+  }
 }

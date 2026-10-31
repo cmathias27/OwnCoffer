@@ -1484,12 +1484,6 @@ abstract class AppLocalizations {
   /// **'Aucune'**
   String get csvNoHeader;
 
-  /// No description provided for @csvRow.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ligne {number}'**
-  String csvRow(int number);
-
   /// No description provided for @csvDate.
   ///
   /// In fr, this message translates to:
@@ -1573,6 +1567,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Valider'**
   String get validate;
+
+  /// No description provided for @csvRowSample.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ligne {number} : {sample}'**
+  String csvRowSample(int number, String sample);
 }
 
 class _AppLocalizationsDelegate

@@ -231,7 +231,6 @@
   "csvTab": "Tab",
   "csvHeaderRow": "Header row",
   "csvNoHeader": "None",
-  "csvRow": "Row {number}",
   "csvDate": "Date",
   "csvLabel": "Label",
   "csvMemo": "Details (optional)",
@@ -245,5 +244,6 @@
   "csvColumn": "Column {number}: {sample}",
   "csvMonthFirst": "Dates as month/day/year (US)",
   "csvIncomplete": "Choose at least the date, the label and an amount.",
-  "validate": "Validate"
+  "validate": "Validate",
+  "csvRowSample": "Row {number}: {sample}"
 }
