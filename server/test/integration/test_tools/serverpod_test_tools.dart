@@ -45,6 +45,8 @@ import 'package:owncoffer_server/src/generated/rule_direction.dart'
     as _ini8nmtb;
 import 'package:owncoffer_server/src/generated/rule_match_type.dart'
     as _ijwgwf7y;
+import 'package:owncoffer_server/src/generated/rule_test_result.dart'
+    as _itg6cveq;
 import 'package:owncoffer_server/src/generated/scheduled_transaction.dart'
     as _inu9ydal;
 import 'package:owncoffer_server/src/generated/setup_status.dart' as _i7xpdhgz;
@@ -1831,6 +1833,43 @@ class _RuleEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_itg6cveq.RuleTestResult> tryLabel(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    String label,
+    int amountCents,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'rule',
+            method: 'tryLabel',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'rule',
+          methodName: 'tryLabel',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'label': label,
+            'amountCents': amountCents,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_itg6cveq.RuleTestResult>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

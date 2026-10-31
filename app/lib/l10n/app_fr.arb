@@ -708,5 +708,118 @@
   "dateToleranceLabel": "Tolérance de date (jours)",
   "amountToleranceLabel": "Tolérance de montant (%)",
   "toleranceInvalid": "Nombre entier attendu.",
-  "scheduledLockedHelp": "La fréquence et la première échéance ne se modifient pas : supprimez et recréez l'opération prévue."
+  "scheduledLockedHelp": "La fréquence et la première échéance ne se modifient pas : supprimez et recréez l'opération prévue.",
+  "categoriesTab": "Catégories",
+  "rulesTab": "Règles",
+  "categoryAdd": "Ajouter une catégorie",
+  "categoryEdit": "Modifier la catégorie",
+  "categoryName": "Nom",
+  "categoryParent": "Catégorie parente",
+  "categoryNoParent": "Aucune (catégorie principale)",
+  "categoryKindLabel": "Type",
+  "kindIncome": "Revenu",
+  "kindExpense": "Dépense",
+  "kindTransfer": "Virement interne",
+  "categoryStandardName": "Nom standard : {name}",
+  "@categoryStandardName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryResetName": "Revenir au nom standard",
+  "categoryStandardHelp": "Reliée au catalogue standard : les règles communautaires continuent de la remplir, même renommée.",
+  "categoryArchive": "Archiver",
+  "categoryArchiveConfirm": "Archiver « {name} » ? Elle ne sera plus proposée ; les opérations déjà classées la gardent.",
+  "@categoryArchiveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ruleAdd": "Ajouter une règle",
+  "ruleEdit": "Modifier la règle",
+  "rulesEmpty": "Aucune règle du groupe. Créez-en une ici ou avec « Toujours classer ainsi » sur une opération.",
+  "rulePattern": "Texte recherché dans le libellé",
+  "ruleMatchType": "Correspondance",
+  "matchContains": "contient",
+  "matchStartsWith": "commence par",
+  "matchEquals": "est exactement",
+  "ruleDirection": "Sens",
+  "directionAny": "Débit ou crédit",
+  "directionDebit": "Débit seulement",
+  "directionCredit": "Crédit seulement",
+  "ruleMinAmount": "Montant minimum (facultatif)",
+  "ruleMaxAmount": "Montant maximum (facultatif)",
+  "rulePriority": "Priorité",
+  "rulePriorityHelp": "La plus petite passe en premier.",
+  "ruleEnabled": "Active",
+  "ruleDelete": "Supprimer",
+  "ruleSummary": "Libellé {match} « {pattern} » → {category}",
+  "@ruleSummary": {
+    "placeholders": {
+      "match": {
+        "type": "String"
+      },
+      "pattern": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "ruleAmounts": "entre {min} et {max}",
+  "@ruleAmounts": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "ruleAmountFrom": "à partir de {min}",
+  "@ruleAmountFrom": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      }
+    }
+  },
+  "ruleAmountUpTo": "jusqu'à {max}",
+  "@ruleAmountUpTo": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "testerTitle": "Tester un libellé",
+  "testerHelp": "Collez un libellé de votre relevé : OwnCoffer montre comment il le nettoie et le classe, sans rien enregistrer.",
+  "testerRun": "Tester",
+  "testerCleaned": "Libellé court : {label}",
+  "@testerCleaned": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "testerResult": "Catégorie : {category} ({source})",
+  "@testerResult": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "testerNone": "Aucune règle ne s'applique : l'opération serait « À classer ».",
+  "testerRuleOpen": "Voir la règle"
 }

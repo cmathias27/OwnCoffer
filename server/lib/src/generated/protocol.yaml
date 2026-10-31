@@ -50,6 +50,7 @@ rule:
   - create:
   - update:
   - delete:
+  - tryLabel:
 scheduled:
   - list:
   - create:

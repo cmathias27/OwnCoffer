@@ -111,12 +111,12 @@ Objectif : se connecter en sécurité, créer des groupes, inviter des membres ;
 
 Objectif : la plus petite version utile, pour votre usage personnel (décision 0010). Fin de phase = **alpha 0.1**, utilisée un mois avant d'ajouter quoi que ce soit.
 
-- [ ] Comptes bancaires : création, solde initial, visibilité
-- [ ] Lecture des exports **Caisse d'Épargne** (format « Money » QIF d'abord, puis OFX et CSV si proposés) dans un module dédié de `shared/`, testée sur les relevés anonymisés et sur des fichiers mal formés (accents, virgule décimale, dates françaises)
+- [x] Comptes bancaires : création, solde initial, visibilité
+- [x] Lecture des exports **Caisse d'Épargne** (format « Money » QIF d'abord, puis OFX et CSV si proposés) dans un module dédié de `shared/`, testée sur des fichiers fictifs reproduisant la structure réelle et sur des fichiers mal formés (accents, virgule décimale, dates françaises)
 - [ ] Écran d'import : aperçu, compte reconnu, doublons écartés par empreinte, historique, annulation
-- [x] Liste des opérations : recherche, filtres, saisie manuelle, pointage (côté serveur ; écrans à venir)
-- [ ] Libellés nettoyés (« PRLV SEPA EDF SA REF… » devient « EDF »)
-- [ ] Classement : catégories reliées au catalogue standard (fait), règles du groupe (API faite), historique, source de la catégorie affichée
+- [x] Liste des opérations : recherche, filtres, saisie manuelle, pointage
+- [x] Libellés nettoyés (« PRLV SEPA EDF SA REF… » devient « EDF »)
+- [x] Classement : catégories reliées au catalogue standard, règles du groupe (écran et testeur), historique, source de la catégorie affichée
 - [x] Règles communautaires v0 : 154 règles pour les grandes enseignes (dans `shared/` pour l'alpha ; dépôt séparé `owncoffer-rules` plus tard)
 - [x] Opérations prévues récurrentes (loyer, salaire, abonnements) et **solde prévu** à 30 jours, avec son écran (courbe, à venir, rapprochements)
 - [x] **Alerte de découvert prévu**, dans l'app et par email (côté serveur ; écran des notifications à venir)

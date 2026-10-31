@@ -5,6 +5,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../state/session.dart';
 import 'accounts_screen.dart';
+import 'categories_screen.dart';
 import 'forecast_screen.dart';
 import 'import_screen.dart';
 import 'members_screen.dart';
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var _imports = 0;
   final _accountsKey = GlobalKey<AccountsScreenState>();
   final _forecastKey = GlobalKey<ForecastScreenState>();
+  final _categoriesKey = GlobalKey<CategoriesScreenState>();
 
   @override
   void initState() {
@@ -59,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => _tab = i);
     if (i == 0) _accountsKey.currentState?.reload();
     if (i == 2) _forecastKey.currentState?.reload();
+    if (i == 4) _categoriesKey.currentState?.reload();
     _loadAccounts();
   }
 
@@ -74,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
       (Icons.receipt_long_outlined, l.navOperations),
       (Icons.show_chart, l.navForecast),
       (Icons.upload_file_outlined, l.navImport),
+      (Icons.label_outline, l.navCategories),
     ];
 
     final Widget body = current == null
@@ -118,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _accountsKey.currentState?.reload();
                 },
               ),
+              CategoriesScreen(key: _categoriesKey, membership: current),
             ],
           );
 
