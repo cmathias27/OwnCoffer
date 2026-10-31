@@ -44,6 +44,7 @@ Suite des ajouts demandés pendant le mois d'essai : on peut annuler une action,
   - Un crédit sans compte prend celui du prélèvement. Un crédit sans libellé reconnu prend celui du prélèvement, avec une règle qui classera les prochains automatiquement.
   - Les autres échéances passées retrouvées sur le compte sont rattachées aussi.
   - Le bouton « Annuler » fonctionne comme pour les autres actions.
+- **Opérations du crédit** dans la fiche d'un crédit : les prélèvements du compte qui le concernent (rattachés à ses échéances ou classés par sa règle), du plus récent au plus ancien, avec le total payé. Modifier un crédit ne fait plus perdre le rattachement des prélèvements déjà reliés.
 - **Paiements en plusieurs fois** (3 ou 4 fois, Alma, Oney…) : un nouveau type dans la page Crédits, sans taux, rangé à part. Il peut être déclaré depuis le premier prélèvement : le montant total est alors calculé à partir du prélèvement.
 
 ## 0.2.1 (31 octobre 2026)

@@ -250,6 +250,38 @@ void main() {
       );
     });
 
+    test("the loan's operations, kept when the loan is changed", () async {
+      final first = await debit(shared, due(3), instalment);
+      final source = await debit(shared, due(1), instalment);
+      await debit(shared, due(1), instalment, label: 'LOYER');
+      final r = await endpoints.loan.createFromTransaction(
+        as(bob),
+        source.id!,
+        terms(),
+      );
+      Future<List<int?>> ids(UuidValue u) async => [
+        for (final t in await endpoints.loan.operations(as(u), r.info.loan.id!))
+          t.id,
+      ];
+      expect(await ids(reader), [source.id, first.id]);
+
+      final changed = await endpoints.loan.update(
+        as(bob),
+        r.info.loan.copyWith(label: 'Maison'),
+      );
+      expect(changed.loan.scheduledId, isNot(r.info.loan.scheduledId));
+      expect(await ids(reader), [source.id, first.id]);
+      expect(
+        (await BankTransaction.db.findById(db, first.id!))!.scheduledId,
+        changed.loan.scheduledId,
+      );
+
+      await expectLater(
+        endpoints.loan.operations(as(mallory), r.info.loan.id!),
+        denied,
+      );
+    });
+
     group('attach to an existing loan', () {
       test('a loan without account takes the debit, its label and a rule; '
           'undo puts things back', () async {

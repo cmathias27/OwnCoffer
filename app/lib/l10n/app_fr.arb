@@ -1644,5 +1644,26 @@
       }
     }
   },
-  "error_loan_other_account": "Ce crédit est prélevé sur un autre compte."
+  "error_loan_other_account": "Ce crédit est prélevé sur un autre compte.",
+  "loanOperationsTitle": "Opérations du crédit",
+  "loanOperationsSummary": "{count} prélèvements · {total} payés",
+  "@loanOperationsSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "loanOperationsEmpty": "Aucun prélèvement rattaché pour l'instant. Depuis la fiche d'un prélèvement, « C'est une échéance de crédit » le rattache à ce crédit.",
+  "loanOperationsMore": "Voir les {count} prélèvements",
+  "@loanOperationsMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

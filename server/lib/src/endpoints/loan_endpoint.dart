@@ -60,6 +60,32 @@ class LoanEndpoint extends Endpoint {
     ];
   }
 
+  /// The loan's operations on the accounts the user may see: debits linked
+  /// to its instalments or classified by its rule, newest first.
+  Future<List<BankTransaction>> operations(Session session, int loanId) async {
+    final loan = await _find(session, loanId);
+    final Set<int> ids = await _visibleIds(session, loan.groupId);
+    final sid = loan.scheduledId;
+    final rid = loan.ruleId;
+    if (ids.isEmpty || (sid == null && rid == null)) return [];
+    return BankTransaction.db.find(
+      session,
+      where: (t) {
+        Expression e = Constant.bool(false);
+        if (sid != null) e = e | t.scheduledId.equals(sid);
+        if (rid != null) {
+          e =
+              e |
+              (t.categorySource.equals(CategorySource.groupRule) &
+                  t.categoryRuleRef.equals('$rid'));
+        }
+        return t.accountId.inSet(ids) & t.deletedAt.equals(null) & e;
+      },
+      orderByList: (t) => [t.date.desc(), t.id.desc()],
+      limit: 1000,
+    );
+  }
+
   Future<EarlyRepayment> simulate(
     Session session,
     int loanId,
@@ -648,6 +674,7 @@ class LoanEndpoint extends Endpoint {
     Transaction tx, {
     bool includePast = false,
   }) async {
+    final old = loan.scheduledId;
     await _dropScheduled(session, loan, tx);
     final status = core.loanStatus(
       _terms(loan),
@@ -655,7 +682,19 @@ class LoanEndpoint extends Endpoint {
       _today(),
     );
     final next = status.next;
-    if (loan.accountId == null || (next == null && !includePast)) {
+    // A repaid loan keeps its (finished) planned operation when debits are
+    // linked to it, so they stay the loan's operations.
+    final keep =
+        includePast ||
+        next != null ||
+        (old != null &&
+            await BankTransaction.db.count(
+                  session,
+                  where: (t) => t.scheduledId.equals(old),
+                  transaction: tx,
+                ) >
+                0);
+    if (loan.accountId == null || !keep) {
       return Loan.db.updateRow(
         session,
         loan.copyWith(scheduledId: null),
@@ -689,6 +728,19 @@ class LoanEndpoint extends Endpoint {
       ),
       transaction: tx,
     );
+    // Debits already linked follow the loan to its new planned operation.
+    if (old != null) {
+      final linked = await BankTransaction.db.find(
+        session,
+        where: (t) => t.scheduledId.equals(old),
+        transaction: tx,
+      );
+      if (linked.isNotEmpty) {
+        await BankTransaction.db.update(session, [
+          for (final t in linked) t.copyWith(scheduledId: s.id),
+        ], transaction: tx);
+      }
+    }
     return Loan.db.updateRow(
       session,
       loan.copyWith(scheduledId: s.id),

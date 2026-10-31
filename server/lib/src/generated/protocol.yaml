@@ -55,6 +55,7 @@ invitation:
 loan:
   - overview:
   - schedule:
+  - operations:
   - simulate:
   - create:
   - update:

@@ -789,6 +789,15 @@ class EndpointLoan extends _isc.EndpointRef {
         {'loanId': loanId},
       );
 
+  /// The loan's operations on the accounts the user may see: debits linked
+  /// to its instalments or classified by its rule, newest first.
+  _ida.Future<List<_ivksw0b3.BankTransaction>> operations(int loanId) =>
+      caller.callServerEndpoint<List<_ivksw0b3.BankTransaction>>(
+        'loan',
+        'operations',
+        {'loanId': loanId},
+      );
+
   _ida.Future<_i0heeame.EarlyRepayment> simulate(
     int loanId,
     int amountCents,

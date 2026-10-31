@@ -596,5 +596,9 @@
   "loanAttachHelp": "Pick a loan already entered: this debit is attached to it and the next ones are classified automatically.",
   "loanAttachNew": "Declare a new loan",
   "loanAttachDone": "Debit attached to the loan: {linked} instalments linked, {others} other operations classified.",
-  "error_loan_other_account": "This loan is debited from another account."
+  "error_loan_other_account": "This loan is debited from another account.",
+  "loanOperationsTitle": "Loan operations",
+  "loanOperationsSummary": "{count} debits · {total} paid",
+  "loanOperationsEmpty": "No debit attached yet. From a debit's details, “This is a loan instalment” attaches it to this loan.",
+  "loanOperationsMore": "See all {count} debits"
 }

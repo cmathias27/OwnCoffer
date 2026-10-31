@@ -2237,4 +2237,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_loan_other_account =>
       'This loan is debited from another account.';
+
+  @override
+  String get loanOperationsTitle => 'Loan operations';
+
+  @override
+  String loanOperationsSummary(int count, String total) {
+    return '$count debits · $total paid';
+  }
+
+  @override
+  String get loanOperationsEmpty =>
+      'No debit attached yet. From a debit\'s details, “This is a loan instalment” attaches it to this loan.';
+
+  @override
+  String loanOperationsMore(int count) {
+    return 'See all $count debits';
+  }
 }

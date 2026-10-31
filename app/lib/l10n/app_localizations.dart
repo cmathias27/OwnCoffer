@@ -3684,6 +3684,30 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce crédit est prélevé sur un autre compte.'**
   String get error_loan_other_account;
+
+  /// No description provided for @loanOperationsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations du crédit'**
+  String get loanOperationsTitle;
+
+  /// No description provided for @loanOperationsSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} prélèvements · {total} payés'**
+  String loanOperationsSummary(int count, String total);
+
+  /// No description provided for @loanOperationsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun prélèvement rattaché pour l\'instant. Depuis la fiche d\'un prélèvement, « C\'est une échéance de crédit » le rattache à ce crédit.'**
+  String get loanOperationsEmpty;
+
+  /// No description provided for @loanOperationsMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les {count} prélèvements'**
+  String loanOperationsMore(int count);
 }
 
 class _AppLocalizationsDelegate

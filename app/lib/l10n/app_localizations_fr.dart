@@ -2248,4 +2248,21 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_loan_other_account =>
       'Ce crédit est prélevé sur un autre compte.';
+
+  @override
+  String get loanOperationsTitle => 'Opérations du crédit';
+
+  @override
+  String loanOperationsSummary(int count, String total) {
+    return '$count prélèvements · $total payés';
+  }
+
+  @override
+  String get loanOperationsEmpty =>
+      'Aucun prélèvement rattaché pour l\'instant. Depuis la fiche d\'un prélèvement, « C\'est une échéance de crédit » le rattache à ce crédit.';
+
+  @override
+  String loanOperationsMore(int count) {
+    return 'Voir les $count prélèvements';
+  }
 }
