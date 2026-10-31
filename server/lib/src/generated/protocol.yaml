@@ -26,6 +26,8 @@ admin:
   - health:
   - stats:
   - audit:
+  - backups:
+  - requestBackup:
   - sendTestEmail:
 analysis:
   - report:

@@ -40,7 +40,8 @@ RUN dart build cli --target bin/main.dart --output build \
 
 # --- Runtime ------------------------------------------------------------------
 FROM alpine:3.22
-RUN addgroup -S owncoffer && adduser -S -G owncoffer owncoffer
+# Fixed ids: the host gives this user the shared docker/state folder.
+RUN addgroup -S -g 10001 owncoffer && adduser -S -u 10001 -G owncoffer owncoffer
 WORKDIR /app
 COPY --from=server /runtime/ /
 COPY --from=server /src/server/build/bundle/ ./

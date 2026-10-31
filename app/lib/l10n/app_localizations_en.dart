@@ -2717,4 +2717,68 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_mail_failed =>
       'Sending the email failed: check the SMTP settings in docker/.env and the server log.';
+
+  @override
+  String get adminTabBackups => 'Backups';
+
+  @override
+  String get adminBackupsUnavailable =>
+      'The folder shared with the host (docker/state) is not mounted. The next automatic update installs it, or run this command as root in the OwnCoffer folder now:';
+
+  @override
+  String get adminBackupNoNightly => 'No nightly backup yet.';
+
+  @override
+  String adminBackupNightlyOk(String date) {
+    return 'Last nightly backup: $date';
+  }
+
+  @override
+  String adminBackupNightlyLate(String date) {
+    return 'No nightly backup since $date: check owncoffer-backup.timer.';
+  }
+
+  @override
+  String adminBackupLastFailed(String date, String message) {
+    return 'The last backup failed ($date): $message';
+  }
+
+  @override
+  String get adminBackupNow => 'Back up now';
+
+  @override
+  String get adminBackupPending => 'Requested, running on the server…';
+
+  @override
+  String get adminBackupRequested =>
+      'Backup requested: it shows here within seconds (at most one every 10 minutes).';
+
+  @override
+  String get adminBackupsHelp =>
+      'Kept on the same server, in docker/backups/: 30 nightly, 10 manual, 10 before an update. Copy them elsewhere regularly (disk, another machine).';
+
+  @override
+  String get adminBackupsEmpty => 'No backup.';
+
+  @override
+  String get adminBackupDaily => 'Nightly';
+
+  @override
+  String get adminBackupManual => 'Manual';
+
+  @override
+  String adminBackupBefore(String version) {
+    return 'Before update $version';
+  }
+
+  @override
+  String get adminRestoreTitle => 'Restore a backup';
+
+  @override
+  String get adminRestoreHelp =>
+      'On the server only, in the OwnCoffer folder: restoring replaces all current data. Back up first.';
+
+  @override
+  String get error_host_bridge_missing =>
+      'The folder shared with the host (docker/state) is not reachable.';
 }

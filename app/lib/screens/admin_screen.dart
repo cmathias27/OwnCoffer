@@ -5,6 +5,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import '../widgets/admin_backups.dart';
 
 /// Server administration (server administrator only): health, figures,
 /// accounts, banned IPs and the audit log. Never a group's financial data.
@@ -21,6 +22,7 @@ class _AdminScreenState extends State<AdminScreen> {
   List<AdminUserInfo> _users = [];
   List<IpBanInfo> _bans = [];
   List<AdminAuditInfo> _audit = [];
+  BackupOverview? _backups;
   String? _error;
 
   @override
@@ -36,6 +38,7 @@ class _AdminScreenState extends State<AdminScreen> {
       final users = await client.admin.users();
       final bans = await client.admin.bannedIps();
       final audit = await client.admin.audit(limit: 100);
+      final backups = await client.admin.backups();
       if (!mounted) return;
       setState(() {
         _health = health;
@@ -43,6 +46,7 @@ class _AdminScreenState extends State<AdminScreen> {
         _users = users;
         _bans = bans;
         _audit = audit;
+        _backups = backups;
         _error = null;
       });
     } on Object catch (e) {
@@ -68,7 +72,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.adminTitle),
@@ -83,6 +87,7 @@ class _AdminScreenState extends State<AdminScreen> {
             isScrollable: true,
             tabs: [
               Tab(text: l.adminTabHealth),
+              Tab(text: l.adminTabBackups),
               Tab(text: l.adminTabUsers),
               Tab(text: l.adminTabSecurity),
               Tab(text: l.adminTabAudit),
@@ -118,6 +123,13 @@ class _AdminScreenState extends State<AdminScreen> {
                         );
                       }
                     },
+                  ),
+                  AdminBackupsView(
+                    overview: _backups!,
+                    onBackup: () => _act(
+                      () => client.admin.requestBackup(),
+                      l.adminBackupRequested,
+                    ),
                   ),
                   _UsersView(
                     users: _users,

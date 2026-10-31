@@ -1,0 +1,8 @@
+### One database backup kept on the host (name, size, date: no data).
+class: BackupInfo
+fields:
+  name: String
+  ### daily, manual, before-X.Y.Z…
+  label: String
+  bytes: int
+  createdAt: DateTime

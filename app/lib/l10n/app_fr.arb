@@ -2070,5 +2070,53 @@
   "menuAdmin": "Administration du serveur",
   "error_cannot_block_self": "Vous ne pouvez pas bloquer votre propre compte.",
   "error_user_not_found": "Compte introuvable.",
-  "error_mail_failed": "L'envoi du courriel a échoué : vérifiez les réglages SMTP dans docker/.env et le journal du serveur."
+  "error_mail_failed": "L'envoi du courriel a échoué : vérifiez les réglages SMTP dans docker/.env et le journal du serveur.",
+  "adminTabBackups": "Sauvegardes",
+  "adminBackupsUnavailable": "Le dossier d'échange avec le serveur hôte (docker/state) n'est pas monté. Il est installé tout seul par la prochaine mise à jour automatique, ou tout de suite avec cette commande lancée en root dans le dossier d'OwnCoffer :",
+  "adminBackupNoNightly": "Aucune sauvegarde de nuit pour l'instant.",
+  "adminBackupNightlyOk": "Dernière sauvegarde de nuit : {date}",
+  "@adminBackupNightlyOk": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminBackupNightlyLate": "Pas de sauvegarde de nuit depuis le {date} : vérifiez owncoffer-backup.timer.",
+  "@adminBackupNightlyLate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminBackupLastFailed": "La dernière sauvegarde a échoué ({date}) : {message}",
+  "@adminBackupLastFailed": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "adminBackupNow": "Sauvegarder maintenant",
+  "adminBackupPending": "Demandée, en cours sur le serveur…",
+  "adminBackupRequested": "Sauvegarde demandée : elle apparaît ici dans quelques secondes (une toutes les 10 minutes au plus).",
+  "adminBackupsHelp": "Gardées sur le même serveur, dans docker/backups/ : 30 de nuit, 10 manuelles, 10 avant mise à jour. Copiez-les régulièrement ailleurs (disque, autre machine).",
+  "adminBackupsEmpty": "Aucune sauvegarde.",
+  "adminBackupDaily": "De nuit",
+  "adminBackupManual": "Manuelle",
+  "adminBackupBefore": "Avant la mise à jour {version}",
+  "@adminBackupBefore": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "adminRestoreTitle": "Restaurer une sauvegarde",
+  "adminRestoreHelp": "Sur le serveur seulement, dans le dossier d'OwnCoffer : restaurer remplace toutes les données actuelles. Faites d'abord une sauvegarde.",
+  "error_host_bridge_missing": "Le dossier d'échange avec le serveur hôte (docker/state) n'est pas accessible."
 }

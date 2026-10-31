@@ -23,6 +23,8 @@ import 'package:owncoffer_client/src/protocol/admin_health.dart' as _in646bd3;
 import 'package:owncoffer_client/src/protocol/admin_stats.dart' as _ip1w2kia;
 import 'package:owncoffer_client/src/protocol/admin_user_info.dart'
     as _i4kcqb5h;
+import 'package:owncoffer_client/src/protocol/backup_overview.dart'
+    as _il220tje;
 import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
 import 'package:owncoffer_client/src/protocol/bank_transaction.dart'
     as _ivksw0b3;
@@ -455,6 +457,22 @@ class EndpointAdmin extends _isc.EndpointRef {
       'limit': limit,
       'offset': offset,
     },
+  );
+
+  /// Backups kept on the host, as reported by its scripts.
+  _ida.Future<_il220tje.BackupOverview> backups() =>
+      caller.callServerEndpoint<_il220tje.BackupOverview>(
+        'admin',
+        'backups',
+        {},
+      );
+
+  /// Asks the host for a backup now (carried out within seconds by
+  /// docker/handle-requests.sh; at most one every 10 minutes).
+  _ida.Future<void> requestBackup() => caller.callServerEndpoint<void>(
+    'admin',
+    'requestBackup',
+    {},
   );
 
   /// Sends a test email to the administrator; returns the address. Without

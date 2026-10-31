@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:owncoffer_server/src/generated/protocol.dart';
+import 'package:owncoffer_server/src/host/host_state.dart';
 import 'package:owncoffer_server/src/mail/mail_service.dart';
 import 'package:owncoffer_server/src/security/scopes.dart';
 import 'package:serverpod/serverpod.dart';
@@ -64,6 +67,8 @@ void main() {
         () => endpoints.admin.audit(as(mallory)),
         () => endpoints.admin.sendTestEmail(as(mallory)),
         () => endpoints.admin.setBlocked(as(mallory), bob, true),
+        () => endpoints.admin.backups(as(mallory)),
+        () => endpoints.admin.requestBackup(as(mallory)),
       ]) {
         await expectLater(call(), denied);
       }
@@ -131,6 +136,51 @@ void main() {
       final to = await endpoints.admin.sendTestEmail(as(admin));
       expect(to, 'admin@example.org');
       expect(MailService.instance.outbox.single.to, 'admin@example.org');
+    });
+
+    group('backups (docker/state)', () {
+      late Directory dir;
+      setUp(() {
+        dir = Directory.systemTemp.createTempSync('owncoffer-state-');
+        HostState.instance = HostState(dir.path);
+      });
+      tearDown(() => dir.deleteSync(recursive: true));
+
+      test('listed newest first, last result, nightly, request', () async {
+        File('${dir.path}/backups.tsv').writeAsStringSync(
+          'owncoffer-20261030-033000-daily.dump\t5000\t1793331000\n'
+          'owncoffer-20261031-120000-manual.dump\t6000\t1793448000\n'
+          'not-a-backup.txt\t1\t1\n',
+        );
+        File('${dir.path}/backup-last').writeAsStringSync(
+          'at=1793448000\nlabel=manual\nok=true\nmessage=\n',
+        );
+        final o = await endpoints.admin.backups(as(admin));
+        expect(o.available, isTrue);
+        expect(o.backups.map((b) => b.label), ['manual', 'daily']);
+        expect(o.backups.first.bytes, 6000);
+        expect(o.lastOk, isTrue);
+        expect(o.lastMessage, isNull);
+        expect(o.lastDailyAt, DateTime.utc(2026, 10, 30, 3, 30));
+        expect(o.requestPending, isFalse);
+
+        await endpoints.admin.requestBackup(as(admin));
+        expect(File('${dir.path}/request-backup').existsSync(), isTrue);
+        expect(
+          (await endpoints.admin.backups(as(admin))).requestPending,
+          isTrue,
+        );
+      });
+
+      test('without the shared folder: said, and requests refused', () async {
+        HostState.instance = HostState('${dir.path}/missing');
+        final o = await endpoints.admin.backups(as(admin));
+        expect(o.available, isFalse);
+        await expectLater(
+          endpoints.admin.requestBackup(as(admin)),
+          throwsA(isA<InvalidInputException>()),
+        );
+      });
     });
   });
 }

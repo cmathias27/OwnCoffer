@@ -24,6 +24,7 @@ pubspec_overrides.yaml
 # Docker et sauvegardes locales
 docker/data/
 docker/backups/
+docker/state/
 *.dump
 *.sql.gz
 

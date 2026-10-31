@@ -4464,6 +4464,108 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'L\'envoi du courriel a échoué : vérifiez les réglages SMTP dans docker/.env et le journal du serveur.'**
   String get error_mail_failed;
+
+  /// No description provided for @adminTabBackups.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegardes'**
+  String get adminTabBackups;
+
+  /// No description provided for @adminBackupsUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le dossier d\'échange avec le serveur hôte (docker/state) n\'est pas monté. Il est installé tout seul par la prochaine mise à jour automatique, ou tout de suite avec cette commande lancée en root dans le dossier d\'OwnCoffer :'**
+  String get adminBackupsUnavailable;
+
+  /// No description provided for @adminBackupNoNightly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune sauvegarde de nuit pour l\'instant.'**
+  String get adminBackupNoNightly;
+
+  /// No description provided for @adminBackupNightlyOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière sauvegarde de nuit : {date}'**
+  String adminBackupNightlyOk(String date);
+
+  /// No description provided for @adminBackupNightlyLate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de sauvegarde de nuit depuis le {date} : vérifiez owncoffer-backup.timer.'**
+  String adminBackupNightlyLate(String date);
+
+  /// No description provided for @adminBackupLastFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La dernière sauvegarde a échoué ({date}) : {message}'**
+  String adminBackupLastFailed(String date, String message);
+
+  /// No description provided for @adminBackupNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarder maintenant'**
+  String get adminBackupNow;
+
+  /// No description provided for @adminBackupPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demandée, en cours sur le serveur…'**
+  String get adminBackupPending;
+
+  /// No description provided for @adminBackupRequested.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde demandée : elle apparaît ici dans quelques secondes (une toutes les 10 minutes au plus).'**
+  String get adminBackupRequested;
+
+  /// No description provided for @adminBackupsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gardées sur le même serveur, dans docker/backups/ : 30 de nuit, 10 manuelles, 10 avant mise à jour. Copiez-les régulièrement ailleurs (disque, autre machine).'**
+  String get adminBackupsHelp;
+
+  /// No description provided for @adminBackupsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune sauvegarde.'**
+  String get adminBackupsEmpty;
+
+  /// No description provided for @adminBackupDaily.
+  ///
+  /// In fr, this message translates to:
+  /// **'De nuit'**
+  String get adminBackupDaily;
+
+  /// No description provided for @adminBackupManual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Manuelle'**
+  String get adminBackupManual;
+
+  /// No description provided for @adminBackupBefore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avant la mise à jour {version}'**
+  String adminBackupBefore(String version);
+
+  /// No description provided for @adminRestoreTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restaurer une sauvegarde'**
+  String get adminRestoreTitle;
+
+  /// No description provided for @adminRestoreHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur le serveur seulement, dans le dossier d\'OwnCoffer : restaurer remplace toutes les données actuelles. Faites d\'abord une sauvegarde.'**
+  String get adminRestoreHelp;
+
+  /// No description provided for @error_host_bridge_missing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le dossier d\'échange avec le serveur hôte (docker/state) n\'est pas accessible.'**
+  String get error_host_bridge_missing;
 }
 
 class _AppLocalizationsDelegate
