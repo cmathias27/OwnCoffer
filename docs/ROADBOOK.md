@@ -113,7 +113,7 @@ Objectif : la plus petite version utile, pour votre usage personnel (décision 0
 
 - [x] Comptes bancaires : création, solde initial, visibilité
 - [x] Lecture des exports **Caisse d'Épargne** (format « Money » QIF d'abord, puis OFX et CSV si proposés) dans un module dédié de `shared/`, testée sur des fichiers fictifs reproduisant la structure réelle et sur des fichiers mal formés (accents, virgule décimale, dates françaises)
-- [ ] Écran d'import : aperçu, compte reconnu, doublons écartés par empreinte, historique, annulation
+- [x] Écran d'import : aperçu, compte reconnu (OFX), doublons écartés par empreinte, historique, annulation
 - [x] Liste des opérations : recherche, filtres, saisie manuelle, pointage
 - [x] Libellés nettoyés (« PRLV SEPA EDF SA REF… » devient « EDF »)
 - [x] Classement : catégories reliées au catalogue standard, règles du groupe (écran et testeur), historique, source de la catégorie affichée

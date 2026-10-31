@@ -1337,4 +1337,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifOpenForecast => 'Show the forecast';
+
+  @override
+  String get importAccountRecognised => 'Account recognised from the file.';
+
+  @override
+  String importOtherAccountMatch(String account) {
+    return 'This file matches the account “$account”.';
+  }
+
+  @override
+  String importSwitchAccount(String account) {
+    return 'Import into “$account”';
+  }
+
+  @override
+  String importWrongBankAccount(String account) {
+    return 'This file comes from another bank account than “$account”. Check the chosen account.';
+  }
 }

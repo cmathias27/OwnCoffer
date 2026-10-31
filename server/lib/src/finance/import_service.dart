@@ -7,6 +7,8 @@ import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
 import '../generated/protocol.dart';
+import '../security/access.dart';
+import '../security/bank_account_key.dart';
 import 'classification_service.dart';
 
 /// One parsed line with everything computed for it.
@@ -145,6 +147,52 @@ abstract final class ImportService {
     core.DuplicateStatus.possibleDuplicate => 'possibleDuplicate',
   };
 
+  /// The visible account of the group whose number matches the file. Only
+  /// accounts the user can see are considered: a restricted account is never
+  /// revealed.
+  static Future<int?> _recognise(
+    Session session,
+    Account account,
+    core.ParsedStatement s,
+  ) async {
+    final key = bankAccountKey(s.accountNumber);
+    if (key == null) return null;
+    if (account.bankAccountKey == key) return account.id;
+    final visible = await Access.visibleAccounts(session, account.groupId);
+    return visible.where((a) => a.bankAccountKey == key).firstOrNull?.id;
+  }
+
+  /// First OFX import into an account: it remembers the number's key, unless
+  /// another account of the group already has it.
+  static Future<void> _learnBankAccount(
+    Session session,
+    Account account,
+    core.ParsedStatement s,
+    Transaction tx,
+  ) async {
+    final key = bankAccountKey(s.accountNumber);
+    if (key == null || account.bankAccountKey != null) return;
+    final taken = await Account.db.count(
+      session,
+      where: (a) =>
+          a.groupId.equals(account.groupId) & a.bankAccountKey.equals(key),
+      transaction: tx,
+    );
+    if (taken > 0) return;
+    await Account.db.updateRow(
+      session,
+      account.copyWith(bankAccountKey: key),
+      transaction: tx,
+    );
+  }
+
+  static bool _otherBankAccount(Account account, core.ParsedStatement s) {
+    final key = bankAccountKey(s.accountNumber);
+    return key != null &&
+        account.bankAccountKey != null &&
+        account.bankAccountKey != key;
+  }
+
   /// Balance on [day] if the new lines were imported: initial balance,
   /// operations already in the account and new lines dated [day] or earlier.
   static Future<int> _balanceAfterImport(
@@ -229,6 +277,8 @@ abstract final class ImportService {
       sameFileAlreadyImported: a.sameFileAlreadyImported,
       statedBalanceCents: s.statedBalanceCents,
       statedBalanceDate: s.statedBalanceDate?.toDb(),
+      recognisedAccountId: await _recognise(session, account, s),
+      otherBankAccount: _otherBankAccount(account, s),
       balanceAfterImportCents: s.statedBalanceDate == null
           ? null
           : await _balanceAfterImport(
@@ -254,7 +304,7 @@ abstract final class ImportService {
   ) async {
     final bytes = _bytes(file);
     return session.db.transaction((tx) async {
-      await Account.db.findFirstRow(
+      final locked = await Account.db.findFirstRow(
         session,
         where: (a) => a.id.equals(account.id!),
         lockMode: LockMode.forUpdate,
@@ -329,6 +379,7 @@ abstract final class ImportService {
             createdBy: author,
           ),
       ], transaction: tx);
+      await _learnBankAccount(session, locked ?? account, a.statement, tx);
       return record;
     });
   }

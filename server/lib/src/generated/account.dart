@@ -28,6 +28,7 @@ abstract class Account
     this.initialBalanceDate,
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
+    this.bankAccountKey,
     this.color,
     DateTime? createdAt,
     this.deletedAt,
@@ -48,6 +49,7 @@ abstract class Account
     DateTime? initialBalanceDate,
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
+    String? bankAccountKey,
     String? color,
     DateTime? createdAt,
     DateTime? deletedAt,
@@ -75,6 +77,7 @@ abstract class Account
           : _ioxxcdxl.AccountVisibility.fromJson(
               (jsonSerialization['visibility'] as String),
             ),
+      bankAccountKey: jsonSerialization['bankAccountKey'] as String?,
       color: jsonSerialization['color'] as String?,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
@@ -113,6 +116,11 @@ abstract class Account
 
   _ioxxcdxl.AccountVisibility visibility;
 
+  /// HMAC of the bank account number seen in an OFX file (keyed with the
+  /// server secret): recognises the account at import without storing the
+  /// number. Learnt at the first OFX import.
+  String? bankAccountKey;
+
   String? color;
 
   DateTime createdAt;
@@ -136,6 +144,7 @@ abstract class Account
     DateTime? initialBalanceDate,
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
+    String? bankAccountKey,
     String? color,
     DateTime? createdAt,
     DateTime? deletedAt,
@@ -155,6 +164,7 @@ abstract class Account
         'initialBalanceDate': initialBalanceDate?.toJson(),
       'alertThresholdCents': alertThresholdCents,
       'visibility': visibility.toJson(),
+      if (bankAccountKey != null) 'bankAccountKey': bankAccountKey,
       if (color != null) 'color': color,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -224,6 +234,7 @@ class _AccountImpl extends Account {
     DateTime? initialBalanceDate,
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
+    String? bankAccountKey,
     String? color,
     DateTime? createdAt,
     DateTime? deletedAt,
@@ -238,6 +249,7 @@ class _AccountImpl extends Account {
          initialBalanceDate: initialBalanceDate,
          alertThresholdCents: alertThresholdCents,
          visibility: visibility,
+         bankAccountKey: bankAccountKey,
          color: color,
          createdAt: createdAt,
          deletedAt: deletedAt,
@@ -258,6 +270,7 @@ class _AccountImpl extends Account {
     Object? initialBalanceDate = _Undefined,
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
+    Object? bankAccountKey = _Undefined,
     Object? color = _Undefined,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
@@ -275,6 +288,9 @@ class _AccountImpl extends Account {
           : this.initialBalanceDate,
       alertThresholdCents: alertThresholdCents ?? this.alertThresholdCents,
       visibility: visibility ?? this.visibility,
+      bankAccountKey: bankAccountKey is String?
+          ? bankAccountKey
+          : this.bankAccountKey,
       color: color is String? ? color : this.color,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
@@ -333,6 +349,12 @@ class AccountUpdateTable extends _is.UpdateTable<AccountTable> {
     table.visibility,
     value,
   );
+
+  _is.ColumnValue<String, String> bankAccountKey(String? value) =>
+      _is.ColumnValue(
+        table.bankAccountKey,
+        value,
+      );
 
   _is.ColumnValue<String, String> color(String? value) => _is.ColumnValue(
     table.color,
@@ -397,6 +419,10 @@ class AccountTable extends _is.Table<int?> {
       _is.EnumSerialization.byName,
       hasDefault: true,
     );
+    bankAccountKey = _is.ColumnString(
+      'bankAccountKey',
+      this,
+    );
     color = _is.ColumnString(
       'color',
       this,
@@ -435,6 +461,11 @@ class AccountTable extends _is.Table<int?> {
 
   late final _is.ColumnEnum<_ioxxcdxl.AccountVisibility> visibility;
 
+  /// HMAC of the bank account number seen in an OFX file (keyed with the
+  /// server secret): recognises the account at import without storing the
+  /// number. Learnt at the first OFX import.
+  late final _is.ColumnString bankAccountKey;
+
   late final _is.ColumnString color;
 
   late final _is.ColumnDateTime createdAt;
@@ -453,6 +484,7 @@ class AccountTable extends _is.Table<int?> {
     initialBalanceDate,
     alertThresholdCents,
     visibility,
+    bankAccountKey,
     color,
     createdAt,
     deletedAt,

@@ -19,3 +19,8 @@ fields:
   ### OwnCoffer's balance on statedBalanceDate once the new lines are
   ### imported (possible duplicates left out), to compare with the bank's.
   balanceAfterImportCents: int?
+  ### Visible account of the group whose bank account number matches the
+  ### file (OFX), possibly the chosen one.
+  recognisedAccountId: int?
+  ### The chosen account already knows another bank account number.
+  otherBankAccount: bool

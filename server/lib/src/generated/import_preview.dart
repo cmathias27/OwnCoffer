@@ -33,6 +33,8 @@ abstract class ImportPreview
     this.statedBalanceCents,
     this.statedBalanceDate,
     this.balanceAfterImportCents,
+    this.recognisedAccountId,
+    required this.otherBankAccount,
   });
 
   factory ImportPreview({
@@ -50,6 +52,8 @@ abstract class ImportPreview
     int? statedBalanceCents,
     DateTime? statedBalanceDate,
     int? balanceAfterImportCents,
+    int? recognisedAccountId,
+    required bool otherBankAccount,
   }) = _ImportPreviewImpl;
 
   factory ImportPreview.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -81,6 +85,10 @@ abstract class ImportPreview
             ),
       balanceAfterImportCents:
           jsonSerialization['balanceAfterImportCents'] as int?,
+      recognisedAccountId: jsonSerialization['recognisedAccountId'] as int?,
+      otherBankAccount: _is.BoolJsonExtension.fromJson(
+        jsonSerialization['otherBankAccount'],
+      ),
     );
   }
 
@@ -116,6 +124,13 @@ abstract class ImportPreview
   /// imported (possible duplicates left out), to compare with the bank's.
   int? balanceAfterImportCents;
 
+  /// Visible account of the group whose bank account number matches the
+  /// file (OFX), possibly the chosen one.
+  int? recognisedAccountId;
+
+  /// The chosen account already knows another bank account number.
+  bool otherBankAccount;
+
   /// Returns a shallow copy of this [ImportPreview]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -134,6 +149,8 @@ abstract class ImportPreview
     int? statedBalanceCents,
     DateTime? statedBalanceDate,
     int? balanceAfterImportCents,
+    int? recognisedAccountId,
+    bool? otherBankAccount,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -155,6 +172,9 @@ abstract class ImportPreview
         'statedBalanceDate': statedBalanceDate?.toJson(),
       if (balanceAfterImportCents != null)
         'balanceAfterImportCents': balanceAfterImportCents,
+      if (recognisedAccountId != null)
+        'recognisedAccountId': recognisedAccountId,
+      'otherBankAccount': otherBankAccount,
     };
   }
 
@@ -178,6 +198,9 @@ abstract class ImportPreview
         'statedBalanceDate': statedBalanceDate?.toJson(),
       if (balanceAfterImportCents != null)
         'balanceAfterImportCents': balanceAfterImportCents,
+      if (recognisedAccountId != null)
+        'recognisedAccountId': recognisedAccountId,
+      'otherBankAccount': otherBankAccount,
     };
   }
 
@@ -205,6 +228,8 @@ class _ImportPreviewImpl extends ImportPreview {
     int? statedBalanceCents,
     DateTime? statedBalanceDate,
     int? balanceAfterImportCents,
+    int? recognisedAccountId,
+    required bool otherBankAccount,
   }) : super._(
          format: format,
          encoding: encoding,
@@ -220,6 +245,8 @@ class _ImportPreviewImpl extends ImportPreview {
          statedBalanceCents: statedBalanceCents,
          statedBalanceDate: statedBalanceDate,
          balanceAfterImportCents: balanceAfterImportCents,
+         recognisedAccountId: recognisedAccountId,
+         otherBankAccount: otherBankAccount,
        );
 
   /// Returns a shallow copy of this [ImportPreview]
@@ -241,6 +268,8 @@ class _ImportPreviewImpl extends ImportPreview {
     Object? statedBalanceCents = _Undefined,
     Object? statedBalanceDate = _Undefined,
     Object? balanceAfterImportCents = _Undefined,
+    Object? recognisedAccountId = _Undefined,
+    bool? otherBankAccount,
   }) {
     return ImportPreview(
       format: format ?? this.format,
@@ -265,6 +294,10 @@ class _ImportPreviewImpl extends ImportPreview {
       balanceAfterImportCents: balanceAfterImportCents is int?
           ? balanceAfterImportCents
           : this.balanceAfterImportCents,
+      recognisedAccountId: recognisedAccountId is int?
+          ? recognisedAccountId
+          : this.recognisedAccountId,
+      otherBankAccount: otherBankAccount ?? this.otherBankAccount,
     );
   }
 }

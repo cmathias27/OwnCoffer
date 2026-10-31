@@ -2196,6 +2196,30 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Voir les prévisions'**
   String get notifOpenForecast;
+
+  /// No description provided for @importAccountRecognised.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte reconnu d\'après le fichier.'**
+  String get importAccountRecognised;
+
+  /// No description provided for @importOtherAccountMatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier correspond au compte « {account} ».'**
+  String importOtherAccountMatch(String account);
+
+  /// No description provided for @importSwitchAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer dans « {account} »'**
+  String importSwitchAccount(String account);
+
+  /// No description provided for @importWrongBankAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier vient d\'un autre compte bancaire que « {account} ». Vérifiez le compte choisi.'**
+  String importWrongBankAccount(String account);
 }
 
 class _AppLocalizationsDelegate

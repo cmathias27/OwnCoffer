@@ -1344,4 +1344,22 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get notifOpenForecast => 'Voir les prévisions';
+
+  @override
+  String get importAccountRecognised => 'Compte reconnu d\'après le fichier.';
+
+  @override
+  String importOtherAccountMatch(String account) {
+    return 'Ce fichier correspond au compte « $account ».';
+  }
+
+  @override
+  String importSwitchAccount(String account) {
+    return 'Importer dans « $account »';
+  }
+
+  @override
+  String importWrongBankAccount(String account) {
+    return 'Ce fichier vient d\'un autre compte bancaire que « $account ». Vérifiez le compte choisi.';
+  }
 }
