@@ -86,6 +86,23 @@ void main() {
     expect(find.text('Description et garantie'), findsNothing);
   });
 
+  testWidgets('tile: a waiting invoice can be attached', (tester) async {
+    await tester.pumpWidget(
+      _app(
+        InvoiceTile(
+          info: _info(attached: false),
+          canWrite: true,
+          showOperation: true,
+          onChanged: (_) {},
+        ),
+      ),
+    );
+    await tester.tap(find.byType(PopupMenuButton<String>));
+    await tester.pumpAndSettle();
+    expect(find.text('Rattacher à une opération'), findsOneWidget);
+    expect(find.text('Ce que dit la facture'), findsOneWidget);
+  });
+
   test('warranty ending within a month', () {
     final today = DateTime.utc(2026, 10, 31);
     expect(warrantyEndingSoon(DateTime.utc(2026, 11, 20), today), isTrue);

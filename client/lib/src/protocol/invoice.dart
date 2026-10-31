@@ -27,6 +27,9 @@ abstract class Invoice
     required this.sizeBytes,
     this.label,
     this.warrantyUntil,
+    this.hintAmountCents,
+    this.hintDate,
+    this.hintMerchant,
     this.uploadedBy,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
@@ -40,6 +43,9 @@ abstract class Invoice
     required int sizeBytes,
     String? label,
     DateTime? warrantyUntil,
+    int? hintAmountCents,
+    DateTime? hintDate,
+    String? hintMerchant,
     _isc.UuidValue? uploadedBy,
     DateTime? createdAt,
   }) = _InvoiceImpl;
@@ -58,6 +64,11 @@ abstract class Invoice
           : _isc.DateTimeJsonExtension.fromJson(
               jsonSerialization['warrantyUntil'],
             ),
+      hintAmountCents: jsonSerialization['hintAmountCents'] as int?,
+      hintDate: jsonSerialization['hintDate'] == null
+          ? null
+          : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['hintDate']),
+      hintMerchant: jsonSerialization['hintMerchant'] as String?,
       uploadedBy: jsonSerialization['uploadedBy'] == null
           ? null
           : _isc.UuidValueJsonExtension.fromJson(
@@ -95,6 +106,14 @@ abstract class Invoice
   /// End of the warranty: a reminder comes a month before.
   DateTime? warrantyUntil;
 
+  /// What is known of an invoice waiting for its operation, to propose
+  /// the right one: total paid (positive cents), date, merchant.
+  int? hintAmountCents;
+
+  DateTime? hintDate;
+
+  String? hintMerchant;
+
   _isc.UuidValue? uploadedBy;
 
   DateTime createdAt;
@@ -111,6 +130,9 @@ abstract class Invoice
     int? sizeBytes,
     String? label,
     DateTime? warrantyUntil,
+    int? hintAmountCents,
+    DateTime? hintDate,
+    String? hintMerchant,
     _isc.UuidValue? uploadedBy,
     DateTime? createdAt,
   });
@@ -126,6 +148,9 @@ abstract class Invoice
       'sizeBytes': sizeBytes,
       if (label != null) 'label': label,
       if (warrantyUntil != null) 'warrantyUntil': warrantyUntil?.toJson(),
+      if (hintAmountCents != null) 'hintAmountCents': hintAmountCents,
+      if (hintDate != null) 'hintDate': hintDate?.toJson(),
+      if (hintMerchant != null) 'hintMerchant': hintMerchant,
       if (uploadedBy != null) 'uploadedBy': uploadedBy?.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -143,6 +168,9 @@ abstract class Invoice
       'sizeBytes': sizeBytes,
       if (label != null) 'label': label,
       if (warrantyUntil != null) 'warrantyUntil': warrantyUntil?.toJson(),
+      if (hintAmountCents != null) 'hintAmountCents': hintAmountCents,
+      if (hintDate != null) 'hintDate': hintDate?.toJson(),
+      if (hintMerchant != null) 'hintMerchant': hintMerchant,
       if (uploadedBy != null) 'uploadedBy': uploadedBy?.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -166,6 +194,9 @@ class _InvoiceImpl extends Invoice {
     required int sizeBytes,
     String? label,
     DateTime? warrantyUntil,
+    int? hintAmountCents,
+    DateTime? hintDate,
+    String? hintMerchant,
     _isc.UuidValue? uploadedBy,
     DateTime? createdAt,
   }) : super._(
@@ -177,6 +208,9 @@ class _InvoiceImpl extends Invoice {
          sizeBytes: sizeBytes,
          label: label,
          warrantyUntil: warrantyUntil,
+         hintAmountCents: hintAmountCents,
+         hintDate: hintDate,
+         hintMerchant: hintMerchant,
          uploadedBy: uploadedBy,
          createdAt: createdAt,
        );
@@ -194,6 +228,9 @@ class _InvoiceImpl extends Invoice {
     int? sizeBytes,
     Object? label = _Undefined,
     Object? warrantyUntil = _Undefined,
+    Object? hintAmountCents = _Undefined,
+    Object? hintDate = _Undefined,
+    Object? hintMerchant = _Undefined,
     Object? uploadedBy = _Undefined,
     DateTime? createdAt,
   }) {
@@ -208,6 +245,11 @@ class _InvoiceImpl extends Invoice {
       warrantyUntil: warrantyUntil is DateTime?
           ? warrantyUntil
           : this.warrantyUntil,
+      hintAmountCents: hintAmountCents is int?
+          ? hintAmountCents
+          : this.hintAmountCents,
+      hintDate: hintDate is DateTime? ? hintDate : this.hintDate,
+      hintMerchant: hintMerchant is String? ? hintMerchant : this.hintMerchant,
       uploadedBy: uploadedBy is _isc.UuidValue? ? uploadedBy : this.uploadedBy,
       createdAt: createdAt ?? this.createdAt,
     );

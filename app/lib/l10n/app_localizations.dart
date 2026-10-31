@@ -4822,7 +4822,7 @@ abstract class AppLocalizations {
   /// No description provided for @invoicesIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Les factures et tickets joints aux opérations, nommés d\'après l\'opération (date, libellé, montant). Pour en ajouter une, ouvrez l\'opération dans la page Opérations.'**
+  /// **'Les factures et tickets, nommés d\'après leur opération (date, libellé, montant). Ajoutez-en depuis une opération (page Opérations), ou ici même si l\'opération n\'est pas encore là : elle sera proposée dès qu\'elle arrivera.'**
   String get invoicesIntro;
 
   /// No description provided for @invoicesSearch.
@@ -5100,6 +5100,120 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Membres de « {group} »'**
   String adminMembersOf(String group);
+
+  /// No description provided for @invoiceAddWaiting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une facture'**
+  String get invoiceAddWaiting;
+
+  /// No description provided for @invoicesWaitingFilter.
+  ///
+  /// In fr, this message translates to:
+  /// **'À rattacher'**
+  String get invoicesWaitingFilter;
+
+  /// No description provided for @invoiceAttachTo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rattacher à une opération'**
+  String get invoiceAttachTo;
+
+  /// No description provided for @invoiceHints.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que dit la facture'**
+  String get invoiceHints;
+
+  /// No description provided for @invoiceHintsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout est facultatif : le montant, la date et le commerçant servent à proposer la bonne opération, maintenant ou après le prochain import. En attendant, tous les membres du groupe voient la facture.'**
+  String get invoiceHintsHelp;
+
+  /// No description provided for @invoiceHintAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant payé'**
+  String get invoiceHintAmount;
+
+  /// No description provided for @invoiceHintAmountInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant illisible (exemple : 499,00).'**
+  String get invoiceHintAmountInvalid;
+
+  /// No description provided for @invoiceHintMerchant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commerçant'**
+  String get invoiceHintMerchant;
+
+  /// No description provided for @invoiceHintMerchantHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Darty, garage Martin…'**
+  String get invoiceHintMerchantHint;
+
+  /// No description provided for @invoiceHintNoDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date inconnue'**
+  String get invoiceHintNoDate;
+
+  /// No description provided for @invoiceHintDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date : {date}'**
+  String invoiceHintDate(String date);
+
+  /// No description provided for @invoiceProposalsSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chercher une opération par son libellé'**
+  String get invoiceProposalsSearch;
+
+  /// No description provided for @invoiceProposalsNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération ne correspond pour l\'instant. La facture reste « à rattacher » : elle vous sera proposée dans l\'opération quand elle sera importée.'**
+  String get invoiceProposalsNone;
+
+  /// No description provided for @invoiceProposalsNoneSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération ne contient ce texte.'**
+  String get invoiceProposalsNoneSearch;
+
+  /// No description provided for @invoiceMatchScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'correspondance {score} %'**
+  String invoiceMatchScore(int score);
+
+  /// No description provided for @invoiceAttachLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get invoiceAttachLater;
+
+  /// No description provided for @invoiceAttached.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture rattachée : {name}'**
+  String invoiceAttached(String name);
+
+  /// No description provided for @invoicesWaitingForThis.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures en attente qui pourraient être celle-ci'**
+  String get invoicesWaitingForThis;
+
+  /// No description provided for @invoiceAttachHere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rattacher ici'**
+  String get invoiceAttachHere;
 }
 
 class _AppLocalizationsDelegate

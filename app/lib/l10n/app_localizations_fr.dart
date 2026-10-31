@@ -2960,7 +2960,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get invoicesIntro =>
-      'Les factures et tickets joints aux opérations, nommés d\'après l\'opération (date, libellé, montant). Pour en ajouter une, ouvrez l\'opération dans la page Opérations.';
+      'Les factures et tickets, nommés d\'après leur opération (date, libellé, montant). Ajoutez-en depuis une opération (page Opérations), ou ici même si l\'opération n\'est pas encore là : elle sera proposée dès qu\'elle arrivera.';
 
   @override
   String get invoicesSearch => 'Rechercher (nom, libellé, compte)';
@@ -3136,4 +3136,72 @@ class AppLocalizationsFr extends AppLocalizations {
   String adminMembersOf(String group) {
     return 'Membres de « $group »';
   }
+
+  @override
+  String get invoiceAddWaiting => 'Ajouter une facture';
+
+  @override
+  String get invoicesWaitingFilter => 'À rattacher';
+
+  @override
+  String get invoiceAttachTo => 'Rattacher à une opération';
+
+  @override
+  String get invoiceHints => 'Ce que dit la facture';
+
+  @override
+  String get invoiceHintsHelp =>
+      'Tout est facultatif : le montant, la date et le commerçant servent à proposer la bonne opération, maintenant ou après le prochain import. En attendant, tous les membres du groupe voient la facture.';
+
+  @override
+  String get invoiceHintAmount => 'Montant payé';
+
+  @override
+  String get invoiceHintAmountInvalid =>
+      'Montant illisible (exemple : 499,00).';
+
+  @override
+  String get invoiceHintMerchant => 'Commerçant';
+
+  @override
+  String get invoiceHintMerchantHint => 'Darty, garage Martin…';
+
+  @override
+  String get invoiceHintNoDate => 'Date inconnue';
+
+  @override
+  String invoiceHintDate(String date) {
+    return 'Date : $date';
+  }
+
+  @override
+  String get invoiceProposalsSearch => 'Chercher une opération par son libellé';
+
+  @override
+  String get invoiceProposalsNone =>
+      'Aucune opération ne correspond pour l\'instant. La facture reste « à rattacher » : elle vous sera proposée dans l\'opération quand elle sera importée.';
+
+  @override
+  String get invoiceProposalsNoneSearch =>
+      'Aucune opération ne contient ce texte.';
+
+  @override
+  String invoiceMatchScore(int score) {
+    return 'correspondance $score %';
+  }
+
+  @override
+  String get invoiceAttachLater => 'Plus tard';
+
+  @override
+  String invoiceAttached(String name) {
+    return 'Facture rattachée : $name';
+  }
+
+  @override
+  String get invoicesWaitingForThis =>
+      'Factures en attente qui pourraient être celle-ci';
+
+  @override
+  String get invoiceAttachHere => 'Rattacher ici';
 }

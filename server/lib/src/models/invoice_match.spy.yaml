@@ -1,0 +1,13 @@
+### An operation proposed for an invoice waiting to be attached (or an
+### invoice waiting, proposed for an operation): the user chooses.
+class: InvoiceMatch
+fields:
+  transactionId: int
+  invoiceId: int
+  date: DateTime
+  label: String
+  amountCents: int
+  currency: String
+  accountName: String
+  ### 0 to 100: same amount, near date, merchant in the label.
+  score: int

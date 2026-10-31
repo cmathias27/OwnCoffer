@@ -2251,7 +2251,7 @@
   "error_invalid_version": "Version invalide : seule une version publiée plus récente que celle installée peut être installée.",
   "navInvoices": "Factures",
   "invoicesTitle": "Factures",
-  "invoicesIntro": "Les factures et tickets joints aux opérations, nommés d'après l'opération (date, libellé, montant). Pour en ajouter une, ouvrez l'opération dans la page Opérations.",
+  "invoicesIntro": "Les factures et tickets, nommés d'après leur opération (date, libellé, montant). Ajoutez-en depuis une opération (page Opérations), ou ici même si l'opération n'est pas encore là : elle sera proposée dès qu'elle arrivera.",
   "invoicesSearch": "Rechercher (nom, libellé, compte)",
   "invoicesAllYears": "Toutes les années",
   "invoicesWarrantyFilter": "Garantie en cours",
@@ -2373,5 +2373,45 @@
         "type": "String"
       }
     }
-  }
+  },
+  "invoiceAddWaiting": "Ajouter une facture",
+  "invoicesWaitingFilter": "À rattacher",
+  "invoiceAttachTo": "Rattacher à une opération",
+  "invoiceHints": "Ce que dit la facture",
+  "invoiceHintsHelp": "Tout est facultatif : le montant, la date et le commerçant servent à proposer la bonne opération, maintenant ou après le prochain import. En attendant, tous les membres du groupe voient la facture.",
+  "invoiceHintAmount": "Montant payé",
+  "invoiceHintAmountInvalid": "Montant illisible (exemple : 499,00).",
+  "invoiceHintMerchant": "Commerçant",
+  "invoiceHintMerchantHint": "Darty, garage Martin…",
+  "invoiceHintNoDate": "Date inconnue",
+  "invoiceHintDate": "Date : {date}",
+  "@invoiceHintDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceProposalsSearch": "Chercher une opération par son libellé",
+  "invoiceProposalsNone": "Aucune opération ne correspond pour l'instant. La facture reste « à rattacher » : elle vous sera proposée dans l'opération quand elle sera importée.",
+  "invoiceProposalsNoneSearch": "Aucune opération ne contient ce texte.",
+  "invoiceMatchScore": "correspondance {score} %",
+  "@invoiceMatchScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "invoiceAttachLater": "Plus tard",
+  "invoiceAttached": "Facture rattachée : {name}",
+  "@invoiceAttached": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "invoicesWaitingForThis": "Factures en attente qui pourraient être celle-ci",
+  "invoiceAttachHere": "Rattacher ici"
 }

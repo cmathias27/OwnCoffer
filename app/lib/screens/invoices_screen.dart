@@ -25,6 +25,7 @@ class InvoicesScreenState extends State<InvoicesScreen> {
   Timer? _debounce;
   int? _year;
   var _warranty = false;
+  var _unattached = false;
   List<InvoiceInfo>? _items;
   String? _error;
 
@@ -54,6 +55,7 @@ class InvoicesScreenState extends State<InvoicesScreen> {
         year: _year,
         search: _search.text,
         warranty: _warranty,
+        unattached: _unattached,
       );
       if (mounted) setState(() => _items = items);
     } on Object catch (e) {
@@ -111,6 +113,38 @@ class InvoicesScreenState extends State<InvoicesScreen> {
         Text(l.invoicesTitle, style: theme.textTheme.headlineSmall),
         const SizedBox(height: 4),
         Text(l.invoicesIntro, style: theme.textTheme.bodyMedium),
+        if (_canWrite) ...[
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              FilledButton.icon(
+                icon: const Icon(Icons.note_add_outlined),
+                label: Text(l.invoiceAddWaiting),
+                onPressed: () async {
+                  final saved = await addUnattachedInvoice(
+                    context,
+                    widget.membership.group.id!,
+                  );
+                  if (saved != null) await reload();
+                },
+              ),
+              OutlinedButton.icon(
+                icon: const Icon(Icons.photo_camera_outlined),
+                label: Text(l.invoiceTakePhoto),
+                onPressed: () async {
+                  final saved = await addUnattachedInvoice(
+                    context,
+                    widget.membership.group.id!,
+                    camera: true,
+                  );
+                  if (saved != null) await reload();
+                },
+              ),
+            ],
+          ),
+        ],
         const SizedBox(height: 12),
         TextField(
           controller: _search,
@@ -138,6 +172,15 @@ class InvoicesScreenState extends State<InvoicesScreen> {
               ],
               onChanged: (y) {
                 setState(() => _year = y);
+                reload();
+              },
+            ),
+            FilterChip(
+              avatar: const Icon(Icons.pending_actions_outlined, size: 18),
+              label: Text(l.invoicesWaitingFilter),
+              selected: _unattached,
+              onSelected: (v) {
+                setState(() => _unattached = v);
                 reload();
               },
             ),

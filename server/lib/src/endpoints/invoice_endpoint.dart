@@ -35,15 +35,21 @@ class InvoiceEndpoint extends Endpoint {
   static const _allowed = {'pdf', 'png', 'jpg', 'jpeg', 'webp'};
   static const _maxListed = 2000;
 
+  /// Invoices waiting for their operation, per group.
+  static const maxUnattached = 500;
+
   /// Invoices the user may see, newest operation first. [year] filters on
-  /// the operation's date (the sending date without operation); [search]
-  /// on names and labels; [warranty]: only those with a running warranty.
+  /// the operation's date (without operation: the invoice's date, else the
+  /// day it was saved); [search] on names and labels; [warranty]: only
+  /// those with a running warranty; [unattached]: only those waiting for
+  /// their operation.
   Future<List<InvoiceInfo>> list(
     Session session,
     int groupId, {
     int? year,
     String? search,
     bool? warranty,
+    bool? unattached,
   }) async {
     final member = await Access.requireMember(session, groupId);
     final accounts = {
@@ -51,7 +57,9 @@ class InvoiceEndpoint extends Endpoint {
     };
     final invoices = await Invoice.db.find(
       session,
-      where: (i) => i.groupId.equals(groupId),
+      where: (i) => unattached == true
+          ? i.groupId.equals(groupId) & i.transactionId.equals(null)
+          : i.groupId.equals(groupId),
       orderByList: (i) => [i.createdAt.desc(), i.id.desc()],
       limit: _maxListed,
     );
@@ -59,7 +67,7 @@ class InvoiceEndpoint extends Endpoint {
     if (year != null) {
       infos = [
         for (final i in infos)
-          if ((i.transactionDate ?? i.invoice.createdAt).year == year) i,
+          if (_when(i).year == year) i,
       ];
     }
     if (warranty == true) {
@@ -89,9 +97,8 @@ class InvoiceEndpoint extends Endpoint {
             i,
       ];
     }
-    DateTime when(InvoiceInfo i) => i.transactionDate ?? i.invoice.createdAt;
     infos.sort((a, b) {
-      final c = when(b).compareTo(when(a));
+      final c = _when(b).compareTo(_when(a));
       return c != 0 ? c : b.invoice.id!.compareTo(a.invoice.id!);
     });
     return infos;
@@ -156,6 +163,202 @@ class InvoiceEndpoint extends Endpoint {
       return invoice;
     });
     await _audit(session, 'upload_invoice', saved, after: saved);
+    return (await _infos(session, [saved], {account.id!: account})).single;
+  }
+
+  /// Keeps an invoice whose operation is not there yet (not on the
+  /// statement, or not imported). Until attached, every member of the
+  /// group sees it. [amountCents] (total paid, positive), [date] and
+  /// [merchant] help propose its operation.
+  Future<InvoiceInfo> uploadUnattached(
+    Session session,
+    int groupId,
+    String fileName,
+    ByteData file, {
+    int? amountCents,
+    DateTime? date,
+    String? merchant,
+  }) async {
+    await Access.requireMember(session, groupId, min: MemberRole.user);
+    final hints = _hints(amountCents, date, merchant);
+    final (:name, :mime) = Documents.check(
+      fileName,
+      file,
+      allowed: _allowed,
+    );
+    final count = await Invoice.db.count(
+      session,
+      where: (i) => i.groupId.equals(groupId) & i.transactionId.equals(null),
+    );
+    if (count >= maxUnattached) {
+      throw InvalidInputException(code: 'document_limit');
+    }
+    final saved = await session.db.transaction((tx) async {
+      final invoice = await Invoice.db.insertRow(
+        session,
+        Invoice(
+          groupId: groupId,
+          fileName: name,
+          mimeType: mime,
+          sizeBytes: file.lengthInBytes,
+          hintAmountCents: hints.amount,
+          hintDate: hints.date,
+          hintMerchant: hints.merchant,
+          uploadedBy: Access.userId(session),
+        ),
+        transaction: tx,
+      );
+      await InvoiceBlob.db.insertRow(
+        session,
+        InvoiceBlob(invoiceId: invoice.id!, content: file),
+        transaction: tx,
+      );
+      return invoice;
+    });
+    await _audit(session, 'upload_invoice', saved, after: saved);
+    return (await _infos(session, [saved], const {})).single;
+  }
+
+  /// Amount, date and merchant of an invoice waiting for its operation
+  /// (null clears them).
+  Future<InvoiceInfo> setHints(
+    Session session,
+    int invoiceId,
+    int? amountCents,
+    DateTime? date,
+    String? merchant,
+  ) async {
+    final before = await _find(session, invoiceId, write: true);
+    final hints = _hints(amountCents, date, merchant);
+    final saved = await Invoice.db.updateRow(
+      session,
+      before.copyWith(
+        hintAmountCents: hints.amount,
+        hintDate: hints.date,
+        hintMerchant: hints.merchant,
+      ),
+    );
+    await _audit(session, 'update_invoice', saved, before: before);
+    return (await _infos(
+      session,
+      [saved],
+      await _accountsOf(session, saved),
+    )).single;
+  }
+
+  /// Operations that could be this waiting invoice's, best first, among
+  /// the accounts the user sees. With [search], operations whose label
+  /// contains it, whatever the hints.
+  Future<List<InvoiceMatch>> proposals(
+    Session session,
+    int invoiceId, {
+    String? search,
+  }) async {
+    final invoice = await _find(session, invoiceId);
+    if (invoice.transactionId != null) return [];
+    final member = await Access.requireMember(session, invoice.groupId);
+    final accounts = {
+      for (final a in await Access.visibleAccountsOf(session, member)) a.id!: a,
+    };
+    if (accounts.isEmpty) return [];
+    final Set<int> accountIds = accounts.keys.toSet();
+    final hint = _hintOf(invoice);
+    final q = search?.trim() ?? '';
+    final List<BankTransaction> ops;
+    if (q.isNotEmpty) {
+      final pattern = '%${q.replaceAll(RegExp(r'[%_\\]'), '')}%';
+      ops = await BankTransaction.db.find(
+        session,
+        where: (t) =>
+            t.accountId.inSet(accountIds) &
+            t.deletedAt.equals(null) &
+            (t.cleanLabel.ilike(pattern) | t.rawLabel.ilike(pattern)),
+        orderByList: (t) => [t.date.desc(), t.id.desc()],
+        limit: 20,
+      );
+    } else {
+      final w = hint.window;
+      ops = await BankTransaction.db.find(
+        session,
+        where: (t) =>
+            t.accountId.inSet(accountIds) &
+            t.deletedAt.equals(null) &
+            (t.amountCents < 0) &
+            (t.date >= w.from.toDb()) &
+            (t.date <= w.to.toDb()),
+        orderByList: (t) => [t.date.desc(), t.id.desc()],
+        limit: 2000,
+      );
+    }
+    final byId = {for (final t in ops) t.id!: t};
+    final candidates = [for (final t in ops) _candidate(t)];
+    final ranked = q.isNotEmpty
+        ? [
+            for (final c in candidates)
+              (candidate: c, score: core.invoiceMatchScore(hint, c) ?? 0),
+          ]
+        : core.rankInvoiceMatches(hint, candidates);
+    return [
+      for (final r in ranked)
+        _match(invoice, byId[r.candidate.id]!, accounts, r.score),
+    ];
+  }
+
+  /// Invoices waiting for their operation that could be this operation's,
+  /// best first.
+  Future<List<InvoiceMatch>> candidatesFor(
+    Session session,
+    int transactionId,
+  ) async {
+    final (t, account) = await _transaction(session, transactionId);
+    final waiting = await Invoice.db.find(
+      session,
+      where: (i) =>
+          i.groupId.equals(account.groupId) & i.transactionId.equals(null),
+      limit: maxUnattached,
+    );
+    final c = _candidate(t);
+    final scored = [
+      for (final i in waiting)
+        if (core.invoiceMatchScore(_hintOf(i), c) case final s?) (i, s),
+    ]..sort((a, b) => b.$2.compareTo(a.$2));
+    return [
+      for (final (i, s) in scored.take(10))
+        _match(i, t, {account.id!: account}, s),
+    ];
+  }
+
+  /// Attaches the invoice to the operation (or moves it to another one).
+  /// Needs to be allowed to change both.
+  Future<InvoiceInfo> attach(
+    Session session,
+    int invoiceId,
+    int transactionId,
+  ) async {
+    final before = await _find(session, invoiceId, write: true);
+    final (t, account) = await _transaction(
+      session,
+      transactionId,
+      write: true,
+    );
+    if (account.groupId != before.groupId) {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    if (before.transactionId == t.id) {
+      return (await _infos(session, [before], {account.id!: account})).single;
+    }
+    final count = await Invoice.db.count(
+      session,
+      where: (i) => i.transactionId.equals(t.id!),
+    );
+    if (count >= maxPerTransaction) {
+      throw InvalidInputException(code: 'document_limit');
+    }
+    final saved = await Invoice.db.updateRow(
+      session,
+      before.copyWith(transactionId: t.id),
+    );
+    await _audit(session, 'attach_invoice', saved, before: before);
     return (await _infos(session, [saved], {account.id!: account})).single;
   }
 
@@ -316,6 +519,9 @@ class InvoiceEndpoint extends Endpoint {
             invoice: i,
             name: core.invoiceFileName(
               originalName: i.fileName,
+              date: i.hintDate?.toLocalDate(),
+              operationLabel: i.hintMerchant,
+              amountCents: i.hintAmountCents,
               label: i.label,
             ),
           )
@@ -427,6 +633,70 @@ class InvoiceEndpoint extends Endpoint {
     rowId: invoice.id,
     before: before,
     after: after,
+  );
+
+  /// Date shown and filtered on: the operation's, else the invoice's own,
+  /// else the day it was saved.
+  static DateTime _when(InvoiceInfo i) =>
+      i.transactionDate ?? i.invoice.hintDate ?? i.invoice.createdAt;
+
+  static ({int? amount, DateTime? date, String? merchant}) _hints(
+    int? amountCents,
+    DateTime? date,
+    String? merchant,
+  ) {
+    if (amountCents != null &&
+        (amountCents <= 0 || amountCents > core.maxAbsCents)) {
+      throw InvalidInputException(code: 'invalid_amount', field: 'amount');
+    }
+    DateTime? day;
+    if (date != null) {
+      final u = date.toUtc();
+      if (u.year < 2000 || u.year > 2100) {
+        throw InvalidInputException(code: 'invalid_date', field: 'date');
+      }
+      day = core.LocalDate(u.year, u.month, u.day).toDb();
+    }
+    final m = merchant?.trim().replaceAll(RegExp(r'\s+'), ' ');
+    if (m != null && m.length > 80) {
+      throw InvalidInputException(code: 'invalid_name', field: 'merchant');
+    }
+    return (
+      amount: amountCents,
+      date: day,
+      merchant: m == null || m.isEmpty ? null : m,
+    );
+  }
+
+  static core.InvoiceHint _hintOf(Invoice i) => core.InvoiceHint(
+    addedOn: core.LocalDate.fromDateTime(i.createdAt.toUtc()),
+    amountCents: i.hintAmountCents,
+    date: i.hintDate?.toLocalDate(),
+    merchant: i.hintMerchant,
+  );
+
+  static core.MatchCandidate _candidate(BankTransaction t) =>
+      core.MatchCandidate(
+        id: t.id!,
+        date: t.date.toLocalDate(),
+        amountCents: t.amountCents,
+        label: '${t.cleanLabel} ${t.rawLabel}',
+      );
+
+  static InvoiceMatch _match(
+    Invoice i,
+    BankTransaction t,
+    Map<int, Account> accounts,
+    int score,
+  ) => InvoiceMatch(
+    transactionId: t.id!,
+    invoiceId: i.id!,
+    date: t.date,
+    label: t.cleanLabel,
+    amountCents: t.amountCents,
+    currency: accounts[t.accountId]!.currency,
+    accountName: accounts[t.accountId]!.name,
+    score: score,
   );
 
   static core.LocalDate _today() =>

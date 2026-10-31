@@ -40,6 +40,111 @@ Future<InvoiceInfo?> attachInvoice(
   }
 }
 
+/// An invoice whose operation is not there yet: file or photo, then what
+/// is known of it (all optional), then the operations it could be.
+/// Returns the saved invoice, or null if cancelled.
+Future<InvoiceInfo?> addUnattachedInvoice(
+  BuildContext context,
+  int groupId, {
+  bool camera = false,
+}) async {
+  final l = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.of(context);
+  try {
+    final f = await pickFile(extensions: invoiceExtensions, camera: camera);
+    if (f == null || !context.mounted) return null;
+    final hints = await showDialog<InvoiceHints>(
+      context: context,
+      builder: (_) => const _HintsDialog(),
+    );
+    if (hints == null) return null;
+    var info = await client.invoice.uploadUnattached(
+      groupId,
+      f.name,
+      ByteData.sublistView(f.bytes),
+      amountCents: hints.amountCents,
+      date: hints.date,
+      merchant: hints.merchant,
+    );
+    messenger.showSnackBar(SnackBar(content: Text(l.invoiceAdded(info.name))));
+    if (context.mounted) {
+      info = await chooseOperationFor(context, info, afterAdding: true) ?? info;
+    }
+    return info;
+  } on Object catch (e) {
+    messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+    return null;
+  }
+}
+
+/// What is known of a waiting invoice: total paid, date, merchant.
+typedef InvoiceHints = ({int? amountCents, DateTime? date, String? merchant});
+
+/// Changes the hints of a waiting invoice; returns it, or null if
+/// cancelled.
+Future<InvoiceInfo?> editInvoiceHints(
+  BuildContext context,
+  InvoiceInfo info,
+) async {
+  final l = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.of(context);
+  final i = info.invoice;
+  final hints = await showDialog<InvoiceHints>(
+    context: context,
+    builder: (_) => _HintsDialog(
+      initial: (
+        amountCents: i.hintAmountCents,
+        date: i.hintDate,
+        merchant: i.hintMerchant,
+      ),
+    ),
+  );
+  if (hints == null) return null;
+  try {
+    return await client.invoice.setHints(
+      i.id!,
+      hints.amountCents,
+      hints.date,
+      hints.merchant,
+    );
+  } on Object catch (e) {
+    messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+    return null;
+  }
+}
+
+/// The operations a waiting invoice could be, to attach it to one (the
+/// user chooses; nothing is attached alone). Returns the attached
+/// invoice, or null if left waiting.
+Future<InvoiceInfo?> chooseOperationFor(
+  BuildContext context,
+  InvoiceInfo info, {
+  bool afterAdding = false,
+}) => showDialog<InvoiceInfo>(
+  context: context,
+  builder: (_) => _ProposalsDialog(info: info, afterAdding: afterAdding),
+);
+
+/// Attaches a waiting invoice to an operation; returns it, or null.
+Future<InvoiceInfo?> attachWaitingInvoice(
+  BuildContext context,
+  int invoiceId,
+  int transactionId,
+) async {
+  final l = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.of(context);
+  try {
+    final info = await client.invoice.attach(invoiceId, transactionId);
+    messenger.showSnackBar(
+      SnackBar(content: Text(l.invoiceAttached(info.name))),
+    );
+    return info;
+  } on Object catch (e) {
+    messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+    return null;
+  }
+}
+
 Future<void> openInvoice(BuildContext context, InvoiceInfo info) async {
   final l = AppLocalizations.of(context);
   final messenger = ScaffoldMessenger.of(context);
@@ -136,6 +241,7 @@ class InvoiceTile extends StatelessWidget {
     final theme = Theme.of(context);
     final i = info.invoice;
     final until = i.warrantyUntil;
+    final waiting = i.transactionId == null;
     final now = DateTime.now().toUtc();
     final today = DateTime.utc(now.year, now.month, now.day);
     final details = [
@@ -149,7 +255,7 @@ class InvoiceTile extends StatelessWidget {
               currency: info.currency ?? 'EUR',
             ),
         ].join(' · '),
-      if (showOperation && info.transactionDate == null) l.invoiceUnattached,
+      if (showOperation && waiting) l.invoiceUnattached,
       AdminBackupsView.bytes(context, i.sizeBytes),
     ];
     return ListTile(
@@ -186,6 +292,12 @@ class InvoiceTile extends StatelessWidget {
           switch (action) {
             case 'open':
               await openInvoice(context, info);
+            case 'attach':
+              final attached = await chooseOperationFor(context, info);
+              if (attached != null) onChanged(attached);
+            case 'hints':
+              final saved = await editInvoiceHints(context, info);
+              if (saved != null) onChanged(saved);
             case 'edit':
               final saved = await editInvoice(context, info);
               if (saved != null) onChanged(saved);
@@ -197,6 +309,10 @@ class InvoiceTile extends StatelessWidget {
         },
         itemBuilder: (_) => [
           PopupMenuItem(value: 'open', child: Text(l.invoiceOpen)),
+          if (canWrite && waiting)
+            PopupMenuItem(value: 'attach', child: Text(l.invoiceAttachTo)),
+          if (canWrite && waiting)
+            PopupMenuItem(value: 'hints', child: Text(l.invoiceHints)),
           if (canWrite)
             PopupMenuItem(value: 'edit', child: Text(l.invoiceEdit)),
           PopupMenuItem(value: 'send', child: Text(l.invoiceSend)),
@@ -230,6 +346,9 @@ class InvoiceSection extends StatefulWidget {
 class _InvoiceSectionState extends State<InvoiceSection> {
   List<InvoiceInfo>? _items;
 
+  /// Waiting invoices that could be this operation's.
+  List<InvoiceMatch> _waiting = const [];
+
   @override
   void initState() {
     super.initState();
@@ -242,6 +361,13 @@ class _InvoiceSectionState extends State<InvoiceSection> {
       if (mounted) setState(() => _items = items);
     } on Object {
       if (mounted) setState(() => _items = const []);
+    }
+    if (!widget.canWrite) return;
+    try {
+      final waiting = await client.invoice.candidatesFor(widget.transactionId);
+      if (mounted) setState(() => _waiting = waiting);
+    } on Object {
+      // Proposals are a help; the section works without them.
     }
   }
 
@@ -287,6 +413,36 @@ class _InvoiceSectionState extends State<InvoiceSection> {
                 widget.onHasInvoices(_items?.isNotEmpty ?? false);
               },
             ),
+        if (_waiting.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              l.invoicesWaitingForThis,
+              style: theme.textTheme.labelLarge,
+            ),
+          ),
+          for (final m in _waiting)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              dense: true,
+              leading: const Icon(Icons.pending_actions_outlined),
+              title: Text(m.label),
+              subtitle: Text(l.invoiceMatchScore(m.score)),
+              trailing: TextButton(
+                onPressed: () async {
+                  final info = await attachWaitingInvoice(
+                    context,
+                    m.invoiceId,
+                    widget.transactionId,
+                  );
+                  if (info == null) return;
+                  await _load();
+                  widget.onHasInvoices(true);
+                },
+                child: Text(l.invoiceAttachHere),
+              ),
+            ),
+        ],
         if (widget.canWrite)
           Wrap(
             spacing: 8,
@@ -554,6 +710,274 @@ class _SendInvoiceDialogState extends State<_SendInvoiceDialog> {
           icon: const Icon(Icons.send),
           onPressed: _busy ? null : _send,
           label: Text(l.invoiceSendAction),
+        ),
+      ],
+    );
+  }
+}
+
+class _HintsDialog extends StatefulWidget {
+  final InvoiceHints? initial;
+  const _HintsDialog({this.initial});
+
+  @override
+  State<_HintsDialog> createState() => _HintsDialogState();
+}
+
+class _HintsDialogState extends State<_HintsDialog> {
+  late final _amount = TextEditingController();
+  late final _merchant = TextEditingController(
+    text: widget.initial?.merchant,
+  );
+  late DateTime? _date = widget.initial?.date;
+  String? _amountError;
+
+  @override
+  void initState() {
+    super.initState();
+    final a = widget.initial?.amountCents;
+    if (a != null) {
+      // Shown as typed: 499,00 / 499.00.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final fr = Localizations.localeOf(context).languageCode == 'fr';
+        final t = (a / 100).toStringAsFixed(2);
+        _amount.text = fr ? t.replaceAll('.', ',') : t;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _amount.dispose();
+    _merchant.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pick() async {
+    final today = todayUtcMidnight();
+    final initial = _date ?? today;
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(initial.year, initial.month, initial.day),
+      firstDate: DateTime(today.year - 10),
+      lastDate: DateTime(today.year, today.month, today.day + 30),
+    );
+    if (picked != null) {
+      setState(
+        () => _date = DateTime.utc(picked.year, picked.month, picked.day),
+      );
+    }
+  }
+
+  void _done() {
+    final l = AppLocalizations.of(context);
+    final text = _amount.text.trim();
+    int? cents;
+    if (text.isNotEmpty) {
+      cents = parseUserAmount(text)?.abs();
+      if (cents == null || cents == 0) {
+        setState(() => _amountError = l.invoiceHintAmountInvalid);
+        return;
+      }
+    }
+    final m = _merchant.text.trim();
+    Navigator.pop<InvoiceHints>(context, (
+      amountCents: cents,
+      date: _date,
+      merchant: m.isEmpty ? null : m,
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final date = _date;
+    return AlertDialog(
+      title: Text(l.invoiceHints),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l.invoiceHintsHelp, style: theme.textTheme.bodySmall),
+            TextField(
+              controller: _amount,
+              autofocus: true,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: InputDecoration(
+                labelText: l.invoiceHintAmount,
+                errorText: _amountError,
+              ),
+            ),
+            TextField(
+              controller: _merchant,
+              maxLength: 80,
+              decoration: InputDecoration(
+                labelText: l.invoiceHintMerchant,
+                hintText: l.invoiceHintMerchantHint,
+              ),
+            ),
+            Wrap(
+              spacing: 8,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Text(
+                  date == null
+                      ? l.invoiceHintNoDate
+                      : l.invoiceHintDate(context.day(date)),
+                ),
+                ActionChip(
+                  avatar: const Icon(Icons.event, size: 18),
+                  label: Text(l.invoiceWarrantyPick),
+                  onPressed: _pick,
+                ),
+                if (date != null)
+                  IconButton(
+                    tooltip: l.invoiceWarrantyClear,
+                    icon: const Icon(Icons.clear),
+                    onPressed: () => setState(() => _date = null),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l.cancel),
+        ),
+        FilledButton(onPressed: _done, child: Text(l.continueLabel)),
+      ],
+    );
+  }
+}
+
+class _ProposalsDialog extends StatefulWidget {
+  final InvoiceInfo info;
+  final bool afterAdding;
+  const _ProposalsDialog({required this.info, required this.afterAdding});
+
+  @override
+  State<_ProposalsDialog> createState() => _ProposalsDialogState();
+}
+
+class _ProposalsDialogState extends State<_ProposalsDialog> {
+  final _search = TextEditingController();
+  List<InvoiceMatch>? _items;
+  String? _error;
+  var _busy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    setState(() => (_items = null, _error = null));
+    try {
+      final items = await client.invoice.proposals(
+        widget.info.invoice.id!,
+        search: _search.text,
+      );
+      if (mounted) setState(() => _items = items);
+    } on Object catch (e) {
+      if (mounted) {
+        setState(() => _error = errorText(AppLocalizations.of(context), e));
+      }
+    }
+  }
+
+  Future<void> _attach(InvoiceMatch m) async {
+    setState(() => _busy = true);
+    final info = await attachWaitingInvoice(
+      context,
+      widget.info.invoice.id!,
+      m.transactionId,
+    );
+    if (!mounted) return;
+    if (info != null) {
+      Navigator.pop(context, info);
+    } else {
+      setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final items = _items;
+    return AlertDialog(
+      title: Text(l.invoiceAttachTo),
+      content: SizedBox(
+        width: 480,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.info.name, style: theme.textTheme.bodySmall),
+            TextField(
+              controller: _search,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                labelText: l.invoiceProposalsSearch,
+              ),
+              onSubmitted: (_) => _load(),
+            ),
+            const SizedBox(height: 8),
+            if (_error != null)
+              Text(_error!, style: TextStyle(color: theme.colorScheme.error))
+            else if (items == null)
+              const LinearProgressIndicator()
+            else if (items.isEmpty)
+              Text(
+                _search.text.trim().isEmpty
+                    ? l.invoiceProposalsNone
+                    : l.invoiceProposalsNoneSearch,
+              )
+            else
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (final m in items)
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        enabled: !_busy,
+                        title: Text(m.label),
+                        subtitle: Text(
+                          '${context.day(m.date)} · ${m.accountName}'
+                          '${_search.text.trim().isEmpty ? ' · ${l.invoiceMatchScore(m.score)}' : ''}',
+                        ),
+                        trailing: Text(
+                          context.money(m.amountCents, currency: m.currency),
+                        ),
+                        onTap: () => _attach(m),
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _busy ? null : () => Navigator.pop(context),
+          child: Text(
+            widget.afterAdding ? l.invoiceAttachLater : l.cancel,
+          ),
         ),
       ],
     );

@@ -2,6 +2,17 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.14 (31 octobre 2026)
+
+### Factures à rattacher
+
+- Page Factures, **« Ajouter une facture »** (ou « Prendre en photo ») pour une facture dont l'opération n'est pas encore là : pas encore sur le relevé, ou pas encore importée. On peut indiquer le **montant**, la **date** et le **commerçant** ; tout est facultatif.
+- OwnCoffer **propose les opérations qui correspondent**, les plus probables en premier : même montant, date proche, commerçant dans le libellé. On peut aussi chercher une opération par son libellé. Rien n'est rattaché sans votre choix.
+- Filtre **« À rattacher »** dans la page Factures.
+- Dans le détail d'une opération, les **factures en attente qui pourraient être celle-ci** sont proposées, avec un bouton « Rattacher ici » : après un import, on retrouve la facture au bon endroit.
+- Tant qu'elle attend, une facture est visible par tous les membres du groupe. Une fois rattachée, elle ne l'est plus que par ceux qui voient le compte de l'opération.
+- Le calcul des propositions est fait dans le cœur commun (`shared/`) : il servira aussi en version autonome.
+
 ## 0.3.13 (31 octobre 2026)
 
 ### Administration du serveur

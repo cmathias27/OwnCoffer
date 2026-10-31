@@ -1661,6 +1661,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<bool?>(),
               nullable: true,
             ),
+            'unattached': _is.ParameterDescription(
+              name: 'unattached',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -1673,6 +1678,7 @@ class Endpoints extends _is.EndpointDispatch {
                     year: params['year'],
                     search: params['search'],
                     warranty: params['warranty'],
+                    unattached: params['unattached'],
                   ),
         ),
         'forTransaction': _is.MethodConnector(
@@ -1723,6 +1729,161 @@ class Endpoints extends _is.EndpointDispatch {
                     params['transactionId'],
                     params['fileName'],
                     params['file'],
+                  ),
+        ),
+        'uploadUnattached': _is.MethodConnector(
+          name: 'uploadUnattached',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'fileName': _is.ParameterDescription(
+              name: 'fileName',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'file': _is.ParameterDescription(
+              name: 'file',
+              type: _is.getType<_idt.ByteData>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'merchant': _is.ParameterDescription(
+              name: 'merchant',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['invoice'] as _ito116jz.InvoiceEndpoint)
+                  .uploadUnattached(
+                    session,
+                    params['groupId'],
+                    params['fileName'],
+                    params['file'],
+                    amountCents: params['amountCents'],
+                    date: params['date'],
+                    merchant: params['merchant'],
+                  ),
+        ),
+        'setHints': _is.MethodConnector(
+          name: 'setHints',
+          params: {
+            'invoiceId': _is.ParameterDescription(
+              name: 'invoiceId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'merchant': _is.ParameterDescription(
+              name: 'merchant',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invoice'] as _ito116jz.InvoiceEndpoint).setHints(
+                    session,
+                    params['invoiceId'],
+                    params['amountCents'],
+                    params['date'],
+                    params['merchant'],
+                  ),
+        ),
+        'proposals': _is.MethodConnector(
+          name: 'proposals',
+          params: {
+            'invoiceId': _is.ParameterDescription(
+              name: 'invoiceId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'search': _is.ParameterDescription(
+              name: 'search',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invoice'] as _ito116jz.InvoiceEndpoint).proposals(
+                    session,
+                    params['invoiceId'],
+                    search: params['search'],
+                  ),
+        ),
+        'candidatesFor': _is.MethodConnector(
+          name: 'candidatesFor',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['invoice'] as _ito116jz.InvoiceEndpoint)
+                  .candidatesFor(
+                    session,
+                    params['transactionId'],
+                  ),
+        ),
+        'attach': _is.MethodConnector(
+          name: 'attach',
+          params: {
+            'invoiceId': _is.ParameterDescription(
+              name: 'invoiceId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['invoice'] as _ito116jz.InvoiceEndpoint).attach(
+                    session,
+                    params['invoiceId'],
+                    params['transactionId'],
                   ),
         ),
         'download': _is.MethodConnector(

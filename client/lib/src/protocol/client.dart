@@ -53,6 +53,7 @@ import 'package:owncoffer_client/src/protocol/import_preview.dart' as _ikjuebnd;
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/invoice_info.dart' as _iej1c1us;
+import 'package:owncoffer_client/src/protocol/invoice_match.dart' as _ikyjg3a9;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/left_to_live_report.dart'
     as _iqfjeddm;
@@ -950,13 +951,16 @@ class EndpointInvoice extends _isc.EndpointRef {
   String get name => 'invoice';
 
   /// Invoices the user may see, newest operation first. [year] filters on
-  /// the operation's date (the sending date without operation); [search]
-  /// on names and labels; [warranty]: only those with a running warranty.
+  /// the operation's date (without operation: the invoice's date, else the
+  /// day it was saved); [search] on names and labels; [warranty]: only
+  /// those with a running warranty; [unattached]: only those waiting for
+  /// their operation.
   _ida.Future<List<_iej1c1us.InvoiceInfo>> list(
     int groupId, {
     int? year,
     String? search,
     bool? warranty,
+    bool? unattached,
   }) => caller.callServerEndpoint<List<_iej1c1us.InvoiceInfo>>(
     'invoice',
     'list',
@@ -965,6 +969,7 @@ class EndpointInvoice extends _isc.EndpointRef {
       'year': year,
       'search': search,
       'warranty': warranty,
+      'unattached': unattached,
     },
   );
 
@@ -988,6 +993,86 @@ class EndpointInvoice extends _isc.EndpointRef {
       'transactionId': transactionId,
       'fileName': fileName,
       'file': file,
+    },
+  );
+
+  /// Keeps an invoice whose operation is not there yet (not on the
+  /// statement, or not imported). Until attached, every member of the
+  /// group sees it. [amountCents] (total paid, positive), [date] and
+  /// [merchant] help propose its operation.
+  _ida.Future<_iej1c1us.InvoiceInfo> uploadUnattached(
+    int groupId,
+    String fileName,
+    _idt.ByteData file, {
+    int? amountCents,
+    DateTime? date,
+    String? merchant,
+  }) => caller.callServerEndpoint<_iej1c1us.InvoiceInfo>(
+    'invoice',
+    'uploadUnattached',
+    {
+      'groupId': groupId,
+      'fileName': fileName,
+      'file': file,
+      'amountCents': amountCents,
+      'date': date,
+      'merchant': merchant,
+    },
+  );
+
+  /// Amount, date and merchant of an invoice waiting for its operation
+  /// (null clears them).
+  _ida.Future<_iej1c1us.InvoiceInfo> setHints(
+    int invoiceId,
+    int? amountCents,
+    DateTime? date,
+    String? merchant,
+  ) => caller.callServerEndpoint<_iej1c1us.InvoiceInfo>(
+    'invoice',
+    'setHints',
+    {
+      'invoiceId': invoiceId,
+      'amountCents': amountCents,
+      'date': date,
+      'merchant': merchant,
+    },
+  );
+
+  /// Operations that could be this waiting invoice's, best first, among
+  /// the accounts the user sees. With [search], operations whose label
+  /// contains it, whatever the hints.
+  _ida.Future<List<_ikyjg3a9.InvoiceMatch>> proposals(
+    int invoiceId, {
+    String? search,
+  }) => caller.callServerEndpoint<List<_ikyjg3a9.InvoiceMatch>>(
+    'invoice',
+    'proposals',
+    {
+      'invoiceId': invoiceId,
+      'search': search,
+    },
+  );
+
+  /// Invoices waiting for their operation that could be this operation's,
+  /// best first.
+  _ida.Future<List<_ikyjg3a9.InvoiceMatch>> candidatesFor(int transactionId) =>
+      caller.callServerEndpoint<List<_ikyjg3a9.InvoiceMatch>>(
+        'invoice',
+        'candidatesFor',
+        {'transactionId': transactionId},
+      );
+
+  /// Attaches the invoice to the operation (or moves it to another one).
+  /// Needs to be allowed to change both.
+  _ida.Future<_iej1c1us.InvoiceInfo> attach(
+    int invoiceId,
+    int transactionId,
+  ) => caller.callServerEndpoint<_iej1c1us.InvoiceInfo>(
+    'invoice',
+    'attach',
+    {
+      'invoiceId': invoiceId,
+      'transactionId': transactionId,
     },
   );
 
