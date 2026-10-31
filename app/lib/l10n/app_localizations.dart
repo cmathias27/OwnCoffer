@@ -2182,13 +2182,8 @@ abstract class AppLocalizations {
   /// No description provided for @notifOverdraftBody.
   ///
   /// In fr, this message translates to:
-  /// **'Solde prévu ce jour-là : {balance} (seuil {threshold}). Point bas : {lowest} le {lowestDate}.'**
-  String notifOverdraftBody(
-    String balance,
-    String threshold,
-    String lowest,
-    String lowestDate,
-  );
+  /// **'Solde prévu ce jour-là au moment de l\'alerte : {balance} (seuil {threshold}).'**
+  String notifOverdraftBody(String balance, String threshold);
 
   /// No description provided for @notifUnknown.
   ///

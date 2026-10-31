@@ -150,8 +150,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         l.notifOverdraftBody(
           context.money(d['balanceCents'] as int),
           context.money(d['thresholdCents'] as int),
-          context.money(d['lowestCents'] as int),
-          day(d['lowestDate'] as String),
         ),
       );
     } on Object {

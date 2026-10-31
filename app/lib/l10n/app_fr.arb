@@ -844,19 +844,13 @@
       }
     }
   },
-  "notifOverdraftBody": "Solde prévu ce jour-là : {balance} (seuil {threshold}). Point bas : {lowest} le {lowestDate}.",
+  "notifOverdraftBody": "Solde prévu ce jour-là au moment de l'alerte : {balance} (seuil {threshold}).",
   "@notifOverdraftBody": {
     "placeholders": {
       "balance": {
         "type": "String"
       },
       "threshold": {
-        "type": "String"
-      },
-      "lowest": {
-        "type": "String"
-      },
-      "lowestDate": {
         "type": "String"
       }
     }

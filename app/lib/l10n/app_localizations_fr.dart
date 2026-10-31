@@ -1335,13 +1335,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String notifOverdraftBody(
-    String balance,
-    String threshold,
-    String lowest,
-    String lowestDate,
-  ) {
-    return 'Solde prévu ce jour-là : $balance (seuil $threshold). Point bas : $lowest le $lowestDate.';
+  String notifOverdraftBody(String balance, String threshold) {
+    return 'Solde prévu ce jour-là au moment de l\'alerte : $balance (seuil $threshold).';
   }
 
   @override

@@ -1328,13 +1328,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String notifOverdraftBody(
-    String balance,
-    String threshold,
-    String lowest,
-    String lowestDate,
-  ) {
-    return 'Expected balance that day: $balance (threshold $threshold). Lowest: $lowest on $lowestDate.';
+  String notifOverdraftBody(String balance, String threshold) {
+    return 'Expected balance that day when the alert was raised: $balance (threshold $threshold).';
   }
 
   @override
