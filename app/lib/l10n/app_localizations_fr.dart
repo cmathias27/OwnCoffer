@@ -2265,4 +2265,84 @@ class AppLocalizationsFr extends AppLocalizations {
   String loanOperationsMore(int count) {
     return 'Voir les $count prélèvements';
   }
+
+  @override
+  String get loanActualPayment => 'Mensualité prélevée (assurance comprise)';
+
+  @override
+  String get loanActualPaymentHelp =>
+      'Le montant réellement prélevé chaque mois : c\'est la seule valeur certaine. Le capital restant, les intérêts et la date de fin en sont déduits.';
+
+  @override
+  String loanActualPreview(String amount, int months) {
+    return 'Avec $amount prélevés par mois, le crédit serait remboursé en $months mois.';
+  }
+
+  @override
+  String get loanPaymentActual => 'Mensualité (prélevée)';
+
+  @override
+  String get loanPaymentComputed => 'Mensualité (calculée)';
+
+  @override
+  String get loanEstimatedDuration => 'Durée estimée';
+
+  @override
+  String get loanEstimatesNote =>
+      'La mensualité prélevée est la seule valeur certaine : le capital restant, les intérêts et la date de fin sont des estimations calculées à partir d\'elle. Le tableau d\'amortissement de votre banque fait foi.';
+
+  @override
+  String get loanEstimatesNoteComputed =>
+      'Mensualité calculée à partir du capital, du taux et de la durée : indiquez la mensualité prélevée pour des estimations plus justes. Le tableau d\'amortissement de votre banque fait foi.';
+
+  @override
+  String get loanDocumentsTitle => 'Documents du crédit';
+
+  @override
+  String get loanDocumentsHelp =>
+      'Tableau d\'amortissement, offre de prêt, captures d\'écran… Ils restent sur votre serveur (PDF, image, CSV, tableur ; 10 Mo au plus).';
+
+  @override
+  String get loanDocumentsEmpty => 'Aucun document.';
+
+  @override
+  String get loanDocumentAdd => 'Ajouter un document';
+
+  @override
+  String get loanDocumentAdded => 'Document ajouté.';
+
+  @override
+  String get loanDocumentDelete => 'Supprimer le document';
+
+  @override
+  String loanDocumentDeleteConfirm(String name) {
+    return 'Supprimer « $name » du serveur ? Cette action est définitive.';
+  }
+
+  @override
+  String loanDocumentInfo(String size, String date) {
+    return '$size · ajouté le $date';
+  }
+
+  @override
+  String get error_document_too_large =>
+      'Le document est vide ou dépasse 10 Mo.';
+
+  @override
+  String get error_document_type =>
+      'Type de document non accepté : PDF, image (PNG, JPEG, WebP), CSV, texte ou tableur (XLSX, ODS).';
+
+  @override
+  String get error_document_limit =>
+      'Ce crédit a déjà 30 documents : supprimez-en avant d\'en ajouter.';
+
+  @override
+  String sizeMb(String value) {
+    return '$value Mo';
+  }
+
+  @override
+  String sizeKb(String value) {
+    return '$value ko';
+  }
 }

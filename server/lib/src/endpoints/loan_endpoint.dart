@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
@@ -84,6 +87,160 @@ class LoanEndpoint extends Endpoint {
       orderByList: (t) => [t.date.desc(), t.id.desc()],
       limit: 1000,
     );
+  }
+
+  // --- documents ------------------------------------------------------------
+
+  static const maxDocumentBytes = 10 * 1024 * 1024;
+  static const maxDocumentsPerLoan = 30;
+
+  /// Accepted types, by extension; the first bytes are checked for the
+  /// binary ones.
+  static const _types = {
+    'pdf': 'application/pdf',
+    'png': 'image/png',
+    'jpg': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+    'webp': 'image/webp',
+    'csv': 'text/csv',
+    'txt': 'text/plain',
+    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'ods': 'application/vnd.oasis.opendocument.spreadsheet',
+  };
+
+  /// Documents of the loan (amortisation table, offer, screenshots…),
+  /// newest first, without their content.
+  Future<List<LoanDocument>> documents(Session session, int loanId) async {
+    await _find(session, loanId);
+    return LoanDocument.db.find(
+      session,
+      where: (d) => d.loanId.equals(loanId),
+      orderByList: (d) => [d.createdAt.desc(), d.id.desc()],
+    );
+  }
+
+  /// Keeps a document of the loan on the server (10 MB at most).
+  Future<LoanDocument> uploadDocument(
+    Session session,
+    int loanId,
+    String fileName,
+    ByteData file,
+  ) async {
+    final loan = await _find(session, loanId, write: true);
+    final name = fileName.trim().replaceAll(RegExp(r'[\\/\x00-\x1f]'), '_');
+    if (name.isEmpty || name.length > 120) {
+      throw InvalidInputException(code: 'invalid_name', field: 'fileName');
+    }
+    final size = file.lengthInBytes;
+    if (size == 0 || size > maxDocumentBytes) {
+      throw InvalidInputException(code: 'document_too_large');
+    }
+    final dot = name.lastIndexOf('.');
+    final ext = dot < 0 ? '' : name.substring(dot + 1).toLowerCase();
+    final mime = _types[ext];
+    final bytes = file.buffer.asUint8List(file.offsetInBytes, size);
+    if (mime == null || !_looksLike(ext, bytes)) {
+      throw InvalidInputException(code: 'document_type');
+    }
+    final count = await LoanDocument.db.count(
+      session,
+      where: (d) => d.loanId.equals(loanId),
+    );
+    if (count >= maxDocumentsPerLoan) {
+      throw InvalidInputException(code: 'document_limit');
+    }
+    final saved = await session.db.transaction((tx) async {
+      final doc = await LoanDocument.db.insertRow(
+        session,
+        LoanDocument(
+          loanId: loanId,
+          fileName: name,
+          mimeType: mime,
+          sizeBytes: size,
+          uploadedBy: Access.userId(session),
+        ),
+        transaction: tx,
+      );
+      await LoanDocumentBlob.db.insertRow(
+        session,
+        LoanDocumentBlob(documentId: doc.id!, content: file),
+        transaction: tx,
+      );
+      return doc;
+    });
+    await Audit.log(
+      session,
+      groupId: loan.groupId,
+      action: 'upload_document',
+      entity: 'loan',
+      rowId: loanId,
+      after: saved,
+    );
+    return saved;
+  }
+
+  /// The content of a document, for the user to open or save it.
+  Future<ByteData> downloadDocument(Session session, int documentId) async {
+    final doc = await _document(session, documentId);
+    final blob = await LoanDocumentBlob.db.findFirstRow(
+      session,
+      where: (b) => b.documentId.equals(doc.id!),
+    );
+    if (blob == null) {
+      throw AccessDeniedException(code: 'loan_access_denied');
+    }
+    return blob.content;
+  }
+
+  Future<void> deleteDocument(Session session, int documentId) async {
+    final doc = await _document(session, documentId, write: true);
+    await LoanDocument.db.deleteRow(session, doc);
+    final loan = await Loan.db.findById(session, doc.loanId);
+    await Audit.log(
+      session,
+      groupId: loan?.groupId,
+      action: 'delete_document',
+      entity: 'loan',
+      rowId: doc.loanId,
+      before: doc,
+    );
+  }
+
+  static Future<LoanDocument> _document(
+    Session session,
+    int documentId, {
+    bool write = false,
+  }) async {
+    final doc = await LoanDocument.db.findById(session, documentId);
+    if (doc == null) throw AccessDeniedException(code: 'loan_access_denied');
+    await _find(session, doc.loanId, write: write);
+    return doc;
+  }
+
+  /// Magic bytes of the binary formats; text files must be valid UTF-8.
+  static bool _looksLike(String ext, Uint8List b) {
+    bool starts(List<int> sig) =>
+        b.length >= sig.length &&
+        [for (var i = 0; i < sig.length; i++) b[i] == sig[i]].every((x) => x);
+    return switch (ext) {
+      'pdf' => starts([0x25, 0x50, 0x44, 0x46]),
+      'png' => starts([0x89, 0x50, 0x4E, 0x47]),
+      'jpg' || 'jpeg' => starts([0xFF, 0xD8, 0xFF]),
+      'webp' =>
+        starts([0x52, 0x49, 0x46, 0x46]) &&
+            b.length > 12 &&
+            String.fromCharCodes(b.sublist(8, 12)) == 'WEBP',
+      'xlsx' || 'ods' => starts([0x50, 0x4B, 0x03, 0x04]),
+      'csv' || 'txt' => () {
+        try {
+          utf8.decode(b);
+          return true;
+        } on FormatException {
+          return false;
+        }
+      }(),
+      _ => false,
+    };
   }
 
   Future<EarlyRepayment> simulate(
@@ -178,6 +335,7 @@ class LoanEndpoint extends Endpoint {
           await _standardCategory(session, groupId, clean.kind) ??
           t.categoryId,
       matchPattern: _pattern(t),
+      paymentCents: clean.paymentCents ?? _actualPayment(clean, t),
     );
     final visible = await _visibleIds(session, groupId);
     final r = await session.db.transaction((tx) async {
@@ -222,6 +380,7 @@ class LoanEndpoint extends Endpoint {
     final updated = loan.copyWith(
       accountId: account.id,
       matchPattern: loan.matchPattern ?? _pattern(t),
+      paymentCents: loan.paymentCents ?? _actualPayment(loan, t),
       categoryId:
           loan.categoryId ??
           await _standardCategory(session, loan.groupId, loan.kind) ??
@@ -332,6 +491,19 @@ class LoanEndpoint extends Endpoint {
       throw InvalidInputException(code: 'invalid_pattern', field: 'pattern');
     }
     return (t, account);
+  }
+
+  /// The instalment the debit shows (insurance taken out), when it makes
+  /// computable terms; else null (the computed one is kept).
+  static int? _actualPayment(Loan loan, BankTransaction t) {
+    final p = -t.amountCents - loan.insuranceMonthlyCents;
+    if (p <= 0) return null;
+    try {
+      _terms(loan.copyWith(paymentCents: p));
+      return p;
+    } on ArgumentError {
+      return null;
+    }
   }
 
   static String _pattern(BankTransaction t) =>
@@ -536,6 +708,7 @@ class LoanEndpoint extends Endpoint {
     months: l.durationMonths,
     firstDue: l.firstDueDate.toLocalDate(),
     insuranceMonthlyCents: l.insuranceMonthlyCents,
+    paymentCents: l.paymentCents,
   );
 
   static LoanInfo _info(Loan l, core.LocalDate today) {
@@ -544,11 +717,8 @@ class LoanEndpoint extends Endpoint {
     final s = core.loanStatus(terms, schedule, today);
     return LoanInfo(
       loan: l,
-      paymentCents: core.loanPaymentCents(
-        l.principalCents,
-        l.annualRateMilli,
-        l.durationMonths,
-      ),
+      paymentCents: terms.payment,
+      paymentIsActual: l.paymentCents != null,
       paidCount: s.paidCount,
       totalCount: s.totalCount,
       remainingCents: s.remainingCents,
@@ -656,6 +826,7 @@ class LoanEndpoint extends Endpoint {
       insuranceMonthlyCents: loan.insuranceMonthlyCents,
       feesCents: loan.feesCents,
       categoryId: loan.categoryId,
+      paymentCents: loan.paymentCents,
     );
     try {
       _terms(clean);
@@ -701,11 +872,8 @@ class LoanEndpoint extends Endpoint {
         transaction: tx,
       );
     }
-    final payment = core.loanPaymentCents(
-      loan.principalCents,
-      loan.annualRateMilli,
-      loan.durationMonths,
-    );
+    final terms = _terms(loan);
+    final payment = terms.payment;
     final s = await ScheduledTransaction.db.insertRow(
       session,
       ScheduledTransaction(
@@ -717,7 +885,8 @@ class LoanEndpoint extends Endpoint {
         categoryId: loan.categoryId,
         frequency: ScheduleFrequency.monthly,
         startDate: loan.firstDueDate,
-        occurrenceCount: loan.durationMonths,
+        // With the actual instalment, as many as it takes.
+        occurrenceCount: core.amortize(terms).length,
         nextDue: (next?.date ?? _today().addDays(1)).toDb(),
         matchPattern:
             loan.matchPattern ??

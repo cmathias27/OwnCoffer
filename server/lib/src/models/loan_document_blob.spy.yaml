@@ -1,0 +1,11 @@
+### Content of a loan document, apart so that listing documents does not
+### read the files.
+class: LoanDocumentBlob
+table: loan_document_blobs
+fields:
+  documentId: int, relation(parent=loan_documents, onDelete=Cascade)
+  content: ByteData
+indexes:
+  loan_document_blobs_doc_idx:
+    fields: documentId
+    unique: true

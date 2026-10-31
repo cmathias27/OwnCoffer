@@ -4,6 +4,9 @@ fields:
   loan: Loan
   ### Capital + interest of a regular instalment.
   paymentCents: int
+  ### The instalment is the one debited (entered or taken from a debit),
+  ### not computed: the other figures are estimates based on it.
+  paymentIsActual: bool
   paidCount: int
   totalCount: int
   remainingCents: int

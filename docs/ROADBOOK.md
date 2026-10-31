@@ -139,6 +139,7 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 - [ ] Objectifs par catégorie, alertes à 80 %, 100 % et anticipée ; réglages des notifications — *en partie dans la 0.2.0 : objectif mensuel et jauge ; alertes à 80 % et 100 % dans la 0.3.0 ; restent l'alerte anticipée et les réglages des notifications*
 - [ ] Tableau de bord et graphiques — *en partie dans la 0.2.0 : page Budget (revenus et dépenses sur 6 périodes, classements) et abonnements*
 - [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois — *en partie dans la 0.2.0 : crédits à taux fixe, tableau calculé, échéances prévues, remboursement anticipé simulé, taux d'endettement ; crédit déclaré depuis une opération (0.2.1), paiements en plusieurs fois (0.3.0) ; restent les événements (renégociation, taux variable) et le crédit renouvelable*
+- [ ] Page Opérations : **mettre en évidence les abonnements** (repère sur chaque opération rattachée à un abonnement, filtre « Abonnements », lien vers la liste des abonnements) — demandé le 31 octobre 2026
 - [ ] Revue de fin de mois et détection d'anomalies — *en partie dans la 0.3.0 : revue du mois*
 - [ ] Onglet Feedback
 
@@ -150,7 +151,7 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 - [ ] Premiers connecteurs : un externe (compatible API OpenAI) et un local (Ollama)
 - [ ] Fonctions de contexte financier en lecture seule (`get_account_overview`, `get_transactions`, `get_budget_status`, `get_upcoming_expenses`, `get_cashflow_forecast`, `get_financial_goals`), limitées aux comptes visibles
 - [ ] Catégorisation d'appoint par l'IA, avec la règle suggérée
-- [ ] Lecture de documents : tickets (sans IA : saisie assistée ; avec IA : ventilation ligne par ligne), offres de prêt et confirmations de paiement fractionné (avec IA)
+- [ ] Lecture de documents : tickets (sans IA : saisie assistée ; avec IA : ventilation ligne par ligne), offres de prêt et confirmations de paiement fractionné (avec IA) ; **tableaux d'amortissement et captures d'écran** des documents du crédit gardés sur le serveur (0.3.1) : l'IA propose les conditions du crédit (mensualité, taux, durée, capital restant) et l'utilisateur valide — demandé le 31 octobre 2026
 - [ ] Assistant IA (en option) : interroge le moteur, explique, pose les scénarios en langage naturel ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable
 - [ ] Licence Serverpod clarifiée avant d'ouvrir la bêta à d'autres personnes (décision 0001)
 - [ ] Row Level Security PostgreSQL réévaluée avant d'ouvrir la bêta (décision 0016)

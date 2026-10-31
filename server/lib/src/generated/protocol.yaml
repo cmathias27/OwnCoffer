@@ -56,6 +56,10 @@ loan:
   - overview:
   - schedule:
   - operations:
+  - documents:
+  - uploadDocument:
+  - downloadDocument:
+  - deleteDocument:
   - simulate:
   - create:
   - update:

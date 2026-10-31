@@ -44,6 +44,7 @@ import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/left_to_live_report.dart'
     as _iqfjeddm;
 import 'package:owncoffer_client/src/protocol/loan.dart' as _ig538h6x;
+import 'package:owncoffer_client/src/protocol/loan_document.dart' as _ixzu9i3x;
 import 'package:owncoffer_client/src/protocol/loan_from_operation.dart'
     as _i04nbqtd;
 import 'package:owncoffer_client/src/protocol/loan_info.dart' as _iwrqx7d4;
@@ -796,6 +797,45 @@ class EndpointLoan extends _isc.EndpointRef {
         'loan',
         'operations',
         {'loanId': loanId},
+      );
+
+  /// Documents of the loan (amortisation table, offer, screenshots…),
+  /// newest first, without their content.
+  _ida.Future<List<_ixzu9i3x.LoanDocument>> documents(int loanId) =>
+      caller.callServerEndpoint<List<_ixzu9i3x.LoanDocument>>(
+        'loan',
+        'documents',
+        {'loanId': loanId},
+      );
+
+  /// Keeps a document of the loan on the server (10 MB at most).
+  _ida.Future<_ixzu9i3x.LoanDocument> uploadDocument(
+    int loanId,
+    String fileName,
+    _idt.ByteData file,
+  ) => caller.callServerEndpoint<_ixzu9i3x.LoanDocument>(
+    'loan',
+    'uploadDocument',
+    {
+      'loanId': loanId,
+      'fileName': fileName,
+      'file': file,
+    },
+  );
+
+  /// The content of a document, for the user to open or save it.
+  _ida.Future<_idt.ByteData> downloadDocument(int documentId) =>
+      caller.callServerEndpoint<_idt.ByteData>(
+        'loan',
+        'downloadDocument',
+        {'documentId': documentId},
+      );
+
+  _ida.Future<void> deleteDocument(int documentId) =>
+      caller.callServerEndpoint<void>(
+        'loan',
+        'deleteDocument',
+        {'documentId': documentId},
       );
 
   _ida.Future<_i0heeame.EarlyRepayment> simulate(

@@ -3708,6 +3708,132 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Voir les {count} prélèvements'**
   String loanOperationsMore(int count);
+
+  /// No description provided for @loanActualPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualité prélevée (assurance comprise)'**
+  String get loanActualPayment;
+
+  /// No description provided for @loanActualPaymentHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le montant réellement prélevé chaque mois : c\'est la seule valeur certaine. Le capital restant, les intérêts et la date de fin en sont déduits.'**
+  String get loanActualPaymentHelp;
+
+  /// No description provided for @loanActualPreview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avec {amount} prélevés par mois, le crédit serait remboursé en {months} mois.'**
+  String loanActualPreview(String amount, int months);
+
+  /// No description provided for @loanPaymentActual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualité (prélevée)'**
+  String get loanPaymentActual;
+
+  /// No description provided for @loanPaymentComputed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualité (calculée)'**
+  String get loanPaymentComputed;
+
+  /// No description provided for @loanEstimatedDuration.
+  ///
+  /// In fr, this message translates to:
+  /// **'Durée estimée'**
+  String get loanEstimatedDuration;
+
+  /// No description provided for @loanEstimatesNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'La mensualité prélevée est la seule valeur certaine : le capital restant, les intérêts et la date de fin sont des estimations calculées à partir d\'elle. Le tableau d\'amortissement de votre banque fait foi.'**
+  String get loanEstimatesNote;
+
+  /// No description provided for @loanEstimatesNoteComputed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualité calculée à partir du capital, du taux et de la durée : indiquez la mensualité prélevée pour des estimations plus justes. Le tableau d\'amortissement de votre banque fait foi.'**
+  String get loanEstimatesNoteComputed;
+
+  /// No description provided for @loanDocumentsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Documents du crédit'**
+  String get loanDocumentsTitle;
+
+  /// No description provided for @loanDocumentsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau d\'amortissement, offre de prêt, captures d\'écran… Ils restent sur votre serveur (PDF, image, CSV, tableur ; 10 Mo au plus).'**
+  String get loanDocumentsHelp;
+
+  /// No description provided for @loanDocumentsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun document.'**
+  String get loanDocumentsEmpty;
+
+  /// No description provided for @loanDocumentAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un document'**
+  String get loanDocumentAdd;
+
+  /// No description provided for @loanDocumentAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Document ajouté.'**
+  String get loanDocumentAdded;
+
+  /// No description provided for @loanDocumentDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le document'**
+  String get loanDocumentDelete;
+
+  /// No description provided for @loanDocumentDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer « {name} » du serveur ? Cette action est définitive.'**
+  String loanDocumentDeleteConfirm(String name);
+
+  /// No description provided for @loanDocumentInfo.
+  ///
+  /// In fr, this message translates to:
+  /// **'{size} · ajouté le {date}'**
+  String loanDocumentInfo(String size, String date);
+
+  /// No description provided for @error_document_too_large.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le document est vide ou dépasse 10 Mo.'**
+  String get error_document_too_large;
+
+  /// No description provided for @error_document_type.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de document non accepté : PDF, image (PNG, JPEG, WebP), CSV, texte ou tableur (XLSX, ODS).'**
+  String get error_document_type;
+
+  /// No description provided for @error_document_limit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce crédit a déjà 30 documents : supprimez-en avant d\'en ajouter.'**
+  String get error_document_limit;
+
+  /// No description provided for @sizeMb.
+  ///
+  /// In fr, this message translates to:
+  /// **'{value} Mo'**
+  String sizeMb(String value);
+
+  /// No description provided for @sizeKb.
+  ///
+  /// In fr, this message translates to:
+  /// **'{value} ko'**
+  String sizeKb(String value);
 }
 
 class _AppLocalizationsDelegate

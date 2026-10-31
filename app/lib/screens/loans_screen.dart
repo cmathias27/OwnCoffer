@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
@@ -5,6 +7,8 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../util/file_pick.dart';
+import '../util/file_save.dart';
 import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/category_field.dart';
@@ -406,6 +410,7 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
   late LoanInfo _info = widget.info;
   List<LoanInstallment>? _schedule;
   List<BankTransaction>? _operations;
+  List<LoanDocument>? _documents;
   var _allOperations = false;
   final _extra = TextEditingController();
   EarlyRepayment? _simulation;
@@ -426,11 +431,14 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
 
   Future<void> _load() async {
     try {
-      final (s, ops) = await (
+      final (s, ops, docs) = await (
         client.loan.schedule(_info.loan.id!),
         client.loan.operations(_info.loan.id!),
+        client.loan.documents(_info.loan.id!),
       ).wait;
-      if (mounted) setState(() => (_schedule = s, _operations = ops));
+      if (mounted) {
+        setState(() => (_schedule = s, _operations = ops, _documents = docs));
+      }
     } on Object catch (e) {
       if (mounted) {
         setState(() => _error = errorText(AppLocalizations.of(context), e));
@@ -468,6 +476,170 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
       setState(() => (_info = saved, _changed = true, _simulation = null));
       await _load();
     }
+  }
+
+  Future<void> _addDocument() async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final f = await pickFile(
+        extensions: const [
+          '.pdf',
+          '.png',
+          '.jpg',
+          '.jpeg',
+          '.webp',
+          '.csv',
+          '.txt',
+          '.xlsx',
+          '.ods',
+        ],
+      );
+      if (f == null) return;
+      final doc = await client.loan.uploadDocument(
+        _info.loan.id!,
+        f.name,
+        ByteData.sublistView(f.bytes),
+      );
+      if (!mounted) return;
+      setState(() => _documents = [doc, ...?_documents]);
+      messenger.showSnackBar(SnackBar(content: Text(l.loanDocumentAdded)));
+    } on Object catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+    }
+  }
+
+  Future<void> _openDocument(LoanDocument d) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final data = await client.loan.downloadDocument(d.id!);
+      openOrSaveFile(
+        d.fileName,
+        d.mimeType,
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+      );
+    } on Object catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+    }
+  }
+
+  Future<void> _deleteDocument(LoanDocument d) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(l.loanDocumentDeleteConfirm(d.fileName)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l.loanDocumentDelete),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    try {
+      await client.loan.deleteDocument(d.id!);
+      if (mounted) {
+        setState(
+          () => _documents = [
+            for (final x in _documents ?? const <LoanDocument>[])
+              if (x.id != d.id) x,
+          ],
+        );
+      }
+    } on Object catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+    }
+  }
+
+  static String _size(AppLocalizations l, int bytes) => bytes >= 1024 * 1024
+      ? l.sizeMb((bytes / (1024 * 1024)).toStringAsFixed(1))
+      : l.sizeKb('${(bytes / 1024).ceil()}');
+
+  /// Amortisation tables, offers, screenshots kept on the server.
+  Widget _documentsCard(
+    BuildContext context,
+    AppLocalizations l,
+    ThemeData theme,
+  ) {
+    final docs = _documents;
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l.loanDocumentsTitle,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ),
+                if (widget.canWrite)
+                  TextButton.icon(
+                    icon: const Icon(Icons.upload_file),
+                    label: Text(l.loanDocumentAdd),
+                    onPressed: _addDocument,
+                  ),
+              ],
+            ),
+            Text(
+              l.loanDocumentsHelp,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            if (docs == null)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else if (docs.isEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(l.loanDocumentsEmpty),
+              )
+            else
+              for (final d in docs)
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(
+                    d.mimeType == 'application/pdf'
+                        ? Icons.picture_as_pdf_outlined
+                        : d.mimeType.startsWith('image/')
+                        ? Icons.image_outlined
+                        : Icons.table_chart_outlined,
+                  ),
+                  title: Text(d.fileName),
+                  subtitle: Text(
+                    l.loanDocumentInfo(
+                      _size(l, d.sizeBytes),
+                      context.day(d.createdAt),
+                    ),
+                  ),
+                  onTap: () => _openDocument(d),
+                  trailing: widget.canWrite
+                      ? IconButton(
+                          tooltip: l.loanDocumentDelete,
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () => _deleteDocument(d),
+                        )
+                      : null,
+                ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// The debits of the account that concern this loan, newest first.
@@ -667,7 +839,18 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                     if (loan.aprMilli != null)
                       line(l.loanApr, rateText(context, loan.aprMilli!)),
                     line(l.loanDuration, l.loanMonths(loan.durationMonths)),
-                    line(l.loanPayment, context.money(info.paymentCents)),
+                    line(
+                      info.paymentIsActual
+                          ? l.loanPaymentActual
+                          : l.loanPaymentComputed,
+                      context.money(info.paymentCents),
+                    ),
+                    if (info.paymentIsActual &&
+                        info.totalCount != loan.durationMonths)
+                      line(
+                        l.loanEstimatedDuration,
+                        l.loanMonths(info.totalCount),
+                      ),
                     if (loan.insuranceMonthlyCents > 0)
                       line(
                         l.loanInsurance,
@@ -684,12 +867,34 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                     ),
                     line(l.loanCost, context.money(info.costCents)),
                     if (account != null) line(l.loanAccount, account.name),
+                    const SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          size: 18,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            info.paymentIsActual
+                                ? l.loanEstimatesNote
+                                : l.loanEstimatesNoteComputed,
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 12),
             _operationsCard(context, l, theme),
+            const SizedBox(height: 12),
+            _documentsCard(context, l, theme),
             const SizedBox(height: 12),
             if (info.nextDueDate != null)
               Card(
@@ -911,6 +1116,14 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
     text: _money(_l?.insuranceMonthlyCents),
   );
   late final _fees = TextEditingController(text: _money(_l?.feesCents));
+
+  /// What leaves the account each month (instalment + insurance): the debit
+  /// when declared from one, the stored actual instalment otherwise.
+  late final _actual = TextEditingController(
+    text: _l?.paymentCents != null
+        ? _money(_l!.paymentCents! + _l.insuranceMonthlyCents)
+        : _money(_op == null ? null : -_op.amountCents),
+  );
   late var _firstDue = _l?.firstDueDate ?? _op?.date ?? todayUtcMidnight();
   late int? _account = _l?.accountId ?? _op?.accountId;
   late int? _category = _l?.categoryId ?? _op?.categoryId;
@@ -939,7 +1152,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
         if (mounted) setState(() => _categories = list);
       }, onError: (_) {});
     }
-    for (final c in [_principal, _rate, _months, _insurance]) {
+    for (final c in [_principal, _rate, _months, _insurance, _actual]) {
       c.addListener(() => setState(() {}));
     }
   }
@@ -955,6 +1168,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
       _months,
       _insurance,
       _fees,
+      _actual,
     ]) {
       c.dispose();
     }
@@ -973,7 +1187,39 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
     return core.loanPaymentCents(p, r, n);
   }
 
-  /// Capital whose instalment, insurance added, is the observed debit.
+  /// The actual instalment (insurance taken out), or null when not entered.
+  int? get _actualPayment {
+    final total = parseUserAmount(_actual.text);
+    if (total == null || total <= 0) return null;
+    final p = total - (parseUserAmount(_insurance.text) ?? 0);
+    return p > 0 ? p : null;
+  }
+
+  /// Instalments the actual one takes to repay the capital, when it can.
+  int? get _actualMonths {
+    final pay = _actualPayment;
+    final p = parseUserAmount(_principal.text);
+    final r = parseRateMilli(_rate.text);
+    final n = int.tryParse(_months.text.trim());
+    if (pay == null || p == null || r == null || n == null) return null;
+    try {
+      return core
+          .amortize(
+            core.LoanTerms(
+              principalCents: p,
+              annualRateMilli: r,
+              months: n,
+              firstDue: core.LocalDate(2000, 1, 1),
+              paymentCents: pay,
+            ),
+          )
+          .length;
+    } on ArgumentError {
+      return null;
+    }
+  }
+
+  /// Capital whose instalment, insurance added, is the debit entered.
   void _deducePrincipal() {
     final l = AppLocalizations.of(context);
     final r = parseRateMilli(_rate.text);
@@ -982,7 +1228,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
     final p = r == null || n == null
         ? null
         : core.loanPrincipalForPaymentCents(
-            -_op!.amountCents - insurance,
+            (parseUserAmount(_actual.text) ?? 0) - insurance,
             r,
             n,
           );
@@ -1012,6 +1258,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
       firstDueDate: _firstDue,
       insuranceMonthlyCents: parseUserAmount(_insurance.text) ?? 0,
       feesCents: parseUserAmount(_fees.text) ?? 0,
+      paymentCents: _actualPayment,
       categoryId: _category,
     );
     setState(() => (_busy = true, _error = null));
@@ -1050,9 +1297,10 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
     final preview = _previewPayment;
     final insurance = parseUserAmount(_insurance.text) ?? 0;
     final op = _op;
-    final observed = op == null ? null : -op.amountCents;
+    final observed = parseUserAmount(_actual.text);
     final mismatch =
         observed != null &&
+        observed > 0 &&
         preview != null &&
         ((preview + insurance) - observed).abs() * 20 > observed;
     return Scaffold(
@@ -1141,6 +1389,20 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                       ),
                     ),
                     TextFormField(
+                      controller: _actual,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: l.loanActualPayment,
+                        helperText: l.loanActualPaymentHelp,
+                        helperMaxLines: 3,
+                        suffixText: '€',
+                      ),
+                      validator: optionalAmount,
+                    ),
+                    gap,
+                    TextFormField(
                       controller: _principal,
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
@@ -1155,7 +1417,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                           ? null
                           : l.amountInvalid,
                     ),
-                    if (op != null)
+                    if ((parseUserAmount(_actual.text) ?? 0) > 0)
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton.icon(
@@ -1335,7 +1597,12 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Text(
-                          preview == null
+                          _actualMonths != null
+                              ? l.loanActualPreview(
+                                  context.money(_actualPayment! + insurance),
+                                  _actualMonths!,
+                                )
+                              : preview == null
                               ? l.loanPreviewEmpty
                               : l.loanPreview(
                                   context.money(preview),

@@ -46,6 +46,7 @@ import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/left_to_live_report.dart'
     as _idzqc1lk;
 import 'package:owncoffer_server/src/generated/loan.dart' as _i2yv792g;
+import 'package:owncoffer_server/src/generated/loan_document.dart' as _ib7nzwu9;
 import 'package:owncoffer_server/src/generated/loan_from_operation.dart'
     as _iqwwu4ga;
 import 'package:owncoffer_server/src/generated/loan_info.dart' as _io3uq7xs;
@@ -2061,6 +2062,136 @@ class _LoanEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<List<_ivm4hoam.BankTransaction>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_ib7nzwu9.LoanDocument>> documents(
+    _ist.TestSessionBuilder sessionBuilder,
+    int loanId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'documents',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'documents',
+          parameters: _ist.testObjectToJson({'loanId': loanId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ib7nzwu9.LoanDocument>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ib7nzwu9.LoanDocument> uploadDocument(
+    _ist.TestSessionBuilder sessionBuilder,
+    int loanId,
+    String fileName,
+    _idt.ByteData file,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'uploadDocument',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'uploadDocument',
+          parameters: _ist.testObjectToJson({
+            'loanId': loanId,
+            'fileName': fileName,
+            'file': file,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ib7nzwu9.LoanDocument>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_idt.ByteData> downloadDocument(
+    _ist.TestSessionBuilder sessionBuilder,
+    int documentId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'downloadDocument',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'downloadDocument',
+          parameters: _ist.testObjectToJson({'documentId': documentId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_idt.ByteData>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> deleteDocument(
+    _ist.TestSessionBuilder sessionBuilder,
+    int documentId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'deleteDocument',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'deleteDocument',
+          parameters: _ist.testObjectToJson({'documentId': documentId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

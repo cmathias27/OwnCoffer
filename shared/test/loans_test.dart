@@ -124,4 +124,51 @@ void main() {
     expect(loanPrincipalForPaymentCents(0, 1000, 12), isNull);
     expect(loanPrincipalForPaymentCents(1000, 1000, 601), isNull);
   });
+
+  test('the actual instalment drives the schedule; the duration follows', () {
+    // 100 000 € at 1 %: 876,04 € computed over 120 months. The bank debits
+    // 900 €: repaid sooner.
+    final t = LoanTerms(
+      principalCents: 10000000,
+      annualRateMilli: 1000,
+      months: 120,
+      firstDue: LocalDate(2026, 1, 5),
+      paymentCents: 90000,
+    );
+    expect(t.payment, 90000);
+    final s = amortize(t);
+    expect(s.length, lessThan(120));
+    expect(s.last.remainingCents, 0);
+    expect(
+      s.take(s.length - 1).every((i) => i.paymentCents == 90000),
+      isTrue,
+    );
+    expect(s.fold(0, (a, i) => a + i.principalCents), 10000000);
+    // Lower than computed: longer than the contract.
+    final longer = amortize(
+      LoanTerms(
+        principalCents: 10000000,
+        annualRateMilli: 1000,
+        months: 120,
+        firstDue: LocalDate(2026, 1, 5),
+        paymentCents: 85000,
+      ),
+    );
+    expect(longer.length, greaterThan(120));
+    expect(longer.last.remainingCents, 0);
+    // Not even the interest: refused.
+    expect(
+      () => LoanTerms(
+        principalCents: 10000000,
+        annualRateMilli: 12000,
+        months: 120,
+        firstDue: LocalDate(2026, 1, 5),
+        paymentCents: 100000,
+      ),
+      throwsArgumentError,
+    );
+    // Early repayment keeps the actual instalment.
+    final r = simulateEarlyRepayment(t, LocalDate(2026, 6, 10), 1000000);
+    expect(r.schedule.first.paymentCents, 90000);
+  });
 }

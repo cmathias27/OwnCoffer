@@ -22,6 +22,7 @@ import 'package:owncoffer_server/src/generated/group_membership.dart'
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
+import 'package:owncoffer_server/src/generated/loan_document.dart' as _ib7nzwu9;
 import 'package:owncoffer_server/src/generated/loan_installment.dart'
     as _ictm0roz;
 import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
@@ -77,6 +78,8 @@ import 'ip_ban.dart' as _i88cvd1d;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'left_to_live_report.dart' as _ibb3lpoc;
 import 'loan.dart' as _i7jednjp;
+import 'loan_document.dart' as _ixhwb2ta;
+import 'loan_document_blob.dart' as _i05ovdfs;
 import 'loan_from_operation.dart' as _ibgzxro1;
 import 'loan_info.dart' as _ijbwwnsd;
 import 'loan_installment.dart' as _ics9k3ng;
@@ -144,6 +147,8 @@ export 'ip_ban.dart';
 export 'ip_ban_info.dart';
 export 'left_to_live_report.dart';
 export 'loan.dart';
+export 'loan_document.dart';
+export 'loan_document_blob.dart';
 export 'loan_from_operation.dart';
 export 'loan_info.dart';
 export 'loan_installment.dart';
@@ -1335,6 +1340,141 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'loan_document_blobs',
+      dartName: 'LoanDocumentBlob',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'documentId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'content',
+          columnType: _isp.ColumnType.bytea,
+          isNullable: false,
+          dartType: 'dart:typed_data:ByteData',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'loan_document_blobs_fk_0',
+          columns: ['documentId'],
+          referenceTable: 'loan_documents',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'loan_document_blobs_doc_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'documentId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'loan_documents',
+      dartName: 'LoanDocument',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'loanId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'fileName',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'mimeType',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'sizeBytes',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'uploadedBy',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: true,
+          dartType: 'UuidValue?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'loan_documents_fk_0',
+          columns: ['loanId'],
+          referenceTable: 'loans',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'loan_documents_loan_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'loanId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'loans',
       dartName: 'Loan',
       schema: 'public',
@@ -1400,6 +1540,12 @@ class Protocol extends _is.DatabaseSerializationManager {
           columnType: _isp.ColumnType.bigint,
           isNullable: false,
           dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'paymentCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
         ),
         _isp.ColumnDefinition(
           name: 'firstDueDate',
@@ -2571,6 +2717,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i7jednjp.Loan) {
       return _i7jednjp.Loan.fromJson(data) as T;
     }
+    if (t == _ixhwb2ta.LoanDocument) {
+      return _ixhwb2ta.LoanDocument.fromJson(data) as T;
+    }
+    if (t == _i05ovdfs.LoanDocumentBlob) {
+      return _i05ovdfs.LoanDocumentBlob.fromJson(data) as T;
+    }
     if (t == _ibgzxro1.LoanFromOperation) {
       return _ibgzxro1.LoanFromOperation.fromJson(data) as T;
     }
@@ -2793,6 +2945,13 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_i7jednjp.Loan?>()) {
       return (data != null ? _i7jednjp.Loan.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ixhwb2ta.LoanDocument?>()) {
+      return (data != null ? _ixhwb2ta.LoanDocument.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i05ovdfs.LoanDocumentBlob?>()) {
+      return (data != null ? _i05ovdfs.LoanDocumentBlob.fromJson(data) : null)
+          as T;
     }
     if (t == _is.getType<_ibgzxro1.LoanFromOperation?>()) {
       return (data != null ? _ibgzxro1.LoanFromOperation.fromJson(data) : null)
@@ -3068,6 +3227,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ib7nzwu9.LoanDocument>) {
+      return (data as List)
+              .map((e) => deserialize<_ib7nzwu9.LoanDocument>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ieap9unx.AppNotification>) {
       return (data as List)
               .map((e) => deserialize<_ieap9unx.AppNotification>(e))
@@ -3145,6 +3310,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _ibb3lpoc.LeftToLiveReport => 'LeftToLiveReport',
       _i7jednjp.Loan => 'Loan',
+      _ixhwb2ta.LoanDocument => 'LoanDocument',
+      _i05ovdfs.LoanDocumentBlob => 'LoanDocumentBlob',
       _ibgzxro1.LoanFromOperation => 'LoanFromOperation',
       _ijbwwnsd.LoanInfo => 'LoanInfo',
       _ics9k3ng.LoanInstallment => 'LoanInstallment',
@@ -3264,6 +3431,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'LeftToLiveReport';
       case _i7jednjp.Loan():
         return 'Loan';
+      case _ixhwb2ta.LoanDocument():
+        return 'LoanDocument';
+      case _i05ovdfs.LoanDocumentBlob():
+        return 'LoanDocumentBlob';
       case _ibgzxro1.LoanFromOperation():
         return 'LoanFromOperation';
       case _ijbwwnsd.LoanInfo():
@@ -3462,6 +3633,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'Loan') {
       return deserialize<_i7jednjp.Loan>(data['data']);
     }
+    if (dataClassName == 'LoanDocument') {
+      return deserialize<_ixhwb2ta.LoanDocument>(data['data']);
+    }
+    if (dataClassName == 'LoanDocumentBlob') {
+      return deserialize<_i05ovdfs.LoanDocumentBlob>(data['data']);
+    }
     if (dataClassName == 'LoanFromOperation') {
       return deserialize<_ibgzxro1.LoanFromOperation>(data['data']);
     }
@@ -3618,6 +3795,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _i88cvd1d.IpBan.t;
       case _i7jednjp.Loan:
         return _i7jednjp.Loan.t;
+      case _ixhwb2ta.LoanDocument:
+        return _ixhwb2ta.LoanDocument.t;
+      case _i05ovdfs.LoanDocumentBlob:
+        return _i05ovdfs.LoanDocumentBlob.t;
       case _irt10kca.AppNotification:
         return _irt10kca.AppNotification.t;
       case _ivw87pdb.Rule:

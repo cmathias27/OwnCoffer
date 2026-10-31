@@ -2254,4 +2254,83 @@ class AppLocalizationsEn extends AppLocalizations {
   String loanOperationsMore(int count) {
     return 'See all $count debits';
   }
+
+  @override
+  String get loanActualPayment => 'Instalment debited (insurance included)';
+
+  @override
+  String get loanActualPaymentHelp =>
+      'The amount actually debited each month: the only certain figure. Remaining capital, interest and end date are worked out from it.';
+
+  @override
+  String loanActualPreview(String amount, int months) {
+    return 'At $amount a month, the loan would be repaid in $months months.';
+  }
+
+  @override
+  String get loanPaymentActual => 'Instalment (debited)';
+
+  @override
+  String get loanPaymentComputed => 'Instalment (computed)';
+
+  @override
+  String get loanEstimatedDuration => 'Estimated duration';
+
+  @override
+  String get loanEstimatesNote =>
+      'The instalment debited is the only certain figure: remaining capital, interest and end date are estimates worked out from it. Your bank\'s amortisation table prevails.';
+
+  @override
+  String get loanEstimatesNoteComputed =>
+      'Instalment computed from the capital, rate and duration: enter the instalment debited for better estimates. Your bank\'s amortisation table prevails.';
+
+  @override
+  String get loanDocumentsTitle => 'Loan documents';
+
+  @override
+  String get loanDocumentsHelp =>
+      'Amortisation table, loan offer, screenshots… They stay on your server (PDF, image, CSV, spreadsheet; 10 MB at most).';
+
+  @override
+  String get loanDocumentsEmpty => 'No document.';
+
+  @override
+  String get loanDocumentAdd => 'Add a document';
+
+  @override
+  String get loanDocumentAdded => 'Document added.';
+
+  @override
+  String get loanDocumentDelete => 'Delete the document';
+
+  @override
+  String loanDocumentDeleteConfirm(String name) {
+    return 'Delete “$name” from the server? This cannot be undone.';
+  }
+
+  @override
+  String loanDocumentInfo(String size, String date) {
+    return '$size · added on $date';
+  }
+
+  @override
+  String get error_document_too_large => 'The document is empty or over 10 MB.';
+
+  @override
+  String get error_document_type =>
+      'Document type not accepted: PDF, image (PNG, JPEG, WebP), CSV, text or spreadsheet (XLSX, ODS).';
+
+  @override
+  String get error_document_limit =>
+      'This loan already has 30 documents: delete some first.';
+
+  @override
+  String sizeMb(String value) {
+    return '$value MB';
+  }
+
+  @override
+  String sizeKb(String value) {
+    return '$value kB';
+  }
 }
