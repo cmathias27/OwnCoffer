@@ -119,6 +119,9 @@ class Forecast {
   final List<DailyBalance> days;
   final List<MissedOccurrence> missed;
 
+  /// Estimated variable spending counted in [days] (positive).
+  final int variableCents;
+
   const Forecast({
     required this.today,
     required this.until,
@@ -127,6 +130,7 @@ class Forecast {
     required this.events,
     required this.days,
     required this.missed,
+    this.variableCents = 0,
   });
 
   int get endBalanceCents => days.last.balanceCents;
@@ -160,6 +164,9 @@ class Forecast {
 /// - Pending scheduled occurrences due before today are still expected: if
 ///   they are at most [lateGraceDays] late they are counted today, otherwise
 ///   they are reported in [Forecast.missed] and not counted.
+/// - [variableSpending]: estimated variable spending by day (positive cents,
+///   see `spreadVariableSpending`), taken off the balance after the events
+///   of the day.
 Forecast computeForecast({
   required int currentBalanceCents,
   required LocalDate today,
@@ -168,6 +175,7 @@ Forecast computeForecast({
   int horizonDays = 30,
   int alertThresholdCents = 0,
   int lateGraceDays = 10,
+  Map<LocalDate, int> variableSpending = const {},
 }) {
   if (horizonDays < 0) throw ArgumentError('Negative horizon');
   final until = today.addDays(horizonDays);
@@ -222,12 +230,16 @@ Forecast computeForecast({
 
   final days = <DailyBalance>[];
   var balance = currentBalanceCents;
+  var variable = 0;
   var e = 0;
   for (var day = today; day <= until; day = day.addDays(1)) {
     while (e < events.length && events[e].date == day) {
       balance = sumCents([balance, events[e].amountCents]);
       e++;
     }
+    final v = variableSpending[day] ?? 0;
+    balance = sumCents([balance, -v]);
+    variable += v;
     days.add(DailyBalance(day, balance));
   }
 
@@ -239,6 +251,7 @@ Forecast computeForecast({
     events: events,
     days: days,
     missed: missed,
+    variableCents: variable,
   );
 }
 

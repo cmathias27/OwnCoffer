@@ -2379,4 +2379,39 @@ class AppLocalizationsFr extends AppLocalizations {
   String sizeKb(String value) {
     return '$value ko';
   }
+
+  @override
+  String get variableToggle => 'Dépenses variables';
+
+  @override
+  String get variableToggleHelp =>
+      'Compter les courses, le carburant, les sorties… estimés d\'après les mois précédents';
+
+  @override
+  String variableIncluded(String amount) {
+    return 'Dont $amount de dépenses variables estimées';
+  }
+
+  @override
+  String variableMonthly(String amount) {
+    return 'Habituellement $amount par mois · voir le calcul';
+  }
+
+  @override
+  String variableHow(String months) {
+    return 'D\'après $months : pour chaque catégorie, la médiane des mois (un mois exceptionnel ne compte pas). Les opérations prévues, les virements entre vos comptes et les revenus ne sont pas comptés.';
+  }
+
+  @override
+  String variableThisMonth(String spent, String left) {
+    return 'Ce mois-ci : $spent déjà dépensés, $left encore attendus, répartis jour par jour.';
+  }
+
+  @override
+  String get variableNoHistory =>
+      'Dépenses variables : pas encore assez d\'historique (il faut au moins un mois complet d\'opérations).';
+
+  @override
+  String get variableNone =>
+      'Dépenses variables : aucune sur les derniers mois.';
 }

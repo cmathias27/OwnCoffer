@@ -270,6 +270,52 @@ void main() {
       await bad(endpoints.scheduled.forecast(as(alice), account.id!, day(-5)));
     });
 
+    test('variable spending: median of the last months, shown and '
+        'counted unless turned off', () async {
+      DateTime monthAgo(int n, int d) =>
+          DateTime.utc(now.year, now.month - n, d);
+      // Unclassified card payments: 300 €, 900 € (one-off), 300 €.
+      for (final (n, cents) in [(3, -30000), (2, -90000), (1, -30000)]) {
+        await BankTransaction.db.insertRow(
+          db,
+          BankTransaction(
+            accountId: account.id!,
+            date: monthAgo(n, 1),
+            amountCents: cents,
+            rawLabel: 'CB HYPER',
+            cleanLabel: 'HYPER',
+            operationKind: 'card',
+          ),
+        );
+      }
+      final f = await endpoints.scheduled.forecast(
+        as(reader),
+        account.id!,
+        today,
+      );
+      final v = f.variable!;
+      expect(v.months, hasLength(3));
+      expect(v.monthlyCents, 30000);
+      expect(v.categories.single.categoryId, isNull);
+      expect(v.categories.single.monthsCents, [30000, 90000, 30000]);
+      expect(v.spentThisMonthCents, 0);
+      expect(v.horizonCents, greaterThan(0));
+      expect(
+        f.days.first.balanceCents - f.days.last.balanceCents,
+        v.horizonCents,
+        reason: 'nothing else planned',
+      );
+
+      final without = await endpoints.scheduled.forecast(
+        as(reader),
+        account.id!,
+        today,
+        includeVariable: false,
+      );
+      expect(without.variable, isNull);
+      expect(without.days.last.balanceCents, without.currentBalanceCents);
+    });
+
     group('isolation (decision 0016)', () {
       final denied = throwsA(isA<AccessDeniedException>());
 

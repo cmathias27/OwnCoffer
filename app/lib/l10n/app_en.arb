@@ -629,5 +629,13 @@
   "error_document_type": "Document type not accepted: PDF, image (PNG, JPEG, WebP), CSV, text or spreadsheet (XLSX, ODS).",
   "error_document_limit": "This loan already has 30 documents: delete some first.",
   "sizeMb": "{value} MB",
-  "sizeKb": "{value} kB"
+  "sizeKb": "{value} kB",
+  "variableToggle": "Variable spending",
+  "variableToggleHelp": "Count groceries, fuel, outings… estimated from the previous months",
+  "variableIncluded": "Including {amount} of estimated variable spending",
+  "variableMonthly": "Usually {amount} a month · see how",
+  "variableHow": "From {months}: for each category, the median of the months (one exceptional month does not count). Planned operations, transfers between your accounts and income are left out.",
+  "variableThisMonth": "This month: {spent} already spent, {left} still expected, spread day by day.",
+  "variableNoHistory": "Variable spending: not enough history yet (at least one complete month of operations is needed).",
+  "variableNone": "Variable spending: none in the last months."
 }

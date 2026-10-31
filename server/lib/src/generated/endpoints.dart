@@ -2313,6 +2313,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'includeVariable': _is.ParameterDescription(
+              name: 'includeVariable',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -2324,6 +2329,7 @@ class Endpoints extends _is.EndpointDispatch {
                     params['accountId'],
                     params['today'],
                     horizonDays: params['horizonDays'],
+                    includeVariable: params['includeVariable'],
                   ),
         ),
         'confirmMatch': _is.MethodConnector(

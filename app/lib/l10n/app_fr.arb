@@ -1782,5 +1782,44 @@
         "type": "String"
       }
     }
-  }
+  },
+  "variableToggle": "Dépenses variables",
+  "variableToggleHelp": "Compter les courses, le carburant, les sorties… estimés d'après les mois précédents",
+  "variableIncluded": "Dont {amount} de dépenses variables estimées",
+  "@variableIncluded": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "variableMonthly": "Habituellement {amount} par mois · voir le calcul",
+  "@variableMonthly": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "variableHow": "D'après {months} : pour chaque catégorie, la médiane des mois (un mois exceptionnel ne compte pas). Les opérations prévues, les virements entre vos comptes et les revenus ne sont pas comptés.",
+  "@variableHow": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "variableThisMonth": "Ce mois-ci : {spent} déjà dépensés, {left} encore attendus, répartis jour par jour.",
+  "@variableThisMonth": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "left": {
+        "type": "String"
+      }
+    }
+  },
+  "variableNoHistory": "Dépenses variables : pas encore assez d'historique (il faut au moins un mois complet d'opérations).",
+  "variableNone": "Dépenses variables : aucune sur les derniers mois."
 }

@@ -3,6 +3,7 @@ import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
 import '../generated/protocol.dart';
+import 'spending_service.dart';
 
 /// Balances, reconciliation and forecast of one account, computed by the
 /// shared engine (cahier des charges : solde réel, actuel, prévisionnel).
@@ -78,7 +79,11 @@ abstract final class ForecastService {
     Account account,
     core.LocalDate today, {
     int horizonDays = 30,
+    bool variable = false,
   }) async {
+    final estimate = variable
+        ? await _variableEstimate(session, account, today)
+        : null;
     return session.db.transaction((tx) async {
       final scheduledRows = await ScheduledTransaction.db.find(
         session,
@@ -149,7 +154,16 @@ abstract final class ForecastService {
       );
 
       // 3. Forecast (proposals not yet confirmed still count as expected).
+      final until = today.addDays(horizonDays);
       final f = core.computeForecast(
+        variableSpending: estimate == null
+            ? const {}
+            : core.spreadVariableSpending(
+                estimate.$1,
+                current: estimate.$2,
+                today: today,
+                until: until,
+              ),
         currentBalanceCents: balances.currentCents,
         today: today,
         horizonDays: horizonDays,
@@ -196,7 +210,58 @@ abstract final class ForecastService {
         ],
         proposals: proposals,
         autoReconciledCount: auto,
+        variable: estimate == null
+            ? null
+            : VariableEstimateInfo(
+                monthlyCents: estimate.$1.monthlyCents,
+                spentThisMonthCents: estimate.$1.spentThisMonthCents,
+                leftThisMonthCents: estimate.$1.leftThisMonthCents,
+                horizonCents: f.variableCents,
+                months: [for (final m in estimate.$1.months) m.start.toDb()],
+                categories: [
+                  for (final c in estimate.$1.categories)
+                    VariableCategoryInfo(
+                      categoryId: c.categoryId,
+                      monthsCents: c.monthsCents,
+                      monthlyCents: c.monthlyCents,
+                    ),
+                ],
+              ),
       );
     });
+  }
+
+  /// Variable spending of [account] over the three last complete budget
+  /// months, and the current budget month.
+  static Future<(core.VariableEstimate, core.Period)> _variableEstimate(
+    Session session,
+    Account account,
+    core.LocalDate today,
+  ) async {
+    final current = await SpendingService.period(
+      session,
+      account.groupId,
+      core.PeriodKind.month,
+      today,
+    );
+    final first = await BankTransaction.db.findFirstRow(
+      session,
+      where: (t) => t.accountId.equals(account.id!) & t.deletedAt.equals(null),
+      orderBy: (t) => t.date,
+    );
+    final ids = {account.id!};
+    final estimate = core.estimateVariableSpending(
+      categories: await SpendingService.categories(session, account.groupId),
+      operations: await SpendingService.operations(
+        session,
+        ids,
+        current.shift(-3).start,
+        current.end,
+      ),
+      current: current,
+      today: today,
+      historyStart: first?.date.toLocalDate(),
+    );
+    return (estimate, current);
   }
 }

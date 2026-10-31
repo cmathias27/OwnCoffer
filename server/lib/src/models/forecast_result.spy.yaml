@@ -20,3 +20,5 @@ fields:
   proposals: List<ReconciliationProposal>
   ### Operations linked automatically to their planned occurrence.
   autoReconciledCount: int
+  ### Estimated variable spending, when asked for (already in `days`).
+  variable: VariableEstimateInfo?

@@ -3882,6 +3882,54 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{value} ko'**
   String sizeKb(String value);
+
+  /// No description provided for @variableToggle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses variables'**
+  String get variableToggle;
+
+  /// No description provided for @variableToggleHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compter les courses, le carburant, les sorties… estimés d\'après les mois précédents'**
+  String get variableToggleHelp;
+
+  /// No description provided for @variableIncluded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dont {amount} de dépenses variables estimées'**
+  String variableIncluded(String amount);
+
+  /// No description provided for @variableMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Habituellement {amount} par mois · voir le calcul'**
+  String variableMonthly(String amount);
+
+  /// No description provided for @variableHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'D\'après {months} : pour chaque catégorie, la médiane des mois (un mois exceptionnel ne compte pas). Les opérations prévues, les virements entre vos comptes et les revenus ne sont pas comptés.'**
+  String variableHow(String months);
+
+  /// No description provided for @variableThisMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois-ci : {spent} déjà dépensés, {left} encore attendus, répartis jour par jour.'**
+  String variableThisMonth(String spent, String left);
+
+  /// No description provided for @variableNoHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses variables : pas encore assez d\'historique (il faut au moins un mois complet d\'opérations).'**
+  String get variableNoHistory;
+
+  /// No description provided for @variableNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses variables : aucune sur les derniers mois.'**
+  String get variableNone;
 }
 
 class _AppLocalizationsDelegate

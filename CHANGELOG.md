@@ -2,6 +2,17 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.5 (31 octobre 2026)
+
+### Prévisions
+
+- **Dépenses variables estimées dans la courbe du solde** : courses, carburant, sorties… Pour chaque catégorie, l'estimation reprend la **médiane des trois derniers mois complets**, si bien qu'un mois exceptionnel ne la gonfle pas. Les opérations prévues, les virements entre vos comptes et les revenus ne sont pas comptés. Les débits non classés forment une catégorie à part.
+- Ce mois-ci, seul le reste est compté (le montant habituel moins ce qui est déjà dépensé), réparti jour par jour jusqu'à la fin du mois. Les mois suivants comptent le montant habituel.
+- Sous la courbe : « Dont … de dépenses variables estimées ». Un clic montre le calcul : les mois utilisés, chaque catégorie avec ses montants et sa médiane, ce qui est déjà dépensé ce mois-ci et ce qui reste attendu.
+- Un filtre **« Dépenses variables »** permet de les retirer pour ne voir que les opérations prévues.
+- Les mois antérieurs à la première opération du compte ne sont pas utilisés. Sans au moins un mois complet d'historique, l'application le signale.
+- L'alerte de découvert et le reste à vivre ne changent pas : ils restent calculés sur les seules opérations prévues.
+
 ## 0.3.4 (31 octobre 2026)
 
 ### Objectifs

@@ -7,6 +7,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/balance_chart.dart';
 import '../widgets/category_field.dart';
+import '../widgets/variable_estimate.dart';
 
 /// Forecast balance of an account: the day-by-day curve, what is coming,
 /// matches to confirm, planned operations that never arrived, and the
@@ -34,6 +35,9 @@ class ForecastScreenState extends State<ForecastScreen> {
   static const _horizons = [30, 90, 365];
   late Account? _account = widget.accounts.firstOrNull;
   var _horizon = 30;
+
+  /// Counts the estimated variable spending (groceries, fuel…).
+  var _variable = true;
   ForecastResult? _forecast;
   List<ScheduledTransaction> _scheduled = [];
   Map<int, Category> _categories = {};
@@ -88,6 +92,7 @@ class ForecastScreenState extends State<ForecastScreen> {
         account.id!,
         todayUtcMidnight(),
         horizonDays: _horizon,
+        includeVariable: _variable,
       );
       final scheduled = await client.scheduled.list(account.id!);
       if (!mounted || _account?.id != account.id) return;
@@ -200,6 +205,20 @@ class ForecastScreenState extends State<ForecastScreen> {
                     _reload();
                   },
                 ),
+                Tooltip(
+                  message: l.variableToggleHelp,
+                  child: FilterChip(
+                    avatar: _variable
+                        ? null
+                        : const Icon(Icons.shopping_cart_outlined, size: 18),
+                    label: Text(l.variableToggle),
+                    selected: _variable,
+                    onSelected: (v) {
+                      setState(() => _variable = v);
+                      _reload();
+                    },
+                  ),
+                ),
               ],
             ),
             if (_error != null)
@@ -276,6 +295,12 @@ class ForecastScreenState extends State<ForecastScreen> {
                         axisMoney: (c) => money(c - c.remainder(100)),
                         day: context.shortDay,
                       ),
+                      if (f.variable case final v?)
+                        VariableEstimateCard(
+                          estimate: v,
+                          categories: _categories,
+                          money: money,
+                        ),
                       if (f.autoReconciledCount > 0)
                         Padding(
                           padding: const EdgeInsets.only(top: 8),
