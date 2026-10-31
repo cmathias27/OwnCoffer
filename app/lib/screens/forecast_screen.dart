@@ -8,6 +8,7 @@ import '../util/format.dart';
 import '../widgets/balance_chart.dart';
 import '../widgets/category_field.dart';
 import '../widgets/variable_estimate.dart';
+import 'purchase_screen.dart';
 
 /// Forecast balance of an account: the day-by-day curve, what is coming,
 /// matches to confirm, planned operations that never arrived, and the
@@ -203,6 +204,25 @@ class ForecastScreenState extends State<ForecastScreen> {
                   onSelectionChanged: (s) {
                     setState(() => _horizon = s.first);
                     _reload();
+                  },
+                ),
+                ActionChip(
+                  avatar: const Icon(Icons.calculate_outlined, size: 18),
+                  label: Text(l.purchaseTitle),
+                  onPressed: () async {
+                    final saved = await Navigator.of(context).push<bool>(
+                      MaterialPageRoute(
+                        builder: (_) => PurchaseScreen(
+                          membership: widget.membership,
+                          account: account,
+                          categories: _categories,
+                        ),
+                      ),
+                    );
+                    if (saved == true) {
+                      widget.onChanged();
+                      await _reload();
+                    }
                   },
                 ),
                 Tooltip(

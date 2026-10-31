@@ -87,6 +87,10 @@ import 'month_review.dart' as _i5m4pdin;
 import 'notification.dart' as _irt10kca;
 import 'occurrence_status.dart' as _it10dx4m;
 import 'period_totals.dart' as _imctw77w;
+import 'purchase_option.dart' as _i46nnn14;
+import 'purchase_payment_info.dart' as _i60c7zzl;
+import 'purchase_scenario_info.dart' as _irvruma2;
+import 'purchase_simulation.dart' as _idtt2l34;
 import 'reconciliation_proposal.dart' as _i7qmkh8w;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_application.dart' as _ie66uvh9;
@@ -153,6 +157,10 @@ export 'month_review.dart';
 export 'notification.dart';
 export 'occurrence_status.dart';
 export 'period_totals.dart';
+export 'purchase_option.dart';
+export 'purchase_payment_info.dart';
+export 'purchase_scenario_info.dart';
+export 'purchase_simulation.dart';
 export 'reconciliation_proposal.dart';
 export 'rule.dart';
 export 'rule_application.dart';
@@ -350,6 +358,18 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _imctw77w.PeriodTotals) {
       return _imctw77w.PeriodTotals.fromJson(data) as T;
+    }
+    if (t == _i46nnn14.PurchaseOption) {
+      return _i46nnn14.PurchaseOption.fromJson(data) as T;
+    }
+    if (t == _i60c7zzl.PurchasePaymentInfo) {
+      return _i60c7zzl.PurchasePaymentInfo.fromJson(data) as T;
+    }
+    if (t == _irvruma2.PurchaseScenarioInfo) {
+      return _irvruma2.PurchaseScenarioInfo.fromJson(data) as T;
+    }
+    if (t == _idtt2l34.PurchaseSimulation) {
+      return _idtt2l34.PurchaseSimulation.fromJson(data) as T;
     }
     if (t == _i7qmkh8w.ReconciliationProposal) {
       return _i7qmkh8w.ReconciliationProposal.fromJson(data) as T;
@@ -579,6 +599,26 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_imctw77w.PeriodTotals?>()) {
       return (data != null ? _imctw77w.PeriodTotals.fromJson(data) : null) as T;
     }
+    if (t == _isc.getType<_i46nnn14.PurchaseOption?>()) {
+      return (data != null ? _i46nnn14.PurchaseOption.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_i60c7zzl.PurchasePaymentInfo?>()) {
+      return (data != null
+              ? _i60c7zzl.PurchasePaymentInfo.fromJson(data)
+              : null)
+          as T;
+    }
+    if (t == _isc.getType<_irvruma2.PurchaseScenarioInfo?>()) {
+      return (data != null
+              ? _irvruma2.PurchaseScenarioInfo.fromJson(data)
+              : null)
+          as T;
+    }
+    if (t == _isc.getType<_idtt2l34.PurchaseSimulation?>()) {
+      return (data != null ? _idtt2l34.PurchaseSimulation.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_i7qmkh8w.ReconciliationProposal?>()) {
       return (data != null
               ? _i7qmkh8w.ReconciliationProposal.fromJson(data)
@@ -737,6 +777,18 @@ class Protocol extends _isc.SerializationManager {
     if (t == List<_ifol8nrg.ScheduledTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ifol8nrg.ScheduledTransaction>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i60c7zzl.PurchasePaymentInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_i60c7zzl.PurchasePaymentInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_irvruma2.PurchaseScenarioInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_irvruma2.PurchaseScenarioInfo>(e))
               .toList()
           as T;
     }
@@ -918,6 +970,10 @@ class Protocol extends _isc.SerializationManager {
       _irt10kca.AppNotification => 'AppNotification',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
       _imctw77w.PeriodTotals => 'PeriodTotals',
+      _i46nnn14.PurchaseOption => 'PurchaseOption',
+      _i60c7zzl.PurchasePaymentInfo => 'PurchasePaymentInfo',
+      _irvruma2.PurchaseScenarioInfo => 'PurchaseScenarioInfo',
+      _idtt2l34.PurchaseSimulation => 'PurchaseSimulation',
       _i7qmkh8w.ReconciliationProposal => 'ReconciliationProposal',
       _ivw87pdb.Rule => 'Rule',
       _ie66uvh9.RuleApplication => 'RuleApplication',
@@ -1046,6 +1102,14 @@ class Protocol extends _isc.SerializationManager {
         return 'OccurrenceStatus';
       case _imctw77w.PeriodTotals():
         return 'PeriodTotals';
+      case _i46nnn14.PurchaseOption():
+        return 'PurchaseOption';
+      case _i60c7zzl.PurchasePaymentInfo():
+        return 'PurchasePaymentInfo';
+      case _irvruma2.PurchaseScenarioInfo():
+        return 'PurchaseScenarioInfo';
+      case _idtt2l34.PurchaseSimulation():
+        return 'PurchaseSimulation';
       case _i7qmkh8w.ReconciliationProposal():
         return 'ReconciliationProposal';
       case _ivw87pdb.Rule():
@@ -1247,6 +1311,18 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'PeriodTotals') {
       return deserialize<_imctw77w.PeriodTotals>(data['data']);
+    }
+    if (dataClassName == 'PurchaseOption') {
+      return deserialize<_i46nnn14.PurchaseOption>(data['data']);
+    }
+    if (dataClassName == 'PurchasePaymentInfo') {
+      return deserialize<_i60c7zzl.PurchasePaymentInfo>(data['data']);
+    }
+    if (dataClassName == 'PurchaseScenarioInfo') {
+      return deserialize<_irvruma2.PurchaseScenarioInfo>(data['data']);
+    }
+    if (dataClassName == 'PurchaseSimulation') {
+      return deserialize<_idtt2l34.PurchaseSimulation>(data['data']);
     }
     if (dataClassName == 'ReconciliationProposal') {
       return deserialize<_i7qmkh8w.ReconciliationProposal>(data['data']);

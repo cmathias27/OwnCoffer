@@ -57,6 +57,8 @@ import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/month_review.dart' as _ir8qupm5;
 import 'package:owncoffer_server/src/generated/notification.dart' as _ieap9unx;
+import 'package:owncoffer_server/src/generated/purchase_simulation.dart'
+    as _ikh9zr0h;
 import 'package:owncoffer_server/src/generated/rule.dart' as _inhqt802;
 import 'package:owncoffer_server/src/generated/rule_application.dart'
     as _i09rkxx8;
@@ -3182,6 +3184,51 @@ class _ScheduledEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_isjvyxsm.ForecastResult>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ikh9zr0h.PurchaseSimulation> simulatePurchase(
+    _ist.TestSessionBuilder sessionBuilder,
+    int accountId,
+    DateTime today,
+    int amountCents,
+    DateTime date,
+    DateTime target, {
+    int? categoryId,
+    bool? includeVariable,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'simulatePurchase',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'simulatePurchase',
+          parameters: _ist.testObjectToJson({
+            'accountId': accountId,
+            'today': today,
+            'amountCents': amountCents,
+            'date': date,
+            'target': target,
+            'categoryId': categoryId,
+            'includeVariable': includeVariable,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ikh9zr0h.PurchaseSimulation>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

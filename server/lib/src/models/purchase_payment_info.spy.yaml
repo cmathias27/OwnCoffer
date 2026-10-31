@@ -1,0 +1,5 @@
+class: PurchasePaymentInfo
+fields:
+  date: DateTime
+  ### Positive.
+  amountCents: int

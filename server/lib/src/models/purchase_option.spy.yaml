@@ -1,0 +1,9 @@
+### How a simulated purchase is paid (none: not buying, the reference).
+enum: PurchaseOption
+serialized: byName
+values:
+  - none
+  - cash
+  - threeTimes
+  - fourTimes
+  - nextMonth

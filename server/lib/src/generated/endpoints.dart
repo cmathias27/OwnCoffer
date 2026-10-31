@@ -2332,6 +2332,61 @@ class Endpoints extends _is.EndpointDispatch {
                     includeVariable: params['includeVariable'],
                   ),
         ),
+        'simulatePurchase': _is.MethodConnector(
+          name: 'simulatePurchase',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'today': _is.ParameterDescription(
+              name: 'today',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'target': _is.ParameterDescription(
+              name: 'target',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'includeVariable': _is.ParameterDescription(
+              name: 'includeVariable',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .simulatePurchase(
+                    session,
+                    params['accountId'],
+                    params['today'],
+                    params['amountCents'],
+                    params['date'],
+                    params['target'],
+                    categoryId: params['categoryId'],
+                    includeVariable: params['includeVariable'],
+                  ),
+        ),
         'confirmMatch': _is.MethodConnector(
           name: 'confirmMatch',
           params: {

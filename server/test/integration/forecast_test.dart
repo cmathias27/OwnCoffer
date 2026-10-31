@@ -316,6 +316,125 @@ void main() {
       expect(without.days.last.balanceCents, without.currentBalanceCents);
     });
 
+    test('purchase simulator: options side by side, nothing saved', () async {
+      await endpoints.scheduled.create(
+        as(alice),
+        account.id!,
+        200000,
+        'Salaire',
+        ScheduleFrequency.monthly,
+        day(5),
+      );
+      final before = await ScheduledTransaction.db.count(db);
+      final sim = await endpoints.scheduled.simulatePurchase(
+        as(reader),
+        account.id!,
+        today,
+        60000,
+        day(1),
+        day(20),
+        includeVariable: false,
+      );
+      expect(await ScheduledTransaction.db.count(db), before);
+      final by = {for (final s in sim.scenarios) s.option: s};
+      expect(by.keys, PurchaseOption.values);
+      expect(by[PurchaseOption.none]!.balanceOnTargetCents, 230000);
+      final cash = by[PurchaseOption.cash]!;
+      expect(cash.balanceOnTargetCents, 170000);
+      expect(cash.lowestBalanceCents, -30000);
+      expect(cash.firstBelowThresholdDate, day(1));
+      final three = by[PurchaseOption.threeTimes]!;
+      expect(three.payments.map((p) => p.amountCents), [20000, 20000, 20000]);
+      expect(three.firstBelowThresholdDate, isNull);
+      expect(three.balanceOnTargetCents, 210000);
+      expect(by[PurchaseOption.nextMonth]!.firstBelowThresholdDate, isNull);
+      expect(sim.until.isAfter(day(20)), isTrue, reason: 'last instalment');
+
+      await expectLater(
+        endpoints.scheduled.simulatePurchase(
+          as(alice),
+          account.id!,
+          today,
+          0,
+          day(1),
+          day(20),
+        ),
+        throwsA(isA<InvalidInputException>()),
+      );
+      await expectLater(
+        endpoints.scheduled.simulatePurchase(
+          as(alice),
+          account.id!,
+          today,
+          100,
+          day(-3),
+          day(20),
+        ),
+        throwsA(isA<InvalidInputException>()),
+      );
+      await expectLater(
+        endpoints.scheduled.simulatePurchase(
+          as(mallory),
+          account.id!,
+          today,
+          100,
+          day(1),
+          day(20),
+        ),
+        throwsA(isA<AccessDeniedException>()),
+      );
+    });
+
+    test('purchase simulator: the category goal it would exceed', () async {
+      final cats = await endpoints.category.list(as(alice), groupA);
+      final food = cats.firstWhere((c) => c.standardCode == 'food.groceries');
+      await endpoints.goal.set(as(alice), groupA, food.id!, 10000);
+      await BankTransaction.db.insertRow(
+        db,
+        BankTransaction(
+          accountId: account.id!,
+          date: today,
+          amountCents: -8000,
+          rawLabel: 'CB HYPER',
+          cleanLabel: 'HYPER',
+          operationKind: 'card',
+          categoryId: food.id,
+        ),
+      );
+      final sim = await endpoints.scheduled.simulatePurchase(
+        as(alice),
+        account.id!,
+        today,
+        6000,
+        today,
+        today,
+        categoryId: food.id,
+      );
+      expect(sim.goalCents, 10000);
+      expect(sim.goalSpentCents, 8000);
+      final by = {for (final s in sim.scenarios) s.option: s};
+      expect(by[PurchaseOption.cash]!.goalOverCents, 4000);
+      expect(by[PurchaseOption.none]!.goalOverCents, isNull);
+      expect(by[PurchaseOption.nextMonth]!.thisMonthCents, 0);
+      expect(by[PurchaseOption.nextMonth]!.goalOverCents, isNull);
+      final foreign = (await Category.db.findFirstRow(
+        db,
+        where: (c) => c.groupId.notEquals(groupA),
+      ))!;
+      await expectLater(
+        endpoints.scheduled.simulatePurchase(
+          as(alice),
+          account.id!,
+          today,
+          6000,
+          today,
+          today,
+          categoryId: foreign.id,
+        ),
+        throwsA(isA<AccessDeniedException>()),
+      );
+    });
+
     group('isolation (decision 0016)', () {
       final denied = throwsA(isA<AccessDeniedException>());
 

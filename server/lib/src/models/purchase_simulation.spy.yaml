@@ -1,0 +1,15 @@
+### Purchase simulator: the options side by side (nothing is saved).
+class: PurchaseSimulation
+fields:
+  accountId: int
+  amountCents: int
+  date: DateTime
+  target: DateTime
+  ### Last day computed: the target or the last instalment.
+  until: DateTime
+  alertThresholdCents: int
+  variableIncluded: bool
+  ### Monthly goal of the chosen category and what is spent of it.
+  goalCents: int?
+  goalSpentCents: int?
+  scenarios: List<PurchaseScenarioInfo>

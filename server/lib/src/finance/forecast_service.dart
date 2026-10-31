@@ -154,25 +154,14 @@ abstract final class ForecastService {
       );
 
       // 3. Forecast (proposals not yet confirmed still count as expected).
-      final until = today.addDays(horizonDays);
-      final f = core.computeForecast(
-        variableSpending: estimate == null
-            ? const {}
-            : core.spreadVariableSpending(
-                estimate.$1,
-                current: estimate.$2,
-                today: today,
-                until: until,
-              ),
-        currentBalanceCents: balances.currentCents,
-        today: today,
-        horizonDays: horizonDays,
-        alertThresholdCents: account.alertThresholdCents,
-        scheduled: [for (final s in byId.values) operationOf(s)],
-        futureOperations: [
-          for (final t in ops)
-            if (t.date.toLocalDate() > today) realOf(t),
-        ],
+      final f = _engine(
+        account,
+        today,
+        horizonDays,
+        balances.currentCents,
+        byId.values,
+        ops,
+        estimate,
       );
       final lowest = f.lowest;
       return ForecastResult(
@@ -229,6 +218,92 @@ abstract final class ForecastService {
               ),
       );
     });
+  }
+
+  /// The shared engine on the account's data, with [extra] planned
+  /// operations (purchase simulator).
+  static core.Forecast _engine(
+    Account account,
+    core.LocalDate today,
+    int horizonDays,
+    int currentBalanceCents,
+    Iterable<ScheduledTransaction> scheduled,
+    List<BankTransaction> ops,
+    (core.VariableEstimate, core.Period)? estimate, {
+    List<core.ScheduledOperation> extra = const [],
+  }) => core.computeForecast(
+    variableSpending: estimate == null
+        ? const {}
+        : core.spreadVariableSpending(
+            estimate.$1,
+            current: estimate.$2,
+            today: today,
+            until: today.addDays(horizonDays),
+          ),
+    currentBalanceCents: currentBalanceCents,
+    today: today,
+    horizonDays: horizonDays,
+    alertThresholdCents: account.alertThresholdCents,
+    scheduled: [for (final s in scheduled) operationOf(s), ...extra],
+    futureOperations: [
+      for (final t in ops)
+        if (t.date.toLocalDate() > today) realOf(t),
+    ],
+  );
+
+  /// The purchase simulator: the account's forecast once per payment option
+  /// (after the usual reconciliation, as when the forecast is opened).
+  /// Nothing is saved.
+  static Future<List<core.PurchaseScenario>> simulatePurchase(
+    Session session,
+    Account account,
+    core.LocalDate today, {
+    required int amountCents,
+    required core.LocalDate date,
+    required core.LocalDate target,
+    bool variable = true,
+  }) async {
+    final until = core.purchaseHorizon(amountCents, date, target);
+    final horizon = today.daysUntil(until);
+    // Links the occurrences that arrived, as opening the forecast does.
+    await compute(session, account, today, horizonDays: horizon);
+    final estimate = variable
+        ? await _variableEstimate(session, account, today)
+        : null;
+    final scheduled = await ScheduledTransaction.db.find(
+      session,
+      where: (s) => s.accountId.equals(account.id!) & s.deletedAt.equals(null),
+    );
+    final ops = await BankTransaction.db.find(
+      session,
+      where: (t) => t.accountId.equals(account.id!) & t.deletedAt.equals(null),
+    );
+    final balance = core
+        .computeBalances(
+          initialBalanceCents: account.initialBalanceCents,
+          operations: [
+            for (final t in ops)
+              core.BalanceInput(t.date.toLocalDate(), t.amountCents),
+          ],
+          today: today,
+        )
+        .currentCents;
+    return core.simulatePurchase(
+      amountCents: amountCents,
+      date: date,
+      target: target,
+      until: until,
+      forecast: (extra) => _engine(
+        account,
+        today,
+        horizon,
+        balance,
+        scheduled,
+        ops,
+        estimate,
+        extra: extra,
+      ),
+    );
   }
 
   /// Variable spending of [account] over the three last complete budget
