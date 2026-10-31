@@ -3204,4 +3204,37 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get invoiceAttachHere => 'Rattacher ici';
+
+  @override
+  String get scanTitle => 'Recadrer la facture';
+
+  @override
+  String get scanHelp =>
+      'Faites glisser les 4 coins sur ceux de la facture : seule la facture est gardée, redressée comme par un scanner. Tout se fait sur cet appareil.';
+
+  @override
+  String get scanLoading => 'Lecture de la photo…';
+
+  @override
+  String get scanUnreadable =>
+      'Cette image ne peut pas être lue ici pour la recadrer.';
+
+  @override
+  String get scanFailed =>
+      'Le recadrage a échoué. Gardez la photo telle quelle, ou réessayez avec d\'autres coins.';
+
+  @override
+  String get scanKeepAsIs => 'Garder telle quelle';
+
+  @override
+  String get scanEnhance => 'Améliorer la lisibilité (fond blanc, texte foncé)';
+
+  @override
+  String get scanWholePhoto => 'Toute la photo';
+
+  @override
+  String get scanDetectAgain => 'Coins trouvés';
+
+  @override
+  String get scanApply => 'Recadrer';
 }

@@ -5214,6 +5214,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Rattacher ici'**
   String get invoiceAttachHere;
+
+  /// No description provided for @scanTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recadrer la facture'**
+  String get scanTitle;
+
+  /// No description provided for @scanHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faites glisser les 4 coins sur ceux de la facture : seule la facture est gardée, redressée comme par un scanner. Tout se fait sur cet appareil.'**
+  String get scanHelp;
+
+  /// No description provided for @scanLoading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture de la photo…'**
+  String get scanLoading;
+
+  /// No description provided for @scanUnreadable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette image ne peut pas être lue ici pour la recadrer.'**
+  String get scanUnreadable;
+
+  /// No description provided for @scanFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le recadrage a échoué. Gardez la photo telle quelle, ou réessayez avec d\'autres coins.'**
+  String get scanFailed;
+
+  /// No description provided for @scanKeepAsIs.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garder telle quelle'**
+  String get scanKeepAsIs;
+
+  /// No description provided for @scanEnhance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Améliorer la lisibilité (fond blanc, texte foncé)'**
+  String get scanEnhance;
+
+  /// No description provided for @scanWholePhoto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toute la photo'**
+  String get scanWholePhoto;
+
+  /// No description provided for @scanDetectAgain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coins trouvés'**
+  String get scanDetectAgain;
+
+  /// No description provided for @scanApply.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recadrer'**
+  String get scanApply;
 }
 
 class _AppLocalizationsDelegate

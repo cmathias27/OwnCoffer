@@ -6,6 +6,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../screens/invoice_scan_screen.dart';
 import '../util/file_pick.dart';
 import '../util/file_save.dart';
 import '../util/format.dart';
@@ -25,7 +26,7 @@ Future<InvoiceInfo?> attachInvoice(
   final l = AppLocalizations.of(context);
   final messenger = ScaffoldMessenger.of(context);
   try {
-    final f = await pickFile(extensions: invoiceExtensions, camera: camera);
+    final f = await _pick(context, camera);
     if (f == null) return null;
     final info = await client.invoice.upload(
       transactionId,
@@ -51,7 +52,7 @@ Future<InvoiceInfo?> addUnattachedInvoice(
   final l = AppLocalizations.of(context);
   final messenger = ScaffoldMessenger.of(context);
   try {
-    final f = await pickFile(extensions: invoiceExtensions, camera: camera);
+    final f = await _pick(context, camera);
     if (f == null || !context.mounted) return null;
     final hints = await showDialog<InvoiceHints>(
       context: context,
@@ -143,6 +144,13 @@ Future<InvoiceInfo?> attachWaitingInvoice(
     messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
     return null;
   }
+}
+
+/// A file or a photo; a photo is then cropped to the invoice alone.
+Future<PickedFile?> _pick(BuildContext context, bool camera) async {
+  final f = await pickFile(extensions: invoiceExtensions, camera: camera);
+  if (f == null || !isScannable(f.name) || !context.mounted) return f;
+  return scanInvoicePhoto(context, f);
 }
 
 Future<void> openInvoice(BuildContext context, InvoiceInfo info) async {

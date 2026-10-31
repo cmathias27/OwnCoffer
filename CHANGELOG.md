@@ -2,6 +2,21 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.15 (31 octobre 2026)
+
+### Factures : photo recadrée comme par un scanner
+
+- Quand on joint une photo (appareil photo ou image), un écran **« Recadrer la facture »** s'ouvre :
+  - la feuille est repérée sur la photo ;
+  - on fait glisser ses **4 coins** si besoin ;
+  - la facture est **redressée** (perspective corrigée) et le reste de la photo est retiré.
+- **« Améliorer la lisibilité »** (activé par défaut) : fond blanc, texte foncé.
+- Boutons « Toute la photo », « Coins trouvés » et « Garder telle quelle ».
+- La facture recadrée est enregistrée en JPEG de 2 000 pixels au plus sur son grand côté : lisible et légère (quelques centaines de Ko au lieu de plusieurs Mo).
+- Tout se fait **sur l'appareil**, dans le navigateur : la photo d'origine n'est envoyée nulle part. Les calculs (repérage, redressement, contraste) sont dans le cœur commun et serviront aussi en version autonome.
+
+Les factures sont complètes : jointes, page Factures, noms automatiques, export ZIP, garantie et rappel, envoi par courriel, factures à rattacher et photo recadrée.
+
 ## 0.3.14 (31 octobre 2026)
 
 ### Factures à rattacher
