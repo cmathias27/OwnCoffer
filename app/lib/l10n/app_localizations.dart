@@ -2256,6 +2256,816 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Créer votre foyer'**
   String get groupCreateTitle;
+
+  /// No description provided for @navBudget.
+  ///
+  /// In fr, this message translates to:
+  /// **'Budget'**
+  String get navBudget;
+
+  /// No description provided for @navLoans.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédits'**
+  String get navLoans;
+
+  /// No description provided for @navMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus'**
+  String get navMore;
+
+  /// No description provided for @allAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les comptes'**
+  String get allAccounts;
+
+  /// No description provided for @moreActions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus d\'actions'**
+  String get moreActions;
+
+  /// No description provided for @optional.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultatif'**
+  String get optional;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Champ obligatoire.'**
+  String get fieldRequired;
+
+  /// No description provided for @filterCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get filterCategory;
+
+  /// No description provided for @periodWeek.
+  ///
+  /// In fr, this message translates to:
+  /// **'Semaine'**
+  String get periodWeek;
+
+  /// No description provided for @periodMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois'**
+  String get periodMonth;
+
+  /// No description provided for @periodYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Année'**
+  String get periodYear;
+
+  /// No description provided for @periodPrevious.
+  ///
+  /// In fr, this message translates to:
+  /// **'Période précédente'**
+  String get periodPrevious;
+
+  /// No description provided for @periodNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'Période suivante'**
+  String get periodNext;
+
+  /// No description provided for @budgetIncome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus'**
+  String get budgetIncome;
+
+  /// No description provided for @budgetExpenses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses'**
+  String get budgetExpenses;
+
+  /// No description provided for @budgetSavings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Épargne'**
+  String get budgetSavings;
+
+  /// No description provided for @budgetNet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste'**
+  String get budgetNet;
+
+  /// No description provided for @budgetDeltaPrevious.
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} % par rapport à la période précédente'**
+  String budgetDeltaPrevious(String percent);
+
+  /// No description provided for @budgetHistoryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus et dépenses'**
+  String get budgetHistoryTitle;
+
+  /// No description provided for @budgetHistorySemantic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus et dépenses des six dernières périodes'**
+  String get budgetHistorySemantic;
+
+  /// No description provided for @rankingExpenses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classement des dépenses'**
+  String get rankingExpenses;
+
+  /// No description provided for @rankingIncome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classement des revenus'**
+  String get rankingIncome;
+
+  /// No description provided for @rankingEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien sur cette période.'**
+  String get rankingEmpty;
+
+  /// No description provided for @rankingShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} % du total'**
+  String rankingShare(int percent);
+
+  /// No description provided for @rankingPrevious.
+  ///
+  /// In fr, this message translates to:
+  /// **'avant : {amount}'**
+  String rankingPrevious(String amount);
+
+  /// No description provided for @rankingAverage.
+  ///
+  /// In fr, this message translates to:
+  /// **'moyenne : {amount}'**
+  String rankingAverage(String amount);
+
+  /// No description provided for @rankingOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les opérations'**
+  String get rankingOperations;
+
+  /// No description provided for @goalAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif'**
+  String get goalAdd;
+
+  /// No description provided for @goalSet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fixer un objectif'**
+  String get goalSet;
+
+  /// No description provided for @goalEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier l\'objectif'**
+  String get goalEdit;
+
+  /// No description provided for @goalRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer l\'objectif'**
+  String get goalRemove;
+
+  /// No description provided for @goalTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif : {category}'**
+  String goalTitle(String category);
+
+  /// No description provided for @goalHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant maximum à dépenser chaque mois dans cette catégorie, sous-catégories comprises.'**
+  String get goalHelp;
+
+  /// No description provided for @goalAmountLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant par mois'**
+  String get goalAmountLabel;
+
+  /// No description provided for @goalSuggestion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suggestion : {amount} (moyenne des 3 mois précédents : {average})'**
+  String goalSuggestion(String amount, String average);
+
+  /// No description provided for @goalOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans l\'objectif'**
+  String get goalOk;
+
+  /// No description provided for @goalWarning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bientôt atteint'**
+  String get goalWarning;
+
+  /// No description provided for @goalOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépassé'**
+  String get goalOver;
+
+  /// No description provided for @goalProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} % de {goal}'**
+  String goalProgress(int percent, String goal);
+
+  /// No description provided for @goalLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'reste {amount}'**
+  String goalLeft(String amount);
+
+  /// No description provided for @goalExceeded.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} de trop'**
+  String goalExceeded(String amount);
+
+  /// No description provided for @monthStartTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début du mois'**
+  String get monthStartTitle;
+
+  /// No description provided for @monthStartHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le jour où commence votre mois de budget, par exemple le jour de la paie. Le budget, le classement des dépenses et les objectifs l\'utilisent pour tout le foyer.'**
+  String get monthStartHelp;
+
+  /// No description provided for @monthStartLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mois commence'**
+  String get monthStartLabel;
+
+  /// No description provided for @monthStartFirst.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le 1er (mois du calendrier)'**
+  String get monthStartFirst;
+
+  /// No description provided for @monthStartDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le {day}'**
+  String monthStartDay(int day);
+
+  /// No description provided for @subscriptionsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnements'**
+  String get subscriptionsTitle;
+
+  /// No description provided for @subscriptionsMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par mois'**
+  String get subscriptionsMonthly;
+
+  /// No description provided for @subscriptionsYearly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par an'**
+  String get subscriptionsYearly;
+
+  /// No description provided for @subscriptionsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations prévues marquées comme abonnements, sur les comptes que vous voyez. Les montants annuels et hebdomadaires sont ramenés au mois.'**
+  String get subscriptionsHelp;
+
+  /// No description provided for @subscriptionsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun abonnement. Dans la fiche d\'une opération, « C\'est un abonnement » l\'ajoute ici.'**
+  String get subscriptionsEmpty;
+
+  /// No description provided for @subscriptionNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'prochain : {date}'**
+  String subscriptionNext(String date);
+
+  /// No description provided for @subscriptionPerMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} / mois'**
+  String subscriptionPerMonth(String amount);
+
+  /// No description provided for @subscriptionUnmark.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ne plus compter comme abonnement'**
+  String get subscriptionUnmark;
+
+  /// No description provided for @subscriptionUnmarkHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste une opération prévue dans les prévisions.'**
+  String get subscriptionUnmarkHelp;
+
+  /// No description provided for @subscriptionStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement résilié'**
+  String get subscriptionStop;
+
+  /// No description provided for @subscriptionStopHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprime l\'opération prévue : elle ne compte plus dans les prévisions.'**
+  String get subscriptionStopHelp;
+
+  /// No description provided for @subscriptionSwitch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement'**
+  String get subscriptionSwitch;
+
+  /// No description provided for @subscriptionSwitchHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Apparaît dans la liste des abonnements.'**
+  String get subscriptionSwitchHelp;
+
+  /// No description provided for @subscriptionFromOperation.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est un abonnement'**
+  String get subscriptionFromOperation;
+
+  /// No description provided for @subscriptionMarkPlanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marquer comme abonnement'**
+  String get subscriptionMarkPlanned;
+
+  /// No description provided for @subscriptionCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement « {label} » ajouté, prochain prélèvement le {date}.'**
+  String subscriptionCreated(String label, String date);
+
+  /// No description provided for @loansRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste à rembourser'**
+  String get loansRemaining;
+
+  /// No description provided for @loansMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualités'**
+  String get loansMonthly;
+
+  /// No description provided for @loansDebtRatio.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux d\'endettement'**
+  String get loansDebtRatio;
+
+  /// No description provided for @loansDebtRatioUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de revenus classés sur les 3 derniers mois.'**
+  String get loansDebtRatioUnknown;
+
+  /// No description provided for @loansDebtRatioOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sous les 35 % conseillés'**
+  String get loansDebtRatioOk;
+
+  /// No description provided for @loansDebtRatioHigh.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au-dessus des 35 % conseillés'**
+  String get loansDebtRatioHigh;
+
+  /// No description provided for @loansDebtRatioBasis.
+  ///
+  /// In fr, this message translates to:
+  /// **'revenus moyens : {amount} / mois'**
+  String loansDebtRatioBasis(String amount);
+
+  /// No description provided for @loansEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun crédit. Ajoutez-en un pour suivre ce qu\'il reste à rembourser.'**
+  String get loansEmpty;
+
+  /// No description provided for @loansDisclaimer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculs indicatifs à taux fixe et mensualités constantes : en cas d\'écart, le tableau d\'amortissement de la banque fait foi.'**
+  String get loansDisclaimer;
+
+  /// No description provided for @loanAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un crédit'**
+  String get loanAdd;
+
+  /// No description provided for @loanEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le crédit'**
+  String get loanEdit;
+
+  /// No description provided for @loanDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le crédit'**
+  String get loanDelete;
+
+  /// No description provided for @loanDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer ce crédit ? Ses échéances prévues sont retirées des prévisions.'**
+  String get loanDeleteConfirm;
+
+  /// No description provided for @loanKind.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de crédit'**
+  String get loanKind;
+
+  /// No description provided for @loanKindMortgage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Immobilier'**
+  String get loanKindMortgage;
+
+  /// No description provided for @loanKindCar.
+  ///
+  /// In fr, this message translates to:
+  /// **'Auto'**
+  String get loanKindCar;
+
+  /// No description provided for @loanKindConsumer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consommation'**
+  String get loanKindConsumer;
+
+  /// No description provided for @loanKindStudent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Étudiant'**
+  String get loanKindStudent;
+
+  /// No description provided for @loanKindPersonal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prêt entre particuliers'**
+  String get loanKindPersonal;
+
+  /// No description provided for @loanKindOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autre'**
+  String get loanKindOther;
+
+  /// No description provided for @loanLender.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisme'**
+  String get loanLender;
+
+  /// No description provided for @loanLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get loanLabel;
+
+  /// No description provided for @loanLabelHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Maison, voiture…'**
+  String get loanLabelHint;
+
+  /// No description provided for @loanPrincipal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capital emprunté'**
+  String get loanPrincipal;
+
+  /// No description provided for @loanRate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux nominal'**
+  String get loanRate;
+
+  /// No description provided for @loanRateHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par an, par exemple 3,45'**
+  String get loanRateHelp;
+
+  /// No description provided for @loanRateInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux entre 0 et 50 %, trois décimales au plus.'**
+  String get loanRateInvalid;
+
+  /// No description provided for @loanApr.
+  ///
+  /// In fr, this message translates to:
+  /// **'TAEG'**
+  String get loanApr;
+
+  /// No description provided for @loanDuration.
+  ///
+  /// In fr, this message translates to:
+  /// **'Durée'**
+  String get loanDuration;
+
+  /// No description provided for @loanDurationMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'Durée en mois'**
+  String get loanDurationMonths;
+
+  /// No description provided for @loanDurationHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'240 mois = 20 ans'**
+  String get loanDurationHelp;
+
+  /// No description provided for @loanDurationInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entre 1 et 600 mois.'**
+  String get loanDurationInvalid;
+
+  /// No description provided for @loanMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} mois'**
+  String loanMonths(int count);
+
+  /// No description provided for @loanFirstDue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de la première échéance'**
+  String get loanFirstDue;
+
+  /// No description provided for @loanInsurance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Assurance par mois'**
+  String get loanInsurance;
+
+  /// No description provided for @loanInsuranceMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Assurance par mois'**
+  String get loanInsuranceMonthly;
+
+  /// No description provided for @loanFees.
+  ///
+  /// In fr, this message translates to:
+  /// **'Frais de dossier'**
+  String get loanFees;
+
+  /// No description provided for @loanAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte de prélèvement'**
+  String get loanAccount;
+
+  /// No description provided for @loanAccountHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les échéances deviennent des opérations prévues sur ce compte : elles comptent dans le solde prévu et sont rapprochées des prélèvements réels.'**
+  String get loanAccountHelp;
+
+  /// No description provided for @loanNoAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun'**
+  String get loanNoAccount;
+
+  /// No description provided for @loanPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualité (hors assurance)'**
+  String get loanPayment;
+
+  /// No description provided for @loanPreview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualité : {payment} hors assurance, {total} avec.'**
+  String loanPreview(String payment, String total);
+
+  /// No description provided for @loanPreviewEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez le capital, le taux et la durée pour voir la mensualité.'**
+  String get loanPreviewEmpty;
+
+  /// No description provided for @loanRemainingShort.
+  ///
+  /// In fr, this message translates to:
+  /// **'restant dû'**
+  String get loanRemainingShort;
+
+  /// No description provided for @loanRepaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} % remboursé'**
+  String loanRepaid(int percent);
+
+  /// No description provided for @loanInstallments.
+  ///
+  /// In fr, this message translates to:
+  /// **'{paid} / {total} échéances'**
+  String loanInstallments(int paid, int total);
+
+  /// No description provided for @loanNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'prochaine le {date} : {amount}'**
+  String loanNext(String date, String amount);
+
+  /// No description provided for @loanFinished.
+  ///
+  /// In fr, this message translates to:
+  /// **'remboursé'**
+  String get loanFinished;
+
+  /// No description provided for @loanEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'fin le {date}'**
+  String loanEnd(String date);
+
+  /// No description provided for @loanInterestPaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Intérêts déjà payés'**
+  String get loanInterestPaid;
+
+  /// No description provided for @loanInterestLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Intérêts restant à payer'**
+  String get loanInterestLeft;
+
+  /// No description provided for @loanCost.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coût total (intérêts, assurance, frais)'**
+  String get loanCost;
+
+  /// No description provided for @loanSimulationTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remboursement anticipé'**
+  String get loanSimulationTitle;
+
+  /// No description provided for @loanSimulationHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Si je rembourse ce montant maintenant, en gardant la même mensualité.'**
+  String get loanSimulationHelp;
+
+  /// No description provided for @loanSimulationAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant'**
+  String get loanSimulationAmount;
+
+  /// No description provided for @loanSimulate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simuler'**
+  String get loanSimulate;
+
+  /// No description provided for @loanSimulationSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Intérêts économisés'**
+  String get loanSimulationSaved;
+
+  /// No description provided for @loanSimulationEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle date de fin'**
+  String get loanSimulationEnd;
+
+  /// No description provided for @loanSimulationRepaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédit soldé'**
+  String get loanSimulationRepaid;
+
+  /// No description provided for @loanSimulationLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéances restantes'**
+  String get loanSimulationLeft;
+
+  /// No description provided for @loanScheduleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau d\'amortissement'**
+  String get loanScheduleTitle;
+
+  /// No description provided for @loanYearSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capital {principal} · intérêts {interest} · restant dû {remaining}'**
+  String loanYearSummary(String principal, String interest, String remaining);
+
+  /// No description provided for @loanColNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'N°'**
+  String get loanColNumber;
+
+  /// No description provided for @loanColDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date'**
+  String get loanColDate;
+
+  /// No description provided for @loanColPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualité'**
+  String get loanColPayment;
+
+  /// No description provided for @loanColPrincipal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capital'**
+  String get loanColPrincipal;
+
+  /// No description provided for @loanColInterest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Intérêts'**
+  String get loanColInterest;
+
+  /// No description provided for @loanColInsurance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Assurance'**
+  String get loanColInsurance;
+
+  /// No description provided for @loanColRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restant dû'**
+  String get loanColRemaining;
+
+  /// No description provided for @error_goal_expense_only.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un objectif se fixe sur une catégorie de dépenses.'**
+  String get error_goal_expense_only;
+
+  /// No description provided for @error_loan_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce crédit n\'existe pas ou vous n\'y avez pas accès.'**
+  String get error_loan_access_denied;
+
+  /// No description provided for @error_loan_terms_invalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conditions du crédit impossibles : vérifiez le capital, le taux et la durée.'**
+  String get error_loan_terms_invalid;
+
+  /// No description provided for @error_invalid_month_start_day.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mois doit commencer entre le 1er et le 28.'**
+  String get error_invalid_month_start_day;
 }
 
 class _AppLocalizationsDelegate

@@ -451,6 +451,7 @@ class _ScheduledDialogState extends State<_ScheduledDialog> {
   late var _start = _s?.startDate ?? todayUtcMidnight();
   late DateTime? _end = _s?.endDate;
   late int? _category = _s?.categoryId;
+  late var _subscription = _s?.subscription ?? false;
   final _form = GlobalKey<FormState>();
   var _busy = false;
   String? _error;
@@ -512,6 +513,7 @@ class _ScheduledDialogState extends State<_ScheduledDialog> {
           matchPattern: _pattern.text,
           dateToleranceDays: dateTolerance,
           amountTolerancePercent: amountTolerance,
+          subscription: _subscription,
         );
       } else {
         await client.scheduled.update(
@@ -523,6 +525,7 @@ class _ScheduledDialogState extends State<_ScheduledDialog> {
           matchPattern: _pattern.text,
           dateToleranceDays: dateTolerance,
           amountTolerancePercent: amountTolerance,
+          subscription: _subscription,
         );
       }
       if (mounted) Navigator.pop(context, true);
@@ -704,6 +707,13 @@ class _ScheduledDialogState extends State<_ScheduledDialog> {
                       ),
                     ),
                   ],
+                ),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l.subscriptionSwitch),
+                  subtitle: Text(l.subscriptionSwitchHelp),
+                  value: _subscription,
+                  onChanged: (v) => setState(() => _subscription = v),
                 ),
                 if (_error != null) ...[
                   gap,

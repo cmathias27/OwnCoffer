@@ -1,0 +1,6 @@
+class: PeriodTotals
+fields:
+  start: DateTime
+  incomeCents: int
+  expenseCents: int
+  savingsCents: int

@@ -43,6 +43,7 @@ class ScheduledEndpoint extends Endpoint {
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
+    bool? subscription,
   }) async {
     final account = await Access.requireAccount(
       session,
@@ -66,6 +67,7 @@ class ScheduledEndpoint extends Endpoint {
         matchPattern: core.normalizeForMatch(matchPattern ?? ''),
         dateToleranceDays: dateToleranceDays ?? 5,
         amountTolerancePercent: amountTolerancePercent ?? 0,
+        subscription: subscription ?? false,
       ),
     );
     final saved = await ScheduledTransaction.db.insertRow(session, row);
@@ -91,6 +93,7 @@ class ScheduledEndpoint extends Endpoint {
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
+    bool? subscription,
   }) async {
     final (current, account) = await _find(session, scheduledId);
     if (categoryId != null) {
@@ -107,6 +110,7 @@ class ScheduledEndpoint extends Endpoint {
             : core.normalizeForMatch(matchPattern),
         dateToleranceDays: dateToleranceDays,
         amountTolerancePercent: amountTolerancePercent,
+        subscription: subscription,
       ),
     );
     final saved = await ScheduledTransaction.db.updateRow(session, next);
@@ -137,6 +141,113 @@ class ScheduledEndpoint extends Endpoint {
       rowId: scheduledId,
       before: current,
     );
+  }
+
+  /// Subscriptions of the accounts the user may see, with their monthly
+  /// cost. Ended ones (last occurrence passed) are left out.
+  Future<SubscriptionOverview> subscriptions(
+    Session session,
+    int groupId,
+  ) async {
+    final visible = await Access.visibleAccounts(session, groupId);
+    final Set<int> ids = {for (final a in visible) a.id!};
+    final today = core.LocalDate.fromDateTime(DateTime.now().toUtc());
+    final items = [
+      for (final s in await ScheduledTransaction.db.find(
+        session,
+        where: (s) =>
+            s.accountId.inSet(ids) &
+            s.deletedAt.equals(null) &
+            s.subscription.equals(true),
+        orderBy: (s) => s.label,
+      ))
+        if (ForecastService.recurrenceOf(s).nextAfter(today.addDays(-1)) !=
+            null)
+          s,
+    ];
+    final monthly = [
+      for (final s in items)
+        core.monthlyEquivalentCents(
+          s.amountCents,
+          core.Frequency.values.byName(s.frequency.name),
+          s.interval,
+        ),
+    ];
+    final total = monthly.fold(0, (a, b) => a + b);
+    return SubscriptionOverview(
+      items: items,
+      monthlyCents: monthly,
+      monthlyTotalCents: total,
+      yearlyTotalCents: total * 12,
+    );
+  }
+
+  /// "This is a subscription": a planned operation repeating [transactionId]
+  /// (same amount, label and category) from its date, the operation itself
+  /// being its first occurrence. Later debits are matched on the label, with
+  /// a 10 % amount tolerance for price changes.
+  Future<ScheduledTransaction> subscribeFrom(
+    Session session,
+    int transactionId, {
+    ScheduleFrequency? frequency,
+  }) async {
+    final t = await BankTransaction.db.findById(session, transactionId);
+    if (t == null || t.deletedAt != null) {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    final Account account;
+    try {
+      account = await Access.requireAccount(session, t.accountId, write: true);
+    } on AccessDeniedException {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    if (t.scheduledId != null) {
+      final existing = await ScheduledTransaction.db.findById(
+        session,
+        t.scheduledId!,
+      );
+      if (existing != null && existing.deletedAt == null) {
+        return ScheduledTransaction.db.updateRow(
+          session,
+          existing.copyWith(subscription: true),
+        );
+      }
+    }
+    final f = frequency ?? ScheduleFrequency.monthly;
+    if (f == ScheduleFrequency.once) {
+      throw InvalidInputException(code: 'invalid_recurrence');
+    }
+    final label = t.cleanLabel.length > 80
+        ? t.cleanLabel.substring(0, 80)
+        : t.cleanLabel;
+    final saved = await ScheduledTransaction.db.insertRow(
+      session,
+      _validated(
+        ScheduledTransaction(
+          accountId: account.id!,
+          amountCents: t.amountCents,
+          label: label,
+          categoryId: t.categoryId,
+          frequency: f,
+          startDate: t.date,
+          matchPattern: core.normalizeForMatch(t.cleanLabel.toUpperCase()),
+          dateToleranceDays: 5,
+          amountTolerancePercent: 10,
+          subscription: true,
+        ),
+      ),
+    );
+    await ForecastService.link(session, saved, t.date.toLocalDate(), t);
+    await AlertService.checkAfterChange(session, account);
+    await Audit.log(
+      session,
+      groupId: account.groupId,
+      action: 'subscribe_from',
+      entity: 'scheduled',
+      rowId: saved.id,
+      after: saved,
+    );
+    return (await ScheduledTransaction.db.findById(session, saved.id!))!;
   }
 
   /// The next occurrence will not happen (or was paid otherwise): skip it.

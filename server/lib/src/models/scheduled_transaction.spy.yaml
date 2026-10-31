@@ -16,6 +16,8 @@ fields:
   matchPattern: String, default=''
   dateToleranceDays: int, default=5
   amountTolerancePercent: int, default=0
+  ### Shown in the subscriptions list (streaming, phone, gym…).
+  subscription: bool, default=false
   createdAt: DateTime, default=now
   deletedAt: DateTime?
 indexes:

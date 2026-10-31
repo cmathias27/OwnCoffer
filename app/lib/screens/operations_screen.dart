@@ -34,6 +34,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
   Timer? _debounce;
   var _toClassify = false;
   var _uncleared = false;
+  int? _categoryFilter;
   final List<BankTransaction> _items = [];
   var _total = 0;
   var _loading = false;
@@ -77,6 +78,8 @@ class _OperationsScreenState extends State<OperationsScreen> {
         search: _search.text,
         toClassify: _toClassify,
         uncleared: _uncleared,
+        categoryId: _toClassify ? null : _categoryFilter,
+        includeSubcategories: true,
         limit: _page,
         offset: _items.length,
       );
@@ -203,6 +206,34 @@ class _OperationsScreenState extends State<OperationsScreen> {
                     setState(() => _toClassify = v);
                     _reload();
                   },
+                ),
+                InputChip(
+                  avatar: const Icon(Icons.label_outline, size: 18),
+                  label: Text(
+                    _categories[_categoryFilter] == null
+                        ? l.filterCategory
+                        : context.categoryName(_categories[_categoryFilter]!),
+                  ),
+                  selected: _categoryFilter != null,
+                  showCheckmark: false,
+                  onPressed: () async {
+                    final choice = await showCategoryPicker(
+                      context,
+                      categories: _categories.values.toList(),
+                      selected: _categoryFilter,
+                    );
+                    if (choice == null) return;
+                    setState(
+                      () => (_categoryFilter = choice.id, _toClassify = false),
+                    );
+                    _reload();
+                  },
+                  onDeleted: _categoryFilter == null
+                      ? null
+                      : () {
+                          setState(() => _categoryFilter = null);
+                          _reload();
+                        },
                 ),
                 FilterChip(
                   label: Text(l.filterUncleared),
@@ -429,6 +460,37 @@ class _OperationSheetState extends State<_OperationSheet> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(l.ruleCreated(r.reclassifiedCount)),
+                    ),
+                  );
+                  Navigator.of(context).pop(true);
+                } on Object catch (e) {
+                  setState(() => _error = errorText(l, e));
+                }
+              },
+            ),
+          ),
+        if (widget.canWrite && t.amountCents < 0)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              icon: const Icon(Icons.autorenew),
+              label: Text(
+                t.scheduledId == null
+                    ? l.subscriptionFromOperation
+                    : l.subscriptionMarkPlanned,
+              ),
+              onPressed: () async {
+                try {
+                  final s = await client.scheduled.subscribeFrom(t.id!);
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        l.subscriptionCreated(
+                          s.label,
+                          s.nextDue == null ? '' : context.day(s.nextDue!),
+                        ),
+                      ),
                     ),
                   );
                   Navigator.of(context).pop(true);

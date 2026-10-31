@@ -1,0 +1,13 @@
+### Money received or spent in a category over a period, its
+### sub-categories included (positive amounts; see SpendingSummary).
+class: CategoryFlow
+fields:
+  categoryId: int
+  amountCents: int
+  count: int
+  ### Same category over the previous period.
+  previousCents: int
+  ### Average over the three previous periods.
+  averageCents: int
+  ### Monthly goal (month view only).
+  goalCents: int?

@@ -4,6 +4,7 @@ import 'package:serverpod/serverpod.dart';
 import '../core/dates.dart';
 import '../finance/alert_service.dart';
 import '../finance/classification_service.dart';
+import '../finance/spending_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
@@ -27,18 +28,34 @@ class TransactionEndpoint extends Endpoint {
     DateTime? to,
     String? search,
     int? categoryId,
+    bool? includeSubcategories,
     bool? toClassify,
     bool? uncleared,
     int? limit,
     int? offset,
   }) async {
-    await Access.requireAccount(session, accountId);
+    final account = await Access.requireAccount(session, accountId);
     final pattern = _likePattern(search);
+    final Set<int> categoryIds = {};
+    if (categoryId != null) {
+      categoryIds.add(categoryId);
+      if (includeSubcategories == true) {
+        categoryIds.addAll(
+          descendantsOf(
+            categoryId,
+            await Category.db.find(
+              session,
+              where: (c) => c.groupId.equals(account.groupId),
+            ),
+          ),
+        );
+      }
+    }
     Expression where(BankTransactionTable t) {
       Expression e = t.accountId.equals(accountId) & t.deletedAt.equals(null);
       if (from != null) e = e & (t.date >= _day(from));
       if (to != null) e = e & (t.date <= _day(to));
-      if (categoryId != null) e = e & t.categoryId.equals(categoryId);
+      if (categoryIds.isNotEmpty) e = e & t.categoryId.inSet(categoryIds);
       if (toClassify == true) e = e & t.categoryId.equals(null);
       if (uncleared == true) e = e & t.cleared.equals(false);
       if (pattern != null) {

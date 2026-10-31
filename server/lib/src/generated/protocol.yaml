@@ -18,15 +18,23 @@ account:
 admin:
   - bannedIps:
   - unbanIp:
+analysis:
+  - report:
+  - operations:
 category:
   - list:
   - create:
   - update:
   - archive:
+goal:
+  - list:
+  - set:
+  - remove:
 group:
   - myGroups:
   - create:
   - rename:
+  - setMonthStartDay:
   - members:
   - setRole:
   - removeMember:
@@ -40,6 +48,13 @@ invitation:
   - list:
   - revoke:
   - accept:
+loan:
+  - overview:
+  - schedule:
+  - simulate:
+  - create:
+  - update:
+  - delete:
 notification:
   - list:
   - unreadCount:
@@ -56,6 +71,8 @@ scheduled:
   - create:
   - update:
   - delete:
+  - subscriptions:
+  - subscribeFrom:
   - skipNext:
   - forecast:
   - confirmMatch:

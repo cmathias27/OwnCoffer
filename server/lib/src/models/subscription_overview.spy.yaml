@@ -1,0 +1,7 @@
+class: SubscriptionOverview
+fields:
+  items: List<ScheduledTransaction>
+  ### Monthly cost of each item, same order.
+  monthlyCents: List<int>
+  monthlyTotalCents: int
+  yearlyTotalCents: int

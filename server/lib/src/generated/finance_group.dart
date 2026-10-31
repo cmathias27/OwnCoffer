@@ -20,10 +20,12 @@ abstract class FinanceGroup
     required this.name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     required this.createdBy,
     DateTime? createdAt,
   }) : aiEnabled = aiEnabled ?? false,
        standardCatalogVersion = standardCatalogVersion ?? 1,
+       monthStartDay = monthStartDay ?? 1,
        createdAt = createdAt ?? DateTime.now();
 
   factory FinanceGroup({
@@ -31,6 +33,7 @@ abstract class FinanceGroup
     required String name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     required _is.UuidValue createdBy,
     DateTime? createdAt,
   }) = _FinanceGroupImpl;
@@ -44,6 +47,7 @@ abstract class FinanceGroup
           : _is.BoolJsonExtension.fromJson(jsonSerialization['aiEnabled']),
       standardCatalogVersion:
           jsonSerialization['standardCatalogVersion'] as int?,
+      monthStartDay: jsonSerialization['monthStartDay'] as int?,
       createdBy: _is.UuidValueJsonExtension.fromJson(
         jsonSerialization['createdBy'],
       ),
@@ -69,6 +73,10 @@ abstract class FinanceGroup
   /// (see updateStandardCategories).
   int standardCatalogVersion;
 
+  /// Day the budget month starts (1 to 28, e.g. pay day): budget, goals and
+  /// spending ranking use months from this day.
+  int monthStartDay;
+
   _is.UuidValue createdBy;
 
   DateTime createdAt;
@@ -84,6 +92,7 @@ abstract class FinanceGroup
     String? name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     _is.UuidValue? createdBy,
     DateTime? createdAt,
   });
@@ -95,6 +104,7 @@ abstract class FinanceGroup
       'name': name,
       'aiEnabled': aiEnabled,
       'standardCatalogVersion': standardCatalogVersion,
+      'monthStartDay': monthStartDay,
       'createdBy': createdBy.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -108,6 +118,7 @@ abstract class FinanceGroup
       'name': name,
       'aiEnabled': aiEnabled,
       'standardCatalogVersion': standardCatalogVersion,
+      'monthStartDay': monthStartDay,
       'createdBy': createdBy.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -149,6 +160,7 @@ class _FinanceGroupImpl extends FinanceGroup {
     required String name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     required _is.UuidValue createdBy,
     DateTime? createdAt,
   }) : super._(
@@ -156,6 +168,7 @@ class _FinanceGroupImpl extends FinanceGroup {
          name: name,
          aiEnabled: aiEnabled,
          standardCatalogVersion: standardCatalogVersion,
+         monthStartDay: monthStartDay,
          createdBy: createdBy,
          createdAt: createdAt,
        );
@@ -169,6 +182,7 @@ class _FinanceGroupImpl extends FinanceGroup {
     String? name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     _is.UuidValue? createdBy,
     DateTime? createdAt,
   }) {
@@ -178,6 +192,7 @@ class _FinanceGroupImpl extends FinanceGroup {
       aiEnabled: aiEnabled ?? this.aiEnabled,
       standardCatalogVersion:
           standardCatalogVersion ?? this.standardCatalogVersion,
+      monthStartDay: monthStartDay ?? this.monthStartDay,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -202,6 +217,11 @@ class FinanceGroupUpdateTable extends _is.UpdateTable<FinanceGroupTable> {
         table.standardCatalogVersion,
         value,
       );
+
+  _is.ColumnValue<int, int> monthStartDay(int value) => _is.ColumnValue(
+    table.monthStartDay,
+    value,
+  );
 
   _is.ColumnValue<_is.UuidValue, _is.UuidValue> createdBy(
     _is.UuidValue value,
@@ -234,6 +254,11 @@ class FinanceGroupTable extends _is.Table<int?> {
       this,
       hasDefault: true,
     );
+    monthStartDay = _is.ColumnInt(
+      'monthStartDay',
+      this,
+      hasDefault: true,
+    );
     createdBy = _is.ColumnUuid(
       'createdBy',
       this,
@@ -256,6 +281,10 @@ class FinanceGroupTable extends _is.Table<int?> {
   /// (see updateStandardCategories).
   late final _is.ColumnInt standardCatalogVersion;
 
+  /// Day the budget month starts (1 to 28, e.g. pay day): budget, goals and
+  /// spending ranking use months from this day.
+  late final _is.ColumnInt monthStartDay;
+
   late final _is.ColumnUuid createdBy;
 
   late final _is.ColumnDateTime createdAt;
@@ -266,6 +295,7 @@ class FinanceGroupTable extends _is.Table<int?> {
     name,
     aiEnabled,
     standardCatalogVersion,
+    monthStartDay,
     createdBy,
     createdAt,
   ];

@@ -9,6 +9,10 @@
 library;
 
 export 'src/banks/caisse_epargne.dart';
+export 'src/budget/goals.dart';
+export 'src/budget/period.dart';
+export 'src/budget/spending.dart';
+export 'src/budget/subscriptions.dart';
 export 'src/categories.dart';
 export 'src/classification/classifier.dart';
 export 'src/data/community_rules.dart';
@@ -23,6 +27,7 @@ export 'src/import/qif_parser.dart';
 export 'src/import/statement.dart';
 export 'src/import/statement_reader.dart';
 export 'src/labels/label_cleaner.dart';
+export 'src/loans/amortization.dart';
 export 'src/local_date.dart';
 export 'src/money.dart';
 export 'src/text.dart';

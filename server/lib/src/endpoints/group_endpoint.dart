@@ -105,6 +105,33 @@ class GroupEndpoint extends Endpoint {
     return updated;
   }
 
+  /// Day the budget month starts (1 to 28; 1 = calendar months).
+  Future<FinanceGroup> setMonthStartDay(
+    Session session,
+    int groupId,
+    int day,
+  ) async {
+    await Access.requireMember(session, groupId, min: MemberRole.admin);
+    if (day < 1 || day > 28) {
+      throw InvalidInputException(code: 'invalid_month_start_day');
+    }
+    final group = (await FinanceGroup.db.findById(session, groupId))!;
+    final updated = await FinanceGroup.db.updateRow(
+      session,
+      group.copyWith(monthStartDay: day),
+    );
+    await Audit.log(
+      session,
+      groupId: groupId,
+      action: 'update',
+      entity: 'group',
+      rowId: groupId,
+      before: group,
+      after: updated,
+    );
+    return updated;
+  }
+
   /// Members of the group (any member may see who else is in it).
   Future<List<MemberInfo>> members(Session session, int groupId) async {
     await Access.requireMember(session, groupId);

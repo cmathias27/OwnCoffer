@@ -1383,4 +1383,471 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get groupCreateTitle => 'Créer votre foyer';
+
+  @override
+  String get navBudget => 'Budget';
+
+  @override
+  String get navLoans => 'Crédits';
+
+  @override
+  String get navMore => 'Plus';
+
+  @override
+  String get allAccounts => 'Tous les comptes';
+
+  @override
+  String get moreActions => 'Plus d\'actions';
+
+  @override
+  String get optional => 'Facultatif';
+
+  @override
+  String get fieldRequired => 'Champ obligatoire.';
+
+  @override
+  String get filterCategory => 'Catégorie';
+
+  @override
+  String get periodWeek => 'Semaine';
+
+  @override
+  String get periodMonth => 'Mois';
+
+  @override
+  String get periodYear => 'Année';
+
+  @override
+  String get periodPrevious => 'Période précédente';
+
+  @override
+  String get periodNext => 'Période suivante';
+
+  @override
+  String get budgetIncome => 'Revenus';
+
+  @override
+  String get budgetExpenses => 'Dépenses';
+
+  @override
+  String get budgetSavings => 'Épargne';
+
+  @override
+  String get budgetNet => 'Reste';
+
+  @override
+  String budgetDeltaPrevious(String percent) {
+    return '$percent % par rapport à la période précédente';
+  }
+
+  @override
+  String get budgetHistoryTitle => 'Revenus et dépenses';
+
+  @override
+  String get budgetHistorySemantic =>
+      'Revenus et dépenses des six dernières périodes';
+
+  @override
+  String get rankingExpenses => 'Classement des dépenses';
+
+  @override
+  String get rankingIncome => 'Classement des revenus';
+
+  @override
+  String get rankingEmpty => 'Rien sur cette période.';
+
+  @override
+  String rankingShare(int percent) {
+    return '$percent % du total';
+  }
+
+  @override
+  String rankingPrevious(String amount) {
+    return 'avant : $amount';
+  }
+
+  @override
+  String rankingAverage(String amount) {
+    return 'moyenne : $amount';
+  }
+
+  @override
+  String get rankingOperations => 'Voir les opérations';
+
+  @override
+  String get goalAdd => 'Objectif';
+
+  @override
+  String get goalSet => 'Fixer un objectif';
+
+  @override
+  String get goalEdit => 'Modifier l\'objectif';
+
+  @override
+  String get goalRemove => 'Supprimer l\'objectif';
+
+  @override
+  String goalTitle(String category) {
+    return 'Objectif : $category';
+  }
+
+  @override
+  String get goalHelp =>
+      'Montant maximum à dépenser chaque mois dans cette catégorie, sous-catégories comprises.';
+
+  @override
+  String get goalAmountLabel => 'Montant par mois';
+
+  @override
+  String goalSuggestion(String amount, String average) {
+    return 'Suggestion : $amount (moyenne des 3 mois précédents : $average)';
+  }
+
+  @override
+  String get goalOk => 'Dans l\'objectif';
+
+  @override
+  String get goalWarning => 'Bientôt atteint';
+
+  @override
+  String get goalOver => 'Dépassé';
+
+  @override
+  String goalProgress(int percent, String goal) {
+    return '$percent % de $goal';
+  }
+
+  @override
+  String goalLeft(String amount) {
+    return 'reste $amount';
+  }
+
+  @override
+  String goalExceeded(String amount) {
+    return '$amount de trop';
+  }
+
+  @override
+  String get monthStartTitle => 'Début du mois';
+
+  @override
+  String get monthStartHelp =>
+      'Le jour où commence votre mois de budget, par exemple le jour de la paie. Le budget, le classement des dépenses et les objectifs l\'utilisent pour tout le foyer.';
+
+  @override
+  String get monthStartLabel => 'Le mois commence';
+
+  @override
+  String get monthStartFirst => 'Le 1er (mois du calendrier)';
+
+  @override
+  String monthStartDay(int day) {
+    return 'Le $day';
+  }
+
+  @override
+  String get subscriptionsTitle => 'Abonnements';
+
+  @override
+  String get subscriptionsMonthly => 'Par mois';
+
+  @override
+  String get subscriptionsYearly => 'Par an';
+
+  @override
+  String get subscriptionsHelp =>
+      'Les opérations prévues marquées comme abonnements, sur les comptes que vous voyez. Les montants annuels et hebdomadaires sont ramenés au mois.';
+
+  @override
+  String get subscriptionsEmpty =>
+      'Aucun abonnement. Dans la fiche d\'une opération, « C\'est un abonnement » l\'ajoute ici.';
+
+  @override
+  String subscriptionNext(String date) {
+    return 'prochain : $date';
+  }
+
+  @override
+  String subscriptionPerMonth(String amount) {
+    return '$amount / mois';
+  }
+
+  @override
+  String get subscriptionUnmark => 'Ne plus compter comme abonnement';
+
+  @override
+  String get subscriptionUnmarkHelp =>
+      'Reste une opération prévue dans les prévisions.';
+
+  @override
+  String get subscriptionStop => 'Abonnement résilié';
+
+  @override
+  String get subscriptionStopHelp =>
+      'Supprime l\'opération prévue : elle ne compte plus dans les prévisions.';
+
+  @override
+  String get subscriptionSwitch => 'Abonnement';
+
+  @override
+  String get subscriptionSwitchHelp =>
+      'Apparaît dans la liste des abonnements.';
+
+  @override
+  String get subscriptionFromOperation => 'C\'est un abonnement';
+
+  @override
+  String get subscriptionMarkPlanned => 'Marquer comme abonnement';
+
+  @override
+  String subscriptionCreated(String label, String date) {
+    return 'Abonnement « $label » ajouté, prochain prélèvement le $date.';
+  }
+
+  @override
+  String get loansRemaining => 'Reste à rembourser';
+
+  @override
+  String get loansMonthly => 'Mensualités';
+
+  @override
+  String get loansDebtRatio => 'Taux d\'endettement';
+
+  @override
+  String get loansDebtRatioUnknown =>
+      'Pas de revenus classés sur les 3 derniers mois.';
+
+  @override
+  String get loansDebtRatioOk => 'Sous les 35 % conseillés';
+
+  @override
+  String get loansDebtRatioHigh => 'Au-dessus des 35 % conseillés';
+
+  @override
+  String loansDebtRatioBasis(String amount) {
+    return 'revenus moyens : $amount / mois';
+  }
+
+  @override
+  String get loansEmpty =>
+      'Aucun crédit. Ajoutez-en un pour suivre ce qu\'il reste à rembourser.';
+
+  @override
+  String get loansDisclaimer =>
+      'Calculs indicatifs à taux fixe et mensualités constantes : en cas d\'écart, le tableau d\'amortissement de la banque fait foi.';
+
+  @override
+  String get loanAdd => 'Ajouter un crédit';
+
+  @override
+  String get loanEdit => 'Modifier le crédit';
+
+  @override
+  String get loanDelete => 'Supprimer le crédit';
+
+  @override
+  String get loanDeleteConfirm =>
+      'Supprimer ce crédit ? Ses échéances prévues sont retirées des prévisions.';
+
+  @override
+  String get loanKind => 'Type de crédit';
+
+  @override
+  String get loanKindMortgage => 'Immobilier';
+
+  @override
+  String get loanKindCar => 'Auto';
+
+  @override
+  String get loanKindConsumer => 'Consommation';
+
+  @override
+  String get loanKindStudent => 'Étudiant';
+
+  @override
+  String get loanKindPersonal => 'Prêt entre particuliers';
+
+  @override
+  String get loanKindOther => 'Autre';
+
+  @override
+  String get loanLender => 'Organisme';
+
+  @override
+  String get loanLabel => 'Nom';
+
+  @override
+  String get loanLabelHint => 'Maison, voiture…';
+
+  @override
+  String get loanPrincipal => 'Capital emprunté';
+
+  @override
+  String get loanRate => 'Taux nominal';
+
+  @override
+  String get loanRateHelp => 'Par an, par exemple 3,45';
+
+  @override
+  String get loanRateInvalid =>
+      'Taux entre 0 et 50 %, trois décimales au plus.';
+
+  @override
+  String get loanApr => 'TAEG';
+
+  @override
+  String get loanDuration => 'Durée';
+
+  @override
+  String get loanDurationMonths => 'Durée en mois';
+
+  @override
+  String get loanDurationHelp => '240 mois = 20 ans';
+
+  @override
+  String get loanDurationInvalid => 'Entre 1 et 600 mois.';
+
+  @override
+  String loanMonths(int count) {
+    return '$count mois';
+  }
+
+  @override
+  String get loanFirstDue => 'Date de la première échéance';
+
+  @override
+  String get loanInsurance => 'Assurance par mois';
+
+  @override
+  String get loanInsuranceMonthly => 'Assurance par mois';
+
+  @override
+  String get loanFees => 'Frais de dossier';
+
+  @override
+  String get loanAccount => 'Compte de prélèvement';
+
+  @override
+  String get loanAccountHelp =>
+      'Les échéances deviennent des opérations prévues sur ce compte : elles comptent dans le solde prévu et sont rapprochées des prélèvements réels.';
+
+  @override
+  String get loanNoAccount => 'Aucun';
+
+  @override
+  String get loanPayment => 'Mensualité (hors assurance)';
+
+  @override
+  String loanPreview(String payment, String total) {
+    return 'Mensualité : $payment hors assurance, $total avec.';
+  }
+
+  @override
+  String get loanPreviewEmpty =>
+      'Saisissez le capital, le taux et la durée pour voir la mensualité.';
+
+  @override
+  String get loanRemainingShort => 'restant dû';
+
+  @override
+  String loanRepaid(int percent) {
+    return '$percent % remboursé';
+  }
+
+  @override
+  String loanInstallments(int paid, int total) {
+    return '$paid / $total échéances';
+  }
+
+  @override
+  String loanNext(String date, String amount) {
+    return 'prochaine le $date : $amount';
+  }
+
+  @override
+  String get loanFinished => 'remboursé';
+
+  @override
+  String loanEnd(String date) {
+    return 'fin le $date';
+  }
+
+  @override
+  String get loanInterestPaid => 'Intérêts déjà payés';
+
+  @override
+  String get loanInterestLeft => 'Intérêts restant à payer';
+
+  @override
+  String get loanCost => 'Coût total (intérêts, assurance, frais)';
+
+  @override
+  String get loanSimulationTitle => 'Remboursement anticipé';
+
+  @override
+  String get loanSimulationHelp =>
+      'Si je rembourse ce montant maintenant, en gardant la même mensualité.';
+
+  @override
+  String get loanSimulationAmount => 'Montant';
+
+  @override
+  String get loanSimulate => 'Simuler';
+
+  @override
+  String get loanSimulationSaved => 'Intérêts économisés';
+
+  @override
+  String get loanSimulationEnd => 'Nouvelle date de fin';
+
+  @override
+  String get loanSimulationRepaid => 'Crédit soldé';
+
+  @override
+  String get loanSimulationLeft => 'Échéances restantes';
+
+  @override
+  String get loanScheduleTitle => 'Tableau d\'amortissement';
+
+  @override
+  String loanYearSummary(String principal, String interest, String remaining) {
+    return 'Capital $principal · intérêts $interest · restant dû $remaining';
+  }
+
+  @override
+  String get loanColNumber => 'N°';
+
+  @override
+  String get loanColDate => 'Date';
+
+  @override
+  String get loanColPayment => 'Mensualité';
+
+  @override
+  String get loanColPrincipal => 'Capital';
+
+  @override
+  String get loanColInterest => 'Intérêts';
+
+  @override
+  String get loanColInsurance => 'Assurance';
+
+  @override
+  String get loanColRemaining => 'Restant dû';
+
+  @override
+  String get error_goal_expense_only =>
+      'Un objectif se fixe sur une catégorie de dépenses.';
+
+  @override
+  String get error_loan_access_denied =>
+      'Ce crédit n\'existe pas ou vous n\'y avez pas accès.';
+
+  @override
+  String get error_loan_terms_invalid =>
+      'Conditions du crédit impossibles : vérifiez le capital, le taux et la durée.';
+
+  @override
+  String get error_invalid_month_start_day =>
+      'Le mois doit commencer entre le 1er et le 28.';
 }

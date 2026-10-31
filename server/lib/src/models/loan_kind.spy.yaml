@@ -1,0 +1,9 @@
+enum: LoanKind
+serialized: byName
+values:
+  - mortgage
+  - car
+  - consumer
+  - student
+  - personal
+  - other

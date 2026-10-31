@@ -20,10 +20,12 @@ abstract class FinanceGroup
     required this.name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     required this.createdBy,
     DateTime? createdAt,
   }) : aiEnabled = aiEnabled ?? false,
        standardCatalogVersion = standardCatalogVersion ?? 1,
+       monthStartDay = monthStartDay ?? 1,
        createdAt = createdAt ?? DateTime.now();
 
   factory FinanceGroup({
@@ -31,6 +33,7 @@ abstract class FinanceGroup
     required String name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     required _isc.UuidValue createdBy,
     DateTime? createdAt,
   }) = _FinanceGroupImpl;
@@ -44,6 +47,7 @@ abstract class FinanceGroup
           : _isc.BoolJsonExtension.fromJson(jsonSerialization['aiEnabled']),
       standardCatalogVersion:
           jsonSerialization['standardCatalogVersion'] as int?,
+      monthStartDay: jsonSerialization['monthStartDay'] as int?,
       createdBy: _isc.UuidValueJsonExtension.fromJson(
         jsonSerialization['createdBy'],
       ),
@@ -67,6 +71,10 @@ abstract class FinanceGroup
   /// (see updateStandardCategories).
   int standardCatalogVersion;
 
+  /// Day the budget month starts (1 to 28, e.g. pay day): budget, goals and
+  /// spending ranking use months from this day.
+  int monthStartDay;
+
   _isc.UuidValue createdBy;
 
   DateTime createdAt;
@@ -79,6 +87,7 @@ abstract class FinanceGroup
     String? name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     _isc.UuidValue? createdBy,
     DateTime? createdAt,
   });
@@ -90,6 +99,7 @@ abstract class FinanceGroup
       'name': name,
       'aiEnabled': aiEnabled,
       'standardCatalogVersion': standardCatalogVersion,
+      'monthStartDay': monthStartDay,
       'createdBy': createdBy.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -103,6 +113,7 @@ abstract class FinanceGroup
       'name': name,
       'aiEnabled': aiEnabled,
       'standardCatalogVersion': standardCatalogVersion,
+      'monthStartDay': monthStartDay,
       'createdBy': createdBy.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -122,6 +133,7 @@ class _FinanceGroupImpl extends FinanceGroup {
     required String name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     required _isc.UuidValue createdBy,
     DateTime? createdAt,
   }) : super._(
@@ -129,6 +141,7 @@ class _FinanceGroupImpl extends FinanceGroup {
          name: name,
          aiEnabled: aiEnabled,
          standardCatalogVersion: standardCatalogVersion,
+         monthStartDay: monthStartDay,
          createdBy: createdBy,
          createdAt: createdAt,
        );
@@ -142,6 +155,7 @@ class _FinanceGroupImpl extends FinanceGroup {
     String? name,
     bool? aiEnabled,
     int? standardCatalogVersion,
+    int? monthStartDay,
     _isc.UuidValue? createdBy,
     DateTime? createdAt,
   }) {
@@ -151,6 +165,7 @@ class _FinanceGroupImpl extends FinanceGroup {
       aiEnabled: aiEnabled ?? this.aiEnabled,
       standardCatalogVersion:
           standardCatalogVersion ?? this.standardCatalogVersion,
+      monthStartDay: monthStartDay ?? this.monthStartDay,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
     );

@@ -135,10 +135,10 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 - [ ] Solde de contrôle et détection des frais bancaires
 - [ ] Rapprochement automatique des opérations prévues, reste à vivre, dépenses variables, calendrier des échéances
 - [ ] Moteur de simulation (sans IA) : simulateur d'achat (solde à une date choisie, point bas, comptant / en plusieurs fois / plus tard) et scénarios comparés côte à côte
-- [ ] Analyses calculées (sans IA) : évolutions par catégorie, hausses et anomalies chiffrées, objectifs suggérés d'après les 3 à 6 derniers mois, fiabilité des prévisions affichée
-- [ ] Objectifs par catégorie, alertes à 80 %, 100 % et anticipée ; réglages des notifications
-- [ ] Tableau de bord et graphiques
-- [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois
+- [ ] Analyses calculées (sans IA) : évolutions par catégorie, hausses et anomalies chiffrées, objectifs suggérés d'après les 3 à 6 derniers mois, fiabilité des prévisions affichée — *en partie dans la 0.2.0 : classement par catégorie sur la semaine, le mois ou l'année, comparaison à la période précédente et à la moyenne des 3 précédentes, objectif suggéré*
+- [ ] Objectifs par catégorie, alertes à 80 %, 100 % et anticipée ; réglages des notifications — *en partie dans la 0.2.0 : objectif mensuel et jauge ; restent les alertes*
+- [ ] Tableau de bord et graphiques — *en partie dans la 0.2.0 : page Budget (revenus et dépenses sur 6 périodes, classements) et abonnements*
+- [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois — *en partie dans la 0.2.0 : crédits à taux fixe, tableau calculé, échéances prévues, remboursement anticipé simulé, taux d'endettement ; restent les événements (renégociation, taux variable), le crédit renouvelable et les paiements en plusieurs fois*
 - [ ] Revue de fin de mois et détection d'anomalies
 - [ ] Onglet Feedback
 
