@@ -679,7 +679,7 @@
   "adminOk": "OK",
   "adminFailed": "failed",
   "adminNotYet": "not yet",
-  "adminDocuments": "Stored documents",
+  "adminDocuments": "Stored documents and invoices",
   "adminAlertsJob": "Last alert check",
   "adminClock": "Server clock",
   "adminClockDrift": "{seconds} s from this device",

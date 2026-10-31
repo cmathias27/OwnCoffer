@@ -1952,7 +1952,7 @@
   "adminOk": "OK",
   "adminFailed": "en échec",
   "adminNotYet": "pas encore",
-  "adminDocuments": "Documents stockés",
+  "adminDocuments": "Documents et factures stockés",
   "adminAlertsJob": "Dernière vérification des alertes",
   "adminClock": "Horloge du serveur",
   "adminClockDrift": "écart de {seconds} s avec cet appareil",
