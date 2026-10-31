@@ -70,6 +70,10 @@ void main() {
         () => endpoints.admin.backups(as(mallory)),
         () => endpoints.admin.requestBackup(as(mallory)),
         () => endpoints.admin.groups(as(mallory)),
+        () => endpoints.admin.updates(as(mallory)),
+        () => endpoints.admin.setAutoUpdate(as(mallory), false),
+        () => endpoints.admin.requestUpdateCheck(as(mallory)),
+        () => endpoints.admin.requestInstall(as(mallory), 'v9.0.0'),
         () => endpoints.admin.invitations(as(mallory)),
         () => endpoints.admin.invite(
           as(mallory),
@@ -240,12 +244,80 @@ void main() {
         );
       });
 
+      test('updates: state, notes, history, auto off, install', () async {
+        File('${dir.path}/update-status').writeAsStringSync(
+          'current=v0.3.9\nlatest=v0.4.0\nchecked=1793448000\nauto=true\n'
+          'failed=v0.3.8\nmessage=automatic updates are off\n',
+        );
+        File('${dir.path}/update-history.tsv').writeAsStringSync(
+          '1793440000\tv0.3.7\tv0.3.8\trollback\tdid not answer\n'
+          '1793445000\tv0.3.8\tv0.3.9\tinstalled\t\n',
+        );
+        File('${dir.path}/CHANGELOG.md').writeAsStringSync(
+          '# Nouveautés\n\nIntro.\n\n## 0.4.0 (1 novembre 2026)\n\n'
+          '### Factures\n\n- Joindre une facture.\n\n'
+          '## 0.3.9 (31 octobre 2026)\n\n- Invitations.\n',
+        );
+        final o = await endpoints.admin.updates(as(admin));
+        expect(o.available, isTrue);
+        expect(o.runningVersion, 'dev');
+        expect((o.current, o.latest), ('v0.3.9', 'v0.4.0'));
+        expect(o.auto, isTrue);
+        expect(o.failedVersion, 'v0.3.8');
+        expect(o.message, 'automatic updates are off');
+        expect(o.history.map((h) => h.result), ['installed', 'rollback']);
+        expect(o.history.last.message, 'did not answer');
+        expect(o.releases.map((r) => r.version), ['0.4.0', '0.3.9']);
+        expect(o.releases.first.body, contains('Joindre une facture'));
+        expect(o.releases.first.date, '1 novembre 2026');
+
+        await endpoints.admin.setAutoUpdate(as(admin), false);
+        expect(
+          File('${dir.path}/settings').readAsStringSync(),
+          'auto=false\n',
+        );
+        expect((await endpoints.admin.updates(as(admin))).auto, isFalse);
+
+        await endpoints.admin.requestUpdateCheck(as(admin));
+        expect(File('${dir.path}/request-check').existsSync(), isTrue);
+        expect(
+          (await endpoints.admin.updates(as(admin))).requestPending,
+          isTrue,
+        );
+
+        await endpoints.admin.requestInstall(as(admin), 'v0.4.0');
+        expect(
+          File('${dir.path}/request-update').readAsStringSync(),
+          'v0.4.0\n',
+        );
+        for (final bad in ['v0.3.9', 'v0.3.1', '0.4.0', 'v0.4.0; rm -rf /']) {
+          await expectLater(
+            endpoints.admin.requestInstall(as(admin), bad),
+            throwsA(isA<InvalidInputException>()),
+            reason: bad,
+          );
+        }
+        final log = await endpoints.admin.audit(as(admin));
+        expect(log.first.action, 'request_install');
+      });
+
       test('without the shared folder: said, and requests refused', () async {
         HostState.instance = HostState('${dir.path}/missing');
         final o = await endpoints.admin.backups(as(admin));
         expect(o.available, isFalse);
         await expectLater(
           endpoints.admin.requestBackup(as(admin)),
+          throwsA(isA<InvalidInputException>()),
+        );
+        final u = await endpoints.admin.updates(as(admin));
+        expect(u.available, isFalse);
+        expect(u.auto, isTrue);
+        await expectLater(
+          endpoints.admin.setAutoUpdate(as(admin), false),
+          throwsA(isA<InvalidInputException>()),
+        );
+        await expectLater(
+          endpoints.admin.requestUpdateCheck(as(admin)),
           throwsA(isA<InvalidInputException>()),
         );
       });

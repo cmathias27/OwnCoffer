@@ -1,0 +1,6 @@
+### One version of the CHANGELOG (markdown body, French).
+class: ReleaseNotes
+fields:
+  version: String
+  date: String
+  body: String

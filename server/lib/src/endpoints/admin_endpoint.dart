@@ -392,12 +392,71 @@ class AdminEndpoint extends Endpoint {
   /// docker/handle-requests.sh; at most one every 10 minutes).
   Future<void> requestBackup(Session session) async {
     await _requireServerAdmin(session);
+    _request('backup');
+    await _audit(session, 'request_backup', 'host', 'backup');
+  }
+
+  /// Versions, automatic updates, history and release notes.
+  Future<UpdateOverview> updates(Session session) async {
+    await _requireServerAdmin(session);
+    return HostState.instance.updates(_version());
+  }
+
+  /// Turns automatic updates on or off (read by the host at each run).
+  Future<void> setAutoUpdate(Session session, bool on) async {
+    await _requireServerAdmin(session);
     try {
-      HostState.instance.request('backup');
+      HostState.instance.setAutoUpdate(on);
     } on FileSystemException {
       throw InvalidInputException(code: 'host_bridge_missing');
     }
-    await _audit(session, 'request_backup', 'host', 'backup');
+    await _audit(
+      session,
+      on ? 'auto_update_on' : 'auto_update_off',
+      'host',
+      '',
+    );
+  }
+
+  /// Asks the host to look for a new version now.
+  Future<void> requestUpdateCheck(Session session) async {
+    await _requireServerAdmin(session);
+    _request('check');
+    await _audit(session, 'request_update_check', 'host', '');
+  }
+
+  /// Asks the host to install [version] (a published vX.Y.Z newer than the
+  /// installed one; the host checks it again, backs up first and rolls back
+  /// if the new version does not start).
+  Future<void> requestInstall(Session session, String version) async {
+    await _requireServerAdmin(session);
+    final o = HostState.instance.updates(_version());
+    if (!RegExp(r'^v\d+\.\d+\.\d+$').hasMatch(version) ||
+        o.current == null ||
+        !_newer(version, o.current!)) {
+      throw InvalidInputException(code: 'invalid_version', field: 'version');
+    }
+    _request('update', content: version);
+    await _audit(session, 'request_install', 'host', version);
+  }
+
+  static void _request(String name, {String? content}) {
+    try {
+      HostState.instance.request(name, content: content);
+    } on FileSystemException {
+      throw InvalidInputException(code: 'host_bridge_missing');
+    }
+  }
+
+  /// Whether vA.B.C [a] comes after [b].
+  static bool _newer(String a, String b) {
+    List<int> parts(String v) =>
+        v.substring(1).split('.').map(int.parse).toList();
+    final x = parts(a), y = parts(b);
+    for (var i = 0; i < 3; i++) {
+      if (x[i] != y[i]) return x[i] > y[i];
+    }
+    return false;
   }
 
   /// Sends a test email to the administrator; returns the address. Without

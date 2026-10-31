@@ -2152,5 +2152,82 @@
     }
   },
   "adminInvitationRevoked": "Invitation révoquée : le lien ne marche plus.",
-  "error_invitation_not_pending": "Cette invitation n'est plus en attente."
+  "error_invitation_not_pending": "Cette invitation n'est plus en attente.",
+  "adminTabUpdates": "Mises à jour",
+  "adminVersionRunning": "Version en service : {version}",
+  "@adminVersionRunning": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "adminUpdatesUnavailable": "Le serveur hôte n'a pas encore donné l'état des mises à jour (dossier docker/state absent, ou script de mise à jour pas encore passé). Il passe toutes les 15 minutes ; pour l'installer tout de suite, lancez en root dans le dossier d'OwnCoffer :",
+  "adminUpToDate": "OwnCoffer est à jour.",
+  "adminUpdateAvailable": "Nouvelle version disponible : {version}",
+  "@adminUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "adminUpdateChecked": "Dernière vérification : {date}",
+  "@adminUpdateChecked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminUpdateFailedVersion": "La version {version} n'a pas démarré : le serveur est revenu à la version précédente avec la sauvegarde. Elle n'est plus réessayée automatiquement ; vous pouvez la réinstaller à la main.",
+  "@adminUpdateFailedVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "adminInstallNow": "Installer {version}",
+  "@adminInstallNow": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "adminInstall": "Installer",
+  "adminInstallTitle": "Installer {version} maintenant ?",
+  "@adminInstallTitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "adminInstallHelp": "Le serveur fait d'abord une sauvegarde, installe la version, puis vérifie qu'elle répond ; sinon il revient à la version actuelle avec la sauvegarde. L'application est indisponible environ une minute ; rechargez la page ensuite.",
+  "adminCheckNow": "Vérifier maintenant",
+  "adminUpdatePending": "Demandé, en cours sur le serveur…",
+  "adminAutoUpdate": "Mises à jour automatiques",
+  "adminAutoUpdateOn": "Chaque version publiée est installée dans les 15 minutes, après une sauvegarde.",
+  "adminAutoUpdateOff": "Désactivées : les nouvelles versions sont signalées ici et attendent que vous les installiez.",
+  "adminAutoUpdateSavedOn": "Mises à jour automatiques activées.",
+  "adminAutoUpdateSavedOff": "Mises à jour automatiques désactivées.",
+  "adminCheckRequested": "Vérification demandée : le résultat apparaît dans quelques secondes.",
+  "adminInstallRequested": "Installation de {version} demandée : l'application redémarre dans quelques minutes.",
+  "@adminInstallRequested": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "adminReleasesUpcoming": "À venir",
+  "adminReleasesInstalled": "Notes des versions installées",
+  "adminUpdateHistory": "Historique",
+  "adminUpdateInstalled": "installée",
+  "adminUpdateRollback": "retour à la version précédente",
+  "adminUpdateRollbackFailed": "retour en arrière en échec",
+  "adminUpdateRefused": "refusée",
+  "error_invalid_version": "Version invalide : seule une version publiée plus récente que celle installée peut être installée."
 }

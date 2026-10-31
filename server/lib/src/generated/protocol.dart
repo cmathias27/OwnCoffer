@@ -113,6 +113,7 @@ import 'purchase_payment_info.dart' as _i60c7zzl;
 import 'purchase_scenario_info.dart' as _irvruma2;
 import 'purchase_simulation.dart' as _idtt2l34;
 import 'reconciliation_proposal.dart' as _i7qmkh8w;
+import 'release_notes.dart' as _idndmjo8;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_application.dart' as _ie66uvh9;
 import 'rule_direction.dart' as _i13yq1r7;
@@ -129,6 +130,8 @@ import 'totp_secret.dart' as _iac9sbwj;
 import 'transaction_page.dart' as _i4rkvxa2;
 import 'transaction_split.dart' as _iqvm376u;
 import 'two_factor_status.dart' as _igcslm1n;
+import 'update_history_entry.dart' as _idu38kh6;
+import 'update_overview.dart' as _iv5yf7x0;
 import 'variable_category_info.dart' as _ic7yx6at;
 import 'variable_estimate_info.dart' as _in08zzvs;
 export 'access_denied_exception.dart';
@@ -196,6 +199,7 @@ export 'purchase_payment_info.dart';
 export 'purchase_scenario_info.dart';
 export 'purchase_simulation.dart';
 export 'reconciliation_proposal.dart';
+export 'release_notes.dart';
 export 'rule.dart';
 export 'rule_application.dart';
 export 'rule_direction.dart';
@@ -212,6 +216,8 @@ export 'totp_secret.dart';
 export 'transaction_page.dart';
 export 'transaction_split.dart';
 export 'two_factor_status.dart';
+export 'update_history_entry.dart';
+export 'update_overview.dart';
 export 'variable_category_info.dart';
 export 'variable_estimate_info.dart';
 
@@ -2834,6 +2840,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i7qmkh8w.ReconciliationProposal) {
       return _i7qmkh8w.ReconciliationProposal.fromJson(data) as T;
     }
+    if (t == _idndmjo8.ReleaseNotes) {
+      return _idndmjo8.ReleaseNotes.fromJson(data) as T;
+    }
     if (t == _ivw87pdb.Rule) {
       return _ivw87pdb.Rule.fromJson(data) as T;
     }
@@ -2881,6 +2890,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _igcslm1n.TwoFactorStatus) {
       return _igcslm1n.TwoFactorStatus.fromJson(data) as T;
+    }
+    if (t == _idu38kh6.UpdateHistoryEntry) {
+      return _idu38kh6.UpdateHistoryEntry.fromJson(data) as T;
+    }
+    if (t == _iv5yf7x0.UpdateOverview) {
+      return _iv5yf7x0.UpdateOverview.fromJson(data) as T;
     }
     if (t == _ic7yx6at.VariableCategoryInfo) {
       return _ic7yx6at.VariableCategoryInfo.fromJson(data) as T;
@@ -3131,6 +3146,9 @@ class Protocol extends _is.DatabaseSerializationManager {
               : null)
           as T;
     }
+    if (t == _is.getType<_idndmjo8.ReleaseNotes?>()) {
+      return (data != null ? _idndmjo8.ReleaseNotes.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_ivw87pdb.Rule?>()) {
       return (data != null ? _ivw87pdb.Rule.fromJson(data) : null) as T;
     }
@@ -3194,6 +3212,14 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_igcslm1n.TwoFactorStatus?>()) {
       return (data != null ? _igcslm1n.TwoFactorStatus.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_idu38kh6.UpdateHistoryEntry?>()) {
+      return (data != null ? _idu38kh6.UpdateHistoryEntry.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_iv5yf7x0.UpdateOverview?>()) {
+      return (data != null ? _iv5yf7x0.UpdateOverview.fromJson(data) : null)
           as T;
     }
     if (t == _is.getType<_ic7yx6at.VariableCategoryInfo?>()) {
@@ -3319,6 +3345,18 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_imctw77w.PeriodTotals>) {
       return (data as List)
               .map((e) => deserialize<_imctw77w.PeriodTotals>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_idu38kh6.UpdateHistoryEntry>) {
+      return (data as List)
+              .map((e) => deserialize<_idu38kh6.UpdateHistoryEntry>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_idndmjo8.ReleaseNotes>) {
+      return (data as List)
+              .map((e) => deserialize<_idndmjo8.ReleaseNotes>(e))
               .toList()
           as T;
     }
@@ -3538,6 +3576,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _irvruma2.PurchaseScenarioInfo => 'PurchaseScenarioInfo',
       _idtt2l34.PurchaseSimulation => 'PurchaseSimulation',
       _i7qmkh8w.ReconciliationProposal => 'ReconciliationProposal',
+      _idndmjo8.ReleaseNotes => 'ReleaseNotes',
       _ivw87pdb.Rule => 'Rule',
       _ie66uvh9.RuleApplication => 'RuleApplication',
       _i13yq1r7.RuleDirection => 'RuleDirection',
@@ -3554,6 +3593,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i4rkvxa2.TransactionPage => 'TransactionPage',
       _iqvm376u.TransactionSplit => 'TransactionSplit',
       _igcslm1n.TwoFactorStatus => 'TwoFactorStatus',
+      _idu38kh6.UpdateHistoryEntry => 'UpdateHistoryEntry',
+      _iv5yf7x0.UpdateOverview => 'UpdateOverview',
       _ic7yx6at.VariableCategoryInfo => 'VariableCategoryInfo',
       _in08zzvs.VariableEstimateInfo => 'VariableEstimateInfo',
       _ => null,
@@ -3700,6 +3741,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'PurchaseSimulation';
       case _i7qmkh8w.ReconciliationProposal():
         return 'ReconciliationProposal';
+      case _idndmjo8.ReleaseNotes():
+        return 'ReleaseNotes';
       case _ivw87pdb.Rule():
         return 'Rule';
       case _ie66uvh9.RuleApplication():
@@ -3732,6 +3775,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'TransactionSplit';
       case _igcslm1n.TwoFactorStatus():
         return 'TwoFactorStatus';
+      case _idu38kh6.UpdateHistoryEntry():
+        return 'UpdateHistoryEntry';
+      case _iv5yf7x0.UpdateOverview():
+        return 'UpdateOverview';
       case _ic7yx6at.VariableCategoryInfo():
         return 'VariableCategoryInfo';
       case _in08zzvs.VariableEstimateInfo():
@@ -3957,6 +4004,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'ReconciliationProposal') {
       return deserialize<_i7qmkh8w.ReconciliationProposal>(data['data']);
     }
+    if (dataClassName == 'ReleaseNotes') {
+      return deserialize<_idndmjo8.ReleaseNotes>(data['data']);
+    }
     if (dataClassName == 'Rule') {
       return deserialize<_ivw87pdb.Rule>(data['data']);
     }
@@ -4004,6 +4054,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'TwoFactorStatus') {
       return deserialize<_igcslm1n.TwoFactorStatus>(data['data']);
+    }
+    if (dataClassName == 'UpdateHistoryEntry') {
+      return deserialize<_idu38kh6.UpdateHistoryEntry>(data['data']);
+    }
+    if (dataClassName == 'UpdateOverview') {
+      return deserialize<_iv5yf7x0.UpdateOverview>(data['data']);
     }
     if (dataClassName == 'VariableCategoryInfo') {
       return deserialize<_ic7yx6at.VariableCategoryInfo>(data['data']);

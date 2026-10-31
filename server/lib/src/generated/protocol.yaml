@@ -32,6 +32,10 @@ admin:
   - revokeInvitation:
   - backups:
   - requestBackup:
+  - updates:
+  - setAutoUpdate:
+  - requestUpdateCheck:
+  - requestInstall:
   - sendTestEmail:
 analysis:
   - report:

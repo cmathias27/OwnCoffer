@@ -15,6 +15,7 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'mail_failed' => l.error_mail_failed,
   'host_bridge_missing' => l.error_host_bridge_missing,
   'invitation_not_pending' => l.error_invitation_not_pending,
+  'invalid_version' => l.error_invalid_version,
   'invalid_name' => l.error_invalid_name,
   'invalid_email' => l.error_invalid_email,
   'amount_out_of_range' => l.error_amount_out_of_range,

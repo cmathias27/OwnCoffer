@@ -826,6 +826,64 @@ class Endpoints extends _is.EndpointDispatch {
               ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
                   .requestBackup(session),
         ),
+        'updates': _is.MethodConnector(
+          name: 'updates',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .updates(session),
+        ),
+        'setAutoUpdate': _is.MethodConnector(
+          name: 'setAutoUpdate',
+          params: {
+            'on': _is.ParameterDescription(
+              name: 'on',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).setAutoUpdate(
+                    session,
+                    params['on'],
+                  ),
+        ),
+        'requestUpdateCheck': _is.MethodConnector(
+          name: 'requestUpdateCheck',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .requestUpdateCheck(session),
+        ),
+        'requestInstall': _is.MethodConnector(
+          name: 'requestInstall',
+          params: {
+            'version': _is.ParameterDescription(
+              name: 'version',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .requestInstall(
+                    session,
+                    params['version'],
+                  ),
+        ),
         'sendTestEmail': _is.MethodConnector(
           name: 'sendTestEmail',
           params: {},
