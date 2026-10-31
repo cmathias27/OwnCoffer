@@ -1,0 +1,16 @@
+### One part of an operation split between categories (a supermarket
+### receipt: groceries, household, clothes). The parts add up to the
+### operation's amount; budgets count the parts instead of the operation.
+class: TransactionSplit
+table: transaction_splits
+fields:
+  transactionId: int, relation(parent=transactions, onDelete=Cascade)
+  categoryId: int?, relation(parent=categories, onDelete=SetNull)
+  ### Signed like the operation.
+  amountCents: int
+  note: String?
+indexes:
+  transaction_splits_tx_idx:
+    fields: transactionId
+  transaction_splits_category_idx:
+    fields: categoryId

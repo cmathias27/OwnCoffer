@@ -12,6 +12,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
+import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
 import 'package:owncoffer_client/src/protocol/bank_transaction.dart'
     as _ivksw0b3;
 import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
@@ -30,6 +31,8 @@ import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
     as _ibpr6881;
 import 'package:owncoffer_client/src/protocol/statement_import.dart'
     as _i5x9swls;
+import 'package:owncoffer_client/src/protocol/transaction_split.dart'
+    as _idy91hap;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -40,14 +43,18 @@ import 'account.dart' as _iulmo8pc;
 import 'account_access.dart' as _idkoqesg;
 import 'account_kind.dart' as _ifkquxga;
 import 'account_visibility.dart' as _ioxxcdxl;
+import 'balance_check.dart' as _ip4e316z;
 import 'bank_transaction.dart' as _i0mjlwv3;
 import 'budget_period.dart' as _ixjzi4yl;
+import 'calendar_item.dart' as _itcb21m0;
 import 'category.dart' as _issw2w8j;
+import 'category_change_info.dart' as _iknjgrwa;
 import 'category_flow.dart' as _i8msyna2;
 import 'category_kind.dart' as _i7kso3nf;
 import 'category_source.dart' as _idpjit5g;
 import 'community_rule.dart' as _igloa2c5;
 import 'csv_columns.dart' as _iq9wp9wq;
+import 'due_calendar.dart' as _ic7yhr4p;
 import 'early_repayment.dart' as _ind4b83h;
 import 'finance_group.dart' as _iqh5irlt;
 import 'forecast_day.dart' as _ids0ngao;
@@ -63,6 +70,7 @@ import 'import_preview_line.dart' as _i4e8elxc;
 import 'invalid_input_exception.dart' as _ijc83d8f;
 import 'invitation_info.dart' as _i9hwipt6;
 import 'ip_ban_info.dart' as _ijfl1fdm;
+import 'left_to_live_report.dart' as _ibb3lpoc;
 import 'loan.dart' as _i7jednjp;
 import 'loan_from_operation.dart' as _ibgzxro1;
 import 'loan_info.dart' as _ijbwwnsd;
@@ -72,7 +80,9 @@ import 'loan_overview.dart' as _itnp0u8s;
 import 'member_info.dart' as _i2slp771;
 import 'member_role.dart' as _insyygng;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
+import 'month_review.dart' as _i5m4pdin;
 import 'notification.dart' as _irt10kca;
+import 'occurrence_status.dart' as _it10dx4m;
 import 'period_totals.dart' as _imctw77w;
 import 'reconciliation_proposal.dart' as _i7qmkh8w;
 import 'rule.dart' as _ivw87pdb;
@@ -84,23 +94,29 @@ import 'scheduled_transaction.dart' as _ifol8nrg;
 import 'setup_status.dart' as _iw7q1xsb;
 import 'spending_report.dart' as _ixcwyj5v;
 import 'statement_import.dart' as _ia7wudj2;
+import 'subscription_change.dart' as _ilnyaemj;
 import 'subscription_overview.dart' as _iliwwe2k;
 import 'totp_enrollment.dart' as _iul1v2p7;
 import 'transaction_page.dart' as _i4rkvxa2;
+import 'transaction_split.dart' as _iqvm376u;
 import 'two_factor_status.dart' as _igcslm1n;
 export 'access_denied_exception.dart';
 export 'account.dart';
 export 'account_access.dart';
 export 'account_kind.dart';
 export 'account_visibility.dart';
+export 'balance_check.dart';
 export 'bank_transaction.dart';
 export 'budget_period.dart';
+export 'calendar_item.dart';
 export 'category.dart';
+export 'category_change_info.dart';
 export 'category_flow.dart';
 export 'category_kind.dart';
 export 'category_source.dart';
 export 'community_rule.dart';
 export 'csv_columns.dart';
+export 'due_calendar.dart';
 export 'early_repayment.dart';
 export 'finance_group.dart';
 export 'forecast_day.dart';
@@ -116,6 +132,7 @@ export 'import_preview_line.dart';
 export 'invalid_input_exception.dart';
 export 'invitation_info.dart';
 export 'ip_ban_info.dart';
+export 'left_to_live_report.dart';
 export 'loan.dart';
 export 'loan_from_operation.dart';
 export 'loan_info.dart';
@@ -125,7 +142,9 @@ export 'loan_overview.dart';
 export 'member_info.dart';
 export 'member_role.dart';
 export 'missed_occurrence_info.dart';
+export 'month_review.dart';
 export 'notification.dart';
+export 'occurrence_status.dart';
 export 'period_totals.dart';
 export 'reconciliation_proposal.dart';
 export 'rule.dart';
@@ -137,9 +156,11 @@ export 'scheduled_transaction.dart';
 export 'setup_status.dart';
 export 'spending_report.dart';
 export 'statement_import.dart';
+export 'subscription_change.dart';
 export 'subscription_overview.dart';
 export 'totp_enrollment.dart';
 export 'transaction_page.dart';
+export 'transaction_split.dart';
 export 'two_factor_status.dart';
 export 'client.dart';
 
@@ -192,14 +213,23 @@ class Protocol extends _isc.SerializationManager {
     if (t == _ioxxcdxl.AccountVisibility) {
       return _ioxxcdxl.AccountVisibility.fromJson(data) as T;
     }
+    if (t == _ip4e316z.BalanceCheck) {
+      return _ip4e316z.BalanceCheck.fromJson(data) as T;
+    }
     if (t == _i0mjlwv3.BankTransaction) {
       return _i0mjlwv3.BankTransaction.fromJson(data) as T;
     }
     if (t == _ixjzi4yl.BudgetPeriod) {
       return _ixjzi4yl.BudgetPeriod.fromJson(data) as T;
     }
+    if (t == _itcb21m0.CalendarItem) {
+      return _itcb21m0.CalendarItem.fromJson(data) as T;
+    }
     if (t == _issw2w8j.Category) {
       return _issw2w8j.Category.fromJson(data) as T;
+    }
+    if (t == _iknjgrwa.CategoryChangeInfo) {
+      return _iknjgrwa.CategoryChangeInfo.fromJson(data) as T;
     }
     if (t == _i8msyna2.CategoryFlow) {
       return _i8msyna2.CategoryFlow.fromJson(data) as T;
@@ -215,6 +245,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _iq9wp9wq.CsvColumns) {
       return _iq9wp9wq.CsvColumns.fromJson(data) as T;
+    }
+    if (t == _ic7yhr4p.DueCalendar) {
+      return _ic7yhr4p.DueCalendar.fromJson(data) as T;
     }
     if (t == _ind4b83h.EarlyRepayment) {
       return _ind4b83h.EarlyRepayment.fromJson(data) as T;
@@ -261,6 +294,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _ijfl1fdm.IpBanInfo) {
       return _ijfl1fdm.IpBanInfo.fromJson(data) as T;
     }
+    if (t == _ibb3lpoc.LeftToLiveReport) {
+      return _ibb3lpoc.LeftToLiveReport.fromJson(data) as T;
+    }
     if (t == _i7jednjp.Loan) {
       return _i7jednjp.Loan.fromJson(data) as T;
     }
@@ -288,8 +324,14 @@ class Protocol extends _isc.SerializationManager {
     if (t == _ifjtpr6l.MissedOccurrenceInfo) {
       return _ifjtpr6l.MissedOccurrenceInfo.fromJson(data) as T;
     }
+    if (t == _i5m4pdin.MonthReview) {
+      return _i5m4pdin.MonthReview.fromJson(data) as T;
+    }
     if (t == _irt10kca.AppNotification) {
       return _irt10kca.AppNotification.fromJson(data) as T;
+    }
+    if (t == _it10dx4m.OccurrenceStatus) {
+      return _it10dx4m.OccurrenceStatus.fromJson(data) as T;
     }
     if (t == _imctw77w.PeriodTotals) {
       return _imctw77w.PeriodTotals.fromJson(data) as T;
@@ -324,6 +366,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _ia7wudj2.StatementImport) {
       return _ia7wudj2.StatementImport.fromJson(data) as T;
     }
+    if (t == _ilnyaemj.SubscriptionChange) {
+      return _ilnyaemj.SubscriptionChange.fromJson(data) as T;
+    }
     if (t == _iliwwe2k.SubscriptionOverview) {
       return _iliwwe2k.SubscriptionOverview.fromJson(data) as T;
     }
@@ -332,6 +377,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _i4rkvxa2.TransactionPage) {
       return _i4rkvxa2.TransactionPage.fromJson(data) as T;
+    }
+    if (t == _iqvm376u.TransactionSplit) {
+      return _iqvm376u.TransactionSplit.fromJson(data) as T;
     }
     if (t == _igcslm1n.TwoFactorStatus) {
       return _igcslm1n.TwoFactorStatus.fromJson(data) as T;
@@ -356,6 +404,9 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _ioxxcdxl.AccountVisibility.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_ip4e316z.BalanceCheck?>()) {
+      return (data != null ? _ip4e316z.BalanceCheck.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_i0mjlwv3.BankTransaction?>()) {
       return (data != null ? _i0mjlwv3.BankTransaction.fromJson(data) : null)
           as T;
@@ -363,8 +414,15 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_ixjzi4yl.BudgetPeriod?>()) {
       return (data != null ? _ixjzi4yl.BudgetPeriod.fromJson(data) : null) as T;
     }
+    if (t == _isc.getType<_itcb21m0.CalendarItem?>()) {
+      return (data != null ? _itcb21m0.CalendarItem.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_issw2w8j.Category?>()) {
       return (data != null ? _issw2w8j.Category.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iknjgrwa.CategoryChangeInfo?>()) {
+      return (data != null ? _iknjgrwa.CategoryChangeInfo.fromJson(data) : null)
+          as T;
     }
     if (t == _isc.getType<_i8msyna2.CategoryFlow?>()) {
       return (data != null ? _i8msyna2.CategoryFlow.fromJson(data) : null) as T;
@@ -382,6 +440,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_iq9wp9wq.CsvColumns?>()) {
       return (data != null ? _iq9wp9wq.CsvColumns.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ic7yhr4p.DueCalendar?>()) {
+      return (data != null ? _ic7yhr4p.DueCalendar.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_ind4b83h.EarlyRepayment?>()) {
       return (data != null ? _ind4b83h.EarlyRepayment.fromJson(data) : null)
@@ -440,6 +501,10 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_ijfl1fdm.IpBanInfo?>()) {
       return (data != null ? _ijfl1fdm.IpBanInfo.fromJson(data) : null) as T;
     }
+    if (t == _isc.getType<_ibb3lpoc.LeftToLiveReport?>()) {
+      return (data != null ? _ibb3lpoc.LeftToLiveReport.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_i7jednjp.Loan?>()) {
       return (data != null ? _i7jednjp.Loan.fromJson(data) : null) as T;
     }
@@ -472,8 +537,15 @@ class Protocol extends _isc.SerializationManager {
               : null)
           as T;
     }
+    if (t == _isc.getType<_i5m4pdin.MonthReview?>()) {
+      return (data != null ? _i5m4pdin.MonthReview.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_irt10kca.AppNotification?>()) {
       return (data != null ? _irt10kca.AppNotification.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_it10dx4m.OccurrenceStatus?>()) {
+      return (data != null ? _it10dx4m.OccurrenceStatus.fromJson(data) : null)
           as T;
     }
     if (t == _isc.getType<_imctw77w.PeriodTotals?>()) {
@@ -521,6 +593,10 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _ia7wudj2.StatementImport.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_ilnyaemj.SubscriptionChange?>()) {
+      return (data != null ? _ilnyaemj.SubscriptionChange.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_iliwwe2k.SubscriptionOverview?>()) {
       return (data != null
               ? _iliwwe2k.SubscriptionOverview.fromJson(data)
@@ -535,8 +611,18 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _i4rkvxa2.TransactionPage.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_iqvm376u.TransactionSplit?>()) {
+      return (data != null ? _iqvm376u.TransactionSplit.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_igcslm1n.TwoFactorStatus?>()) {
       return (data != null ? _igcslm1n.TwoFactorStatus.fromJson(data) : null)
+          as T;
+    }
+    if (t == List<_itcb21m0.CalendarItem>) {
+      return (data as List)
+              .map((e) => deserialize<_itcb21m0.CalendarItem>(e))
+              .toList()
           as T;
     }
     if (t == List<_ids0ngao.ForecastDay>) {
@@ -575,9 +661,18 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    }
     if (t == List<_ijbwwnsd.LoanInfo>) {
       return (data as List)
               .map((e) => deserialize<_ijbwwnsd.LoanInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iknjgrwa.CategoryChangeInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iknjgrwa.CategoryChangeInfo>(e))
               .toList()
           as T;
     }
@@ -587,9 +682,15 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
-    if (t == List<_imctw77w.PeriodTotals>) {
+    if (t == List<_i0mjlwv3.BankTransaction>) {
       return (data as List)
-              .map((e) => deserialize<_imctw77w.PeriodTotals>(e))
+              .map((e) => deserialize<_i0mjlwv3.BankTransaction>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ilnyaemj.SubscriptionChange>) {
+      return (data as List)
+              .map((e) => deserialize<_ilnyaemj.SubscriptionChange>(e))
               .toList()
           as T;
     }
@@ -599,18 +700,21 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
-    }
-    if (t == List<_i0mjlwv3.BankTransaction>) {
+    if (t == List<_imctw77w.PeriodTotals>) {
       return (data as List)
-              .map((e) => deserialize<_i0mjlwv3.BankTransaction>(e))
+              .map((e) => deserialize<_imctw77w.PeriodTotals>(e))
               .toList()
           as T;
     }
     if (t == List<_i4motmly.Account>) {
       return (data as List)
               .map((e) => deserialize<_i4motmly.Account>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ifxnt0qj.BalanceCheck>) {
+      return (data as List)
+              .map((e) => deserialize<_ifxnt0qj.BalanceCheck>(e))
               .toList()
           as T;
     }
@@ -691,6 +795,12 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_idy91hap.TransactionSplit>) {
+      return (data as List)
+              .map((e) => deserialize<_idy91hap.TransactionSplit>(e))
+              .toList()
+          as T;
+    }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
@@ -710,14 +820,18 @@ class Protocol extends _isc.SerializationManager {
       _idkoqesg.AccountAccess => 'AccountAccess',
       _ifkquxga.AccountKind => 'AccountKind',
       _ioxxcdxl.AccountVisibility => 'AccountVisibility',
+      _ip4e316z.BalanceCheck => 'BalanceCheck',
       _i0mjlwv3.BankTransaction => 'BankTransaction',
       _ixjzi4yl.BudgetPeriod => 'BudgetPeriod',
+      _itcb21m0.CalendarItem => 'CalendarItem',
       _issw2w8j.Category => 'Category',
+      _iknjgrwa.CategoryChangeInfo => 'CategoryChangeInfo',
       _i8msyna2.CategoryFlow => 'CategoryFlow',
       _i7kso3nf.CategoryKind => 'CategoryKind',
       _idpjit5g.CategorySource => 'CategorySource',
       _igloa2c5.CommunityRule => 'CommunityRule',
       _iq9wp9wq.CsvColumns => 'CsvColumns',
+      _ic7yhr4p.DueCalendar => 'DueCalendar',
       _ind4b83h.EarlyRepayment => 'EarlyRepayment',
       _iqh5irlt.FinanceGroup => 'FinanceGroup',
       _ids0ngao.ForecastDay => 'ForecastDay',
@@ -733,6 +847,7 @@ class Protocol extends _isc.SerializationManager {
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
       _i9hwipt6.InvitationInfo => 'InvitationInfo',
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
+      _ibb3lpoc.LeftToLiveReport => 'LeftToLiveReport',
       _i7jednjp.Loan => 'Loan',
       _ibgzxro1.LoanFromOperation => 'LoanFromOperation',
       _ijbwwnsd.LoanInfo => 'LoanInfo',
@@ -742,7 +857,9 @@ class Protocol extends _isc.SerializationManager {
       _i2slp771.MemberInfo => 'MemberInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
+      _i5m4pdin.MonthReview => 'MonthReview',
       _irt10kca.AppNotification => 'AppNotification',
+      _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
       _imctw77w.PeriodTotals => 'PeriodTotals',
       _i7qmkh8w.ReconciliationProposal => 'ReconciliationProposal',
       _ivw87pdb.Rule => 'Rule',
@@ -754,9 +871,11 @@ class Protocol extends _isc.SerializationManager {
       _iw7q1xsb.SetupStatus => 'SetupStatus',
       _ixcwyj5v.SpendingReport => 'SpendingReport',
       _ia7wudj2.StatementImport => 'StatementImport',
+      _ilnyaemj.SubscriptionChange => 'SubscriptionChange',
       _iliwwe2k.SubscriptionOverview => 'SubscriptionOverview',
       _iul1v2p7.TotpEnrollment => 'TotpEnrollment',
       _i4rkvxa2.TransactionPage => 'TransactionPage',
+      _iqvm376u.TransactionSplit => 'TransactionSplit',
       _igcslm1n.TwoFactorStatus => 'TwoFactorStatus',
       _ => null,
     };
@@ -782,12 +901,18 @@ class Protocol extends _isc.SerializationManager {
         return 'AccountKind';
       case _ioxxcdxl.AccountVisibility():
         return 'AccountVisibility';
+      case _ip4e316z.BalanceCheck():
+        return 'BalanceCheck';
       case _i0mjlwv3.BankTransaction():
         return 'BankTransaction';
       case _ixjzi4yl.BudgetPeriod():
         return 'BudgetPeriod';
+      case _itcb21m0.CalendarItem():
+        return 'CalendarItem';
       case _issw2w8j.Category():
         return 'Category';
+      case _iknjgrwa.CategoryChangeInfo():
+        return 'CategoryChangeInfo';
       case _i8msyna2.CategoryFlow():
         return 'CategoryFlow';
       case _i7kso3nf.CategoryKind():
@@ -798,6 +923,8 @@ class Protocol extends _isc.SerializationManager {
         return 'CommunityRule';
       case _iq9wp9wq.CsvColumns():
         return 'CsvColumns';
+      case _ic7yhr4p.DueCalendar():
+        return 'DueCalendar';
       case _ind4b83h.EarlyRepayment():
         return 'EarlyRepayment';
       case _iqh5irlt.FinanceGroup():
@@ -828,6 +955,8 @@ class Protocol extends _isc.SerializationManager {
         return 'InvitationInfo';
       case _ijfl1fdm.IpBanInfo():
         return 'IpBanInfo';
+      case _ibb3lpoc.LeftToLiveReport():
+        return 'LeftToLiveReport';
       case _i7jednjp.Loan():
         return 'Loan';
       case _ibgzxro1.LoanFromOperation():
@@ -846,8 +975,12 @@ class Protocol extends _isc.SerializationManager {
         return 'MemberRole';
       case _ifjtpr6l.MissedOccurrenceInfo():
         return 'MissedOccurrenceInfo';
+      case _i5m4pdin.MonthReview():
+        return 'MonthReview';
       case _irt10kca.AppNotification():
         return 'AppNotification';
+      case _it10dx4m.OccurrenceStatus():
+        return 'OccurrenceStatus';
       case _imctw77w.PeriodTotals():
         return 'PeriodTotals';
       case _i7qmkh8w.ReconciliationProposal():
@@ -870,12 +1003,16 @@ class Protocol extends _isc.SerializationManager {
         return 'SpendingReport';
       case _ia7wudj2.StatementImport():
         return 'StatementImport';
+      case _ilnyaemj.SubscriptionChange():
+        return 'SubscriptionChange';
       case _iliwwe2k.SubscriptionOverview():
         return 'SubscriptionOverview';
       case _iul1v2p7.TotpEnrollment():
         return 'TotpEnrollment';
       case _i4rkvxa2.TransactionPage():
         return 'TransactionPage';
+      case _iqvm376u.TransactionSplit():
+        return 'TransactionSplit';
       case _igcslm1n.TwoFactorStatus():
         return 'TwoFactorStatus';
     }
@@ -915,14 +1052,23 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'AccountVisibility') {
       return deserialize<_ioxxcdxl.AccountVisibility>(data['data']);
     }
+    if (dataClassName == 'BalanceCheck') {
+      return deserialize<_ip4e316z.BalanceCheck>(data['data']);
+    }
     if (dataClassName == 'BankTransaction') {
       return deserialize<_i0mjlwv3.BankTransaction>(data['data']);
     }
     if (dataClassName == 'BudgetPeriod') {
       return deserialize<_ixjzi4yl.BudgetPeriod>(data['data']);
     }
+    if (dataClassName == 'CalendarItem') {
+      return deserialize<_itcb21m0.CalendarItem>(data['data']);
+    }
     if (dataClassName == 'Category') {
       return deserialize<_issw2w8j.Category>(data['data']);
+    }
+    if (dataClassName == 'CategoryChangeInfo') {
+      return deserialize<_iknjgrwa.CategoryChangeInfo>(data['data']);
     }
     if (dataClassName == 'CategoryFlow') {
       return deserialize<_i8msyna2.CategoryFlow>(data['data']);
@@ -938,6 +1084,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'CsvColumns') {
       return deserialize<_iq9wp9wq.CsvColumns>(data['data']);
+    }
+    if (dataClassName == 'DueCalendar') {
+      return deserialize<_ic7yhr4p.DueCalendar>(data['data']);
     }
     if (dataClassName == 'EarlyRepayment') {
       return deserialize<_ind4b83h.EarlyRepayment>(data['data']);
@@ -984,6 +1133,9 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'IpBanInfo') {
       return deserialize<_ijfl1fdm.IpBanInfo>(data['data']);
     }
+    if (dataClassName == 'LeftToLiveReport') {
+      return deserialize<_ibb3lpoc.LeftToLiveReport>(data['data']);
+    }
     if (dataClassName == 'Loan') {
       return deserialize<_i7jednjp.Loan>(data['data']);
     }
@@ -1011,8 +1163,14 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'MissedOccurrenceInfo') {
       return deserialize<_ifjtpr6l.MissedOccurrenceInfo>(data['data']);
     }
+    if (dataClassName == 'MonthReview') {
+      return deserialize<_i5m4pdin.MonthReview>(data['data']);
+    }
     if (dataClassName == 'AppNotification') {
       return deserialize<_irt10kca.AppNotification>(data['data']);
+    }
+    if (dataClassName == 'OccurrenceStatus') {
+      return deserialize<_it10dx4m.OccurrenceStatus>(data['data']);
     }
     if (dataClassName == 'PeriodTotals') {
       return deserialize<_imctw77w.PeriodTotals>(data['data']);
@@ -1047,6 +1205,9 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'StatementImport') {
       return deserialize<_ia7wudj2.StatementImport>(data['data']);
     }
+    if (dataClassName == 'SubscriptionChange') {
+      return deserialize<_ilnyaemj.SubscriptionChange>(data['data']);
+    }
     if (dataClassName == 'SubscriptionOverview') {
       return deserialize<_iliwwe2k.SubscriptionOverview>(data['data']);
     }
@@ -1055,6 +1216,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'TransactionPage') {
       return deserialize<_i4rkvxa2.TransactionPage>(data['data']);
+    }
+    if (dataClassName == 'TransactionSplit') {
+      return deserialize<_iqvm376u.TransactionSplit>(data['data']);
     }
     if (dataClassName == 'TwoFactorStatus') {
       return deserialize<_igcslm1n.TwoFactorStatus>(data['data']);

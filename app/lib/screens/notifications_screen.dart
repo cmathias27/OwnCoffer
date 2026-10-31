@@ -7,6 +7,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import '../widgets/budget_charts.dart';
 
 /// The user's notifications. Texts are built here from the type and the
 /// figures stored by the server, so they follow the user's language.
@@ -101,14 +102,21 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   final (title, body) = _texts(context, n);
                   final isUnread = n.readAt == null;
                   return ListTile(
-                    leading: Icon(
-                      n.type == 'overdraft_forecast'
-                          ? Icons.warning_amber
-                          : Icons.notifications_none,
-                      color: n.type == 'overdraft_forecast'
-                          ? theme.colorScheme.error
-                          : null,
-                    ),
+                    leading: switch (n.type) {
+                      'overdraft_forecast' => Icon(
+                        Icons.warning_amber,
+                        color: theme.colorScheme.error,
+                      ),
+                      'goal_warning' => const Icon(
+                        Icons.flag_outlined,
+                        color: ChartColors.warning,
+                      ),
+                      'goal_over' => const Icon(
+                        Icons.flag,
+                        color: ChartColors.critical,
+                      ),
+                      _ => const Icon(Icons.notifications_none),
+                    },
                     title: Text(
                       title,
                       style: TextStyle(
@@ -141,6 +149,30 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   static (String, String?) _texts(BuildContext context, AppNotification n) {
     final l = AppLocalizations.of(context);
+    if (n.type == 'goal_warning' || n.type == 'goal_over') {
+      try {
+        final d = jsonDecode(n.data) as Map<String, dynamic>;
+        final name = context.categoryName(
+          Category(
+            groupId: n.groupId ?? 0,
+            name: d['name'] as String?,
+            standardCode: d['standardCode'] as String?,
+            kind: CategoryKind.expense,
+          ),
+        );
+        return (
+          n.type == 'goal_over'
+              ? l.notifGoalOverTitle(name)
+              : l.notifGoalWarningTitle(name),
+          l.notifGoalBody(
+            context.money(d['spentCents'] as int),
+            context.money(d['goalCents'] as int),
+          ),
+        );
+      } on Object {
+        return (l.notifUnknown, null);
+      }
+    }
     if (n.type != 'overdraft_forecast') return (l.notifUnknown, null);
     try {
       final d = jsonDecode(n.data) as Map<String, dynamic>;

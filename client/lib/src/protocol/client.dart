@@ -17,12 +17,16 @@ import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
 import 'package:owncoffer_client/src/protocol/account_kind.dart' as _ighjli9i;
 import 'package:owncoffer_client/src/protocol/account_visibility.dart'
     as _i33sijhq;
+import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
 import 'package:owncoffer_client/src/protocol/bank_transaction.dart'
     as _ivksw0b3;
 import 'package:owncoffer_client/src/protocol/budget_period.dart' as _iff4p9sd;
 import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
 import 'package:owncoffer_client/src/protocol/category_kind.dart' as _ig2tt18e;
+import 'package:owncoffer_client/src/protocol/category_source.dart'
+    as _i8y5k73o;
 import 'package:owncoffer_client/src/protocol/csv_columns.dart' as _irbioy6y;
+import 'package:owncoffer_client/src/protocol/due_calendar.dart' as _i25nl2kq;
 import 'package:owncoffer_client/src/protocol/early_repayment.dart'
     as _i0heeame;
 import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
@@ -37,6 +41,8 @@ import 'package:owncoffer_client/src/protocol/import_preview.dart' as _ikjuebnd;
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
+import 'package:owncoffer_client/src/protocol/left_to_live_report.dart'
+    as _iqfjeddm;
 import 'package:owncoffer_client/src/protocol/loan.dart' as _ig538h6x;
 import 'package:owncoffer_client/src/protocol/loan_from_operation.dart'
     as _i04nbqtd;
@@ -46,6 +52,7 @@ import 'package:owncoffer_client/src/protocol/loan_installment.dart'
 import 'package:owncoffer_client/src/protocol/loan_overview.dart' as _i1y07bmb;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
+import 'package:owncoffer_client/src/protocol/month_review.dart' as _ilg6npsn;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
 import 'package:owncoffer_client/src/protocol/rule_application.dart'
@@ -68,6 +75,8 @@ import 'package:owncoffer_client/src/protocol/totp_enrollment.dart'
     as _iy6m3xur;
 import 'package:owncoffer_client/src/protocol/transaction_page.dart'
     as _ioa38wkb;
+import 'package:owncoffer_client/src/protocol/transaction_split.dart'
+    as _idy91hap;
 import 'package:owncoffer_client/src/protocol/two_factor_status.dart'
     as _is1jzs1l;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
@@ -333,6 +342,31 @@ class EndpointAccount extends _isc.EndpointRef {
       'allowed': allowed,
     },
   );
+
+  /// Balance check: the balance the bank shows at the end of [date],
+  /// compared with the one computed from the operations. Saved, so the last
+  /// checks can be seen again.
+  _ida.Future<_ifxnt0qj.BalanceCheck> checkBalance(
+    int accountId,
+    DateTime date,
+    int bankBalanceCents,
+  ) => caller.callServerEndpoint<_ifxnt0qj.BalanceCheck>(
+    'account',
+    'checkBalance',
+    {
+      'accountId': accountId,
+      'date': date,
+      'bankBalanceCents': bankBalanceCents,
+    },
+  );
+
+  /// The last balance checks of the account, newest first.
+  _ida.Future<List<_ifxnt0qj.BalanceCheck>> balanceChecks(int accountId) =>
+      caller.callServerEndpoint<List<_ifxnt0qj.BalanceCheck>>(
+        'account',
+        'balanceChecks',
+        {'accountId': accountId},
+      );
 }
 
 /// Server administration (server administrator only).
@@ -400,6 +434,38 @@ class EndpointAnalysis extends _isc.EndpointRef {
       'date': date,
       'categoryId': categoryId,
       'unclassified': unclassified,
+      'accountId': accountId,
+    },
+  );
+
+  /// What is left to spend until the end of the budget month (the next pay
+  /// day), planned operations counted: checking accounts the user may see,
+  /// or the one asked for.
+  _ida.Future<_iqfjeddm.LeftToLiveReport> leftToLive(
+    int groupId, {
+    int? accountId,
+  }) => caller.callServerEndpoint<_iqfjeddm.LeftToLiveReport>(
+    'analysis',
+    'leftToLive',
+    {
+      'groupId': groupId,
+      'accountId': accountId,
+    },
+  );
+
+  /// Month-end review of the budget month containing [date]: rises and drops
+  /// against the three previous months, goals exceeded, bank fees, biggest
+  /// expenses, subscriptions charged another amount or new.
+  _ida.Future<_ilg6npsn.MonthReview> review(
+    int groupId,
+    DateTime date, {
+    int? accountId,
+  }) => caller.callServerEndpoint<_ilg6npsn.MonthReview>(
+    'analysis',
+    'review',
+    {
+      'groupId': groupId,
+      'date': date,
       'accountId': accountId,
     },
   );
@@ -772,6 +838,16 @@ class EndpointLoan extends _isc.EndpointRef {
     },
   );
 
+  /// Undo of "this is a loan instalment": removes the loan, its planned
+  /// instalments and its rule, unlinks its instalments and classifies again
+  /// the operations the rule had classified (the app restores the declared
+  /// operation itself). Returns how many were classified again.
+  _ida.Future<int> undoCreate(int loanId) => caller.callServerEndpoint<int>(
+    'loan',
+    'undoCreate',
+    {'loanId': loanId},
+  );
+
   /// Moves the loan to the trash and stops its planned instalments.
   _ida.Future<void> delete(int loanId) => caller.callServerEndpoint<void>(
     'loan',
@@ -880,6 +956,14 @@ class EndpointRule extends _isc.EndpointRef {
       'priority': priority,
       'enabled': enabled,
     },
+  );
+
+  /// Undo of "always classify like this": deletes the rule and classifies
+  /// again the operations it had classified. Returns how many.
+  _ida.Future<int> undoCreate(int ruleId) => caller.callServerEndpoint<int>(
+    'rule',
+    'undoCreate',
+    {'ruleId': ruleId},
   );
 
   _ida.Future<void> delete(int ruleId) => caller.callServerEndpoint<void>(
@@ -1008,6 +1092,23 @@ class EndpointScheduled extends _isc.EndpointRef {
     {
       'transactionId': transactionId,
       'frequency': frequency,
+    },
+  );
+
+  /// Due dates of the budget month containing [date], on the accounts the
+  /// user may see (or the one asked for): each occurrence of the planned
+  /// operations, paid, late, skipped or to come.
+  _ida.Future<_i25nl2kq.DueCalendar> calendar(
+    int groupId,
+    DateTime date, {
+    int? accountId,
+  }) => caller.callServerEndpoint<_i25nl2kq.DueCalendar>(
+    'scheduled',
+    'calendar',
+    {
+      'groupId': groupId,
+      'date': date,
+      'accountId': accountId,
     },
   );
 
@@ -1172,6 +1273,50 @@ class EndpointTransaction extends _isc.EndpointRef {
     {
       'transactionId': transactionId,
       'categoryId': categoryId,
+    },
+  );
+
+  /// Undo of a classification change: puts back the category, its source
+  /// and the split the operation had before (as the app saw it).
+  _ida.Future<_ivksw0b3.BankTransaction> restoreClassification(
+    int transactionId,
+    int? categoryId,
+    _i8y5k73o.CategorySource source,
+    String? ruleRef,
+    List<_idy91hap.TransactionSplit> splits,
+  ) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
+    'transaction',
+    'restoreClassification',
+    {
+      'transactionId': transactionId,
+      'categoryId': categoryId,
+      'source': source,
+      'ruleRef': ruleRef,
+      'splits': splits,
+    },
+  );
+
+  /// Parts of a split operation (empty when not split).
+  _ida.Future<List<_idy91hap.TransactionSplit>> splits(int transactionId) =>
+      caller.callServerEndpoint<List<_idy91hap.TransactionSplit>>(
+        'transaction',
+        'splits',
+        {'transactionId': transactionId},
+      );
+
+  /// Splits the operation between categories (a receipt: groceries,
+  /// household…): at least two parts of its sign adding up to its amount.
+  /// The operation shows the category of its largest part and counts as
+  /// classified by hand. An empty list removes the split.
+  _ida.Future<_ivksw0b3.BankTransaction> setSplits(
+    int transactionId,
+    List<_idy91hap.TransactionSplit> parts,
+  ) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
+    'transaction',
+    'setSplits',
+    {
+      'transactionId': transactionId,
+      'parts': parts,
     },
   );
 

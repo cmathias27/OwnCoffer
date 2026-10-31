@@ -1,0 +1,16 @@
+### One occurrence of a planned operation in the due-date calendar.
+class: CalendarItem
+fields:
+  date: DateTime
+  scheduledId: int
+  accountId: int
+  label: String
+  amountCents: int
+  categoryId: int?
+  subscription: bool
+  ### Instalment of a loan of the loans page.
+  loanId: int?
+  status: OccurrenceStatus
+  ### Real operation matched with it.
+  transactionId: int?
+  transactionAmountCents: int?

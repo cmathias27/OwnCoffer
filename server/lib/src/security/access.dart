@@ -114,9 +114,17 @@ abstract final class Access {
     int groupId,
   ) async {
     final member = await requireMember(session, groupId);
+    return visibleAccountsOf(session, member);
+  }
+
+  /// Accounts [member] may see (jobs acting for a member, e.g. alerts).
+  static Future<List<Account>> visibleAccountsOf(
+    Session session,
+    GroupMember member,
+  ) async {
     final accounts = await Account.db.find(
       session,
-      where: (a) => a.groupId.equals(groupId) & a.deletedAt.equals(null),
+      where: (a) => a.groupId.equals(member.groupId) & a.deletedAt.equals(null),
       orderBy: (a) => a.name,
     );
     if (member.role == MemberRole.admin) return accounts;

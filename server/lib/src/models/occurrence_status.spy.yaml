@@ -1,0 +1,7 @@
+enum: OccurrenceStatus
+serialized: byName
+values:
+  - paid
+  - late
+  - skipped
+  - upcoming

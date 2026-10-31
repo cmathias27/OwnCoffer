@@ -131,15 +131,15 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 
 **Compléments du cœur**
 
-- [ ] Import groupé, ventilation, corbeille, testeur de règles
-- [ ] Solde de contrôle et détection des frais bancaires
-- [ ] Rapprochement automatique des opérations prévues, reste à vivre, dépenses variables, calendrier des échéances
+- [ ] Import groupé, ventilation, corbeille, testeur de règles — *en partie dans la 0.3.0 : ventilation, annulation des actions*
+- [ ] Solde de contrôle et détection des frais bancaires — *en partie dans la 0.3.0 : solde de contrôle, frais du mois dans la revue*
+- [ ] Rapprochement automatique des opérations prévues, reste à vivre, dépenses variables, calendrier des échéances — *en partie dans la 0.3.0 : reste à vivre, calendrier ; restent les dépenses variables*
 - [ ] Moteur de simulation (sans IA) : simulateur d'achat (solde à une date choisie, point bas, comptant / en plusieurs fois / plus tard) et scénarios comparés côte à côte
 - [ ] Analyses calculées (sans IA) : évolutions par catégorie, hausses et anomalies chiffrées, objectifs suggérés d'après les 3 à 6 derniers mois, fiabilité des prévisions affichée — *en partie dans la 0.2.0 : classement par catégorie sur la semaine, le mois ou l'année, comparaison à la période précédente et à la moyenne des 3 précédentes, objectif suggéré*
-- [ ] Objectifs par catégorie, alertes à 80 %, 100 % et anticipée ; réglages des notifications — *en partie dans la 0.2.0 : objectif mensuel et jauge ; restent les alertes*
+- [ ] Objectifs par catégorie, alertes à 80 %, 100 % et anticipée ; réglages des notifications — *en partie dans la 0.2.0 : objectif mensuel et jauge ; alertes à 80 % et 100 % dans la 0.3.0 ; restent l'alerte anticipée et les réglages des notifications*
 - [ ] Tableau de bord et graphiques — *en partie dans la 0.2.0 : page Budget (revenus et dépenses sur 6 périodes, classements) et abonnements*
-- [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois — *en partie dans la 0.2.0 : crédits à taux fixe, tableau calculé, échéances prévues, remboursement anticipé simulé, taux d'endettement ; restent les événements (renégociation, taux variable), le crédit renouvelable et les paiements en plusieurs fois*
-- [ ] Revue de fin de mois et détection d'anomalies
+- [ ] Crédits avec tableau d'amortissement, paiements en plusieurs fois — *en partie dans la 0.2.0 : crédits à taux fixe, tableau calculé, échéances prévues, remboursement anticipé simulé, taux d'endettement ; crédit déclaré depuis une opération (0.2.1), paiements en plusieurs fois (0.3.0) ; restent les événements (renégociation, taux variable) et le crédit renouvelable*
+- [ ] Revue de fin de mois et détection d'anomalies — *en partie dans la 0.3.0 : revue du mois*
 - [ ] Onglet Feedback
 
 **Conseiller et IA**

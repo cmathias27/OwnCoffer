@@ -1,0 +1,7 @@
+### A category whose spending moved against the average of the three
+### previous months.
+class: CategoryChangeInfo
+fields:
+  categoryId: int
+  amountCents: int
+  averageCents: int

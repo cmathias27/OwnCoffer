@@ -16,6 +16,8 @@ import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
 import 'package:owncoffer_server/src/generated/budget_period.dart' as _imscipj7;
 import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
+import 'package:owncoffer_server/src/generated/category_source.dart'
+    as _is85mlpa;
 import 'package:owncoffer_server/src/generated/csv_columns.dart' as _iytxq8gu;
 import 'package:owncoffer_server/src/generated/frequency.dart' as _iugtcrzz;
 import 'package:owncoffer_server/src/generated/loan.dart' as _i2yv792g;
@@ -24,6 +26,8 @@ import 'package:owncoffer_server/src/generated/rule_direction.dart'
     as _ini8nmtb;
 import 'package:owncoffer_server/src/generated/rule_match_type.dart'
     as _ijwgwf7y;
+import 'package:owncoffer_server/src/generated/transaction_split.dart'
+    as _i84rsuuz;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
@@ -555,6 +559,56 @@ class Endpoints extends _is.EndpointDispatch {
                     params['allowed'],
                   ),
         ),
+        'checkBalance': _is.MethodConnector(
+          name: 'checkBalance',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'bankBalanceCents': _is.ParameterDescription(
+              name: 'bankBalanceCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['account'] as _iaho7ul5.AccountEndpoint)
+                  .checkBalance(
+                    session,
+                    params['accountId'],
+                    params['date'],
+                    params['bankBalanceCents'],
+                  ),
+        ),
+        'balanceChecks': _is.MethodConnector(
+          name: 'balanceChecks',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['account'] as _iaho7ul5.AccountEndpoint)
+                  .balanceChecks(
+                    session,
+                    params['accountId'],
+                  ),
+        ),
       },
     );
     connectors['admin'] = _is.EndpointConnector(
@@ -679,6 +733,62 @@ class Endpoints extends _is.EndpointDispatch {
                     params['date'],
                     categoryId: params['categoryId'],
                     unclassified: params['unclassified'],
+                    accountId: params['accountId'],
+                  ),
+        ),
+        'leftToLive': _is.MethodConnector(
+          name: 'leftToLive',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['analysis'] as _i0sl0qub.AnalysisEndpoint)
+                  .leftToLive(
+                    session,
+                    params['groupId'],
+                    accountId: params['accountId'],
+                  ),
+        ),
+        'review': _is.MethodConnector(
+          name: 'review',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['analysis'] as _i0sl0qub.AnalysisEndpoint).review(
+                    session,
+                    params['groupId'],
+                    params['date'],
                     accountId: params['accountId'],
                   ),
         ),
@@ -1398,6 +1508,25 @@ class Endpoints extends _is.EndpointDispatch {
                     params['loan'],
                   ),
         ),
+        'undoCreate': _is.MethodConnector(
+          name: 'undoCreate',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['loan'] as _imitaxsf.LoanEndpoint).undoCreate(
+                    session,
+                    params['loanId'],
+                  ),
+        ),
         'delete': _is.MethodConnector(
           name: 'delete',
           params: {
@@ -1639,6 +1768,25 @@ class Endpoints extends _is.EndpointDispatch {
                 priority: params['priority'],
                 enabled: params['enabled'],
               ),
+        ),
+        'undoCreate': _is.MethodConnector(
+          name: 'undoCreate',
+          params: {
+            'ruleId': _is.ParameterDescription(
+              name: 'ruleId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['rule'] as _i1yhvvjn.RuleEndpoint).undoCreate(
+                    session,
+                    params['ruleId'],
+                  ),
         ),
         'delete': _is.MethodConnector(
           name: 'delete',
@@ -1932,6 +2080,37 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['transactionId'],
                     frequency: params['frequency'],
+                  ),
+        ),
+        'calendar': _is.MethodConnector(
+          name: 'calendar',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .calendar(
+                    session,
+                    params['groupId'],
+                    params['date'],
+                    accountId: params['accountId'],
                   ),
         ),
         'skipNext': _is.MethodConnector(
@@ -2260,6 +2439,96 @@ class Endpoints extends _is.EndpointDispatch {
                         session,
                         params['transactionId'],
                         params['categoryId'],
+                      ),
+        ),
+        'restoreClassification': _is.MethodConnector(
+          name: 'restoreClassification',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'source': _is.ParameterDescription(
+              name: 'source',
+              type: _is.getType<_is85mlpa.CategorySource>(),
+              nullable: false,
+            ),
+            'ruleRef': _is.ParameterDescription(
+              name: 'ruleRef',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'splits': _is.ParameterDescription(
+              name: 'splits',
+              type: _is.getType<List<_i84rsuuz.TransactionSplit>>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .restoreClassification(
+                        session,
+                        params['transactionId'],
+                        params['categoryId'],
+                        params['source'],
+                        params['ruleRef'],
+                        params['splits'],
+                      ),
+        ),
+        'splits': _is.MethodConnector(
+          name: 'splits',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .splits(
+                        session,
+                        params['transactionId'],
+                      ),
+        ),
+        'setSplits': _is.MethodConnector(
+          name: 'setSplits',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'parts': _is.ParameterDescription(
+              name: 'parts',
+              type: _is.getType<List<_i84rsuuz.TransactionSplit>>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .setSplits(
+                        session,
+                        params['transactionId'],
+                        params['parts'],
                       ),
         ),
         'setCleared': _is.MethodConnector(

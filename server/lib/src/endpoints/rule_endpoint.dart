@@ -106,6 +106,29 @@ class RuleEndpoint extends Endpoint {
     return updated;
   }
 
+  /// Undo of "always classify like this": deletes the rule and classifies
+  /// again the operations it had classified. Returns how many.
+  Future<int> undoCreate(Session session, int ruleId) async {
+    final current = await _find(session, ruleId);
+    final n = await session.db.transaction(
+      (tx) => ClassificationService.revertRule(
+        session,
+        current.groupId,
+        ruleId,
+        transaction: tx,
+      ),
+    );
+    await Audit.log(
+      session,
+      groupId: current.groupId,
+      action: 'undo_create',
+      entity: 'rule',
+      rowId: ruleId,
+      before: current,
+    );
+    return n;
+  }
+
   Future<void> delete(Session session, int ruleId) async {
     final current = await _find(session, ruleId);
     await Rule.db.deleteRow(session, current);

@@ -8,7 +8,10 @@ import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/budget_charts.dart';
+import '../widgets/undo.dart';
 import '../widgets/category_field.dart';
+import 'calendar_screen.dart';
+import 'review_screen.dart';
 import 'subscriptions_screen.dart';
 
 /// Where the money comes from and goes: a week, a month (from the group's
@@ -32,6 +35,7 @@ class BudgetScreenState extends State<BudgetScreen> {
   var _date = todayUtcMidnight();
   int? _accountId;
   SpendingReport? _report;
+  LeftToLiveReport? _left;
   Map<int, Category> _categories = {};
   final Set<int> _expanded = {};
   String? _error;
@@ -59,10 +63,12 @@ class BudgetScreenState extends State<BudgetScreen> {
           accountId: _accountId,
         ),
         client.category.list(_groupId),
+        client.analysis.leftToLive(_groupId, accountId: _accountId),
       ]);
       if (!mounted) return;
       setState(() {
         _report = results[0] as SpendingReport;
+        _left = results[2] as LeftToLiveReport;
         _categories = {
           for (final c in results[1] as List<Category>) c.id!: c,
         };
@@ -156,7 +162,10 @@ class BudgetScreenState extends State<BudgetScreen> {
   }
 
   Future<void> _editGoal(Category c, CategoryFlow? flow) async {
-    final changed = await showDialog<bool>(
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final before = flow?.goalCents;
+    final done = await showDialog<String>(
       context: context,
       builder: (_) => _GoalDialog(
         groupId: _groupId,
@@ -165,7 +174,17 @@ class BudgetScreenState extends State<BudgetScreen> {
         name: context.categoryName(c),
       ),
     );
-    if (changed == true) await reload();
+    if (done == null) return;
+    await reload();
+    showUndo(
+      messenger,
+      l,
+      done == 'removed' ? l.goalRemoved : l.goalSaved,
+      () => before == null
+          ? client.goal.remove(_groupId, c.id!)
+          : client.goal.set(_groupId, c.id!, before).then((_) {}),
+      after: reload,
+    );
   }
 
   Future<void> _settings() async {
@@ -253,6 +272,13 @@ class BudgetScreenState extends State<BudgetScreen> {
           if (r != null) ...[
             const SizedBox(height: 12),
             _summary(context, l, r),
+            if (_left case final left?)
+              if (_period == BudgetPeriod.month &&
+                  !todayUtcMidnight().isBefore(r.start) &&
+                  !todayUtcMidnight().isAfter(r.last)) ...[
+                const SizedBox(height: 16),
+                _LeftToLiveCard(report: left),
+              ],
             const SizedBox(height: 16),
             _card(
               context,
@@ -362,6 +388,35 @@ class BudgetScreenState extends State<BudgetScreen> {
               builder: (_) => SubscriptionsScreen(
                 membership: widget.membership,
                 accounts: widget.accounts,
+              ),
+            ),
+          ),
+        ),
+        OutlinedButton.icon(
+          icon: const Icon(Icons.calendar_month_outlined),
+          label: Text(l.calendarTitle),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => CalendarScreen(
+                membership: widget.membership,
+                accounts: widget.accounts,
+                accountId: _accountId,
+              ),
+            ),
+          ),
+        ),
+        OutlinedButton.icon(
+          icon: const Icon(Icons.fact_check_outlined),
+          label: Text(l.reviewTitle),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => ReviewScreen(
+                membership: widget.membership,
+                accountId: _accountId,
+                // The month shown, or the one just ended early in a month.
+                date: _period == BudgetPeriod.month
+                    ? _date
+                    : todayUtcMidnight(),
               ),
             ),
           ),
@@ -586,6 +641,62 @@ class BudgetScreenState extends State<BudgetScreen> {
             )
           : Column(children: children),
       trailing: goalButton,
+    );
+  }
+}
+
+/// "Left to live on until pay day", the figure and how it is made.
+class _LeftToLiveCard extends StatelessWidget {
+  final LeftToLiveReport report;
+  const _LeftToLiveCard({required this.report});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final r = report;
+    final negative = r.leftCents < 0;
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l.leftToLiveTitle, style: theme.textTheme.titleMedium),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                if (negative) ...[
+                  const Icon(Icons.error, color: ChartColors.critical),
+                  const SizedBox(width: 8),
+                ],
+                Text(
+                  context.money(r.leftCents),
+                  style: theme.textTheme.headlineMedium,
+                ),
+              ],
+            ),
+            Text(
+              l.leftToLiveBody(
+                context.money(r.perDayCents),
+                r.daysLeft,
+                context.day(r.last),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l.leftToLiveDetail(
+                context.money(r.balanceCents),
+                context.money(r.plannedDebitsCents),
+                context.money(r.plannedCreditsCents),
+              ),
+              style: theme.textTheme.bodySmall,
+            ),
+            Text(l.leftToLiveHelp, style: theme.textTheme.bodySmall),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -853,11 +964,12 @@ class _GoalDialogState extends State<_GoalDialog> {
     super.dispose();
   }
 
-  Future<void> _run(Future<void> Function() call) async {
+  /// Pops with [result] ('saved' or 'removed') once [call] succeeded.
+  Future<void> _run(Future<void> Function() call, String result) async {
     setState(() => (_busy = true, _error = null));
     try {
       await call();
-      if (mounted) Navigator.of(context).pop(true);
+      if (mounted) Navigator.of(context).pop(result);
     } on Object catch (e) {
       if (mounted) {
         setState(
@@ -934,11 +1046,12 @@ class _GoalDialogState extends State<_GoalDialog> {
                 : () => _run(
                     () =>
                         client.goal.remove(widget.groupId, widget.category.id!),
+                    'removed',
                   ),
             child: Text(l.goalRemove),
           ),
         TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
+          onPressed: () => Navigator.of(context).pop(),
           child: Text(l.cancel),
         ),
         FilledButton(
@@ -954,6 +1067,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                     () => client.goal
                         .set(widget.groupId, widget.category.id!, cents)
                         .then((_) {}),
+                    'saved',
                   );
                 },
           child: Text(l.save),

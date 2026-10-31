@@ -2,6 +2,37 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.0 (31 octobre 2026)
+
+Suite des ajouts demandés pendant le mois d'essai : on peut annuler une action, et la page Budget s'enrichit.
+
+### Annuler
+
+- Après chaque action dans la fiche d'une opération, un bouton **« Annuler »** remet les choses comme avant. C'est le cas pour un changement de catégorie, une ventilation, le pointage, « Toujours classer ainsi », « C'est un abonnement », « C'est une échéance de crédit » et la mise à la corbeille. Annuler une règle ou un crédit classe à nouveau, sans eux, les opérations qu'ils avaient classées.
+- Même chose pour fixer, modifier ou supprimer un objectif.
+
+### Budget
+
+- **Reste à vivre** jusqu'à la prochaine paie : solde des comptes courants, moins les prélèvements prévus d'ici la fin du mois de budget, plus les rentrées prévues. Il est aussi ramené à un montant par jour.
+- **Alertes d'objectif** : une notification quand une catégorie atteint 80 % puis 100 % de son objectif du mois, une seule fois par seuil. Le calcul se fait sur les comptes que chaque membre peut voir.
+- **Calendrier des échéances** : toutes les opérations prévues du mois (loyer, abonnements, échéances de crédit), avec leur état : passée, en retard, sautée ou à venir.
+- **Revue du mois** :
+  - reste du mois comparé au mois précédent ;
+  - catégories en hausse ou en baisse par rapport à la moyenne des trois mois précédents ;
+  - objectifs dépassés ;
+  - frais bancaires du mois ;
+  - plus grosses dépenses ;
+  - abonnements prélevés pour un autre montant que prévu, et nouveaux abonnements.
+
+### Opérations et comptes
+
+- **Ventilation** : une opération (un ticket de supermarché, par exemple) se répartit entre plusieurs catégories. Les parts comptent dans le budget, les objectifs et le filtre par catégorie.
+- **Solde de contrôle** : saisir le solde affiché par la banque à une date pour le comparer au solde calculé. En cas d'écart, OwnCoffer montre ce qui peut l'expliquer : opérations saisies à la main et non pointées, ou relevé manquant.
+
+### Crédits
+
+- **Paiements en plusieurs fois** (3 ou 4 fois, Alma, Oney…) : un nouveau type dans la page Crédits, sans taux, rangé à part. Il peut être déclaré depuis le premier prélèvement : le montant total est alors calculé à partir du prélèvement.
+
 ## 0.2.1 (31 octobre 2026)
 
 ### Crédits déclarés depuis une opération

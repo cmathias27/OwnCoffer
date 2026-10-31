@@ -9,6 +9,8 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../util/web_search.dart';
 import '../widgets/category_field.dart';
+import '../widgets/split_dialog.dart';
+import '../widgets/undo.dart';
 import 'loans_screen.dart';
 
 /// Operations of one account: search, filters, corrections, manual entry.
@@ -110,6 +112,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
   }
 
   Future<void> _open(BankTransaction t) async {
+    final messenger = ScaffoldMessenger.of(context);
     // Resizable by dragging, always within the screen (small phones,
     // keyboard open): the content scrolls inside the sheet.
     final changed = await showModalBottomSheet<bool>(
@@ -124,20 +127,28 @@ class _OperationsScreenState extends State<OperationsScreen> {
         maxChildSize: 1,
         snap: true,
         snapSizes: const [0.7],
-        builder: (_, scroll) => _OperationSheet(
-          groupId: widget.membership.group.id!,
-          operation: t,
-          accounts: widget.accounts,
-          categories: _categories,
-          currency: _account!.currency,
-          canWrite: _canWrite,
-          onChanged: _replace,
-          onSameProvider: () {
-            Navigator.of(context).pop();
-            setState(() => _provider = t.cleanLabel);
-            _reload();
-          },
-          scrollController: scroll,
+        // Own messenger: "undo" bars show inside the sheet, above it.
+        builder: (_, scroll) => ScaffoldMessenger(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: _OperationSheet(
+              groupId: widget.membership.group.id!,
+              messenger: messenger,
+              onUndone: _reload,
+              operation: t,
+              accounts: widget.accounts,
+              categories: _categories,
+              currency: _account!.currency,
+              canWrite: _canWrite,
+              onChanged: _replace,
+              onSameProvider: () {
+                Navigator.of(context).pop();
+                setState(() => _provider = t.cleanLabel);
+                _reload();
+              },
+              scrollController: scroll,
+            ),
+          ),
         ),
       ),
     );
@@ -374,6 +385,12 @@ class _OperationSheet extends StatefulWidget {
   final BankTransaction operation;
   final List<Account> accounts;
 
+  /// The screen's messenger, for actions that close the sheet.
+  final ScaffoldMessengerState messenger;
+
+  /// Refreshes the screen after an undo.
+  final VoidCallback onUndone;
+
   /// The screen's categories; a category created here is added to it.
   final Map<int, Category> categories;
   final String currency;
@@ -388,6 +405,8 @@ class _OperationSheet extends StatefulWidget {
     required this.groupId,
     required this.operation,
     required this.accounts,
+    required this.messenger,
+    required this.onUndone,
     required this.categories,
     required this.currency,
     required this.canWrite,
@@ -403,7 +422,85 @@ class _OperationSheet extends StatefulWidget {
 class _OperationSheetState extends State<_OperationSheet> {
   late BankTransaction _t = widget.operation;
   late final _note = TextEditingController(text: widget.operation.note);
+  List<TransactionSplit> _splits = [];
   String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    client.transaction.splits(widget.operation.id!).then((s) {
+      if (mounted) setState(() => _splits = s);
+    }, onError: (_) {});
+  }
+
+  /// The classification as it is now, to undo a change.
+  ({
+    int? categoryId,
+    CategorySource source,
+    String? ruleRef,
+    List<TransactionSplit> splits,
+  })
+  get _snapshot => (
+    categoryId: _t.categoryId,
+    source: _t.categorySource,
+    ruleRef: _t.categoryRuleRef,
+    splits: List.of(_splits),
+  );
+
+  Future<BankTransaction> _restore(
+    ({
+      int? categoryId,
+      CategorySource source,
+      String? ruleRef,
+      List<TransactionSplit> splits,
+    })
+    s,
+  ) => client.transaction.restoreClassification(
+    _t.id!,
+    s.categoryId,
+    s.source,
+    s.ruleRef,
+    s.splits,
+  );
+
+  /// Undo inside the sheet: restores and shows the result here.
+  void _undoHere(
+    String message,
+    ({
+      int? categoryId,
+      CategorySource source,
+      String? ruleRef,
+      List<TransactionSplit> splits,
+    })
+    before,
+  ) {
+    final l = AppLocalizations.of(context);
+    showUndo(ScaffoldMessenger.of(context), l, message, () async {
+      final t = await _restore(before);
+      widget.onChanged(t);
+      if (mounted) setState(() => (_t = t, _splits = before.splits));
+    });
+  }
+
+  Future<void> _split() async {
+    final before = _snapshot;
+    final t = await showDialog<BankTransaction>(
+      context: context,
+      builder: (_) => SplitDialog(
+        operation: _t,
+        current: _splits,
+        categories: widget.categories.values.toList(),
+        currency: widget.currency,
+      ),
+    );
+    if (t == null || !mounted) return;
+    final parts = await client.transaction.splits(t.id!);
+    widget.onChanged(t);
+    setState(() => (_t = t, _splits = parts));
+    if (mounted) {
+      _undoHere(AppLocalizations.of(context).splitSaved, before);
+    }
+  }
 
   @override
   void dispose() {
@@ -476,7 +573,13 @@ class _OperationSheetState extends State<_OperationSheet> {
               ? null
               : context.categorySourceName(t.categorySource),
           onChanged: widget.canWrite
-              ? (id) => _do(() => client.transaction.setCategory(t.id!, id))
+              ? (id) async {
+                  final before = _snapshot;
+                  await _do(() => client.transaction.setCategory(t.id!, id));
+                  if (!mounted || _error != null) return;
+                  setState(() => _splits = []);
+                  _undoHere(l.categoryChanged, before);
+                }
               : null,
           onCreate: widget.canWrite
               ? (context, name) async {
@@ -494,25 +597,62 @@ class _OperationSheetState extends State<_OperationSheet> {
                 }
               : null,
         ),
-        if (widget.canWrite && t.categoryId != null)
+        if (_splits.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l.splitPartsSummary(_splits.length),
+                  style: theme.textTheme.labelLarge,
+                ),
+                for (final p in _splits)
+                  Text(
+                    '${widget.categories[p.categoryId] == null ? l.noCategory : context.categoryName(widget.categories[p.categoryId]!)}'
+                    ' · ${context.money(p.amountCents, currency: widget.currency)}'
+                    '${p.note == null ? '' : ' · ${p.note}'}',
+                    style: theme.textTheme.bodySmall,
+                  ),
+              ],
+            ),
+          ),
+        if (widget.canWrite)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              icon: const Icon(Icons.call_split),
+              label: Text(l.splitAction),
+              onPressed: _split,
+            ),
+          ),
+        if (widget.canWrite && t.categoryId != null && _splits.isEmpty)
           Align(
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
               icon: const Icon(Icons.rule),
               label: Text(l.alwaysClassify),
               onPressed: () async {
+                final before = _snapshot;
                 try {
                   final r = await client.transaction.createRuleFrom(
                     t.id!,
                     t.categoryId!,
                   );
                   if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(l.ruleCreated(r.reclassifiedCount)),
-                    ),
-                  );
                   Navigator.of(context).pop(true);
+                  showUndo(
+                    widget.messenger,
+                    l,
+                    l.ruleCreated(r.reclassifiedCount),
+                    () async {
+                      // The operation first, so its manual choice no longer
+                      // teaches the history.
+                      await _restore(before);
+                      await client.rule.undoCreate(r.rule.id!);
+                    },
+                    after: widget.onUndone,
+                  );
                 } on Object catch (e) {
                   setState(() => _error = errorText(l, e));
                 }
@@ -530,20 +670,25 @@ class _OperationSheetState extends State<_OperationSheet> {
                     : l.subscriptionMarkPlanned,
               ),
               onPressed: () async {
+                final wasPlanned = t.scheduledId != null;
                 try {
                   final s = await client.scheduled.subscribeFrom(t.id!);
                   if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        l.subscriptionCreated(
-                          s.label,
-                          s.nextDue == null ? '' : context.day(s.nextDue!),
-                        ),
-                      ),
-                    ),
-                  );
                   Navigator.of(context).pop(true);
+                  showUndo(
+                    widget.messenger,
+                    l,
+                    l.subscriptionCreated(
+                      s.label,
+                      s.nextDue == null ? '' : context.day(s.nextDue!),
+                    ),
+                    () => wasPlanned
+                        ? client.scheduled
+                              .update(s.id!, subscription: false)
+                              .then((_) {})
+                        : client.scheduled.delete(s.id!),
+                    after: widget.onUndone,
+                  );
                 } on Object catch (e) {
                   setState(() => _error = errorText(l, e));
                 }
@@ -557,6 +702,7 @@ class _OperationSheetState extends State<_OperationSheet> {
               icon: const Icon(Icons.account_balance_outlined),
               label: Text(l.loanFromOperation),
               onPressed: () async {
+                final before = _snapshot;
                 final r = await Navigator.of(context).push<LoanFromOperation>(
                   MaterialPageRoute(
                     builder: (_) => LoanFormScreen(
@@ -568,17 +714,17 @@ class _OperationSheetState extends State<_OperationSheet> {
                   ),
                 );
                 if (r == null || !context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      l.loanFromOperationDone(
-                        r.linkedCount,
-                        r.reclassifiedCount,
-                      ),
-                    ),
-                  ),
-                );
                 Navigator.of(context).pop(true);
+                showUndo(
+                  widget.messenger,
+                  l,
+                  l.loanFromOperationDone(r.linkedCount, r.reclassifiedCount),
+                  () async {
+                    await _restore(before);
+                    await client.loan.undoCreate(r.info.loan.id!);
+                  },
+                  after: widget.onUndone,
+                );
               },
             ),
           ),
@@ -587,7 +733,24 @@ class _OperationSheetState extends State<_OperationSheet> {
           title: Text(l.cleared),
           value: t.cleared,
           onChanged: widget.canWrite
-              ? (v) => _do(() => client.transaction.setCleared(t.id!, v))
+              ? (v) async {
+                  final messenger = ScaffoldMessenger.of(context);
+                  await _do(() => client.transaction.setCleared(t.id!, v));
+                  if (!mounted || _error != null) return;
+                  showUndo(
+                    messenger,
+                    l,
+                    l.clearedChanged,
+                    () async {
+                      final back = await client.transaction.setCleared(
+                        t.id!,
+                        !v,
+                      );
+                      widget.onChanged(back);
+                      if (mounted) setState(() => _t = back);
+                    },
+                  );
+                }
               : null,
         ),
         TextField(
@@ -616,16 +779,13 @@ class _OperationSheetState extends State<_OperationSheet> {
                 onPressed: () async {
                   await client.transaction.trash(t.id!);
                   if (!context.mounted) return;
-                  final messenger = ScaffoldMessenger.of(context);
                   Navigator.of(context).pop(true);
-                  messenger.showSnackBar(
-                    SnackBar(
-                      content: Text(l.trashed),
-                      action: SnackBarAction(
-                        label: l.undo,
-                        onPressed: () => client.transaction.restore(t.id!),
-                      ),
-                    ),
+                  showUndo(
+                    widget.messenger,
+                    l,
+                    l.trashed,
+                    () => client.transaction.restore(t.id!).then((_) {}),
+                    after: widget.onUndone,
                   );
                 },
               ),

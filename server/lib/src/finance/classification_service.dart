@@ -136,4 +136,69 @@ abstract final class ClassificationService {
     }
     return changed;
   }
+
+  /// Undoes a group rule: deletes it, then classifies again (without it) the
+  /// operations it had classified. Manual choices are left alone. Returns
+  /// how many operations were classified again.
+  static Future<int> revertRule(
+    Session session,
+    int groupId,
+    int ruleId, {
+    Transaction? transaction,
+  }) async {
+    final accounts = await Account.db.find(
+      session,
+      where: (a) => a.groupId.equals(groupId),
+      transaction: transaction,
+    );
+    final Set<int> ids = {for (final a in accounts) a.id!};
+    final classified = ids.isEmpty
+        ? <BankTransaction>[]
+        : await BankTransaction.db.find(
+            session,
+            where: (t) =>
+                t.accountId.inSet(ids) &
+                t.categorySource.equals(CategorySource.groupRule) &
+                t.categoryRuleRef.equals('$ruleId'),
+            transaction: transaction,
+          );
+    await Rule.db.deleteWhere(
+      session,
+      where: (r) => r.id.equals(ruleId) & r.groupId.equals(groupId),
+      transaction: transaction,
+    );
+    if (classified.isEmpty) return 0;
+    final classifier = await forGroup(
+      session,
+      groupId,
+      transaction: transaction,
+    );
+    final now = DateTime.now().toUtc();
+    final updated = [
+      for (final t in classified)
+        () {
+          final c = classifier.classify(
+            core.CleanedLabel(
+              t.cleanLabel,
+              core.normalizeForMatch('${t.rawLabel} ${t.memo ?? ''}'),
+              core.OperationKind.values.asNameMap()[t.operationKind] ??
+                  core.OperationKind.other,
+            ),
+            t.amountCents,
+          );
+          return t.copyWith(
+            categoryId: c.categoryId,
+            categorySource: toDb(c.source),
+            categoryRuleRef: c.ruleId?.toString(),
+            updatedAt: now,
+          );
+        }(),
+    ];
+    await BankTransaction.db.update(
+      session,
+      updated,
+      transaction: transaction,
+    );
+    return updated.length;
+  }
 }

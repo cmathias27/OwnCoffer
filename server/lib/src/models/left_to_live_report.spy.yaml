@@ -1,0 +1,15 @@
+### What is left to spend until the next pay day (end of the budget month),
+### once the planned operations are counted. Checking accounts only, unless
+### one account is asked for.
+class: LeftToLiveReport
+fields:
+  today: DateTime
+  last: DateTime
+  balanceCents: int
+  plannedDebitsCents: int
+  plannedCreditsCents: int
+  leftCents: int
+  daysLeft: int
+  perDayCents: int
+  ### Accounts counted.
+  accountIds: List<int>

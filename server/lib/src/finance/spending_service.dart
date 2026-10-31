@@ -55,15 +55,56 @@ abstract final class SpendingService {
           (t.date >= from.toDb()) &
           (t.date < to.toDb()),
     );
+    final parts = await splitsOf(session, {for (final t in rows) t.id!});
     return [
       for (final t in rows)
-        core.SpendingOperation(
-          t.date.toLocalDate(),
-          t.amountCents,
-          categoryId: t.categoryId,
-          internalTransfer: t.transferPairId != null,
-        ),
+        if (parts[t.id] case final split?)
+          for (final p in split)
+            core.SpendingOperation(
+              t.date.toLocalDate(),
+              p.amountCents,
+              categoryId: p.categoryId,
+            )
+        else
+          core.SpendingOperation(
+            t.date.toLocalDate(),
+            t.amountCents,
+            categoryId: t.categoryId,
+            internalTransfer: t.transferPairId != null,
+          ),
     ];
+  }
+
+  /// Parts of the split operations among [transactionIds].
+  static Future<Map<int, List<TransactionSplit>>> splitsOf(
+    Session session,
+    Set<int> transactionIds,
+  ) async {
+    if (transactionIds.isEmpty) return const {};
+    final result = <int, List<TransactionSplit>>{};
+    for (final s in await TransactionSplit.db.find(
+      session,
+      where: (s) => s.transactionId.inSet(transactionIds),
+      orderBy: (s) => s.id,
+    )) {
+      result.putIfAbsent(s.transactionId, () => []).add(s);
+    }
+    return result;
+  }
+
+  /// Operations with a part in one of [categoryIds] (category filters).
+  static Future<Set<int>> splitTransactionsIn(
+    Session session,
+    Set<int> categoryIds,
+  ) async {
+    if (categoryIds.isEmpty) return {};
+    return {
+      for (final s in await TransactionSplit.db.find(
+        session,
+        where: (s) => s.categoryId.inSet(categoryIds),
+      ))
+        s.transactionId,
+    };
   }
 
   /// The period containing [date], months starting on the group's day.

@@ -254,6 +254,58 @@ class LoanEndpoint extends Endpoint {
     );
   }
 
+  /// Undo of "this is a loan instalment": removes the loan, its planned
+  /// instalments and its rule, unlinks its instalments and classifies again
+  /// the operations the rule had classified (the app restores the declared
+  /// operation itself). Returns how many were classified again.
+  Future<int> undoCreate(Session session, int loanId) async {
+    final current = await _find(session, loanId, write: true);
+    final n = await session.db.transaction((tx) async {
+      await Loan.db.updateRow(
+        session,
+        current.copyWith(
+          deletedAt: DateTime.now().toUtc(),
+          scheduledId: null,
+          ruleId: null,
+        ),
+        transaction: tx,
+      );
+      final sid = current.scheduledId;
+      if (sid != null) {
+        final linked = await BankTransaction.db.find(
+          session,
+          where: (t) => t.scheduledId.equals(sid),
+          transaction: tx,
+        );
+        if (linked.isNotEmpty) {
+          await BankTransaction.db.update(session, [
+            for (final t in linked)
+              t.copyWith(scheduledId: null, scheduledDueDate: null),
+          ], transaction: tx);
+        }
+      }
+      await _dropScheduled(session, current, tx);
+      final rid = current.ruleId;
+      if (rid == null) return 0;
+      return ClassificationService.revertRule(
+        session,
+        current.groupId,
+        rid,
+        transaction: tx,
+      );
+    });
+    await _afterChange(session, current);
+    await Audit.log(
+      session,
+      groupId: current.groupId,
+      action: 'undo_create',
+      entity: 'loan',
+      rowId: loanId,
+      before: current,
+    );
+    return n;
+  }
+
   /// Moves the loan to the trash and stops its planned instalments.
   Future<void> delete(Session session, int loanId) async {
     final current = await _find(session, loanId, write: true);
@@ -516,6 +568,7 @@ class LoanEndpoint extends Endpoint {
     final code = switch (kind) {
       LoanKind.mortgage => 'housing.mortgage',
       LoanKind.car => 'transport.vehicle_loan',
+      LoanKind.installments => 'banking.installments',
       _ => 'banking.consumer_loan',
     };
     final c = await Category.db.findFirstRow(
