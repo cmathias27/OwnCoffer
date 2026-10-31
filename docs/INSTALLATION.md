@@ -3,7 +3,7 @@
 Prérequis : un serveur avec Docker et `docker compose`, et un accès extérieur par Cloudflare (décisions 0012 et 0015).
 
 ```sh
-git clone --branch v0.1.0 https://github.com/cmathias27/OwnCoffer.git
+git clone --branch v0.1.1 https://github.com/cmathias27/OwnCoffer.git
 cd OwnCoffer
 ./docker/generate-env.sh        # crée docker/.env avec des secrets aléatoires
 nano docker/.env                # régler OWNCOFFER_PUBLIC_URL, le port, la version
@@ -12,7 +12,7 @@ docker compose -f docker/compose.yaml up -d
 
 L'application répond sur `http://127.0.0.1:8080` (port et adresse réglables dans `docker/.env`). Si le port 8080 est déjà pris sur votre serveur, changez `OWNCOFFER_PORT`. Faites pointer le connecteur Cloudflare vers cette adresse : Cloudflare gère le HTTPS.
 
-**Version** : `OWNCOFFER_TAG` choisit l'image. `0.1.0` (par défaut) est la version publiée ; `edge` suit la branche `main`, pour tester ce qui vient d'être fusionné. Les versions et leurs nouveautés sont listées dans [CHANGELOG.md](../CHANGELOG.md).
+**Version** : `OWNCOFFER_TAG` choisit l'image. `0.1.1` (par défaut) est la version publiée ; `edge` suit la branche `main`, pour tester ce qui vient d'être fusionné. Les versions et leurs nouveautés sont listées dans [CHANGELOG.md](../CHANGELOG.md).
 
 ## Premier lancement
 
@@ -67,8 +67,8 @@ Sans les mises à jour automatiques ci-dessous :
 2. Lisez les nouveautés de la version dans [CHANGELOG.md](../CHANGELOG.md).
 3. Récupérez les fichiers de la nouvelle version et changez `OWNCOFFER_TAG` dans `docker/.env` :
    ```sh
-   git fetch --tags && git checkout v0.1.0      # la nouvelle version
-   nano docker/.env                             # OWNCOFFER_TAG=0.1.0
+   git fetch --tags && git checkout v0.1.1      # la nouvelle version
+   nano docker/.env                             # OWNCOFFER_TAG=0.1.1
    docker compose -f docker/compose.yaml pull
    docker compose -f docker/compose.yaml up -d
    ```

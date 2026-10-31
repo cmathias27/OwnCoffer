@@ -6,6 +6,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../state/session.dart';
+import '../widgets/form_card.dart';
 import 'accounts_screen.dart';
 import 'categories_screen.dart';
 import 'forecast_screen.dart';
@@ -122,12 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     final Widget body = current == null
-        ? Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Text(l.homeNoGroup, textAlign: TextAlign.center),
-            ),
-          )
+        ? _CreateGroup(session: s)
         : IndexedStack(
             index: _tab,
             children: [
@@ -256,6 +252,65 @@ class _HomeScreenState extends State<HomeScreen> {
                   NavigationDestination(icon: Icon(icon), label: label),
               ],
             ),
+    );
+  }
+}
+
+/// No group yet (e.g. the page was reloaded during the first launch): the
+/// server administrator creates the household here; others are told to ask
+/// for an invitation (the server refuses them anyway).
+class _CreateGroup extends StatefulWidget {
+  final SessionController session;
+  const _CreateGroup({required this.session});
+
+  @override
+  State<_CreateGroup> createState() => _CreateGroupState();
+}
+
+class _CreateGroupState extends State<_CreateGroup> {
+  final _action = AsyncAction();
+  final _name = TextEditingController();
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  Future<void> _create() async {
+    final m = await _action.run(
+      context,
+      setState,
+      () => client.group.create(_name.text.trim()),
+    );
+    if (m == null) return;
+    widget.session.currentGroupId = m.group.id;
+    await widget.session.reloadGroups();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    return FormCard(
+      title: l.groupCreateTitle,
+      intro: '${l.homeNoGroup}\n\n${l.groupIntro}',
+      children: [
+        TextField(
+          controller: _name,
+          autofocus: true,
+          decoration: InputDecoration(
+            labelText: l.groupNameLabel,
+            hintText: l.groupNameHint,
+          ),
+          onSubmitted: (_) => _create(),
+        ),
+        ErrorText(_action.error),
+        PrimaryButton(
+          label: l.continueLabel,
+          busy: _action.busy,
+          onPressed: _create,
+        ),
+      ],
     );
   }
 }

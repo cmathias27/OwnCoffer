@@ -551,7 +551,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeNoGroup.
   ///
   /// In fr, this message translates to:
-  /// **'Vous ne faites encore partie d\'aucun groupe. Demandez une invitation à un administrateur.'**
+  /// **'Vous ne faites encore partie d\'aucun groupe. Si vous administrez ce serveur, créez votre foyer ci-dessous ; sinon, demandez une invitation à son administrateur.'**
   String get homeNoGroup;
 
   /// No description provided for @groupLabel.
@@ -2220,6 +2220,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce fichier vient d\'un autre compte bancaire que « {account} ». Vérifiez le compte choisi.'**
   String importWrongBankAccount(String account);
+
+  /// No description provided for @groupCreateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer votre foyer'**
+  String get groupCreateTitle;
 }
 
 class _AppLocalizationsDelegate

@@ -277,7 +277,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeNoGroup =>
-      'You are not in any group yet. Ask an administrator for an invitation.';
+      'You are not in any group yet. If you administer this server, create your household below; otherwise, ask its administrator for an invitation.';
 
   @override
   String get groupLabel => 'Group';
@@ -1355,4 +1355,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String importWrongBankAccount(String account) {
     return 'This file comes from another bank account than “$account”. Check the chosen account.';
   }
+
+  @override
+  String get groupCreateTitle => 'Create your household';
 }

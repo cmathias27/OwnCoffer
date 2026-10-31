@@ -281,7 +281,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeNoGroup =>
-      'Vous ne faites encore partie d\'aucun groupe. Demandez une invitation à un administrateur.';
+      'Vous ne faites encore partie d\'aucun groupe. Si vous administrez ce serveur, créez votre foyer ci-dessous ; sinon, demandez une invitation à son administrateur.';
 
   @override
   String get groupLabel => 'Groupe';
@@ -1362,4 +1362,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String importWrongBankAccount(String account) {
     return 'Ce fichier vient d\'un autre compte bancaire que « $account ». Vérifiez le compte choisi.';
   }
+
+  @override
+  String get groupCreateTitle => 'Créer votre foyer';
 }
