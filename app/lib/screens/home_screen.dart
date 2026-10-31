@@ -5,6 +5,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../state/session.dart';
 import 'accounts_screen.dart';
+import 'import_screen.dart';
 import 'members_screen.dart';
 import 'operations_screen.dart';
 import 'security_screen.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var _tab = 0;
   List<Account> _accounts = [];
   Account? _openAccount;
+  var _imports = 0;
   final _accountsKey = GlobalKey<AccountsScreenState>();
 
   @override
@@ -67,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final destinations = [
       (Icons.account_balance_wallet_outlined, l.navAccounts),
       (Icons.receipt_long_outlined, l.navOperations),
+      (Icons.upload_file_outlined, l.navImport),
     ];
 
     final Widget body = current == null
@@ -86,11 +89,20 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               OperationsScreen(
                 key: ValueKey(
-                  'ops-${current.group.id}-${_openAccount?.id}-${_accounts.length}',
+                  'ops-${current.group.id}-${_openAccount?.id}-${_accounts.length}-$_imports',
                 ),
                 membership: current,
                 accounts: _accounts,
                 initialAccount: _openAccount,
+              ),
+              ImportScreen(
+                key: ValueKey('import-${current.group.id}'),
+                membership: current,
+                accounts: _accounts,
+                onImported: () {
+                  setState(() => _imports++);
+                  _accountsKey.currentState?.reload();
+                },
               ),
             ],
           );

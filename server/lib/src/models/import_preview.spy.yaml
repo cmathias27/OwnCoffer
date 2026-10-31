@@ -16,3 +16,6 @@ fields:
   ### Closing balance stated by the bank (OFX), to compare with OwnCoffer's.
   statedBalanceCents: int?
   statedBalanceDate: DateTime?
+  ### OwnCoffer's balance on statedBalanceDate once the new lines are
+  ### imported (possible duplicates left out), to compare with the bank's.
+  balanceAfterImportCents: int?

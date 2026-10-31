@@ -145,6 +145,37 @@ abstract final class ImportService {
     core.DuplicateStatus.possibleDuplicate => 'possibleDuplicate',
   };
 
+  /// Balance on [day] if the new lines were imported: initial balance,
+  /// operations already in the account and new lines dated [day] or earlier.
+  static Future<int> _balanceAfterImport(
+    Session session,
+    Account account,
+    _Analysis a,
+    core.LocalDate day,
+  ) async {
+    final until = day.toDb();
+    final existing = await BankTransaction.db.find(
+      session,
+      where: (t) =>
+          t.accountId.equals(account.id!) &
+          t.deletedAt.equals(null) &
+          (t.date <= until),
+    );
+    return core
+        .computeBalances(
+          initialBalanceCents: account.initialBalanceCents,
+          operations: [
+            for (final t in existing)
+              core.BalanceInput(t.date.toLocalDate(), t.amountCents),
+            for (final l in a.lines)
+              if (l.status == core.DuplicateStatus.isNew)
+                core.BalanceInput(l.parsed.date, l.parsed.amountCents),
+          ],
+          today: day,
+        )
+        .currentCents;
+  }
+
   static Future<ImportPreview> preview(
     Session session,
     Account account,
@@ -198,6 +229,14 @@ abstract final class ImportService {
       sameFileAlreadyImported: a.sameFileAlreadyImported,
       statedBalanceCents: s.statedBalanceCents,
       statedBalanceDate: s.statedBalanceDate?.toDb(),
+      balanceAfterImportCents: s.statedBalanceDate == null
+          ? null
+          : await _balanceAfterImport(
+              session,
+              account,
+              a,
+              s.statedBalanceDate!,
+            ),
     );
   }
 

@@ -134,6 +134,35 @@ void main() {
       },
     );
 
+    test('the balance after import is compared with the bank one', () async {
+      final before = await endpoints.import.preview(
+        as(alice),
+        account.id!,
+        fixture('ce_export.ofx'),
+      );
+      expect(before.statedBalanceCents, 183917);
+      // Initial balance 0: the 20 operations only.
+      expect(before.balanceAfterImportCents, 63917);
+
+      await endpoints.import.commit(
+        as(alice),
+        account.id!,
+        'export.qif',
+        fixture('ce_export.qif'),
+      );
+      final after = await endpoints.import.preview(
+        as(alice),
+        account.id!,
+        fixture('ce_export.ofx'),
+      );
+      expect(after.newCount, 0);
+      expect(
+        after.balanceAfterImportCents,
+        63917,
+        reason: 'duplicates are not counted twice',
+      );
+    });
+
     test('group rules win over community rules', () async {
       final restaurants = await categoryOf('food.restaurants');
       await endpoints.rule.create(

@@ -1255,6 +1255,324 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Votre note'**
   String get noteLabel;
+
+  /// No description provided for @importTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un relevé'**
+  String get importTitle;
+
+  /// No description provided for @importChooseFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un fichier'**
+  String get importChooseFile;
+
+  /// No description provided for @importOtherFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un autre fichier'**
+  String get importOtherFile;
+
+  /// No description provided for @importFormats.
+  ///
+  /// In fr, this message translates to:
+  /// **'QIF, OFX ou CSV, 4 Mo au maximum. Le fichier n\'est envoyé qu\'à votre serveur OwnCoffer.'**
+  String get importFormats;
+
+  /// No description provided for @importReaderOnly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avec le rôle Lecteur, vous ne pouvez pas importer.'**
+  String get importReaderOnly;
+
+  /// No description provided for @importNoAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créez d\'abord un compte dans l\'onglet Comptes.'**
+  String get importNoAccount;
+
+  /// No description provided for @importFileInfo.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} : format {format}, encodage {encoding}'**
+  String importFileInfo(String name, String format, String encoding);
+
+  /// No description provided for @importCountRead.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune opération lue} =1{1 opération lue} other{{count} opérations lues}}'**
+  String importCountRead(int count);
+
+  /// No description provided for @importCountNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 nouvelle} other{{count} nouvelles}}'**
+  String importCountNew(int count);
+
+  /// No description provided for @importCountDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 déjà présente} other{{count} déjà présentes}}'**
+  String importCountDuplicate(int count);
+
+  /// No description provided for @importCountPossible.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 doublon possible} other{{count} doublons possibles}}'**
+  String importCountPossible(int count);
+
+  /// No description provided for @importCountClassified.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 classée} other{{count} classées}}'**
+  String importCountClassified(int count);
+
+  /// No description provided for @importCountErrors.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 erreur} other{{count} erreurs}}'**
+  String importCountErrors(int count);
+
+  /// No description provided for @importSameFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier a déjà été importé dans ce compte.'**
+  String get importSameFile;
+
+  /// No description provided for @importBankBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde indiqué par la banque le {date} : {amount}'**
+  String importBankBalance(String date, String amount);
+
+  /// No description provided for @importBalanceMatches.
+  ///
+  /// In fr, this message translates to:
+  /// **'Après l\'import, OwnCoffer aura le même solde à cette date.'**
+  String get importBalanceMatches;
+
+  /// No description provided for @importBalanceDiffers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Après l\'import, OwnCoffer affichera {amount} à cette date, soit un écart de {gap}. Vérifiez le solde initial du compte ou s\'il manque des opérations plus anciennes.'**
+  String importBalanceDiffers(String amount, String gap);
+
+  /// No description provided for @importIssues.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remarques sur le fichier'**
+  String get importIssues;
+
+  /// No description provided for @importStatusNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle'**
+  String get importStatusNew;
+
+  /// No description provided for @importStatusDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà présente'**
+  String get importStatusDuplicate;
+
+  /// No description provided for @importStatusPossible.
+  ///
+  /// In fr, this message translates to:
+  /// **'Doublon possible'**
+  String get importStatusPossible;
+
+  /// No description provided for @importPossibleHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un doublon possible a la même date et le même montant qu\'une opération déjà présente, avec un libellé différent. Cochez ceux à importer quand même.'**
+  String get importPossibleHelp;
+
+  /// No description provided for @importConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Rien à importer} =1{Importer 1 opération} other{Importer {count} opérations}}'**
+  String importConfirm(int count);
+
+  /// No description provided for @importDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'{added, plural, =0{Aucune opération ajoutée.} =1{1 opération ajoutée, {classified} classée.} other{{added} opérations ajoutées, dont {classified} classées.}}'**
+  String importDone(int added, int classified);
+
+  /// No description provided for @importHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Imports précédents'**
+  String get importHistory;
+
+  /// No description provided for @importHistoryEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun import pour ce compte.'**
+  String get importHistoryEmpty;
+
+  /// No description provided for @importHistoryLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{date} · {added} ajoutées, {duplicates} déjà présentes'**
+  String importHistoryLine(String date, int added, int duplicates);
+
+  /// No description provided for @importCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulé'**
+  String get importCancelled;
+
+  /// No description provided for @importCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler cet import'**
+  String get importCancel;
+
+  /// No description provided for @importCancelConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{L\'opération ajoutée par cet import sera mise à la corbeille.} other{Les {count} opérations ajoutées par cet import seront mises à la corbeille.}} Vos corrections sur ces opérations seront perdues.'**
+  String importCancelConfirm(int count);
+
+  /// No description provided for @importCancelDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Import annulé.'**
+  String get importCancelDone;
+
+  /// No description provided for @csvTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Colonnes du fichier CSV'**
+  String get csvTitle;
+
+  /// No description provided for @csvHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'OwnCoffer ne reconnaît pas l\'en-tête de ce fichier. Indiquez ce que contient chaque colonne.'**
+  String get csvHelp;
+
+  /// No description provided for @csvChangeColumns.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier les colonnes'**
+  String get csvChangeColumns;
+
+  /// No description provided for @csvDelimiter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Séparateur'**
+  String get csvDelimiter;
+
+  /// No description provided for @csvTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tabulation'**
+  String get csvTab;
+
+  /// No description provided for @csvHeaderRow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ligne d\'en-tête'**
+  String get csvHeaderRow;
+
+  /// No description provided for @csvNoHeader.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune'**
+  String get csvNoHeader;
+
+  /// No description provided for @csvRow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ligne {number}'**
+  String csvRow(int number);
+
+  /// No description provided for @csvDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date'**
+  String get csvDate;
+
+  /// No description provided for @csvLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libellé'**
+  String get csvLabel;
+
+  /// No description provided for @csvMemo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Détail (facultatif)'**
+  String get csvMemo;
+
+  /// No description provided for @csvAmountMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montants'**
+  String get csvAmountMode;
+
+  /// No description provided for @csvOneColumn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une colonne signée'**
+  String get csvOneColumn;
+
+  /// No description provided for @csvDebitCredit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Débit et crédit séparés'**
+  String get csvDebitCredit;
+
+  /// No description provided for @csvAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant'**
+  String get csvAmount;
+
+  /// No description provided for @csvDebit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Débit'**
+  String get csvDebit;
+
+  /// No description provided for @csvCredit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédit'**
+  String get csvCredit;
+
+  /// No description provided for @csvNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune'**
+  String get csvNone;
+
+  /// No description provided for @csvColumn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Colonne {number} : {sample}'**
+  String csvColumn(int number, String sample);
+
+  /// No description provided for @csvMonthFirst.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dates au format mois/jour/année (américain)'**
+  String get csvMonthFirst;
+
+  /// No description provided for @csvIncomplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez au moins la date, le libellé et un montant.'**
+  String get csvIncomplete;
+
+  /// No description provided for @validate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider'**
+  String get validate;
 }
 
 class _AppLocalizationsDelegate

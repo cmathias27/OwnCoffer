@@ -677,4 +677,257 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noteLabel => 'Your note';
+
+  @override
+  String get importTitle => 'Import a statement';
+
+  @override
+  String get importChooseFile => 'Choose a file';
+
+  @override
+  String get importOtherFile => 'Choose another file';
+
+  @override
+  String get importFormats =>
+      'QIF, OFX or CSV, 4 MB at most. The file is only sent to your OwnCoffer server.';
+
+  @override
+  String get importReaderOnly => 'With the Reader role, you cannot import.';
+
+  @override
+  String get importNoAccount => 'First create an account in the Accounts tab.';
+
+  @override
+  String importFileInfo(String name, String format, String encoding) {
+    return '$name: $format format, $encoding encoding';
+  }
+
+  @override
+  String importCountRead(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations read',
+      one: '1 operation read',
+      zero: 'No operation read',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importCountNew(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new',
+      one: '1 new',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importCountDuplicate(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count already there',
+      one: '1 already there',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importCountPossible(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count possible duplicates',
+      one: '1 possible duplicate',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importCountClassified(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count classified',
+      one: '1 classified',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importCountErrors(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count errors',
+      one: '1 error',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importSameFile =>
+      'This file was already imported into this account.';
+
+  @override
+  String importBankBalance(String date, String amount) {
+    return 'Balance stated by the bank on $date: $amount';
+  }
+
+  @override
+  String get importBalanceMatches =>
+      'After the import, OwnCoffer will have the same balance on that date.';
+
+  @override
+  String importBalanceDiffers(String amount, String gap) {
+    return 'After the import, OwnCoffer will show $amount on that date, a gap of $gap. Check the account\'s initial balance, or whether older operations are missing.';
+  }
+
+  @override
+  String get importIssues => 'Notes about the file';
+
+  @override
+  String get importStatusNew => 'New';
+
+  @override
+  String get importStatusDuplicate => 'Already there';
+
+  @override
+  String get importStatusPossible => 'Possible duplicate';
+
+  @override
+  String get importPossibleHelp =>
+      'A possible duplicate has the same date and amount as an operation already there, with a different label. Tick those to import anyway.';
+
+  @override
+  String importConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Import $count operations',
+      one: 'Import 1 operation',
+      zero: 'Nothing to import',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importDone(int added, int classified) {
+    String _temp0 = intl.Intl.pluralLogic(
+      added,
+      locale: localeName,
+      other: '$added operations added, $classified of them classified.',
+      one: '1 operation added, $classified classified.',
+      zero: 'No operation added.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importHistory => 'Previous imports';
+
+  @override
+  String get importHistoryEmpty => 'No import for this account.';
+
+  @override
+  String importHistoryLine(String date, int added, int duplicates) {
+    return '$date · $added added, $duplicates already there';
+  }
+
+  @override
+  String get importCancelled => 'Cancelled';
+
+  @override
+  String get importCancel => 'Cancel this import';
+
+  @override
+  String importCancelConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'The $count operations added by this import will be moved to the trash.',
+      one: 'The operation added by this import will be moved to the trash.',
+    );
+    return '$_temp0 Your corrections on them will be lost.';
+  }
+
+  @override
+  String get importCancelDone => 'Import cancelled.';
+
+  @override
+  String get csvTitle => 'CSV file columns';
+
+  @override
+  String get csvHelp =>
+      'OwnCoffer does not recognise this file\'s header. Tell what each column holds.';
+
+  @override
+  String get csvChangeColumns => 'Change the columns';
+
+  @override
+  String get csvDelimiter => 'Separator';
+
+  @override
+  String get csvTab => 'Tab';
+
+  @override
+  String get csvHeaderRow => 'Header row';
+
+  @override
+  String get csvNoHeader => 'None';
+
+  @override
+  String csvRow(int number) {
+    return 'Row $number';
+  }
+
+  @override
+  String get csvDate => 'Date';
+
+  @override
+  String get csvLabel => 'Label';
+
+  @override
+  String get csvMemo => 'Details (optional)';
+
+  @override
+  String get csvAmountMode => 'Amounts';
+
+  @override
+  String get csvOneColumn => 'One signed column';
+
+  @override
+  String get csvDebitCredit => 'Separate debit and credit';
+
+  @override
+  String get csvAmount => 'Amount';
+
+  @override
+  String get csvDebit => 'Debit';
+
+  @override
+  String get csvCredit => 'Credit';
+
+  @override
+  String get csvNone => 'None';
+
+  @override
+  String csvColumn(int number, String sample) {
+    return 'Column $number: $sample';
+  }
+
+  @override
+  String get csvMonthFirst => 'Dates as month/day/year (US)';
+
+  @override
+  String get csvIncomplete =>
+      'Choose at least the date, the label and an amount.';
+
+  @override
+  String get validate => 'Validate';
 }
