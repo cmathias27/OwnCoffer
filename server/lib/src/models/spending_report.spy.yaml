@@ -14,5 +14,6 @@ fields:
   unclassifiedInCents: int
   unclassifiedOutCents: int
   categories: List<CategoryFlow>
-  ### Six periods, oldest first, the current one last.
+  ### The periods asked for (six by default), oldest first, the current
+  ### one last.
   history: List<PeriodTotals>

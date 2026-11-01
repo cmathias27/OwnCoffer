@@ -2,6 +2,23 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.16 (1er novembre 2026)
+
+### Budget : plusieurs vues des dépenses et des revenus
+
+- Page Budget, nouveau choix **« Affichage »** pour les classements des dépenses et des revenus :
+  - **Lignes** : le classement habituel ;
+  - **Tableau** : montant, part du total, période précédente, moyenne des 3 précédentes et nombre d'opérations, côte à côte ; on trie en touchant un en-tête, et une catégorie s'ouvre sur ses sous-catégories ;
+  - **Camembert** : les 7 plus grosses catégories et « Autres » ; toucher une catégorie montre la répartition de ses sous-catégories, puis leurs opérations ;
+  - **Graphique** : l'évolution des 5 principales catégories, une courbe chacune, avec les montants de chaque période au toucher.
+- Nouvelle période **Trimestre**, en plus de la semaine, du mois et de l'année. Elle suit le jour de début du mois budgétaire.
+- **Sur 6, 12 ou 24 périodes** : le graphique d'évolution et l'historique des revenus et dépenses peuvent couvrir 2 ans de mois, 6 ans de trimestres, etc.
+
+### Budget : gérer une opération sans changer de page
+
+- Dans la liste des opérations d'une catégorie, **toucher une opération ouvre sa fiche**, la même que dans la page Opérations : catégorie, ventilation, règle, abonnement, crédit, pointage, note, factures, corbeille.
+- Une fois la fiche fermée, la liste et le budget sont recalculés. Une opération changée de catégorie quitte donc la liste.
+
 ## 0.3.15 (31 octobre 2026)
 
 ### Factures : photo recadrée comme par un scanner

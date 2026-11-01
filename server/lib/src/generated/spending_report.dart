@@ -97,7 +97,8 @@ abstract class SpendingReport
 
   List<_i8msyna2.CategoryFlow> categories;
 
-  /// Six periods, oldest first, the current one last.
+  /// The periods asked for (six by default), oldest first, the current
+  /// one last.
   List<_imctw77w.PeriodTotals> history;
 
   /// Returns a shallow copy of this [SpendingReport]

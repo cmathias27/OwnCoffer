@@ -2380,7 +2380,7 @@ abstract class AppLocalizations {
   /// No description provided for @budgetHistorySemantic.
   ///
   /// In fr, this message translates to:
-  /// **'Revenus et dépenses des six dernières périodes'**
+  /// **'Revenus et dépenses des dernières périodes'**
   String get budgetHistorySemantic;
 
   /// No description provided for @rankingExpenses.
@@ -5274,6 +5274,162 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Recadrer'**
   String get scanApply;
+
+  /// No description provided for @periodQuarter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trimestre'**
+  String get periodQuarter;
+
+  /// No description provided for @periodQuarterName.
+  ///
+  /// In fr, this message translates to:
+  /// **'T{quarter} {year}'**
+  String periodQuarterName(int quarter, String year);
+
+  /// No description provided for @spendingView.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affichage'**
+  String get spendingView;
+
+  /// No description provided for @spendingViewLines.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lignes'**
+  String get spendingViewLines;
+
+  /// No description provided for @spendingViewTable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau'**
+  String get spendingViewTable;
+
+  /// No description provided for @spendingViewPie.
+  ///
+  /// In fr, this message translates to:
+  /// **'Camembert'**
+  String get spendingViewPie;
+
+  /// No description provided for @spendingViewChart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Graphique'**
+  String get spendingViewChart;
+
+  /// No description provided for @spendingPeriods.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur {count} périodes'**
+  String spendingPeriods(int count);
+
+  /// No description provided for @spendingPeriodsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de périodes montrées par les graphiques dans le temps'**
+  String get spendingPeriodsHelp;
+
+  /// No description provided for @sharePercent.
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} %'**
+  String sharePercent(int percent);
+
+  /// No description provided for @tableCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get tableCategory;
+
+  /// No description provided for @tableAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant'**
+  String get tableAmount;
+
+  /// No description provided for @tableShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Part'**
+  String get tableShare;
+
+  /// No description provided for @tablePrevious.
+  ///
+  /// In fr, this message translates to:
+  /// **'Période précédente'**
+  String get tablePrevious;
+
+  /// No description provided for @tableAverage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyenne des 3 précédentes'**
+  String get tableAverage;
+
+  /// No description provided for @tableCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations'**
+  String get tableCount;
+
+  /// No description provided for @pieOthers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autres'**
+  String get pieOthers;
+
+  /// No description provided for @pieDirect.
+  ///
+  /// In fr, this message translates to:
+  /// **'{category} (sans sous-catégorie)'**
+  String pieDirect(String category);
+
+  /// No description provided for @pieTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total'**
+  String get pieTotal;
+
+  /// No description provided for @pieAllCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les catégories'**
+  String get pieAllCategories;
+
+  /// No description provided for @pieSemantic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Répartition par catégorie'**
+  String get pieSemantic;
+
+  /// No description provided for @pieHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez une catégorie pour voir sa répartition ou ses opérations ; « Autres » ouvre le tableau complet.'**
+  String get pieHelp;
+
+  /// No description provided for @pieHelpSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez une sous-catégorie pour voir ses opérations.'**
+  String get pieHelpSub;
+
+  /// No description provided for @chartSemantic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Évolution des principales catégories'**
+  String get chartSemantic;
+
+  /// No description provided for @chartHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les {count} catégories les plus importantes sur ces périodes. Touchez le graphique pour lire les montants, ou une catégorie pour voir ses opérations de la période en cours.'**
+  String chartHelp(int count);
+
+  /// No description provided for @budgetOperationsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez une opération pour la gérer : catégorie, ventilation, facture, note, abonnement…'**
+  String get budgetOperationsHint;
 }
 
 class _AppLocalizationsDelegate

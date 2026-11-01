@@ -1442,7 +1442,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get budgetHistorySemantic =>
-      'Income and expenses of the last six periods';
+      'Income and expenses over the last periods';
 
   @override
   String get rankingExpenses => 'Expense ranking';
@@ -3217,4 +3217,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanApply => 'Crop';
+
+  @override
+  String get periodQuarter => 'Quarter';
+
+  @override
+  String periodQuarterName(int quarter, String year) {
+    return 'Q$quarter $year';
+  }
+
+  @override
+  String get spendingView => 'View';
+
+  @override
+  String get spendingViewLines => 'Lines';
+
+  @override
+  String get spendingViewTable => 'Table';
+
+  @override
+  String get spendingViewPie => 'Pie';
+
+  @override
+  String get spendingViewChart => 'Chart';
+
+  @override
+  String spendingPeriods(int count) {
+    return 'Over $count periods';
+  }
+
+  @override
+  String get spendingPeriodsHelp =>
+      'Number of periods shown by the charts over time';
+
+  @override
+  String sharePercent(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get tableCategory => 'Category';
+
+  @override
+  String get tableAmount => 'Amount';
+
+  @override
+  String get tableShare => 'Share';
+
+  @override
+  String get tablePrevious => 'Previous period';
+
+  @override
+  String get tableAverage => 'Average of the 3 previous';
+
+  @override
+  String get tableCount => 'Operations';
+
+  @override
+  String get pieOthers => 'Others';
+
+  @override
+  String pieDirect(String category) {
+    return '$category (no sub-category)';
+  }
+
+  @override
+  String get pieTotal => 'Total';
+
+  @override
+  String get pieAllCategories => 'All categories';
+
+  @override
+  String get pieSemantic => 'Split by category';
+
+  @override
+  String get pieHelp =>
+      'Touch a category to see its split or its operations; \"Others\" opens the full table.';
+
+  @override
+  String get pieHelpSub => 'Touch a sub-category to see its operations.';
+
+  @override
+  String get chartSemantic => 'Main categories over time';
+
+  @override
+  String chartHelp(int count) {
+    return 'The $count largest categories over these periods. Touch the chart to read the amounts, or a category to see its operations in the current period.';
+  }
+
+  @override
+  String get budgetOperationsHint =>
+      'Touch an operation to manage it: category, split, invoice, note, subscription…';
 }

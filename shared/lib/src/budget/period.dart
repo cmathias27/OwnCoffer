@@ -1,8 +1,9 @@
 import '../local_date.dart';
 
-enum PeriodKind { week, month, year }
+enum PeriodKind { week, month, quarter, year }
 
-/// A calendar period: a week (Monday to Sunday), a month or a year.
+/// A calendar period: a week (Monday to Sunday), a month, a quarter (three
+/// months) or a year.
 class Period {
   final PeriodKind kind;
 
@@ -13,8 +14,9 @@ class Period {
 
   /// The period of [kind] that contains [date]. A month may start on another
   /// day than the 1st ([monthStartDay], 1 to 28: the day the salary comes
-  /// in), so that "October" runs from 27 October to 26 November. Weeks start
-  /// on Monday, years on 1 January.
+  /// in), so that "October" runs from 27 October to 26 November; quarters
+  /// are then three such months, the first one starting in January, April,
+  /// July or October. Weeks start on Monday, years on 1 January.
   factory Period.containing(
     PeriodKind kind,
     LocalDate date, {
@@ -22,6 +24,14 @@ class Period {
   }) {
     if (monthStartDay < 1 || monthStartDay > 28) {
       throw ArgumentError.value(monthStartDay, 'monthStartDay');
+    }
+    if (kind == PeriodKind.quarter) {
+      final month = Period.containing(
+        PeriodKind.month,
+        date,
+        monthStartDay: monthStartDay,
+      ).start;
+      return Period._(kind, month.addMonths(-((month.month - 1) % 3)));
     }
     if (kind == PeriodKind.month && monthStartDay > 1) {
       final here = LocalDate(date.year, date.month, monthStartDay);
@@ -40,6 +50,7 @@ class Period {
       date.addDays(-((date.epochDay + 3) % 7)),
     ),
     PeriodKind.month => Period._(kind, LocalDate(date.year, date.month, 1)),
+    PeriodKind.quarter => throw StateError('quarters come from months'),
     PeriodKind.year => Period._(kind, LocalDate(date.year, 1, 1)),
   };
 
@@ -47,6 +58,7 @@ class Period {
   LocalDate get end => switch (kind) {
     PeriodKind.week => start.addDays(7),
     PeriodKind.month => start.addMonths(1),
+    PeriodKind.quarter => start.addMonths(3),
     PeriodKind.year => start.addMonths(12),
   };
 
@@ -58,6 +70,7 @@ class Period {
   Period shift(int periods) => switch (kind) {
     PeriodKind.week => Period._(kind, start.addDays(7 * periods)),
     PeriodKind.month => Period._(kind, start.addMonths(periods)),
+    PeriodKind.quarter => Period._(kind, start.addMonths(3 * periods)),
     PeriodKind.year => Period._(kind, start.addMonths(12 * periods)),
   };
 

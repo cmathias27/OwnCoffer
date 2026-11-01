@@ -10,12 +10,17 @@ import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/undo.dart';
 import '../widgets/category_field.dart';
+import '../widgets/operation_sheet.dart';
 import 'calendar_screen.dart';
 import 'review_screen.dart';
 import 'subscriptions_screen.dart';
 
+/// How the categories of the period are shown: ranked lines, a table, a
+/// pie, or a chart of the last periods.
+enum SpendingView { lines, table, pie, chart }
+
 /// Where the money comes from and goes: a week, a month (from the group's
-/// start day) or a year, ranked by category, with the monthly goals.
+/// start day), a quarter or a year, by category, with the monthly goals.
 class BudgetScreen extends StatefulWidget {
   final GroupMembership membership;
   final List<Account> accounts;
@@ -38,6 +43,15 @@ class BudgetScreenState extends State<BudgetScreen> {
   LeftToLiveReport? _left;
   Map<int, Category> _categories = {};
   final Set<int> _expanded = {};
+  var _view = SpendingView.lines;
+
+  /// Periods in the history (charts).
+  var _periods = 6;
+
+  /// The category whose sub-categories the pie shows, by kind.
+  final Map<CategoryKind, int> _drill = {};
+  var _sortColumn = 1;
+  var _sortAscending = false;
   String? _error;
   var _loading = false;
   late var _startDay = widget.membership.group.monthStartDay;
@@ -61,6 +75,7 @@ class BudgetScreenState extends State<BudgetScreen> {
           _period,
           _date,
           accountId: _accountId,
+          periods: _periods,
         ),
         client.category.list(_groupId),
         client.analysis.leftToLive(_groupId, accountId: _accountId),
@@ -96,16 +111,24 @@ class BudgetScreenState extends State<BudgetScreen> {
   String _periodLabel(BuildContext context, SpendingReport r) {
     final lang = Localizations.localeOf(context).languageCode;
     DateTime local(DateTime d) => DateTime(d.year, d.month, d.day);
+    final range =
+        '${DateFormat.MMMd(lang).format(local(r.start))} – '
+        '${DateFormat.yMMMd(lang).format(local(r.last))}';
     return switch (r.period) {
       BudgetPeriod.year => '${r.start.year}',
+      BudgetPeriod.quarter when r.start.day == 1 => _quarter(context, r.start),
+      BudgetPeriod.quarter => '${_quarter(context, r.start)} · $range',
       BudgetPeriod.month when r.start.day == 1 => toBeginningOfSentenceCase(
         DateFormat.yMMMM(lang).format(local(r.start)),
       ),
-      _ =>
-        '${DateFormat.MMMd(lang).format(local(r.start))} – '
-            '${DateFormat.yMMMd(lang).format(local(r.last))}',
+      _ => range,
     };
   }
+
+  /// "T4 2026": a quarter is named after the month it starts in.
+  String _quarter(BuildContext context, DateTime start) => AppLocalizations.of(
+    context,
+  ).periodQuarterName((start.month - 1) ~/ 3 + 1, '${start.year}');
 
   String _historyLabel(BuildContext context, DateTime start) {
     final lang = Localizations.localeOf(context).languageCode;
@@ -116,6 +139,7 @@ class BudgetScreenState extends State<BudgetScreen> {
         _startDay == 1
             ? DateFormat.MMM(lang).format(d)
             : DateFormat.Md(lang).format(d),
+      BudgetPeriod.quarter => _quarter(context, d),
       BudgetPeriod.year => '${d.year}',
     };
   }
@@ -130,9 +154,12 @@ class BudgetScreenState extends State<BudgetScreen> {
 
   // --- actions ----------------------------------------------------------------
 
+  /// The operations behind a figure; touching one opens it as in the
+  /// Operations page. The budget is reloaded afterwards if one changed.
   Future<void> _showOperations(String title, {int? categoryId}) async {
     final r = _report;
     if (r == null) return;
+    final changed = ValueNotifier(false);
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -145,7 +172,7 @@ class BudgetScreenState extends State<BudgetScreen> {
         maxChildSize: 1,
         builder: (context, scroll) => _OperationsList(
           title: title,
-          load: client.analysis.operations(
+          load: () => client.analysis.operations(
             _groupId,
             _period,
             r.start,
@@ -153,12 +180,16 @@ class BudgetScreenState extends State<BudgetScreen> {
             unclassified: categoryId == null,
             accountId: _accountId,
           ),
+          membership: widget.membership,
           categories: _categories,
-          accounts: {for (final a in widget.accounts) a.id!: a},
+          accounts: widget.accounts,
+          changed: changed,
           scroll: scroll,
         ),
       ),
     );
+    if (changed.value && mounted) await reload();
+    changed.dispose();
   }
 
   Future<void> _editGoal(Category c, CategoryFlow? flow) async {
@@ -346,6 +377,8 @@ class BudgetScreenState extends State<BudgetScreen> {
       ],
       if (_period == BudgetPeriod.month) ...[gap, _goals(context, l, r)],
       gap,
+      _viewBar(context, l),
+      gap,
       _ranking(context, l, r, CategoryKind.expense),
       gap,
       _ranking(context, l, r, CategoryKind.income),
@@ -404,6 +437,10 @@ class BudgetScreenState extends State<BudgetScreen> {
                   label: Text(l.periodMonth),
                 ),
                 ButtonSegment(
+                  value: BudgetPeriod.quarter,
+                  label: Text(l.periodQuarter),
+                ),
+                ButtonSegment(
                   value: BudgetPeriod.year,
                   label: Text(l.periodYear),
                 ),
@@ -414,6 +451,7 @@ class BudgetScreenState extends State<BudgetScreen> {
                 setState(() {
                   _period = s.single;
                   _expanded.clear();
+                  _drill.clear();
                 });
                 reload();
               },
@@ -775,16 +813,369 @@ class BudgetScreenState extends State<BudgetScreen> {
         ),
       );
     }
+    final empty = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Text(l.rankingEmpty, textAlign: TextAlign.center),
+    );
     return _card(
       context,
       isExpense ? l.rankingExpenses : l.rankingIncome,
-      children.isEmpty
-          ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text(l.rankingEmpty, textAlign: TextAlign.center),
-            )
-          : Column(children: children),
+      switch (_view) {
+        SpendingView.chart => _chart(context, l, r, kind, flows) ?? empty,
+        _ when top.isEmpty => empty,
+        SpendingView.lines => Column(children: children),
+        SpendingView.table => _table(context, l, rows, total),
+        SpendingView.pie => _pie(context, l, kind, rows),
+      },
       subtitle: l.rankingTotal(context.money(total)),
+    );
+  }
+
+  /// The choice of view, and how many periods the charts cover.
+  Widget _viewBar(BuildContext context, AppLocalizations l) => LayoutBuilder(
+    builder: (context, box) {
+      final narrow = box.maxWidth < 600;
+      ButtonSegment<SpendingView> segment(
+        SpendingView v,
+        IconData icon,
+        String label,
+      ) => ButtonSegment(
+        value: v,
+        icon: Icon(icon),
+        label: narrow ? null : Text(label),
+        tooltip: label,
+      );
+      return Wrap(
+        spacing: 12,
+        runSpacing: 8,
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l.spendingView,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              const SizedBox(width: 12),
+              SegmentedButton<SpendingView>(
+                segments: [
+                  segment(
+                    SpendingView.lines,
+                    Icons.view_list,
+                    l.spendingViewLines,
+                  ),
+                  segment(
+                    SpendingView.table,
+                    Icons.table_chart_outlined,
+                    l.spendingViewTable,
+                  ),
+                  segment(
+                    SpendingView.pie,
+                    Icons.pie_chart_outline,
+                    l.spendingViewPie,
+                  ),
+                  segment(
+                    SpendingView.chart,
+                    Icons.show_chart,
+                    l.spendingViewChart,
+                  ),
+                ],
+                selected: {_view},
+                showSelectedIcon: false,
+                onSelectionChanged: (v) => setState(() => _view = v.single),
+              ),
+            ],
+          ),
+          Tooltip(
+            message: l.spendingPeriodsHelp,
+            child: DropdownButton<int>(
+              value: _periods,
+              items: [
+                for (final n in const [6, 12, 24])
+                  DropdownMenuItem(value: n, child: Text(l.spendingPeriods(n))),
+              ],
+              onChanged: (v) {
+                if (v == null || v == _periods) return;
+                setState(() => _periods = v);
+                reload();
+              },
+            ),
+          ),
+        ],
+      );
+    },
+  );
+
+  /// Every figure of each category side by side, sortable; a category with
+  /// sub-categories opens below itself, the others show their operations.
+  Widget _table(
+    BuildContext context,
+    AppLocalizations l,
+    List<(Category, CategoryFlow)> Function(int?) rows,
+    int total,
+  ) {
+    final theme = Theme.of(context);
+    int compare((Category, CategoryFlow) a, (Category, CategoryFlow) b) =>
+        switch (_sortColumn) {
+          0 =>
+            context
+                .categoryName(a.$1)
+                .toLowerCase()
+                .compareTo(
+                  context.categoryName(b.$1).toLowerCase(),
+                ),
+          3 => a.$2.previousCents.compareTo(b.$2.previousCents),
+          4 => a.$2.averageCents.compareTo(b.$2.averageCents),
+          5 => a.$2.count.compareTo(b.$2.count),
+          _ => a.$2.amountCents.compareTo(b.$2.amountCents),
+        };
+    List<(Category, CategoryFlow)> sorted(int? parentId) =>
+        rows(parentId)
+          ..sort((a, b) => _sortAscending ? compare(a, b) : compare(b, a));
+    const figures = TextStyle(fontFeatures: [FontFeature.tabularFigures()]);
+    DataRow row(Category c, CategoryFlow f, {required bool child}) {
+      final subs = child ? const <(Category, CategoryFlow)>[] : rows(c.id);
+      final open = _expanded.contains(c.id);
+      final name = context.categoryName(c);
+      final share = total <= 0 ? 0 : (f.amountCents * 100 / total).round();
+      Text money(int cents) => Text(context.money(cents), style: figures);
+      return DataRow(
+        onSelectChanged: (_) => subs.isEmpty
+            ? _showOperations(
+                child ? categoryPath(context, c, _categories) : name,
+                categoryId: c.id,
+              )
+            : setState(
+                () => open ? _expanded.remove(c.id) : _expanded.add(c.id!),
+              ),
+        cells: [
+          DataCell(
+            Padding(
+              padding: EdgeInsets.only(left: child ? 24 : 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (subs.isNotEmpty)
+                    Icon(
+                      open ? Icons.expand_less : Icons.expand_more,
+                      size: 18,
+                    ),
+                  Text(
+                    name,
+                    style: child
+                        ? theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          )
+                        : theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          DataCell(money(f.amountCents)),
+          DataCell(Text(l.sharePercent(share), style: figures)),
+          DataCell(money(f.previousCents)),
+          DataCell(money(f.averageCents)),
+          DataCell(Text('${f.count}', style: figures)),
+        ],
+      );
+    }
+
+    void sort(int column, bool ascending) => setState(
+      () => (_sortColumn = column, _sortAscending = ascending),
+    );
+    DataColumn column(String label, {bool numeric = true}) =>
+        DataColumn(label: Text(label), numeric: numeric, onSort: sort);
+    return LayoutBuilder(
+      builder: (context, box) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: box.maxWidth),
+          child: DataTable(
+            showCheckboxColumn: false,
+            columnSpacing: 20,
+            horizontalMargin: 8,
+            headingRowHeight: 44,
+            sortColumnIndex: _sortColumn,
+            sortAscending: _sortAscending,
+            columns: [
+              column(l.tableCategory, numeric: false),
+              column(l.tableAmount),
+              column(l.tableShare),
+              column(l.tablePrevious),
+              column(l.tableAverage),
+              column(l.tableCount),
+            ],
+            rows: [
+              for (final (c, f) in sorted(null)) ...[
+                row(c, f, child: false),
+                if (_expanded.contains(c.id))
+                  for (final (s, sf) in sorted(c.id)) row(s, sf, child: true),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// The split of the period: the largest categories and the rest merged.
+  /// Touching a category with sub-categories shows its own split.
+  Widget _pie(
+    BuildContext context,
+    AppLocalizations l,
+    CategoryKind kind,
+    List<(Category, CategoryFlow)> Function(int?) rows,
+  ) {
+    final parent = _categories[_drill[kind]];
+    final level = rows(parent?.id);
+    final amounts = {for (final (c, f) in level) c.id!: f.amountCents};
+    // Spent in the category itself, outside its sub-categories.
+    if (parent != null) {
+      final own = _report!.categories
+          .where((f) => f.categoryId == parent.id)
+          .firstOrNull;
+      final direct =
+          (own?.amountCents ?? 0) -
+          amounts.values.fold<int>(0, (a, v) => a + v);
+      if (direct > 0) amounts[parent.id!] = direct;
+    }
+    final parts = core.sharesWithOthers(amounts, max: SeriesColors.count);
+    String name(int? id) => switch (id) {
+      null => l.pieOthers,
+      _ when id == parent?.id => l.pieDirect(context.categoryName(parent!)),
+      _ => context.categoryName(_categories[id]!),
+    };
+    void open(int i) {
+      final id = parts[i].id;
+      if (id == null) {
+        // Too small to be drawn apart: every one is in the table.
+        setState(() => _view = SpendingView.table);
+      } else if (parent == null && rows(id).isNotEmpty) {
+        setState(() => _drill[kind] = id);
+      } else {
+        _showOperations(
+          parent == null
+              ? name(id)
+              : categoryPath(context, _categories[id]!, _categories),
+          categoryId: id,
+        );
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (parent != null)
+          Wrap(
+            spacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              TextButton.icon(
+                icon: const Icon(Icons.arrow_back),
+                label: Text(l.pieAllCategories),
+                onPressed: () => setState(() => _drill.remove(kind)),
+              ),
+              Text(
+                context.categoryName(parent),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              TextButton.icon(
+                icon: const Icon(Icons.receipt_long_outlined),
+                label: Text(l.rankingOperations),
+                onPressed: () => _showOperations(
+                  context.categoryName(parent),
+                  categoryId: parent.id,
+                ),
+              ),
+            ],
+          ),
+        DonutChart(
+          key: ValueKey('pie-${kind.name}-${parent?.id}'),
+          slices: [
+            for (final (i, p) in parts.indexed)
+              ChartSlice(
+                label: name(p.id),
+                cents: p.cents,
+                color: p.id == null
+                    ? SeriesColors.others(context)
+                    : SeriesColors.of(context, i),
+              ),
+          ],
+          totalLabel: parent == null
+              ? l.pieTotal
+              : context.categoryName(parent),
+          semanticLabel: l.pieSemantic,
+          money: (c) => context.money(c),
+          percent: l.sharePercent,
+          onTap: open,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(
+            parent == null ? l.pieHelp : l.pieHelpSub,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// The largest categories over the last periods, one line each; null
+  /// when nothing was spent or received over them.
+  Widget? _chart(
+    BuildContext context,
+    AppLocalizations l,
+    SpendingReport r,
+    CategoryKind kind,
+    Map<int, CategoryFlow> flows,
+  ) {
+    final tops = [
+      for (final c in _categories.values)
+        if (c.kind == kind && c.parentId == null && flows[c.id] != null) c,
+    ];
+    final ids = core.leadingSeries([
+      for (var i = 0; i < r.history.length; i++)
+        {
+          for (final c in tops)
+            c.id!: flows[c.id]!.history.elementAtOrNull(i) ?? 0,
+        },
+    ]);
+    if (ids.isEmpty) return null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TrendChart(
+          key: ValueKey('chart-${kind.name}'),
+          labels: [for (final h in r.history) _historyLabel(context, h.start)],
+          series: [
+            for (final (i, id) in ids.indexed)
+              ChartSeries(
+                label: context.categoryName(_categories[id]!),
+                color: SeriesColors.of(context, i),
+                values: flows[id]!.history,
+              ),
+          ],
+          semanticLabel: l.chartSemantic,
+          money: (c) => context.money(c),
+          axisMoney: (c) => _axisMoney(context, c),
+          onTapSeries: (i) => _showOperations(
+            context.categoryName(_categories[ids[i]]!),
+            categoryId: ids[i],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(
+            l.chartHelp(ids.length),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -1505,38 +1896,90 @@ class _GoalDialogState extends State<_GoalDialog> {
 }
 
 /// The operations behind a figure, largest first.
-class _OperationsList extends StatelessWidget {
+/// The operations behind a figure. Touching one opens it as in the
+/// Operations page; [changed] is set when one was modified.
+class _OperationsList extends StatefulWidget {
   final String title;
-  final Future<List<BankTransaction>> load;
+  final Future<List<BankTransaction>> Function() load;
+  final GroupMembership membership;
   final Map<int, Category> categories;
-  final Map<int, Account> accounts;
+  final List<Account> accounts;
+  final ValueNotifier<bool> changed;
   final ScrollController scroll;
 
   const _OperationsList({
     required this.title,
     required this.load,
+    required this.membership,
     required this.categories,
     required this.accounts,
+    required this.changed,
     required this.scroll,
   });
+
+  @override
+  State<_OperationsList> createState() => _OperationsListState();
+}
+
+class _OperationsListState extends State<_OperationsList> {
+  late var _items = widget.load();
+
+  void _reload() {
+    widget.changed.value = true;
+    if (mounted) setState(() => _items = widget.load());
+  }
+
+  Future<void> _open(BankTransaction t) async {
+    var touched = false;
+    final moved = await showOperationSheet(
+      context,
+      membership: widget.membership,
+      operation: t,
+      accounts: widget.accounts,
+      categories: widget.categories,
+      onUndone: _reload,
+      onChanged: (_) => touched = true,
+      onOpenSubscriptions: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => SubscriptionsScreen(
+            membership: widget.membership,
+            accounts: widget.accounts,
+          ),
+        ),
+      ),
+    );
+    // A new category may take it out of this list: shown again as it is.
+    if (moved || touched) _reload();
+  }
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final accounts = {for (final a in widget.accounts) a.id!: a};
     return FutureBuilder<List<BankTransaction>>(
-      future: load,
+      future: _items,
       builder: (context, snap) {
         final items = snap.data;
         return ListView(
-          controller: scroll,
+          controller: widget.scroll,
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
           children: [
-            Text(title, style: theme.textTheme.titleLarge),
+            Text(widget.title, style: theme.textTheme.titleLarge),
             if (items != null)
               Text(
                 l.operationsCount(items.length),
                 style: theme.textTheme.bodySmall,
+              ),
+            if (items != null && items.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  l.budgetOperationsHint,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
               ),
             const SizedBox(height: 8),
             if (snap.hasError)
@@ -1546,7 +1989,11 @@ class _OperationsList extends StatelessWidget {
             else
               for (final t in items)
                 ListTile(
-                  contentPadding: EdgeInsets.zero,
+                  contentPadding: const EdgeInsets.only(left: 4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  onTap: () => _open(t),
                   title: Text(
                     t.cleanLabel,
                     maxLines: 1,
@@ -1555,20 +2002,26 @@ class _OperationsList extends StatelessWidget {
                   subtitle: Text(
                     [
                       context.shortDay(t.date),
-                      if (categories[t.categoryId] != null)
-                        context.categoryName(categories[t.categoryId]!),
+                      if (widget.categories[t.categoryId] != null)
+                        context.categoryName(widget.categories[t.categoryId]!),
                       if (accounts.length > 1 && accounts[t.accountId] != null)
                         accounts[t.accountId]!.name,
                     ].join(' · '),
                   ),
-                  trailing: Text(
-                    context.money(
-                      t.amountCents,
-                      currency: accounts[t.accountId]?.currency ?? 'EUR',
-                    ),
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontFamily: 'Manrope',
-                    ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        context.money(
+                          t.amountCents,
+                          currency: accounts[t.accountId]?.currency ?? 'EUR',
+                        ),
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontFamily: 'Manrope',
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right),
+                    ],
                   ),
                 ),
           ],

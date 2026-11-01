@@ -8,7 +8,8 @@ import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/scopes.dart';
 
-/// Income and expenses by category over a week, a month or a year, computed
+/// Income and expenses by category over a week, a month, a quarter or a
+/// year, computed
 /// by the shared engine on the accounts the user may see.
 class AnalysisEndpoint extends Endpoint {
   @override
@@ -17,15 +18,21 @@ class AnalysisEndpoint extends Endpoint {
   @override
   Set<Scope> get requiredScopes => {accessScope};
 
+  /// Periods of history by default, and at most.
   static const _history = 6;
+  static const _maxHistory = 24;
 
+  /// [periods]: how many periods the history holds, the current one
+  /// included (4 to 24, 6 by default).
   Future<SpendingReport> report(
     Session session,
     int groupId,
     BudgetPeriod period,
     DateTime date, {
     int? accountId,
+    int? periods,
   }) async {
+    final count = (periods ?? _history).clamp(4, _maxHistory);
     final ids = await SpendingService.accounts(session, groupId, accountId);
     final current = await SpendingService.period(
       session,
@@ -33,7 +40,7 @@ class AnalysisEndpoint extends Endpoint {
       _kind(period),
       _local(date),
     );
-    final first = current.shift(1 - _history);
+    final first = current.shift(1 - count);
     final categories = await SpendingService.categories(session, groupId);
     final ops = await SpendingService.operations(
       session,
@@ -48,7 +55,7 @@ class AnalysisEndpoint extends Endpoint {
     );
 
     final history = [
-      for (var i = 1 - _history; i <= 0; i++)
+      for (var i = 1 - count; i <= 0; i++)
         (current.shift(i), summary(current.shift(i))),
     ];
     final now = history.last.$2;
@@ -68,7 +75,10 @@ class AnalysisEndpoint extends Endpoint {
       core.LocalDate.fromDateTime(DateTime.now().toUtc()),
     );
 
-    final shown = {...now.totals.keys, ...previous.totals.keys, ...goals.keys};
+    final shown = {
+      for (final (_, s) in history) ...s.totals.keys,
+      ...goals.keys,
+    };
     return SpendingReport(
       period: period,
       start: current.start.toDb(),
@@ -90,6 +100,7 @@ class AnalysisEndpoint extends Endpoint {
             averageCents:
                 earlier.fold(0, (a, s) => a + (s.$2.totals[id] ?? 0)) ~/
                 earlier.length,
+            history: [for (final (_, s) in history) s.totals[id] ?? 0],
             goalCents: goals[id],
             projectedCents: projections[id]?.projectedCents,
             projectedOverDate: projections[id]?.overDate?.toDb(),
@@ -310,6 +321,7 @@ class AnalysisEndpoint extends Endpoint {
             count: now.counts[g.categoryId] ?? 0,
             previousCents: previous.totals[g.categoryId] ?? 0,
             averageCents: average[g.categoryId] ?? 0,
+            history: const [],
             goalCents: g.amountCents,
           ),
     ];

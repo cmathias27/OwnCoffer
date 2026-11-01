@@ -853,6 +853,9 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    }
     if (t == List<_itcb21m0.CalendarItem>) {
       return (data as List)
               .map((e) => deserialize<_itcb21m0.CalendarItem>(e))
@@ -894,9 +897,6 @@ class Protocol extends _isc.SerializationManager {
               .map((e) => deserialize<_i4e8elxc.ImportPreviewLine>(e))
               .toList()
           as T;
-    }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
     }
     if (t == List<_ijbwwnsd.LoanInfo>) {
       return (data as List)

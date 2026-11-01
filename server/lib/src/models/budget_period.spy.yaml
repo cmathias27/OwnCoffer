@@ -3,4 +3,5 @@ serialized: byName
 values:
   - week
   - month
+  - quarter
   - year

@@ -10,6 +10,7 @@
 // ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:owncoffer_server/src/generated/protocol.dart' as _itdod8fx;
 import 'package:serverpod/serverpod.dart' as _is;
 
 /// Money received or spent in a category over a period, its
@@ -22,6 +23,7 @@ abstract class CategoryFlow
     required this.count,
     required this.previousCents,
     required this.averageCents,
+    required this.history,
     this.goalCents,
     this.projectedCents,
     this.projectedOverDate,
@@ -33,6 +35,7 @@ abstract class CategoryFlow
     required int count,
     required int previousCents,
     required int averageCents,
+    required List<int> history,
     int? goalCents,
     int? projectedCents,
     DateTime? projectedOverDate,
@@ -45,6 +48,9 @@ abstract class CategoryFlow
       count: jsonSerialization['count'] as int,
       previousCents: jsonSerialization['previousCents'] as int,
       averageCents: jsonSerialization['averageCents'] as int,
+      history: _itdod8fx.Protocol().deserialize<List<int>>(
+        jsonSerialization['history'],
+      ),
       goalCents: jsonSerialization['goalCents'] as int?,
       projectedCents: jsonSerialization['projectedCents'] as int?,
       projectedOverDate: jsonSerialization['projectedOverDate'] == null
@@ -67,6 +73,10 @@ abstract class CategoryFlow
   /// Average over the three previous periods.
   int averageCents;
 
+  /// Same category over each period of the report's history, oldest
+  /// first, the current one last (empty in the month review).
+  List<int> history;
+
   /// Monthly goal (month view only).
   int? goalCents;
 
@@ -86,6 +96,7 @@ abstract class CategoryFlow
     int? count,
     int? previousCents,
     int? averageCents,
+    List<int>? history,
     int? goalCents,
     int? projectedCents,
     DateTime? projectedOverDate,
@@ -99,6 +110,7 @@ abstract class CategoryFlow
       'count': count,
       'previousCents': previousCents,
       'averageCents': averageCents,
+      'history': history.toJson(),
       if (goalCents != null) 'goalCents': goalCents,
       if (projectedCents != null) 'projectedCents': projectedCents,
       if (projectedOverDate != null)
@@ -115,6 +127,7 @@ abstract class CategoryFlow
       'count': count,
       'previousCents': previousCents,
       'averageCents': averageCents,
+      'history': history.toJson(),
       if (goalCents != null) 'goalCents': goalCents,
       if (projectedCents != null) 'projectedCents': projectedCents,
       if (projectedOverDate != null)
@@ -137,6 +150,7 @@ class _CategoryFlowImpl extends CategoryFlow {
     required int count,
     required int previousCents,
     required int averageCents,
+    required List<int> history,
     int? goalCents,
     int? projectedCents,
     DateTime? projectedOverDate,
@@ -146,6 +160,7 @@ class _CategoryFlowImpl extends CategoryFlow {
          count: count,
          previousCents: previousCents,
          averageCents: averageCents,
+         history: history,
          goalCents: goalCents,
          projectedCents: projectedCents,
          projectedOverDate: projectedOverDate,
@@ -161,6 +176,7 @@ class _CategoryFlowImpl extends CategoryFlow {
     int? count,
     int? previousCents,
     int? averageCents,
+    List<int>? history,
     Object? goalCents = _Undefined,
     Object? projectedCents = _Undefined,
     Object? projectedOverDate = _Undefined,
@@ -171,6 +187,7 @@ class _CategoryFlowImpl extends CategoryFlow {
       count: count ?? this.count,
       previousCents: previousCents ?? this.previousCents,
       averageCents: averageCents ?? this.averageCents,
+      history: history ?? this.history.map((e0) => e0).toList(),
       goalCents: goalCents is int? ? goalCents : this.goalCents,
       projectedCents: projectedCents is int?
           ? projectedCents

@@ -1565,6 +1565,7 @@ class _AnalysisEndpoint {
     _imscipj7.BudgetPeriod period,
     DateTime date, {
     int? accountId,
+    int? periods,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1582,6 +1583,7 @@ class _AnalysisEndpoint {
             'period': period,
             'date': date,
             'accountId': accountId,
+            'periods': periods,
           }),
           serializationManager: _serializationManager,
         );

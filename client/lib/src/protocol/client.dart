@@ -563,7 +563,8 @@ class EndpointAdmin extends _isc.EndpointRef {
   );
 }
 
-/// Income and expenses by category over a week, a month or a year, computed
+/// Income and expenses by category over a week, a month, a quarter or a
+/// year, computed
 /// by the shared engine on the accounts the user may see.
 /// {@category Endpoint}
 class EndpointAnalysis extends _isc.EndpointRef {
@@ -572,11 +573,14 @@ class EndpointAnalysis extends _isc.EndpointRef {
   @override
   String get name => 'analysis';
 
+  /// [periods]: how many periods the history holds, the current one
+  /// included (4 to 24, 6 by default).
   _ida.Future<_isyymxi6.SpendingReport> report(
     int groupId,
     _iff4p9sd.BudgetPeriod period,
     DateTime date, {
     int? accountId,
+    int? periods,
   }) => caller.callServerEndpoint<_isyymxi6.SpendingReport>(
     'analysis',
     'report',
@@ -585,6 +589,7 @@ class EndpointAnalysis extends _isc.EndpointRef {
       'period': period,
       'date': date,
       'accountId': accountId,
+      'periods': periods,
     },
   );
 

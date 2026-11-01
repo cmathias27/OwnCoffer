@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:owncoffer_app/l10n/app_localizations.dart';
 import 'package:owncoffer_app/screens/budget_screen.dart';
+import 'package:owncoffer_app/widgets/budget_charts.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
 Widget _app(Widget child, {Brightness brightness = Brightness.light}) =>
@@ -76,6 +77,7 @@ void main() {
                     count: 12,
                     previousCents: 50000,
                     averageCents: 45000,
+                    history: const [],
                     goalCents: 55000,
                   ),
                   max: 60000,
@@ -96,6 +98,7 @@ void main() {
                         count: 8,
                         previousCents: 0,
                         averageCents: 0,
+                        history: const [],
                       ),
                       max: 60000,
                       total: 250000,
@@ -179,4 +182,73 @@ void main() {
       reason: 'not once the goal is exceeded',
     );
   });
+
+  for (final width in [360.0, 1000.0]) {
+    for (final b in Brightness.values) {
+      testWidgets('pie and chart fit at $width px ($b)', (tester) async {
+        tester.view.physicalSize = Size(width, 2000);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        final tapped = <int>[];
+        await tester.pumpWidget(
+          _app(
+            Column(
+              children: [
+                DonutChart(
+                  slices: const [
+                    ChartSlice(
+                      label: 'Logement',
+                      cents: 90000,
+                      color: Colors.blue,
+                    ),
+                    ChartSlice(
+                      label: 'Alimentation et maison',
+                      cents: 60000,
+                      color: Colors.orange,
+                    ),
+                    ChartSlice(
+                      label: 'Autres',
+                      cents: 50000,
+                      color: Colors.grey,
+                    ),
+                  ],
+                  totalLabel: 'Total',
+                  semanticLabel: 'Répartition',
+                  money: (c) => '${c ~/ 100} €',
+                  percent: (p) => '$p %',
+                  onTap: tapped.add,
+                ),
+                TrendChart(
+                  labels: [for (var i = 1; i <= 24; i++) 'M$i'],
+                  series: [
+                    ChartSeries(
+                      label: 'Logement',
+                      color: Colors.blue,
+                      values: [for (var i = 0; i < 24; i++) 90000 + i * 100],
+                    ),
+                    ChartSeries(
+                      label: 'Loisirs',
+                      color: Colors.orange,
+                      values: [for (var i = 0; i < 24; i++) i * 1000],
+                    ),
+                  ],
+                  semanticLabel: 'Évolution',
+                  money: (c) => '${c ~/ 100} €',
+                  axisMoney: (c) => '${c ~/ 100}',
+                  onTapSeries: tapped.add,
+                ),
+              ],
+            ),
+            brightness: b,
+          ),
+        );
+        expect(tester.takeException(), isNull);
+        expect(find.text('45 %'), findsOneWidget, reason: '900 of 2000');
+        expect(find.text('2000 €'), findsOneWidget, reason: 'total inside');
+        await tester.tap(find.text('Alimentation et maison'));
+        await tester.tap(find.text('Loisirs'));
+        expect(tapped, [1, 1]);
+      });
+    }
+  }
 }

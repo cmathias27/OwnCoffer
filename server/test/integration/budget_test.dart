@@ -193,6 +193,50 @@ void main() {
       expect(y.expenseCents, 8000 + 2500 + 1234 + 6000 + 99900);
     });
 
+    test('quarter report, chosen number of periods, history of each '
+        'category', () async {
+      await october();
+      final q = await endpoints.analysis.report(
+        as(alice),
+        groupA,
+        BudgetPeriod.quarter,
+        DateTime.utc(2026, 11, 1),
+        periods: 12,
+      );
+      expect(q.start, DateTime.utc(2026, 10, 1));
+      expect(q.last, DateTime.utc(2026, 12, 31));
+      expect(q.expenseCents, 8000 + 2500 + 1234 + 99900);
+      expect(q.history, hasLength(12));
+      expect(q.history.first.start, DateTime.utc(2024, 1, 1));
+      expect(q.history[10].expenseCents, 6000, reason: 'July to September');
+
+      final m = await endpoints.analysis.report(
+        as(bob),
+        groupA,
+        BudgetPeriod.month,
+        DateTime.utc(2026, 10, 15),
+        periods: 2,
+      );
+      expect(m.history, hasLength(4), reason: 'at least four periods');
+      final food = m.categories.firstWhere(
+        (f) => f.categoryId == cats['food']!.id,
+      );
+      expect(food.history, [0, 0, 6000, 10500]);
+      expect(
+        m.categories.any((f) => f.categoryId == cats['shopping.clothing']!.id),
+        isFalse,
+        reason: 'restricted account hidden from bob in the history too',
+      );
+      final most = await endpoints.analysis.report(
+        as(alice),
+        groupA,
+        BudgetPeriod.week,
+        DateTime.utc(2026, 10, 15),
+        periods: 100,
+      );
+      expect(most.history, hasLength(24));
+    });
+
     test('operations behind a figure: category with sub-categories, '
         'unclassified, largest first', () async {
       await october();

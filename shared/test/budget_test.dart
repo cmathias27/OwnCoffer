@@ -28,6 +28,62 @@ void main() {
       expect(y.contains(LocalDate(2024, 12, 31)), isTrue);
       expect(y.contains(LocalDate(2025, 1, 1)), isFalse);
     });
+
+    test('quarters: three months from January, April, July or October', () {
+      final q = Period.containing(PeriodKind.quarter, LocalDate(2026, 11, 1));
+      expect(q.start, LocalDate(2026, 10, 1));
+      expect(q.last, LocalDate(2026, 12, 31));
+      expect(q.days, 92);
+      expect(q.shift(1).start, LocalDate(2027, 1, 1));
+      expect(q.shift(-4).start, LocalDate(2025, 10, 1));
+      // On pay day 27, the first quarter starts on 27 January.
+      final pay = Period.containing(
+        PeriodKind.quarter,
+        LocalDate(2026, 1, 26),
+        monthStartDay: 27,
+      );
+      expect(pay.start, LocalDate(2025, 10, 27));
+      expect(pay.last, LocalDate(2026, 1, 26));
+      expect(
+        Period.containing(
+          PeriodKind.quarter,
+          LocalDate(2026, 1, 27),
+          monthStartDay: 27,
+        ).start,
+        LocalDate(2026, 1, 27),
+      );
+    });
+  });
+
+  group('views of the spending', () {
+    test('a pie keeps the largest parts and merges the rest', () {
+      final all = {1: 500, 2: 300, 3: 300, 4: 100, 5: 50, 6: 0, 7: -20};
+      expect(sharesWithOthers(all), [
+        (id: 1, cents: 500),
+        (id: 2, cents: 300),
+        (id: 3, cents: 300),
+        (id: 4, cents: 100),
+        (id: 5, cents: 50),
+      ], reason: 'nothing to merge; empty and negative parts left out');
+      expect(sharesWithOthers(all, max: 3), [
+        (id: 1, cents: 500),
+        (id: 2, cents: 300),
+        (id: null, cents: 450),
+      ]);
+      expect(() => sharesWithOthers(all, max: 1), throwsArgumentError);
+    });
+
+    test('series over time: the largest over all the periods', () {
+      expect(
+        leadingSeries([
+          {1: 100, 2: 900},
+          {1: 1000, 3: 50},
+          {3: 60, 4: -500},
+        ], count: 2),
+        [1, 2],
+      );
+      expect(leadingSeries([{}], count: 3), isEmpty);
+    });
   });
 
   test('a month may start on pay day', () {
