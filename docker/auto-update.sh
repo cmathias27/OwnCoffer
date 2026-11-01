@@ -70,6 +70,19 @@ if [[ $(id -u) == 0 && ! -f /etc/systemd/system/owncoffer-request.path ]]; then
 fi
 
 state=docker/state
+
+# Free space of the disk holding OwnCoffer, for the health page.
+write_disk() {
+  [[ -d $state ]] || return 0
+  local f
+  f=$(mktemp "$state/.disk.XXXXXX")
+  df -Pk . | awk 'NR == 2 { printf "total=%.0f\nfree=%.0f\n", $2 * 1024, $4 * 1024 }' > "$f"
+  printf 'at=%s\n' "$(date +%s)" >> "$f"
+  chmod 644 "$f"
+  mv "$f" "$state/disk"
+}
+write_disk || true
+
 auto=true
 if [[ -f $state/settings ]] && grep -qx 'auto=false' "$state/settings"; then
   auto=false
@@ -99,6 +112,17 @@ record() {
   chmod 644 "$state/update-history.tsv"
   tail -n 50 "$state/update-history.tsv" > "$state/.history" &&
     chmod 644 "$state/.history" && mv "$state/.history" "$state/update-history.tsv"
+}
+# Step of an installation, shown by the administration page while it runs:
+# pull, backup, start, check, done, rollback, failed or waiting (image not
+# published yet).
+progress() {
+  [[ -d $state && $mode != check ]] || return 0
+  local f
+  f=$(mktemp "$state/.update-progress.XXXXXX")
+  printf 'target=%s\nstep=%s\nat=%s\n' "${target:-$wanted}" "$1" "$(date +%s)" > "$f"
+  chmod 644 "$f"
+  mv "$f" "$state/update-progress"
 }
 stop() { # message, exit code
   message=$1
@@ -132,6 +156,7 @@ target=$latest
 if [[ $mode == install ]]; then
   if ! git rev-parse -q --verify "refs/tags/$wanted" >/dev/null; then
     record "$wanted" refused "not a published version"
+    progress failed
     stop "$wanted is not a published version: nothing done" 1
   fi
   target=$wanted
@@ -140,6 +165,7 @@ newest=$(printf '%s\n%s\n' "$current" "$target" | sort -V | tail -1)
 if [[ $target == "$current" || $newest == "$current" ]]; then
   if [[ $mode == install ]]; then
     record "$target" refused "not newer than $current"
+    progress failed
   fi
   stop "" 0
 fi
@@ -163,7 +189,9 @@ image=$(sed -n 's/^OWNCOFFER_IMAGE=//p' docker/.env)
 image=${image:-ghcr.io/cmathias27/owncoffer}
 
 # The image is built by the CI a few minutes after the tag: retry later.
+progress pull
 if ! docker pull --quiet "$image:$version" >/dev/null 2>&1; then
+  progress waiting
   stop "$target: image not published yet, next try in 15 minutes" 0
 fi
 
@@ -182,22 +210,27 @@ healthy() {
 set_tag() { sed -i "s/^OWNCOFFER_TAG=.*/OWNCOFFER_TAG=$1/" docker/.env; }
 
 log "$current -> $target: backup"
+progress backup
 dump=$(docker/backup.sh "before-$version")
 log "backup: $dump"
 # The rollback restores this file: it must be readable before going on.
 if [[ ! -s $dump ]]; then
   record "$target" refused "backup not found"
+  progress failed
   stop "backup not found ($dump): nothing changed" 1
 fi
 
 git -c advice.detachedHead=false checkout --quiet "$target"
 set_tag "$version"
 log "starting $target"
+progress start
 compose up -d --remove-orphans --quiet-pull
+progress check
 if healthy; then
   log "$target installed"
   record "$target" installed ""
   rm -f "$failed_file"
+  progress done
   current=$target
   message=""
   write_status
@@ -205,12 +238,14 @@ if healthy; then
 fi
 
 log "$target does not answer: back to $current and to the backup"
+progress rollback
 echo "$target" > "$failed_file"
 compose logs --tail 80 owncoffer >&2 || true
 git -c advice.detachedHead=false checkout --quiet "$current"
 set_tag "${current#v}"
 if [[ ! -s $dump ]]; then
   record "$target" rollback-failed "backup missing"
+  progress failed
   stop "ROLLBACK STOPPED: backup $dump missing; database left as is" 1
 fi
 compose stop owncoffer
@@ -223,7 +258,9 @@ compose exec -T postgres \
 compose up -d --remove-orphans
 if healthy; then
   record "$target" rollback "$target did not answer; back on $current"
+  progress failed
   stop "back on $current with the data of $dump" 1
 fi
 record "$target" rollback-failed "$current does not answer either"
+progress failed
 stop "ROLLBACK FAILED: $current does not answer either; backup kept in $dump" 1

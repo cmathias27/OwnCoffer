@@ -14,3 +14,8 @@ fields:
   ### Last run of the hourly alert job, and whether it went through.
   alertsRunAt: DateTime?
   alertsRunOk: bool?
+  ### Disk holding the installation, as the host saw it at its last run
+  ### (every 15 minutes); null without the shared folder.
+  diskTotalBytes: int?
+  diskFreeBytes: int?
+  diskAt: DateTime?

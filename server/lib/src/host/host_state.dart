@@ -102,8 +102,37 @@ class HostState {
     _file('settings').writeAsStringSync('auto=$on\n');
   }
 
+  static const _steps = {
+    'pull',
+    'backup',
+    'start',
+    'check',
+    'done',
+    'rollback',
+    'failed',
+    'waiting',
+  };
+
+  /// Size and free space of the host's disk, written by the update script.
+  ({int? total, int? free, DateTime? at}) disk() {
+    if (!available) return (total: null, free: null, at: null);
+    final d = _keyValues('disk');
+    final total = int.tryParse(d['total'] ?? '');
+    final free = int.tryParse(d['free'] ?? '');
+    final ok = total != null && free != null && total > 0 && free <= total;
+    return (
+      total: ok ? total : null,
+      free: ok ? free : null,
+      at: ok ? _epoch(d['at']) : null,
+    );
+  }
+
   UpdateOverview updates(String runningVersion) {
     final status = _keyValues('update-status');
+    final progress = available
+        ? _keyValues('update-progress')
+        : const <String, String>{};
+    final step = progress['step'];
     String? version(String? v) => v != null && _version.hasMatch(v) ? v : null;
     final history = <UpdateHistoryEntry>[];
     final tsv = _file('update-history.tsv');
@@ -139,6 +168,9 @@ class HostState {
           available &&
           (_file('request-update').existsSync() ||
               _file('request-check').existsSync()),
+      progressTarget: version(progress['target']),
+      progressStep: _steps.contains(step) ? step : null,
+      progressAt: _epoch(progress['at']),
       history: history,
       releases: available && changelog.existsSync()
           ? parseChangelog(changelog.readAsStringSync())

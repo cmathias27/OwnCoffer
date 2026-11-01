@@ -2,6 +2,19 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.20 (1er novembre 2026)
+
+### Administration : mise à jour suivie pas à pas, espace disque
+
+- **« Installer » une mise à jour fige maintenant la page** sur son avancement, jusqu'au bout :
+  - demande transmise, téléchargement, sauvegarde de vos données, redémarrage, vérification, terminé ;
+  - chaque étape est cochée quand le serveur l'a faite ;
+  - pendant le redémarrage, la page explique que le silence du serveur est normal ;
+  - à la fin, **« Recharger la page »** pour utiliser la nouvelle version.
+  - Si la mise à jour échoue, la page dit qu'OwnCoffer est revenu à la version précédente avec vos données. Si la nouvelle version n'est pas encore téléchargeable, elle dit que le serveur réessaiera tout seul.
+  - Au-delà de 15 minutes, on peut quitter la page : la mise à jour continue sur le serveur.
+- **Espace disque du serveur** dans la Santé : place libre sur la place totale, relevée toutes les 15 minutes. La ligne passe en rouge, avec une explication, sous 10 % libres (la base de données et les sauvegardes risqueraient d'échouer).
+
 ## 0.3.19 (1er novembre 2026)
 
 ### Fiche d'opération : opérations passées et nouvelle allure
