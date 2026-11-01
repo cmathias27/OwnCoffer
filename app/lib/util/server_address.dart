@@ -17,10 +17,25 @@ abstract final class ServerAddress {
 
   static Future<String?> load() => _storage.read(key: _key);
 
+  static const _modeKey = 'owncoffer.mode';
+
+  /// The first launch choice: `standalone` (decision 0022) or `server`;
+  /// null before it is made (apps from before 1.1 have an address: server).
+  static Future<String?> mode() async =>
+      await _storage.read(key: _modeKey) ??
+      (await load() != null ? 'server' : null);
+
+  static Future<void> saveMode(String mode) =>
+      _storage.write(key: _modeKey, value: mode);
+
   static Future<void> save(Uri api) =>
       _storage.write(key: _key, value: api.toString());
 
-  static Future<void> forget() => _storage.delete(key: _key);
+  /// Forgets the address and the mode (the standalone data stays).
+  static Future<void> forget() async {
+    await _storage.delete(key: _key);
+    await _storage.delete(key: _modeKey);
+  }
 
   /// The API address from what the user typed: `comptes.example.org` or
   /// `https://comptes.example.org/` give `https://comptes.example.org/api/`

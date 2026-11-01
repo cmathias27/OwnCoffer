@@ -5355,4 +5355,42 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appsBannerLater => 'Plus tard';
+
+  @override
+  String get firstLaunchTitle => 'Bienvenue dans OwnCoffer';
+
+  @override
+  String get firstLaunchIntro =>
+      'Comment voulez-vous utiliser OwnCoffer ? Vous pourrez passer de l\'un à l\'autre plus tard sans rien perdre.';
+
+  @override
+  String get firstLaunchStandalone => 'Utiliser seul sur cet appareil';
+
+  @override
+  String get firstLaunchStandaloneHelp =>
+      'Pour une personne. Vos données restent sur cet appareil, rien à installer d\'autre. Plus tard, « Migrer vers un serveur » envoie tout sur un serveur OwnCoffer.';
+
+  @override
+  String get firstLaunchServer => 'Se connecter à un serveur';
+
+  @override
+  String get firstLaunchServerHelp =>
+      'Pour un foyer ou plusieurs appareils : votre serveur OwnCoffer (Docker), avec la version web.';
+
+  @override
+  String get firstLaunchBack => 'Retour';
+
+  @override
+  String get startingStandalone => 'Ouverture de vos comptes…';
+
+  @override
+  String get standaloneChangeMode => 'Changer de mode';
+
+  @override
+  String get standaloneModeNote =>
+      'Mode autonome : vos données sont sur cet appareil.';
+
+  @override
+  String get appsStandaloneHint =>
+      'Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées.';
 }

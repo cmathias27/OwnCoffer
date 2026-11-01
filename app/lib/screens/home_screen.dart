@@ -6,6 +6,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../util/app_versions.dart';
+import '../util/web_search.dart';
 import '../widgets/soft.dart';
 import '../state/session.dart';
 import '../widgets/form_card.dart';
@@ -178,6 +179,23 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     if (picked != null) _selectTab(picked);
+  }
+
+  /// The server's administrator reads the remarks; in standalone mode that
+  /// is oneself, so they go to the project's issues on GitHub (opened only
+  /// when asked).
+  void _feedback() {
+    if (isStandalone) {
+      openLink(
+        Uri.parse('https://github.com/cmathias27/OwnCoffer/issues/new/choose'),
+      );
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => FeedbackScreen(page: _helpTopic.name),
+      ),
+    );
   }
 
   @override
@@ -403,11 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 PopupMenuItem(
-                  value: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => FeedbackScreen(page: _helpTopic.name),
-                    ),
-                  ),
+                  value: _feedback,
                   child: ListTile(
                     leading: const Icon(Icons.feedback_outlined),
                     title: Text(l.feedbackTitle),
@@ -424,11 +438,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(l.helpTitle),
                   ),
                 ),
+                // Standalone: no password to sign in again; the data stays
+                // on the device when another mode is chosen.
                 PopupMenuItem(
-                  value: s.signOut,
+                  value: isStandalone ? changeServer : s.signOut,
                   child: ListTile(
-                    leading: const Icon(Icons.logout),
-                    title: Text(l.signOut),
+                    leading: Icon(
+                      isStandalone ? Icons.swap_horiz : Icons.logout,
+                    ),
+                    title: Text(
+                      isStandalone ? l.standaloneChangeMode : l.signOut,
+                    ),
                   ),
                 ),
               ],
@@ -487,17 +507,13 @@ class _HomeScreenState extends State<HomeScreen> {
             IconButton(
               tooltip: l.feedbackTitle,
               icon: const Icon(Icons.feedback_outlined),
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => FeedbackScreen(page: _helpTopic.name),
-                ),
-              ),
+              onPressed: _feedback,
             ),
           if (wide)
             IconButton(
-              tooltip: l.signOut,
-              icon: const Icon(Icons.logout),
-              onPressed: s.signOut,
+              tooltip: isStandalone ? l.standaloneChangeMode : l.signOut,
+              icon: Icon(isStandalone ? Icons.swap_horiz : Icons.logout),
+              onPressed: isStandalone ? changeServer : s.signOut,
             ),
         ],
       ),

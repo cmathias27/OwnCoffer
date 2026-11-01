@@ -50,3 +50,6 @@ docker/backup.key
 app/android/key.properties
 *.jks
 *.keystore
+
+# Standalone version: SQLite files of tool/standalone.sh
+server/owncoffer_sqlite_*.db*

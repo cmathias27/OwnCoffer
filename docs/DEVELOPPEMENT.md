@@ -60,3 +60,13 @@ flutter run --dart-define=SERVER_URL=http://10.0.2.2:8080/api/   # émulateur An
 ```
 
 La CI compile les deux à chaque pull request (artefacts `owncoffer-android` et `owncoffer-windows`) : voir [APPLICATIONS.md](APPLICATIONS.md).
+
+## Version autonome (serveur sur SQLite)
+
+Les applications Windows et Android embarquent le serveur sur SQLite (décision 0022). Serverpod n'accepte qu'un type de base par projet : `tool/standalone.sh` remplace le temps d'une commande les configurations et les migrations par celles de SQLite, puis remet tout en place.
+
+```sh
+./tool/standalone.sh migrations   # après un changement de modèle de table
+./tool/standalone.sh test         # tous les tests du serveur, sur SQLite
+```
+

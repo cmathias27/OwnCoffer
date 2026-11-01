@@ -186,6 +186,10 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] Hors-ligne et synchronisation
 - [x] Page « Applications » (télécharger Windows et Android dans la version du serveur), versions comparées, bannière quand l'application est en retard — *1.0.4*
 - [ ] Installation automatique des mises à jour des applications
-- [ ] Version autonome sans serveur
+- [ ] Version autonome sans serveur (décision 0022) :
+  - [x] le serveur embarqué dans l'application, sur SQLite ; choix « seul sur cet appareil » ou « serveur » au premier lancement ; tous les tests du serveur aussi sur SQLite — *1.1.0*
+  - [ ] « Migrer vers un serveur » (et retour) par l'export complet, factures comprises
+  - [ ] Sauvegarde chiffrée automatique vers un dossier
+  - [ ] Chiffrement du fichier SQLite
 
 Les autres fonctionnalités du cahier des charges marquées « Après 1.0 » s'ajouteront une par une, selon les avis des utilisateurs.

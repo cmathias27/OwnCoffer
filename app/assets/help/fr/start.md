@@ -27,3 +27,5 @@ Après la plupart des actions, un bouton **« Annuler »** apparaît en bas pend
 ## Sur Windows ou Android
 
 Menu du compte → **« Applications »** : les applications Windows et Android à télécharger, dans la version de votre serveur. Quand le serveur est mis à jour, une bannière prévient dans l'application.
+
+Sur Windows et Android, OwnCoffer peut aussi s'utiliser **seul sur l'appareil**, sans serveur : c'est le choix du premier lancement. « Changer de mode » (menu du compte) y revient.

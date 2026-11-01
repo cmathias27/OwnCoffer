@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.4+44
+version: 1.1.0+45
 
 environment:
   sdk: '^3.12.2'
@@ -35,6 +35,9 @@ dependencies:
   owncoffer_shared: any
   owncoffer_client:
     path: ../client
+  # The server itself, embedded in the Windows and Android apps for the
+  # standalone mode (decision 0022); never imported by the web app.
+  owncoffer_server: any
   serverpod_auth_idp_client: 4.0.4
   serverpod_auth_idp_flutter: 4.0.4
   serverpod_flutter: 4.0.4

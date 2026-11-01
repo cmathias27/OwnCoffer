@@ -8601,6 +8601,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Plus tard'**
   String get appsBannerLater;
+
+  /// No description provided for @firstLaunchTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bienvenue dans OwnCoffer'**
+  String get firstLaunchTitle;
+
+  /// No description provided for @firstLaunchIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment voulez-vous utiliser OwnCoffer ? Vous pourrez passer de l\'un à l\'autre plus tard sans rien perdre.'**
+  String get firstLaunchIntro;
+
+  /// No description provided for @firstLaunchStandalone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utiliser seul sur cet appareil'**
+  String get firstLaunchStandalone;
+
+  /// No description provided for @firstLaunchStandaloneHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour une personne. Vos données restent sur cet appareil, rien à installer d\'autre. Plus tard, « Migrer vers un serveur » envoie tout sur un serveur OwnCoffer.'**
+  String get firstLaunchStandaloneHelp;
+
+  /// No description provided for @firstLaunchServer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter à un serveur'**
+  String get firstLaunchServer;
+
+  /// No description provided for @firstLaunchServerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour un foyer ou plusieurs appareils : votre serveur OwnCoffer (Docker), avec la version web.'**
+  String get firstLaunchServerHelp;
+
+  /// No description provided for @firstLaunchBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour'**
+  String get firstLaunchBack;
+
+  /// No description provided for @startingStandalone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouverture de vos comptes…'**
+  String get startingStandalone;
+
+  /// No description provided for @standaloneChangeMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer de mode'**
+  String get standaloneChangeMode;
+
+  /// No description provided for @standaloneModeNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode autonome : vos données sont sur cet appareil.'**
+  String get standaloneModeNote;
+
+  /// No description provided for @appsStandaloneHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées.'**
+  String get appsStandaloneHint;
 }
 
 class _AppLocalizationsDelegate

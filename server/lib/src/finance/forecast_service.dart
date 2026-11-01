@@ -2,6 +2,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
+import '../core/portable_sql.dart';
 import '../generated/protocol.dart';
 import 'spending_service.dart';
 
@@ -235,15 +236,18 @@ abstract final class ForecastService {
     Transaction? tx,
   }) async {
     final rows = await session.db.unsafeQuery(
+      // Standard SQL, the same on PostgreSQL and SQLite.
       'SELECT '
-      'COALESCE(SUM("amountCents") FILTER (WHERE "cleared"), 0)::bigint, '
-      'COALESCE(SUM("amountCents") FILTER (WHERE "date" <= @today), 0)::bigint, '
-      'COALESCE(SUM("amountCents"), 0)::bigint '
+      'CAST(COALESCE(SUM(CASE WHEN "cleared" THEN "amountCents" END), 0) '
+      'AS BIGINT), '
+      'CAST(COALESCE(SUM(CASE WHEN "date" <= @today THEN "amountCents" END), '
+      '0) AS BIGINT), '
+      'CAST(COALESCE(SUM("amountCents"), 0) AS BIGINT) '
       'FROM "transactions" '
       'WHERE "accountId" = @account AND "deletedAt" IS NULL',
       parameters: QueryParameters.named({
         'account': account.id!,
-        'today': today.toDb(),
+        'today': session.sqlTimestamp(today.toDb()),
       }),
       transaction: tx,
     );

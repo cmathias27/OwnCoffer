@@ -27,3 +27,5 @@ After most actions, an **"Undo"** button shows at the bottom for a few seconds: 
 ## On Windows or Android
 
 Account menu → **"Apps"**: the Windows and Android apps to download, in your server's version. When the server is updated, a banner says so in the app.
+
+On Windows and Android, OwnCoffer can also be used **alone on the device**, without a server: that is the first launch choice. "Change mode" (account menu) goes back to it.

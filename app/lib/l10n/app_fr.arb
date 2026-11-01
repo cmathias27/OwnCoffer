@@ -3559,5 +3559,16 @@
       }
     }
   },
-  "appsBannerLater": "Plus tard"
+  "appsBannerLater": "Plus tard",
+  "firstLaunchTitle": "Bienvenue dans OwnCoffer",
+  "firstLaunchIntro": "Comment voulez-vous utiliser OwnCoffer ? Vous pourrez passer de l'un à l'autre plus tard sans rien perdre.",
+  "firstLaunchStandalone": "Utiliser seul sur cet appareil",
+  "firstLaunchStandaloneHelp": "Pour une personne. Vos données restent sur cet appareil, rien à installer d'autre. Plus tard, « Migrer vers un serveur » envoie tout sur un serveur OwnCoffer.",
+  "firstLaunchServer": "Se connecter à un serveur",
+  "firstLaunchServerHelp": "Pour un foyer ou plusieurs appareils : votre serveur OwnCoffer (Docker), avec la version web.",
+  "firstLaunchBack": "Retour",
+  "startingStandalone": "Ouverture de vos comptes…",
+  "standaloneChangeMode": "Changer de mode",
+  "standaloneModeNote": "Mode autonome : vos données sont sur cet appareil.",
+  "appsStandaloneHint": "Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées."
 }

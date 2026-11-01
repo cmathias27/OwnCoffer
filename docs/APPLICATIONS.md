@@ -1,6 +1,13 @@
 # Applications Windows et Android
 
-Les applications Windows et Android sont la même application que la version web, connectée à **votre** serveur OwnCoffer (décision 0020). Elles ne gardent sur l'appareil que l'adresse du serveur et votre session : vos opérations restent sur le serveur.
+## Deux façons de les utiliser
+
+- **Seul sur cet appareil** (décision 0022) : pour une personne, sans serveur. Le serveur OwnCoffer tourne dans l'application ; vos données restent dans son dossier privé, et seul cet appareil peut y accéder. Rien d'autre à installer.
+- **Avec un serveur** : pour un foyer ou plusieurs appareils, connecté à votre serveur OwnCoffer (Docker), comme la version web.
+
+Le choix se fait au premier lancement ; « Changer de mode » (menu du compte) y revient sans rien effacer.
+
+Les applications Windows et Android sont la même application que la version web, connectée à **votre** serveur OwnCoffer (décision 0020). Avec un serveur, elles ne gardent sur l'appareil que l'adresse du serveur et votre session : vos opérations restent sur le serveur.
 
 Le plus simple : dans l'application web, menu du compte → **« Applications »**. La page propose les deux fichiers dans la version de votre serveur. Ils sont aussi joints à chaque version, sur la page **Releases** du dépôt GitHub :
 
@@ -16,7 +23,7 @@ Elles ne sont **pas encore signées par un éditeur** ni publiées sur le Micros
 1. Téléchargez `owncoffer-X.Y.Z-windows-x64.zip` et **décompressez-le** dans un dossier (par exemple `Documents\OwnCoffer`).
 2. Lancez `owncoffer.exe`.
 3. Windows SmartScreen affiche « Windows a protégé votre ordinateur » : c'est parce que l'application n'a pas de certificat d'éditeur. Cliquez sur **Informations complémentaires**, puis **Exécuter quand même**.
-4. Saisissez l'adresse de votre serveur (celle que vous ouvrez dans le navigateur).
+4. Choisissez « Utiliser seul sur cet appareil », ou saisissez l'adresse de votre serveur (celle que vous ouvrez dans le navigateur).
 
 Mettre à jour : quand le serveur passe à une nouvelle version, une bannière le signale dans l'application ; « Télécharger » ouvre la page Applications. Remplacez le dossier par celui de la nouvelle version : votre session est conservée.
 
@@ -25,7 +32,7 @@ Mettre à jour : quand le serveur passe à une nouvelle version, une bannière l
 1. Sur le téléphone, téléchargez `owncoffer-X.Y.Z-android.apk`.
 2. Ouvrez-le. Android demande d'autoriser l'installation depuis cette source (le navigateur ou l'application Fichiers) : autorisez-la pour cette installation, puis vous pouvez la retirer.
 3. Play Protect peut avertir d'une application inconnue : choisissez **Installer quand même**.
-4. Saisissez l'adresse de votre serveur.
+4. Choisissez « Utiliser seul sur cet appareil », ou saisissez l'adresse de votre serveur.
 
 Mettre à jour : quand le serveur passe à une nouvelle version, une bannière le signale ; « Télécharger » ouvre la page Applications. Installez le nouvel APK par-dessus. Si Android refuse (« conflit avec un paquet existant »), c'est que les deux versions n'ont pas été signées avec la même clé : désinstallez l'ancienne, puis installez la nouvelle. Vous n'y perdez que la session : vos données sont sur le serveur.
 
@@ -67,4 +74,4 @@ flutter build windows --release    # build\windows\x64\runner\Release\ (sous Win
 
 ## Pas encore
 
-Hors-ligne et synchronisation, installation automatique des mises à jour des applications, version autonome sans serveur, magasins d'applications : phase 6 du [roadbook](ROADBOOK.md).
+Hors-ligne et synchronisation, installation automatique des mises à jour des applications, migration du mode autonome vers un serveur et sauvegarde chiffrée automatique, magasins d'applications : phase 6 du [roadbook](ROADBOOK.md).
