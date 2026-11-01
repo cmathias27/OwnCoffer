@@ -4918,13 +4918,13 @@ abstract class AppLocalizations {
   /// No description provided for @invoiceAttach.
   ///
   /// In fr, this message translates to:
-  /// **'Joindre une facture'**
+  /// **'Joindre un fichier'**
   String get invoiceAttach;
 
   /// No description provided for @invoiceTakePhoto.
   ///
   /// In fr, this message translates to:
-  /// **'Prendre en photo'**
+  /// **'Scanner avec l\'appareil photo'**
   String get invoiceTakePhoto;
 
   /// No description provided for @invoiceAdded.
@@ -5128,7 +5128,7 @@ abstract class AppLocalizations {
   /// No description provided for @invoiceAddWaiting.
   ///
   /// In fr, this message translates to:
-  /// **'Ajouter une facture'**
+  /// **'Ajouter un fichier'**
   String get invoiceAddWaiting;
 
   /// No description provided for @invoicesWaitingFilter.

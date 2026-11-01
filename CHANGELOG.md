@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.0.3 (novembre 2026)
+
+### Factures : un fichier, ou un scan avec le téléphone
+
+- **Application Android** : « Scanner avec l'appareil photo » ouvre maintenant **directement l'appareil photo** (il ouvrait le choix d'un fichier). La photo passe ensuite par le recadrage, comme sur le web.
+- Deux boutons clairs partout : **« Joindre un fichier »** / **« Ajouter un fichier »** pour un PDF ou une image déjà sur l'appareil, et **« Scanner avec l'appareil photo »** sur téléphone. L'application Windows, sans appareil photo, ne propose que le fichier.
+
 ## 1.0.2 (novembre 2026)
 
 - **Publication** : la version GitHub (applications Windows et Android, listes des composants, signatures) n'avait pas pu être créée pour la 1.0.0 ni pour la 1.0.1, identique à la 1.0.0 ; elle l'est pour celle-ci. Rien ne change dans le serveur ni dans l'application.

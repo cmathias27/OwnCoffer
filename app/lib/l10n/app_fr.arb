@@ -2291,8 +2291,8 @@
   },
   "invoicesOfOperation": "Factures",
   "invoicesNone": "Aucune facture jointe.",
-  "invoiceAttach": "Joindre une facture",
-  "invoiceTakePhoto": "Prendre en photo",
+  "invoiceAttach": "Joindre un fichier",
+  "invoiceTakePhoto": "Scanner avec l'appareil photo",
   "invoiceAdded": "Facture ajoutée : {name}",
   "@invoiceAdded": {
     "placeholders": {
@@ -2378,7 +2378,7 @@
       }
     }
   },
-  "invoiceAddWaiting": "Ajouter une facture",
+  "invoiceAddWaiting": "Ajouter un fichier",
   "invoicesWaitingFilter": "À rattacher",
   "invoiceAttachTo": "Rattacher à une opération",
   "invoiceHints": "Ce que dit la facture",

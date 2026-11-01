@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:owncoffer_app/client.dart';
 import 'package:owncoffer_app/l10n/app_localizations.dart';
+import 'package:owncoffer_app/util/file_pick.dart';
 import 'package:owncoffer_app/widgets/invoices.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
@@ -107,5 +109,34 @@ void main() {
     final today = DateTime.utc(2026, 10, 31);
     expect(warrantyEndingSoon(DateTime.utc(2026, 11, 20), today), isTrue);
     expect(warrantyEndingSoon(DateTime.utc(2027, 1, 1), today), isFalse);
+  });
+
+  group('add an invoice: a file, or a scan with the camera', () {
+    setUpAll(() => client = Client('http://localhost:9/'));
+    tearDown(() => debugCanUseCamera = null);
+
+    for (final (camera, label) in [(true, 'phone'), (false, 'Windows')]) {
+      testWidgets('$label: ${camera ? 'both' : 'the file only'}', (
+        tester,
+      ) async {
+        debugCanUseCamera = camera;
+        await tester.pumpWidget(
+          _app(
+            InvoiceSection(
+              transactionId: 7,
+              canWrite: true,
+              onHasInvoices: (_) {},
+            ),
+          ),
+        );
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(find.text('Joindre un fichier'), findsOneWidget);
+        expect(
+          find.text("Scanner avec l'appareil photo"),
+          camera ? findsOneWidget : findsNothing,
+        );
+        await tester.pumpWidget(const SizedBox());
+      });
+    }
   });
 }

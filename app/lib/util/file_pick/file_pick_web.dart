@@ -5,6 +5,10 @@ import 'package:web/web.dart' as web;
 
 import '../file_pick.dart';
 
+/// The browser decides: on a phone, `capture` opens the camera; elsewhere
+/// it falls back to the file dialog.
+bool get canUseCamera => true;
+
 Future<PickedFile?> pickFile(List<String> extensions, {bool camera = false}) {
   final done = Completer<PickedFile?>();
   final input = web.HTMLInputElement()

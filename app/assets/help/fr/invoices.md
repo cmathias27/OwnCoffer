@@ -4,13 +4,13 @@ Gardez les factures et tickets avec l'opération qui les a payés, et retrouvez-
 
 ## Joindre une facture
 
-- Dans la fiche d'une opération : **« Joindre une facture »** (PDF ou image, 10 Mo au plus) ou **« Prendre en photo »**.
+- Dans la fiche d'une opération : **« Joindre un fichier »** (PDF ou image déjà sur l'appareil, 10 Mo au plus) ou, sur téléphone, **« Scanner avec l'appareil photo »**, qui ouvre directement l'appareil photo.
 - Une photo est **recadrée comme par un scanner** : la feuille est repérée, vous ajustez les coins, elle est redressée et rendue plus lisible. Tout se fait sur votre appareil.
 - Le nom du fichier est fait tout seul : date, commerçant, description, montant.
 
 ## Facture sans opération
 
-Une facture arrive souvent avant le relevé. **« Ajouter une facture »** dans cette page l'enregistre **à rattacher**. OwnCoffer propose ensuite les opérations qui correspondent (montant, date, commerçant), et la fiche d'une nouvelle opération propose « Rattacher ici ». Rien n'est rattaché sans votre choix.
+Une facture arrive souvent avant le relevé. **« Ajouter un fichier »** ou **« Scanner avec l'appareil photo »** dans cette page l'enregistre **à rattacher**. OwnCoffer propose ensuite les opérations qui correspondent (montant, date, commerçant), et la fiche d'une nouvelle opération propose « Rattacher ici ». Rien n'est rattaché sans votre choix.
 
 ## Lire avec l'IA
 

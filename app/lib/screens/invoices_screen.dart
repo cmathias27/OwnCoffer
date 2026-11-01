@@ -7,6 +7,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../util/file_pick.dart' show canUseCamera;
 import '../util/file_save.dart';
 import '../widgets/invoices.dart';
 
@@ -120,7 +121,7 @@ class InvoicesScreenState extends State<InvoicesScreen> {
             runSpacing: 8,
             children: [
               FilledButton.icon(
-                icon: const Icon(Icons.note_add_outlined),
+                icon: const Icon(Icons.upload_file_outlined),
                 label: Text(l.invoiceAddWaiting),
                 onPressed: () async {
                   final saved = await addUnattachedInvoice(
@@ -130,18 +131,21 @@ class InvoicesScreenState extends State<InvoicesScreen> {
                   if (saved != null) await reload();
                 },
               ),
-              OutlinedButton.icon(
-                icon: const Icon(Icons.photo_camera_outlined),
-                label: Text(l.invoiceTakePhoto),
-                onPressed: () async {
-                  final saved = await addUnattachedInvoice(
-                    context,
-                    widget.membership.group.id!,
-                    camera: true,
-                  );
-                  if (saved != null) await reload();
-                },
-              ),
+              // A phone: straight to the camera, then the scan (crop,
+              // straighten). The Windows app has no camera to offer.
+              if (canUseCamera)
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.document_scanner_outlined),
+                  label: Text(l.invoiceTakePhoto),
+                  onPressed: () async {
+                    final saved = await addUnattachedInvoice(
+                      context,
+                      widget.membership.group.id!,
+                      camera: true,
+                    );
+                    if (saved != null) await reload();
+                  },
+                ),
             ],
           ),
         ],

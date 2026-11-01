@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 
 import 'file_pick/file_pick_stub.dart'
     if (dart.library.js_interop) 'file_pick/file_pick_web.dart'
@@ -12,9 +12,17 @@ class PickedFile {
   const PickedFile(this.name, this.bytes);
 }
 
+/// Whether [pickFile] can open a camera: phones (browser or Android app);
+/// not the Windows app.
+bool get canUseCamera => debugCanUseCamera ?? impl.canUseCamera;
+
+/// For tests: a device with or without a camera.
+@visibleForTesting
+bool? debugCanUseCamera;
+
 /// Opens the file dialog (browser, Windows or Android). Returns null when the user cancels.
-/// [camera]: on a phone, opens the back camera to take a photo (a file
-/// dialog elsewhere).
+/// [camera]: on a phone, opens the back camera to take a photo (the
+/// browser's `capture`, the camera app on Android; a file dialog elsewhere).
 Future<PickedFile?> pickFile({
   List<String> extensions = const [],
   bool camera = false,

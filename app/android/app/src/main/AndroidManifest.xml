@@ -48,6 +48,10 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+        <!-- The camera app, to scan an invoice (image_picker). -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE"/>
+        </intent>
         <!-- Links opened in the browser (web search of a label, help). -->
         <intent>
             <action android:name="android.intent.action.VIEW"/>
