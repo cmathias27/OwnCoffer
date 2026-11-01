@@ -50,6 +50,12 @@ ai:
   - testProvider:
   - readInvoice:
   - readLoanDocument:
+  - memories:
+  - addMemory:
+  - deleteMemory:
+  - conversations:
+  - saveConversation:
+  - deleteConversation:
   - setPreference:
   - chat:
 analysis:
@@ -63,6 +69,11 @@ category:
   - create:
   - update:
   - archive:
+feedback:
+  - send:
+  - mine:
+  - all:
+  - setDone:
 goal:
   - list:
   - set:

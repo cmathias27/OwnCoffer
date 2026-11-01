@@ -4906,4 +4906,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trashEmptied => 'Trash emptied.';
+
+  @override
+  String get chatHistory => 'Previous conversations';
+
+  @override
+  String get chatHistoryHelp =>
+      'Your latest 30 conversations, kept on your server and visible to you only. Tap one to go on with it.';
+
+  @override
+  String get chatHistoryNone => 'No conversation kept.';
+
+  @override
+  String get chatHistoryDelete => 'Delete this conversation';
+
+  @override
+  String get aiMemoriesTitle => 'What the assistant should know';
+
+  @override
+  String get aiMemoriesHelp =>
+      'A few sentences the assistant keeps in mind with each question, for instance \"I am paid on the 28th\" or \"do not suggest changing banks\". Only you see them; they are sent to the model with your questions.';
+
+  @override
+  String get aiMemoriesHint => 'Add something to keep in mind';
+
+  @override
+  String get aiMemoriesAdd => 'Add';
+
+  @override
+  String get aiMemoriesDelete => 'Forget';
+
+  @override
+  String get error_ai_memory_full =>
+      '20 things to keep in mind at most: forget one first.';
+
+  @override
+  String get feedbackTitle => 'Give feedback';
+
+  @override
+  String get feedbackIntro =>
+      'A problem, an idea, a question? Your message goes to the administrator of this server.';
+
+  @override
+  String get feedbackBug => 'Problem';
+
+  @override
+  String get feedbackIdea => 'Idea';
+
+  @override
+  String get feedbackQuestion => 'Question';
+
+  @override
+  String get feedbackHint => 'Describe what happens, or what you would like';
+
+  @override
+  String get feedbackPrivacy =>
+      'The message stays on this server, with the page you send it from and OwnCoffer\'s version. No bank data is joined: do not write any.';
+
+  @override
+  String get feedbackSend => 'Send';
+
+  @override
+  String get feedbackSent => 'Thank you, it is sent.';
+
+  @override
+  String get feedbackMine => 'Your messages';
+
+  @override
+  String get feedbackDone => 'dealt with';
+
+  @override
+  String get feedbackOpen => 'waiting';
+
+  @override
+  String get adminTabFeedback => 'Feedback';
+
+  @override
+  String get adminFeedbackHelp =>
+      'The users\' messages, newest first. Tick those dealt with: their author sees it.';
+
+  @override
+  String get adminFeedbackNone => 'No feedback yet.';
+
+  @override
+  String get error_feedback_too_many => '20 messages a day at most.';
+
+  @override
+  String get error_ai_conversation_access_denied =>
+      'This conversation no longer exists.';
+
+  @override
+  String get error_feedback_unknown => 'This message no longer exists.';
 }

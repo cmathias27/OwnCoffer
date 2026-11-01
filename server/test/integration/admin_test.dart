@@ -354,5 +354,40 @@ void main() {
         );
       });
     });
+
+    test('remarks: sent by anyone, read and closed by the server '
+        'administrator only', () async {
+      final f = await endpoints.feedback.send(
+        as(bob),
+        'idea',
+        '  Un mode sombre plus contrasté  ',
+        'budget',
+        '0.3.33',
+      );
+      expect(f.text, 'Un mode sombre plus contrasté');
+      expect(f.status, 'open');
+      expect(f.appVersion, 'dev', reason: "the server's own");
+      await expectLater(
+        endpoints.feedback.send(as(bob), 'spam', 'x', null, null),
+        throwsA(isA<InvalidInputException>()),
+      );
+      expect(await endpoints.feedback.mine(as(bob)), hasLength(1));
+      expect(await endpoints.feedback.mine(as(mallory)), isEmpty);
+      await expectLater(
+        endpoints.feedback.all(as(bob)),
+        throwsA(isA<AccessDeniedException>()),
+      );
+      await expectLater(
+        endpoints.feedback.setDone(as(bob), f.id!, true),
+        throwsA(isA<AccessDeniedException>()),
+      );
+      final all = await endpoints.feedback.all(as(admin));
+      expect(all.single.feedback.id, f.id);
+      expect(all.single.email, 'bob@example.org');
+      expect(
+        (await endpoints.feedback.setDone(as(admin), f.id!, true)).status,
+        'done',
+      );
+    });
   });
 }

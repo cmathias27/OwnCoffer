@@ -537,6 +537,68 @@ void main() {
       );
     });
 
+    test("memory and history: the user's own, sent to the model, never "
+        "seen or deleted by anyone else", () async {
+      final p = await endpoints.ai.saveProvider(as(admin), local(), null);
+      final model = _ScriptedModel([
+        {'role': 'assistant', 'content': 'Noté.'},
+      ]);
+      AiGateway.adapter = model;
+      await endpoints.ai.setPreference(as(bob), p.id, 'llama3.1', true);
+      final m = await endpoints.ai.addMemory(
+        as(bob),
+        groupA,
+        ' Je suis payé le 28 ',
+      );
+      expect(m.text, 'Je suis payé le 28');
+      await expectLater(
+        endpoints.ai.memories(as(mallory), groupA),
+        denied,
+      );
+      await endpoints.ai.deleteMemory(as(admin), m.id!);
+      expect(await endpoints.ai.memories(as(bob), groupA), hasLength(1));
+      expect(await endpoints.ai.memories(as(admin), groupA), isEmpty);
+      await endpoints.ai.chat(
+        as(bob),
+        groupA,
+        [],
+        AiMessage(role: 'user', content: 'Quand suis-je payé ?'),
+      );
+      expect(
+        model.received.single.first['content'],
+        contains('Je suis payé le 28'),
+      );
+
+      final talk = [
+        AiMessage(role: 'user', content: 'Quand suis-je payé ?'),
+        AiMessage(role: 'assistant', content: 'Le 28.'),
+      ];
+      final c = await endpoints.ai.saveConversation(
+        as(bob),
+        groupA,
+        null,
+        talk,
+      );
+      expect(c.title, 'Quand suis-je payé ?');
+      await expectLater(
+        endpoints.ai.saveConversation(as(admin), groupA, c.id, talk),
+        denied,
+      );
+      expect(await endpoints.ai.conversations(as(admin), groupA), isEmpty);
+      await endpoints.ai.deleteConversation(as(admin), c.id!);
+      expect(await endpoints.ai.conversations(as(bob), groupA), hasLength(1));
+      for (var i = 0; i < 31; i++) {
+        await endpoints.ai.saveConversation(as(bob), groupA, null, talk);
+      }
+      expect(
+        await endpoints.ai.conversations(as(bob), groupA),
+        hasLength(30),
+        reason: 'the latest 30',
+      );
+      await endpoints.ai.deleteMemory(as(bob), m.id!);
+      expect(await endpoints.ai.memories(as(bob), groupA), isEmpty);
+    });
+
     test('cap, no vision, provider down: said plainly, never another '
         'provider', () async {
       final p = await endpoints.ai.saveProvider(as(admin), local(cap: 1), null);

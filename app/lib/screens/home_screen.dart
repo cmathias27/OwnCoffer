@@ -25,6 +25,7 @@ import 'operations_screen.dart';
 import 'security_screen.dart';
 import '../help/help.dart';
 import '../assistant/chat_controller.dart';
+import 'feedback_screen.dart';
 
 /// Signed-in shell: navigation rail on wide screens, bottom bar on phones.
 class HomeScreen extends StatefulWidget {
@@ -384,6 +385,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 PopupMenuItem(
                   value: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
+                      builder: (_) => FeedbackScreen(page: _helpTopic.name),
+                    ),
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.feedback_outlined),
+                    title: Text(l.feedbackTitle),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
                       builder: (_) => HelpPage(topic: _helpTopic),
                     ),
                   ),
@@ -429,6 +441,16 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.shield_outlined),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(builder: (_) => const SecurityScreen()),
+              ),
+            ),
+          if (wide)
+            IconButton(
+              tooltip: l.feedbackTitle,
+              icon: const Icon(Icons.feedback_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => FeedbackScreen(page: _helpTopic.name),
+                ),
               ),
             ),
           if (wide)

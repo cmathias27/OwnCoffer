@@ -11,6 +11,11 @@ OwnCoffer fonctionne entièrement sans IA. L'assistant est **désactivé par dé
 
 Une fois l'assistant activé, une **bulle** apparaît en bas à droite de l'écran. Touchez-la pour ouvrir la conversation, comme dans une messagerie : elle **reste ouverte quand vous changez de page**, et la bulle signale une réponse arrivée pendant qu'elle était réduite. L'en-tête permet de commencer une nouvelle conversation, d'ouvrir les réglages ou de réduire la fenêtre.
 
+## Ce qu'il garde en tête, et l'historique
+
+- Dans les réglages, **« Ce que l'assistant doit savoir »** : quelques phrases (« je suis payé le 28 »…) envoyées avec chaque question. Vous seul les voyez, et vous les oubliez d'un geste.
+- Dans la bulle, le bouton **historique** montre vos 30 dernières conversations, gardées sur votre serveur et visibles par vous seul : touchez-en une pour la reprendre, ou supprimez-la.
+
 ## Ce qu'il peut faire
 
 - **Répondre à vos questions** sur vos comptes : « combien ai-je dépensé en restaurants ce mois-ci ? », « quelles échéances arrivent ? ».

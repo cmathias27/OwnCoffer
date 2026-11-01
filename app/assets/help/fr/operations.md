@@ -21,6 +21,10 @@ Toucher une opération ouvre sa fiche :
 
 D'où vient la catégorie est toujours indiqué : votre choix, une règle du foyer, une règle commune, votre historique, ou une proposition de l'IA que vous avez acceptée.
 
+## Corbeille
+
+Le bouton **« Corbeille »** de la page Opérations liste les opérations mises à la corbeille : **restaurez-les**, ou **supprimez-les définitivement** (une à une ou en vidant la corbeille). Une opération supprimée revient si vous réimportez le relevé qui la contient.
+
 ## Pointer
 
 Pointer une opération, c'est cocher qu'elle apparaît bien sur le relevé de la banque.

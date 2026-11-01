@@ -11,6 +11,11 @@ OwnCoffer works fully without AI. The assistant is **off by default**: everyone 
 
 Once the assistant is on, a **bubble** shows at the bottom right of the screen. Tap it to open the conversation, as in a messenger: it **stays open when you change page**, and the bubble shows a reply that arrived while it was minimised. Its header starts a new conversation, opens the settings or minimises the window.
 
+## What it keeps in mind, and the history
+
+- In the settings, **"What the assistant should know"**: a few sentences ("I am paid on the 28th"…) sent with each question. Only you see them, and you forget them in one tap.
+- In the bubble, the **history** button shows your latest 30 conversations, kept on your server and visible to you only: tap one to go on with it, or delete it.
+
 ## What it can do
 
 - **Answer your questions** about your accounts: "how much did I spend in restaurants this month?", "which due dates are coming?".

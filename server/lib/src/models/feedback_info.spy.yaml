@@ -1,0 +1,5 @@
+### A remark and who sent it (server administrator).
+class: FeedbackInfo
+fields:
+  feedback: UserFeedback
+  email: String?

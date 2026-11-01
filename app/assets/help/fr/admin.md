@@ -12,6 +12,7 @@ Cette page n'est visible que par l'**administrateur du serveur**. Elle ne montre
 - **Sauvegardes** : sauvegarde de chaque nuit, « Sauvegarder maintenant », liste. La restauration se fait sur le serveur seulement : les sauvegardes contiennent toutes les données bancaires.
 - **Mises à jour** : version en service, dernière publiée, mises à jour automatiques ou non. L'installation sauvegarde d'abord et revient en arrière si la nouvelle version ne démarre pas.
 - **IA** : les fournisseurs d'IA proposés aux utilisateurs.
+- **Retours** : les messages envoyés par les utilisateurs avec « Donner un avis » ; cochez ceux qui sont traités.
 
 ## Ajouter un fournisseur d'IA
 

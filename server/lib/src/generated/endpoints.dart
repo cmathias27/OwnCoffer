@@ -46,6 +46,7 @@ import '../endpoints/advisor_endpoint.dart' as _ioe4fqri;
 import '../endpoints/ai_endpoint.dart' as _igsjf4zh;
 import '../endpoints/analysis_endpoint.dart' as _i0sl0qub;
 import '../endpoints/category_endpoint.dart' as _ioevag4g;
+import '../endpoints/feedback_endpoint.dart' as _iebcplle;
 import '../endpoints/goal_endpoint.dart' as _i2k4izhk;
 import '../endpoints/group_endpoint.dart' as _iknqvl2r;
 import '../endpoints/import_endpoint.dart' as _i51ek8od;
@@ -110,6 +111,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'category',
+          null,
+        ),
+      'feedback': _iebcplle.FeedbackEndpoint()
+        ..initialize(
+          server,
+          'feedback',
           null,
         ),
       'goal': _i2k4izhk.GoalEndpoint()
@@ -1142,6 +1149,135 @@ class Endpoints extends _is.EndpointDispatch {
                     params['documentId'],
                   ),
         ),
+        'memories': _is.MethodConnector(
+          name: 'memories',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['ai'] as _igsjf4zh.AiEndpoint).memories(
+                session,
+                params['groupId'],
+              ),
+        ),
+        'addMemory': _is.MethodConnector(
+          name: 'addMemory',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'text': _is.ParameterDescription(
+              name: 'text',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['ai'] as _igsjf4zh.AiEndpoint).addMemory(
+                session,
+                params['groupId'],
+                params['text'],
+              ),
+        ),
+        'deleteMemory': _is.MethodConnector(
+          name: 'deleteMemory',
+          params: {
+            'memoryId': _is.ParameterDescription(
+              name: 'memoryId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['ai'] as _igsjf4zh.AiEndpoint).deleteMemory(
+                session,
+                params['memoryId'],
+              ),
+        ),
+        'conversations': _is.MethodConnector(
+          name: 'conversations',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['ai'] as _igsjf4zh.AiEndpoint).conversations(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'saveConversation': _is.MethodConnector(
+          name: 'saveConversation',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'conversationId': _is.ParameterDescription(
+              name: 'conversationId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'messages': _is.ParameterDescription(
+              name: 'messages',
+              type: _is.getType<List<_ijy47dz3.AiMessage>>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['ai'] as _igsjf4zh.AiEndpoint).saveConversation(
+                    session,
+                    params['groupId'],
+                    params['conversationId'],
+                    params['messages'],
+                  ),
+        ),
+        'deleteConversation': _is.MethodConnector(
+          name: 'deleteConversation',
+          params: {
+            'conversationId': _is.ParameterDescription(
+              name: 'conversationId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['ai'] as _igsjf4zh.AiEndpoint).deleteConversation(
+                    session,
+                    params['conversationId'],
+                  ),
+        ),
         'setPreference': _is.MethodConnector(
           name: 'setPreference',
           params: {
@@ -1504,6 +1640,94 @@ class Endpoints extends _is.EndpointDispatch {
                   (endpoints['category'] as _ioevag4g.CategoryEndpoint).archive(
                     session,
                     params['categoryId'],
+                  ),
+        ),
+      },
+    );
+    connectors['feedback'] = _is.EndpointConnector(
+      name: 'feedback',
+      endpoint: endpoints['feedback']!,
+      methodConnectors: {
+        'send': _is.MethodConnector(
+          name: 'send',
+          params: {
+            'kind': _is.ParameterDescription(
+              name: 'kind',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'text': _is.ParameterDescription(
+              name: 'text',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'page': _is.ParameterDescription(
+              name: 'page',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'appVersion': _is.ParameterDescription(
+              name: 'appVersion',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['feedback'] as _iebcplle.FeedbackEndpoint).send(
+                    session,
+                    params['kind'],
+                    params['text'],
+                    params['page'],
+                    params['appVersion'],
+                  ),
+        ),
+        'mine': _is.MethodConnector(
+          name: 'mine',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['feedback'] as _iebcplle.FeedbackEndpoint)
+                  .mine(session),
+        ),
+        'all': _is.MethodConnector(
+          name: 'all',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['feedback'] as _iebcplle.FeedbackEndpoint)
+                  .all(session),
+        ),
+        'setDone': _is.MethodConnector(
+          name: 'setDone',
+          params: {
+            'feedbackId': _is.ParameterDescription(
+              name: 'feedbackId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'done': _is.ParameterDescription(
+              name: 'done',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['feedback'] as _iebcplle.FeedbackEndpoint).setDone(
+                    session,
+                    params['feedbackId'],
+                    params['done'],
                   ),
         ),
       },

@@ -174,8 +174,17 @@ abstract final class AiGateway {
             ],
     };
     final today = DateTime.now().toUtc().toIso8601String().substring(0, 10);
+    final memories = await AiMemory.db.find(
+      session,
+      where: (m) => m.authUserId.equals(user) & m.groupId.equals(groupId),
+      orderBy: (m) => m.id,
+    );
+    final remember = memories.isEmpty
+        ? ''
+        : ' What the user asked you to keep in mind: '
+              '${[for (final m in memories) '"${m.text}"'].join('; ')}.';
     final messages = <Map<String, Object?>>[
-      {'role': 'system', 'content': '$_system Today is $today.'},
+      {'role': 'system', 'content': '$_system Today is $today.$remember'},
       for (final m
           in history.length > _maxHistory
               ? history.sublist(history.length - _maxHistory)

@@ -13,6 +13,7 @@ import 'update_progress_screen.dart';
 import 'members_screen.dart';
 import 'security_screen.dart';
 import '../help/help.dart';
+import 'feedback_screen.dart';
 
 /// Server administration (server administrator only): health, figures,
 /// accounts, banned IPs and the audit log. Never a group's financial data.
@@ -118,7 +119,7 @@ class _AdminScreenState extends State<AdminScreen> {
     final l = AppLocalizations.of(context);
     final membership = widget.membership;
     return DefaultTabController(
-      length: membership == null ? 9 : 10,
+      length: membership == null ? 10 : 11,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.adminTitle),
@@ -143,6 +144,7 @@ class _AdminScreenState extends State<AdminScreen> {
               Tab(text: l.adminTabMySecurity),
               Tab(text: l.adminTabSecurity),
               Tab(text: l.adminTabAudit),
+              Tab(text: l.adminTabFeedback),
             ],
           ),
         ),
@@ -223,6 +225,7 @@ class _AdminScreenState extends State<AdminScreen> {
                         _act(() => client.admin.unbanIp(ip), l.adminUnbanned),
                   ),
                   _AuditView(entries: _audit),
+                  const AdminFeedbackView(),
                 ],
               ),
       ),

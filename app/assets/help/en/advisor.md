@@ -7,6 +7,16 @@ What OwnCoffer proposes to change. **Nothing changes without your agreement.**
 - **Calculated by OwnCoffer, without AI**: set a goal for a category spent every month, raise it when it is often exceeded, lower it when spending stays well below. Each card shows its figures and its calculation.
 - **Proposed by the AI**, if you use the assistant: a category for an operation, a classification rule, a loan read in a document, the split of a receipt, an invoice's details, or the terms read in a loan's document. The card names the provider and the model. For a rule, OwnCoffer checks that it matches the label and counts by itself the operations it will classify.
 
+## Cards to watch
+
+Next to the proposals, My advisor shows **information cards**, computed without AI, that change nothing:
+
+- **anticipate**: an account that will go below its alert threshold, with the lowest point forecast;
+- **watch**: an operation much higher than usual for its label, or charged twice;
+- **advise**: the bank fees of the year, when over 20 €.
+
+Tap **"Understood"** or **"Ignore"**: the card does not come back.
+
 ## Accept, refuse, undo
 
 - **Accept** applies the proposal, once only, even after a double click.

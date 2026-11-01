@@ -1,0 +1,15 @@
+### A past conversation with the assistant, kept on this server for its
+### user only (the latest 30), to read again or go on with. Text only.
+class: AiConversation
+table: ai_conversations
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  title: String
+  ### The messages as JSON: [{"role": "user" | "assistant", "content": …}].
+  messages: String
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+indexes:
+  ai_conversations_user_idx:
+    fields: authUserId, groupId, updatedAt

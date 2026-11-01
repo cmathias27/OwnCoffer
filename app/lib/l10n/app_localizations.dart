@@ -7919,6 +7919,174 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Corbeille vidée.'**
   String get trashEmptied;
+
+  /// No description provided for @chatHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conversations précédentes'**
+  String get chatHistory;
+
+  /// No description provided for @chatHistoryHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos 30 dernières conversations, gardées sur votre serveur et visibles par vous seul. Touchez-en une pour la reprendre.'**
+  String get chatHistoryHelp;
+
+  /// No description provided for @chatHistoryNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune conversation gardée.'**
+  String get chatHistoryNone;
+
+  /// No description provided for @chatHistoryDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer cette conversation'**
+  String get chatHistoryDelete;
+
+  /// No description provided for @aiMemoriesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que l\'assistant doit savoir'**
+  String get aiMemoriesTitle;
+
+  /// No description provided for @aiMemoriesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quelques phrases que l\'assistant garde en tête à chaque question, par exemple « je suis payé le 28 » ou « ne me propose pas de changer de banque ». Vous seul les voyez ; elles sont envoyées au modèle avec vos questions.'**
+  String get aiMemoriesHelp;
+
+  /// No description provided for @aiMemoriesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une chose à retenir'**
+  String get aiMemoriesHint;
+
+  /// No description provided for @aiMemoriesAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get aiMemoriesAdd;
+
+  /// No description provided for @aiMemoriesDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Oublier'**
+  String get aiMemoriesDelete;
+
+  /// No description provided for @error_ai_memory_full.
+  ///
+  /// In fr, this message translates to:
+  /// **'20 choses à retenir au plus : oubliez-en une d\'abord.'**
+  String get error_ai_memory_full;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donner un avis'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un problème, une idée, une question ? Votre message va à l\'administrateur de ce serveur.'**
+  String get feedbackIntro;
+
+  /// No description provided for @feedbackBug.
+  ///
+  /// In fr, this message translates to:
+  /// **'Problème'**
+  String get feedbackBug;
+
+  /// No description provided for @feedbackIdea.
+  ///
+  /// In fr, this message translates to:
+  /// **'Idée'**
+  String get feedbackIdea;
+
+  /// No description provided for @feedbackQuestion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Question'**
+  String get feedbackQuestion;
+
+  /// No description provided for @feedbackHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Décrivez ce qui se passe, ou ce que vous aimeriez'**
+  String get feedbackHint;
+
+  /// No description provided for @feedbackPrivacy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le message reste sur ce serveur, avec la page d\'où vous l\'envoyez et la version d\'OwnCoffer. Aucune donnée bancaire n\'est jointe : n\'en écrivez pas.'**
+  String get feedbackPrivacy;
+
+  /// No description provided for @feedbackSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get feedbackSend;
+
+  /// No description provided for @feedbackSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Merci, c\'est envoyé.'**
+  String get feedbackSent;
+
+  /// No description provided for @feedbackMine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos messages'**
+  String get feedbackMine;
+
+  /// No description provided for @feedbackDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'traité'**
+  String get feedbackDone;
+
+  /// No description provided for @feedbackOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'en attente'**
+  String get feedbackOpen;
+
+  /// No description provided for @adminTabFeedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retours'**
+  String get adminTabFeedback;
+
+  /// No description provided for @adminFeedbackHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les messages des utilisateurs, du plus récent au plus ancien. Cochez ceux qui sont traités : l\'auteur le voit.'**
+  String get adminFeedbackHelp;
+
+  /// No description provided for @adminFeedbackNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun retour pour l\'instant.'**
+  String get adminFeedbackNone;
+
+  /// No description provided for @error_feedback_too_many.
+  ///
+  /// In fr, this message translates to:
+  /// **'20 messages par jour au plus.'**
+  String get error_feedback_too_many;
+
+  /// No description provided for @error_ai_conversation_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette conversation n\'existe plus.'**
+  String get error_ai_conversation_access_denied;
+
+  /// No description provided for @error_feedback_unknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce message n\'existe plus.'**
+  String get error_feedback_unknown;
 }
 
 class _AppLocalizationsDelegate

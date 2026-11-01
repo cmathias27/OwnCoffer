@@ -131,31 +131,31 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 
 **Compléments du cœur**
 
-- [ ] Import groupé, ventilation, corbeille, testeur de règles — *en partie dans la 0.3.0 : ventilation, annulation des actions*
-- [ ] Solde de contrôle et détection des frais bancaires — *en partie dans la 0.3.0 : solde de contrôle, frais du mois dans la revue*
+- [x] Import groupé, ventilation, corbeille, testeur de règles — *ventilation et annulation (0.3.0), testeur de règles ; import de plusieurs fichiers et corbeille (restaurer, supprimer, vider) dans la 0.3.33*
+- [x] Solde de contrôle et détection des frais bancaires — *solde de contrôle (0.3.0) ; frais repérés par catégorie et par libellé sur 12 mois, et carte du conseiller, dans la 0.3.33*
 - [x] Rapprochement automatique des opérations prévues, reste à vivre, dépenses variables, calendrier des échéances — *reste à vivre et calendrier dans la 0.3.0, dépenses variables estimées dans la 0.3.5*
 - [x] Moteur de simulation (sans IA) : simulateur d'achat (solde à une date choisie, point bas, comptant / en plusieurs fois / plus tard) et scénarios comparés côte à côte — *0.3.6*
-- [ ] Analyses calculées (sans IA) : évolutions par catégorie, hausses et anomalies chiffrées, objectifs suggérés d'après les 3 à 6 derniers mois, fiabilité des prévisions affichée — *en partie dans la 0.2.0 : classement par catégorie sur la semaine, le mois ou l'année, comparaison à la période précédente et à la moyenne des 3 précédentes, objectif suggéré*
+- [x] Analyses calculées (sans IA) : évolutions par catégorie, hausses et anomalies chiffrées, objectifs suggérés d'après les 3 à 6 derniers mois, fiabilité des prévisions affichée — *0.2.0 et 0.3.33 : page Analyses (opérations inhabituelles, fiabilité des prévisions), objectifs sur 6 mois*
 - [x] Objectifs par catégorie, alertes à 80 %, 100 % et anticipée ; réglages des notifications — *objectif mensuel et jauge (0.2.0), alertes à 80 % et 100 % (0.3.0), projection et alerte anticipée (0.3.4), réglages des notifications par personne, dans l'application et par courriel (0.3.31)*
 - [x] Tableau de bord et graphiques — *en partie dans la 0.2.0 : page Budget (revenus et dépenses sur 6 périodes, classements) et abonnements ; vues lignes, tableau, camembert et graphique, trimestre, 6 à 24 périodes (0.3.16) ; comparaisons entre catégories, périodes et comptes (0.3.18) ; comparaison avec une simulation de changement de contrat (0.3.22) ; accueil (0.3.23)*
 - [x] Crédits avec tableau d'amortissement, paiements en plusieurs fois — *crédits à taux fixe (0.2.0), depuis une opération (0.2.1), paiements en plusieurs fois (0.3.0, 0.3.17) ; taux variable, renégociation, remboursement anticipé enregistré et crédit renouvelable avec plafond (0.3.31)*
 - [x] Page Opérations : **mettre en évidence les abonnements** (repère sur chaque opération rattachée à un abonnement, filtre « Abonnements », lien vers la liste des abonnements) — demandé le 31 octobre 2026
-- [ ] Revue de fin de mois et détection d'anomalies — *en partie dans la 0.3.0 : revue du mois*
+- [x] Revue de fin de mois et détection d'anomalies — *revue du mois (0.3.0) ; opérations inhabituelles et doubles prélèvements (0.3.33)*
 - [x] **Page d'administration du serveur** (demandée le 31 octobre 2026) : santé, chiffres sans montant, comptes (bloquer), IP bloquées, journal — *0.3.7*, sauvegardes (liste, état de la nuit, sauvegarde à la demande) — *0.3.8*, invitations de tous les groupes — *0.3.9*, mises à jour (automatiques ou non, installation à la demande, notes de version, historique) — *0.3.10*, par un dossier d'échange avec l'hôte
 - [x] **Factures** (demandées le 31 octobre 2026) : jointes à une opération (PDF, image, photo recadrée), page Factures avec noms automatiques et export ZIP, factures à rattacher avec propositions, fin de garantie et rappel, envoi par courriel ; en mode serveur comme en mode autonome — jointes à une opération, page Factures, noms automatiques, export ZIP, garantie et rappel, envoi par courriel — *0.3.11* ; factures à rattacher avec propositions — *0.3.14* ; photo recadrée comme par un scanner — *0.3.15*
-- [ ] Onglet Feedback
+- [x] Onglet Feedback — *« Donner un avis » et onglet Retours de l'administration, 0.3.33*
 
 **Conseiller et IA**
 
 - [x] Circuit des modifications proposées (décision 0009) : service de propositions, service de validation, service de commandes financières ; idempotence, refus des propositions périmées, journal d'audit, annulation possible — *0.3.24*
-- [ ] Espace **Mon conseiller** (sans IA) : cartes surveiller / anticiper / conseiller / accompagner calculées par le moteur, acceptées, refusées ou ignorées, suivies et justifiées — *en partie dans la 0.3.24 : propositions sur les objectifs, justifiées, acceptées, refusées, annulables ; l'accueil fait la partie « surveiller »*
+- [x] Espace **Mon conseiller** (sans IA) : cartes surveiller / anticiper / conseiller / accompagner calculées par le moteur, acceptées, refusées ou ignorées, suivies et justifiées — *propositions sur les objectifs (0.3.24) ; cartes découvert à venir, opération inhabituelle ou en double, frais bancaires (0.3.33)*
 - [x] Passerelle IA (décision 0008) : interface commune, choix du fournisseur et du modèle par utilisateur, capacités par modèle, aucun basculement automatique vers l'externe, affichage de ce qui quitte le serveur ; clé chiffrée, plafond mensuel — *0.3.25, fournisseurs configurés par l'administrateur (décision 0017)*
 - [x] Premiers connecteurs : un externe (compatible API OpenAI) et un local (Ollama) — *0.3.25 : un seul adaptateur, Ollama parlant la même API ; 0.3.29 : Gemini, ChatGPT et Claude prêts à l'emploi, Claude par son API*
 - [x] Fonctions de contexte financier en lecture seule (`get_account_overview`, `get_transactions`, `get_budget_status`, `get_upcoming_expenses`, `get_cashflow_forecast`, `get_financial_goals`), limitées aux comptes visibles
 - [x] **Serveur MCP** (demandé le 1er novembre 2026) : mêmes fonctions que l'assistant, jeton personnel révocable, comptes visibles, propositions seulement — *0.3.26, décision 0018*
 - [x] Catégorisation d'appoint par l'IA, avec la règle suggérée — *catégories proposées dans la 0.3.25 ; règle suggérée, vérifiée et comptée par le moteur, dans la 0.3.28*
 - [x] Lecture de documents : tickets (sans IA : saisie assistée ; avec IA : ventilation ligne par ligne), offres de prêt et tableaux d'amortissement (avec IA), factures — *0.3.31 : tickets, factures et documents de crédit gardés dans OwnCoffer lus par l'IA de l'utilisateur, propositions validées dans Mon conseiller ; sans IA, la ventilation à la main reste disponible*
-- [ ] Assistant IA (en option) : interroge le moteur, explique, pose les scénarios en langage naturel ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable
+- [x] Assistant IA (en option) : interroge le moteur, explique, pose les scénarios en langage naturel ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable — *0.3.25 ; bulle de discussion (0.3.32) ; mémoire et historique des conversations (0.3.33) ; fonctions consultées affichées, propositions refusables*
 - [ ] Licence Serverpod clarifiée avant d'ouvrir la bêta à d'autres personnes (décision 0001)
 - [ ] Row Level Security PostgreSQL réévaluée avant d'ouvrir la bêta (décision 0016)
 

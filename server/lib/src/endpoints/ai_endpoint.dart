@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:serverpod/serverpod.dart';
 
 import '../ai/ai_adapter.dart';
@@ -180,6 +182,140 @@ class AiEndpoint extends Endpoint {
     } on AiUnavailable catch (e) {
       throw InvalidInputException(code: 'ai_unavailable', field: e.reason);
     }
+  }
+
+  static const _maxMemories = 20;
+  static const _maxConversations = 30;
+
+  /// What the user asked the assistant to keep in mind, oldest first.
+  Future<List<AiMemory>> memories(Session session, int groupId) async {
+    await Access.requireMember(session, groupId);
+    return AiMemory.db.find(
+      session,
+      where: (m) =>
+          m.authUserId.equals(Access.userId(session)) &
+          m.groupId.equals(groupId),
+      orderBy: (m) => m.id,
+    );
+  }
+
+  Future<AiMemory> addMemory(Session session, int groupId, String text) async {
+    await Access.requireMember(session, groupId);
+    final clean = text.trim().replaceAll(RegExp(r'\s+'), ' ');
+    if (clean.isEmpty || clean.length > 300) {
+      throw InvalidInputException(code: 'invalid_name', field: 'text');
+    }
+    if ((await memories(session, groupId)).length >= _maxMemories) {
+      throw InvalidInputException(code: 'ai_memory_full');
+    }
+    return AiMemory.db.insertRow(
+      session,
+      AiMemory(
+        authUserId: Access.userId(session),
+        groupId: groupId,
+        text: clean,
+      ),
+    );
+  }
+
+  Future<void> deleteMemory(Session session, int memoryId) async {
+    await AiMemory.db.deleteWhere(
+      session,
+      where: (m) =>
+          m.id.equals(memoryId) & m.authUserId.equals(Access.userId(session)),
+    );
+  }
+
+  /// The user's past conversations in this household, newest first.
+  Future<List<AiConversation>> conversations(
+    Session session,
+    int groupId,
+  ) async {
+    await Access.requireMember(session, groupId);
+    return AiConversation.db.find(
+      session,
+      where: (c) =>
+          c.authUserId.equals(Access.userId(session)) &
+          c.groupId.equals(groupId),
+      orderByList: (c) => [c.updatedAt.desc(), c.id.desc()],
+      limit: _maxConversations,
+    );
+  }
+
+  /// Keeps a conversation (text only); [conversationId] goes on with one.
+  /// Only the latest 30 are kept.
+  Future<AiConversation> saveConversation(
+    Session session,
+    int groupId,
+    int? conversationId,
+    List<AiMessage> messages,
+  ) async {
+    await Access.requireMember(session, groupId);
+    final user = Access.userId(session);
+    final kept = [
+      for (final m in messages.take(200))
+        {
+          'role': m.role == 'assistant' ? 'assistant' : 'user',
+          'content': m.content.length > 8000
+              ? m.content.substring(0, 8000)
+              : m.content,
+        },
+    ];
+    final first = messages
+        .where((m) => m.role != 'assistant')
+        .firstOrNull
+        ?.content
+        .trim();
+    final title = first == null || first.isEmpty
+        ? '…'
+        : first.length > 80
+        ? '${first.substring(0, 80)}…'
+        : first;
+    final now = DateTime.now().toUtc();
+    final current = conversationId == null
+        ? null
+        : await AiConversation.db.findFirstRow(
+            session,
+            where: (c) =>
+                c.id.equals(conversationId) &
+                c.authUserId.equals(user) &
+                c.groupId.equals(groupId),
+          );
+    if (conversationId != null && current == null) {
+      throw AccessDeniedException(code: 'ai_conversation_access_denied');
+    }
+    final saved = current == null
+        ? await AiConversation.db.insertRow(
+            session,
+            AiConversation(
+              authUserId: user,
+              groupId: groupId,
+              title: title,
+              messages: jsonEncode(kept),
+            ),
+          )
+        : await AiConversation.db.updateRow(
+            session,
+            current.copyWith(messages: jsonEncode(kept), updatedAt: now),
+          );
+    final all = await AiConversation.db.find(
+      session,
+      where: (c) => c.authUserId.equals(user) & c.groupId.equals(groupId),
+      orderByList: (c) => [c.updatedAt.desc(), c.id.desc()],
+    );
+    for (final old in all.skip(_maxConversations)) {
+      await AiConversation.db.deleteRow(session, old);
+    }
+    return saved;
+  }
+
+  Future<void> deleteConversation(Session session, int conversationId) async {
+    await AiConversation.db.deleteWhere(
+      session,
+      where: (c) =>
+          c.id.equals(conversationId) &
+          c.authUserId.equals(Access.userId(session)),
+    );
   }
 
   /// The user's choice: a provider set up by the administrator and one of

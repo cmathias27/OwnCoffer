@@ -2,6 +2,34 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.33 (1er novembre 2026)
+
+### Analyses, sans IA
+
+- Nouvelle page **Analyses** (depuis le Budget) :
+  - **fiabilité des prévisions** : combien d'opérations prévues sont arrivées comme prévu ces trois derniers mois, et les dépenses variables estimées du dernier mois face à ce qui a été réellement dépensé ;
+  - **opérations inhabituelles** : un prélèvement bien plus élevé que d'habitude pour son libellé (avec le montant habituel et sur combien d'opérations il est calculé), ou le même prélevé deux fois à quelques jours d'écart ;
+  - **frais bancaires des 12 derniers mois** : mois par mois et par libellé. Ils sont repérés par leur catégorie ou par leur libellé (frais, commission, agios, cotisation de carte…), et les remboursements de frais sont déduits.
+- Les **objectifs suggérés** se calculent maintenant sur les 3 à 6 derniers mois, sans compter les mois vides du début.
+
+### Mon conseiller : des cartes à surveiller
+
+- À côté des propositions : **découvert à venir** sur un compte, **opération inhabituelle** ou **prélevée deux fois**, **frais bancaires** de l'année. Chaque carte donne ses chiffres. Elle se marque « Compris » ou « Ignorer », ne change rien et ne revient pas.
+
+### Import de plusieurs fichiers, corbeille
+
+- **« Plusieurs fichiers »** dans la page Import : plusieurs relevés d'un coup, chacun lu d'abord, sur le compte reconnu (OFX) ou choisi ; les doublons possibles sont laissés de côté.
+- **Corbeille** (page Opérations) : les opérations mises à la corbeille, à **restaurer** ou à **supprimer définitivement** ; « Vider » pour tout supprimer.
+
+### Assistant : mémoire et historique
+
+- **« Ce que l'assistant doit savoir »** dans les réglages : quelques phrases envoyées avec chaque question, visibles par vous seul.
+- **Historique** dans la bulle : vos 30 dernières conversations, gardées sur votre serveur, à reprendre ou à supprimer.
+
+### Donner un avis
+
+- **« Donner un avis »** (menu du compte, ou icône en haut sur grand écran) : un problème, une idée, une question, envoyés à l'administrateur du serveur avec la page et la version. L'administrateur les lit dans l'onglet **Retours** et les marque traités ; l'auteur voit où en est son message.
+
 ## 0.3.32 (1er novembre 2026)
 
 ### Assistant : une bulle de discussion

@@ -21,6 +21,10 @@ Tapping an operation opens its sheet:
 
 Where the category comes from is always shown: your choice, a household rule, a common rule, your history, or an AI proposal you accepted.
 
+## Trash
+
+The **"Trash"** button of the Operations page lists the operations moved to the trash: **restore them**, or **delete them for good** (one by one or by emptying the trash). A deleted operation comes back if you import again the statement that holds it.
+
 ## Clearing
 
 Clearing an operation means ticking that it does appear on the bank statement.

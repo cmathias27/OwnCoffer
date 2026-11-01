@@ -7,6 +7,16 @@ Ce qu'OwnCoffer vous propose de changer. **Rien ne change sans votre accord.**
 - **Calculées par OwnCoffer, sans IA** : fixer un objectif pour une catégorie dépensée chaque mois, le relever quand il est souvent dépassé, le baisser quand les dépenses restent bien en dessous. Chaque carte montre ses chiffres et son calcul.
 - **Proposées par l'IA**, si vous utilisez l'assistant : une catégorie pour une opération, une règle de classement, un crédit lu dans un document, la ventilation d'un ticket, les informations d'une facture, ou les conditions lues dans le document d'un crédit. La carte indique le fournisseur et le modèle. Pour une règle, OwnCoffer vérifie qu'elle correspond au libellé et compte lui-même les opérations qu'elle classera.
 
+## Les cartes à surveiller
+
+À côté des propositions, Mon conseiller montre des **cartes d'information**, calculées sans IA, qui ne changent rien :
+
+- **anticiper** : un compte qui passera sous son seuil d'alerte, avec le point bas prévu ;
+- **surveiller** : une opération bien plus élevée que d'habitude pour son libellé, ou prélevée deux fois ;
+- **conseiller** : les frais bancaires de l'année, quand ils dépassent 20 €.
+
+Touchez **« Compris »** ou **« Ignorer »** : la carte ne revient pas.
+
 ## Accepter, refuser, annuler
 
 - **Accepter** applique la proposition, une seule fois, même en cas de double clic.

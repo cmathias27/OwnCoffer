@@ -16,6 +16,9 @@ class ChatController extends ChangeNotifier {
   var open = false;
   var sending = false;
 
+  /// The kept conversation this one goes on with, once saved.
+  int? conversationId;
+
   /// A reply arrived while the panel was closed.
   var unread = false;
 
@@ -39,6 +42,7 @@ class ChatController extends ChangeNotifier {
     if (m?.group.id == _membership?.group.id) return;
     _membership = m;
     talk.clear();
+    conversationId = null;
     open = false;
     unread = false;
     _status = null;
@@ -79,7 +83,58 @@ class ChatController extends ChangeNotifier {
 
   void clear() {
     talk.clear();
+    conversationId = null;
     notifyListeners();
+  }
+
+  /// Goes on with a past conversation (text only).
+  void resume(AiConversation c) {
+    final raw = jsonDecode(c.messages);
+    talk.clear();
+    AiMessage? question;
+    for (final m in raw is List ? raw : const []) {
+      if (m is! Map) continue;
+      final text = '${m['content'] ?? ''}';
+      if (m['role'] == 'assistant') {
+        if (question == null) continue;
+        talk.add((
+          question,
+          AiReply(
+            text: text,
+            tools: const [],
+            provider: '',
+            model: '',
+            isExternal: false,
+            proposals: const [],
+          ),
+        ));
+        question = null;
+      } else {
+        question = AiMessage(role: 'user', content: text);
+      }
+    }
+    conversationId = c.id;
+    notifyListeners();
+  }
+
+  Future<void> _save() async {
+    final m = _membership;
+    if (m == null) return;
+    try {
+      final saved = await client.ai.saveConversation(
+        m.group.id!,
+        conversationId,
+        [
+          for (final (q, r) in talk) ...[
+            q.copyWith(imageBase64: null),
+            if (r != null) AiMessage(role: 'assistant', content: r.text),
+          ],
+        ],
+      );
+      conversationId = saved.id;
+    } on Object {
+      // Kept on screen anyway; the history simply misses it.
+    }
   }
 
   /// Sends [text] (and an image for a model that reads them). Returns the
@@ -111,6 +166,7 @@ class ChatController extends ChangeNotifier {
       final reply = await client.ai.chat(m.group.id!, history, message);
       talk[talk.length - 1] = (message, reply);
       if (!open) unread = true;
+      await _save();
     } on Object catch (e) {
       talk.removeLast();
       error = e;

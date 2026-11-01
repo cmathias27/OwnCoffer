@@ -12,6 +12,7 @@ This page is only visible to the **server administrator**. It never shows a hous
 - **Backups**: nightly backup, "Back up now", list. Restoring is done on the server only: backups hold all the bank data.
 - **Updates**: running version, latest published, automatic updates or not. Installing backs up first and rolls back if the new version does not start.
 - **AI**: the AI providers offered to the users.
+- **Feedback**: the messages users send with "Give feedback"; tick those dealt with.
 
 ## Add an AI provider
 

@@ -29,6 +29,9 @@ import 'package:owncoffer_client/src/protocol/admin_invitation_info.dart'
 import 'package:owncoffer_client/src/protocol/admin_stats.dart' as _ip1w2kia;
 import 'package:owncoffer_client/src/protocol/admin_user_info.dart'
     as _i4kcqb5h;
+import 'package:owncoffer_client/src/protocol/ai_conversation.dart'
+    as _i3twyez0;
+import 'package:owncoffer_client/src/protocol/ai_memory.dart' as _iofw4ha7;
 import 'package:owncoffer_client/src/protocol/ai_message.dart' as _iarsdlqt;
 import 'package:owncoffer_client/src/protocol/ai_provider.dart' as _iupqajx2;
 import 'package:owncoffer_client/src/protocol/ai_reply.dart' as _i6gcixlb;
@@ -47,6 +50,7 @@ import 'package:owncoffer_client/src/protocol/csv_columns.dart' as _irbioy6y;
 import 'package:owncoffer_client/src/protocol/due_calendar.dart' as _i25nl2kq;
 import 'package:owncoffer_client/src/protocol/early_repayment.dart'
     as _i0heeame;
+import 'package:owncoffer_client/src/protocol/feedback_info.dart' as _i6glypql;
 import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
 import 'package:owncoffer_client/src/protocol/forecast_result.dart'
     as _ip0wp7v2;
@@ -115,6 +119,7 @@ import 'package:owncoffer_client/src/protocol/two_factor_status.dart'
     as _is1jzs1l;
 import 'package:owncoffer_client/src/protocol/update_overview.dart'
     as _ighiaz9s;
+import 'package:owncoffer_client/src/protocol/user_feedback.dart' as _i081ti63;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -693,6 +698,64 @@ class EndpointAi extends _isc.EndpointRef {
         {'documentId': documentId},
       );
 
+  /// What the user asked the assistant to keep in mind, oldest first.
+  _ida.Future<List<_iofw4ha7.AiMemory>> memories(int groupId) =>
+      caller.callServerEndpoint<List<_iofw4ha7.AiMemory>>(
+        'ai',
+        'memories',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<_iofw4ha7.AiMemory> addMemory(
+    int groupId,
+    String text,
+  ) => caller.callServerEndpoint<_iofw4ha7.AiMemory>(
+    'ai',
+    'addMemory',
+    {
+      'groupId': groupId,
+      'text': text,
+    },
+  );
+
+  _ida.Future<void> deleteMemory(int memoryId) =>
+      caller.callServerEndpoint<void>(
+        'ai',
+        'deleteMemory',
+        {'memoryId': memoryId},
+      );
+
+  /// The user's past conversations in this household, newest first.
+  _ida.Future<List<_i3twyez0.AiConversation>> conversations(int groupId) =>
+      caller.callServerEndpoint<List<_i3twyez0.AiConversation>>(
+        'ai',
+        'conversations',
+        {'groupId': groupId},
+      );
+
+  /// Keeps a conversation (text only); [conversationId] goes on with one.
+  /// Only the latest 30 are kept.
+  _ida.Future<_i3twyez0.AiConversation> saveConversation(
+    int groupId,
+    int? conversationId,
+    List<_iarsdlqt.AiMessage> messages,
+  ) => caller.callServerEndpoint<_i3twyez0.AiConversation>(
+    'ai',
+    'saveConversation',
+    {
+      'groupId': groupId,
+      'conversationId': conversationId,
+      'messages': messages,
+    },
+  );
+
+  _ida.Future<void> deleteConversation(int conversationId) =>
+      caller.callServerEndpoint<void>(
+        'ai',
+        'deleteConversation',
+        {'conversationId': conversationId},
+      );
+
   /// The user's choice: a provider set up by the administrator and one of
   /// its models, on or off.
   _ida.Future<_if0b0k6p.AiStatus> setPreference(
@@ -879,6 +942,60 @@ class EndpointCategory extends _isc.EndpointRef {
     'category',
     'archive',
     {'categoryId': categoryId},
+  );
+}
+
+/// Remarks sent from the app to the server administrator. They stay on the
+/// server: nothing goes to the project or anywhere else.
+/// {@category Endpoint}
+class EndpointFeedback extends _isc.EndpointRef {
+  EndpointFeedback(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'feedback';
+
+  _ida.Future<_i081ti63.UserFeedback> send(
+    String kind,
+    String text,
+    String? page,
+    String? appVersion,
+  ) => caller.callServerEndpoint<_i081ti63.UserFeedback>(
+    'feedback',
+    'send',
+    {
+      'kind': kind,
+      'text': text,
+      'page': page,
+      'appVersion': appVersion,
+    },
+  );
+
+  /// The user's own remarks, newest first.
+  _ida.Future<List<_i081ti63.UserFeedback>> mine() =>
+      caller.callServerEndpoint<List<_i081ti63.UserFeedback>>(
+        'feedback',
+        'mine',
+        {},
+      );
+
+  /// Server administrator: every remark, newest first, with who sent it.
+  _ida.Future<List<_i6glypql.FeedbackInfo>> all() =>
+      caller.callServerEndpoint<List<_i6glypql.FeedbackInfo>>(
+        'feedback',
+        'all',
+        {},
+      );
+
+  _ida.Future<_i081ti63.UserFeedback> setDone(
+    int feedbackId,
+    bool done,
+  ) => caller.callServerEndpoint<_i081ti63.UserFeedback>(
+    'feedback',
+    'setDone',
+    {
+      'feedbackId': feedbackId,
+      'done': done,
+    },
   );
 }
 
@@ -2284,6 +2401,7 @@ class Client extends _isc.ServerpodClientShared {
     ai = EndpointAi(this);
     analysis = EndpointAnalysis(this);
     category = EndpointCategory(this);
+    feedback = EndpointFeedback(this);
     goal = EndpointGoal(this);
     group = EndpointGroup(this);
     import = EndpointImport(this);
@@ -2315,6 +2433,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointAnalysis analysis;
 
   late final EndpointCategory category;
+
+  late final EndpointFeedback feedback;
 
   late final EndpointGoal goal;
 
@@ -2354,6 +2474,7 @@ class Client extends _isc.ServerpodClientShared {
     'ai': ai,
     'analysis': analysis,
     'category': category,
+    'feedback': feedback,
     'goal': goal,
     'group': group,
     'import': import,
