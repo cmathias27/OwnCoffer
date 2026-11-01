@@ -71,7 +71,7 @@ shared:
   // Serverpod listens on every interface: only this device may talk to it.
   pod.server.addMiddleware((Handler next) {
     return (Request req) async {
-      if (!isLocalAddress(req.connectionInfo.remote.address.toString())) {
+      if (!isLocalBytes(req.connectionInfo.remote.address.bytes)) {
         return Response.forbidden(body: Body.fromString('local_only'));
       }
       return next(req);
@@ -82,11 +82,19 @@ shared:
   return (pod: pod, api: Uri.parse('http://127.0.0.1:$port/'));
 }
 
-/// This device only: 127.0.0.1, ::1, and 127.0.0.1 seen through an IPv6
-/// socket (::ffff:127.0.0.1), as on any machine with IPv6.
+/// This device only, from the raw address: 127.x.x.x, ::1, and 127.x.x.x
+/// seen through an IPv6 socket (::ffff:127.0.0.1, however it is written),
+/// as on any machine with IPv6.
+bool isLocalBytes(List<int> b) {
+  if (b.length == 4) return b[0] == 127;
+  if (b.length != 16) return false;
+  final zeros = b.take(10).every((x) => x == 0);
+  if (zeros && b[10] == 0xff && b[11] == 0xff) return b[12] == 127;
+  return zeros && b.skip(10).take(5).every((x) => x == 0) && b[15] == 1;
+}
+
+/// [isLocalBytes] of a written address; false if it is not one.
 bool isLocalAddress(String address) {
-  var a = address.trim().toLowerCase();
-  if (a.startsWith('::ffff:')) a = a.substring(7);
-  final ip = InternetAddress.tryParse(a);
-  return ip != null && ip.isLoopback;
+  final ip = InternetAddress.tryParse(address.trim());
+  return ip != null && isLocalBytes(ip.rawAddress);
 }
