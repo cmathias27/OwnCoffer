@@ -3348,4 +3348,59 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get loanInstallmentsTotalHelp =>
       'Computed: instalment × number of instalments. Change it if the purchase cost something else.';
+
+  @override
+  String get compareTitle => 'Compare';
+
+  @override
+  String get compareIntro =>
+      'Put side by side categories over time, several periods or several accounts. The first period (or account) is the reference for the gaps.';
+
+  @override
+  String get compareCategories => 'Categories';
+
+  @override
+  String get comparePeriods => 'Periods';
+
+  @override
+  String get compareAccounts => 'Accounts';
+
+  @override
+  String get compareAddCategory => 'Add a category';
+
+  @override
+  String get compareAddPeriod => 'Add a period';
+
+  @override
+  String get compareAddPeriodHelp => 'A day of the period to add';
+
+  @override
+  String get compareNothing => 'Choose at least one category to compare.';
+
+  @override
+  String get compareOverTime => 'Over time';
+
+  @override
+  String get compareColumnPeriod => 'Period';
+
+  @override
+  String get compareTotal => 'Total';
+
+  @override
+  String get compareAverage => 'Average per period';
+
+  @override
+  String compareReference(String name) {
+    return '$name (reference)';
+  }
+
+  @override
+  String get compareByCategory => 'By category';
+
+  @override
+  String get compareGapHelp =>
+      'Gaps to the reference, in euros and as a percentage.';
+
+  @override
+  String get compareSame => 'same';
 }

@@ -2516,5 +2516,29 @@
   "loanInstallmentsCountHelp": "Touchez − ou + pour régler le nombre de mensualités, celles déjà prélevées comprises.",
   "loanInstallmentsLess": "Une mensualité de moins",
   "loanInstallmentsMore": "Une mensualité de plus",
-  "loanInstallmentsTotalHelp": "Calculé : mensualité × nombre de mensualités. Modifiable si l'achat coûtait autre chose."
+  "loanInstallmentsTotalHelp": "Calculé : mensualité × nombre de mensualités. Modifiable si l'achat coûtait autre chose.",
+  "compareTitle": "Comparer",
+  "compareIntro": "Mettez côte à côte des catégories dans le temps, plusieurs périodes ou plusieurs comptes. La première période (ou le premier compte) sert de référence pour les écarts.",
+  "compareCategories": "Catégories",
+  "comparePeriods": "Périodes",
+  "compareAccounts": "Comptes",
+  "compareAddCategory": "Ajouter une catégorie",
+  "compareAddPeriod": "Ajouter une période",
+  "compareAddPeriodHelp": "Un jour de la période à ajouter",
+  "compareNothing": "Choisissez au moins une catégorie à comparer.",
+  "compareOverTime": "Évolution",
+  "compareColumnPeriod": "Période",
+  "compareTotal": "Total",
+  "compareAverage": "Moyenne par période",
+  "compareReference": "{name} (référence)",
+  "@compareReference": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "compareByCategory": "Par catégorie",
+  "compareGapHelp": "Écarts par rapport à la référence, en euros et en pourcentage.",
+  "compareSame": "identique"
 }

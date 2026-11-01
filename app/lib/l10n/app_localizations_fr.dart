@@ -3369,4 +3369,59 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get loanInstallmentsTotalHelp =>
       'Calculé : mensualité × nombre de mensualités. Modifiable si l\'achat coûtait autre chose.';
+
+  @override
+  String get compareTitle => 'Comparer';
+
+  @override
+  String get compareIntro =>
+      'Mettez côte à côte des catégories dans le temps, plusieurs périodes ou plusieurs comptes. La première période (ou le premier compte) sert de référence pour les écarts.';
+
+  @override
+  String get compareCategories => 'Catégories';
+
+  @override
+  String get comparePeriods => 'Périodes';
+
+  @override
+  String get compareAccounts => 'Comptes';
+
+  @override
+  String get compareAddCategory => 'Ajouter une catégorie';
+
+  @override
+  String get compareAddPeriod => 'Ajouter une période';
+
+  @override
+  String get compareAddPeriodHelp => 'Un jour de la période à ajouter';
+
+  @override
+  String get compareNothing => 'Choisissez au moins une catégorie à comparer.';
+
+  @override
+  String get compareOverTime => 'Évolution';
+
+  @override
+  String get compareColumnPeriod => 'Période';
+
+  @override
+  String get compareTotal => 'Total';
+
+  @override
+  String get compareAverage => 'Moyenne par période';
+
+  @override
+  String compareReference(String name) {
+    return '$name (référence)';
+  }
+
+  @override
+  String get compareByCategory => 'Par catégorie';
+
+  @override
+  String get compareGapHelp =>
+      'Écarts par rapport à la référence, en euros et en pourcentage.';
+
+  @override
+  String get compareSame => 'identique';
 }

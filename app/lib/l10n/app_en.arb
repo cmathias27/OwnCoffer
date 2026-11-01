@@ -896,5 +896,22 @@
   "loanInstallmentsCountHelp": "Touch − or + to set the number of instalments, those already debited included.",
   "loanInstallmentsLess": "One instalment less",
   "loanInstallmentsMore": "One instalment more",
-  "loanInstallmentsTotalHelp": "Computed: instalment × number of instalments. Change it if the purchase cost something else."
+  "loanInstallmentsTotalHelp": "Computed: instalment × number of instalments. Change it if the purchase cost something else.",
+  "compareTitle": "Compare",
+  "compareIntro": "Put side by side categories over time, several periods or several accounts. The first period (or account) is the reference for the gaps.",
+  "compareCategories": "Categories",
+  "comparePeriods": "Periods",
+  "compareAccounts": "Accounts",
+  "compareAddCategory": "Add a category",
+  "compareAddPeriod": "Add a period",
+  "compareAddPeriodHelp": "A day of the period to add",
+  "compareNothing": "Choose at least one category to compare.",
+  "compareOverTime": "Over time",
+  "compareColumnPeriod": "Period",
+  "compareTotal": "Total",
+  "compareAverage": "Average per period",
+  "compareReference": "{name} (reference)",
+  "compareByCategory": "By category",
+  "compareGapHelp": "Gaps to the reference, in euros and as a percentage.",
+  "compareSame": "same"
 }
