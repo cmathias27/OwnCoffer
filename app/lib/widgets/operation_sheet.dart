@@ -9,6 +9,7 @@ import '../util/format.dart';
 import '../util/web_search.dart';
 import 'category_field.dart';
 import 'invoices.dart';
+import 'soft.dart';
 import 'split_dialog.dart';
 import 'undo.dart';
 
@@ -320,7 +321,7 @@ class _OperationSheetState extends State<OperationSheet> {
               ],
             ),
           ),
-        _Section(
+        SoftSection(
           icon: Icons.storefront_outlined,
           title: l.sectionProvider,
           children: [
@@ -334,14 +335,14 @@ class _OperationSheetState extends State<OperationSheet> {
               runSpacing: 8,
               children: [
                 if (widget.onSameProvider != null)
-                  _ActionTile(
+                  ActionTile(
                     icon: const Icon(Icons.storefront_outlined),
                     label: Text(l.sameProvider),
                     onPressed: widget.onSameProvider,
                   ),
                 Tooltip(
                   message: l.webSearchHelp,
-                  child: _ActionTile(
+                  child: ActionTile(
                     icon: const Icon(Icons.travel_explore),
                     label: Text(l.webSearch),
                     onPressed: () => openWebSearch(t.cleanLabel),
@@ -352,7 +353,7 @@ class _OperationSheetState extends State<OperationSheet> {
             const SizedBox(height: 8),
           ],
         ),
-        _Section(
+        SoftSection(
           icon: Icons.category_outlined,
           title: l.sectionClassification,
           children: [
@@ -420,13 +421,13 @@ class _OperationSheetState extends State<OperationSheet> {
               runSpacing: 8,
               children: [
                 if (widget.canWrite)
-                  _ActionTile(
+                  ActionTile(
                     icon: const Icon(Icons.call_split),
                     label: Text(l.splitAction),
                     onPressed: _split,
                   ),
                 if (widget.canWrite && t.categoryId != null && _splits.isEmpty)
-                  _ActionTile(
+                  ActionTile(
                     icon: const Icon(Icons.rule),
                     label: Text(l.alwaysClassify),
                     onPressed: () async {
@@ -458,7 +459,7 @@ class _OperationSheetState extends State<OperationSheet> {
                 if (widget.canWrite &&
                     t.amountCents < 0 &&
                     _subscription == null)
-                  _ActionTile(
+                  ActionTile(
                     icon: const Icon(Icons.autorenew),
                     label: Text(
                       t.scheduledId == null
@@ -491,7 +492,7 @@ class _OperationSheetState extends State<OperationSheet> {
                     },
                   ),
                 if (widget.canWrite && t.amountCents < 0)
-                  _ActionTile(
+                  ActionTile(
                     icon: const Icon(Icons.account_balance_outlined),
                     label: Text(l.loanFromOperation),
                     onPressed: () async {
@@ -616,7 +617,7 @@ class _OperationSheetState extends State<OperationSheet> {
             const SizedBox(height: 8),
           ],
         ),
-        _Section(
+        SoftSection(
           icon: Icons.edit_note,
           title: l.sectionFollowUp,
           children: [
@@ -660,7 +661,7 @@ class _OperationSheetState extends State<OperationSheet> {
           accounts: widget.accounts,
           categories: widget.categories,
         ),
-        _Section(
+        SoftSection(
           icon: Icons.receipt_long_outlined,
           title: l.sectionInvoices,
           children: [
@@ -757,7 +758,7 @@ class _SameProviderState extends State<_SameProvider> {
       currency: accounts[accountId]?.currency ?? 'EUR',
     );
     final currencyOf = widget.operation.accountId;
-    return _Section(
+    return SoftSection(
       icon: Icons.history,
       title: l.sameProviderTitle,
       children: [
@@ -898,111 +899,6 @@ class _Header extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-/// One group of the sheet: a rounded tonal card with a small title.
-class _Section extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final List<Widget> children;
-
-  const _Section({
-    required this.icon,
-    required this.title,
-    required this.children,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    // A Material, not a coloured box, so that the rows' ink shows.
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: Material(
-        color: theme.colorScheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(24),
-        clipBehavior: Clip.antiAlias,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Icon(icon, size: 18, color: theme.colorScheme.primary),
-                  const SizedBox(width: 8),
-                  Text(title, style: theme.textTheme.titleSmall),
-                ],
-              ),
-              const SizedBox(height: 6),
-              ...children,
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// An action of the sheet as a tile: a round icon above its name, easy to
-/// spot and to touch on a phone.
-class _ActionTile extends StatelessWidget {
-  final Widget icon;
-  final Widget label;
-  final VoidCallback? onPressed;
-
-  const _ActionTile({
-    required this.icon,
-    required this.label,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    return SizedBox(
-      width: 108,
-      child: Material(
-        color: scheme.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(20),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 12, 8, 10),
-            child: Column(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: scheme.primaryContainer,
-                  ),
-                  child: IconTheme.merge(
-                    data: IconThemeData(
-                      size: 22,
-                      color: scheme.onPrimaryContainer,
-                    ),
-                    child: icon,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                DefaultTextStyle.merge(
-                  textAlign: TextAlign.center,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelMedium,
-                  child: label,
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );

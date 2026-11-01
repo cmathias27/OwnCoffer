@@ -770,6 +770,7 @@ class _CsvColumnsDialogState extends State<_CsvColumnsDialog> {
               Text(l.csvHelp),
               gap,
               DropdownButtonFormField<String>(
+                isExpanded: true,
                 initialValue: _delimiter,
                 decoration: InputDecoration(labelText: l.csvDelimiter),
                 items: [
@@ -785,6 +786,7 @@ class _CsvColumnsDialogState extends State<_CsvColumnsDialog> {
               ),
               gap,
               DropdownButtonFormField<int>(
+                isExpanded: true,
                 key: ValueKey('header-$_delimiter'),
                 initialValue: _headerRow,
                 decoration: InputDecoration(labelText: l.csvHeaderRow),

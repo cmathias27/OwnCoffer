@@ -3512,4 +3512,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateStepDone => 'Update done';
+
+  @override
+  String get menuAccount => 'My account';
 }

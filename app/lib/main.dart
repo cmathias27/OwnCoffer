@@ -29,8 +29,54 @@ ThemeData _buildTheme(Brightness brightness) {
     ),
     fontFamily: 'Inter',
   );
-  // Titles and figures in Manrope, text in Inter (docs/MAQUETTES.md).
+  final scheme = base.colorScheme;
+  final soft = BorderRadius.circular(16);
+  // Titles and figures in Manrope, text in Inter (docs/MAQUETTES.md). The
+  // soft look: round cards without hard shadow, round dialogs, filled
+  // fields, pill chips, floating messages.
   return base.copyWith(
+    cardTheme: CardThemeData(
+      elevation: 0,
+      color: scheme.surfaceContainer,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+    ),
+    dialogTheme: DialogThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+    ),
+    chipTheme: base.chipTheme.copyWith(shape: const StadiumBorder()),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(borderRadius: soft),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: soft),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: scheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      border: OutlineInputBorder(
+        borderRadius: soft,
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: soft,
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: soft,
+        borderSide: BorderSide(color: scheme.primary, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: soft,
+        borderSide: BorderSide(color: scheme.error),
+      ),
+    ),
     textTheme: base.textTheme.copyWith(
       displayLarge: base.textTheme.displayLarge?.copyWith(
         fontFamily: 'Manrope',

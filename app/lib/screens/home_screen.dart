@@ -5,6 +5,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/soft.dart';
 import '../state/session.dart';
 import '../widgets/form_card.dart';
 import 'accounts_screen.dart';
@@ -133,10 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
     BuildContext context,
     List<(IconData, String)> destinations,
   ) async {
-    final picked = await showModalBottomSheet<int>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
+    final picked = await showSoftSheet<int>(
+      context,
+      builder: (context, _) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -159,7 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final l = AppLocalizations.of(context);
     final s = widget.session;
     final current = s.currentGroup;
-    final wide = MediaQuery.sizeOf(context).width >= 840;
+    final layout = navLayoutFor(MediaQuery.sizeOf(context).width);
+    final wide = layout != NavLayout.bar;
 
     final tabs = [
       (Icons.account_balance_wallet_outlined, l.navAccounts),
@@ -269,9 +270,62 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          // Phone: members, administration, security and sign-out in one
+          // menu, so that the title keeps its room.
+          if (!wide)
+            PopupMenuButton<VoidCallback>(
+              tooltip: l.menuAccount,
+              icon: const Icon(Icons.account_circle_outlined),
+              onSelected: (action) => action(),
+              itemBuilder: (context) => [
+                if (current != null && !_isServerAdmin)
+                  PopupMenuItem(
+                    value: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => MembersScreen(membership: current),
+                      ),
+                    ),
+                    child: ListTile(
+                      leading: const Icon(Icons.people_outline),
+                      title: Text(l.menuMembers),
+                    ),
+                  ),
+                if (_isServerAdmin)
+                  PopupMenuItem(
+                    value: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => AdminScreen(membership: current),
+                      ),
+                    ),
+                    child: ListTile(
+                      leading: const Icon(Icons.admin_panel_settings_outlined),
+                      title: Text(l.menuAdmin),
+                    ),
+                  ),
+                if (!_isServerAdmin)
+                  PopupMenuItem(
+                    value: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const SecurityScreen(),
+                      ),
+                    ),
+                    child: ListTile(
+                      leading: const Icon(Icons.shield_outlined),
+                      title: Text(l.menuSecurity),
+                    ),
+                  ),
+                PopupMenuItem(
+                  value: s.signOut,
+                  child: ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: Text(l.signOut),
+                  ),
+                ),
+              ],
+            ),
           // The server administrator finds members and security in the
           // administration page.
-          if (current != null && !_isServerAdmin)
+          if (wide && current != null && !_isServerAdmin)
             IconButton(
               tooltip: l.menuMembers,
               icon: const Icon(Icons.people_outline),
@@ -281,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          if (_isServerAdmin)
+          if (wide && _isServerAdmin)
             IconButton(
               tooltip: l.menuAdmin,
               icon: const Icon(Icons.admin_panel_settings_outlined),
@@ -291,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          if (!_isServerAdmin)
+          if (wide && !_isServerAdmin)
             IconButton(
               tooltip: l.menuSecurity,
               icon: const Icon(Icons.shield_outlined),
@@ -299,27 +353,41 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute<void>(builder: (_) => const SecurityScreen()),
               ),
             ),
-          IconButton(
-            tooltip: l.signOut,
-            icon: const Icon(Icons.logout),
-            onPressed: s.signOut,
-          ),
+          if (wide)
+            IconButton(
+              tooltip: l.signOut,
+              icon: const Icon(Icons.logout),
+              onPressed: s.signOut,
+            ),
         ],
       ),
       body: wide && current != null
           ? Row(
               children: [
-                NavigationRail(
-                  selectedIndex: shown,
-                  onDestinationSelected: (i) => _selectTab(_order[i]),
-                  labelType: NavigationRailLabelType.all,
-                  destinations: [
-                    for (final (icon, label) in destinations)
-                      NavigationRailDestination(
-                        icon: Icon(icon),
-                        label: Text(label),
+                // Scrolls when the window is low (phone held sideways).
+                LayoutBuilder(
+                  builder: (context, box) => SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: box.maxHeight),
+                      child: IntrinsicHeight(
+                        child: NavigationRail(
+                          selectedIndex: shown,
+                          onDestinationSelected: (i) => _selectTab(_order[i]),
+                          extended: layout == NavLayout.extendedRail,
+                          labelType: layout == NavLayout.extendedRail
+                              ? NavigationRailLabelType.none
+                              : NavigationRailLabelType.all,
+                          destinations: [
+                            for (final (icon, label) in destinations)
+                              NavigationRailDestination(
+                                icon: Icon(icon),
+                                label: Text(label),
+                              ),
+                          ],
+                        ),
                       ),
-                  ],
+                    ),
+                  ),
                 ),
                 const VerticalDivider(width: 1),
                 Expanded(child: body),
@@ -347,6 +415,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+/// How the pages are reached for a window [width]: a bottom bar on a
+/// phone, a rail on a tablet, an extended rail on a large screen.
+enum NavLayout { bar, rail, extendedRail }
+
+NavLayout navLayoutFor(double width) => width >= 1200
+    ? NavLayout.extendedRail
+    : width >= 600
+    ? NavLayout.rail
+    : NavLayout.bar;
 
 /// No group yet (e.g. the page was reloaded during the first launch): the
 /// server administrator creates the household here; others are told to ask

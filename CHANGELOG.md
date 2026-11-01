@@ -2,6 +2,21 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.21 (1er novembre 2026)
+
+### Affichage adapté au téléphone et à la tablette
+
+- **Tablette** (600 à 1 200 px de large) : menu compact sur le côté, au lieu de la barre du bas du téléphone. **Grand écran** (1 200 px et plus) : menu latéral déplié, avec les noms. Le menu défile quand la fenêtre est basse (téléphone tenu en paysage).
+- **Téléphone** : la barre du haut ne garde que le foyer et les notifications ; membres ou administration, sécurité et déconnexion passent dans le menu **« Mon compte »**. La barre du bas garde ses 4 onglets et « Plus ».
+- Les listes déroulantes des formulaires ne débordent plus sur un petit écran (le type de crédit dépassait de 120 px à 360 px de large).
+- Les écrans principaux sont vérifiés automatiquement à 360, 768 et 1 200 px de large.
+
+### Le style doux partout
+
+- La fenêtre flottante et arrondie de la fiche d'opération est utilisée par les autres fenêtres du bas : opérations d'une catégorie du budget, menu « Plus », actions d'un abonnement.
+- Dans toute l'application : cartes plus arrondies et sans ombre dure, dialogues arrondis, champs de saisie remplis aux coins arrondis, puces en pilule, lignes arrondies au toucher, messages flottants.
+- Sections en cartes et tuiles icône + texte réutilisables par les autres écrans (`widgets/soft.dart`).
+
 ## 0.3.20 (1er novembre 2026)
 
 ### Administration : mise à jour suivie pas à pas, espace disque

@@ -1511,6 +1511,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                       gap,
                     ],
                     DropdownButtonFormField<LoanKind>(
+                      isExpanded: true,
                       initialValue: _kind,
                       decoration: InputDecoration(labelText: l.loanKind),
                       items: [

@@ -203,6 +203,7 @@ class _InviteDialogState extends State<_InviteDialog> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<MemberRole>(
+              isExpanded: true,
               initialValue: _role,
               decoration: InputDecoration(
                 labelText: l.roleLabel,

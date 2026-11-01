@@ -3533,4 +3533,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get updateStepDone => 'Mise à jour terminée';
+
+  @override
+  String get menuAccount => 'Mon compte';
 }

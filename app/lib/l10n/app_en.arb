@@ -940,5 +940,6 @@
   "updateStepStart": "Restarting OwnCoffer",
   "updateStepCheck": "Checking that everything answers",
   "updateStepRollback": "Going back to the previous version…",
-  "updateStepDone": "Update done"
+  "updateStepDone": "Update done",
+  "menuAccount": "My account"
 }
