@@ -1,13 +1,16 @@
 import 'package:serverpod/serverpod.dart';
 
+import '../demo/demo_seed.dart';
 import '../generated/protocol.dart';
 import '../onboarding/onboarding.dart';
 import '../security/ip_guard.dart';
 
 /// First launch wizard (no login: no account exists yet).
 class SetupEndpoint extends Endpoint {
-  Future<SetupStatus> status(Session session) async =>
-      SetupStatus(needsSetup: await Onboarding.needsSetup(session));
+  Future<SetupStatus> status(Session session) async => SetupStatus(
+    needsSetup: await Onboarding.needsSetup(session),
+    demo: DemoSeed.enabled,
+  );
 
   /// Checks the setup code from the server log and allows [email] to
   /// register as server administrator (then: emailIdp.startRegistration).

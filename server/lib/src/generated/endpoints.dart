@@ -914,6 +914,25 @@ class Endpoints extends _is.EndpointDispatch {
                     params['version'],
                   ),
         ),
+        'fillDemo': _is.MethodConnector(
+          name: 'fillDemo',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).fillDemo(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
         'sendTestEmail': _is.MethodConnector(
           name: 'sendTestEmail',
           params: {},

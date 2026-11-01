@@ -52,6 +52,8 @@ services:
       OWNCOFFER_BAN_MINUTES: ${OWNCOFFER_BAN_MINUTES:-60}
       OWNCOFFER_RATE_LIMIT_PER_MINUTE: ${OWNCOFFER_RATE_LIMIT_PER_MINUTE:-600}
       OWNCOFFER_STATE_DIR: /app/state
+      # Demonstration instance only (docs/DEMO.md): fictitious data.
+      OWNCOFFER_DEMO: ${OWNCOFFER_DEMO:-false}
     volumes:
       # Shared with the host scripts (administration page): backups list,
       # update state, requests. Never bank data.

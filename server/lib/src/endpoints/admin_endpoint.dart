@@ -5,6 +5,7 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 
 import '../finance/alert_service.dart';
+import '../demo/demo_seed.dart';
 import '../generated/protocol.dart';
 import '../host/host_state.dart';
 import '../mail/mail_service.dart';
@@ -467,6 +468,13 @@ class AdminEndpoint extends Endpoint {
       if (x[i] != y[i]) return x[i] > y[i];
     }
     return false;
+  }
+
+  /// Demonstration instance only: fills the empty group [groupId] with the
+  /// fictitious household (DemoSeed).
+  Future<void> fillDemo(Session session, int groupId) async {
+    await _requireServerAdmin(session);
+    await DemoSeed.fill(session, groupId);
   }
 
   /// Sends a test email to the administrator; returns the address. Without

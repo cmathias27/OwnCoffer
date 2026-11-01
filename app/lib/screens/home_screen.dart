@@ -394,39 +394,49 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
         ],
       ),
-      body: wide && current != null
-          ? Row(
-              children: [
-                // Scrolls when the window is low (phone held sideways).
-                LayoutBuilder(
-                  builder: (context, box) => SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: box.maxHeight),
-                      child: IntrinsicHeight(
-                        child: NavigationRail(
-                          selectedIndex: shown,
-                          onDestinationSelected: (i) => _selectTab(_order[i]),
-                          extended: layout == NavLayout.extendedRail,
-                          labelType: layout == NavLayout.extendedRail
-                              ? NavigationRailLabelType.none
-                              : NavigationRailLabelType.all,
-                          destinations: [
-                            for (final (icon, label) in destinations)
-                              NavigationRailDestination(
-                                icon: Icon(icon),
-                                label: Text(label),
+      body: Column(
+        children: [
+          if (s.demo) const _DemoBanner(),
+          Expanded(
+            child: wide && current != null
+                ? Row(
+                    children: [
+                      // Scrolls when the window is low (phone held sideways).
+                      LayoutBuilder(
+                        builder: (context, box) => SingleChildScrollView(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: box.maxHeight,
+                            ),
+                            child: IntrinsicHeight(
+                              child: NavigationRail(
+                                selectedIndex: shown,
+                                onDestinationSelected: (i) =>
+                                    _selectTab(_order[i]),
+                                extended: layout == NavLayout.extendedRail,
+                                labelType: layout == NavLayout.extendedRail
+                                    ? NavigationRailLabelType.none
+                                    : NavigationRailLabelType.all,
+                                destinations: [
+                                  for (final (icon, label) in destinations)
+                                    NavigationRailDestination(
+                                      icon: Icon(icon),
+                                      label: Text(label),
+                                    ),
+                                ],
                               ),
-                          ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(width: 1),
-                Expanded(child: body),
-              ],
-            )
-          : body,
+                      const VerticalDivider(width: 1),
+                      Expanded(child: body),
+                    ],
+                  )
+                : body,
+          ),
+        ],
+      ),
       bottomNavigationBar: wide || current == null
           ? null
           : NavigationBar(
@@ -445,6 +455,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
+    );
+  }
+}
+
+/// On a demonstration instance, on every page: the data is fictitious.
+class _DemoBanner extends StatelessWidget {
+  const _DemoBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Material(
+      color: scheme.tertiaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        child: Row(
+          children: [
+            Icon(
+              Icons.science_outlined,
+              size: 18,
+              color: scheme.onTertiaryContainer,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                AppLocalizations.of(context).demoBanner,
+                style: TextStyle(color: scheme.onTertiaryContainer),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

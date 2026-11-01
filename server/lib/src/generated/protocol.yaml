@@ -36,6 +36,7 @@ admin:
   - setAutoUpdate:
   - requestUpdateCheck:
   - requestInstall:
+  - fillDemo:
   - sendTestEmail:
 advisor:
   - proposals:

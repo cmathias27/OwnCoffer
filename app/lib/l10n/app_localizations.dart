@@ -6761,6 +6761,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce jeton n\'existe pas ou n\'est pas à vous.'**
   String get error_mcp_token_access_denied;
+
+  /// No description provided for @demoBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Démonstration : toutes les données sont fictives.'**
+  String get demoBanner;
+
+  /// No description provided for @adminDemoFill.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remplir avec le foyer de démonstration'**
+  String get adminDemoFill;
+
+  /// No description provided for @adminDemoHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Instance de démonstration : remplit le foyer actuel (vide) avec trois comptes, douze mois d\'opérations fictives, des abonnements, des objectifs et un crédit.'**
+  String get adminDemoHelp;
+
+  /// No description provided for @adminDemoDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Foyer de démonstration rempli.'**
+  String get adminDemoDone;
+
+  /// No description provided for @error_demo_only.
+  ///
+  /// In fr, this message translates to:
+  /// **'Possible seulement sur une instance de démonstration.'**
+  String get error_demo_only;
+
+  /// No description provided for @error_demo_group_not_empty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le foyer doit être vide (aucun compte) pour y charger la démonstration.'**
+  String get error_demo_group_not_empty;
 }
 
 class _AppLocalizationsDelegate
