@@ -15,4 +15,4 @@ Cette page n'est visible que par l'**administrateur du serveur**. Elle ne montre
 
 ## Ajouter un fournisseur d'IA
 
-Choisissez **Google Gemini**, **OpenAI ChatGPT** ou **Anthropic Claude** et collez la clé d'API : la liste des modèles est demandée au fournisseur, ce qui vérifie aussi la clé. Pour **Ollama**, indiquez l'adresse de la machine. La clé est chiffrée et n'est jamais réaffichée. Un plafond mensuel de demandes par utilisateur peut être fixé.
+Choisissez **Google Gemini**, **OpenAI ChatGPT** ou **Anthropic Claude** et collez la clé d'API : la liste des modèles est demandée au fournisseur, ce qui vérifie aussi la clé. Pour **Ollama**, indiquez l'adresse de la machine. Seuls les modèles courants sont gardés (sans versions d'essai ni variantes spécialisées). **« Tester la connexion »** essaie une vraie petite conversation avec le premier modèle : en cas d'erreur, la réponse exacte du fournisseur s'affiche (clé refusée, modèle inconnu…). La clé est chiffrée et n'est jamais réaffichée. Un plafond mensuel de demandes par utilisateur peut être fixé.

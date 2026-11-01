@@ -5,7 +5,11 @@ OwnCoffer works fully without AI. The assistant is **off by default**: everyone 
 ## Turn it on
 
 1. The server administrator adds a provider in **Server administration > AI** (Ollama on your network, Gemini, ChatGPT, Claude…).
-2. Here, choose the **provider** and the **model**, then turn the assistant on.
+2. In **Assistant: settings** (✨ icon while it is off), choose the **provider** and the **model**, then turn the assistant on.
+
+## The chat bubble
+
+Once the assistant is on, a **bubble** shows at the bottom right of the screen. Tap it to open the conversation, as in a messenger: it **stays open when you change page**, and the bubble shows a reply that arrived while it was minimised. Its header starts a new conversation, opens the settings or minimises the window.
 
 ## What it can do
 

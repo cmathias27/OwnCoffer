@@ -1,21 +1,18 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
+import '../assistant/chat_controller.dart';
 import '../client.dart';
+import '../help/help.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
-import '../util/file_pick.dart';
 import '../widgets/mcp_tokens.dart';
 import '../widgets/soft.dart';
-import 'advisor_screen.dart';
-import '../help/help.dart';
 
-/// The assistant (optional AI, décisions 0006 and 0008): the user's choice
-/// of provider and model, then a conversation in which the AI reads the
-/// engine's figures and may only propose changes. What leaves the server
-/// is said before anything is sent to an external model.
+/// The assistant's settings (optional AI, décisions 0006 and 0008): the
+/// user's choice of provider and model, on or off, and the tokens for
+/// another assistant (MCP). The conversation itself is in the chat bubble,
+/// at the bottom right of every page.
 class AssistantScreen extends StatefulWidget {
   final GroupMembership membership;
   const AssistantScreen({super.key, required this.membership});
@@ -27,21 +24,11 @@ class AssistantScreen extends StatefulWidget {
 class _AssistantScreenState extends State<AssistantScreen> {
   AiStatus? _status;
   String? _error;
-  final _input = TextEditingController();
-  final List<(AiMessage, AiReply?)> _talk = [];
-  PickedFile? _image;
-  var _sending = false;
 
   @override
   void initState() {
     super.initState();
     _load();
-  }
-
-  @override
-  void dispose() {
-    _input.dispose();
-    super.dispose();
   }
 
   Future<void> _load() async {
@@ -66,6 +53,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
     try {
       final s = await client.ai.setPreference(providerId, model, enabled);
       if (mounted) setState(() => _status = s);
+      await chat.refreshStatus();
     } on Object catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
@@ -73,56 +61,6 @@ class _AssistantScreenState extends State<AssistantScreen> {
         ).showSnackBar(SnackBar(content: Text(errorText(l, e))));
       }
     }
-  }
-
-  Future<void> _send() async {
-    final l = AppLocalizations.of(context);
-    final text = _input.text.trim();
-    if (text.isEmpty || _sending) return;
-    final image = _image;
-    final message = AiMessage(
-      role: 'user',
-      content: text,
-      imageBase64: image == null ? null : base64Encode(image.bytes),
-      imageMimeType: image == null
-          ? null
-          : image.name.toLowerCase().endsWith('.png')
-          ? 'image/png'
-          : 'image/jpeg',
-    );
-    final history = [
-      for (final (m, r) in _talk) ...[
-        m.copyWith(imageBase64: null),
-        if (r != null) AiMessage(role: 'assistant', content: r.text),
-      ],
-    ];
-    setState(() {
-      _talk.add((message, null));
-      _sending = true;
-      _image = null;
-      _input.clear();
-    });
-    try {
-      final reply = await client.ai.chat(
-        widget.membership.group.id!,
-        history,
-        message,
-      );
-      if (mounted) {
-        setState(() => _talk[_talk.length - 1] = (message, reply));
-      }
-    } on Object catch (e) {
-      if (mounted) {
-        setState(() => _talk.removeLast());
-        _input.text = text;
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(errorText(l, e))));
-      }
-    } finally {
-      if (mounted) setState(() => _sending = false);
-    }
-    await _load();
   }
 
   @override
@@ -131,59 +69,51 @@ class _AssistantScreenState extends State<AssistantScreen> {
     final s = _status;
     return Scaffold(
       appBar: AppBar(
-        title: Text(l.assistantTitle),
+        title: Text(l.assistantSettingsTitle),
         actions: const [HelpButton(HelpTopic.assistant)],
       ),
       body: _error != null
           ? Center(child: Text(_error!))
           : s == null
           ? const Center(child: CircularProgressIndicator())
-          : Column(
+          : ListView(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 32),
               children: [
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 16),
-                    children: [
-                      Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 760),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              _settings(context, l, s),
-                              McpTokensSection(membership: widget.membership),
-                              if (s.enabled && _provider != null)
-                                for (final (m, r) in _talk)
-                                  ..._exchange(context, l, m, r),
-                              if (s.enabled &&
-                                  _provider != null &&
-                                  _talk.isEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: Wrap(
-                                    children: [
-                                      ActionChip(
-                                        avatar: const Icon(Icons.rule),
-                                        label: Text(l.assistantClassifyChip),
-                                        onPressed: _sending
-                                            ? null
-                                            : () {
-                                                _input.text =
-                                                    l.assistantClassifyPrompt;
-                                                _send();
-                                              },
-                                      ),
-                                    ],
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 760),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _settings(context, l, s),
+                        ListenableBuilder(
+                          listenable: chat,
+                          builder: (context, _) => chat.available
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
                                   ),
-                                ),
-                            ],
-                          ),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: FilledButton.icon(
+                                      icon: const Icon(
+                                        Icons.chat_bubble_outline,
+                                      ),
+                                      label: Text(l.chatOpen),
+                                      onPressed: () {
+                                        chat.setOpen(true);
+                                        Navigator.of(context).maybePop();
+                                      },
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
                         ),
-                      ),
-                    ],
+                        McpTokensSection(membership: widget.membership),
+                      ],
+                    ),
                   ),
                 ),
-                if (s.enabled && _provider != null) _composer(context, l),
               ],
             ),
     );
@@ -278,168 +208,6 @@ class _AssistantScreenState extends State<AssistantScreen> {
             ),
         ],
       ],
-    );
-  }
-
-  List<Widget> _exchange(
-    BuildContext context,
-    AppLocalizations l,
-    AiMessage m,
-    AiReply? r,
-  ) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    Widget bubble(Widget child, {required bool mine}) => Align(
-      alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 560),
-        child: Container(
-          margin: const EdgeInsets.only(top: 12),
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: mine ? scheme.primaryContainer : scheme.surfaceContainerHigh,
-            borderRadius: BorderRadius.circular(22),
-          ),
-          child: child,
-        ),
-      ),
-    );
-    return [
-      bubble(
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (m.imageBase64 != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.image_outlined, size: 16),
-                    const SizedBox(width: 4),
-                    Text(l.assistantImageSent),
-                  ],
-                ),
-              ),
-            SelectableText(m.content),
-          ],
-        ),
-        mine: true,
-      ),
-      bubble(
-        r == null
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox.square(
-                    dimension: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(l.assistantThinking),
-                ],
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SelectableText(
-                    r.text.isEmpty ? l.assistantNoAnswer : r.text,
-                  ),
-                  if (r.tools.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    Text(
-                      l.assistantUsedTools(r.tools.toSet().join(', ')),
-                      style: theme.textTheme.bodySmall,
-                    ),
-                  ],
-                  if (r.isExternal)
-                    Text(
-                      l.assistantSentTo(r.provider, r.model),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: scheme.tertiary,
-                      ),
-                    ),
-                  if (r.proposals.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    FilledButton.tonalIcon(
-                      icon: const Icon(Icons.lightbulb_outline),
-                      label: Text(l.assistantProposals(r.proposals.length)),
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) =>
-                              AdvisorScreen(membership: widget.membership),
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-        mine: false,
-      ),
-    ];
-  }
-
-  Widget _composer(BuildContext context, AppLocalizations l) {
-    final vision = _provider?.vision ?? false;
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-        child: Material(
-          color: Theme.of(context).colorScheme.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(28),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Row(
-              children: [
-                if (vision)
-                  IconButton(
-                    tooltip: _image == null
-                        ? l.assistantAttach
-                        : l.assistantImageReady(_image!.name),
-                    icon: Icon(
-                      _image == null
-                          ? Icons.add_photo_alternate_outlined
-                          : Icons.image,
-                    ),
-                    onPressed: () async {
-                      final f = await pickFile(
-                        extensions: const ['png', 'jpg', 'jpeg', 'webp'],
-                      );
-                      if (f != null && mounted) setState(() => _image = f);
-                    },
-                  ),
-                Expanded(
-                  child: TextField(
-                    controller: _input,
-                    minLines: 1,
-                    maxLines: 5,
-                    textInputAction: TextInputAction.send,
-                    onSubmitted: (_) => _send(),
-                    decoration: InputDecoration(
-                      hintText: l.assistantHint,
-                      filled: false,
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                    ),
-                  ),
-                ),
-                IconButton.filled(
-                  tooltip: l.assistantSend,
-                  icon: _sending
-                      ? const SizedBox.square(
-                          dimension: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.send),
-                  onPressed: _sending ? null : _send,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

@@ -9,6 +9,7 @@ import 'screens/setup_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/two_factor_screen.dart';
 import 'state/session.dart';
+import 'assistant/chat_bubble.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -101,6 +102,9 @@ ThemeData _buildTheme(Brightness brightness) {
   );
 }
 
+/// The pages' navigator, for the chat window above them.
+final _navigator = GlobalKey<NavigatorState>();
+
 class OwnCofferApp extends StatelessWidget {
   const OwnCofferApp({super.key});
 
@@ -123,6 +127,10 @@ class OwnCofferApp extends StatelessWidget {
       theme: _buildTheme(Brightness.light),
       darkTheme: _buildTheme(Brightness.dark),
       themeMode: ThemeMode.system,
+      navigatorKey: _navigator,
+      // The assistant's bubble stays above every page.
+      builder: (context, child) =>
+          ChatLayer(navigator: _navigator, child: child ?? const SizedBox()),
       home: const _Root(),
     );
   }

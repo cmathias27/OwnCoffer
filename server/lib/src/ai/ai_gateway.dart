@@ -341,10 +341,34 @@ abstract final class AiGateway {
     return (fields: decoded, provider: provider, model: model);
   }
 
-  static Future<List<String>> testProvider(AiProvider p) =>
-      adapterFor(p).models(baseUrl: p.baseUrl, apiKey: _key(p));
+  /// Checks a provider for real: its list of models, then a short
+  /// conversation with its first model and one function, as the assistant
+  /// does. The provider's own error, if any, is what the user sees.
+  static Future<List<String>> testProvider(AiProvider p) async {
+    final adapter = adapterFor(p);
+    final key = _key(p);
+    final listed = await adapter.models(baseUrl: p.baseUrl, apiKey: key);
+    final model = modelsOf(p).firstOrNull;
+    if (model != null) {
+      await adapter.chat(
+        baseUrl: p.baseUrl,
+        apiKey: key,
+        model: model,
+        messages: [
+          {'role': 'system', 'content': 'Answer with one word.'},
+          {'role': 'user', 'content': 'Say OK.'},
+        ],
+        tools: p.toolCalling ? [AiContext.tools.first] : null,
+      );
+    }
+    return p.kind == 'ollama' ? listed : commonModelIds(listed);
+  }
 
   /// The models of a provider being set up, with the key just typed.
-  static Future<List<String>> modelsWith(AiProvider p, String? apiKey) =>
-      adapterFor(p).models(baseUrl: p.baseUrl, apiKey: apiKey ?? _key(p));
+  static Future<List<String>> modelsWith(AiProvider p, String? apiKey) async {
+    final all = await adapterFor(
+      p,
+    ).models(baseUrl: p.baseUrl, apiKey: apiKey ?? _key(p));
+    return p.kind == 'ollama' ? all : commonModelIds(all);
+  }
 }

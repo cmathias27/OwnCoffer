@@ -52,6 +52,42 @@ void main() {
       );
     });
 
+    test('the usual models: no preview, experiment, snapshot or special '
+        'variant; newest first; a few only', () {
+      expect(
+        commonModelIds([
+          'models/gemini-2.5-flash',
+          'models/gemini-3.8-flash',
+          'models/gemini-3.8-pro',
+          'models/gemini-3.8-flash-preview-09-2026',
+          'models/gemini-2.0-flash-exp',
+          'models/gemini-2.0-flash-001',
+          'models/gemini-3.8-flash-live',
+          'models/gemma-3-27b-it',
+          'models/text-embedding-004',
+        ]),
+        ['gemini-3.8-flash', 'gemini-3.8-pro', 'gemini-2.5-flash'],
+      );
+      expect(
+        commonModelIds([
+          'gpt-4o',
+          'gpt-5-mini',
+          'gpt-5-2026-08-07',
+          'gpt-4o-realtime-preview',
+          'gpt-5',
+        ]),
+        ['gpt-5', 'gpt-5-mini', 'gpt-4o'],
+      );
+      expect(
+        commonModelIds(['claude-sonnet-5-5', 'claude-3-5-sonnet-20241022']),
+        ['claude-sonnet-5-5'],
+      );
+      expect(
+        commonModelIds([for (var i = 0; i < 30; i++) 'gpt-$i']).length,
+        12,
+      );
+    });
+
     test("the provider's own error message, short", () {
       expect(
         providerError(

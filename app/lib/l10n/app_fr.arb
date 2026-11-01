@@ -3289,5 +3289,11 @@
   "error_receipt_mismatch": "Les lignes lues sur le ticket dépassent le montant de l'opération : ce n'est sans doute pas son ticket.",
   "error_document_nothing_read": "L'IA n'a rien pu lire d'utile dans ce document.",
   "error_ai_document_not_image": "Ce modèle ne lit que les images : joignez une photo ou une capture du document.",
-  "error_ai_document_too_large": "Document trop lourd pour être lu (8 Mo au plus)."
+  "error_ai_document_too_large": "Document trop lourd pour être lu (8 Mo au plus).",
+  "chatOpen": "Discuter avec l'assistant",
+  "chatClose": "Réduire",
+  "chatNew": "Nouvelle conversation",
+  "chatSettings": "Réglages de l'assistant",
+  "chatIntro": "Posez une question sur vos comptes, ou demandez-lui de classer vos opérations. Il lit vos chiffres par les fonctions d'OwnCoffer et ne modifie rien : ses propositions arrivent dans Mon conseiller. La conversation reste ouverte quand vous changez de page.",
+  "assistantSettingsTitle": "Assistant : réglages"
 }

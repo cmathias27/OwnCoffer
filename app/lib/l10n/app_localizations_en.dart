@@ -4672,4 +4672,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_ai_document_too_large =>
       'Document too large to be read (8 MB at most).';
+
+  @override
+  String get chatOpen => 'Chat with the assistant';
+
+  @override
+  String get chatClose => 'Minimise';
+
+  @override
+  String get chatNew => 'New conversation';
+
+  @override
+  String get chatSettings => 'Assistant settings';
+
+  @override
+  String get chatIntro =>
+      'Ask a question about your accounts, or ask it to classify your operations. It reads your figures through OwnCoffer\'s functions and changes nothing: its proposals go to My advisor. The conversation stays open when you change page.';
+
+  @override
+  String get assistantSettingsTitle => 'Assistant: settings';
 }

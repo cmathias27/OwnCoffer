@@ -7595,6 +7595,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Document trop lourd pour être lu (8 Mo au plus).'**
   String get error_ai_document_too_large;
+
+  /// No description provided for @chatOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Discuter avec l\'assistant'**
+  String get chatOpen;
+
+  /// No description provided for @chatClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réduire'**
+  String get chatClose;
+
+  /// No description provided for @chatNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle conversation'**
+  String get chatNew;
+
+  /// No description provided for @chatSettings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages de l\'assistant'**
+  String get chatSettings;
+
+  /// No description provided for @chatIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Posez une question sur vos comptes, ou demandez-lui de classer vos opérations. Il lit vos chiffres par les fonctions d\'OwnCoffer et ne modifie rien : ses propositions arrivent dans Mon conseiller. La conversation reste ouverte quand vous changez de page.'**
+  String get chatIntro;
+
+  /// No description provided for @assistantSettingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Assistant : réglages'**
+  String get assistantSettingsTitle;
 }
 
 class _AppLocalizationsDelegate

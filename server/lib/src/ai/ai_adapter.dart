@@ -119,6 +119,46 @@ List<String> chatModelIds(Iterable<String> ids) {
   }.toList()..sort();
 }
 
+/// The usual chat models among [ids] (chatModelIds first): without
+/// previews, experiments, dated snapshots or specialised variants, newest
+/// first, at most [max]. A local server (Ollama) keeps all its models: the
+/// administrator installed them on purpose.
+List<String> commonModelIds(Iterable<String> ids, {int max = 12}) {
+  const special = [
+    'preview',
+    'exp',
+    'live',
+    'search',
+    'instruct',
+    'computer-use',
+    'codex',
+    'nano-banana',
+    'robotics',
+    'learnlm',
+    'gemma',
+  ];
+  final dated = RegExp(r'-(\d{4}-\d{2}-\d{2}|\d{8}|\d{3,4})$');
+  final kept = [
+    for (final id in chatModelIds(ids))
+      if (!special.any(id.toLowerCase().contains) && !dated.hasMatch(id)) id,
+  ];
+  // Newest first: the version numbers in the name, compared as numbers.
+  List<int> version(String id) => [
+    for (final m in RegExp(r'\d+').allMatches(id)) int.parse(m[0]!),
+  ];
+  int compare(String a, String b) {
+    final va = version(a), vb = version(b);
+    for (var i = 0; i < va.length && i < vb.length; i++) {
+      if (va[i] != vb[i]) return vb[i].compareTo(va[i]);
+    }
+    if (va.length != vb.length) return vb.length.compareTo(va.length);
+    return a.compareTo(b);
+  }
+
+  kept.sort(compare);
+  return kept.take(max).toList();
+}
+
 /// Any API compatible with OpenAI's chat completions: OpenAI (ChatGPT),
 /// Google Gemini (`…/v1beta/openai/`), Mistral, OpenRouter… and Ollama
 /// (`http://host:11434/v1`), which speaks the same.
@@ -178,7 +218,8 @@ final class OpenAiCompatibleAdapter extends _JsonHttp implements AiAdapter {
         'model': model,
         'messages': wireMessages(messages),
         if (tools != null && tools.isNotEmpty) 'tools': wireTools(tools),
-        'temperature': 0.2,
+        // No temperature: recent models (OpenAI's reasoning models, Gemini 3)
+        // refuse or advise against anything but their default.
       },
     );
     final choices = json['choices'];
