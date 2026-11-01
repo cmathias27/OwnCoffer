@@ -5633,6 +5633,126 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Factures et tickets'**
   String get sectionInvoices;
+
+  /// No description provided for @adminDisk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Disque du serveur'**
+  String get adminDisk;
+
+  /// No description provided for @adminDiskFree.
+  ///
+  /// In fr, this message translates to:
+  /// **'{free} libres sur {total} ({percent} %)'**
+  String adminDiskFree(String free, String total, int percent);
+
+  /// No description provided for @adminDiskUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inconnu (relevé toutes les 15 minutes par le serveur)'**
+  String get adminDiskUnknown;
+
+  /// No description provided for @adminDiskLow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moins de 10 % libres : la base de données et les sauvegardes risquent d\'échouer. Libérez de la place sur le serveur (anciennes images Docker, journaux…).'**
+  String get adminDiskLow;
+
+  /// No description provided for @updateProgressTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mise à jour vers {version}'**
+  String updateProgressTitle(String version);
+
+  /// No description provided for @updateProgressHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restez sur cette page : OwnCoffer va redémarrer et sera indisponible une à deux minutes. Vos données sont sauvegardées avant tout changement.'**
+  String get updateProgressHelp;
+
+  /// No description provided for @updateProgressRestarting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Redémarrage d\'OwnCoffer… (le serveur ne répond pas, c\'est normal)'**
+  String get updateProgressRestarting;
+
+  /// No description provided for @updateProgressDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'OwnCoffer {version} est installé. Rechargez la page pour utiliser la nouvelle version.'**
+  String updateProgressDone(String version);
+
+  /// No description provided for @updateProgressReload.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recharger la page'**
+  String get updateProgressReload;
+
+  /// No description provided for @updateProgressFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La mise à jour n\'a pas abouti : OwnCoffer est revenu à la version précédente, avec les données d\'avant la mise à jour. Le détail est dans l\'historique des mises à jour.'**
+  String get updateProgressFailed;
+
+  /// No description provided for @updateProgressWaiting.
+  ///
+  /// In fr, this message translates to:
+  /// **'La nouvelle version n\'est pas encore prête au téléchargement (elle est publiée quelques minutes après son annonce). Le serveur réessaiera tout seul d\'ici 15 minutes.'**
+  String get updateProgressWaiting;
+
+  /// No description provided for @updateProgressSlow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cela prend plus de temps que prévu. Vous pouvez quitter cette page : la mise à jour continue sur le serveur, et son résultat sera dans l\'historique.'**
+  String get updateProgressSlow;
+
+  /// No description provided for @updateProgressClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get updateProgressClose;
+
+  /// No description provided for @updateStepRequested.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande transmise au serveur'**
+  String get updateStepRequested;
+
+  /// No description provided for @updateStepPull.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléchargement de la nouvelle version'**
+  String get updateStepPull;
+
+  /// No description provided for @updateStepBackup.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde de vos données'**
+  String get updateStepBackup;
+
+  /// No description provided for @updateStepStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Redémarrage d\'OwnCoffer'**
+  String get updateStepStart;
+
+  /// No description provided for @updateStepCheck.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification que tout répond'**
+  String get updateStepCheck;
+
+  /// No description provided for @updateStepRollback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour à la version précédente…'**
+  String get updateStepRollback;
+
+  /// No description provided for @updateStepDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mise à jour terminée'**
+  String get updateStepDone;
 }
 
 class _AppLocalizationsDelegate

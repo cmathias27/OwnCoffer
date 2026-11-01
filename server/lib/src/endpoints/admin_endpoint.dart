@@ -156,6 +156,7 @@ class AdminEndpoint extends Endpoint {
         documents += i.sizeBytes;
       }
     }
+    final disk = HostState.instance.disk();
     return AdminHealth(
       version: _version(),
       startedAt: startedAt,
@@ -167,6 +168,9 @@ class AdminEndpoint extends Endpoint {
       publicUrl: Platform.environment['OWNCOFFER_PUBLIC_URL'] ?? '',
       alertsRunAt: AlertService.lastRunAt,
       alertsRunOk: AlertService.lastRunOk,
+      diskTotalBytes: disk.total,
+      diskFreeBytes: disk.free,
+      diskAt: disk.at,
     );
   }
 

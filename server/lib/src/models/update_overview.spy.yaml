@@ -18,6 +18,12 @@ fields:
   message: String?
   ### A check or an installation was asked for and not yet carried out.
   requestPending: bool
+  ### The installation in progress or last made (vX.Y.Z), its step (pull,
+  ### backup, start, check, done, rollback, failed, waiting) and when the
+  ### host wrote it.
+  progressTarget: String?
+  progressStep: String?
+  progressAt: DateTime?
   ### Newest first.
   history: List<UpdateHistoryEntry>
   ### Release notes, newest first (from the newest version's CHANGELOG).

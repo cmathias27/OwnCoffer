@@ -29,6 +29,9 @@ abstract class UpdateOverview
     this.failedVersion,
     this.message,
     required this.requestPending,
+    this.progressTarget,
+    this.progressStep,
+    this.progressAt,
     required this.history,
     required this.releases,
   });
@@ -43,6 +46,9 @@ abstract class UpdateOverview
     String? failedVersion,
     String? message,
     required bool requestPending,
+    String? progressTarget,
+    String? progressStep,
+    DateTime? progressAt,
     required List<_idu38kh6.UpdateHistoryEntry> history,
     required List<_idndmjo8.ReleaseNotes> releases,
   }) = _UpdateOverviewImpl;
@@ -64,6 +70,13 @@ abstract class UpdateOverview
       requestPending: _isc.BoolJsonExtension.fromJson(
         jsonSerialization['requestPending'],
       ),
+      progressTarget: jsonSerialization['progressTarget'] as String?,
+      progressStep: jsonSerialization['progressStep'] as String?,
+      progressAt: jsonSerialization['progressAt'] == null
+          ? null
+          : _isc.DateTimeJsonExtension.fromJson(
+              jsonSerialization['progressAt'],
+            ),
       history: _iylp5nsw.Protocol()
           .deserialize<List<_idu38kh6.UpdateHistoryEntry>>(
             jsonSerialization['history'],
@@ -99,6 +112,15 @@ abstract class UpdateOverview
   /// A check or an installation was asked for and not yet carried out.
   bool requestPending;
 
+  /// The installation in progress or last made (vX.Y.Z), its step (pull,
+  /// backup, start, check, done, rollback, failed, waiting) and when the
+  /// host wrote it.
+  String? progressTarget;
+
+  String? progressStep;
+
+  DateTime? progressAt;
+
   /// Newest first.
   List<_idu38kh6.UpdateHistoryEntry> history;
 
@@ -118,6 +140,9 @@ abstract class UpdateOverview
     String? failedVersion,
     String? message,
     bool? requestPending,
+    String? progressTarget,
+    String? progressStep,
+    DateTime? progressAt,
     List<_idu38kh6.UpdateHistoryEntry>? history,
     List<_idndmjo8.ReleaseNotes>? releases,
   });
@@ -134,6 +159,9 @@ abstract class UpdateOverview
       if (failedVersion != null) 'failedVersion': failedVersion,
       if (message != null) 'message': message,
       'requestPending': requestPending,
+      if (progressTarget != null) 'progressTarget': progressTarget,
+      if (progressStep != null) 'progressStep': progressStep,
+      if (progressAt != null) 'progressAt': progressAt?.toJson(),
       'history': history.toJson(valueToJson: (v) => v.toJson()),
       'releases': releases.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -152,6 +180,9 @@ abstract class UpdateOverview
       if (failedVersion != null) 'failedVersion': failedVersion,
       if (message != null) 'message': message,
       'requestPending': requestPending,
+      if (progressTarget != null) 'progressTarget': progressTarget,
+      if (progressStep != null) 'progressStep': progressStep,
+      if (progressAt != null) 'progressAt': progressAt?.toJson(),
       'history': history.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'releases': releases.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
@@ -176,6 +207,9 @@ class _UpdateOverviewImpl extends UpdateOverview {
     String? failedVersion,
     String? message,
     required bool requestPending,
+    String? progressTarget,
+    String? progressStep,
+    DateTime? progressAt,
     required List<_idu38kh6.UpdateHistoryEntry> history,
     required List<_idndmjo8.ReleaseNotes> releases,
   }) : super._(
@@ -188,6 +222,9 @@ class _UpdateOverviewImpl extends UpdateOverview {
          failedVersion: failedVersion,
          message: message,
          requestPending: requestPending,
+         progressTarget: progressTarget,
+         progressStep: progressStep,
+         progressAt: progressAt,
          history: history,
          releases: releases,
        );
@@ -206,6 +243,9 @@ class _UpdateOverviewImpl extends UpdateOverview {
     Object? failedVersion = _Undefined,
     Object? message = _Undefined,
     bool? requestPending,
+    Object? progressTarget = _Undefined,
+    Object? progressStep = _Undefined,
+    Object? progressAt = _Undefined,
     List<_idu38kh6.UpdateHistoryEntry>? history,
     List<_idndmjo8.ReleaseNotes>? releases,
   }) {
@@ -221,6 +261,11 @@ class _UpdateOverviewImpl extends UpdateOverview {
           : this.failedVersion,
       message: message is String? ? message : this.message,
       requestPending: requestPending ?? this.requestPending,
+      progressTarget: progressTarget is String?
+          ? progressTarget
+          : this.progressTarget,
+      progressStep: progressStep is String? ? progressStep : this.progressStep,
+      progressAt: progressAt is DateTime? ? progressAt : this.progressAt,
       history: history ?? this.history.map((e0) => e0.copyWith()).toList(),
       releases: releases ?? this.releases.map((e0) => e0.copyWith()).toList(),
     );

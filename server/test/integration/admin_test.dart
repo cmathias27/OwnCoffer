@@ -244,6 +244,38 @@ void main() {
         );
       });
 
+      test('installation progress and free disk space, as the host wrote '
+          'them; anything else ignored', () async {
+        var o = await endpoints.admin.updates(as(admin));
+        expect((o.progressTarget, o.progressStep), (null, null));
+        var h = await endpoints.admin.health(as(admin));
+        expect(h.diskTotalBytes, isNull);
+
+        File('${dir.path}/update-progress').writeAsStringSync(
+          'target=v0.4.0\nstep=backup\nat=1793448000\n',
+        );
+        File('${dir.path}/disk').writeAsStringSync(
+          'total=100000000000\nfree=7000000000\nat=1793448000\n',
+        );
+        o = await endpoints.admin.updates(as(admin));
+        expect(o.progressTarget, 'v0.4.0');
+        expect(o.progressStep, 'backup');
+        expect(o.progressAt, DateTime.utc(2026, 10, 31, 12));
+        h = await endpoints.admin.health(as(admin));
+        expect(h.diskTotalBytes, 100000000000);
+        expect(h.diskFreeBytes, 7000000000);
+        expect(h.diskAt, DateTime.utc(2026, 10, 31, 12));
+
+        File('${dir.path}/update-progress').writeAsStringSync(
+          'target=../etc\nstep=rm -rf\n',
+        );
+        File('${dir.path}/disk').writeAsStringSync('total=10\nfree=20\n');
+        o = await endpoints.admin.updates(as(admin));
+        expect((o.progressTarget, o.progressStep), (null, null));
+        h = await endpoints.admin.health(as(admin));
+        expect(h.diskFreeBytes, isNull, reason: 'free above total');
+      });
+
       test('updates: state, notes, history, auto off, install', () async {
         File('${dir.path}/update-status').writeAsStringSync(
           'current=v0.3.9\nlatest=v0.4.0\nchecked=1793448000\nauto=true\n'

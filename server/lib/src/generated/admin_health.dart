@@ -26,6 +26,9 @@ abstract class AdminHealth
     required this.publicUrl,
     this.alertsRunAt,
     this.alertsRunOk,
+    this.diskTotalBytes,
+    this.diskFreeBytes,
+    this.diskAt,
   });
 
   factory AdminHealth({
@@ -39,6 +42,9 @@ abstract class AdminHealth
     required String publicUrl,
     DateTime? alertsRunAt,
     bool? alertsRunOk,
+    int? diskTotalBytes,
+    int? diskFreeBytes,
+    DateTime? diskAt,
   }) = _AdminHealthImpl;
 
   factory AdminHealth.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -67,6 +73,11 @@ abstract class AdminHealth
       alertsRunOk: jsonSerialization['alertsRunOk'] == null
           ? null
           : _is.BoolJsonExtension.fromJson(jsonSerialization['alertsRunOk']),
+      diskTotalBytes: jsonSerialization['diskTotalBytes'] as int?,
+      diskFreeBytes: jsonSerialization['diskFreeBytes'] as int?,
+      diskAt: jsonSerialization['diskAt'] == null
+          ? null
+          : _is.DateTimeJsonExtension.fromJson(jsonSerialization['diskAt']),
     );
   }
 
@@ -93,6 +104,14 @@ abstract class AdminHealth
 
   bool? alertsRunOk;
 
+  /// Disk holding the installation, as the host saw it at its last run
+  /// (every 15 minutes); null without the shared folder.
+  int? diskTotalBytes;
+
+  int? diskFreeBytes;
+
+  DateTime? diskAt;
+
   /// Returns a shallow copy of this [AdminHealth]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -107,6 +126,9 @@ abstract class AdminHealth
     String? publicUrl,
     DateTime? alertsRunAt,
     bool? alertsRunOk,
+    int? diskTotalBytes,
+    int? diskFreeBytes,
+    DateTime? diskAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -122,6 +144,9 @@ abstract class AdminHealth
       'publicUrl': publicUrl,
       if (alertsRunAt != null) 'alertsRunAt': alertsRunAt?.toJson(),
       if (alertsRunOk != null) 'alertsRunOk': alertsRunOk,
+      if (diskTotalBytes != null) 'diskTotalBytes': diskTotalBytes,
+      if (diskFreeBytes != null) 'diskFreeBytes': diskFreeBytes,
+      if (diskAt != null) 'diskAt': diskAt?.toJson(),
     };
   }
 
@@ -139,6 +164,9 @@ abstract class AdminHealth
       'publicUrl': publicUrl,
       if (alertsRunAt != null) 'alertsRunAt': alertsRunAt?.toJson(),
       if (alertsRunOk != null) 'alertsRunOk': alertsRunOk,
+      if (diskTotalBytes != null) 'diskTotalBytes': diskTotalBytes,
+      if (diskFreeBytes != null) 'diskFreeBytes': diskFreeBytes,
+      if (diskAt != null) 'diskAt': diskAt?.toJson(),
     };
   }
 
@@ -162,6 +190,9 @@ class _AdminHealthImpl extends AdminHealth {
     required String publicUrl,
     DateTime? alertsRunAt,
     bool? alertsRunOk,
+    int? diskTotalBytes,
+    int? diskFreeBytes,
+    DateTime? diskAt,
   }) : super._(
          version: version,
          startedAt: startedAt,
@@ -173,6 +204,9 @@ class _AdminHealthImpl extends AdminHealth {
          publicUrl: publicUrl,
          alertsRunAt: alertsRunAt,
          alertsRunOk: alertsRunOk,
+         diskTotalBytes: diskTotalBytes,
+         diskFreeBytes: diskFreeBytes,
+         diskAt: diskAt,
        );
 
   /// Returns a shallow copy of this [AdminHealth]
@@ -190,6 +224,9 @@ class _AdminHealthImpl extends AdminHealth {
     String? publicUrl,
     Object? alertsRunAt = _Undefined,
     Object? alertsRunOk = _Undefined,
+    Object? diskTotalBytes = _Undefined,
+    Object? diskFreeBytes = _Undefined,
+    Object? diskAt = _Undefined,
   }) {
     return AdminHealth(
       version: version ?? this.version,
@@ -202,6 +239,11 @@ class _AdminHealthImpl extends AdminHealth {
       publicUrl: publicUrl ?? this.publicUrl,
       alertsRunAt: alertsRunAt is DateTime? ? alertsRunAt : this.alertsRunAt,
       alertsRunOk: alertsRunOk is bool? ? alertsRunOk : this.alertsRunOk,
+      diskTotalBytes: diskTotalBytes is int?
+          ? diskTotalBytes
+          : this.diskTotalBytes,
+      diskFreeBytes: diskFreeBytes is int? ? diskFreeBytes : this.diskFreeBytes,
+      diskAt: diskAt is DateTime? ? diskAt : this.diskAt,
     );
   }
 }

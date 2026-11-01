@@ -3460,4 +3460,77 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get sectionInvoices => 'Factures et tickets';
+
+  @override
+  String get adminDisk => 'Disque du serveur';
+
+  @override
+  String adminDiskFree(String free, String total, int percent) {
+    return '$free libres sur $total ($percent %)';
+  }
+
+  @override
+  String get adminDiskUnknown =>
+      'Inconnu (relevé toutes les 15 minutes par le serveur)';
+
+  @override
+  String get adminDiskLow =>
+      'Moins de 10 % libres : la base de données et les sauvegardes risquent d\'échouer. Libérez de la place sur le serveur (anciennes images Docker, journaux…).';
+
+  @override
+  String updateProgressTitle(String version) {
+    return 'Mise à jour vers $version';
+  }
+
+  @override
+  String get updateProgressHelp =>
+      'Restez sur cette page : OwnCoffer va redémarrer et sera indisponible une à deux minutes. Vos données sont sauvegardées avant tout changement.';
+
+  @override
+  String get updateProgressRestarting =>
+      'Redémarrage d\'OwnCoffer… (le serveur ne répond pas, c\'est normal)';
+
+  @override
+  String updateProgressDone(String version) {
+    return 'OwnCoffer $version est installé. Rechargez la page pour utiliser la nouvelle version.';
+  }
+
+  @override
+  String get updateProgressReload => 'Recharger la page';
+
+  @override
+  String get updateProgressFailed =>
+      'La mise à jour n\'a pas abouti : OwnCoffer est revenu à la version précédente, avec les données d\'avant la mise à jour. Le détail est dans l\'historique des mises à jour.';
+
+  @override
+  String get updateProgressWaiting =>
+      'La nouvelle version n\'est pas encore prête au téléchargement (elle est publiée quelques minutes après son annonce). Le serveur réessaiera tout seul d\'ici 15 minutes.';
+
+  @override
+  String get updateProgressSlow =>
+      'Cela prend plus de temps que prévu. Vous pouvez quitter cette page : la mise à jour continue sur le serveur, et son résultat sera dans l\'historique.';
+
+  @override
+  String get updateProgressClose => 'Fermer';
+
+  @override
+  String get updateStepRequested => 'Demande transmise au serveur';
+
+  @override
+  String get updateStepPull => 'Téléchargement de la nouvelle version';
+
+  @override
+  String get updateStepBackup => 'Sauvegarde de vos données';
+
+  @override
+  String get updateStepStart => 'Redémarrage d\'OwnCoffer';
+
+  @override
+  String get updateStepCheck => 'Vérification que tout répond';
+
+  @override
+  String get updateStepRollback => 'Retour à la version précédente…';
+
+  @override
+  String get updateStepDone => 'Mise à jour terminée';
 }

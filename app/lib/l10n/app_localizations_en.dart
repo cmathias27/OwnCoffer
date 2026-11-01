@@ -3439,4 +3439,77 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sectionInvoices => 'Invoices and receipts';
+
+  @override
+  String get adminDisk => 'Server disk';
+
+  @override
+  String adminDiskFree(String free, String total, int percent) {
+    return '$free free of $total ($percent%)';
+  }
+
+  @override
+  String get adminDiskUnknown =>
+      'Unknown (read every 15 minutes by the server)';
+
+  @override
+  String get adminDiskLow =>
+      'Less than 10% free: the database and the backups may fail. Free some space on the server (old Docker images, logs…).';
+
+  @override
+  String updateProgressTitle(String version) {
+    return 'Updating to $version';
+  }
+
+  @override
+  String get updateProgressHelp =>
+      'Stay on this page: OwnCoffer will restart and be unavailable for a minute or two. Your data is backed up before anything changes.';
+
+  @override
+  String get updateProgressRestarting =>
+      'OwnCoffer restarting… (the server does not answer, as expected)';
+
+  @override
+  String updateProgressDone(String version) {
+    return 'OwnCoffer $version is installed. Reload the page to use the new version.';
+  }
+
+  @override
+  String get updateProgressReload => 'Reload the page';
+
+  @override
+  String get updateProgressFailed =>
+      'The update did not go through: OwnCoffer went back to the previous version, with the data from before the update. The details are in the update history.';
+
+  @override
+  String get updateProgressWaiting =>
+      'The new version is not ready to download yet (it is published a few minutes after its announcement). The server will try again by itself within 15 minutes.';
+
+  @override
+  String get updateProgressSlow =>
+      'This takes longer than expected. You may leave this page: the update goes on on the server, and its result will be in the history.';
+
+  @override
+  String get updateProgressClose => 'Close';
+
+  @override
+  String get updateStepRequested => 'Request sent to the server';
+
+  @override
+  String get updateStepPull => 'Downloading the new version';
+
+  @override
+  String get updateStepBackup => 'Backing up your data';
+
+  @override
+  String get updateStepStart => 'Restarting OwnCoffer';
+
+  @override
+  String get updateStepCheck => 'Checking that everything answers';
+
+  @override
+  String get updateStepRollback => 'Going back to the previous version…';
+
+  @override
+  String get updateStepDone => 'Update done';
 }

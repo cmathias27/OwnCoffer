@@ -8,6 +8,7 @@ import '../util/format.dart';
 import '../widgets/admin_backups.dart';
 import '../widgets/admin_invitations.dart';
 import '../widgets/admin_updates.dart';
+import 'update_progress_screen.dart';
 import 'members_screen.dart';
 import 'security_screen.dart';
 
@@ -85,6 +86,27 @@ class _AdminScreenState extends State<AdminScreen> {
     }
   }
 
+  /// Asks for the installation, then holds the page on its progress until
+  /// it ends.
+  Future<void> _install(String version) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    try {
+      await client.admin.requestInstall(version);
+    } on Object catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+      return;
+    }
+    await navigator.push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (_) => UpdateProgressScreen(target: version),
+      ),
+    );
+    if (mounted) await _load();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
@@ -156,10 +178,7 @@ class _AdminScreenState extends State<AdminScreen> {
                       () => client.admin.requestUpdateCheck(),
                       l.adminCheckRequested,
                     ),
-                    onInstall: (v) => _act(
-                      () => client.admin.requestInstall(v),
-                      l.adminInstallRequested(v),
-                    ),
+                    onInstall: _install,
                   ),
                   AdminBackupsView(
                     overview: _backups!,
@@ -306,6 +325,29 @@ class AdminHealthView extends StatelessWidget {
             l.adminDocuments,
             _bytes(context, h.documentsBytes),
           ),
+          if (h.diskTotalBytes case final total?)
+            row(
+              Icons.sd_storage_outlined,
+              l.adminDisk,
+              l.adminDiskFree(
+                _bytes(context, h.diskFreeBytes!),
+                _bytes(context, total),
+                (h.diskFreeBytes! * 100 / total).round(),
+              ),
+              // Under 10 % free, backups and the database may fail.
+              ok: h.diskFreeBytes! * 10 >= total,
+            )
+          else
+            row(Icons.sd_storage_outlined, l.adminDisk, l.adminDiskUnknown),
+          if (h.diskTotalBytes != null &&
+              h.diskFreeBytes! * 10 < h.diskTotalBytes!)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Text(
+                l.adminDiskLow,
+                style: TextStyle(color: theme.colorScheme.error),
+              ),
+            ),
           row(
             Icons.notifications_active_outlined,
             l.adminAlertsJob,
