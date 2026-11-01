@@ -1,0 +1,9 @@
+### What an import created (decision 0022): the new group, counts, and the
+### documents whose files are sent next, one by one.
+class: ImportResult
+fields:
+  groupId: int
+  groupName: String
+  accounts: int
+  transactions: int
+  documents: List<ImportedDocument>

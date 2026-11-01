@@ -400,7 +400,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   PopupMenuItem(
                     value: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(
-                        builder: (_) => ExportScreen(membership: current),
+                        builder: (_) => ExportScreen(
+                          membership: current,
+                          canImport: _isServerAdmin,
+                          onImported: s.reloadGroups,
+                        ),
                       ),
                     ),
                     child: ListTile(
@@ -489,7 +493,11 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.download_outlined),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => ExportScreen(membership: current),
+                  builder: (_) => ExportScreen(
+                    membership: current,
+                    canImport: _isServerAdmin,
+                    onImported: s.reloadGroups,
+                  ),
                 ),
               ),
             ),

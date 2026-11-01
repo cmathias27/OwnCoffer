@@ -18,7 +18,7 @@ Serverpod 4 sait faire tourner un serveur sur **SQLite** au lieu de PostgreSQL (
    - ses secrets sont créés au premier lancement, dans le dossier privé de l'application, et n'en sortent jamais ;
    - **un compte local** est créé, sans mot de passe ni courriel puisque personne d'autre ne peut joindre ce serveur. Il est administrateur de ses données, comme le propriétaire d'un serveur Docker. L'application lui ouvre une session à chaque démarrage et crée son premier groupe, « Mes comptes ».
 3. **Un seul schéma, deux bases** : `tool/standalone.sh migrations` génère les migrations SQLite (`server/standalone/migrations`) à partir des mêmes modèles, ainsi que leur copie embarquée dans l'application. La CI vérifie qu'elles sont à jour, puis **exécute tous les tests du serveur aussi sur SQLite**. Le peu de SQL écrit à la main est compatible avec les deux bases (`portable_sql.dart`).
-4. **Passer au mode serveur**, puis éventuellement revenir : par l'export JSON complet (phase 5), importé dans un nouveau groupe du serveur cible, factures et documents compris. C'est la prochaine étape.
+4. **Passer au mode serveur**, puis éventuellement revenir : par l'export JSON complet (phase 5), recréé dans un nouveau groupe du serveur cible (`TransferEndpoint`, envoi en morceaux de 1 million de caractères), chaque lien renuméroté ; puis les fichiers des factures et des documents, un par un. Seul l'administrateur du serveur cible importe, comme seul il crée des groupes. Rien n'est effacé à la source. Dans l'autre sens, « Importer un export » recrée un export JSON (sans les fichiers).
 5. **Sauvegardes du mode autonome** : un export chiffré automatique vers un dossier, l'étape d'après.
 
 ## Conséquences

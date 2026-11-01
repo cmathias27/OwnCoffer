@@ -3570,5 +3570,56 @@
   "startingStandalone": "Ouverture de vos comptes…",
   "standaloneChangeMode": "Changer de mode",
   "standaloneModeNote": "Mode autonome : vos données sont sur cet appareil.",
-  "appsStandaloneHint": "Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées."
+  "appsStandaloneHint": "Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées.",
+  "migrateTitle": "Migrer vers un serveur",
+  "migrateIntro": "Envoie toutes vos données sur un serveur OwnCoffer : comptes, opérations, catégories, règles, objectifs, crédits, factures et documents. Elles restent aussi sur cet appareil.",
+  "migrateAdminNote": "Il faut un compte d'administrateur de ce serveur : seul lui peut créer un groupe. Vous en devenez l'administrateur.",
+  "migrateSignIn": "Se connecter au serveur",
+  "migrateNotAdmin": "Ce compte n'est pas administrateur de ce serveur. Connectez-vous avec le compte d'administrateur.",
+  "migrateCodeLabel": "Code de double authentification",
+  "migrateSend": "Envoyer mes données",
+  "migrateSending": "Envoi en cours… ({percent} %)",
+  "@migrateSending": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "migrateDone": "C'est fait : {count} groupe(s) créé(s) sur le serveur, avec {operations} opérations.",
+  "@migrateDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "operations": {
+        "type": "int"
+      }
+    }
+  },
+  "migrateSwitch": "Utiliser maintenant le serveur",
+  "migrateStay": "Rester en mode autonome",
+  "migrateSwitchNote": "L'application passera en mode serveur. Vos données restent aussi sur cet appareil : « Changer de mode » permet d'y revenir.",
+  "importExportTitle": "Importer un export",
+  "importExportHelp": "Recrée un export JSON d'OwnCoffer (depuis un serveur ou un autre appareil) dans un nouveau groupe. Les fichiers des factures et documents ne sont pas dans l'export : ils ne viennent qu'avec « Migrer vers un serveur ».",
+  "importExportChoose": "Choisir le fichier",
+  "importExportDone": "Importé dans le groupe « {group} » : {accounts} compte(s), {operations} opérations.",
+  "@importExportDone": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      },
+      "accounts": {
+        "type": "int"
+      },
+      "operations": {
+        "type": "int"
+      }
+    }
+  },
+  "error_import_not_an_export": "Ce fichier n'est pas un export OwnCoffer.",
+  "error_import_newer_format": "Cet export vient d'une version plus récente d'OwnCoffer : mettez d'abord à jour.",
+  "error_import_document_mismatch": "Ce document ne correspond pas à celui attendu, ou a déjà été reçu.",
+  "error_import_unknown_upload": "Envoi inconnu ou expiré : recommencez.",
+  "error_import_too_big": "Export trop volumineux pour être envoyé."
 }

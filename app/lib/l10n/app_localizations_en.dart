@@ -5363,4 +5363,82 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get appsStandaloneHint =>
       'Standalone mode: new versions are on the project\'s releases page (link below). Install it over this one: your data is kept.';
+
+  @override
+  String get migrateTitle => 'Move to a server';
+
+  @override
+  String get migrateIntro =>
+      'Sends all your data to an OwnCoffer server: accounts, operations, categories, rules, goals, loans, invoices and documents. They also stay on this device.';
+
+  @override
+  String get migrateAdminNote =>
+      'You need an administrator account on that server: only the administrator creates groups. You become the group\'s administrator.';
+
+  @override
+  String get migrateSignIn => 'Sign in to the server';
+
+  @override
+  String get migrateNotAdmin =>
+      'This account is not the server\'s administrator. Sign in with the administrator account.';
+
+  @override
+  String get migrateCodeLabel => 'Two-factor code';
+
+  @override
+  String get migrateSend => 'Send my data';
+
+  @override
+  String migrateSending(int percent) {
+    return 'Sending… ($percent %)';
+  }
+
+  @override
+  String migrateDone(int count, int operations) {
+    return 'Done: $count group(s) created on the server, with $operations operations.';
+  }
+
+  @override
+  String get migrateSwitch => 'Use the server now';
+
+  @override
+  String get migrateStay => 'Stay in standalone mode';
+
+  @override
+  String get migrateSwitchNote =>
+      'The app will switch to server mode. Your data also stays on this device: \"Change mode\" brings it back.';
+
+  @override
+  String get importExportTitle => 'Import an export';
+
+  @override
+  String get importExportHelp =>
+      'Recreates an OwnCoffer JSON export (from a server or another device) in a new group. Invoice and document files are not in the export: they only come with \"Move to a server\".';
+
+  @override
+  String get importExportChoose => 'Choose the file';
+
+  @override
+  String importExportDone(String group, int accounts, int operations) {
+    return 'Imported into the group \"$group\": $accounts account(s), $operations operations.';
+  }
+
+  @override
+  String get error_import_not_an_export =>
+      'This file is not an OwnCoffer export.';
+
+  @override
+  String get error_import_newer_format =>
+      'This export comes from a newer OwnCoffer version: update first.';
+
+  @override
+  String get error_import_document_mismatch =>
+      'This document does not match the expected one, or was already received.';
+
+  @override
+  String get error_import_unknown_upload =>
+      'Unknown or expired upload: start again.';
+
+  @override
+  String get error_import_too_big => 'Export too big to be sent.';
 }

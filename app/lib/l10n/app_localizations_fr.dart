@@ -5393,4 +5393,82 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get appsStandaloneHint =>
       'Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées.';
+
+  @override
+  String get migrateTitle => 'Migrer vers un serveur';
+
+  @override
+  String get migrateIntro =>
+      'Envoie toutes vos données sur un serveur OwnCoffer : comptes, opérations, catégories, règles, objectifs, crédits, factures et documents. Elles restent aussi sur cet appareil.';
+
+  @override
+  String get migrateAdminNote =>
+      'Il faut un compte d\'administrateur de ce serveur : seul lui peut créer un groupe. Vous en devenez l\'administrateur.';
+
+  @override
+  String get migrateSignIn => 'Se connecter au serveur';
+
+  @override
+  String get migrateNotAdmin =>
+      'Ce compte n\'est pas administrateur de ce serveur. Connectez-vous avec le compte d\'administrateur.';
+
+  @override
+  String get migrateCodeLabel => 'Code de double authentification';
+
+  @override
+  String get migrateSend => 'Envoyer mes données';
+
+  @override
+  String migrateSending(int percent) {
+    return 'Envoi en cours… ($percent %)';
+  }
+
+  @override
+  String migrateDone(int count, int operations) {
+    return 'C\'est fait : $count groupe(s) créé(s) sur le serveur, avec $operations opérations.';
+  }
+
+  @override
+  String get migrateSwitch => 'Utiliser maintenant le serveur';
+
+  @override
+  String get migrateStay => 'Rester en mode autonome';
+
+  @override
+  String get migrateSwitchNote =>
+      'L\'application passera en mode serveur. Vos données restent aussi sur cet appareil : « Changer de mode » permet d\'y revenir.';
+
+  @override
+  String get importExportTitle => 'Importer un export';
+
+  @override
+  String get importExportHelp =>
+      'Recrée un export JSON d\'OwnCoffer (depuis un serveur ou un autre appareil) dans un nouveau groupe. Les fichiers des factures et documents ne sont pas dans l\'export : ils ne viennent qu\'avec « Migrer vers un serveur ».';
+
+  @override
+  String get importExportChoose => 'Choisir le fichier';
+
+  @override
+  String importExportDone(String group, int accounts, int operations) {
+    return 'Importé dans le groupe « $group » : $accounts compte(s), $operations opérations.';
+  }
+
+  @override
+  String get error_import_not_an_export =>
+      'Ce fichier n\'est pas un export OwnCoffer.';
+
+  @override
+  String get error_import_newer_format =>
+      'Cet export vient d\'une version plus récente d\'OwnCoffer : mettez d\'abord à jour.';
+
+  @override
+  String get error_import_document_mismatch =>
+      'Ce document ne correspond pas à celui attendu, ou a déjà été reçu.';
+
+  @override
+  String get error_import_unknown_upload =>
+      'Envoi inconnu ou expiré : recommencez.';
+
+  @override
+  String get error_import_too_big => 'Export trop volumineux pour être envoyé.';
 }

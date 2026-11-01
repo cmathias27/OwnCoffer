@@ -8667,6 +8667,132 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées.'**
   String get appsStandaloneHint;
+
+  /// No description provided for @migrateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Migrer vers un serveur'**
+  String get migrateTitle;
+
+  /// No description provided for @migrateIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoie toutes vos données sur un serveur OwnCoffer : comptes, opérations, catégories, règles, objectifs, crédits, factures et documents. Elles restent aussi sur cet appareil.'**
+  String get migrateIntro;
+
+  /// No description provided for @migrateAdminNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il faut un compte d\'administrateur de ce serveur : seul lui peut créer un groupe. Vous en devenez l\'administrateur.'**
+  String get migrateAdminNote;
+
+  /// No description provided for @migrateSignIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter au serveur'**
+  String get migrateSignIn;
+
+  /// No description provided for @migrateNotAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce compte n\'est pas administrateur de ce serveur. Connectez-vous avec le compte d\'administrateur.'**
+  String get migrateNotAdmin;
+
+  /// No description provided for @migrateCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code de double authentification'**
+  String get migrateCodeLabel;
+
+  /// No description provided for @migrateSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer mes données'**
+  String get migrateSend;
+
+  /// No description provided for @migrateSending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi en cours… ({percent} %)'**
+  String migrateSending(int percent);
+
+  /// No description provided for @migrateDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est fait : {count} groupe(s) créé(s) sur le serveur, avec {operations} opérations.'**
+  String migrateDone(int count, int operations);
+
+  /// No description provided for @migrateSwitch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utiliser maintenant le serveur'**
+  String get migrateSwitch;
+
+  /// No description provided for @migrateStay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rester en mode autonome'**
+  String get migrateStay;
+
+  /// No description provided for @migrateSwitchNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'application passera en mode serveur. Vos données restent aussi sur cet appareil : « Changer de mode » permet d\'y revenir.'**
+  String get migrateSwitchNote;
+
+  /// No description provided for @importExportTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un export'**
+  String get importExportTitle;
+
+  /// No description provided for @importExportHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recrée un export JSON d\'OwnCoffer (depuis un serveur ou un autre appareil) dans un nouveau groupe. Les fichiers des factures et documents ne sont pas dans l\'export : ils ne viennent qu\'avec « Migrer vers un serveur ».'**
+  String get importExportHelp;
+
+  /// No description provided for @importExportChoose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir le fichier'**
+  String get importExportChoose;
+
+  /// No description provided for @importExportDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importé dans le groupe « {group} » : {accounts} compte(s), {operations} opérations.'**
+  String importExportDone(String group, int accounts, int operations);
+
+  /// No description provided for @error_import_not_an_export.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier n\'est pas un export OwnCoffer.'**
+  String get error_import_not_an_export;
+
+  /// No description provided for @error_import_newer_format.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet export vient d\'une version plus récente d\'OwnCoffer : mettez d\'abord à jour.'**
+  String get error_import_newer_format;
+
+  /// No description provided for @error_import_document_mismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce document ne correspond pas à celui attendu, ou a déjà été reçu.'**
+  String get error_import_document_mismatch;
+
+  /// No description provided for @error_import_unknown_upload.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi inconnu ou expiré : recommencez.'**
+  String get error_import_unknown_upload;
+
+  /// No description provided for @error_import_too_big.
+  ///
+  /// In fr, this message translates to:
+  /// **'Export trop volumineux pour être envoyé.'**
+  String get error_import_too_big;
 }
 
 class _AppLocalizationsDelegate

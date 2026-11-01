@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:owncoffer_app/client.dart';
 import 'package:owncoffer_app/l10n/app_localizations.dart';
 import 'package:owncoffer_app/screens/export_screen.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
@@ -61,5 +62,49 @@ void main() {
     expect(saved[1].$3.take(3), [0xEF, 0xBB, 0xBF]);
     expect(utf8.decode(saved[1].$3), contains('date;compte'));
     expect(find.textContaining('Export prêt'), findsOneWidget);
+  });
+
+  testWidgets('standalone: move to a server; administrator: import', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 2000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    addTearDown(() => isStandalone = false);
+    Widget screen({required bool admin}) => MaterialApp(
+      locale: const Locale('fr'),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: ExportScreen(
+        canImport: admin,
+        membership: GroupMembership(
+          group: FinanceGroup(
+            id: 7,
+            name: 'Mes comptes',
+            createdBy: UuidValue.fromString(
+              '00000000-0000-4000-8000-000000000001',
+            ),
+          ),
+          role: MemberRole.admin,
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(screen(admin: false));
+    expect(find.text('Migrer vers un serveur'), findsNothing);
+    expect(find.text('Importer un export'), findsNothing);
+
+    isStandalone = true;
+    await tester.pumpWidget(screen(admin: true));
+    expect(find.text('Migrer vers un serveur'), findsOneWidget);
+    expect(find.text('Importer un export'), findsOneWidget);
+    await tester.tap(find.text('Migrer vers un serveur'));
+    await tester.pumpAndSettle();
+    expect(find.text('Adresse du serveur'), findsOneWidget);
   });
 }

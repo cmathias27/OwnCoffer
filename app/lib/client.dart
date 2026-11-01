@@ -55,6 +55,10 @@ Future<void> initializeClient({String? url}) async {
   unawaited(client.auth.initialize());
 }
 
+/// Set by main(): leaves the standalone mode for the server at [api],
+/// signed in with [session] (after a move, decision 0022).
+late Future<void> Function(Uri api, AuthSuccess session) switchToServer;
+
 /// Set by main(): shows the first launch choice again (native apps).
 late Future<void> Function() askServerAddress;
 
