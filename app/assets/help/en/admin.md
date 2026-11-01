@@ -15,4 +15,4 @@ This page is only visible to the **server administrator**. It never shows a hous
 
 ## Add an AI provider
 
-Choose **Google Gemini**, **OpenAI ChatGPT** or **Anthropic Claude** and paste the API key: the list of models is asked to the provider, which also checks the key. For **Ollama**, enter the machine's address. The key is encrypted and never shown again. A monthly cap of requests per user can be set.
+Choose **Google Gemini**, **OpenAI ChatGPT** or **Anthropic Claude** and paste the API key: the list of models is asked to the provider, which also checks the key. For **Ollama**, enter the machine's address. Only the usual models are kept (no trial versions or specialised variants). **"Test the connection"** tries a real short conversation with the first model: on error, the provider's exact answer is shown (key refused, unknown model…). The key is encrypted and never shown again. A monthly cap of requests per user can be set.

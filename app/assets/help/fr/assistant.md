@@ -5,7 +5,11 @@ OwnCoffer fonctionne entièrement sans IA. L'assistant est **désactivé par dé
 ## L'activer
 
 1. L'administrateur du serveur ajoute un fournisseur dans **Administration > IA** (Ollama sur votre réseau, Gemini, ChatGPT, Claude…).
-2. Ici, choisissez le **fournisseur** et le **modèle**, puis activez l'assistant.
+2. Dans **Assistant : réglages** (icône ✨ tant qu'il n'est pas activé), choisissez le **fournisseur** et le **modèle**, puis activez l'assistant.
+
+## La bulle de discussion
+
+Une fois l'assistant activé, une **bulle** apparaît en bas à droite de l'écran. Touchez-la pour ouvrir la conversation, comme dans une messagerie : elle **reste ouverte quand vous changez de page**, et la bulle signale une réponse arrivée pendant qu'elle était réduite. L'en-tête permet de commencer une nouvelle conversation, d'ouvrir les réglages ou de réduire la fenêtre.
 
 ## Ce qu'il peut faire
 

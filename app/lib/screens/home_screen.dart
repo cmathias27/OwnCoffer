@@ -24,6 +24,7 @@ import 'notifications_screen.dart';
 import 'operations_screen.dart';
 import 'security_screen.dart';
 import '../help/help.dart';
+import '../assistant/chat_controller.dart';
 
 /// Signed-in shell: navigation rail on wide screens, bottom bar on phones.
 class HomeScreen extends StatefulWidget {
@@ -90,6 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _unreadTimer?.cancel();
+    // Signed out: the conversation is forgotten.
+    chat.detach();
     super.dispose();
   }
 
@@ -178,6 +181,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final l = AppLocalizations.of(context);
     final s = widget.session;
     final current = s.currentGroup;
+    // The chat bubble follows the household shown.
+    if (current?.group.id != chat.membership?.group.id) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => chat.attach(current));
+    }
     final layout = navLayoutFor(MediaQuery.sizeOf(context).width);
     final wide = layout != NavLayout.bar;
 
@@ -295,13 +302,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           if (current != null)
-            IconButton(
-              tooltip: l.assistantTitle,
-              icon: const Icon(Icons.auto_awesome_outlined),
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => AssistantScreen(membership: current),
-                ),
+            // The conversation when the assistant is on, its settings
+            // otherwise.
+            ListenableBuilder(
+              listenable: chat,
+              builder: (context, _) => IconButton(
+                tooltip: chat.available ? l.chatOpen : l.assistantSettingsTitle,
+                icon: const Icon(Icons.auto_awesome_outlined),
+                onPressed: chat.available
+                    ? () => chat.setOpen(!chat.open)
+                    : () => Navigator.of(context)
+                          .push(
+                            MaterialPageRoute<void>(
+                              builder: (_) =>
+                                  AssistantScreen(membership: current),
+                            ),
+                          )
+                          .then((_) => chat.refreshStatus()),
               ),
             ),
           // Wide screens: the help of the open tab; phones find it in the

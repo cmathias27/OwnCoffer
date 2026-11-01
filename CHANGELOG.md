@@ -2,6 +2,19 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.32 (1er novembre 2026)
+
+### Assistant : une bulle de discussion
+
+- La conversation avec l'assistant s'ouvre maintenant dans une **bulle en bas à droite**, comme une messagerie : elle **reste ouverte d'une page à l'autre**, signale une réponse arrivée pendant qu'elle était réduite, et prend tout l'écran sur téléphone.
+- La page **Assistant : réglages** ne garde que la configuration : fournisseur, modèle, activation, jetons MCP. L'icône ✨ ouvre la conversation quand l'assistant est activé, ses réglages sinon.
+
+### Fournisseurs d'IA
+
+- **« Tester la connexion »** essaie maintenant une vraie petite conversation avec le premier modèle, et affiche **la réponse exacte du fournisseur** en cas d'erreur (clé refusée, modèle inconnu, quota…).
+- Seuls les **modèles courants** sont proposés quand la liste est demandée au fournisseur : sans versions d'essai (« preview », « exp »), sans versions datées, sans variantes spécialisées, les plus récents d'abord, 12 au plus.
+- La **température n'est plus imposée** : les modèles récents (modèles de raisonnement d'OpenAI, Gemini 3) refusent ou déconseillent toute autre valeur que la leur.
+
 ## 0.3.31 (1er novembre 2026)
 
 ### Lire les tickets, factures et documents de crédit avec l'IA

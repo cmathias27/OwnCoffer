@@ -1247,5 +1247,11 @@
   "error_receipt_mismatch": "The lines read on the receipt exceed the operation's amount: it is probably not its receipt.",
   "error_document_nothing_read": "The AI could read nothing useful in this document.",
   "error_ai_document_not_image": "This model only reads images: attach a photo or a screenshot of the document.",
-  "error_ai_document_too_large": "Document too large to be read (8 MB at most)."
+  "error_ai_document_too_large": "Document too large to be read (8 MB at most).",
+  "chatOpen": "Chat with the assistant",
+  "chatClose": "Minimise",
+  "chatNew": "New conversation",
+  "chatSettings": "Assistant settings",
+  "chatIntro": "Ask a question about your accounts, or ask it to classify your operations. It reads your figures through OwnCoffer's functions and changes nothing: its proposals go to My advisor. The conversation stays open when you change page.",
+  "assistantSettingsTitle": "Assistant: settings"
 }
