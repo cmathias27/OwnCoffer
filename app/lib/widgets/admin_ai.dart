@@ -161,8 +161,50 @@ class _ProviderDialog extends StatefulWidget {
   State<_ProviderDialog> createState() => _ProviderDialogState();
 }
 
+/// Ready-made set-ups: for the big providers, only the key is left to type
+/// (the list of models is asked to the provider when left empty).
+enum _Preset {
+  ollama('ollama', 'Ollama', 'http://192.168.1.10:11434/v1', '', false),
+  gemini(
+    'openai',
+    'Gemini',
+    'https://generativelanguage.googleapis.com/v1beta/openai/',
+    '',
+    true,
+  ),
+  chatgpt('openai', 'ChatGPT', 'https://api.openai.com/v1', '', true),
+  claude(
+    'anthropic',
+    'Claude',
+    'https://api.anthropic.com/v1',
+    'claude-opus-5-5,claude-sonnet-5-5,claude-haiku-5-5',
+    true,
+  ),
+  other('openai', '', 'https://', '', false);
+
+  final String kind;
+  final String name;
+  final String url;
+  final String models;
+  final bool vision;
+  const _Preset(this.kind, this.name, this.url, this.models, this.vision);
+
+  static _Preset of(AiProvider? p) {
+    if (p == null) return _Preset.ollama;
+    for (final x in values) {
+      if (x != other &&
+          x.kind == p.kind &&
+          (x == ollama || x.url == p.baseUrl)) {
+        return x;
+      }
+    }
+    return p.kind == 'ollama' ? ollama : other;
+  }
+}
+
 class _ProviderDialogState extends State<_ProviderDialog> {
   late final p = widget.provider;
+  late var _preset = _Preset.of(p);
   late var _kind = p?.kind ?? 'ollama';
   late final _name = TextEditingController(text: p?.name ?? 'Ollama');
   late final _url = TextEditingController(
@@ -223,23 +265,56 @@ class _ProviderDialogState extends State<_ProviderDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SegmentedButton<String>(
-                segments: [
-                  ButtonSegment(value: 'ollama', label: Text(l.adminAiLocal)),
-                  ButtonSegment(
-                    value: 'openai',
-                    label: Text(l.adminAiExternal),
-                  ),
+              DropdownButtonFormField<_Preset>(
+                isExpanded: true,
+                initialValue: _preset,
+                decoration: InputDecoration(labelText: l.adminAiPreset),
+                items: [
+                  for (final x in _Preset.values)
+                    DropdownMenuItem(
+                      value: x,
+                      child: Text(switch (x) {
+                        _Preset.ollama => l.adminAiLocal,
+                        _Preset.gemini => 'Google Gemini',
+                        _Preset.chatgpt => 'OpenAI ChatGPT',
+                        _Preset.claude => 'Anthropic Claude',
+                        _Preset.other => l.adminAiExternal,
+                      }),
+                    ),
                 ],
-                selected: {_kind},
-                showSelectedIcon: false,
-                onSelectionChanged: (s) => setState(() => _kind = s.single),
+                onChanged: (x) {
+                  if (x == null) return;
+                  setState(() {
+                    _preset = x;
+                    _kind = x.kind;
+                    if (x != _Preset.other) {
+                      _name.text = x.name;
+                      _url.text = x.url;
+                      _models.text = x.models;
+                      _vision = x.vision;
+                      _tools = true;
+                    }
+                  });
+                },
               ),
               const SizedBox(height: 6),
               Text(
-                _kind == 'ollama' ? l.adminAiLocalHelp : l.adminAiExternalHelp,
+                switch (_preset) {
+                  _Preset.ollama => l.adminAiLocalHelp,
+                  _Preset.gemini => l.adminAiGeminiHelp,
+                  _Preset.chatgpt => l.adminAiChatGptHelp,
+                  _Preset.claude => l.adminAiClaudeHelp,
+                  _Preset.other => l.adminAiExternalHelp,
+                },
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              if (_preset != _Preset.ollama) ...[
+                const SizedBox(height: 4),
+                Text(
+                  l.adminAiSentOutside,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
               gap,
               TextField(
                 controller: _name,

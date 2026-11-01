@@ -3995,6 +3995,25 @@ class AppLocalizationsFr extends AppLocalizations {
       'Un fournisseur en ligne (Mistral, OpenAI, OpenRouter…) : les questions et les chiffres utiles lui sont envoyés, ce que l\'application dit à l\'utilisateur.';
 
   @override
+  String get adminAiPreset => 'Fournisseur';
+
+  @override
+  String get adminAiGeminiHelp =>
+      'Collez une clé d\'API Google AI Studio (aistudio.google.com, « Get API key »). La liste des modèles est demandée à Google à l\'enregistrement si vous la laissez vide.';
+
+  @override
+  String get adminAiChatGptHelp =>
+      'Collez une clé d\'API OpenAI (platform.openai.com, « API keys ») : elle est facturée à l\'usage, à part de l\'abonnement ChatGPT. La liste des modèles est demandée à OpenAI à l\'enregistrement si vous la laissez vide.';
+
+  @override
+  String get adminAiClaudeHelp =>
+      'Collez une clé d\'API Anthropic (platform.claude.com, « API keys ») : elle est facturée à l\'usage, à part de l\'abonnement Claude. OwnCoffer utilise l\'API Claude elle-même, sans passer par une compatibilité OpenAI.';
+
+  @override
+  String get adminAiSentOutside =>
+      'Fournisseur en ligne : les questions et les chiffres utiles lui sont envoyés, ce que l\'application rappelle à chaque utilisateur.';
+
+  @override
   String get adminAiName => 'Nom affiché';
 
   @override
@@ -4016,7 +4035,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get adminAiModelsHelp =>
-      'Séparés par des virgules, par exemple : llama3.1, mistral-small';
+      'Séparés par des virgules, par exemple : llama3.1, mistral-small. Laissez vide pour demander la liste au fournisseur.';
 
   @override
   String get adminAiCap => 'Plafond mensuel par utilisateur';
@@ -4159,6 +4178,15 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_ai_unavailable =>
       'Le fournisseur d\'IA ne répond pas. Aucun autre n\'a été utilisé à sa place.';
+
+  @override
+  String error_ai_reason(String reason) {
+    return 'Réponse du fournisseur : $reason';
+  }
+
+  @override
+  String get error_ai_no_models =>
+      'Le fournisseur n\'a proposé aucun modèle de conversation : indiquez-en un.';
 
   @override
   String get error_ai_no_vision => 'Ce modèle ne lit pas les images.';

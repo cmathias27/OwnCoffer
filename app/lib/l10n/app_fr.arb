@@ -2999,13 +2999,18 @@
   "adminAiExternal": "Externe (compatible OpenAI)",
   "adminAiLocalHelp": "Un modèle qui tourne sur ce serveur ou votre réseau : les données ne sortent pas de chez vous. Adresse du type http://192.168.1.10:11434/v1.",
   "adminAiExternalHelp": "Un fournisseur en ligne (Mistral, OpenAI, OpenRouter…) : les questions et les chiffres utiles lui sont envoyés, ce que l'application dit à l'utilisateur.",
+  "adminAiPreset": "Fournisseur",
+  "adminAiGeminiHelp": "Collez une clé d'API Google AI Studio (aistudio.google.com, « Get API key »). La liste des modèles est demandée à Google à l'enregistrement si vous la laissez vide.",
+  "adminAiChatGptHelp": "Collez une clé d'API OpenAI (platform.openai.com, « API keys ») : elle est facturée à l'usage, à part de l'abonnement ChatGPT. La liste des modèles est demandée à OpenAI à l'enregistrement si vous la laissez vide.",
+  "adminAiClaudeHelp": "Collez une clé d'API Anthropic (platform.claude.com, « API keys ») : elle est facturée à l'usage, à part de l'abonnement Claude. OwnCoffer utilise l'API Claude elle-même, sans passer par une compatibilité OpenAI.",
+  "adminAiSentOutside": "Fournisseur en ligne : les questions et les chiffres utiles lui sont envoyés, ce que l'application rappelle à chaque utilisateur.",
   "adminAiName": "Nom affiché",
   "adminAiUrl": "Adresse de l'API",
   "adminAiKey": "Clé d'API",
   "adminAiKeyHelp": "Facultative pour Ollama. Chiffrée sur le serveur, jamais réaffichée.",
   "adminAiKeyKeep": "Une clé est enregistrée : laisser vide pour la garder.",
   "adminAiModels": "Modèles proposés",
-  "adminAiModelsHelp": "Séparés par des virgules, par exemple : llama3.1, mistral-small",
+  "adminAiModelsHelp": "Séparés par des virgules, par exemple : llama3.1, mistral-small. Laissez vide pour demander la liste au fournisseur.",
   "adminAiCap": "Plafond mensuel par utilisateur",
   "adminAiCapHelp": "Nombre de demandes ; 0 pour aucun plafond.",
   "adminAiTools": "Appel des fonctions du moteur",
@@ -3098,6 +3103,15 @@
   "error_ai_provider_unavailable": "Ce fournisseur ou ce modèle n'est pas disponible.",
   "error_ai_cap_reached": "Plafond mensuel de demandes atteint.",
   "error_ai_unavailable": "Le fournisseur d'IA ne répond pas. Aucun autre n'a été utilisé à sa place.",
+  "error_ai_reason": "Réponse du fournisseur : {reason}",
+  "@error_ai_reason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "error_ai_no_models": "Le fournisseur n'a proposé aucun modèle de conversation : indiquez-en un.",
   "error_ai_no_vision": "Ce modèle ne lit pas les images.",
   "error_ai_message_too_long": "Message trop long (4 000 caractères au plus).",
   "error_ai_invalid_url": "Adresse invalide : http:// ou https://, sans identifiant dedans.",

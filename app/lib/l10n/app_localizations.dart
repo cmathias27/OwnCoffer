@@ -6414,6 +6414,36 @@ abstract class AppLocalizations {
   /// **'Un fournisseur en ligne (Mistral, OpenAI, OpenRouter…) : les questions et les chiffres utiles lui sont envoyés, ce que l\'application dit à l\'utilisateur.'**
   String get adminAiExternalHelp;
 
+  /// No description provided for @adminAiPreset.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fournisseur'**
+  String get adminAiPreset;
+
+  /// No description provided for @adminAiGeminiHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Collez une clé d\'API Google AI Studio (aistudio.google.com, « Get API key »). La liste des modèles est demandée à Google à l\'enregistrement si vous la laissez vide.'**
+  String get adminAiGeminiHelp;
+
+  /// No description provided for @adminAiChatGptHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Collez une clé d\'API OpenAI (platform.openai.com, « API keys ») : elle est facturée à l\'usage, à part de l\'abonnement ChatGPT. La liste des modèles est demandée à OpenAI à l\'enregistrement si vous la laissez vide.'**
+  String get adminAiChatGptHelp;
+
+  /// No description provided for @adminAiClaudeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Collez une clé d\'API Anthropic (platform.claude.com, « API keys ») : elle est facturée à l\'usage, à part de l\'abonnement Claude. OwnCoffer utilise l\'API Claude elle-même, sans passer par une compatibilité OpenAI.'**
+  String get adminAiClaudeHelp;
+
+  /// No description provided for @adminAiSentOutside.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fournisseur en ligne : les questions et les chiffres utiles lui sont envoyés, ce que l\'application rappelle à chaque utilisateur.'**
+  String get adminAiSentOutside;
+
   /// No description provided for @adminAiName.
   ///
   /// In fr, this message translates to:
@@ -6453,7 +6483,7 @@ abstract class AppLocalizations {
   /// No description provided for @adminAiModelsHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Séparés par des virgules, par exemple : llama3.1, mistral-small'**
+  /// **'Séparés par des virgules, par exemple : llama3.1, mistral-small. Laissez vide pour demander la liste au fournisseur.'**
   String get adminAiModelsHelp;
 
   /// No description provided for @adminAiCap.
@@ -6677,6 +6707,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le fournisseur d\'IA ne répond pas. Aucun autre n\'a été utilisé à sa place.'**
   String get error_ai_unavailable;
+
+  /// No description provided for @error_ai_reason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse du fournisseur : {reason}'**
+  String error_ai_reason(String reason);
+
+  /// No description provided for @error_ai_no_models.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fournisseur n\'a proposé aucun modèle de conversation : indiquez-en un.'**
+  String get error_ai_no_models;
 
   /// No description provided for @error_ai_no_vision.
   ///

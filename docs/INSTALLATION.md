@@ -101,6 +101,23 @@ Depuis la page **Administration du serveur** (onglet Mises à jour), l'administr
 
 Le script s'utilise aussi en ligne de commande : `./docker/auto-update.sh --check`, `./docker/auto-update.sh --install v0.3.10`.
 
+## Brancher une IA (facultatif)
+
+OwnCoffer fonctionne entièrement sans IA. Pour proposer l'assistant aux membres, l'administrateur du serveur ouvre **Administration > IA > Ajouter un fournisseur** et choisit :
+
+| Fournisseur | Où trouver la clé | Ce qu'il reste à remplir |
+| --- | --- | --- |
+| **Ollama** (local) | aucune clé | l'adresse de la machine, par exemple `http://192.168.1.10:11434/v1`, et les modèles installés |
+| **Google Gemini** | [aistudio.google.com](https://aistudio.google.com) > *Get API key* | la clé seulement |
+| **OpenAI ChatGPT** | [platform.openai.com](https://platform.openai.com) > *API keys* (facturé à l'usage, à part de l'abonnement ChatGPT) | la clé seulement |
+| **Anthropic Claude** | [platform.claude.com](https://platform.claude.com) > *API keys* (facturé à l'usage, à part de l'abonnement Claude) | la clé seulement |
+| **Autre compatible OpenAI** (Mistral, OpenRouter…) | chez le fournisseur | l'adresse de l'API et la clé |
+
+- Si la liste des modèles est laissée vide, elle est **demandée au fournisseur à l'enregistrement** : cela vérifie aussi la clé. Une clé refusée n'est pas enregistrée, et la réponse du fournisseur (« API key not valid »…) est affichée.
+- La clé est chiffrée sur le serveur, jamais réaffichée ni écrite au journal. Le bouton « Tester la connexion » redemande la liste des modèles.
+- Avec un fournisseur en ligne, les questions et les chiffres utiles lui sont envoyés ; chaque utilisateur en est averti et choisit lui-même d'activer l'assistant.
+- Claude est appelé par son API (`/v1/messages`), les autres par l'API compatible OpenAI (`/chat/completions`).
+
 ## Image privée
 
 Si `docker compose pull` répond `denied` ou `unauthorized`, l'image `ghcr.io/cmathias27/owncoffer` n'est pas publique : rendez le paquet public dans GitHub (Packages, owncoffer, Package settings), ou connectez-vous avec `docker login ghcr.io` et un jeton ayant le droit `read:packages`.
