@@ -1,0 +1,9 @@
+### One message of a conversation with the assistant (user or assistant),
+### optionally with an image (a screenshot of a loan table, a receipt) for
+### a model that reads images.
+class: AiMessage
+fields:
+  role: String
+  content: String
+  imageBase64: String?
+  imageMimeType: String?

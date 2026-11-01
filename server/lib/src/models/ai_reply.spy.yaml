@@ -1,0 +1,13 @@
+### The assistant's answer, with what it used and what left the server.
+class: AiReply
+fields:
+  text: String
+  ### Engine functions it called (get_budget_status…), in order.
+  tools: List<String>
+  ### Provider and model that answered.
+  provider: String
+  model: String
+  ### The model runs outside this server and the local network.
+  isExternal: bool
+  ### Proposals it made, to accept in Mon conseiller.
+  proposals: List<ActionProposal>

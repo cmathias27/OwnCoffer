@@ -29,6 +29,10 @@ import 'package:owncoffer_client/src/protocol/admin_invitation_info.dart'
 import 'package:owncoffer_client/src/protocol/admin_stats.dart' as _ip1w2kia;
 import 'package:owncoffer_client/src/protocol/admin_user_info.dart'
     as _i4kcqb5h;
+import 'package:owncoffer_client/src/protocol/ai_message.dart' as _iarsdlqt;
+import 'package:owncoffer_client/src/protocol/ai_provider.dart' as _iupqajx2;
+import 'package:owncoffer_client/src/protocol/ai_reply.dart' as _i6gcixlb;
+import 'package:owncoffer_client/src/protocol/ai_status.dart' as _if0b0k6p;
 import 'package:owncoffer_client/src/protocol/backup_overview.dart'
     as _il220tje;
 import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
@@ -608,6 +612,84 @@ class EndpointAdvisor extends _isc.EndpointRef {
         'undo',
         {'proposalId': proposalId},
       );
+}
+
+/// The AI, optional (décision 0006): providers set up by the server
+/// administrator (décision 0017), each user's choice, and the assistant.
+/// {@category Endpoint}
+class EndpointAi extends _isc.EndpointRef {
+  EndpointAi(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'ai';
+
+  _ida.Future<_if0b0k6p.AiStatus> status() =>
+      caller.callServerEndpoint<_if0b0k6p.AiStatus>(
+        'ai',
+        'status',
+        {},
+      );
+
+  /// Creates or changes a provider. [apiKey]: null keeps the current key,
+  /// empty removes it.
+  _ida.Future<_iupqajx2.AiProvider> saveProvider(
+    _iupqajx2.AiProvider provider,
+    String? apiKey,
+  ) => caller.callServerEndpoint<_iupqajx2.AiProvider>(
+    'ai',
+    'saveProvider',
+    {
+      'provider': provider,
+      'apiKey': apiKey,
+    },
+  );
+
+  _ida.Future<void> deleteProvider(int providerId) =>
+      caller.callServerEndpoint<void>(
+        'ai',
+        'deleteProvider',
+        {'providerId': providerId},
+      );
+
+  /// Asks the provider for its models: checks the address and the key.
+  _ida.Future<List<String>> testProvider(int providerId) =>
+      caller.callServerEndpoint<List<String>>(
+        'ai',
+        'testProvider',
+        {'providerId': providerId},
+      );
+
+  /// The user's choice: a provider set up by the administrator and one of
+  /// its models, on or off.
+  _ida.Future<_if0b0k6p.AiStatus> setPreference(
+    int? providerId,
+    String? model,
+    bool enabled,
+  ) => caller.callServerEndpoint<_if0b0k6p.AiStatus>(
+    'ai',
+    'setPreference',
+    {
+      'providerId': providerId,
+      'model': model,
+      'enabled': enabled,
+    },
+  );
+
+  /// One turn with the assistant, on the accounts of [groupId] the user may
+  /// see. A provider that does not answer is said so: never another one.
+  _ida.Future<_i6gcixlb.AiReply> chat(
+    int groupId,
+    List<_iarsdlqt.AiMessage> history,
+    _iarsdlqt.AiMessage message,
+  ) => caller.callServerEndpoint<_i6gcixlb.AiReply>(
+    'ai',
+    'chat',
+    {
+      'groupId': groupId,
+      'history': history,
+      'message': message,
+    },
+  );
 }
 
 /// Income and expenses by category over a week, a month, a quarter or a
@@ -2032,6 +2114,7 @@ class Client extends _isc.ServerpodClientShared {
     account = EndpointAccount(this);
     admin = EndpointAdmin(this);
     advisor = EndpointAdvisor(this);
+    ai = EndpointAi(this);
     analysis = EndpointAnalysis(this);
     category = EndpointCategory(this);
     goal = EndpointGoal(this);
@@ -2058,6 +2141,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointAdmin admin;
 
   late final EndpointAdvisor advisor;
+
+  late final EndpointAi ai;
 
   late final EndpointAnalysis analysis;
 
@@ -2096,6 +2181,7 @@ class Client extends _isc.ServerpodClientShared {
     'account': account,
     'admin': admin,
     'advisor': advisor,
+    'ai': ai,
     'analysis': analysis,
     'category': category,
     'goal': goal,

@@ -22,6 +22,7 @@ import 'package:owncoffer_server/src/generated/admin_invitation_info.dart'
     as _i9lpyifc;
 import 'package:owncoffer_server/src/generated/admin_user_info.dart'
     as _i3ew1lpl;
+import 'package:owncoffer_server/src/generated/ai_message.dart' as _ijy47dz3;
 import 'package:owncoffer_server/src/generated/balance_check.dart' as _i0mjy83n;
 import 'package:owncoffer_server/src/generated/bank_transaction.dart'
     as _ivm4hoam;
@@ -66,6 +67,12 @@ import 'admin_health.dart' as _ihbeufm3;
 import 'admin_invitation_info.dart' as _ib01m0m7;
 import 'admin_stats.dart' as _iqygks5s;
 import 'admin_user_info.dart' as _is8wfuq8;
+import 'ai_message.dart' as _ikwoa06z;
+import 'ai_preference.dart' as _i5zygq2d;
+import 'ai_provider.dart' as _ibtxcndu;
+import 'ai_reply.dart' as _ih3b4fxu;
+import 'ai_status.dart' as _idsjcs1s;
+import 'ai_usage.dart' as _iojy8c5d;
 import 'audit_entry.dart' as _i1613bfs;
 import 'backup_code.dart' as _i0b7vj86;
 import 'backup_info.dart' as _i73uehc4;
@@ -159,6 +166,12 @@ export 'admin_health.dart';
 export 'admin_invitation_info.dart';
 export 'admin_stats.dart';
 export 'admin_user_info.dart';
+export 'ai_message.dart';
+export 'ai_preference.dart';
+export 'ai_provider.dart';
+export 'ai_reply.dart';
+export 'ai_status.dart';
+export 'ai_usage.dart';
 export 'audit_entry.dart';
 export 'backup_code.dart';
 export 'backup_info.dart';
@@ -638,6 +651,247 @@ class Protocol extends _is.DatabaseSerializationManager {
             _isp.IndexElementDefinition(
               type: _isp.IndexElementDefinitionType.column,
               definition: 'dedupKey',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'ai_preferences',
+      dartName: 'AiPreference',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'providerId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'model',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'enabled',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'ai_preferences_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'ai_preferences_fk_1',
+          columns: ['providerId'],
+          referenceTable: 'ai_providers',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.setNull,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'ai_preferences_user_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'ai_providers',
+      dartName: 'AiProvider',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'name',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'kind',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'baseUrl',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'apiKeyBox',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'models',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'toolCalling',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+        ),
+        _isp.ColumnDefinition(
+          name: 'vision',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+        ),
+        _isp.ColumnDefinition(
+          name: 'monthlyCap',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'enabled',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'ai_usage',
+      dartName: 'AiUsage',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'providerId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'month',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'requests',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'ai_usage_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'ai_usage_fk_1',
+          columns: ['providerId'],
+          referenceTable: 'ai_providers',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'ai_usage_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'providerId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'month',
             ),
           ],
           type: 'btree',
@@ -3102,6 +3356,24 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is8wfuq8.AdminUserInfo) {
       return _is8wfuq8.AdminUserInfo.fromJson(data) as T;
     }
+    if (t == _ikwoa06z.AiMessage) {
+      return _ikwoa06z.AiMessage.fromJson(data) as T;
+    }
+    if (t == _i5zygq2d.AiPreference) {
+      return _i5zygq2d.AiPreference.fromJson(data) as T;
+    }
+    if (t == _ibtxcndu.AiProvider) {
+      return _ibtxcndu.AiProvider.fromJson(data) as T;
+    }
+    if (t == _ih3b4fxu.AiReply) {
+      return _ih3b4fxu.AiReply.fromJson(data) as T;
+    }
+    if (t == _idsjcs1s.AiStatus) {
+      return _idsjcs1s.AiStatus.fromJson(data) as T;
+    }
+    if (t == _iojy8c5d.AiUsage) {
+      return _iojy8c5d.AiUsage.fromJson(data) as T;
+    }
     if (t == _i1613bfs.AuditEntry) {
       return _i1613bfs.AuditEntry.fromJson(data) as T;
     }
@@ -3392,6 +3664,24 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_is8wfuq8.AdminUserInfo?>()) {
       return (data != null ? _is8wfuq8.AdminUserInfo.fromJson(data) : null)
           as T;
+    }
+    if (t == _is.getType<_ikwoa06z.AiMessage?>()) {
+      return (data != null ? _ikwoa06z.AiMessage.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i5zygq2d.AiPreference?>()) {
+      return (data != null ? _i5zygq2d.AiPreference.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ibtxcndu.AiProvider?>()) {
+      return (data != null ? _ibtxcndu.AiProvider.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ih3b4fxu.AiReply?>()) {
+      return (data != null ? _ih3b4fxu.AiReply.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_idsjcs1s.AiStatus?>()) {
+      return (data != null ? _idsjcs1s.AiStatus.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iojy8c5d.AiUsage?>()) {
+      return (data != null ? _iojy8c5d.AiUsage.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_i1613bfs.AuditEntry?>()) {
       return (data != null ? _i1613bfs.AuditEntry.fromJson(data) : null) as T;
@@ -3711,6 +4001,18 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ius3n358.ActionProposal>) {
+      return (data as List)
+              .map((e) => deserialize<_ius3n358.ActionProposal>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ibtxcndu.AiProvider>) {
+      return (data as List)
+              .map((e) => deserialize<_ibtxcndu.AiProvider>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_i73uehc4.BackupInfo>) {
       return (data as List)
               .map((e) => deserialize<_i73uehc4.BackupInfo>(e))
@@ -3885,6 +4187,15 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
+    }
+    if (t == List<_ijy47dz3.AiMessage>) {
+      return (data as List)
+              .map((e) => deserialize<_ijy47dz3.AiMessage>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ivm4hoam.BankTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ivm4hoam.BankTransaction>(e))
@@ -3986,9 +4297,6 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
-    if (t == List<String>) {
-      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
-    }
     try {
       return _iais.Protocol().deserialize<T>(data, t);
     } on _is.DeserializationTypeNotFoundException catch (_) {}
@@ -4015,6 +4323,12 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ib01m0m7.AdminInvitationInfo => 'AdminInvitationInfo',
       _iqygks5s.AdminStats => 'AdminStats',
       _is8wfuq8.AdminUserInfo => 'AdminUserInfo',
+      _ikwoa06z.AiMessage => 'AiMessage',
+      _i5zygq2d.AiPreference => 'AiPreference',
+      _ibtxcndu.AiProvider => 'AiProvider',
+      _ih3b4fxu.AiReply => 'AiReply',
+      _idsjcs1s.AiStatus => 'AiStatus',
+      _iojy8c5d.AiUsage => 'AiUsage',
       _i1613bfs.AuditEntry => 'AuditEntry',
       _i0b7vj86.BackupCode => 'BackupCode',
       _i73uehc4.BackupInfo => 'BackupInfo',
@@ -4134,6 +4448,18 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'AdminStats';
       case _is8wfuq8.AdminUserInfo():
         return 'AdminUserInfo';
+      case _ikwoa06z.AiMessage():
+        return 'AiMessage';
+      case _i5zygq2d.AiPreference():
+        return 'AiPreference';
+      case _ibtxcndu.AiProvider():
+        return 'AiProvider';
+      case _ih3b4fxu.AiReply():
+        return 'AiReply';
+      case _idsjcs1s.AiStatus():
+        return 'AiStatus';
+      case _iojy8c5d.AiUsage():
+        return 'AiUsage';
       case _i1613bfs.AuditEntry():
         return 'AuditEntry';
       case _i0b7vj86.BackupCode():
@@ -4357,6 +4683,24 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'AdminUserInfo') {
       return deserialize<_is8wfuq8.AdminUserInfo>(data['data']);
+    }
+    if (dataClassName == 'AiMessage') {
+      return deserialize<_ikwoa06z.AiMessage>(data['data']);
+    }
+    if (dataClassName == 'AiPreference') {
+      return deserialize<_i5zygq2d.AiPreference>(data['data']);
+    }
+    if (dataClassName == 'AiProvider') {
+      return deserialize<_ibtxcndu.AiProvider>(data['data']);
+    }
+    if (dataClassName == 'AiReply') {
+      return deserialize<_ih3b4fxu.AiReply>(data['data']);
+    }
+    if (dataClassName == 'AiStatus') {
+      return deserialize<_idsjcs1s.AiStatus>(data['data']);
+    }
+    if (dataClassName == 'AiUsage') {
+      return deserialize<_iojy8c5d.AiUsage>(data['data']);
     }
     if (dataClassName == 'AuditEntry') {
       return deserialize<_i1613bfs.AuditEntry>(data['data']);
@@ -4648,6 +4992,12 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _idkoqesg.AccountAccess.t;
       case _ius3n358.ActionProposal:
         return _ius3n358.ActionProposal.t;
+      case _i5zygq2d.AiPreference:
+        return _i5zygq2d.AiPreference.t;
+      case _ibtxcndu.AiProvider:
+        return _ibtxcndu.AiProvider.t;
+      case _iojy8c5d.AiUsage:
+        return _iojy8c5d.AiUsage.t;
       case _i1613bfs.AuditEntry:
         return _i1613bfs.AuditEntry.t;
       case _i0b7vj86.BackupCode:

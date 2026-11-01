@@ -3910,4 +3910,239 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_proposal_unknown =>
       'Cette proposition ne peut pas être appliquée : elle est incomplète.';
+
+  @override
+  String get adminTabAi => 'IA';
+
+  @override
+  String get adminAiIntro =>
+      'Les fournisseurs d\'IA que les utilisateurs peuvent choisir. L\'IA reste désactivée pour chacun tant qu\'il ne l\'active pas. Elle ne lit que les comptes que l\'utilisateur voit, par les fonctions du moteur, et ne fait que proposer : rien ne change sans validation.';
+
+  @override
+  String get adminAiAdd => 'Ajouter un fournisseur';
+
+  @override
+  String get adminAiEdit => 'Modifier le fournisseur';
+
+  @override
+  String get adminAiNone =>
+      'Aucun fournisseur : l\'IA n\'est pas disponible sur ce serveur.';
+
+  @override
+  String get adminAiKeySet => 'clé enregistrée';
+
+  @override
+  String get adminAiDisabled => 'désactivé';
+
+  @override
+  String adminAiCapValue(int count) {
+    return '$count demandes par mois et par utilisateur';
+  }
+
+  @override
+  String get adminAiTest => 'Tester la connexion';
+
+  @override
+  String adminAiTestOk(int count, String models) {
+    return 'Connexion réussie : $count modèles ($models)';
+  }
+
+  @override
+  String get adminAiDelete => 'Supprimer';
+
+  @override
+  String adminAiDeleteTitle(String name) {
+    return 'Supprimer « $name » ?';
+  }
+
+  @override
+  String get adminAiDeleteHelp =>
+      'Les utilisateurs qui l\'avaient choisi n\'auront plus d\'IA tant qu\'ils n\'en choisissent pas un autre.';
+
+  @override
+  String get adminAiLocal => 'Local (Ollama)';
+
+  @override
+  String get adminAiExternal => 'Externe (compatible OpenAI)';
+
+  @override
+  String get adminAiLocalHelp =>
+      'Un modèle qui tourne sur ce serveur ou votre réseau : les données ne sortent pas de chez vous. Adresse du type http://192.168.1.10:11434/v1.';
+
+  @override
+  String get adminAiExternalHelp =>
+      'Un fournisseur en ligne (Mistral, OpenAI, OpenRouter…) : les questions et les chiffres utiles lui sont envoyés, ce que l\'application dit à l\'utilisateur.';
+
+  @override
+  String get adminAiName => 'Nom affiché';
+
+  @override
+  String get adminAiUrl => 'Adresse de l\'API';
+
+  @override
+  String get adminAiKey => 'Clé d\'API';
+
+  @override
+  String get adminAiKeyHelp =>
+      'Facultative pour Ollama. Chiffrée sur le serveur, jamais réaffichée.';
+
+  @override
+  String get adminAiKeyKeep =>
+      'Une clé est enregistrée : laisser vide pour la garder.';
+
+  @override
+  String get adminAiModels => 'Modèles proposés';
+
+  @override
+  String get adminAiModelsHelp =>
+      'Séparés par des virgules, par exemple : llama3.1, mistral-small';
+
+  @override
+  String get adminAiCap => 'Plafond mensuel par utilisateur';
+
+  @override
+  String get adminAiCapHelp => 'Nombre de demandes ; 0 pour aucun plafond.';
+
+  @override
+  String get adminAiTools => 'Appel des fonctions du moteur';
+
+  @override
+  String get adminAiToolsHelp =>
+      'Le modèle sait appeler des fonctions : il lit vos chiffres et fait des propositions.';
+
+  @override
+  String get adminAiVision => 'Lecture d\'images';
+
+  @override
+  String get adminAiVisionHelp =>
+      'Le modèle lit des images (tableau d\'amortissement, ticket…).';
+
+  @override
+  String get adminAiEnabled => 'Proposé aux utilisateurs';
+
+  @override
+  String get assistantTitle => 'Assistant';
+
+  @override
+  String get assistantNotSetUp => 'L\'IA n\'est pas configurée';
+
+  @override
+  String get assistantSetUpAdmin =>
+      'Ajoutez un fournisseur dans Administration > IA (un modèle local avec Ollama, ou un fournisseur en ligne).';
+
+  @override
+  String get assistantSetUpAsk =>
+      'L\'administrateur du serveur peut ajouter un fournisseur d\'IA. OwnCoffer fonctionne entièrement sans.';
+
+  @override
+  String get assistantChoice => 'Votre IA';
+
+  @override
+  String get assistantIntro =>
+      'L\'assistant lit vos chiffres par les fonctions d\'OwnCoffer (comptes que vous voyez seulement), explique, et peut proposer des changements : catégories, crédit lu dans un document. Rien ne change tant que vous n\'acceptez pas dans Mon conseiller.';
+
+  @override
+  String get assistantProvider => 'Fournisseur';
+
+  @override
+  String get assistantModel => 'Modèle';
+
+  @override
+  String get assistantLocal => 'local';
+
+  @override
+  String get assistantExternal => 'externe';
+
+  @override
+  String get assistantEnabled => 'Activer l\'assistant';
+
+  @override
+  String assistantUsage(int count) {
+    return '$count demandes ce mois-ci';
+  }
+
+  @override
+  String assistantUsageCap(int count, int cap) {
+    return '$count demandes sur $cap ce mois-ci';
+  }
+
+  @override
+  String assistantExternalWarning(String provider) {
+    return 'Fournisseur externe : votre question, la conversation, les images jointes et les résultats des fonctions appelées (opérations, montants, catégories) sont envoyés à $provider.';
+  }
+
+  @override
+  String get assistantImageSent => 'Image jointe';
+
+  @override
+  String get assistantThinking => 'Réflexion…';
+
+  @override
+  String get assistantNoAnswer => 'Pas de réponse du modèle.';
+
+  @override
+  String assistantUsedTools(String tools) {
+    return 'A consulté : $tools';
+  }
+
+  @override
+  String assistantSentTo(String provider, String model) {
+    return 'Envoyé à $provider ($model).';
+  }
+
+  @override
+  String assistantProposals(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count propositions à valider',
+      one: '1 proposition à valider',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantAttach =>
+      'Joindre une image (tableau d\'amortissement, ticket…)';
+
+  @override
+  String assistantImageReady(String name) {
+    return 'Image prête : $name';
+  }
+
+  @override
+  String get assistantHint =>
+      'Posez une question, ou « classe mes opérations »…';
+
+  @override
+  String get assistantSend => 'Envoyer';
+
+  @override
+  String get error_ai_off =>
+      'L\'assistant est désactivé : activez-le et choisissez un modèle.';
+
+  @override
+  String get error_ai_provider_unavailable =>
+      'Ce fournisseur ou ce modèle n\'est pas disponible.';
+
+  @override
+  String get error_ai_cap_reached => 'Plafond mensuel de demandes atteint.';
+
+  @override
+  String get error_ai_unavailable =>
+      'Le fournisseur d\'IA ne répond pas. Aucun autre n\'a été utilisé à sa place.';
+
+  @override
+  String get error_ai_no_vision => 'Ce modèle ne lit pas les images.';
+
+  @override
+  String get error_ai_message_too_long =>
+      'Message trop long (4 000 caractères au plus).';
+
+  @override
+  String get error_ai_invalid_url =>
+      'Adresse invalide : http:// ou https://, sans identifiant dedans.';
+
+  @override
+  String get error_ai_invalid_kind => 'Type de fournisseur inconnu.';
 }

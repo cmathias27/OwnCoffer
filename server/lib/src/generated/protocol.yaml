@@ -42,6 +42,13 @@ advisor:
   - accept:
   - refuse:
   - undo:
+ai:
+  - status:
+  - saveProvider:
+  - deleteProvider:
+  - testProvider:
+  - setPreference:
+  - chat:
 analysis:
   - report:
   - operations:

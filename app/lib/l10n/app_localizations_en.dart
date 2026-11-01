@@ -3887,4 +3887,236 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_proposal_unknown =>
       'This proposal cannot be applied: it is incomplete.';
+
+  @override
+  String get adminTabAi => 'AI';
+
+  @override
+  String get adminAiIntro =>
+      'The AI providers the users may choose. The AI stays off for each until they turn it on. It reads only the accounts the user sees, through the engine\'s functions, and only proposes: nothing changes without validation.';
+
+  @override
+  String get adminAiAdd => 'Add a provider';
+
+  @override
+  String get adminAiEdit => 'Edit the provider';
+
+  @override
+  String get adminAiNone => 'No provider: AI is not available on this server.';
+
+  @override
+  String get adminAiKeySet => 'key set';
+
+  @override
+  String get adminAiDisabled => 'disabled';
+
+  @override
+  String adminAiCapValue(int count) {
+    return '$count requests a month per user';
+  }
+
+  @override
+  String get adminAiTest => 'Test the connection';
+
+  @override
+  String adminAiTestOk(int count, String models) {
+    return 'Connected: $count models ($models)';
+  }
+
+  @override
+  String get adminAiDelete => 'Delete';
+
+  @override
+  String adminAiDeleteTitle(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String get adminAiDeleteHelp =>
+      'Users who had chosen it will have no AI until they choose another one.';
+
+  @override
+  String get adminAiLocal => 'Local (Ollama)';
+
+  @override
+  String get adminAiExternal => 'External (OpenAI-compatible)';
+
+  @override
+  String get adminAiLocalHelp =>
+      'A model running on this server or your network: data stays at home. Address like http://192.168.1.10:11434/v1.';
+
+  @override
+  String get adminAiExternalHelp =>
+      'An online provider (Mistral, OpenAI, OpenRouter…): questions and the useful figures are sent to it, which the app tells the user.';
+
+  @override
+  String get adminAiName => 'Displayed name';
+
+  @override
+  String get adminAiUrl => 'API address';
+
+  @override
+  String get adminAiKey => 'API key';
+
+  @override
+  String get adminAiKeyHelp =>
+      'Optional for Ollama. Encrypted on the server, never shown again.';
+
+  @override
+  String get adminAiKeyKeep => 'A key is set: leave empty to keep it.';
+
+  @override
+  String get adminAiModels => 'Models offered';
+
+  @override
+  String get adminAiModelsHelp =>
+      'Comma-separated, for example: llama3.1, mistral-small';
+
+  @override
+  String get adminAiCap => 'Monthly cap per user';
+
+  @override
+  String get adminAiCapHelp => 'Number of requests; 0 for no cap.';
+
+  @override
+  String get adminAiTools => 'Calling the engine\'s functions';
+
+  @override
+  String get adminAiToolsHelp =>
+      'The model can call functions: it reads your figures and makes proposals.';
+
+  @override
+  String get adminAiVision => 'Reading images';
+
+  @override
+  String get adminAiVisionHelp =>
+      'The model reads images (amortisation table, receipt…).';
+
+  @override
+  String get adminAiEnabled => 'Offered to the users';
+
+  @override
+  String get assistantTitle => 'Assistant';
+
+  @override
+  String get assistantNotSetUp => 'AI is not set up';
+
+  @override
+  String get assistantSetUpAdmin =>
+      'Add a provider in Administration > AI (a local model with Ollama, or an online provider).';
+
+  @override
+  String get assistantSetUpAsk =>
+      'The server administrator can add an AI provider. OwnCoffer works fully without one.';
+
+  @override
+  String get assistantChoice => 'Your AI';
+
+  @override
+  String get assistantIntro =>
+      'The assistant reads your figures through OwnCoffer\'s functions (only the accounts you see), explains, and may propose changes: categories, a loan read from a document. Nothing changes until you accept in My advisor.';
+
+  @override
+  String get assistantProvider => 'Provider';
+
+  @override
+  String get assistantModel => 'Model';
+
+  @override
+  String get assistantLocal => 'local';
+
+  @override
+  String get assistantExternal => 'external';
+
+  @override
+  String get assistantEnabled => 'Turn the assistant on';
+
+  @override
+  String assistantUsage(int count) {
+    return '$count requests this month';
+  }
+
+  @override
+  String assistantUsageCap(int count, int cap) {
+    return '$count of $cap requests this month';
+  }
+
+  @override
+  String assistantExternalWarning(String provider) {
+    return 'External provider: your question, the conversation, attached images and the results of the functions called (operations, amounts, categories) are sent to $provider.';
+  }
+
+  @override
+  String get assistantImageSent => 'Image attached';
+
+  @override
+  String get assistantThinking => 'Thinking…';
+
+  @override
+  String get assistantNoAnswer => 'No answer from the model.';
+
+  @override
+  String assistantUsedTools(String tools) {
+    return 'Looked at: $tools';
+  }
+
+  @override
+  String assistantSentTo(String provider, String model) {
+    return 'Sent to $provider ($model).';
+  }
+
+  @override
+  String assistantProposals(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count proposals to review',
+      one: '1 proposal to review',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantAttach =>
+      'Attach an image (amortisation table, receipt…)';
+
+  @override
+  String assistantImageReady(String name) {
+    return 'Image ready: $name';
+  }
+
+  @override
+  String get assistantHint => 'Ask a question, or \"classify my operations\"…';
+
+  @override
+  String get assistantSend => 'Send';
+
+  @override
+  String get error_ai_off =>
+      'The assistant is off: turn it on and choose a model.';
+
+  @override
+  String get error_ai_provider_unavailable =>
+      'This provider or model is not available.';
+
+  @override
+  String get error_ai_cap_reached => 'Monthly request cap reached.';
+
+  @override
+  String get error_ai_unavailable =>
+      'The AI provider does not answer. No other was used instead.';
+
+  @override
+  String get error_ai_no_vision => 'This model does not read images.';
+
+  @override
+  String get error_ai_message_too_long =>
+      'Message too long (4,000 characters at most).';
+
+  @override
+  String get error_ai_invalid_url =>
+      'Invalid address: http:// or https://, without credentials in it.';
+
+  @override
+  String get error_ai_invalid_kind => 'Unknown provider type.';
 }

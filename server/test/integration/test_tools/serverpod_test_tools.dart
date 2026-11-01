@@ -30,6 +30,10 @@ import 'package:owncoffer_server/src/generated/admin_invitation_info.dart'
 import 'package:owncoffer_server/src/generated/admin_stats.dart' as _izw0akf9;
 import 'package:owncoffer_server/src/generated/admin_user_info.dart'
     as _i3ew1lpl;
+import 'package:owncoffer_server/src/generated/ai_message.dart' as _ijy47dz3;
+import 'package:owncoffer_server/src/generated/ai_provider.dart' as _iptn367l;
+import 'package:owncoffer_server/src/generated/ai_reply.dart' as _iggzqc7o;
+import 'package:owncoffer_server/src/generated/ai_status.dart' as _i2x2xeqe;
 import 'package:owncoffer_server/src/generated/backup_overview.dart'
     as _iitccyew;
 import 'package:owncoffer_server/src/generated/balance_check.dart' as _i0mjy83n;
@@ -254,6 +258,8 @@ class TestEndpoints {
 
   late final _AdvisorEndpoint advisor;
 
+  late final _AiEndpoint ai;
+
   late final _AnalysisEndpoint analysis;
 
   late final _CategoryEndpoint category;
@@ -307,6 +313,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     advisor = _AdvisorEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    ai = _AiEndpoint(
       endpoints,
       serializationManager,
     );
@@ -1688,6 +1698,218 @@ class _AdvisorEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_ijqvws8i.ActionProposal>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _AiEndpoint {
+  _AiEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<_i2x2xeqe.AiStatus> status(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'status',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'status',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_i2x2xeqe.AiStatus>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iptn367l.AiProvider> saveProvider(
+    _ist.TestSessionBuilder sessionBuilder,
+    _iptn367l.AiProvider provider,
+    String? apiKey,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'saveProvider',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'saveProvider',
+          parameters: _ist.testObjectToJson({
+            'provider': provider,
+            'apiKey': apiKey,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iptn367l.AiProvider>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> deleteProvider(
+    _ist.TestSessionBuilder sessionBuilder,
+    int providerId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'deleteProvider',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'deleteProvider',
+          parameters: _ist.testObjectToJson({'providerId': providerId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<String>> testProvider(
+    _ist.TestSessionBuilder sessionBuilder,
+    int providerId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'testProvider',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'testProvider',
+          parameters: _ist.testObjectToJson({'providerId': providerId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<String>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_i2x2xeqe.AiStatus> setPreference(
+    _ist.TestSessionBuilder sessionBuilder,
+    int? providerId,
+    String? model,
+    bool enabled,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'setPreference',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'setPreference',
+          parameters: _ist.testObjectToJson({
+            'providerId': providerId,
+            'model': model,
+            'enabled': enabled,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_i2x2xeqe.AiStatus>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iggzqc7o.AiReply> chat(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    List<_ijy47dz3.AiMessage> history,
+    _ijy47dz3.AiMessage message,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'chat',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'chat',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'history': history,
+            'message': message,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iggzqc7o.AiReply>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

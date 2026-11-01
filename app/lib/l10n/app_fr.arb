@@ -2928,5 +2928,147 @@
   "error_proposal_stale": "Les données ont changé depuis cette proposition : elle a été retirée, sans rien modifier.",
   "error_proposal_closed": "Cette proposition a déjà été traitée.",
   "error_proposal_access_denied": "Cette proposition n'existe pas ou n'est pas à vous.",
-  "error_proposal_unknown": "Cette proposition ne peut pas être appliquée : elle est incomplète."
+  "error_proposal_unknown": "Cette proposition ne peut pas être appliquée : elle est incomplète.",
+  "adminTabAi": "IA",
+  "adminAiIntro": "Les fournisseurs d'IA que les utilisateurs peuvent choisir. L'IA reste désactivée pour chacun tant qu'il ne l'active pas. Elle ne lit que les comptes que l'utilisateur voit, par les fonctions du moteur, et ne fait que proposer : rien ne change sans validation.",
+  "adminAiAdd": "Ajouter un fournisseur",
+  "adminAiEdit": "Modifier le fournisseur",
+  "adminAiNone": "Aucun fournisseur : l'IA n'est pas disponible sur ce serveur.",
+  "adminAiKeySet": "clé enregistrée",
+  "adminAiDisabled": "désactivé",
+  "adminAiCapValue": "{count} demandes par mois et par utilisateur",
+  "@adminAiCapValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAiTest": "Tester la connexion",
+  "adminAiTestOk": "Connexion réussie : {count} modèles ({models})",
+  "@adminAiTestOk": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "models": {
+        "type": "String"
+      }
+    }
+  },
+  "adminAiDelete": "Supprimer",
+  "adminAiDeleteTitle": "Supprimer « {name} » ?",
+  "@adminAiDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminAiDeleteHelp": "Les utilisateurs qui l'avaient choisi n'auront plus d'IA tant qu'ils n'en choisissent pas un autre.",
+  "adminAiLocal": "Local (Ollama)",
+  "adminAiExternal": "Externe (compatible OpenAI)",
+  "adminAiLocalHelp": "Un modèle qui tourne sur ce serveur ou votre réseau : les données ne sortent pas de chez vous. Adresse du type http://192.168.1.10:11434/v1.",
+  "adminAiExternalHelp": "Un fournisseur en ligne (Mistral, OpenAI, OpenRouter…) : les questions et les chiffres utiles lui sont envoyés, ce que l'application dit à l'utilisateur.",
+  "adminAiName": "Nom affiché",
+  "adminAiUrl": "Adresse de l'API",
+  "adminAiKey": "Clé d'API",
+  "adminAiKeyHelp": "Facultative pour Ollama. Chiffrée sur le serveur, jamais réaffichée.",
+  "adminAiKeyKeep": "Une clé est enregistrée : laisser vide pour la garder.",
+  "adminAiModels": "Modèles proposés",
+  "adminAiModelsHelp": "Séparés par des virgules, par exemple : llama3.1, mistral-small",
+  "adminAiCap": "Plafond mensuel par utilisateur",
+  "adminAiCapHelp": "Nombre de demandes ; 0 pour aucun plafond.",
+  "adminAiTools": "Appel des fonctions du moteur",
+  "adminAiToolsHelp": "Le modèle sait appeler des fonctions : il lit vos chiffres et fait des propositions.",
+  "adminAiVision": "Lecture d'images",
+  "adminAiVisionHelp": "Le modèle lit des images (tableau d'amortissement, ticket…).",
+  "adminAiEnabled": "Proposé aux utilisateurs",
+  "assistantTitle": "Assistant",
+  "assistantNotSetUp": "L'IA n'est pas configurée",
+  "assistantSetUpAdmin": "Ajoutez un fournisseur dans Administration > IA (un modèle local avec Ollama, ou un fournisseur en ligne).",
+  "assistantSetUpAsk": "L'administrateur du serveur peut ajouter un fournisseur d'IA. OwnCoffer fonctionne entièrement sans.",
+  "assistantChoice": "Votre IA",
+  "assistantIntro": "L'assistant lit vos chiffres par les fonctions d'OwnCoffer (comptes que vous voyez seulement), explique, et peut proposer des changements : catégories, crédit lu dans un document. Rien ne change tant que vous n'acceptez pas dans Mon conseiller.",
+  "assistantProvider": "Fournisseur",
+  "assistantModel": "Modèle",
+  "assistantLocal": "local",
+  "assistantExternal": "externe",
+  "assistantEnabled": "Activer l'assistant",
+  "assistantUsage": "{count} demandes ce mois-ci",
+  "@assistantUsage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "assistantUsageCap": "{count} demandes sur {cap} ce mois-ci",
+  "@assistantUsageCap": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "cap": {
+        "type": "int"
+      }
+    }
+  },
+  "assistantExternalWarning": "Fournisseur externe : votre question, la conversation, les images jointes et les résultats des fonctions appelées (opérations, montants, catégories) sont envoyés à {provider}.",
+  "@assistantExternalWarning": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "assistantImageSent": "Image jointe",
+  "assistantThinking": "Réflexion…",
+  "assistantNoAnswer": "Pas de réponse du modèle.",
+  "assistantUsedTools": "A consulté : {tools}",
+  "@assistantUsedTools": {
+    "placeholders": {
+      "tools": {
+        "type": "String"
+      }
+    }
+  },
+  "assistantSentTo": "Envoyé à {provider} ({model}).",
+  "@assistantSentTo": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      },
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "assistantProposals": "{count, plural, =1{1 proposition à valider} other{{count} propositions à valider}}",
+  "@assistantProposals": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "assistantAttach": "Joindre une image (tableau d'amortissement, ticket…)",
+  "assistantImageReady": "Image prête : {name}",
+  "@assistantImageReady": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "assistantHint": "Posez une question, ou « classe mes opérations »…",
+  "assistantSend": "Envoyer",
+  "error_ai_off": "L'assistant est désactivé : activez-le et choisissez un modèle.",
+  "error_ai_provider_unavailable": "Ce fournisseur ou ce modèle n'est pas disponible.",
+  "error_ai_cap_reached": "Plafond mensuel de demandes atteint.",
+  "error_ai_unavailable": "Le fournisseur d'IA ne répond pas. Aucun autre n'a été utilisé à sa place.",
+  "error_ai_no_vision": "Ce modèle ne lit pas les images.",
+  "error_ai_message_too_long": "Message trop long (4 000 caractères au plus).",
+  "error_ai_invalid_url": "Adresse invalide : http:// ou https://, sans identifiant dedans.",
+  "error_ai_invalid_kind": "Type de fournisseur inconnu."
 }

@@ -6293,6 +6293,384 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cette proposition ne peut pas être appliquée : elle est incomplète.'**
   String get error_proposal_unknown;
+
+  /// No description provided for @adminTabAi.
+  ///
+  /// In fr, this message translates to:
+  /// **'IA'**
+  String get adminTabAi;
+
+  /// No description provided for @adminAiIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les fournisseurs d\'IA que les utilisateurs peuvent choisir. L\'IA reste désactivée pour chacun tant qu\'il ne l\'active pas. Elle ne lit que les comptes que l\'utilisateur voit, par les fonctions du moteur, et ne fait que proposer : rien ne change sans validation.'**
+  String get adminAiIntro;
+
+  /// No description provided for @adminAiAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un fournisseur'**
+  String get adminAiAdd;
+
+  /// No description provided for @adminAiEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le fournisseur'**
+  String get adminAiEdit;
+
+  /// No description provided for @adminAiNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun fournisseur : l\'IA n\'est pas disponible sur ce serveur.'**
+  String get adminAiNone;
+
+  /// No description provided for @adminAiKeySet.
+  ///
+  /// In fr, this message translates to:
+  /// **'clé enregistrée'**
+  String get adminAiKeySet;
+
+  /// No description provided for @adminAiDisabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'désactivé'**
+  String get adminAiDisabled;
+
+  /// No description provided for @adminAiCapValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} demandes par mois et par utilisateur'**
+  String adminAiCapValue(int count);
+
+  /// No description provided for @adminAiTest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tester la connexion'**
+  String get adminAiTest;
+
+  /// No description provided for @adminAiTestOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion réussie : {count} modèles ({models})'**
+  String adminAiTestOk(int count, String models);
+
+  /// No description provided for @adminAiDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get adminAiDelete;
+
+  /// No description provided for @adminAiDeleteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer « {name} » ?'**
+  String adminAiDeleteTitle(String name);
+
+  /// No description provided for @adminAiDeleteHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les utilisateurs qui l\'avaient choisi n\'auront plus d\'IA tant qu\'ils n\'en choisissent pas un autre.'**
+  String get adminAiDeleteHelp;
+
+  /// No description provided for @adminAiLocal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Local (Ollama)'**
+  String get adminAiLocal;
+
+  /// No description provided for @adminAiExternal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Externe (compatible OpenAI)'**
+  String get adminAiExternal;
+
+  /// No description provided for @adminAiLocalHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un modèle qui tourne sur ce serveur ou votre réseau : les données ne sortent pas de chez vous. Adresse du type http://192.168.1.10:11434/v1.'**
+  String get adminAiLocalHelp;
+
+  /// No description provided for @adminAiExternalHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un fournisseur en ligne (Mistral, OpenAI, OpenRouter…) : les questions et les chiffres utiles lui sont envoyés, ce que l\'application dit à l\'utilisateur.'**
+  String get adminAiExternalHelp;
+
+  /// No description provided for @adminAiName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom affiché'**
+  String get adminAiName;
+
+  /// No description provided for @adminAiUrl.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse de l\'API'**
+  String get adminAiUrl;
+
+  /// No description provided for @adminAiKey.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clé d\'API'**
+  String get adminAiKey;
+
+  /// No description provided for @adminAiKeyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultative pour Ollama. Chiffrée sur le serveur, jamais réaffichée.'**
+  String get adminAiKeyHelp;
+
+  /// No description provided for @adminAiKeyKeep.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une clé est enregistrée : laisser vide pour la garder.'**
+  String get adminAiKeyKeep;
+
+  /// No description provided for @adminAiModels.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèles proposés'**
+  String get adminAiModels;
+
+  /// No description provided for @adminAiModelsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Séparés par des virgules, par exemple : llama3.1, mistral-small'**
+  String get adminAiModelsHelp;
+
+  /// No description provided for @adminAiCap.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plafond mensuel par utilisateur'**
+  String get adminAiCap;
+
+  /// No description provided for @adminAiCapHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de demandes ; 0 pour aucun plafond.'**
+  String get adminAiCapHelp;
+
+  /// No description provided for @adminAiTools.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appel des fonctions du moteur'**
+  String get adminAiTools;
+
+  /// No description provided for @adminAiToolsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le modèle sait appeler des fonctions : il lit vos chiffres et fait des propositions.'**
+  String get adminAiToolsHelp;
+
+  /// No description provided for @adminAiVision.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture d\'images'**
+  String get adminAiVision;
+
+  /// No description provided for @adminAiVisionHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le modèle lit des images (tableau d\'amortissement, ticket…).'**
+  String get adminAiVisionHelp;
+
+  /// No description provided for @adminAiEnabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposé aux utilisateurs'**
+  String get adminAiEnabled;
+
+  /// No description provided for @assistantTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Assistant'**
+  String get assistantTitle;
+
+  /// No description provided for @assistantNotSetUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'IA n\'est pas configurée'**
+  String get assistantNotSetUp;
+
+  /// No description provided for @assistantSetUpAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutez un fournisseur dans Administration > IA (un modèle local avec Ollama, ou un fournisseur en ligne).'**
+  String get assistantSetUpAdmin;
+
+  /// No description provided for @assistantSetUpAsk.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'administrateur du serveur peut ajouter un fournisseur d\'IA. OwnCoffer fonctionne entièrement sans.'**
+  String get assistantSetUpAsk;
+
+  /// No description provided for @assistantChoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre IA'**
+  String get assistantChoice;
+
+  /// No description provided for @assistantIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'assistant lit vos chiffres par les fonctions d\'OwnCoffer (comptes que vous voyez seulement), explique, et peut proposer des changements : catégories, crédit lu dans un document. Rien ne change tant que vous n\'acceptez pas dans Mon conseiller.'**
+  String get assistantIntro;
+
+  /// No description provided for @assistantProvider.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fournisseur'**
+  String get assistantProvider;
+
+  /// No description provided for @assistantModel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle'**
+  String get assistantModel;
+
+  /// No description provided for @assistantLocal.
+  ///
+  /// In fr, this message translates to:
+  /// **'local'**
+  String get assistantLocal;
+
+  /// No description provided for @assistantExternal.
+  ///
+  /// In fr, this message translates to:
+  /// **'externe'**
+  String get assistantExternal;
+
+  /// No description provided for @assistantEnabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer l\'assistant'**
+  String get assistantEnabled;
+
+  /// No description provided for @assistantUsage.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} demandes ce mois-ci'**
+  String assistantUsage(int count);
+
+  /// No description provided for @assistantUsageCap.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} demandes sur {cap} ce mois-ci'**
+  String assistantUsageCap(int count, int cap);
+
+  /// No description provided for @assistantExternalWarning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fournisseur externe : votre question, la conversation, les images jointes et les résultats des fonctions appelées (opérations, montants, catégories) sont envoyés à {provider}.'**
+  String assistantExternalWarning(String provider);
+
+  /// No description provided for @assistantImageSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image jointe'**
+  String get assistantImageSent;
+
+  /// No description provided for @assistantThinking.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réflexion…'**
+  String get assistantThinking;
+
+  /// No description provided for @assistantNoAnswer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de réponse du modèle.'**
+  String get assistantNoAnswer;
+
+  /// No description provided for @assistantUsedTools.
+  ///
+  /// In fr, this message translates to:
+  /// **'A consulté : {tools}'**
+  String assistantUsedTools(String tools);
+
+  /// No description provided for @assistantSentTo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyé à {provider} ({model}).'**
+  String assistantSentTo(String provider, String model);
+
+  /// No description provided for @assistantProposals.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 proposition à valider} other{{count} propositions à valider}}'**
+  String assistantProposals(int count);
+
+  /// No description provided for @assistantAttach.
+  ///
+  /// In fr, this message translates to:
+  /// **'Joindre une image (tableau d\'amortissement, ticket…)'**
+  String get assistantAttach;
+
+  /// No description provided for @assistantImageReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image prête : {name}'**
+  String assistantImageReady(String name);
+
+  /// No description provided for @assistantHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Posez une question, ou « classe mes opérations »…'**
+  String get assistantHint;
+
+  /// No description provided for @assistantSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get assistantSend;
+
+  /// No description provided for @error_ai_off.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'assistant est désactivé : activez-le et choisissez un modèle.'**
+  String get error_ai_off;
+
+  /// No description provided for @error_ai_provider_unavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fournisseur ou ce modèle n\'est pas disponible.'**
+  String get error_ai_provider_unavailable;
+
+  /// No description provided for @error_ai_cap_reached.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plafond mensuel de demandes atteint.'**
+  String get error_ai_cap_reached;
+
+  /// No description provided for @error_ai_unavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fournisseur d\'IA ne répond pas. Aucun autre n\'a été utilisé à sa place.'**
+  String get error_ai_unavailable;
+
+  /// No description provided for @error_ai_no_vision.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce modèle ne lit pas les images.'**
+  String get error_ai_no_vision;
+
+  /// No description provided for @error_ai_message_too_long.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message trop long (4 000 caractères au plus).'**
+  String get error_ai_message_too_long;
+
+  /// No description provided for @error_ai_invalid_url.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse invalide : http:// ou https://, sans identifiant dedans.'**
+  String get error_ai_invalid_url;
+
+  /// No description provided for @error_ai_invalid_kind.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de fournisseur inconnu.'**
+  String get error_ai_invalid_kind;
 }
 
 class _AppLocalizationsDelegate

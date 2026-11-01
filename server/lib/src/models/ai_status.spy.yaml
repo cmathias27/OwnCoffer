@@ -1,0 +1,11 @@
+### What the AI page shows a user: the providers they may choose, their
+### choice, and their use this month.
+class: AiStatus
+fields:
+  providers: List<AiProvider>
+  providerId: int?
+  model: String?
+  enabled: bool
+  usedThisMonth: int
+  ### The user may set up providers (server administrator).
+  canConfigure: bool
