@@ -247,7 +247,7 @@ jobs:
           fi
       - name: Connexion à ghcr.io
         if: steps.tags.outputs.push == 'true'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
