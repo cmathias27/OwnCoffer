@@ -8,7 +8,7 @@ OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de 
 - Fonctionnalités détaillées : `docs/CAHIER_DES_CHARGES.md`.
 - Décisions d'architecture : `docs/decisions/` — à respecter ; pour en changer une, écrire une nouvelle décision.
 
-**Phase actuelle : phase 5 terminée (version 1.0 préparée, audit externe à trouver), phase 6 commencée** — applications Windows et Android connectées au serveur, décision 0020 ; reste hors-ligne, page « Télécharger », mises à jour des applications, version autonome. Continuer à corriger en priorité ce que l'utilisateur remonte de son usage réel (#20).
+**Phase actuelle : phase 5 terminée (version 1.0 préparée, audit externe à trouver), phase 6 commencée** — applications Windows et Android connectées au serveur, décision 0020 ; version autonome commencée (décision 0022 : serveur embarqué sur SQLite) ; restent sa migration vers un serveur et sa sauvegarde chiffrée, le hors-ligne, l'installation automatique des mises à jour des applications. Continuer à corriger en priorité ce que l'utilisateur remonte de son usage réel (#20).
 
 ## Pile technique décidée
 
@@ -52,6 +52,7 @@ docs/     cahier des charges, roadbook, décisions
 
 - Un paramètre nommé **avec valeur par défaut** dans un point d'accès devient **obligatoire** côté client : utiliser un type nullable sans valeur par défaut (`bool? x`) et appliquer la valeur par défaut dans le corps.
 - Après toute modification de `server/lib` (points d'accès, modèles `.spy.yaml`) : `serverpod generate`, puis `serverpod create-migration` si un modèle de table a changé.
+- Version autonome (décision 0022) : le même serveur tourne sur SQLite dans les applications. Après un changement de modèle de table, aussi `./tool/standalone.sh migrations` (la CI le vérifie et lance tous les tests sur SQLite : `./tool/standalone.sh test`). Le SQL écrit à la main doit marcher sur PostgreSQL et SQLite (`server/lib/src/core/portable_sql.dart`).
 - `inSet` attend un `Set<T>` explicitement typé (`final Set<int> ids = {...}`).
 - Avant chaque push : `./tool/check.sh` (mêmes vérifications que la CI).
 - Publier une version : mettre à jour `CHANGELOG.md`, `app/pubspec.yaml` et `OWNCOFFER_TAG` de `docker/.env.example`, puis l'étiquette `vX.Y.Z` sur `main` (la CI publie l'image signée `:X.Y.Z`, les applications, les SBOM et la version GitHub — `docs/PUBLICATION.md`).

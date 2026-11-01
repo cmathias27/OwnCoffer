@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../client.dart' show isStandalone;
 import '../l10n/app_localizations.dart';
 import '../util/app_versions.dart';
 import '../util/web_search.dart';
@@ -38,7 +39,7 @@ class _AppsScreenState extends State<AppsScreen> {
     final theme = Theme.of(context);
     final server = widget.serverVersion;
     final published = AppVersions.parse(server) != null;
-    final order = AppVersions.compare(_app, server);
+    final order = isStandalone ? null : AppVersions.compare(_app, server);
 
     Widget platform(String id, IconData icon, String title, String help) {
       final uri = AppVersions.download(server, id);
@@ -92,7 +93,9 @@ class _AppsScreenState extends State<AppsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(l.appsThisApp(_app ?? l.appsUnknown)),
-                      Text(l.appsServer(server ?? l.appsUnknown)),
+                      // Standalone: the server is this app.
+                      if (!isStandalone)
+                        Text(l.appsServer(server ?? l.appsUnknown)),
                       const SizedBox(height: 8),
                       if (!kIsWeb && order == -1)
                         Text(
@@ -103,7 +106,10 @@ class _AppsScreenState extends State<AppsScreen> {
                         Text(l.appsNewerThanServer)
                       else if (!kIsWeb && order == 0)
                         Text(l.appsUpToDate),
-                      if (!published) Text(l.appsDevServer),
+                      if (isStandalone)
+                        Text(l.appsStandaloneHint)
+                      else if (!published)
+                        Text(l.appsDevServer),
                     ],
                   ),
                 ),

@@ -96,26 +96,40 @@ void main() {
           DateTime.utc(2019, 1, 5),
         );
         // 90 % on the checking account, 10 % on the savings, over 8 years up
-        // to today; one category in four, the rest to classify.
+        // to today; one category in four, the rest to classify. Plain SQL
+        // that runs on PostgreSQL and on SQLite (decision 0022): only the
+        // date differs (a timestamp, or milliseconds since the epoch).
+        final sqlite = db.db.dialect == DatabaseDialect.sqlite;
+        final daysBack = '(s.i * 2922 / $total)';
+        final date = sqlite
+            ? '(${today.millisecondsSinceEpoch} - $daysBack * 86400000)'
+            : "(TIMESTAMP '2026-11-02' - $daysBack * INTERVAL '1 day')";
+        final category = [
+          'CASE s.i % ${ids.length}',
+          for (var k = 0; k < ids.length; k++) 'WHEN $k THEN ${ids[k]}',
+          'END',
+        ].join(' ');
         await db.db.unsafeExecute('''
+        WITH RECURSIVE s(i) AS (
+          SELECT 1 UNION ALL SELECT i + 1 FROM s WHERE i < $total
+        )
         INSERT INTO "transactions"
           ("accountId", "date", "amountCents", "rawLabel", "cleanLabel",
            "operationKind", "categoryId", "categorySource", "fingerprint",
            "cleared")
         SELECT
-          CASE WHEN i % 10 = 0 THEN ${savings.id} ELSE ${checking.id} END,
-          DATE '2026-11-02' - (i * 2922 / $total),
-          CASE WHEN i % 25 = 0 THEN 180000 ELSE -((i * 7919) % 15000) - 100 END,
-          'CB MAGASIN ' || (i % 400) || ' FACT ' || i,
-          'MAGASIN ' || (i % 400),
+          CASE WHEN s.i % 10 = 0 THEN ${savings.id} ELSE ${checking.id} END,
+          $date,
+          CASE WHEN s.i % 25 = 0 THEN 180000
+            ELSE -((s.i * 7919) % 15000) - 100 END,
+          'CB MAGASIN ' || (s.i % 400) || ' FACT ' || s.i,
+          'MAGASIN ' || (s.i % 400),
           'card',
-          CASE WHEN i % 4 = 0
-            THEN (ARRAY[${ids.join(',')}])[1 + i % ${ids.length}]
-            ELSE NULL END,
-          CASE WHEN i % 4 = 0 THEN 'groupRule' ELSE 'none' END,
-          'perf-' || i,
-          i > 300
-        FROM generate_series(1, $total) AS i
+          CASE WHEN s.i % 4 = 0 THEN $category ELSE NULL END,
+          CASE WHEN s.i % 4 = 0 THEN 'groupRule' ELSE 'none' END,
+          'perf-' || s.i,
+          s.i > 300
+        FROM s
       ''');
         await db.db.unsafeExecute('ANALYZE "transactions"');
       });

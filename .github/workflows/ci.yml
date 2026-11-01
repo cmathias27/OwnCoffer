@@ -83,6 +83,39 @@ jobs:
         working-directory: server
         run: dart test
 
+  standalone:
+    name: Serveur sur SQLite (version autonome)
+    runs-on: ubuntu-latest
+    env:
+      # Throw-away values for the tests only.
+      SERVERPOD_PASSWORD_serviceSecret: ci-service-secret-not-used-elsewhere
+      SERVERPOD_PASSWORD_emailSecretHashPepper: ci-pepper-not-used-elsewhere-000
+      SERVERPOD_PASSWORD_jwtHmacSha512PrivateKey: ci-jwt-key-not-used-elsewhere-00
+      SERVERPOD_PASSWORD_jwtRefreshTokenHashPepper: ci-refresh-not-used-elsewhere-00
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - name: Serverpod CLI
+        run: |
+          dart pub global activate serverpod_cli $SERVERPOD_VERSION
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+      # Decision 0022: the apps carry the same server on SQLite; its schema
+      # follows the PostgreSQL one through tool/standalone.sh.
+      - name: Migrations SQLite à jour
+        run: |
+          ./tool/standalone.sh migrations
+          if [[ -n $(git status --porcelain -- server/standalone server/lib/src/standalone) ]]; then
+            git status --short -- server/standalone server/lib/src/standalone
+            echo "Migrations SQLite à régénérer : ./tool/standalone.sh migrations, puis commit." >&2
+            exit 1
+          fi
+      - name: Tests du serveur sur SQLite
+        run: ./tool/standalone.sh test
+
   app:
     name: Application web
     runs-on: ubuntu-latest
@@ -215,7 +248,7 @@ jobs:
   image:
     name: Image Docker
     runs-on: ubuntu-latest
-    needs: [shared, server, app, backups]
+    needs: [shared, server, standalone, app, backups]
     permissions:
       contents: read
       packages: write

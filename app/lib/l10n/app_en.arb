@@ -1413,5 +1413,16 @@
   "appsNote": "The files come from the project's releases page on GitHub: the download goes through GitHub, only when you ask. The apps are not signed by a publisher yet.",
   "appsWebHint": "On a phone, you can also install this web page: browser menu, \"Add to home screen\".",
   "appsBanner": "New version of the app: {version}",
-  "appsBannerLater": "Later"
+  "appsBannerLater": "Later",
+  "firstLaunchTitle": "Welcome to OwnCoffer",
+  "firstLaunchIntro": "How do you want to use OwnCoffer? You can switch later without losing anything.",
+  "firstLaunchStandalone": "Use alone on this device",
+  "firstLaunchStandaloneHelp": "For one person. Your data stays on this device, nothing else to install. Later, \"Move to a server\" sends everything to an OwnCoffer server.",
+  "firstLaunchServer": "Connect to a server",
+  "firstLaunchServerHelp": "For a household or several devices: your OwnCoffer server (Docker), with the web version.",
+  "firstLaunchBack": "Back",
+  "startingStandalone": "Opening your accounts…",
+  "standaloneChangeMode": "Change mode",
+  "standaloneModeNote": "Standalone mode: your data is on this device.",
+  "appsStandaloneHint": "Standalone mode: new versions are on the project's releases page (link below). Install it over this one: your data is kept."
 }

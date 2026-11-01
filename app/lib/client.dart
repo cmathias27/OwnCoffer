@@ -42,23 +42,32 @@ Future<String> _resolveServerUrl() async {
 /// instead of using a global client object. This is just a simple example.
 late Client client;
 
-Future<void> initializeClient() async {
-  client = Client(await _resolveServerUrl())
+/// Standalone mode (decision 0022): the server runs inside this app, on
+/// this device only.
+bool isStandalone = false;
+
+/// [url]: the embedded server of the standalone mode; otherwise the server
+/// found as above.
+Future<void> initializeClient({String? url}) async {
+  client = Client(url ?? await _resolveServerUrl())
     ..connectivityMonitor = FlutterConnectivityMonitor()
     ..authSessionManager = FlutterAuthSessionManager();
   unawaited(client.auth.initialize());
 }
 
-/// Set by main(): shows the server address screen again (native apps).
+/// Set by main(): shows the first launch choice again (native apps).
 late Future<void> Function() askServerAddress;
 
-/// Native apps: signs out of this server, forgets its address and asks for
-/// another one.
+/// Native apps: signs out of this server, forgets its address and the
+/// mode, and asks again. In standalone mode the data stays on the device
+/// and comes back when the standalone mode is chosen again.
 Future<void> changeServer() async {
-  try {
-    await client.auth.signOutDevice();
-  } on Object {
-    // Server unreachable: the local session is dropped with the address.
+  if (!isStandalone) {
+    try {
+      await client.auth.signOutDevice();
+    } on Object {
+      // Server unreachable: the local session is dropped with the address.
+    }
   }
   await ServerAddress.forget();
   await askServerAddress();

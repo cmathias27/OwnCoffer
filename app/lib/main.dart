@@ -1,10 +1,14 @@
+import 'dart:ui' show PlatformDispatcher;
+
 import 'package:flutter/material.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'client.dart';
 import 'l10n/app_localizations.dart';
 import 'l10n/error_messages.dart';
 import 'screens/home_screen.dart';
+import 'screens/first_launch_screen.dart';
 import 'screens/server_address_screen.dart';
 import 'screens/setup_screen.dart';
 import 'screens/sign_in_screen.dart';
@@ -12,21 +16,68 @@ import 'screens/two_factor_screen.dart';
 import 'state/session.dart';
 import 'assistant/chat_bubble.dart';
 import 'util/server_address.dart';
+import 'util/standalone.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  askServerAddress = () async =>
-      runApp(OwnCofferApp(home: ServerAddressScreen(onSaved: _start)));
-  // Windows and Android: the user's server is asked once (decision 0020).
-  if (ServerAddress.needed && await ServerAddress.load() == null) {
-    await askServerAddress();
-    return;
+  askServerAddress = () async => runApp(
+    OwnCofferApp(
+      home: FirstLaunchScreen(
+        standalone: standaloneAvailable,
+        onServer: _askAddress,
+        onStandalone: _startStandalone,
+      ),
+    ),
+  );
+  // Windows and Android: the first launch asks how to work (decisions
+  // 0020 and 0022); the web app is served by its server.
+  if (ServerAddress.needed) {
+    final mode = await ServerAddress.mode();
+    if (mode == 'standalone' && standaloneAvailable) {
+      await _startStandalone();
+      return;
+    }
+    if (mode != 'server' || await ServerAddress.load() == null) {
+      await askServerAddress();
+      return;
+    }
   }
   await _start();
 }
 
 Future<void> _start() async {
   await initializeClient();
+  runApp(const OwnCofferApp());
+}
+
+Future<void> _askAddress() async => runApp(
+  OwnCofferApp(
+    home: ServerAddressScreen(
+      onSaved: () async {
+        await ServerAddress.saveMode('server');
+        await _start();
+      },
+      onBack: standaloneAvailable ? askServerAddress : null,
+    ),
+  ),
+);
+
+/// Standalone mode: the server starts inside the app, the device's owner
+/// is signed in, and their first group is created (decision 0022).
+Future<void> _startStandalone() async {
+  runApp(const OwnCofferApp(home: StartingScreen()));
+  final local = await startStandalone();
+  isStandalone = true;
+  await initializeClient(url: local.api.toString());
+  // A fresh session at each start: the server only answers this device.
+  await client.auth.updateSignedInUser(
+    AuthSuccess.fromJson(await local.signIn()),
+  );
+  if ((await client.group.myGroups()).isEmpty) {
+    final fr = PlatformDispatcher.instance.locale.languageCode != 'en';
+    await client.group.create(fr ? 'Mes comptes' : 'My accounts');
+  }
+  await ServerAddress.saveMode('standalone');
   runApp(const OwnCofferApp());
 }
 

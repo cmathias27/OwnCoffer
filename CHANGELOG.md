@@ -2,6 +2,16 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.1.0 (novembre 2026)
+
+### Applications Windows et Android : utiliser OwnCoffer seul, sans serveur
+
+- Au premier lancement, deux choix : **« Utiliser seul sur cet appareil »** ou **« Se connecter à un serveur »**.
+- **Seul sur cet appareil** : rien d'autre à installer. Le vrai serveur OwnCoffer tourne dans l'application, avec toutes ses fonctions : import, classement, prévisions, budget, crédits, factures, analyses, conseiller, assistant IA. Vos données restent dans le dossier privé de l'application, et seul cet appareil peut y accéder. Pas de mot de passe : l'application vous ouvre directement vos comptes.
+- **« Changer de mode »** (menu du compte) revient au choix du premier lancement ; les données du mode autonome restent sur l'appareil et reviennent quand vous le choisissez à nouveau.
+- À venir : « Migrer vers un serveur » (tout envoyer sur un serveur OwnCoffer), et une sauvegarde chiffrée automatique vers un dossier. En attendant, faites un « Exporter mes données » de temps en temps.
+- Les applications déjà connectées à un serveur ne changent pas.
+
 ## 1.0.4 (novembre 2026)
 
 ### Applications : versions et téléchargement

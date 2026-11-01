@@ -12,7 +12,15 @@ class ServerAddressScreen extends StatefulWidget {
   /// For tests: whether a server answers.
   final Future<bool> Function(Uri api)? check;
 
-  const ServerAddressScreen({super.key, required this.onSaved, this.check});
+  /// Back to the first launch choice (apps that offer the standalone mode).
+  final Future<void> Function()? onBack;
+
+  const ServerAddressScreen({
+    super.key,
+    required this.onSaved,
+    this.check,
+    this.onBack,
+  });
 
   @override
   State<ServerAddressScreen> createState() => _ServerAddressScreenState();
@@ -78,6 +86,13 @@ class _ServerAddressScreenState extends State<ServerAddressScreen> {
                 )
               : Text(l.serverAddressConnect),
         ),
+        if (widget.onBack != null) ...[
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: _busy ? null : widget.onBack,
+            child: Text(l.firstLaunchBack),
+          ),
+        ],
       ],
     );
   }

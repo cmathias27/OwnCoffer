@@ -5325,4 +5325,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appsBannerLater => 'Later';
+
+  @override
+  String get firstLaunchTitle => 'Welcome to OwnCoffer';
+
+  @override
+  String get firstLaunchIntro =>
+      'How do you want to use OwnCoffer? You can switch later without losing anything.';
+
+  @override
+  String get firstLaunchStandalone => 'Use alone on this device';
+
+  @override
+  String get firstLaunchStandaloneHelp =>
+      'For one person. Your data stays on this device, nothing else to install. Later, \"Move to a server\" sends everything to an OwnCoffer server.';
+
+  @override
+  String get firstLaunchServer => 'Connect to a server';
+
+  @override
+  String get firstLaunchServerHelp =>
+      'For a household or several devices: your OwnCoffer server (Docker), with the web version.';
+
+  @override
+  String get firstLaunchBack => 'Back';
+
+  @override
+  String get startingStandalone => 'Opening your accounts…';
+
+  @override
+  String get standaloneChangeMode => 'Change mode';
+
+  @override
+  String get standaloneModeNote =>
+      'Standalone mode: your data is on this device.';
+
+  @override
+  String get appsStandaloneHint =>
+      'Standalone mode: new versions are on the project\'s releases page (link below). Install it over this one: your data is kept.';
 }

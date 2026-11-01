@@ -4,13 +4,10 @@ import 'package:serverpod_auth_idp_server/core.dart';
 
 import 'src/auth/email_config.dart';
 import 'src/cache_busting.dart';
-import 'src/endpoints/admin_endpoint.dart';
-import 'src/endpoints/category_endpoint.dart';
-import 'src/finance/alert_service.dart';
 import 'src/generated/serverpod.dart';
-import 'src/onboarding/onboarding.dart';
 import 'src/security/ip_guard.dart';
 import 'src/security/ip_middleware.dart';
+import 'src/startup.dart';
 import 'src/web/routes/app_config_route.dart';
 import 'src/web/routes/mcp_route.dart';
 
@@ -112,20 +109,5 @@ void run(List<String> args) async {
   );
 
   await pod.start();
-  AdminEndpoint.startedAt = DateTime.now().toUtc();
-
-  // First launch: print the one-time setup code while no account exists.
-  // Active IP bans are loaded so they survive a restart.
-  final session = await pod.createSession(enableLogging: true);
-  try {
-    await Onboarding.announceSetupIfNeeded(session);
-    await IpGuard.instance.load(session);
-    // New standard categories reach the existing groups.
-    await updateAllStandardCategories(session);
-  } finally {
-    await session.close();
-  }
-
-  // Overdraft alerts: hourly check of every account's forecast.
-  AlertService.start(pod);
+  await afterStart(pod, announceSetup: true);
 }
