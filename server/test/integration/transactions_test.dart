@@ -70,6 +70,55 @@ void main() {
       );
     });
 
+    test('same provider: past operations of every visible account, total '
+        'and average; isolation', () async {
+      final hidden = await endpoints.account.create(
+        as(alice),
+        groupA,
+        'Perso',
+        AccountKind.checking,
+        visibility: AccountVisibility.restricted,
+      );
+      Future<BankTransaction> edf(Account a, int month, int cents) =>
+          BankTransaction.db.insertRow(
+            db,
+            BankTransaction(
+              accountId: a.id!,
+              date: DateTime.utc(2026, month, 10),
+              amountCents: cents,
+              rawLabel: 'PRLV ENERGIE TEST $month',
+              cleanLabel: 'ENERGIE TEST',
+              operationKind: 'directDebit',
+            ),
+          );
+      await edf(account, 7, -6000);
+      await edf(account, 8, -6500);
+      await edf(hidden, 8, -9900);
+      final now = await edf(account, 9, -7000);
+
+      final h = await endpoints.transaction.sameProvider(as(alice), now.id!);
+      expect(h.count, 4);
+      expect(h.items.map((t) => t.amountCents), [-9900, -6500, -6000]);
+      expect(h.totalCents, -29400);
+      expect(h.averageCents, -7350);
+      expect(h.since, DateTime.utc(2026, 7, 10));
+
+      final r = await endpoints.transaction.sameProvider(as(reader), now.id!);
+      expect(r.count, 3, reason: 'the restricted account stays hidden');
+      expect(r.averageCents, -6500);
+      final one = await endpoints.transaction.sameProvider(
+        as(alice),
+        now.id!,
+        limit: 1,
+      );
+      expect(one.items, hasLength(1));
+      expect(one.count, 4);
+      await expectLater(
+        endpoints.transaction.sameProvider(as(mallory), now.id!),
+        throwsA(isA<AccessDeniedException>()),
+      );
+    });
+
     test('list: newest first, paging, search, filters', () async {
       final all = await endpoints.transaction.list(as(alice), account.id!);
       expect(all.total, 20);

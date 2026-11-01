@@ -3371,6 +3371,32 @@ class Endpoints extends _is.EndpointDispatch {
                         params['transactionId'],
                       ),
         ),
+        'sameProvider': _is.MethodConnector(
+          name: 'sameProvider',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'limit': _is.ParameterDescription(
+              name: 'limit',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .sameProvider(
+                        session,
+                        params['transactionId'],
+                        limit: params['limit'],
+                      ),
+        ),
         'setSplits': _is.MethodConnector(
           name: 'setSplits',
           params: {

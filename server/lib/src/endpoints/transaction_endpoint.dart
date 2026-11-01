@@ -352,6 +352,48 @@ class TransactionEndpoint extends Endpoint {
     );
   }
 
+  /// The other operations of the same provider (same cleaned label) on the
+  /// accounts of the group the user may see: the [limit] most recent (10
+  /// by default, at most 50), and how many there are in all, with their
+  /// total and average.
+  Future<ProviderHistory> sameProvider(
+    Session session,
+    int transactionId, {
+    int? limit,
+  }) async {
+    final t = await BankTransaction.db.findById(session, transactionId);
+    if (t == null || t.deletedAt != null) {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    final account = await _account(session, t, write: false);
+    final Set<int> visible = {
+      for (final a in await Access.visibleAccounts(session, account.groupId))
+        a.id!,
+    };
+    final label = t.cleanLabel;
+    final all = label.trim().isEmpty
+        ? [t]
+        : await BankTransaction.db.find(
+            session,
+            where: (x) =>
+                x.accountId.inSet(visible) &
+                x.deletedAt.equals(null) &
+                x.cleanLabel.equals(label),
+            orderByList: (x) => [x.date.desc(), x.id.desc()],
+          );
+    final total = all.fold<int>(0, (a, x) => a + x.amountCents);
+    return ProviderHistory(
+      items: [
+        for (final x in all)
+          if (x.id != t.id) x,
+      ].take((limit ?? 10).clamp(1, 50)).toList(),
+      count: all.length,
+      totalCents: total,
+      averageCents: all.isEmpty ? 0 : total ~/ all.length,
+      since: all.isEmpty ? null : all.last.date,
+    );
+  }
+
   /// Splits the operation between categories (a receipt: groceries,
   /// household…): at least two parts of its sign adding up to its amount.
   /// The operation shows the category of its largest part and counts as

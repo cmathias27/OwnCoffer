@@ -3403,4 +3403,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compareSame => 'same';
+
+  @override
+  String get sameProviderTitle => 'Past operations with the same label';
+
+  @override
+  String sameProviderHistory(
+    int count,
+    String since,
+    String total,
+    String average,
+  ) {
+    return '$count operations since $since · total $total · average $average';
+  }
+
+  @override
+  String sameProviderMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'and $count older',
+      one: 'and 1 older',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get sectionProvider => 'Provider';
+
+  @override
+  String get sectionClassification => 'Classification';
+
+  @override
+  String get sectionFollowUp => 'Follow-up';
+
+  @override
+  String get sectionInvoices => 'Invoices and receipts';
 }

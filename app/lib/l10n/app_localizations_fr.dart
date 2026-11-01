@@ -3424,4 +3424,40 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get compareSame => 'identique';
+
+  @override
+  String get sameProviderTitle => 'Opérations passées au même libellé';
+
+  @override
+  String sameProviderHistory(
+    int count,
+    String since,
+    String total,
+    String average,
+  ) {
+    return '$count opérations depuis le $since · total $total · moyenne $average';
+  }
+
+  @override
+  String sameProviderMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'et $count plus anciennes',
+      one: 'et 1 plus ancienne',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get sectionProvider => 'Fournisseur';
+
+  @override
+  String get sectionClassification => 'Classement';
+
+  @override
+  String get sectionFollowUp => 'Suivi';
+
+  @override
+  String get sectionInvoices => 'Factures et tickets';
 }

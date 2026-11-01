@@ -2,6 +2,18 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.19 (1er novembre 2026)
+
+### Fiche d'opération : opérations passées et nouvelle allure
+
+- La fiche montre les **opérations passées au même libellé** (même fournisseur), sur tous les comptes que vous voyez : combien, depuis quand, le total et la moyenne, puis les 10 plus récentes avec leur date, leur catégorie et leur montant. Pratique pour vérifier qu'un prélèvement n'a pas changé.
+- **Nouvelle allure, plus douce** :
+  - la fiche flotte au-dessus de la page, arrondie de tous les côtés, au lieu de finir droit en bas de l'écran ;
+  - un en-tête teinté, avec des formes rondes, donne le libellé, le montant en grand et la date ;
+  - le reste est rangé en cartes arrondies : Fournisseur, Classement, Suivi, Opérations passées, Factures et tickets ;
+  - les actions (ventiler, toujours classer ainsi, abonnement, crédit, autres paiements, recherche sur le web) deviennent des **tuiles avec une icône et leur nom**, plus faciles à repérer et à toucher sur téléphone ;
+  - le bouton « Mettre à la corbeille » est centré, en forme de pilule.
+
 ## 0.3.18 (1er novembre 2026)
 
 ### Budget : comparer

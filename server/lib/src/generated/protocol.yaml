@@ -133,6 +133,7 @@ transaction:
   - setCategory:
   - restoreClassification:
   - splits:
+  - sameProvider:
   - setSplits:
   - setCleared:
   - trash:

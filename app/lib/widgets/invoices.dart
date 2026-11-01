@@ -399,10 +399,7 @@ class _InvoiceSectionState extends State<InvoiceSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: Text(l.invoicesOfOperation, style: theme.textTheme.titleSmall),
-        ),
+        // Titled by the operation sheet's section.
         if (items == null)
           const Padding(
             padding: EdgeInsets.all(8),
