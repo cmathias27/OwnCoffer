@@ -469,11 +469,12 @@ class _InvoiceSectionState extends State<InvoiceSection> {
                 label: Text(l.invoiceAttach),
                 onPressed: () => _attach(camera: false),
               ),
-              TextButton.icon(
-                icon: const Icon(Icons.photo_camera_outlined),
-                label: Text(l.invoiceTakePhoto),
-                onPressed: () => _attach(camera: true),
-              ),
+              if (canUseCamera)
+                TextButton.icon(
+                  icon: const Icon(Icons.document_scanner_outlined),
+                  label: Text(l.invoiceTakePhoto),
+                  onPressed: () => _attach(camera: true),
+                ),
             ],
           ),
       ],

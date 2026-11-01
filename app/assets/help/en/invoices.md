@@ -4,13 +4,13 @@ Keep invoices and receipts with the operation that paid them, and find them the 
 
 ## Attach an invoice
 
-- In an operation's sheet: **"Attach an invoice"** (PDF or image, 10 MB at most) or **"Take a photo"**.
+- In an operation's sheet: **"Attach a file"** (a PDF or image already on the device, 10 MB at most) or, on a phone, **"Scan with the camera"**, which opens the camera straight away.
 - A photo is **cropped as by a scanner**: the sheet is found, you adjust the corners, it is straightened and made easier to read. Everything happens on your device.
 - The file name is made for you: date, merchant, description, amount.
 
 ## Invoice without an operation
 
-An invoice often comes before the statement. **"Add an invoice"** in this page keeps it **to attach**. OwnCoffer then proposes the matching operations (amount, date, merchant), and the sheet of a new operation offers "Attach here". Nothing is attached without your choice.
+An invoice often comes before the statement. **"Add a file"** or **"Scan with the camera"** in this page keeps it **to attach**. OwnCoffer then proposes the matching operations (amount, date, merchant), and the sheet of a new operation offers "Attach here". Nothing is attached without your choice.
 
 ## Read with the AI
 

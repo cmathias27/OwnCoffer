@@ -3021,10 +3021,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get invoicesNone => 'Aucune facture jointe.';
 
   @override
-  String get invoiceAttach => 'Joindre une facture';
+  String get invoiceAttach => 'Joindre un fichier';
 
   @override
-  String get invoiceTakePhoto => 'Prendre en photo';
+  String get invoiceTakePhoto => 'Scanner avec l\'appareil photo';
 
   @override
   String invoiceAdded(String name) {
@@ -3151,7 +3151,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get invoiceAddWaiting => 'Ajouter une facture';
+  String get invoiceAddWaiting => 'Ajouter un fichier';
 
   @override
   String get invoicesWaitingFilter => 'À rattacher';

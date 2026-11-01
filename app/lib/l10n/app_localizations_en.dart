@@ -3004,10 +3004,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invoicesNone => 'No invoice attached.';
 
   @override
-  String get invoiceAttach => 'Attach an invoice';
+  String get invoiceAttach => 'Attach a file';
 
   @override
-  String get invoiceTakePhoto => 'Take a photo';
+  String get invoiceTakePhoto => 'Scan with the camera';
 
   @override
   String invoiceAdded(String name) {
@@ -3134,7 +3134,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get invoiceAddWaiting => 'Add an invoice';
+  String get invoiceAddWaiting => 'Add a file';
 
   @override
   String get invoicesWaitingFilter => 'To attach';

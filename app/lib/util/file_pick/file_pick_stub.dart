@@ -1,5 +1,7 @@
 import '../file_pick.dart';
 
+bool get canUseCamera => false;
+
 Future<PickedFile?> pickFile(
   List<String> extensions, {
   bool camera = false,
