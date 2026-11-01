@@ -5050,4 +5050,27 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get chatAffordPrompt => 'Puis-je me permettre un achat de  € ?';
+
+  @override
+  String get loanFamilyLoans => 'Crédits';
+
+  @override
+  String get loanFamilyConsumer => 'Crédits à la consommation';
+
+  @override
+  String loanFamilyTotals(String monthly, String remaining) {
+    return '$monthly / mois · reste $remaining';
+  }
+
+  @override
+  String get loanSortRemaining => 'Reste à rembourser';
+
+  @override
+  String get loanSortMonthly => 'Mensualité';
+
+  @override
+  String get loanSortEnd => 'Date de fin';
+
+  @override
+  String get loanSortLender => 'Organisme';
 }

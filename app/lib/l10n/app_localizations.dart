@@ -8129,6 +8129,48 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Puis-je me permettre un achat de  € ?'**
   String get chatAffordPrompt;
+
+  /// No description provided for @loanFamilyLoans.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédits'**
+  String get loanFamilyLoans;
+
+  /// No description provided for @loanFamilyConsumer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédits à la consommation'**
+  String get loanFamilyConsumer;
+
+  /// No description provided for @loanFamilyTotals.
+  ///
+  /// In fr, this message translates to:
+  /// **'{monthly} / mois · reste {remaining}'**
+  String loanFamilyTotals(String monthly, String remaining);
+
+  /// No description provided for @loanSortRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste à rembourser'**
+  String get loanSortRemaining;
+
+  /// No description provided for @loanSortMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualité'**
+  String get loanSortMonthly;
+
+  /// No description provided for @loanSortEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de fin'**
+  String get loanSortEnd;
+
+  /// No description provided for @loanSortLender.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisme'**
+  String get loanSortLender;
 }
 
 class _AppLocalizationsDelegate

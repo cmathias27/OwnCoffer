@@ -1336,5 +1336,12 @@
   "chatSaveChip": "Where to save?",
   "chatSavePrompt": "Where could I save? Look at my spending, subscriptions, loans and bank fees, and suggest the most useful ideas, with figures.",
   "chatAffordChip": "Can I afford…?",
-  "chatAffordPrompt": "Can I afford a purchase of €?"
+  "chatAffordPrompt": "Can I afford a purchase of €?",
+  "loanFamilyLoans": "Loans",
+  "loanFamilyConsumer": "Consumer credit",
+  "loanFamilyTotals": "{monthly} / month · {remaining} left",
+  "loanSortRemaining": "Left to repay",
+  "loanSortMonthly": "Instalment",
+  "loanSortEnd": "End date",
+  "loanSortLender": "Lender"
 }

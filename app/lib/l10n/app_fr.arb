@@ -3396,5 +3396,13 @@
   "chatSaveChip": "Où économiser ?",
   "chatSavePrompt": "Où pourrais-je économiser ? Regarde mes dépenses, mes abonnements, mes crédits et mes frais bancaires, et propose-moi les pistes les plus utiles, chiffrées.",
   "chatAffordChip": "Puis-je me permettre… ?",
-  "chatAffordPrompt": "Puis-je me permettre un achat de  € ?"
+  "chatAffordPrompt": "Puis-je me permettre un achat de  € ?",
+  "loanFamilyLoans": "Crédits",
+  "loanFamilyConsumer": "Crédits à la consommation",
+  "loanFamilyTotals": "{monthly} / mois · reste {remaining}",
+  "@loanFamilyTotals": {"placeholders": {"monthly": {"type": "String"}, "remaining": {"type": "String"}}},
+  "loanSortRemaining": "Reste à rembourser",
+  "loanSortMonthly": "Mensualité",
+  "loanSortEnd": "Date de fin",
+  "loanSortLender": "Organisme"
 }

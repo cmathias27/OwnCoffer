@@ -26,6 +26,11 @@ Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). 
 - **« Ce que l'assistant doit savoir »** dans les réglages : quelques phrases envoyées avec chaque question, visibles par vous seul.
 - **Historique** dans la bulle : vos 30 dernières conversations, gardées sur votre serveur, à reprendre ou à supprimer.
 
+### Crédits : trois familles, affichage et tri
+
+- La page Crédits sépare les **crédits**, les **crédits à la consommation** (renouvelable compris) et les **paiements en plusieurs fois**, chacun avec sa mensualité totale et son reste à rembourser.
+- Des puces choisissent les familles affichées, et un menu les trie par **reste à rembourser**, **mensualité**, **date de fin** ou **organisme**. Les crédits terminés passent en dernier.
+
 ### Assistant : un vrai conseiller
 
 - L'assistant se comporte maintenant en **conseiller personnel** : il rassemble lui-même vos chiffres, puis donne un diagnostic et deux ou trois conseils chiffrés, du plus utile au moins utile. Il dit aussi ce qu'il n'a pas pu savoir.

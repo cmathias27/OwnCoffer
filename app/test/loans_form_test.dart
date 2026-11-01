@@ -230,4 +230,20 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  test('three families: loans, consumer credit, payments in instalments', () {
+    expect(
+      {for (final k in LoanKind.values) k: loanFamily(k)},
+      {
+        LoanKind.mortgage: LoanFamily.loans,
+        LoanKind.car: LoanFamily.loans,
+        LoanKind.consumer: LoanFamily.consumer,
+        LoanKind.student: LoanFamily.loans,
+        LoanKind.personal: LoanFamily.loans,
+        LoanKind.other: LoanFamily.loans,
+        LoanKind.installments: LoanFamily.installments,
+        LoanKind.revolving: LoanFamily.consumer,
+      },
+    );
+  });
 }
