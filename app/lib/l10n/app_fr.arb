@@ -2618,5 +2618,74 @@
   "updateStepCheck": "Vérification que tout répond",
   "updateStepRollback": "Retour à la version précédente…",
   "updateStepDone": "Mise à jour terminée",
-  "menuAccount": "Mon compte"
+  "menuAccount": "Mon compte",
+  "compareSimulation": "Simulation",
+  "simIntro": "Et si je changeais de contrat ? Comparez ce que coûte un abonnement gardé tel quel, et une autre offre, sur plusieurs années. C'est une simulation : rien n'est modifié.",
+  "simContract": "Le contrat actuel",
+  "simFrom": "Partir de",
+  "simFreeAmount": "Un montant libre",
+  "simCurrentMonthly": "Prix actuel par mois",
+  "simCurrentRise": "Hausse par an du contrat actuel",
+  "simRiseHelp": "Facultatif : de combien le prix augmente chaque année (exemple : 3).",
+  "simOffer": "La nouvelle offre",
+  "simNewMonthly": "Nouveau prix par mois",
+  "simSwitchCost": "Coût du changement",
+  "simSwitchCostHelp": "Facultatif : frais de résiliation, d'installation ou de dossier, payés une fois.",
+  "simNewRise": "Hausse par an de la nouvelle offre",
+  "simOver": "Sur",
+  "simYears": "{count, plural, =1{1 an} other{{count} ans}}",
+  "@simYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "simFillIn": "Indiquez le prix actuel et le nouveau prix pour voir la comparaison.",
+  "simSaves": "Vous économiseriez {amount} sur {period}.",
+  "@simSaves": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "simCostsMore": "Ce changement coûterait {amount} de plus sur {period}.",
+  "@simCostsMore": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "simPerMonth": "par mois en moyenne",
+  "simPerYear": "par an en moyenne",
+  "simNeverPaysOff": "Le changement n'est jamais rentabilisé sur cette durée.",
+  "simPaysOffNow": "Rentable dès le premier mois.",
+  "simPaysOffAfter": "Rentabilisé au bout de {months} mois.",
+  "@simPaysOffAfter": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "simMonthLabel": "mois {month}",
+  "@simMonthLabel": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      }
+    }
+  },
+  "simKeep": "En gardant le contrat",
+  "simSwitch": "En changeant",
+  "simChart": "Total payé, mois après mois",
+  "simHow": "Calcul : total payé chaque mois, coût du changement compté au départ, prix relevés chaque année de leur hausse, arrondis au centime."
 }

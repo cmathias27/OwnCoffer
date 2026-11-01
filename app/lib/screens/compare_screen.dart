@@ -7,10 +7,12 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/category_field.dart';
+import '../widgets/contract_simulation.dart';
 import 'budget_screen.dart';
 
-/// What is compared: categories over time, periods, or accounts.
-enum CompareMode { categories, periods, accounts }
+/// What is compared: categories over time, periods, accounts, or a
+/// contract against another offer.
+enum CompareMode { categories, periods, accounts, simulation }
 
 /// Several selections side by side: a few categories over the last
 /// periods, the same budget over several periods (this month, last month,
@@ -98,6 +100,9 @@ class _CompareScreenState extends State<CompareScreen> {
     try {
       final List<_Column> columns;
       switch (_mode) {
+        case CompareMode.simulation:
+          // Computed on the device from what the user types.
+          columns = [];
         case CompareMode.categories:
           final r = await client.analysis.report(
             _groupId,
@@ -234,6 +239,9 @@ class _CompareScreenState extends State<CompareScreen> {
                     )
                   else
                     switch (_mode) {
+                      CompareMode.simulation => ContractSimulation(
+                        membership: widget.membership,
+                      ),
                       CompareMode.categories => _overTime(
                         context,
                         l,
@@ -257,180 +265,194 @@ class _CompareScreenState extends State<CompareScreen> {
       children: [
         Text(l.compareIntro, style: theme.textTheme.bodyMedium),
         const SizedBox(height: 12),
-        SegmentedButton<CompareMode>(
-          segments: [
-            ButtonSegment(
-              value: CompareMode.categories,
-              icon: const Icon(Icons.category_outlined),
-              label: Text(l.compareCategories),
-            ),
-            ButtonSegment(
-              value: CompareMode.periods,
-              icon: const Icon(Icons.date_range),
-              label: Text(l.comparePeriods),
-            ),
-            if (widget.accounts.length > 1)
-              ButtonSegment(
-                value: CompareMode.accounts,
-                icon: const Icon(Icons.account_balance_wallet_outlined),
-                label: Text(l.compareAccounts),
-              ),
-          ],
-          selected: {_mode},
-          showSelectedIcon: false,
-          onSelectionChanged: (s) {
-            setState(() => (_mode = s.single, _columns = null));
-            _load();
-          },
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 12,
-          runSpacing: 8,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            DropdownButton<BudgetPeriod>(
-              value: _period,
-              items: [
-                for (final (p, name) in [
-                  (BudgetPeriod.week, l.periodWeek),
-                  (BudgetPeriod.month, l.periodMonth),
-                  (BudgetPeriod.quarter, l.periodQuarter),
-                  (BudgetPeriod.year, l.periodYear),
-                ])
-                  DropdownMenuItem(value: p, child: Text(name)),
-              ],
-              onChanged: (v) {
-                if (v == null || v == _period) return;
-                setState(() {
-                  _period = v;
-                  _dates = _defaultDates();
-                });
-                _load();
-              },
-            ),
-            SegmentedButton<CategoryKind>(
-              segments: [
-                ButtonSegment(
-                  value: CategoryKind.expense,
-                  label: Text(l.budgetExpenses),
-                ),
-                ButtonSegment(
-                  value: CategoryKind.income,
-                  label: Text(l.budgetIncome),
-                ),
-              ],
-              selected: {_kind},
-              showSelectedIcon: false,
-              onSelectionChanged: (s) => setState(() {
-                _kind = s.single;
-                _picked
-                  ..clear()
-                  ..addAll(
-                    _mode == CompareMode.categories && _columns != null
-                        ? _leading(_columns!.single.report)
-                        : const [],
-                  );
-              }),
-            ),
-            if (_mode == CompareMode.categories)
-              DropdownButton<int>(
-                value: _periods,
-                items: [
-                  for (final n in const [6, 12, 24])
-                    DropdownMenuItem(
-                      value: n,
-                      child: Text(l.spendingPeriods(n)),
-                    ),
-                ],
-                onChanged: (v) {
-                  if (v == null || v == _periods) return;
-                  setState(() => _periods = v);
-                  _load();
-                },
-              ),
-            if (_mode != CompareMode.accounts && widget.accounts.length > 1)
-              DropdownButton<int?>(
-                value: _accountId,
-                items: [
-                  DropdownMenuItem(value: null, child: Text(l.allAccounts)),
-                  for (final a in widget.accounts)
-                    DropdownMenuItem(value: a.id, child: Text(a.name)),
-                ],
-                onChanged: (v) {
-                  setState(() => _accountId = v);
-                  _load();
-                },
-              ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        // The selections, each removable; the first is the reference.
+        // Chips: they go to the next line on a narrow phone.
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: switch (_mode) {
-            CompareMode.categories => [
-              for (final (i, id) in _picked.indexed)
-                InputChip(
-                  avatar: CircleAvatar(
-                    backgroundColor: SeriesColors.of(context, i),
+          children: [
+            for (final (mode, icon, label) in [
+              (
+                CompareMode.categories,
+                Icons.category_outlined,
+                l.compareCategories,
+              ),
+              (CompareMode.periods, Icons.date_range, l.comparePeriods),
+              if (widget.accounts.length > 1)
+                (
+                  CompareMode.accounts,
+                  Icons.account_balance_wallet_outlined,
+                  l.compareAccounts,
+                ),
+              (
+                CompareMode.simulation,
+                Icons.science_outlined,
+                l.compareSimulation,
+              ),
+            ])
+              ChoiceChip(
+                avatar: Icon(icon, size: 18),
+                label: Text(label),
+                selected: _mode == mode,
+                showCheckmark: false,
+                onSelected: (_) {
+                  if (_mode == mode) return;
+                  setState(() => (_mode = mode, _columns = null));
+                  _load();
+                },
+              ),
+          ],
+        ),
+        if (_mode != CompareMode.simulation) ...[
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 12,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              DropdownButton<BudgetPeriod>(
+                value: _period,
+                items: [
+                  for (final (p, name) in [
+                    (BudgetPeriod.week, l.periodWeek),
+                    (BudgetPeriod.month, l.periodMonth),
+                    (BudgetPeriod.quarter, l.periodQuarter),
+                    (BudgetPeriod.year, l.periodYear),
+                  ])
+                    DropdownMenuItem(value: p, child: Text(name)),
+                ],
+                onChanged: (v) {
+                  if (v == null || v == _period) return;
+                  setState(() {
+                    _period = v;
+                    _dates = _defaultDates();
+                  });
+                  _load();
+                },
+              ),
+              SegmentedButton<CategoryKind>(
+                segments: [
+                  ButtonSegment(
+                    value: CategoryKind.expense,
+                    label: Text(l.budgetExpenses),
                   ),
-                  label: Text(_name(id)),
-                  onDeleted: () => setState(() => _picked.remove(id)),
-                ),
-              if (_picked.length < _max)
-                ActionChip(
-                  avatar: const Icon(Icons.add, size: 18),
-                  label: Text(l.compareAddCategory),
-                  onPressed: _addCategory,
-                ),
-            ],
-            CompareMode.periods => [
-              for (final (i, d) in _dates.indexed)
-                InputChip(
-                  avatar: CircleAvatar(
-                    backgroundColor: SeriesColors.of(context, i),
+                  ButtonSegment(
+                    value: CategoryKind.income,
+                    label: Text(l.budgetIncome),
                   ),
-                  label: Text(
-                    _columns != null && i < _columns!.length
-                        ? _columns![i].name
-                        : context.day(d),
-                  ),
-                  onDeleted: _dates.length <= 2
-                      ? null
-                      : () {
-                          setState(() => _dates = [..._dates]..removeAt(i));
-                          _load();
-                        },
+                ],
+                selected: {_kind},
+                showSelectedIcon: false,
+                onSelectionChanged: (s) => setState(() {
+                  _kind = s.single;
+                  _picked
+                    ..clear()
+                    ..addAll(
+                      _mode == CompareMode.categories && _columns != null
+                          ? _leading(_columns!.single.report)
+                          : const [],
+                    );
+                }),
+              ),
+              if (_mode == CompareMode.categories)
+                DropdownButton<int>(
+                  value: _periods,
+                  items: [
+                    for (final n in const [6, 12, 24])
+                      DropdownMenuItem(
+                        value: n,
+                        child: Text(l.spendingPeriods(n)),
+                      ),
+                  ],
+                  onChanged: (v) {
+                    if (v == null || v == _periods) return;
+                    setState(() => _periods = v);
+                    _load();
+                  },
                 ),
-              if (_dates.length < _max)
-                ActionChip(
-                  avatar: const Icon(Icons.add, size: 18),
-                  label: Text(l.compareAddPeriod),
-                  onPressed: _addPeriod,
-                ),
-            ],
-            CompareMode.accounts => [
-              for (final a in widget.accounts)
-                FilterChip(
-                  label: Text(a.name),
-                  selected: _accountIds.contains(a.id),
-                  onSelected: (on) {
-                    final next = [
-                      for (final b in widget.accounts)
-                        if (b.id == a.id ? on : _accountIds.contains(b.id))
-                          b.id!,
-                    ];
-                    if (next.length < 2 || next.length > _max) return;
-                    setState(() => _accountIds = next);
+              if (_mode != CompareMode.accounts && widget.accounts.length > 1)
+                DropdownButton<int?>(
+                  value: _accountId,
+                  items: [
+                    DropdownMenuItem(value: null, child: Text(l.allAccounts)),
+                    for (final a in widget.accounts)
+                      DropdownMenuItem(value: a.id, child: Text(a.name)),
+                  ],
+                  onChanged: (v) {
+                    setState(() => _accountId = v);
                     _load();
                   },
                 ),
             ],
-          },
-        ),
+          ),
+          const SizedBox(height: 8),
+          // The selections, each removable; the first is the reference.
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: switch (_mode) {
+              CompareMode.categories => [
+                for (final (i, id) in _picked.indexed)
+                  InputChip(
+                    avatar: CircleAvatar(
+                      backgroundColor: SeriesColors.of(context, i),
+                    ),
+                    label: Text(_name(id)),
+                    onDeleted: () => setState(() => _picked.remove(id)),
+                  ),
+                if (_picked.length < _max)
+                  ActionChip(
+                    avatar: const Icon(Icons.add, size: 18),
+                    label: Text(l.compareAddCategory),
+                    onPressed: _addCategory,
+                  ),
+              ],
+              CompareMode.periods => [
+                for (final (i, d) in _dates.indexed)
+                  InputChip(
+                    avatar: CircleAvatar(
+                      backgroundColor: SeriesColors.of(context, i),
+                    ),
+                    label: Text(
+                      _columns != null && i < _columns!.length
+                          ? _columns![i].name
+                          : context.day(d),
+                    ),
+                    onDeleted: _dates.length <= 2
+                        ? null
+                        : () {
+                            setState(() => _dates = [..._dates]..removeAt(i));
+                            _load();
+                          },
+                  ),
+                if (_dates.length < _max)
+                  ActionChip(
+                    avatar: const Icon(Icons.add, size: 18),
+                    label: Text(l.compareAddPeriod),
+                    onPressed: _addPeriod,
+                  ),
+              ],
+              CompareMode.simulation => const <Widget>[],
+              CompareMode.accounts => [
+                for (final a in widget.accounts)
+                  FilterChip(
+                    label: Text(a.name),
+                    selected: _accountIds.contains(a.id),
+                    onSelected: (on) {
+                      final next = [
+                        for (final b in widget.accounts)
+                          if (b.id == a.id ? on : _accountIds.contains(b.id))
+                            b.id!,
+                      ];
+                      if (next.length < 2 || next.length > _max) return;
+                      setState(() => _accountIds = next);
+                      _load();
+                    },
+                  ),
+              ],
+            },
+          ),
+        ],
       ],
     );
   }

@@ -63,4 +63,58 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsNothing);
     });
   }
+
+  testWidgets('simulation: a cheaper contract, saving and pay-back on a '
+      'phone', (tester) async {
+    tester.view.physicalSize = const Size(360, 2400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('fr'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: CompareScreen(
+          membership: GroupMembership(
+            group: FinanceGroup(
+              id: 1,
+              name: 'Foyer',
+              createdBy: UuidValue.fromString(
+                '00000000-0000-4000-8000-000000000000',
+              ),
+            ),
+            role: MemberRole.user,
+          ),
+          accounts: [
+            Account(
+              id: 1,
+              groupId: 1,
+              name: 'Courant',
+              kind: AccountKind.checking,
+            ),
+          ],
+          categories: const {},
+          period: BudgetPeriod.month,
+          date: DateTime.utc(2026, 10, 15),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Simulation'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Indiquez le prix actuel'), findsOneWidget);
+    Finder field(String label) => find.widgetWithText(TextField, label).first;
+    await tester.enterText(field('Prix actuel par mois'), '45');
+    await tester.enterText(field('Nouveau prix par mois'), '30');
+    await tester.enterText(field('Coût du changement'), '50');
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(find.textContaining('Vous économiseriez'), findsOneWidget);
+    expect(find.text('Rentabilisé au bout de 4 mois.'), findsOneWidget);
+  });
 }

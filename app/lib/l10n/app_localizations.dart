@@ -5759,6 +5759,174 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Mon compte'**
   String get menuAccount;
+
+  /// No description provided for @compareSimulation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simulation'**
+  String get compareSimulation;
+
+  /// No description provided for @simIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Et si je changeais de contrat ? Comparez ce que coûte un abonnement gardé tel quel, et une autre offre, sur plusieurs années. C\'est une simulation : rien n\'est modifié.'**
+  String get simIntro;
+
+  /// No description provided for @simContract.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le contrat actuel'**
+  String get simContract;
+
+  /// No description provided for @simFrom.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partir de'**
+  String get simFrom;
+
+  /// No description provided for @simFreeAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un montant libre'**
+  String get simFreeAmount;
+
+  /// No description provided for @simCurrentMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix actuel par mois'**
+  String get simCurrentMonthly;
+
+  /// No description provided for @simCurrentRise.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hausse par an du contrat actuel'**
+  String get simCurrentRise;
+
+  /// No description provided for @simRiseHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultatif : de combien le prix augmente chaque année (exemple : 3).'**
+  String get simRiseHelp;
+
+  /// No description provided for @simOffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'La nouvelle offre'**
+  String get simOffer;
+
+  /// No description provided for @simNewMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau prix par mois'**
+  String get simNewMonthly;
+
+  /// No description provided for @simSwitchCost.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coût du changement'**
+  String get simSwitchCost;
+
+  /// No description provided for @simSwitchCostHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultatif : frais de résiliation, d\'installation ou de dossier, payés une fois.'**
+  String get simSwitchCostHelp;
+
+  /// No description provided for @simNewRise.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hausse par an de la nouvelle offre'**
+  String get simNewRise;
+
+  /// No description provided for @simOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur'**
+  String get simOver;
+
+  /// No description provided for @simYears.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 an} other{{count} ans}}'**
+  String simYears(int count);
+
+  /// No description provided for @simFillIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez le prix actuel et le nouveau prix pour voir la comparaison.'**
+  String get simFillIn;
+
+  /// No description provided for @simSaves.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous économiseriez {amount} sur {period}.'**
+  String simSaves(String amount, String period);
+
+  /// No description provided for @simCostsMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce changement coûterait {amount} de plus sur {period}.'**
+  String simCostsMore(String amount, String period);
+
+  /// No description provided for @simPerMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'par mois en moyenne'**
+  String get simPerMonth;
+
+  /// No description provided for @simPerYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'par an en moyenne'**
+  String get simPerYear;
+
+  /// No description provided for @simNeverPaysOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le changement n\'est jamais rentabilisé sur cette durée.'**
+  String get simNeverPaysOff;
+
+  /// No description provided for @simPaysOffNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rentable dès le premier mois.'**
+  String get simPaysOffNow;
+
+  /// No description provided for @simPaysOffAfter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rentabilisé au bout de {months} mois.'**
+  String simPaysOffAfter(int months);
+
+  /// No description provided for @simMonthLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'mois {month}'**
+  String simMonthLabel(int month);
+
+  /// No description provided for @simKeep.
+  ///
+  /// In fr, this message translates to:
+  /// **'En gardant le contrat'**
+  String get simKeep;
+
+  /// No description provided for @simSwitch.
+  ///
+  /// In fr, this message translates to:
+  /// **'En changeant'**
+  String get simSwitch;
+
+  /// No description provided for @simChart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total payé, mois après mois'**
+  String get simChart;
+
+  /// No description provided for @simHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calcul : total payé chaque mois, coût du changement compté au départ, prix relevés chaque année de leur hausse, arrondis au centime.'**
+  String get simHow;
 }
 
 class _AppLocalizationsDelegate

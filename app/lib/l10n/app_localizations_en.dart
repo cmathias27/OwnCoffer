@@ -3515,4 +3515,109 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuAccount => 'My account';
+
+  @override
+  String get compareSimulation => 'Simulation';
+
+  @override
+  String get simIntro =>
+      'What if I changed contracts? Compare what a subscription costs if kept, and another offer, over several years. It is a simulation: nothing is changed.';
+
+  @override
+  String get simContract => 'The current contract';
+
+  @override
+  String get simFrom => 'Start from';
+
+  @override
+  String get simFreeAmount => 'Any amount';
+
+  @override
+  String get simCurrentMonthly => 'Current price per month';
+
+  @override
+  String get simCurrentRise => 'Yearly rise of the current contract';
+
+  @override
+  String get simRiseHelp =>
+      'Optional: how much the price rises each year (example: 3).';
+
+  @override
+  String get simOffer => 'The new offer';
+
+  @override
+  String get simNewMonthly => 'New price per month';
+
+  @override
+  String get simSwitchCost => 'Cost of switching';
+
+  @override
+  String get simSwitchCostHelp =>
+      'Optional: termination, set-up or file fees, paid once.';
+
+  @override
+  String get simNewRise => 'Yearly rise of the new offer';
+
+  @override
+  String get simOver => 'Over';
+
+  @override
+  String simYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count years',
+      one: '1 year',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get simFillIn =>
+      'Enter the current and the new price to see the comparison.';
+
+  @override
+  String simSaves(String amount, String period) {
+    return 'You would save $amount over $period.';
+  }
+
+  @override
+  String simCostsMore(String amount, String period) {
+    return 'This switch would cost $amount more over $period.';
+  }
+
+  @override
+  String get simPerMonth => 'per month on average';
+
+  @override
+  String get simPerYear => 'per year on average';
+
+  @override
+  String get simNeverPaysOff => 'The switch never pays off over this period.';
+
+  @override
+  String get simPaysOffNow => 'Worth it from the first month.';
+
+  @override
+  String simPaysOffAfter(int months) {
+    return 'Pays off after $months months.';
+  }
+
+  @override
+  String simMonthLabel(int month) {
+    return 'month $month';
+  }
+
+  @override
+  String get simKeep => 'Keeping the contract';
+
+  @override
+  String get simSwitch => 'Switching';
+
+  @override
+  String get simChart => 'Total paid, month after month';
+
+  @override
+  String get simHow =>
+      'How: total paid each month, cost of switching counted at the start, prices raised each year by their rise, rounded to the cent.';
 }
