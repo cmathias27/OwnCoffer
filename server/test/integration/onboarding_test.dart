@@ -47,6 +47,11 @@ void main() {
 
     test('first launch: setup code, then admin, then first group', () async {
       expect((await endpoints.setup.status(sessionBuilder)).needsSetup, isTrue);
+      // No published build in tests: the apps compare with "dev".
+      expect(
+        (await endpoints.setup.status(sessionBuilder)).serverVersion,
+        'dev',
+      );
       expect(await Onboarding.mayRegister(db, 'admin@example.org'), isFalse);
 
       await Onboarding.announceSetupIfNeeded(db);

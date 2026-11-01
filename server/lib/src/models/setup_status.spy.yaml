@@ -5,3 +5,6 @@ fields:
   ### A demonstration instance (OWNCOFFER_DEMO=true): fictitious data only;
   ### the app says so on every page.
   demo: bool?
+  ### Version of the server (1.0.2; "dev" for a development build): the
+  ### Windows and Android apps compare it with their own.
+  serverVersion: String?

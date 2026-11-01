@@ -16,6 +16,9 @@ class SessionController extends ChangeNotifier {
   /// A demonstration instance: fictitious data, said on every page.
   var demo = false;
 
+  /// The server's version (1.0.3), compared with this app's.
+  String? serverVersion;
+
   /// Token from an invitation link (`?invitation=…`), kept until accepted.
   String? pendingInvitation = Uri.base.queryParameters['invitation'];
 
@@ -39,6 +42,7 @@ class SessionController extends ChangeNotifier {
     try {
       final setup = await client.setup.status();
       demo = setup.demo ?? false;
+      serverVersion = setup.serverVersion;
       if (setup.needsSetup) {
         _set(SessionStage.setup);
         return;

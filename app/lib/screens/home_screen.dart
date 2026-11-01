@@ -5,6 +5,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
+import '../util/app_versions.dart';
 import '../widgets/soft.dart';
 import '../state/session.dart';
 import '../widgets/form_card.dart';
@@ -25,6 +26,7 @@ import 'operations_screen.dart';
 import 'security_screen.dart';
 import '../help/help.dart';
 import '../assistant/chat_controller.dart';
+import 'apps_screen.dart';
 import 'export_screen.dart';
 import 'feedback_screen.dart';
 
@@ -391,6 +393,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 PopupMenuItem(
                   value: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
+                      builder: (_) =>
+                          AppsScreen(serverVersion: s.serverVersion),
+                    ),
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.devices_outlined),
+                    title: Text(l.appsTitle),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
                       builder: (_) => FeedbackScreen(page: _helpTopic.name),
                     ),
                   ),
@@ -461,6 +475,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           if (wide)
             IconButton(
+              tooltip: l.appsTitle,
+              icon: const Icon(Icons.devices_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => AppsScreen(serverVersion: s.serverVersion),
+                ),
+              ),
+            ),
+          if (wide)
+            IconButton(
               tooltip: l.feedbackTitle,
               icon: const Icon(Icons.feedback_outlined),
               onPressed: () => Navigator.of(context).push(
@@ -480,6 +504,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           if (s.demo) const _DemoBanner(),
+          AppUpdateBanner(serverVersion: s.serverVersion),
           Expanded(
             child: wide && current != null
                 ? Row(
@@ -639,6 +664,75 @@ class _CreateGroupState extends State<_CreateGroup> {
           onPressed: _create,
         ),
       ],
+    );
+  }
+}
+
+/// Windows and Android apps older than the server: says so, with the way
+/// to the new version. Nothing on the web app, which the server serves.
+class AppUpdateBanner extends StatefulWidget {
+  final String? serverVersion;
+  const AppUpdateBanner({super.key, required this.serverVersion});
+
+  @override
+  State<AppUpdateBanner> createState() => _AppUpdateBannerState();
+}
+
+class _AppUpdateBannerState extends State<AppUpdateBanner> {
+  String? _app;
+
+  /// "Later": hidden until the server moves to yet another version.
+  static String? _dismissedFor;
+
+  @override
+  void initState() {
+    super.initState();
+    AppVersions.app().then((v) {
+      if (mounted) setState(() => _app = v);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final server = widget.serverVersion;
+    if (!AppVersions.updateAvailable(_app, server) || _dismissedFor == server) {
+      return const SizedBox.shrink();
+    }
+    final l = AppLocalizations.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    return Material(
+      color: scheme.primaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 4, 8, 4),
+        child: Row(
+          children: [
+            Icon(
+              Icons.system_update,
+              size: 18,
+              color: scheme.onPrimaryContainer,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                l.appsBanner(server!),
+                style: TextStyle(color: scheme.onPrimaryContainer),
+              ),
+            ),
+            TextButton(
+              onPressed: () => setState(() => _dismissedFor = server),
+              child: Text(l.appsBannerLater),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => AppsScreen(serverVersion: server),
+                ),
+              ),
+              child: Text(l.appsDownload),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

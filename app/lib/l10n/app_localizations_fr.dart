@@ -5283,4 +5283,76 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get exportNote =>
       'Ce fichier contient vos opérations bancaires : rangez-le dans un endroit sûr. Il ne remplace pas les sauvegardes du serveur, qui seules permettent de tout restaurer.';
+
+  @override
+  String get appsTitle => 'Applications';
+
+  @override
+  String get appsIntro =>
+      'OwnCoffer existe aussi en application Windows et Android, connectée à ce serveur. Elles s\'installent sans magasin d\'applications.';
+
+  @override
+  String appsThisApp(String version) {
+    return 'Cette application : $version';
+  }
+
+  @override
+  String appsServer(String version) {
+    return 'Serveur : $version';
+  }
+
+  @override
+  String get appsUnknown => 'inconnue';
+
+  @override
+  String get appsUpToDate => 'L\'application est à jour.';
+
+  @override
+  String appsUpdate(String version) {
+    return 'Une nouvelle version de l\'application est disponible : $version. Téléchargez-la ci-dessous et installez-la par-dessus celle-ci.';
+  }
+
+  @override
+  String get appsNewerThanServer =>
+      'Cette application est plus récente que le serveur. Tout devrait fonctionner ; en cas de souci, demandez à l\'administrateur de mettre le serveur à jour.';
+
+  @override
+  String get appsDevServer =>
+      'Le serveur n\'est pas une version publiée : les téléchargements renvoient vers la dernière version.';
+
+  @override
+  String get appsAndroid => 'Android';
+
+  @override
+  String get appsAndroidHelp =>
+      'Fichier APK, Android 7 ou plus récent. À l\'ouverture, autorisez l\'installation depuis cette source.';
+
+  @override
+  String get appsWindows => 'Windows';
+
+  @override
+  String get appsWindowsHelp =>
+      'Dossier zip, Windows 10 ou 11 (64 bits). Décompressez-le et lancez owncoffer.exe ; si Windows avertit, « Informations complémentaires » puis « Exécuter quand même ».';
+
+  @override
+  String get appsDownload => 'Télécharger';
+
+  @override
+  String get appsAllFiles => 'Toutes les versions, empreintes et signatures';
+
+  @override
+  String get appsNote =>
+      'Les fichiers viennent de la page des versions du projet sur GitHub : le téléchargement se fait depuis GitHub, seulement quand vous le demandez. Les applications ne sont pas encore signées par un éditeur.';
+
+  @override
+  String get appsWebHint =>
+      'Sur téléphone, vous pouvez aussi installer cette page web : menu du navigateur, « Ajouter à l\'écran d\'accueil ».';
+
+  @override
+  String appsBanner(String version) {
+    return 'Nouvelle version de l\'application : $version';
+  }
+
+  @override
+  String get appsBannerLater => 'Plus tard';
 }

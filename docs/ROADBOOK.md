@@ -184,7 +184,8 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] Compilées par la CI, jointes à chaque version : Windows (zip, non signé) et Android (APK hors Play Store) — [APPLICATIONS.md](APPLICATIONS.md)
 - [ ] Clé Android stable (secrets GitHub) et certificat de signature Windows
 - [ ] Hors-ligne et synchronisation
-- [ ] Page « Télécharger » dans l'application web, mises à jour automatiques des applications
+- [x] Page « Applications » (télécharger Windows et Android dans la version du serveur), versions comparées, bannière quand l'application est en retard — *1.0.4*
+- [ ] Installation automatique des mises à jour des applications
 - [ ] Version autonome sans serveur
 
 Les autres fonctionnalités du cahier des charges marquées « Après 1.0 » s'ajouteront une par une, selon les avis des utilisateurs.

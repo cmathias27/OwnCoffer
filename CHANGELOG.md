@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.0.4 (novembre 2026)
+
+### Applications : versions et téléchargement
+
+- Nouvelle page **« Applications »** (menu du compte, ou icône en haut sur grand écran) : la version de l'application et celle du serveur, et les **téléchargements Windows et Android** dans la version du serveur, avec le lien vers toutes les versions, empreintes et signatures.
+- Dans les applications Windows et Android, une **bannière** prévient quand une version plus récente est disponible (le serveur a été mis à jour) ; « Plus tard » la cache jusqu'à la version suivante. Si l'application est plus récente que le serveur, la page le dit.
+- Les messages « Donner un avis » indiquent aussi la version de l'application quand elle diffère de celle du serveur.
+
 ## 1.0.3 (novembre 2026)
 
 ### Factures : un fichier, ou un scan avec le téléphone

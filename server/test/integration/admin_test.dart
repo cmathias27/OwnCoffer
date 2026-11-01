@@ -411,7 +411,11 @@ void main() {
       );
       expect(f.text, 'Un mode sombre plus contrasté');
       expect(f.status, 'open');
-      expect(f.appVersion, 'dev', reason: "the server's own");
+      expect(
+        f.appVersion,
+        'dev · app 0.3.33',
+        reason: "the server's own, then the app's",
+      );
       await expectLater(
         endpoints.feedback.send(as(bob), 'spam', 'x', null, null),
         throwsA(isA<InvalidInputException>()),
@@ -433,6 +437,22 @@ void main() {
         (await endpoints.feedback.setDone(as(admin), f.id!, true)).status,
         'done',
       );
+      // Only a short version and platform from the app is kept.
+      for (final (sent, stored) in [
+        ('1.0.2 android', 'dev · app 1.0.2 android'),
+        (null, 'dev'),
+        ('<script>', 'dev'),
+        ('1.0.2 android; DROP TABLE', 'dev'),
+      ]) {
+        final g = await endpoints.feedback.send(
+          as(bob),
+          'bug',
+          'Version $sent',
+          null,
+          sent,
+        );
+        expect(g.appVersion, stored, reason: '$sent');
+      }
     });
   });
 }

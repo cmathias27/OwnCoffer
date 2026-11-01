@@ -23,3 +23,7 @@ OwnCoffer keeps your bank accounts at home: it reads the statements you download
 ## Undo
 
 After most actions, an **"Undo"** button shows at the bottom for a few seconds: it puts things back as they were.
+
+## On Windows or Android
+
+Account menu → **"Apps"**: the Windows and Android apps to download, in your server's version. When the server is updated, a banner says so in the app.

@@ -8487,6 +8487,120 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce fichier contient vos opérations bancaires : rangez-le dans un endroit sûr. Il ne remplace pas les sauvegardes du serveur, qui seules permettent de tout restaurer.'**
   String get exportNote;
+
+  /// No description provided for @appsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Applications'**
+  String get appsTitle;
+
+  /// No description provided for @appsIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'OwnCoffer existe aussi en application Windows et Android, connectée à ce serveur. Elles s\'installent sans magasin d\'applications.'**
+  String get appsIntro;
+
+  /// No description provided for @appsThisApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette application : {version}'**
+  String appsThisApp(String version);
+
+  /// No description provided for @appsServer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Serveur : {version}'**
+  String appsServer(String version);
+
+  /// No description provided for @appsUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'inconnue'**
+  String get appsUnknown;
+
+  /// No description provided for @appsUpToDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'application est à jour.'**
+  String get appsUpToDate;
+
+  /// No description provided for @appsUpdate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une nouvelle version de l\'application est disponible : {version}. Téléchargez-la ci-dessous et installez-la par-dessus celle-ci.'**
+  String appsUpdate(String version);
+
+  /// No description provided for @appsNewerThanServer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette application est plus récente que le serveur. Tout devrait fonctionner ; en cas de souci, demandez à l\'administrateur de mettre le serveur à jour.'**
+  String get appsNewerThanServer;
+
+  /// No description provided for @appsDevServer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le serveur n\'est pas une version publiée : les téléchargements renvoient vers la dernière version.'**
+  String get appsDevServer;
+
+  /// No description provided for @appsAndroid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Android'**
+  String get appsAndroid;
+
+  /// No description provided for @appsAndroidHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier APK, Android 7 ou plus récent. À l\'ouverture, autorisez l\'installation depuis cette source.'**
+  String get appsAndroidHelp;
+
+  /// No description provided for @appsWindows.
+  ///
+  /// In fr, this message translates to:
+  /// **'Windows'**
+  String get appsWindows;
+
+  /// No description provided for @appsWindowsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dossier zip, Windows 10 ou 11 (64 bits). Décompressez-le et lancez owncoffer.exe ; si Windows avertit, « Informations complémentaires » puis « Exécuter quand même ».'**
+  String get appsWindowsHelp;
+
+  /// No description provided for @appsDownload.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger'**
+  String get appsDownload;
+
+  /// No description provided for @appsAllFiles.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les versions, empreintes et signatures'**
+  String get appsAllFiles;
+
+  /// No description provided for @appsNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les fichiers viennent de la page des versions du projet sur GitHub : le téléchargement se fait depuis GitHub, seulement quand vous le demandez. Les applications ne sont pas encore signées par un éditeur.'**
+  String get appsNote;
+
+  /// No description provided for @appsWebHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur téléphone, vous pouvez aussi installer cette page web : menu du navigateur, « Ajouter à l\'écran d\'accueil ».'**
+  String get appsWebHint;
+
+  /// No description provided for @appsBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle version de l\'application : {version}'**
+  String appsBanner(String version);
+
+  /// No description provided for @appsBannerLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get appsBannerLater;
 }
 
 class _AppLocalizationsDelegate
