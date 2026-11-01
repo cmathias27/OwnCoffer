@@ -162,6 +162,9 @@ transaction:
   - setSplits:
   - setCleared:
   - setClearedMany:
+  - trashed:
+  - purge:
+  - emptyTrash:
   - trash:
   - restore:
   - createRuleFrom:

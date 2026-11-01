@@ -7805,6 +7805,120 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Carte ignorée.'**
   String get noticeIgnored;
+
+  /// No description provided for @batchImportChoose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plusieurs fichiers'**
+  String get batchImportChoose;
+
+  /// No description provided for @batchImportTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Importer 1 fichier} other{Importer {count} fichiers}}'**
+  String batchImportTitle(int count);
+
+  /// No description provided for @batchImportHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque fichier est lu d\'abord. Le compte est reconnu d\'après le fichier quand il le dit (OFX), sinon c\'est celui choisi. Les doublons possibles sont laissés de côté ; pour les vérifier un par un, importez le fichier seul.'**
+  String get batchImportHelp;
+
+  /// No description provided for @batchImportReading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture…'**
+  String get batchImportReading;
+
+  /// No description provided for @batchImportPreview.
+  ///
+  /// In fr, this message translates to:
+  /// **'{added} nouvelles, {duplicates} déjà présentes, {possible} doublons possibles laissés de côté'**
+  String batchImportPreview(int added, int duplicates, int possible);
+
+  /// No description provided for @batchImportSameFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier a déjà été importé dans ce compte.'**
+  String get batchImportSameFile;
+
+  /// No description provided for @batchImportGo.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Rien à importer} =1{Importer 1 fichier} other{Importer {count} fichiers}}'**
+  String batchImportGo(int count);
+
+  /// No description provided for @trashTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Corbeille'**
+  String get trashTitle;
+
+  /// No description provided for @trashHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations mises à la corbeille ne comptent plus nulle part. Restaurez-les, ou supprimez-les pour de bon (avec leur ventilation et leurs factures).'**
+  String get trashHelp;
+
+  /// No description provided for @trashNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'La corbeille est vide.'**
+  String get trashNone;
+
+  /// No description provided for @trashSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'mise à la corbeille le {date}'**
+  String trashSince(String date);
+
+  /// No description provided for @trashRestore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restaurer'**
+  String get trashRestore;
+
+  /// No description provided for @trashRestored.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération restaurée.'**
+  String get trashRestored;
+
+  /// No description provided for @trashDeleteForGood.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer définitivement'**
+  String get trashDeleteForGood;
+
+  /// No description provided for @trashDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer définitivement « {label} » ? Ce n\'est pas annulable ; un nouvel import du relevé la ramènera.'**
+  String trashDeleteConfirm(String label);
+
+  /// No description provided for @trashDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération supprimée.'**
+  String get trashDeleted;
+
+  /// No description provided for @trashEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vider'**
+  String get trashEmpty;
+
+  /// No description provided for @trashEmptyConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Supprimer définitivement l\'opération de la corbeille ?} other{Supprimer définitivement les {count} opérations de la corbeille ?}} Ce n\'est pas annulable.'**
+  String trashEmptyConfirm(int count);
+
+  /// No description provided for @trashEmptied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Corbeille vidée.'**
+  String get trashEmptied;
 }
 
 class _AppLocalizationsDelegate

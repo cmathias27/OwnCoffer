@@ -4844,4 +4844,95 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get noticeIgnored => 'Carte ignorée.';
+
+  @override
+  String get batchImportChoose => 'Plusieurs fichiers';
+
+  @override
+  String batchImportTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importer $count fichiers',
+      one: 'Importer 1 fichier',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get batchImportHelp =>
+      'Chaque fichier est lu d\'abord. Le compte est reconnu d\'après le fichier quand il le dit (OFX), sinon c\'est celui choisi. Les doublons possibles sont laissés de côté ; pour les vérifier un par un, importez le fichier seul.';
+
+  @override
+  String get batchImportReading => 'Lecture…';
+
+  @override
+  String batchImportPreview(int added, int duplicates, int possible) {
+    return '$added nouvelles, $duplicates déjà présentes, $possible doublons possibles laissés de côté';
+  }
+
+  @override
+  String get batchImportSameFile =>
+      'Ce fichier a déjà été importé dans ce compte.';
+
+  @override
+  String batchImportGo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importer $count fichiers',
+      one: 'Importer 1 fichier',
+      zero: 'Rien à importer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashTitle => 'Corbeille';
+
+  @override
+  String get trashHelp =>
+      'Les opérations mises à la corbeille ne comptent plus nulle part. Restaurez-les, ou supprimez-les pour de bon (avec leur ventilation et leurs factures).';
+
+  @override
+  String get trashNone => 'La corbeille est vide.';
+
+  @override
+  String trashSince(String date) {
+    return 'mise à la corbeille le $date';
+  }
+
+  @override
+  String get trashRestore => 'Restaurer';
+
+  @override
+  String get trashRestored => 'Opération restaurée.';
+
+  @override
+  String get trashDeleteForGood => 'Supprimer définitivement';
+
+  @override
+  String trashDeleteConfirm(String label) {
+    return 'Supprimer définitivement « $label » ? Ce n\'est pas annulable ; un nouvel import du relevé la ramènera.';
+  }
+
+  @override
+  String get trashDeleted => 'Opération supprimée.';
+
+  @override
+  String get trashEmpty => 'Vider';
+
+  @override
+  String trashEmptyConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Supprimer définitivement les $count opérations de la corbeille ?',
+      one: 'Supprimer définitivement l\'opération de la corbeille ?',
+    );
+    return '$_temp0 Ce n\'est pas annulable.';
+  }
+
+  @override
+  String get trashEmptied => 'Corbeille vidée.';
 }

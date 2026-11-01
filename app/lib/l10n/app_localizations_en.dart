@@ -4815,4 +4815,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noticeIgnored => 'Card ignored.';
+
+  @override
+  String get batchImportChoose => 'Several files';
+
+  @override
+  String batchImportTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Import $count files',
+      one: 'Import 1 file',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get batchImportHelp =>
+      'Each file is read first. The account is recognised from the file when it says so (OFX), otherwise it is the one chosen. Possible duplicates are left out; to check them one by one, import the file alone.';
+
+  @override
+  String get batchImportReading => 'Reading…';
+
+  @override
+  String batchImportPreview(int added, int duplicates, int possible) {
+    return '$added new, $duplicates already there, $possible possible duplicates left out';
+  }
+
+  @override
+  String get batchImportSameFile =>
+      'This file was already imported into this account.';
+
+  @override
+  String batchImportGo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Import $count files',
+      one: 'Import 1 file',
+      zero: 'Nothing to import',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashTitle => 'Trash';
+
+  @override
+  String get trashHelp =>
+      'Operations moved to the trash no longer count anywhere. Restore them, or delete them for good (with their split and invoices).';
+
+  @override
+  String get trashNone => 'The trash is empty.';
+
+  @override
+  String trashSince(String date) {
+    return 'trashed on $date';
+  }
+
+  @override
+  String get trashRestore => 'Restore';
+
+  @override
+  String get trashRestored => 'Operation restored.';
+
+  @override
+  String get trashDeleteForGood => 'Delete for good';
+
+  @override
+  String trashDeleteConfirm(String label) {
+    return 'Delete \"$label\" for good? This cannot be undone; importing the statement again will bring it back.';
+  }
+
+  @override
+  String get trashDeleted => 'Operation deleted.';
+
+  @override
+  String get trashEmpty => 'Empty';
+
+  @override
+  String trashEmptyConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Delete the $count operations in the trash for good?',
+      one: 'Delete the operation in the trash for good?',
+    );
+    return '$_temp0 This cannot be undone.';
+  }
+
+  @override
+  String get trashEmptied => 'Trash emptied.';
 }

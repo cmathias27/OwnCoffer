@@ -2124,6 +2124,31 @@ class EndpointTransaction extends _isc.EndpointRef {
     },
   );
 
+  /// The trash: operations moved there, on the accounts the user may see,
+  /// most recently trashed first.
+  _ida.Future<List<_ivksw0b3.BankTransaction>> trashed(int groupId) =>
+      caller.callServerEndpoint<List<_ivksw0b3.BankTransaction>>(
+        'transaction',
+        'trashed',
+        {'groupId': groupId},
+      );
+
+  /// Deletes an operation of the trash for good (its split and invoices
+  /// with it). Only from the trash.
+  _ida.Future<void> purge(int transactionId) => caller.callServerEndpoint<void>(
+    'transaction',
+    'purge',
+    {'transactionId': transactionId},
+  );
+
+  /// Empties the trash of the accounts the user may change. Returns how
+  /// many operations were deleted.
+  _ida.Future<int> emptyTrash(int groupId) => caller.callServerEndpoint<int>(
+    'transaction',
+    'emptyTrash',
+    {'groupId': groupId},
+  );
+
   /// Moves the operation to the trash (kept 30 days).
   _ida.Future<void> trash(int transactionId) => caller.callServerEndpoint<void>(
     'transaction',

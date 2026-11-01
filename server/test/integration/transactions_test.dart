@@ -170,6 +170,49 @@ void main() {
       );
     });
 
+    test('trash: listed, restored, deleted for good; another household and '
+        'a reader are refused', () async {
+      final ops = (await endpoints.transaction.list(
+        as(alice),
+        account.id!,
+      )).items;
+      final (a, b) = (ops[0], ops[1]);
+      await endpoints.transaction.trash(as(alice), a.id!);
+      await endpoints.transaction.trash(as(alice), b.id!);
+      expect(
+        [
+          for (final t in await endpoints.transaction.trashed(
+            as(alice),
+            groupA,
+          ))
+            t.id,
+        ],
+        containsAll([a.id, b.id]),
+      );
+      await expectLater(
+        endpoints.transaction.trashed(as(mallory), groupA),
+        throwsA(isA<AccessDeniedException>()),
+      );
+      await expectLater(
+        endpoints.transaction.purge(as(mallory), a.id!),
+        throwsA(isA<AccessDeniedException>()),
+      );
+      await expectLater(
+        endpoints.transaction.purge(as(reader), a.id!),
+        throwsA(isA<AccessDeniedException>()),
+      );
+      await expectLater(
+        endpoints.transaction.purge(as(alice), ops[2].id!),
+        throwsA(isA<AccessDeniedException>()),
+        reason: 'only from the trash',
+      );
+      await endpoints.transaction.restore(as(alice), b.id!);
+      expect(await endpoints.transaction.emptyTrash(as(alice), groupA), 1);
+      expect(await BankTransaction.db.findById(db, a.id!), isNull);
+      expect(await BankTransaction.db.findById(db, b.id!), isNotNull);
+      expect(await endpoints.transaction.trashed(as(alice), groupA), isEmpty);
+    });
+
     test('list: newest first, paging, search, filters', () async {
       final all = await endpoints.transaction.list(as(alice), account.id!);
       expect(all.total, 20);

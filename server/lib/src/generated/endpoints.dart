@@ -3964,6 +3964,66 @@ class Endpoints extends _is.EndpointDispatch {
                         params['cleared'],
                       ),
         ),
+        'trashed': _is.MethodConnector(
+          name: 'trashed',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .trashed(
+                        session,
+                        params['groupId'],
+                      ),
+        ),
+        'purge': _is.MethodConnector(
+          name: 'purge',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .purge(
+                        session,
+                        params['transactionId'],
+                      ),
+        ),
+        'emptyTrash': _is.MethodConnector(
+          name: 'emptyTrash',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .emptyTrash(
+                        session,
+                        params['groupId'],
+                      ),
+        ),
         'trash': _is.MethodConnector(
           name: 'trash',
           params: {

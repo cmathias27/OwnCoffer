@@ -18,3 +18,7 @@ Future<PickedFile?> pickFile({
   List<String> extensions = const [],
   bool camera = false,
 }) => impl.pickFile(extensions, camera: camera);
+
+/// Opens the file dialog for several files at once. Empty when cancelled.
+Future<List<PickedFile>> pickFiles({List<String> extensions = const []}) =>
+    impl.pickFiles(extensions);
