@@ -6,6 +6,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../help/help.dart';
+import 'group_audit_screen.dart';
 
 /// Members of the group; invitations for administrators.
 class MembersScreen extends StatefulWidget {
@@ -142,7 +143,20 @@ class _MembersScreenState extends State<MembersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l.membersTitle),
-        actions: const [HelpButton(HelpTopic.members)],
+        actions: [
+          if (_isAdmin)
+            IconButton(
+              tooltip: l.groupAuditTitle,
+              icon: const Icon(Icons.history),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) =>
+                      GroupAuditScreen(membership: widget.membership),
+                ),
+              ),
+            ),
+          const HelpButton(HelpTopic.members),
+        ],
       ),
       floatingActionButton: _isAdmin
           ? FloatingActionButton.extended(

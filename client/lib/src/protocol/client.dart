@@ -67,6 +67,7 @@ import 'package:owncoffer_client/src/protocol/left_to_live_report.dart'
     as _iqfjeddm;
 import 'package:owncoffer_client/src/protocol/loan.dart' as _ig538h6x;
 import 'package:owncoffer_client/src/protocol/loan_document.dart' as _ixzu9i3x;
+import 'package:owncoffer_client/src/protocol/loan_event.dart' as _iz3v8osk;
 import 'package:owncoffer_client/src/protocol/loan_from_operation.dart'
     as _i04nbqtd;
 import 'package:owncoffer_client/src/protocol/loan_info.dart' as _iwrqx7d4;
@@ -80,6 +81,8 @@ import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/month_review.dart' as _ilg6npsn;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
+import 'package:owncoffer_client/src/protocol/notification_settings.dart'
+    as _inuj1ggb;
 import 'package:owncoffer_client/src/protocol/provider_history.dart'
     as _i26z4phw;
 import 'package:owncoffer_client/src/protocol/purchase_simulation.dart'
@@ -670,6 +673,25 @@ class EndpointAi extends _isc.EndpointRef {
         {'providerId': providerId},
       );
 
+  /// Reads a receipt or invoice with the user's AI: a split (joined to an
+  /// operation) or its amount, date and merchant (waiting) are proposed in
+  /// "Mon conseiller". Nothing is changed here.
+  _ida.Future<_i6gcixlb.AiReply> readInvoice(int invoiceId) =>
+      caller.callServerEndpoint<_i6gcixlb.AiReply>(
+        'ai',
+        'readInvoice',
+        {'invoiceId': invoiceId},
+      );
+
+  /// Reads a loan document with the user's AI: the terms it states are
+  /// proposed for the loan in "Mon conseiller".
+  _ida.Future<_i6gcixlb.AiReply> readLoanDocument(int documentId) =>
+      caller.callServerEndpoint<_i6gcixlb.AiReply>(
+        'ai',
+        'readLoanDocument',
+        {'documentId': documentId},
+      );
+
   /// The user's choice: a provider set up by the administrator and one of
   /// its models, on or off.
   _ida.Future<_if0b0k6p.AiStatus> setPreference(
@@ -949,6 +971,23 @@ class EndpointGroup extends _isc.EndpointRef {
         'members',
         {'groupId': groupId},
       );
+
+  /// The group's log, for its administrators (#37): who did what and when
+  /// in this group, newest first, without the data. Somebody who is no
+  /// longer a member shows without their address.
+  _ida.Future<List<_icr6cafh.AdminAuditInfo>> audit(
+    int groupId, {
+    int? limit,
+    int? offset,
+  }) => caller.callServerEndpoint<List<_icr6cafh.AdminAuditInfo>>(
+    'group',
+    'audit',
+    {
+      'groupId': groupId,
+      'limit': limit,
+      'offset': offset,
+    },
+  );
 
   /// Changes a member's role. The group always keeps at least one admin.
   _ida.Future<_il25bams.GroupMember> setRole(
@@ -1365,6 +1404,35 @@ class EndpointLoan extends _isc.EndpointRef {
     },
   );
 
+  /// Adds a change to the loan (new rate, renegotiation, money drawn or
+  /// repaid): the schedule, the planned instalments and the forecast follow.
+  /// Refused when the loan would no longer be repaid, or when a revolving
+  /// credit would go over its limit.
+  _ida.Future<_iwrqx7d4.LoanInfo> addEvent(
+    int loanId,
+    _iz3v8osk.LoanEvent event,
+  ) => caller.callServerEndpoint<_iwrqx7d4.LoanInfo>(
+    'loan',
+    'addEvent',
+    {
+      'loanId': loanId,
+      'event': event,
+    },
+  );
+
+  /// Removes the change at [index] (as listed in the loan, oldest first).
+  _ida.Future<_iwrqx7d4.LoanInfo> removeEvent(
+    int loanId,
+    int index,
+  ) => caller.callServerEndpoint<_iwrqx7d4.LoanInfo>(
+    'loan',
+    'removeEvent',
+    {
+      'loanId': loanId,
+      'index': index,
+    },
+  );
+
   _ida.Future<_iwrqx7d4.LoanInfo> create(
     int groupId,
     _ig538h6x.Loan loan,
@@ -1522,6 +1590,24 @@ class EndpointNotification extends _isc.EndpointRef {
     'notification',
     'markAllRead',
     {},
+  );
+
+  /// The user's own choices (everything on by default).
+  _ida.Future<_inuj1ggb.NotificationSettings> settings() =>
+      caller.callServerEndpoint<_inuj1ggb.NotificationSettings>(
+        'notification',
+        'settings',
+        {},
+      );
+
+  /// Saves the user's choices; always for the user signed in, whatever
+  /// [settings] says. An email needs its alert in the app.
+  _ida.Future<_inuj1ggb.NotificationSettings> saveSettings(
+    _inuj1ggb.NotificationSettings settings,
+  ) => caller.callServerEndpoint<_inuj1ggb.NotificationSettings>(
+    'notification',
+    'saveSettings',
+    {'settings': settings},
   );
 }
 

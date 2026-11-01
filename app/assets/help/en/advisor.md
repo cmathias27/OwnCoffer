@@ -5,7 +5,7 @@ What OwnCoffer proposes to change. **Nothing changes without your agreement.**
 ## Where proposals come from
 
 - **Calculated by OwnCoffer, without AI**: set a goal for a category spent every month, raise it when it is often exceeded, lower it when spending stays well below. Each card shows its figures and its calculation.
-- **Proposed by the AI**, if you use the assistant: a category for an operation, a classification rule, a loan read in a document. The card names the provider and the model. For a rule, OwnCoffer checks that it matches the label and counts by itself the operations it will classify.
+- **Proposed by the AI**, if you use the assistant: a category for an operation, a classification rule, a loan read in a document, the split of a receipt, an invoice's details, or the terms read in a loan's document. The card names the provider and the model. For a rule, OwnCoffer checks that it matches the label and counts by itself the operations it will classify.
 
 ## Accept, refuse, undo
 

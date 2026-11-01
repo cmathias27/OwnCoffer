@@ -6893,6 +6893,708 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le foyer doit être vide (aucun compte) pour y charger la démonstration.'**
   String get error_demo_group_not_empty;
+
+  /// No description provided for @groupAuditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Journal du foyer'**
+  String get groupAuditTitle;
+
+  /// No description provided for @groupAuditHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Qui a fait quoi dans ce foyer, et quand. Le contenu des changements n\'est pas montré. Réservé aux administrateurs du foyer.'**
+  String get groupAuditHelp;
+
+  /// No description provided for @groupAuditFormer.
+  ///
+  /// In fr, this message translates to:
+  /// **'ancien membre ou administrateur du serveur'**
+  String get groupAuditFormer;
+
+  /// No description provided for @groupAuditMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les plus anciennes'**
+  String get groupAuditMore;
+
+  /// No description provided for @auditLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{what} : {did}'**
+  String auditLine(String what, String did);
+
+  /// No description provided for @auditEntityTransaction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération'**
+  String get auditEntityTransaction;
+
+  /// No description provided for @auditEntityAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get auditEntityAccount;
+
+  /// No description provided for @auditEntityImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Import'**
+  String get auditEntityImport;
+
+  /// No description provided for @auditEntityRule.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règle'**
+  String get auditEntityRule;
+
+  /// No description provided for @auditEntityCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get auditEntityCategory;
+
+  /// No description provided for @auditEntityLoan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédit'**
+  String get auditEntityLoan;
+
+  /// No description provided for @auditEntityInvoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture'**
+  String get auditEntityInvoice;
+
+  /// No description provided for @auditEntityGoal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif'**
+  String get auditEntityGoal;
+
+  /// No description provided for @auditEntityScheduled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération prévue'**
+  String get auditEntityScheduled;
+
+  /// No description provided for @auditEntityGroup.
+  ///
+  /// In fr, this message translates to:
+  /// **'Foyer'**
+  String get auditEntityGroup;
+
+  /// No description provided for @auditEntityMember.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre'**
+  String get auditEntityMember;
+
+  /// No description provided for @auditEntityInvitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation'**
+  String get auditEntityInvitation;
+
+  /// No description provided for @auditEntityProposal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposition'**
+  String get auditEntityProposal;
+
+  /// No description provided for @auditEntityAi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Assistant IA'**
+  String get auditEntityAi;
+
+  /// No description provided for @auditEntityMcp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Assistant externe (MCP)'**
+  String get auditEntityMcp;
+
+  /// No description provided for @auditEntityNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages des notifications'**
+  String get auditEntityNotifications;
+
+  /// No description provided for @auditActionCreate.
+  ///
+  /// In fr, this message translates to:
+  /// **'créé'**
+  String get auditActionCreate;
+
+  /// No description provided for @auditActionUpdate.
+  ///
+  /// In fr, this message translates to:
+  /// **'modifié'**
+  String get auditActionUpdate;
+
+  /// No description provided for @auditActionDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'supprimé'**
+  String get auditActionDelete;
+
+  /// No description provided for @auditActionTrash.
+  ///
+  /// In fr, this message translates to:
+  /// **'mis à la corbeille'**
+  String get auditActionTrash;
+
+  /// No description provided for @auditActionRestore.
+  ///
+  /// In fr, this message translates to:
+  /// **'restauré'**
+  String get auditActionRestore;
+
+  /// No description provided for @auditActionCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'catégorie changée'**
+  String get auditActionCategory;
+
+  /// No description provided for @auditActionSplit.
+  ///
+  /// In fr, this message translates to:
+  /// **'ventilation changée'**
+  String get auditActionSplit;
+
+  /// No description provided for @auditActionCleared.
+  ///
+  /// In fr, this message translates to:
+  /// **'pointage changé'**
+  String get auditActionCleared;
+
+  /// No description provided for @auditActionImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'relevé importé'**
+  String get auditActionImport;
+
+  /// No description provided for @auditActionCancelImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'import annulé'**
+  String get auditActionCancelImport;
+
+  /// No description provided for @auditActionUndo.
+  ///
+  /// In fr, this message translates to:
+  /// **'action annulée'**
+  String get auditActionUndo;
+
+  /// No description provided for @auditActionArchive.
+  ///
+  /// In fr, this message translates to:
+  /// **'archivé'**
+  String get auditActionArchive;
+
+  /// No description provided for @auditActionInvite.
+  ///
+  /// In fr, this message translates to:
+  /// **'invitation envoyée'**
+  String get auditActionInvite;
+
+  /// No description provided for @auditActionRevoke.
+  ///
+  /// In fr, this message translates to:
+  /// **'révoqué'**
+  String get auditActionRevoke;
+
+  /// No description provided for @auditActionRole.
+  ///
+  /// In fr, this message translates to:
+  /// **'rôle changé'**
+  String get auditActionRole;
+
+  /// No description provided for @auditActionRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'retiré du foyer'**
+  String get auditActionRemove;
+
+  /// No description provided for @auditActionPropose.
+  ///
+  /// In fr, this message translates to:
+  /// **'proposée'**
+  String get auditActionPropose;
+
+  /// No description provided for @auditActionAccept.
+  ///
+  /// In fr, this message translates to:
+  /// **'acceptée et appliquée'**
+  String get auditActionAccept;
+
+  /// No description provided for @auditActionRefuse.
+  ///
+  /// In fr, this message translates to:
+  /// **'refusée'**
+  String get auditActionRefuse;
+
+  /// No description provided for @auditActionExpire.
+  ///
+  /// In fr, this message translates to:
+  /// **'retirée (données changées)'**
+  String get auditActionExpire;
+
+  /// No description provided for @auditActionAsk.
+  ///
+  /// In fr, this message translates to:
+  /// **'question posée'**
+  String get auditActionAsk;
+
+  /// No description provided for @auditActionReadDocument.
+  ///
+  /// In fr, this message translates to:
+  /// **'document lu'**
+  String get auditActionReadDocument;
+
+  /// No description provided for @auditActionAttach.
+  ///
+  /// In fr, this message translates to:
+  /// **'document joint'**
+  String get auditActionAttach;
+
+  /// No description provided for @notifSettingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages des notifications'**
+  String get notifSettingsTitle;
+
+  /// No description provided for @notifSettingsIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez ce qu\'OwnCoffer vous signale. Ces réglages ne valent que pour vous ; les autres membres du foyer ont les leurs.'**
+  String get notifSettingsIntro;
+
+  /// No description provided for @notifSettingsOverdraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Découvert prévu'**
+  String get notifSettingsOverdraft;
+
+  /// No description provided for @notifSettingsOverdraftHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quand le solde prévu d\'un compte passera sous son seuil d\'alerte.'**
+  String get notifSettingsOverdraftHelp;
+
+  /// No description provided for @notifSettingsInApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans l\'application'**
+  String get notifSettingsInApp;
+
+  /// No description provided for @notifSettingsByEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aussi par courriel'**
+  String get notifSettingsByEmail;
+
+  /// No description provided for @notifSettingsGoals.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectifs du mois'**
+  String get notifSettingsGoals;
+
+  /// No description provided for @notifSettingsGoalWarning.
+  ///
+  /// In fr, this message translates to:
+  /// **'À 80 % de l\'objectif'**
+  String get notifSettingsGoalWarning;
+
+  /// No description provided for @notifSettingsGoalOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif dépassé'**
+  String get notifSettingsGoalOver;
+
+  /// No description provided for @notifSettingsGoalForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépassement annoncé'**
+  String get notifSettingsGoalForecast;
+
+  /// No description provided for @notifSettingsGoalForecastHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dès que la projection de fin de mois annonce un dépassement.'**
+  String get notifSettingsGoalForecastHelp;
+
+  /// No description provided for @notifSettingsWarranty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin de garantie'**
+  String get notifSettingsWarranty;
+
+  /// No description provided for @notifSettingsWarrantyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un mois avant la fin de la garantie d\'une facture.'**
+  String get notifSettingsWarrantyHelp;
+
+  /// No description provided for @notifSettingsEmailNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les courriels ne partent que si l\'administrateur du serveur a réglé leur envoi. Une alerte coupée n\'est pas créée du tout, et n\'est donc pas envoyée par courriel.'**
+  String get notifSettingsEmailNote;
+
+  /// No description provided for @loanKindRevolving.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédit renouvelable'**
+  String get loanKindRevolving;
+
+  /// No description provided for @loanRevolvingHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une réserve d\'argent qu\'on rembourse par mensualités : indiquez le montant utilisé aujourd\'hui, la mensualité prélevée et le taux. La durée en découle. Les nouvelles utilisations s\'ajoutent ensuite dans « Changements ».'**
+  String get loanRevolvingHelp;
+
+  /// No description provided for @loanRevolvingPaymentRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'La mensualité est nécessaire pour un crédit renouvelable.'**
+  String get loanRevolvingPaymentRequired;
+
+  /// No description provided for @loanRevolvingUsed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant utilisé (à rembourser)'**
+  String get loanRevolvingUsed;
+
+  /// No description provided for @loanCreditLimit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plafond de la réserve'**
+  String get loanCreditLimit;
+
+  /// No description provided for @loanCreditAvailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Encore disponible'**
+  String get loanCreditAvailable;
+
+  /// No description provided for @loanEventsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changements'**
+  String get loanEventsTitle;
+
+  /// No description provided for @loanEventsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun changement depuis le début : taux et mensualité d\'origine.'**
+  String get loanEventsEmpty;
+
+  /// No description provided for @loanEventsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le tableau, le capital restant, les échéances prévues et la prévision du solde en tiennent compte.'**
+  String get loanEventsHelp;
+
+  /// No description provided for @loanEventAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un changement'**
+  String get loanEventAdd;
+
+  /// No description provided for @loanEventAddRevolving.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle utilisation ou changement'**
+  String get loanEventAddRevolving;
+
+  /// No description provided for @loanEventRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer ce changement'**
+  String get loanEventRemove;
+
+  /// No description provided for @loanEventKind.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changement'**
+  String get loanEventKind;
+
+  /// No description provided for @loanEventKindRate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau taux (taux variable)'**
+  String get loanEventKindRate;
+
+  /// No description provided for @loanEventKindRenegotiation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renégociation'**
+  String get loanEventKindRenegotiation;
+
+  /// No description provided for @loanEventKindDraw.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle utilisation (renouvelable)'**
+  String get loanEventKindDraw;
+
+  /// No description provided for @loanEventKindRepayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remboursement anticipé'**
+  String get loanEventKindRepayment;
+
+  /// No description provided for @loanEventRateHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'À partir de cette date, le nouveau taux s\'applique. La date de fin est gardée et la mensualité recalculée, sauf si la mensualité prélevée est connue : elle est alors gardée et la date de fin bouge.'**
+  String get loanEventRateHelp;
+
+  /// No description provided for @loanEventRenegotiationHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez ce que la banque vous a accordé : nouveau taux, et nouvelle mensualité ou nouvelle durée restante. Laissez vide ce qui ne change pas.'**
+  String get loanEventRenegotiationHelp;
+
+  /// No description provided for @loanEventDrawHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'De l\'argent utilisé sur la réserve : il s\'ajoute à ce qui reste à rembourser, avec la même mensualité.'**
+  String get loanEventDrawHelp;
+
+  /// No description provided for @loanEventRepaymentHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une somme remboursée en plus des mensualités : la mensualité est gardée, le crédit finit plus tôt.'**
+  String get loanEventRepaymentHelp;
+
+  /// No description provided for @loanEventDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'À partir du'**
+  String get loanEventDate;
+
+  /// No description provided for @loanEventNewRate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau taux nominal'**
+  String get loanEventNewRate;
+
+  /// No description provided for @loanEventNewPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle mensualité (hors assurance)'**
+  String get loanEventNewPayment;
+
+  /// No description provided for @loanEventNewMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle durée restante (mois)'**
+  String get loanEventNewMonths;
+
+  /// No description provided for @loanEventNewMonthsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ignorée si une nouvelle mensualité est indiquée.'**
+  String get loanEventNewMonthsHelp;
+
+  /// No description provided for @loanEventAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant'**
+  String get loanEventAmount;
+
+  /// No description provided for @loanEventNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note'**
+  String get loanEventNote;
+
+  /// No description provided for @loanEventInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez au moins un nouveau taux, une nouvelle mensualité ou une nouvelle durée.'**
+  String get loanEventInvalid;
+
+  /// No description provided for @loanEventRate.
+  ///
+  /// In fr, this message translates to:
+  /// **'taux à {rate}'**
+  String loanEventRate(String rate);
+
+  /// No description provided for @loanEventPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'mensualité de {amount}'**
+  String loanEventPayment(String amount);
+
+  /// No description provided for @loanEventMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'encore {months}'**
+  String loanEventMonths(String months);
+
+  /// No description provided for @loanEventDraw.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} utilisés'**
+  String loanEventDraw(String amount);
+
+  /// No description provided for @loanEventRepaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} remboursés en plus'**
+  String loanEventRepaid(String amount);
+
+  /// No description provided for @error_loan_event_invalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce changement n\'est pas possible pour ce crédit (date avant la première échéance, ou valeurs hors limites).'**
+  String get error_loan_event_invalid;
+
+  /// No description provided for @error_loan_event_unpaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avec ce changement, le crédit ne serait jamais remboursé : la mensualité ne couvre pas les intérêts.'**
+  String get error_loan_event_unpaid;
+
+  /// No description provided for @error_loan_over_limit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce montant dépasse le plafond de la réserve.'**
+  String get error_loan_over_limit;
+
+  /// No description provided for @aiReadReceipt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire le ticket avec l\'IA'**
+  String get aiReadReceipt;
+
+  /// No description provided for @aiReadInvoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire la facture avec l\'IA'**
+  String get aiReadInvoice;
+
+  /// No description provided for @aiReadLoan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire ce document avec l\'IA'**
+  String get aiReadLoan;
+
+  /// No description provided for @aiReadTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire avec l\'IA'**
+  String get aiReadTitle;
+
+  /// No description provided for @aiReadExternal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le document sera envoyé à {provider} ({model}), un fournisseur en ligne, pour être lu. L\'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.'**
+  String aiReadExternal(String provider, String model);
+
+  /// No description provided for @aiReadLocal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le document sera lu par {provider} ({model}), sur votre réseau. L\'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.'**
+  String aiReadLocal(String provider, String model);
+
+  /// No description provided for @aiReadGo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire'**
+  String get aiReadGo;
+
+  /// No description provided for @aiReadRunning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture en cours…'**
+  String get aiReadRunning;
+
+  /// No description provided for @aiReadDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Une proposition vous attend dans Mon conseiller.} other{{count} propositions vous attendent dans Mon conseiller.}}'**
+  String aiReadDone(int count);
+
+  /// No description provided for @aiReadNothingNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien de nouveau dans ce document.'**
+  String get aiReadNothingNew;
+
+  /// No description provided for @aiReadNotReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour lire un document, activez l\'assistant (icône ✨) avec un modèle qui lit les images.'**
+  String get aiReadNotReady;
+
+  /// No description provided for @aiReadNoPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce modèle ne lit que les images : joignez une photo ou une capture du document. (Claude lit aussi les PDF.)'**
+  String get aiReadNoPdf;
+
+  /// No description provided for @advisorAiSplit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ventiler « {label} » d\'après le ticket'**
+  String advisorAiSplit(String label);
+
+  /// No description provided for @advisorAiSplitWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération de {amount} du {date}, répartie ainsi :'**
+  String advisorAiSplitWhy(String amount, String date);
+
+  /// No description provided for @advisorAiSplitRest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dont {amount} que les lignes du ticket n\'expliquent pas (remise, arrondi, ligne illisible), à classer : calculé par OwnCoffer.'**
+  String advisorAiSplitRest(String amount);
+
+  /// No description provided for @advisorAiInvoiceHints.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compléter la facture « {name} »'**
+  String advisorAiInvoiceHints(String name);
+
+  /// No description provided for @advisorAiLoanTerms.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre à jour le crédit « {lender} » d\'après son document'**
+  String advisorAiLoanTerms(String lender);
+
+  /// No description provided for @advisorReadIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu dans « {name} ».'**
+  String advisorReadIn(String name);
+
+  /// No description provided for @error_receipt_mismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les lignes lues sur le ticket dépassent le montant de l\'opération : ce n\'est sans doute pas son ticket.'**
+  String get error_receipt_mismatch;
+
+  /// No description provided for @error_document_nothing_read.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'IA n\'a rien pu lire d\'utile dans ce document.'**
+  String get error_document_nothing_read;
+
+  /// No description provided for @error_ai_document_not_image.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce modèle ne lit que les images : joignez une photo ou une capture du document.'**
+  String get error_ai_document_not_image;
+
+  /// No description provided for @error_ai_document_too_large.
+  ///
+  /// In fr, this message translates to:
+  /// **'Document trop lourd pour être lu (8 Mo au plus).'**
+  String get error_ai_document_too_large;
 }
 
 class _AppLocalizationsDelegate

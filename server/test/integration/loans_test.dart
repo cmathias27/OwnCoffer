@@ -179,6 +179,137 @@ void main() {
       },
     );
 
+    test('events: a rate change and a renegotiation change the schedule '
+        'and the planned instalment; undone by removing them', () async {
+      final info = await endpoints.loan.create(
+        as(bob),
+        groupA,
+        mortgage(accountId: shared.id),
+      );
+      final id = info.loan.id!;
+      final before = await endpoints.loan.schedule(as(bob), id);
+      final change = DateTime.utc(now.year + 1, 1, 1);
+      final changed = await endpoints.loan.addEvent(
+        as(bob),
+        id,
+        LoanEvent(date: change, annualRateMilli: 3000, note: 'Révision'),
+      );
+      expect(changed.loan.events!.single.annualRateMilli, 3000);
+      final after = await endpoints.loan.schedule(as(bob), id);
+      expect(after.length, before.length, reason: 'same end date');
+      expect(after.last.remainingCents, 0);
+      final firstNew = after.firstWhere((i) => !i.date.isBefore(change));
+      expect(
+        firstNew.paymentCents,
+        greaterThan(before[firstNew.number - 1].paymentCents),
+      );
+      expect(
+        changed.interestRemainingCents,
+        greaterThan(info.interestRemainingCents),
+      );
+
+      // An instalment below the interest would never repay the loan.
+      await expectLater(
+        endpoints.loan.addEvent(
+          as(bob),
+          id,
+          LoanEvent(date: change, paymentCents: 100),
+        ),
+        throwsA(
+          isA<InvalidInputException>().having(
+            (e) => e.code,
+            'code',
+            'loan_event_unpaid',
+          ),
+        ),
+      );
+      final back = await endpoints.loan.removeEvent(as(bob), id, 0);
+      expect(back.loan.events, isNull);
+      expect(back.interestRemainingCents, info.interestRemainingCents);
+    });
+
+    test('events: another household, a reader and a hidden account are '
+        'refused, nothing changes', () async {
+      final mine = await endpoints.loan.create(
+        as(alice),
+        groupA,
+        mortgage(accountId: restricted.id),
+      );
+      final event = LoanEvent(
+        date: DateTime.utc(now.year + 1, 1, 1),
+        annualRateMilli: 2000,
+      );
+      for (final u in [mallory, reader, bob]) {
+        await expectLater(
+          endpoints.loan.addEvent(as(u), mine.loan.id!, event),
+          denied,
+          reason: '$u',
+        );
+      }
+      await expectLater(
+        endpoints.loan.removeEvent(as(mallory), mine.loan.id!, 0),
+        denied,
+      );
+      expect((await Loan.db.findById(db, mine.loan.id!))!.events, isNull);
+    });
+
+    test('revolving credit: the instalment repays it, money drawn is added, '
+        'never over the limit', () async {
+      final info = await endpoints.loan.create(
+        as(bob),
+        groupA,
+        Loan(
+          groupId: 0,
+          accountId: shared.id,
+          kind: LoanKind.revolving,
+          lender: 'Cofidis',
+          principalCents: 200000,
+          annualRateMilli: 19000,
+          durationMonths: 1,
+          paymentCents: 8000,
+          creditLimitCents: 300000,
+          firstDueDate: DateTime.utc(now.year, now.month, 5),
+        ),
+      );
+      expect(info.loan.creditLimitCents, 300000);
+      expect(info.loan.durationMonths, greaterThan(24), reason: 'follows it');
+      final drawn = await endpoints.loan.addEvent(
+        as(bob),
+        info.loan.id!,
+        LoanEvent(
+          date: DateTime.utc(now.year, now.month + 2, 1),
+          drawCents: 50000,
+        ),
+      );
+      expect(drawn.totalCount, greaterThan(info.totalCount));
+      await expectLater(
+        endpoints.loan.addEvent(
+          as(bob),
+          info.loan.id!,
+          LoanEvent(
+            date: DateTime.utc(now.year, now.month + 3, 1),
+            drawCents: 200000,
+          ),
+        ),
+        throwsA(
+          isA<InvalidInputException>().having(
+            (e) => e.code,
+            'code',
+            'loan_over_limit',
+          ),
+        ),
+      );
+      await expectLater(
+        endpoints.loan.create(
+          as(bob),
+          groupA,
+          info.loan.copyWith(id: null, paymentCents: null),
+        ),
+        throwsA(isA<InvalidInputException>()),
+        reason: 'a revolving credit needs its instalment',
+      );
+    });
+
     test('early repayment simulation', () async {
       final info = await endpoints.loan.create(as(bob), groupA, mortgage());
       final r = await endpoints.loan.simulate(

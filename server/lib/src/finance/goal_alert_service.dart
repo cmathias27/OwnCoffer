@@ -6,6 +6,7 @@ import 'package:serverpod/serverpod.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import 'spending_service.dart';
+import 'notification_settings_service.dart';
 
 /// Goal alerts: when the spending of a category reaches 80 % then 100 % of
 /// its monthly goal, every member gets one in-app notification per level and
@@ -66,6 +67,10 @@ abstract final class GoalAlertService {
       session,
       where: (m) => m.groupId.equals(groupId),
     )) {
+      final settings = await NotificationSettingsService.of(
+        session,
+        member.authUserId,
+      );
       final Set<int> ids = {
         for (final a in await Access.visibleAccountsOf(session, member)) a.id!,
       };
@@ -100,9 +105,12 @@ abstract final class GoalAlertService {
             : projection?.overDate;
         final c = rows[goal.categoryId];
         for (final (type, suffix) in [
-          if (overDate != null) (forecastType, 'forecast'),
-          if (level == core.GoalLevel.warning) (warningType, level.name),
-          if (level == core.GoalLevel.over) (overType, level.name),
+          if (overDate != null && settings.goalForecast)
+            (forecastType, 'forecast'),
+          if (level == core.GoalLevel.warning && settings.goalWarning)
+            (warningType, level.name),
+          if (level == core.GoalLevel.over && settings.goalOver)
+            (overType, level.name),
         ]) {
           final key = 'goal:${goal.id}:${month.start}:$suffix';
           final exists = await AppNotification.db.count(

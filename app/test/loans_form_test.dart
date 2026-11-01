@@ -193,4 +193,41 @@ void main() {
     expect(text('Montant total de l\'achat'), '95', reason: 'typed: kept');
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('revolving credit: no duration to enter, a limit, the '
+      'instalment is required', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('fr'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const LoanFormScreen(
+          groupId: 1,
+          accounts: [],
+          categories: [],
+          initialKind: LoanKind.revolving,
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Crédit renouvelable'), findsOneWidget);
+    expect(find.text('Plafond de la réserve'), findsOneWidget);
+    expect(find.text('Montant utilisé (à rembourser)'), findsOneWidget);
+    expect(find.text('Durée en mois'), findsNothing);
+    final save = find.text('Enregistrer');
+    await tester.ensureVisible(save);
+    await tester.pumpAndSettle();
+    await tester.tap(save);
+    await tester.pump();
+    expect(
+      find.text('La mensualité est nécessaire pour un crédit renouvelable.'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
 }

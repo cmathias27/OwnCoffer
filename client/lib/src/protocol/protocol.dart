@@ -111,6 +111,7 @@ import 'left_to_live_report.dart' as _ibb3lpoc;
 import 'loan.dart' as _i7jednjp;
 import 'loan_document.dart' as _ixhwb2ta;
 import 'loan_document_blob.dart' as _i05ovdfs;
+import 'loan_event.dart' as _inh9sy0f;
 import 'loan_from_operation.dart' as _ibgzxro1;
 import 'loan_info.dart' as _ijbwwnsd;
 import 'loan_installment.dart' as _ics9k3ng;
@@ -123,6 +124,7 @@ import 'member_role.dart' as _insyygng;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
 import 'month_review.dart' as _i5m4pdin;
 import 'notification.dart' as _irt10kca;
+import 'notification_settings.dart' as _iwwkm5c2;
 import 'occurrence_status.dart' as _it10dx4m;
 import 'period_totals.dart' as _imctw77w;
 import 'provider_history.dart' as _irsxtgs7;
@@ -207,6 +209,7 @@ export 'left_to_live_report.dart';
 export 'loan.dart';
 export 'loan_document.dart';
 export 'loan_document_blob.dart';
+export 'loan_event.dart';
 export 'loan_from_operation.dart';
 export 'loan_info.dart';
 export 'loan_installment.dart';
@@ -219,6 +222,7 @@ export 'member_role.dart';
 export 'missed_occurrence_info.dart';
 export 'month_review.dart';
 export 'notification.dart';
+export 'notification_settings.dart';
 export 'occurrence_status.dart';
 export 'period_totals.dart';
 export 'provider_history.dart';
@@ -451,6 +455,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _i05ovdfs.LoanDocumentBlob) {
       return _i05ovdfs.LoanDocumentBlob.fromJson(data) as T;
     }
+    if (t == _inh9sy0f.LoanEvent) {
+      return _inh9sy0f.LoanEvent.fromJson(data) as T;
+    }
     if (t == _ibgzxro1.LoanFromOperation) {
       return _ibgzxro1.LoanFromOperation.fromJson(data) as T;
     }
@@ -486,6 +493,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _irt10kca.AppNotification) {
       return _irt10kca.AppNotification.fromJson(data) as T;
+    }
+    if (t == _iwwkm5c2.NotificationSettings) {
+      return _iwwkm5c2.NotificationSettings.fromJson(data) as T;
     }
     if (t == _it10dx4m.OccurrenceStatus) {
       return _it10dx4m.OccurrenceStatus.fromJson(data) as T;
@@ -773,6 +783,9 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _i05ovdfs.LoanDocumentBlob.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_inh9sy0f.LoanEvent?>()) {
+      return (data != null ? _inh9sy0f.LoanEvent.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_ibgzxro1.LoanFromOperation?>()) {
       return (data != null ? _ibgzxro1.LoanFromOperation.fromJson(data) : null)
           as T;
@@ -814,6 +827,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_irt10kca.AppNotification?>()) {
       return (data != null ? _irt10kca.AppNotification.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_iwwkm5c2.NotificationSettings?>()) {
+      return (data != null
+              ? _iwwkm5c2.NotificationSettings.fromJson(data)
+              : null)
           as T;
     }
     if (t == _isc.getType<_it10dx4m.OccurrenceStatus?>()) {
@@ -1008,6 +1027,20 @@ class Protocol extends _isc.SerializationManager {
       return (data as List)
               .map((e) => deserialize<_i4e8elxc.ImportPreviewLine>(e))
               .toList()
+          as T;
+    }
+    if (t == List<_inh9sy0f.LoanEvent>) {
+      return (data as List)
+              .map((e) => deserialize<_inh9sy0f.LoanEvent>(e))
+              .toList()
+          as T;
+    }
+    if (t == _isc.getType<List<_inh9sy0f.LoanEvent>?>()) {
+      return (data != null
+              ? (data as List)
+                    .map((e) => deserialize<_inh9sy0f.LoanEvent>(e))
+                    .toList()
+              : null)
           as T;
     }
     if (t == List<_ijbwwnsd.LoanInfo>) {
@@ -1316,6 +1349,7 @@ class Protocol extends _isc.SerializationManager {
       _i7jednjp.Loan => 'Loan',
       _ixhwb2ta.LoanDocument => 'LoanDocument',
       _i05ovdfs.LoanDocumentBlob => 'LoanDocumentBlob',
+      _inh9sy0f.LoanEvent => 'LoanEvent',
       _ibgzxro1.LoanFromOperation => 'LoanFromOperation',
       _ijbwwnsd.LoanInfo => 'LoanInfo',
       _ics9k3ng.LoanInstallment => 'LoanInstallment',
@@ -1328,6 +1362,7 @@ class Protocol extends _isc.SerializationManager {
       _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
       _i5m4pdin.MonthReview => 'MonthReview',
       _irt10kca.AppNotification => 'AppNotification',
+      _iwwkm5c2.NotificationSettings => 'NotificationSettings',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
       _imctw77w.PeriodTotals => 'PeriodTotals',
       _irsxtgs7.ProviderHistory => 'ProviderHistory',
@@ -1482,6 +1517,8 @@ class Protocol extends _isc.SerializationManager {
         return 'LoanDocument';
       case _i05ovdfs.LoanDocumentBlob():
         return 'LoanDocumentBlob';
+      case _inh9sy0f.LoanEvent():
+        return 'LoanEvent';
       case _ibgzxro1.LoanFromOperation():
         return 'LoanFromOperation';
       case _ijbwwnsd.LoanInfo():
@@ -1506,6 +1543,8 @@ class Protocol extends _isc.SerializationManager {
         return 'MonthReview';
       case _irt10kca.AppNotification():
         return 'AppNotification';
+      case _iwwkm5c2.NotificationSettings():
+        return 'NotificationSettings';
       case _it10dx4m.OccurrenceStatus():
         return 'OccurrenceStatus';
       case _imctw77w.PeriodTotals():
@@ -1752,6 +1791,9 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'LoanDocumentBlob') {
       return deserialize<_i05ovdfs.LoanDocumentBlob>(data['data']);
     }
+    if (dataClassName == 'LoanEvent') {
+      return deserialize<_inh9sy0f.LoanEvent>(data['data']);
+    }
     if (dataClassName == 'LoanFromOperation') {
       return deserialize<_ibgzxro1.LoanFromOperation>(data['data']);
     }
@@ -1787,6 +1829,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'AppNotification') {
       return deserialize<_irt10kca.AppNotification>(data['data']);
+    }
+    if (dataClassName == 'NotificationSettings') {
+      return deserialize<_iwwkm5c2.NotificationSettings>(data['data']);
     }
     if (dataClassName == 'OccurrenceStatus') {
       return deserialize<_it10dx4m.OccurrenceStatus>(data['data']);

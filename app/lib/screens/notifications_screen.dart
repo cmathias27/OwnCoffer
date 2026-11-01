@@ -9,6 +9,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../help/help.dart';
+import '../widgets/notification_settings.dart';
 
 /// The user's notifications. Texts are built here from the type and the
 /// figures stored by the server, so they follow the user's language.
@@ -80,6 +81,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       appBar: AppBar(
         title: Text(l.notificationsTitle),
         actions: [
+          IconButton(
+            tooltip: AppLocalizations.of(context).notifSettingsTitle,
+            icon: const Icon(Icons.tune),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const NotificationSettingsScreen(),
+              ),
+            ),
+          ),
           const HelpButton(HelpTopic.notifications),
           if (unread > 0)
             TextButton(

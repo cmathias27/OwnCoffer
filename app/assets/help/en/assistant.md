@@ -11,7 +11,7 @@ OwnCoffer works fully without AI. The assistant is **off by default**: everyone 
 
 - **Answer your questions** about your accounts: "how much did I spend in restaurants this month?", "which due dates are coming?".
 - **Classify the operations to classify**: the shortcut asks for you. It proposes a category and, for a merchant that comes back, a rule.
-- **Read a document** (with a model that reads images): attach the photo of an amortisation table for it to propose the loan.
+- **Read a document** (with a model that reads images): attach the photo of an amortisation table for it to propose the loan. Receipts, invoices and loan documents already kept in OwnCoffer can also be read directly, from their menu ("Read with the AI" button).
 
 ## Its limits, on purpose
 

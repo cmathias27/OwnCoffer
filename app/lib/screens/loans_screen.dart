@@ -13,6 +13,7 @@ import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/category_field.dart';
 import '../widgets/undo.dart';
+import '../widgets/ai_read.dart';
 
 /// Indicative debt ratio above which French banks usually refuse a new loan
 /// (HCSF recommendation: 35 %).
@@ -302,6 +303,7 @@ String loanKindText(AppLocalizations l, LoanKind k) => switch (k) {
   LoanKind.personal => l.loanKindPersonal,
   LoanKind.other => l.loanKindOther,
   LoanKind.installments => l.loanKindInstallments,
+  LoanKind.revolving => l.loanKindRevolving,
 };
 
 IconData _kindIcon(LoanKind k) => switch (k) {
@@ -312,6 +314,7 @@ IconData _kindIcon(LoanKind k) => switch (k) {
   LoanKind.personal => Icons.people_outline,
   LoanKind.other => Icons.account_balance_outlined,
   LoanKind.installments => Icons.splitscreen_outlined,
+  LoanKind.revolving => Icons.credit_card_outlined,
 };
 
 /// `3,45 %` from thousandths of a percent.
@@ -687,6 +690,102 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
       : l.sizeKb('${(bytes / 1024).ceil()}');
 
   /// Amortisation tables, offers, screenshots kept on the server.
+  Future<void> _changeEvents(Future<LoanInfo> Function() call) async {
+    final l = AppLocalizations.of(context);
+    try {
+      final saved = await call();
+      if (!mounted) return;
+      setState(() => (_info = saved, _changed = true, _simulation = null));
+      await _load();
+    } on Object catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(errorText(l, e))));
+      }
+    }
+  }
+
+  Future<void> _addEvent() async {
+    final event = await showDialog<LoanEvent>(
+      context: context,
+      builder: (_) => _LoanEventDialog(loan: _info.loan),
+    );
+    if (event == null) return;
+    await _changeEvents(() => client.loan.addEvent(_info.loan.id!, event));
+  }
+
+  /// What a change did, in one line.
+  String _eventText(AppLocalizations l, LoanEvent e) => [
+    if (e.annualRateMilli != null)
+      l.loanEventRate(rateText(context, e.annualRateMilli!)),
+    if (e.paymentCents != null)
+      l.loanEventPayment(context.money(e.paymentCents!)),
+    if (e.remainingMonths != null)
+      l.loanEventMonths(l.loanMonths(e.remainingMonths!)),
+    if ((e.drawCents ?? 0) > 0) l.loanEventDraw(context.money(e.drawCents!)),
+    if ((e.drawCents ?? 0) < 0) l.loanEventRepaid(context.money(-e.drawCents!)),
+  ].join(' · ');
+
+  Widget _eventsCard(
+    BuildContext context,
+    AppLocalizations l,
+    ThemeData theme,
+  ) {
+    final events = _info.loan.events ?? const <LoanEvent>[];
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l.loanEventsTitle, style: theme.textTheme.titleMedium),
+            const SizedBox(height: 4),
+            Text(
+              events.isEmpty ? l.loanEventsEmpty : l.loanEventsHelp,
+              style: theme.textTheme.bodySmall,
+            ),
+            for (final (i, e) in events.indexed)
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.change_circle_outlined),
+                title: Text(_eventText(l, e)),
+                subtitle: Text(
+                  [
+                    context.day(e.date),
+                    if (e.note != null) e.note!,
+                  ].join(' · '),
+                ),
+                trailing: widget.canWrite
+                    ? IconButton(
+                        tooltip: l.loanEventRemove,
+                        icon: const Icon(Icons.delete_outline),
+                        onPressed: () => _changeEvents(
+                          () => client.loan.removeEvent(_info.loan.id!, i),
+                        ),
+                      )
+                    : null,
+              ),
+            if (widget.canWrite)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  icon: const Icon(Icons.add),
+                  label: Text(
+                    _info.loan.kind == LoanKind.revolving
+                        ? l.loanEventAddRevolving
+                        : l.loanEventAdd,
+                  ),
+                  onPressed: _addEvent,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _documentsCard(
     BuildContext context,
     AppLocalizations l,
@@ -752,10 +851,23 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                   ),
                   onTap: () => _openDocument(d),
                   trailing: widget.canWrite
-                      ? IconButton(
-                          tooltip: l.loanDocumentDelete,
-                          icon: const Icon(Icons.delete_outline),
-                          onPressed: () => _deleteDocument(d),
+                      ? Wrap(
+                          children: [
+                            IconButton(
+                              tooltip: l.aiReadLoan,
+                              icon: const Icon(Icons.auto_awesome_outlined),
+                              onPressed: () => readWithAi(
+                                context,
+                                mimeType: d.mimeType,
+                                read: () => client.ai.readLoanDocument(d.id!),
+                              ),
+                            ),
+                            IconButton(
+                              tooltip: l.loanDocumentDelete,
+                              icon: const Icon(Icons.delete_outline),
+                              onPressed: () => _deleteDocument(d),
+                            ),
+                          ],
                         )
                       : null,
                 ),
@@ -961,7 +1073,20 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                     line(l.loanRate, rateText(context, loan.annualRateMilli)),
                     if (loan.aprMilli != null)
                       line(l.loanApr, rateText(context, loan.aprMilli!)),
-                    line(l.loanDuration, l.loanMonths(loan.durationMonths)),
+                    if (loan.creditLimitCents != null) ...[
+                      line(
+                        l.loanCreditLimit,
+                        context.money(loan.creditLimitCents!),
+                      ),
+                      line(
+                        l.loanCreditAvailable,
+                        context.money(
+                          loan.creditLimitCents! - info.remainingCents,
+                        ),
+                      ),
+                    ],
+                    if (loan.kind != LoanKind.revolving)
+                      line(l.loanDuration, l.loanMonths(loan.durationMonths)),
                     line(
                       info.paymentIsActual
                           ? l.loanPaymentActual
@@ -1014,6 +1139,8 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 12),
+            _eventsCard(context, l, theme),
             const SizedBox(height: 12),
             _operationsCard(context, l, theme),
             const SizedBox(height: 12),
@@ -1228,6 +1355,10 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
   late final BankTransaction? _op = widget.fromOperation;
   late var _kind = _l?.kind ?? widget.initialKind ?? LoanKind.mortgage;
   bool get _installments => _kind == LoanKind.installments;
+  bool get _revolving => _kind == LoanKind.revolving;
+  late final _limit = TextEditingController(
+    text: _money(_l?.creditLimitCents),
+  );
   late final _lender = TextEditingController(
     text: _l?.lender ?? widget.initialLender ?? _op?.cleanLabel,
   );
@@ -1333,6 +1464,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
       _insurance,
       _fees,
       _actual,
+      _limit,
     ]) {
       c.dispose();
     }
@@ -1418,7 +1550,12 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
       principalCents: parseUserAmount(_principal.text)!,
       annualRateMilli: parseRateMilli(_rate.text)!,
       aprMilli: _apr.text.trim().isEmpty ? null : parseRateMilli(_apr.text),
-      durationMonths: int.parse(_months.text.trim()),
+      // A revolving credit has no duration: the server computes it from
+      // the instalment.
+      durationMonths: _revolving
+          ? (int.tryParse(_months.text.trim()) ?? 1)
+          : int.parse(_months.text.trim()),
+      creditLimitCents: _revolving ? parseUserAmount(_limit.text) : null,
       firstDueDate: _firstDue,
       insuranceMonthlyCents: parseUserAmount(_insurance.text) ?? 0,
       feesCents: parseUserAmount(_fees.text) ?? 0,
@@ -1531,11 +1668,13 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         }
                       }),
                     ),
-                    if (_installments)
+                    if (_installments || _revolving)
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: Text(
-                          l.loanInstallmentsHelp,
+                          _revolving
+                              ? l.loanRevolvingHelp
+                              : l.loanInstallmentsHelp,
                           style: theme.textTheme.bodySmall,
                         ),
                       ),
@@ -1565,7 +1704,10 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         helperMaxLines: 3,
                         suffixText: '€',
                       ),
-                      validator: optionalAmount,
+                      validator: (v) =>
+                          _revolving && (parseUserAmount(v ?? '') ?? 0) <= 0
+                          ? l.loanRevolvingPaymentRequired
+                          : optionalAmount(v),
                     ),
                     gap,
                     TextFormField(
@@ -1576,6 +1718,8 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                       decoration: InputDecoration(
                         labelText: _installments
                             ? l.loanInstallmentsTotal
+                            : _revolving
+                            ? l.loanRevolvingUsed
                             : l.loanPrincipal,
                         helperText: _installments && _totalFollows
                             ? l.loanInstallmentsTotalHelp
@@ -1597,6 +1741,21 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                           onPressed: _deducePrincipal,
                         ),
                       ),
+                    if (_revolving) ...[
+                      gap,
+                      TextFormField(
+                        controller: _limit,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        decoration: InputDecoration(
+                          labelText: l.loanCreditLimit,
+                          helperText: l.optional,
+                          suffixText: '€',
+                        ),
+                        validator: optionalAmount,
+                      ),
+                    ],
                     gap,
                     if (!_installments) ...[
                       Row(
@@ -1643,39 +1802,40 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                       ),
                       gap,
                     ],
-                    TextFormField(
-                      controller: _months,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: _installments
-                            ? l.loanInstallmentsCount
-                            : l.loanDurationMonths,
-                        helperText: _installments
-                            ? l.loanInstallmentsCountHelp
-                            : l.loanDurationHelp,
-                        helperMaxLines: 2,
-                        prefixIcon: _installments
-                            ? IconButton(
-                                tooltip: l.loanInstallmentsLess,
-                                icon: const Icon(Icons.remove),
-                                onPressed: () => _step(-1),
-                              )
-                            : null,
-                        suffixIcon: _installments
-                            ? IconButton(
-                                tooltip: l.loanInstallmentsMore,
-                                icon: const Icon(Icons.add),
-                                onPressed: () => _step(1),
-                              )
-                            : null,
+                    if (!_revolving)
+                      TextFormField(
+                        controller: _months,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: _installments
+                              ? l.loanInstallmentsCount
+                              : l.loanDurationMonths,
+                          helperText: _installments
+                              ? l.loanInstallmentsCountHelp
+                              : l.loanDurationHelp,
+                          helperMaxLines: 2,
+                          prefixIcon: _installments
+                              ? IconButton(
+                                  tooltip: l.loanInstallmentsLess,
+                                  icon: const Icon(Icons.remove),
+                                  onPressed: () => _step(-1),
+                                )
+                              : null,
+                          suffixIcon: _installments
+                              ? IconButton(
+                                  tooltip: l.loanInstallmentsMore,
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () => _step(1),
+                                )
+                              : null,
+                        ),
+                        validator: (v) {
+                          final n = int.tryParse(v?.trim() ?? '');
+                          return n == null || n < 1 || n > core.maxLoanMonths
+                              ? l.loanDurationInvalid
+                              : null;
+                        },
                       ),
-                      validator: (v) {
-                        final n = int.tryParse(v?.trim() ?? '');
-                        return n == null || n < 1 || n > core.maxLoanMonths
-                            ? l.loanDurationInvalid
-                            : null;
-                      },
-                    ),
                     gap,
                     ListTile(
                       contentPadding: EdgeInsets.zero,
@@ -1841,6 +2001,204 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+enum _EventKind { rate, renegotiation, draw, repayment }
+
+/// One change of a loan: a new rate, a renegotiation, money drawn
+/// (revolving credit) or repaid early.
+class _LoanEventDialog extends StatefulWidget {
+  final Loan loan;
+  const _LoanEventDialog({required this.loan});
+
+  @override
+  State<_LoanEventDialog> createState() => _LoanEventDialogState();
+}
+
+class _LoanEventDialogState extends State<_LoanEventDialog> {
+  late var _kind = widget.loan.kind == LoanKind.revolving
+      ? _EventKind.draw
+      : _EventKind.rate;
+  var _date = todayUtcMidnight();
+  final _rate = TextEditingController();
+  final _payment = TextEditingController();
+  final _months = TextEditingController();
+  final _amount = TextEditingController();
+  final _note = TextEditingController();
+  String? _error;
+
+  @override
+  void dispose() {
+    for (final c in [_rate, _payment, _months, _amount, _note]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  void _ok() {
+    final l = AppLocalizations.of(context);
+    String? text(TextEditingController c) =>
+        c.text.trim().isEmpty ? null : c.text.trim();
+    final rate = text(_rate) == null ? null : parseRateMilli(_rate.text);
+    final payment = text(_payment) == null
+        ? null
+        : parseUserAmount(_payment.text);
+    final months = text(_months) == null ? null : int.tryParse(_months.text);
+    final amount = parseUserAmount(_amount.text);
+    final LoanEvent e;
+    switch (_kind) {
+      case _EventKind.rate:
+        if (rate == null) return setState(() => _error = l.loanRateInvalid);
+        e = LoanEvent(date: _date, annualRateMilli: rate);
+      case _EventKind.renegotiation:
+        if ((text(_rate) != null && rate == null) ||
+            (text(_payment) != null && (payment ?? 0) <= 0) ||
+            (text(_months) != null && (months ?? 0) < 1) ||
+            (rate == null && payment == null && months == null)) {
+          return setState(() => _error = l.loanEventInvalid);
+        }
+        e = LoanEvent(
+          date: _date,
+          annualRateMilli: rate,
+          paymentCents: payment,
+          remainingMonths: payment == null ? months : null,
+        );
+      case _EventKind.draw || _EventKind.repayment:
+        if (amount == null || amount <= 0) {
+          return setState(() => _error = l.amountInvalid);
+        }
+        e = LoanEvent(
+          date: _date,
+          drawCents: _kind == _EventKind.draw ? amount : -amount,
+        );
+    }
+    Navigator.of(context).pop(e.copyWith(note: text(_note)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    const gap = SizedBox(height: 12);
+    TextField money(TextEditingController c, String label) => TextField(
+      controller: c,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      decoration: InputDecoration(labelText: label, suffixText: '€'),
+    );
+    final rate = TextField(
+      controller: _rate,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      decoration: InputDecoration(
+        labelText: l.loanEventNewRate,
+        suffixText: '%',
+      ),
+    );
+    return AlertDialog(
+      title: Text(l.loanEventAdd),
+      content: SizedBox(
+        width: 440,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              DropdownButtonFormField<_EventKind>(
+                isExpanded: true,
+                initialValue: _kind,
+                decoration: InputDecoration(labelText: l.loanEventKind),
+                items: [
+                  for (final k in _EventKind.values)
+                    DropdownMenuItem(
+                      value: k,
+                      child: Text(switch (k) {
+                        _EventKind.rate => l.loanEventKindRate,
+                        _EventKind.renegotiation =>
+                          l.loanEventKindRenegotiation,
+                        _EventKind.draw => l.loanEventKindDraw,
+                        _EventKind.repayment => l.loanEventKindRepayment,
+                      }),
+                    ),
+                ],
+                onChanged: (k) => setState(() => (_kind = k!, _error = null)),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                switch (_kind) {
+                  _EventKind.rate => l.loanEventRateHelp,
+                  _EventKind.renegotiation => l.loanEventRenegotiationHelp,
+                  _EventKind.draw => l.loanEventDrawHelp,
+                  _EventKind.repayment => l.loanEventRepaymentHelp,
+                },
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              gap,
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.event),
+                title: Text(l.loanEventDate),
+                subtitle: Text(context.day(_date)),
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime(_date.year, _date.month, _date.day),
+                    firstDate: DateTime(1970),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    setState(
+                      () => _date = DateTime.utc(
+                        picked.year,
+                        picked.month,
+                        picked.day,
+                      ),
+                    );
+                  }
+                },
+              ),
+              if (_kind == _EventKind.rate) rate,
+              if (_kind == _EventKind.renegotiation) ...[
+                rate,
+                gap,
+                money(_payment, l.loanEventNewPayment),
+                gap,
+                TextField(
+                  controller: _months,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: l.loanEventNewMonths,
+                    helperText: l.loanEventNewMonthsHelp,
+                    helperMaxLines: 2,
+                  ),
+                ),
+              ],
+              if (_kind == _EventKind.draw || _kind == _EventKind.repayment)
+                money(_amount, l.loanEventAmount),
+              gap,
+              TextField(
+                controller: _note,
+                maxLength: 200,
+                decoration: InputDecoration(
+                  labelText: l.loanEventNote,
+                  helperText: l.optional,
+                ),
+              ),
+              if (_error != null)
+                Text(
+                  _error!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l.cancel),
+        ),
+        FilledButton(onPressed: _ok, child: Text(l.save)),
+      ],
     );
   }
 }

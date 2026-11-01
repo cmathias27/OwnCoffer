@@ -10,10 +10,13 @@
 // ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:owncoffer_client/src/protocol/protocol.dart' as _iylp5nsw;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
+import 'loan_event.dart' as _inh9sy0f;
 import 'loan_kind.dart' as _i1700pxx;
 
-/// A fixed-rate loan with constant monthly instalments. The schedule is
+/// A loan with monthly instalments: fixed rate, or changed by its events
+/// (variable rate, renegotiation, revolving credit). The schedule is
 /// computed (shared/loans), never stored; indicative, the bank's table
 /// prevails.
 abstract class Loan
@@ -37,6 +40,8 @@ abstract class Loan
     this.scheduledId,
     this.matchPattern,
     this.ruleId,
+    this.creditLimitCents,
+    this.events,
     DateTime? createdAt,
     this.deletedAt,
   }) : insuranceMonthlyCents = insuranceMonthlyCents ?? 0,
@@ -62,6 +67,8 @@ abstract class Loan
     int? scheduledId,
     String? matchPattern,
     int? ruleId,
+    int? creditLimitCents,
+    List<_inh9sy0f.LoanEvent>? events,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _LoanImpl;
@@ -88,6 +95,12 @@ abstract class Loan
       scheduledId: jsonSerialization['scheduledId'] as int?,
       matchPattern: jsonSerialization['matchPattern'] as String?,
       ruleId: jsonSerialization['ruleId'] as int?,
+      creditLimitCents: jsonSerialization['creditLimitCents'] as int?,
+      events: jsonSerialization['events'] == null
+          ? null
+          : _iylp5nsw.Protocol().deserialize<List<_inh9sy0f.LoanEvent>>(
+              jsonSerialization['events'],
+            ),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -148,6 +161,13 @@ abstract class Loan
   /// is declared from an operation.
   int? ruleId;
 
+  /// Revolving credit: the amount that may be drawn in all.
+  int? creditLimitCents;
+
+  /// Changes since the start (rate, instalment, duration, money drawn or
+  /// repaid), oldest first.
+  List<_inh9sy0f.LoanEvent>? events;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -174,6 +194,8 @@ abstract class Loan
     int? scheduledId,
     String? matchPattern,
     int? ruleId,
+    int? creditLimitCents,
+    List<_inh9sy0f.LoanEvent>? events,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -199,6 +221,9 @@ abstract class Loan
       if (scheduledId != null) 'scheduledId': scheduledId,
       if (matchPattern != null) 'matchPattern': matchPattern,
       if (ruleId != null) 'ruleId': ruleId,
+      if (creditLimitCents != null) 'creditLimitCents': creditLimitCents,
+      if (events != null)
+        'events': events?.toJson(valueToJson: (v) => v.toJson()),
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -226,6 +251,9 @@ abstract class Loan
       if (scheduledId != null) 'scheduledId': scheduledId,
       if (matchPattern != null) 'matchPattern': matchPattern,
       if (ruleId != null) 'ruleId': ruleId,
+      if (creditLimitCents != null) 'creditLimitCents': creditLimitCents,
+      if (events != null)
+        'events': events?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -259,6 +287,8 @@ class _LoanImpl extends Loan {
     int? scheduledId,
     String? matchPattern,
     int? ruleId,
+    int? creditLimitCents,
+    List<_inh9sy0f.LoanEvent>? events,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -280,6 +310,8 @@ class _LoanImpl extends Loan {
          scheduledId: scheduledId,
          matchPattern: matchPattern,
          ruleId: ruleId,
+         creditLimitCents: creditLimitCents,
+         events: events,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -307,6 +339,8 @@ class _LoanImpl extends Loan {
     Object? scheduledId = _Undefined,
     Object? matchPattern = _Undefined,
     Object? ruleId = _Undefined,
+    Object? creditLimitCents = _Undefined,
+    Object? events = _Undefined,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -330,6 +364,12 @@ class _LoanImpl extends Loan {
       scheduledId: scheduledId is int? ? scheduledId : this.scheduledId,
       matchPattern: matchPattern is String? ? matchPattern : this.matchPattern,
       ruleId: ruleId is int? ? ruleId : this.ruleId,
+      creditLimitCents: creditLimitCents is int?
+          ? creditLimitCents
+          : this.creditLimitCents,
+      events: events is List<_inh9sy0f.LoanEvent>?
+          ? events
+          : this.events?.map((e0) => e0.copyWith()).toList(),
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );

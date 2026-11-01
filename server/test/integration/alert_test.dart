@@ -99,6 +99,37 @@ void main() {
       expect(await endpoints.notification.unreadCount(as(bob)), 0);
     });
 
+    test('settings: each user chooses for themselves; no email without '
+        'the alert; nobody changes another user\'s settings', () async {
+      final defaults = await endpoints.notification.settings(as(bob));
+      expect(defaults.overdraftApp && defaults.overdraftEmail, isTrue);
+      // Bob keeps the alert but not the email; alice turns the alert off,
+      // and asks for the email anyway (ignored: it needs the alert).
+      await endpoints.notification.saveSettings(
+        as(bob),
+        defaults.copyWith(overdraftEmail: false),
+      );
+      final aliceSaved = await endpoints.notification.saveSettings(
+        as(alice),
+        defaults.copyWith(
+          authUserId: bob,
+          overdraftApp: false,
+          overdraftEmail: true,
+        ),
+      );
+      expect(aliceSaved.authUserId, alice, reason: 'always for oneself');
+      expect(aliceSaved.overdraftEmail, isFalse);
+      expect(
+        (await endpoints.notification.settings(as(bob))).overdraftApp,
+        isTrue,
+        reason: "alice's save did not touch bob's settings",
+      );
+      await planRent();
+      expect(await endpoints.notification.list(as(alice)), isEmpty);
+      expect((await endpoints.notification.list(as(bob))), hasLength(1));
+      expect(mail.outbox, isEmpty, reason: 'bob: no email; alice: no alert');
+    });
+
     test('a manual operation is checked at once too', () async {
       await endpoints.transaction.create(
         as(alice),

@@ -6,6 +6,7 @@ import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
 import '../endpoints/goal_endpoint.dart';
+import '../endpoints/invoice_endpoint.dart';
 import '../endpoints/loan_endpoint.dart';
 import '../endpoints/rule_endpoint.dart';
 import '../endpoints/transaction_endpoint.dart';
@@ -24,6 +25,9 @@ abstract final class ProposalService {
     'set_category',
     'create_loan',
     'create_rule',
+    'set_split',
+    'update_loan',
+    'set_invoice_hints',
   };
 
   /// What [kind] on [targetId] rests on now: a proposal made on other data
@@ -48,6 +52,19 @@ abstract final class ProposalService {
       case 'create_loan':
         // A new loan rests on nothing that can change.
         return 'loan:new';
+      case 'set_split':
+        // The operation as it is now: category, split and last change.
+        final t = await BankTransaction.db.findById(session, targetId);
+        return 'split:$targetId:${t?.categoryId ?? 'none'}:'
+            '${t?.updatedAt.millisecondsSinceEpoch ?? 0}:${t?.deletedAt != null}';
+      case 'update_loan':
+        final l = await Loan.db.findById(session, targetId);
+        return 'loanterms:$targetId:'
+            '${l == null || l.deletedAt != null ? 'none' : jsonEncode(loanFields(l))}';
+      case 'set_invoice_hints':
+        final i = await Invoice.db.findById(session, targetId);
+        return 'invoice:$targetId:'
+            '${i == null ? 'none' : jsonEncode(invoiceHints(i))}';
       case 'create_rule':
         // The example operation (target) may be classified in the meantime;
         // what matters is that the same rule was not created since.
@@ -211,6 +228,42 @@ abstract final class ProposalService {
       if (p.resultId != null) {
         await LoanEndpoint().delete(session, p.resultId!);
       }
+    } else if (p.kind == 'set_split') {
+      // What the operation had before: category, its source, its split.
+      final b = _fields(p.data)['before'];
+      final before = b is Map ? b.cast<String, Object?>() : const {};
+      await TransactionEndpoint().restoreClassification(
+        session,
+        p.targetId,
+        (before['category_id'] as num?)?.toInt(),
+        CategorySource.values.asNameMap()[before['source']] ??
+            CategorySource.none,
+        before['rule_ref'] as String?,
+        [
+          for (final x in (before['splits'] as List?) ?? const [])
+            if (x is Map)
+              TransactionSplit(
+                transactionId: p.targetId,
+                categoryId: (x['category_id'] as num?)?.toInt(),
+                amountCents: (x['amount_cents'] as num).toInt(),
+                note: x['note'] as String?,
+              ),
+        ],
+      );
+    } else if (p.kind == 'update_loan') {
+      final b = _fields(p.data)['before'];
+      if (b is Map) {
+        await _applyLoanFields(session, p.targetId, b.cast<String, Object?>());
+      }
+    } else if (p.kind == 'set_invoice_hints') {
+      final b = _fields(p.data)['before'];
+      if (b is Map) {
+        await _applyInvoiceHints(
+          session,
+          p.targetId,
+          b.cast<String, Object?>(),
+        );
+      }
     } else if (p.kind == 'create_rule') {
       // The rule is deleted and its operations classified again without it;
       // a rule the user already deleted leaves nothing to undo.
@@ -279,6 +332,31 @@ abstract final class ProposalService {
           ),
         );
         return info.loan.id;
+      case 'set_split':
+        final f = _fields(p.proposedData);
+        final parts = [
+          for (final x in (f['parts'] as List?) ?? const [])
+            if (x is Map)
+              TransactionSplit(
+                transactionId: p.targetId,
+                categoryId: (x['category_id'] as num?)?.toInt(),
+                amountCents: (x['amount_cents'] as num).toInt(),
+                note: x['note'] as String?,
+              ),
+        ];
+        // The split page's own checks apply (sum, sign, categories).
+        await TransactionEndpoint().setSplits(session, p.targetId, parts);
+        return null;
+      case 'update_loan':
+        await _applyLoanFields(session, p.targetId, _fields(p.proposedData));
+        return null;
+      case 'set_invoice_hints':
+        await _applyInvoiceHints(
+          session,
+          p.targetId,
+          _fields(p.proposedData),
+        );
+        return null;
       case 'create_rule':
         final f = _fields(p.proposedData);
         if (value == null || f['pattern'] is! String) {
@@ -301,6 +379,68 @@ abstract final class ProposalService {
       default:
         throw InvalidInputException(code: 'proposal_unknown');
     }
+  }
+
+  /// The terms of a loan a document can tell (amounts in cents, rate in
+  /// thousandths of a percent).
+  static Map<String, Object?> loanFields(Loan l) => {
+    'principal_cents': l.principalCents,
+    'annual_rate_milli': l.annualRateMilli,
+    'duration_months': l.durationMonths,
+    'payment_cents': l.paymentCents,
+    'insurance_monthly_cents': l.insuranceMonthlyCents,
+    'first_due_date': l.firstDueDate.toIso8601String().substring(0, 10),
+  };
+
+  static Map<String, Object?> invoiceHints(Invoice i) => {
+    'amount_cents': i.hintAmountCents,
+    'date': i.hintDate?.toIso8601String().substring(0, 10),
+    'merchant': i.hintMerchant,
+  };
+
+  /// Through the loan page's update: its checks, its planned instalments.
+  static Future<void> _applyLoanFields(
+    Session session,
+    int loanId,
+    Map<String, Object?> f,
+  ) async {
+    final l = await Loan.db.findById(session, loanId);
+    if (l == null || l.deletedAt != null) {
+      throw InvalidInputException(code: 'proposal_unknown');
+    }
+    int? n(String k) => (f[k] as num?)?.toInt();
+    final first = DateTime.tryParse(f['first_due_date'] as String? ?? '');
+    await LoanEndpoint().update(
+      session,
+      l.copyWith(
+        principalCents: n('principal_cents') ?? l.principalCents,
+        annualRateMilli: n('annual_rate_milli') ?? l.annualRateMilli,
+        durationMonths: n('duration_months') ?? l.durationMonths,
+        paymentCents: f.containsKey('payment_cents')
+            ? n('payment_cents')
+            : l.paymentCents,
+        insuranceMonthlyCents:
+            n('insurance_monthly_cents') ?? l.insuranceMonthlyCents,
+        firstDueDate: first == null
+            ? l.firstDueDate
+            : DateTime.utc(first.year, first.month, first.day),
+      ),
+    );
+  }
+
+  static Future<void> _applyInvoiceHints(
+    Session session,
+    int invoiceId,
+    Map<String, Object?> f,
+  ) async {
+    final d = DateTime.tryParse(f['date'] as String? ?? '');
+    await InvoiceEndpoint().setHints(
+      session,
+      invoiceId,
+      (f['amount_cents'] as num?)?.toInt(),
+      d == null ? null : DateTime.utc(d.year, d.month, d.day),
+      f['merchant'] as String?,
+    );
   }
 
   static Map<String, Object?> _fields(String? json) {

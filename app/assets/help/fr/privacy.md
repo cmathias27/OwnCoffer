@@ -11,7 +11,7 @@
 
 - **Courriels** d'alerte, d'invitation ou de facture, si l'envoi est réglé.
 - **« Rechercher ce libellé sur Google »** ouvre une recherche web avec le libellé nettoyé seulement.
-- **L'assistant IA**, seulement si vous l'activez : avec un fournisseur en ligne, vos questions et les chiffres utiles lui sont envoyés, ce qui est signalé à chaque réponse. Avec Ollama sur votre réseau, rien ne sort.
+- **L'assistant IA**, seulement si vous l'activez : avec un fournisseur en ligne, vos questions et les chiffres utiles lui sont envoyés, ainsi que les documents que vous lui faites lire (après votre accord), ce qui est signalé à chaque réponse. Avec Ollama sur votre réseau, rien ne sort.
 
 ## Sauvegardes
 

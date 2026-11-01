@@ -10,10 +10,13 @@
 // ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:owncoffer_server/src/generated/protocol.dart' as _itdod8fx;
 import 'package:serverpod/serverpod.dart' as _is;
+import 'loan_event.dart' as _inh9sy0f;
 import 'loan_kind.dart' as _i1700pxx;
 
-/// A fixed-rate loan with constant monthly instalments. The schedule is
+/// A loan with monthly instalments: fixed rate, or changed by its events
+/// (variable rate, renegotiation, revolving credit). The schedule is
 /// computed (shared/loans), never stored; indicative, the bank's table
 /// prevails.
 abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
@@ -36,6 +39,8 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
     this.scheduledId,
     this.matchPattern,
     this.ruleId,
+    this.creditLimitCents,
+    this.events,
     DateTime? createdAt,
     this.deletedAt,
   }) : insuranceMonthlyCents = insuranceMonthlyCents ?? 0,
@@ -61,6 +66,8 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
     int? scheduledId,
     String? matchPattern,
     int? ruleId,
+    int? creditLimitCents,
+    List<_inh9sy0f.LoanEvent>? events,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _LoanImpl;
@@ -87,6 +94,12 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
       scheduledId: jsonSerialization['scheduledId'] as int?,
       matchPattern: jsonSerialization['matchPattern'] as String?,
       ruleId: jsonSerialization['ruleId'] as int?,
+      creditLimitCents: jsonSerialization['creditLimitCents'] as int?,
+      events: jsonSerialization['events'] == null
+          ? null
+          : _itdod8fx.Protocol().deserialize<List<_inh9sy0f.LoanEvent>>(
+              jsonSerialization['events'],
+            ),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _is.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -149,6 +162,13 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
   /// is declared from an operation.
   int? ruleId;
 
+  /// Revolving credit: the amount that may be drawn in all.
+  int? creditLimitCents;
+
+  /// Changes since the start (rate, instalment, duration, money drawn or
+  /// repaid), oldest first.
+  List<_inh9sy0f.LoanEvent>? events;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -178,6 +198,8 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
     int? scheduledId,
     String? matchPattern,
     int? ruleId,
+    int? creditLimitCents,
+    List<_inh9sy0f.LoanEvent>? events,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -203,6 +225,9 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
       if (scheduledId != null) 'scheduledId': scheduledId,
       if (matchPattern != null) 'matchPattern': matchPattern,
       if (ruleId != null) 'ruleId': ruleId,
+      if (creditLimitCents != null) 'creditLimitCents': creditLimitCents,
+      if (events != null)
+        'events': events?.toJson(valueToJson: (v) => v.toJson()),
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -230,6 +255,9 @@ abstract class Loan implements _is.TableRow<int?>, _is.ProtocolSerialization {
       if (scheduledId != null) 'scheduledId': scheduledId,
       if (matchPattern != null) 'matchPattern': matchPattern,
       if (ruleId != null) 'ruleId': ruleId,
+      if (creditLimitCents != null) 'creditLimitCents': creditLimitCents,
+      if (events != null)
+        'events': events?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -285,6 +313,8 @@ class _LoanImpl extends Loan {
     int? scheduledId,
     String? matchPattern,
     int? ruleId,
+    int? creditLimitCents,
+    List<_inh9sy0f.LoanEvent>? events,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -306,6 +336,8 @@ class _LoanImpl extends Loan {
          scheduledId: scheduledId,
          matchPattern: matchPattern,
          ruleId: ruleId,
+         creditLimitCents: creditLimitCents,
+         events: events,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -333,6 +365,8 @@ class _LoanImpl extends Loan {
     Object? scheduledId = _Undefined,
     Object? matchPattern = _Undefined,
     Object? ruleId = _Undefined,
+    Object? creditLimitCents = _Undefined,
+    Object? events = _Undefined,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -356,6 +390,12 @@ class _LoanImpl extends Loan {
       scheduledId: scheduledId is int? ? scheduledId : this.scheduledId,
       matchPattern: matchPattern is String? ? matchPattern : this.matchPattern,
       ruleId: ruleId is int? ? ruleId : this.ruleId,
+      creditLimitCents: creditLimitCents is int?
+          ? creditLimitCents
+          : this.creditLimitCents,
+      events: events is List<_inh9sy0f.LoanEvent>?
+          ? events
+          : this.events?.map((e0) => e0.copyWith()).toList(),
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );
@@ -454,6 +494,18 @@ class LoanUpdateTable extends _is.UpdateTable<LoanTable> {
     value,
   );
 
+  _is.ColumnValue<int, int> creditLimitCents(int? value) => _is.ColumnValue(
+    table.creditLimitCents,
+    value,
+  );
+
+  _is.ColumnValue<List<_inh9sy0f.LoanEvent>, List<_inh9sy0f.LoanEvent>> events(
+    List<_inh9sy0f.LoanEvent>? value,
+  ) => _is.ColumnValue(
+    table.events,
+    value,
+  );
+
   _is.ColumnValue<DateTime, DateTime> createdAt(DateTime value) =>
       _is.ColumnValue(
         table.createdAt,
@@ -541,6 +593,14 @@ class LoanTable extends _is.Table<int?> {
       'ruleId',
       this,
     );
+    creditLimitCents = _is.ColumnInt(
+      'creditLimitCents',
+      this,
+    );
+    events = _is.ColumnSerializable<List<_inh9sy0f.LoanEvent>>(
+      'events',
+      this,
+    );
     createdAt = _is.ColumnDateTime(
       'createdAt',
       this,
@@ -600,6 +660,13 @@ class LoanTable extends _is.Table<int?> {
   /// is declared from an operation.
   late final _is.ColumnInt ruleId;
 
+  /// Revolving credit: the amount that may be drawn in all.
+  late final _is.ColumnInt creditLimitCents;
+
+  /// Changes since the start (rate, instalment, duration, money drawn or
+  /// repaid), oldest first.
+  late final _is.ColumnSerializable<List<_inh9sy0f.LoanEvent>> events;
+
   late final _is.ColumnDateTime createdAt;
 
   late final _is.ColumnDateTime deletedAt;
@@ -624,6 +691,8 @@ class LoanTable extends _is.Table<int?> {
     scheduledId,
     matchPattern,
     ruleId,
+    creditLimitCents,
+    events,
     createdAt,
     deletedAt,
   ];

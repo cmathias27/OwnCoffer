@@ -2,6 +2,7 @@ import 'package:serverpod/serverpod.dart';
 
 import '../ai/ai_adapter.dart';
 import '../ai/ai_gateway.dart';
+import '../ai/document_reader.dart';
 import '../generated/protocol.dart';
 import '../onboarding/onboarding.dart';
 import '../security/access.dart';
@@ -158,6 +159,25 @@ class AiEndpoint extends Endpoint {
       return await AiGateway.testProvider(p);
     } on AiUnavailable catch (e) {
       // The provider's own reason (never the key): shown to the user.
+      throw InvalidInputException(code: 'ai_unavailable', field: e.reason);
+    }
+  }
+
+  /// Reads a receipt or invoice with the user's AI: a split (joined to an
+  /// operation) or its amount, date and merchant (waiting) are proposed in
+  /// "Mon conseiller". Nothing is changed here.
+  Future<AiReply> readInvoice(Session session, int invoiceId) =>
+      _reading(() => DocumentReader.readInvoice(session, invoiceId));
+
+  /// Reads a loan document with the user's AI: the terms it states are
+  /// proposed for the loan in "Mon conseiller".
+  Future<AiReply> readLoanDocument(Session session, int documentId) =>
+      _reading(() => DocumentReader.readLoanDocument(session, documentId));
+
+  static Future<AiReply> _reading(Future<AiReply> Function() read) async {
+    try {
+      return await read();
+    } on AiUnavailable catch (e) {
       throw InvalidInputException(code: 'ai_unavailable', field: e.reason);
     }
   }

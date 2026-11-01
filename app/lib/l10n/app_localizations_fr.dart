@@ -4288,4 +4288,416 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_demo_group_not_empty =>
       'Le foyer doit être vide (aucun compte) pour y charger la démonstration.';
+
+  @override
+  String get groupAuditTitle => 'Journal du foyer';
+
+  @override
+  String get groupAuditHelp =>
+      'Qui a fait quoi dans ce foyer, et quand. Le contenu des changements n\'est pas montré. Réservé aux administrateurs du foyer.';
+
+  @override
+  String get groupAuditFormer => 'ancien membre ou administrateur du serveur';
+
+  @override
+  String get groupAuditMore => 'Voir les plus anciennes';
+
+  @override
+  String auditLine(String what, String did) {
+    return '$what : $did';
+  }
+
+  @override
+  String get auditEntityTransaction => 'Opération';
+
+  @override
+  String get auditEntityAccount => 'Compte';
+
+  @override
+  String get auditEntityImport => 'Import';
+
+  @override
+  String get auditEntityRule => 'Règle';
+
+  @override
+  String get auditEntityCategory => 'Catégorie';
+
+  @override
+  String get auditEntityLoan => 'Crédit';
+
+  @override
+  String get auditEntityInvoice => 'Facture';
+
+  @override
+  String get auditEntityGoal => 'Objectif';
+
+  @override
+  String get auditEntityScheduled => 'Opération prévue';
+
+  @override
+  String get auditEntityGroup => 'Foyer';
+
+  @override
+  String get auditEntityMember => 'Membre';
+
+  @override
+  String get auditEntityInvitation => 'Invitation';
+
+  @override
+  String get auditEntityProposal => 'Proposition';
+
+  @override
+  String get auditEntityAi => 'Assistant IA';
+
+  @override
+  String get auditEntityMcp => 'Assistant externe (MCP)';
+
+  @override
+  String get auditEntityNotifications => 'Réglages des notifications';
+
+  @override
+  String get auditActionCreate => 'créé';
+
+  @override
+  String get auditActionUpdate => 'modifié';
+
+  @override
+  String get auditActionDelete => 'supprimé';
+
+  @override
+  String get auditActionTrash => 'mis à la corbeille';
+
+  @override
+  String get auditActionRestore => 'restauré';
+
+  @override
+  String get auditActionCategory => 'catégorie changée';
+
+  @override
+  String get auditActionSplit => 'ventilation changée';
+
+  @override
+  String get auditActionCleared => 'pointage changé';
+
+  @override
+  String get auditActionImport => 'relevé importé';
+
+  @override
+  String get auditActionCancelImport => 'import annulé';
+
+  @override
+  String get auditActionUndo => 'action annulée';
+
+  @override
+  String get auditActionArchive => 'archivé';
+
+  @override
+  String get auditActionInvite => 'invitation envoyée';
+
+  @override
+  String get auditActionRevoke => 'révoqué';
+
+  @override
+  String get auditActionRole => 'rôle changé';
+
+  @override
+  String get auditActionRemove => 'retiré du foyer';
+
+  @override
+  String get auditActionPropose => 'proposée';
+
+  @override
+  String get auditActionAccept => 'acceptée et appliquée';
+
+  @override
+  String get auditActionRefuse => 'refusée';
+
+  @override
+  String get auditActionExpire => 'retirée (données changées)';
+
+  @override
+  String get auditActionAsk => 'question posée';
+
+  @override
+  String get auditActionReadDocument => 'document lu';
+
+  @override
+  String get auditActionAttach => 'document joint';
+
+  @override
+  String get notifSettingsTitle => 'Réglages des notifications';
+
+  @override
+  String get notifSettingsIntro =>
+      'Choisissez ce qu\'OwnCoffer vous signale. Ces réglages ne valent que pour vous ; les autres membres du foyer ont les leurs.';
+
+  @override
+  String get notifSettingsOverdraft => 'Découvert prévu';
+
+  @override
+  String get notifSettingsOverdraftHelp =>
+      'Quand le solde prévu d\'un compte passera sous son seuil d\'alerte.';
+
+  @override
+  String get notifSettingsInApp => 'Dans l\'application';
+
+  @override
+  String get notifSettingsByEmail => 'Aussi par courriel';
+
+  @override
+  String get notifSettingsGoals => 'Objectifs du mois';
+
+  @override
+  String get notifSettingsGoalWarning => 'À 80 % de l\'objectif';
+
+  @override
+  String get notifSettingsGoalOver => 'Objectif dépassé';
+
+  @override
+  String get notifSettingsGoalForecast => 'Dépassement annoncé';
+
+  @override
+  String get notifSettingsGoalForecastHelp =>
+      'Dès que la projection de fin de mois annonce un dépassement.';
+
+  @override
+  String get notifSettingsWarranty => 'Fin de garantie';
+
+  @override
+  String get notifSettingsWarrantyHelp =>
+      'Un mois avant la fin de la garantie d\'une facture.';
+
+  @override
+  String get notifSettingsEmailNote =>
+      'Les courriels ne partent que si l\'administrateur du serveur a réglé leur envoi. Une alerte coupée n\'est pas créée du tout, et n\'est donc pas envoyée par courriel.';
+
+  @override
+  String get loanKindRevolving => 'Crédit renouvelable';
+
+  @override
+  String get loanRevolvingHelp =>
+      'Une réserve d\'argent qu\'on rembourse par mensualités : indiquez le montant utilisé aujourd\'hui, la mensualité prélevée et le taux. La durée en découle. Les nouvelles utilisations s\'ajoutent ensuite dans « Changements ».';
+
+  @override
+  String get loanRevolvingPaymentRequired =>
+      'La mensualité est nécessaire pour un crédit renouvelable.';
+
+  @override
+  String get loanRevolvingUsed => 'Montant utilisé (à rembourser)';
+
+  @override
+  String get loanCreditLimit => 'Plafond de la réserve';
+
+  @override
+  String get loanCreditAvailable => 'Encore disponible';
+
+  @override
+  String get loanEventsTitle => 'Changements';
+
+  @override
+  String get loanEventsEmpty =>
+      'Aucun changement depuis le début : taux et mensualité d\'origine.';
+
+  @override
+  String get loanEventsHelp =>
+      'Le tableau, le capital restant, les échéances prévues et la prévision du solde en tiennent compte.';
+
+  @override
+  String get loanEventAdd => 'Ajouter un changement';
+
+  @override
+  String get loanEventAddRevolving => 'Nouvelle utilisation ou changement';
+
+  @override
+  String get loanEventRemove => 'Retirer ce changement';
+
+  @override
+  String get loanEventKind => 'Changement';
+
+  @override
+  String get loanEventKindRate => 'Nouveau taux (taux variable)';
+
+  @override
+  String get loanEventKindRenegotiation => 'Renégociation';
+
+  @override
+  String get loanEventKindDraw => 'Nouvelle utilisation (renouvelable)';
+
+  @override
+  String get loanEventKindRepayment => 'Remboursement anticipé';
+
+  @override
+  String get loanEventRateHelp =>
+      'À partir de cette date, le nouveau taux s\'applique. La date de fin est gardée et la mensualité recalculée, sauf si la mensualité prélevée est connue : elle est alors gardée et la date de fin bouge.';
+
+  @override
+  String get loanEventRenegotiationHelp =>
+      'Indiquez ce que la banque vous a accordé : nouveau taux, et nouvelle mensualité ou nouvelle durée restante. Laissez vide ce qui ne change pas.';
+
+  @override
+  String get loanEventDrawHelp =>
+      'De l\'argent utilisé sur la réserve : il s\'ajoute à ce qui reste à rembourser, avec la même mensualité.';
+
+  @override
+  String get loanEventRepaymentHelp =>
+      'Une somme remboursée en plus des mensualités : la mensualité est gardée, le crédit finit plus tôt.';
+
+  @override
+  String get loanEventDate => 'À partir du';
+
+  @override
+  String get loanEventNewRate => 'Nouveau taux nominal';
+
+  @override
+  String get loanEventNewPayment => 'Nouvelle mensualité (hors assurance)';
+
+  @override
+  String get loanEventNewMonths => 'Nouvelle durée restante (mois)';
+
+  @override
+  String get loanEventNewMonthsHelp =>
+      'Ignorée si une nouvelle mensualité est indiquée.';
+
+  @override
+  String get loanEventAmount => 'Montant';
+
+  @override
+  String get loanEventNote => 'Note';
+
+  @override
+  String get loanEventInvalid =>
+      'Indiquez au moins un nouveau taux, une nouvelle mensualité ou une nouvelle durée.';
+
+  @override
+  String loanEventRate(String rate) {
+    return 'taux à $rate';
+  }
+
+  @override
+  String loanEventPayment(String amount) {
+    return 'mensualité de $amount';
+  }
+
+  @override
+  String loanEventMonths(String months) {
+    return 'encore $months';
+  }
+
+  @override
+  String loanEventDraw(String amount) {
+    return '$amount utilisés';
+  }
+
+  @override
+  String loanEventRepaid(String amount) {
+    return '$amount remboursés en plus';
+  }
+
+  @override
+  String get error_loan_event_invalid =>
+      'Ce changement n\'est pas possible pour ce crédit (date avant la première échéance, ou valeurs hors limites).';
+
+  @override
+  String get error_loan_event_unpaid =>
+      'Avec ce changement, le crédit ne serait jamais remboursé : la mensualité ne couvre pas les intérêts.';
+
+  @override
+  String get error_loan_over_limit =>
+      'Ce montant dépasse le plafond de la réserve.';
+
+  @override
+  String get aiReadReceipt => 'Lire le ticket avec l\'IA';
+
+  @override
+  String get aiReadInvoice => 'Lire la facture avec l\'IA';
+
+  @override
+  String get aiReadLoan => 'Lire ce document avec l\'IA';
+
+  @override
+  String get aiReadTitle => 'Lire avec l\'IA';
+
+  @override
+  String aiReadExternal(String provider, String model) {
+    return 'Le document sera envoyé à $provider ($model), un fournisseur en ligne, pour être lu. L\'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.';
+  }
+
+  @override
+  String aiReadLocal(String provider, String model) {
+    return 'Le document sera lu par $provider ($model), sur votre réseau. L\'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.';
+  }
+
+  @override
+  String get aiReadGo => 'Lire';
+
+  @override
+  String get aiReadRunning => 'Lecture en cours…';
+
+  @override
+  String aiReadDone(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count propositions vous attendent dans Mon conseiller.',
+      one: 'Une proposition vous attend dans Mon conseiller.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get aiReadNothingNew => 'Rien de nouveau dans ce document.';
+
+  @override
+  String get aiReadNotReady =>
+      'Pour lire un document, activez l\'assistant (icône ✨) avec un modèle qui lit les images.';
+
+  @override
+  String get aiReadNoPdf =>
+      'Ce modèle ne lit que les images : joignez une photo ou une capture du document. (Claude lit aussi les PDF.)';
+
+  @override
+  String advisorAiSplit(String label) {
+    return 'Ventiler « $label » d\'après le ticket';
+  }
+
+  @override
+  String advisorAiSplitWhy(String amount, String date) {
+    return 'Opération de $amount du $date, répartie ainsi :';
+  }
+
+  @override
+  String advisorAiSplitRest(String amount) {
+    return 'Dont $amount que les lignes du ticket n\'expliquent pas (remise, arrondi, ligne illisible), à classer : calculé par OwnCoffer.';
+  }
+
+  @override
+  String advisorAiInvoiceHints(String name) {
+    return 'Compléter la facture « $name »';
+  }
+
+  @override
+  String advisorAiLoanTerms(String lender) {
+    return 'Mettre à jour le crédit « $lender » d\'après son document';
+  }
+
+  @override
+  String advisorReadIn(String name) {
+    return 'Lu dans « $name ».';
+  }
+
+  @override
+  String get error_receipt_mismatch =>
+      'Les lignes lues sur le ticket dépassent le montant de l\'opération : ce n\'est sans doute pas son ticket.';
+
+  @override
+  String get error_document_nothing_read =>
+      'L\'IA n\'a rien pu lire d\'utile dans ce document.';
+
+  @override
+  String get error_ai_document_not_image =>
+      'Ce modèle ne lit que les images : joignez une photo ou une capture du document.';
+
+  @override
+  String get error_ai_document_too_large =>
+      'Document trop lourd pour être lu (8 Mo au plus).';
 }
