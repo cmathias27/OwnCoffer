@@ -16,6 +16,10 @@ OwnCoffer keeps your bank accounts at home: it reads the statements you download
 - **Home** sums up where the money stands today and what is coming.
 - The **?** button at the top of each page opens the help for that page.
 
+## A problem, an idea?
+
+**"Give feedback"** (account menu on a phone, icon at the top on a large screen) sends a message to your server's administrator.
+
 ## Undo
 
 After most actions, an **"Undo"** button shows at the bottom for a few seconds: it puts things back as they were.

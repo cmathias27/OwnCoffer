@@ -14,6 +14,8 @@ import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
 import 'classification_service.dart';
+import 'forecast_service.dart';
+import 'insights_service.dart';
 import 'spending_service.dart';
 
 /// The circuit of décision 0009: proposals are stored here, checked again
@@ -28,6 +30,7 @@ abstract final class ProposalService {
     'set_split',
     'update_loan',
     'set_invoice_hints',
+    'notice',
   };
 
   /// What [kind] on [targetId] rests on now: a proposal made on other data
@@ -52,6 +55,9 @@ abstract final class ProposalService {
       case 'create_loan':
         // A new loan rests on nothing that can change.
         return 'loan:new';
+      case 'notice':
+        // Information only: nothing it rests on can go stale.
+        return 'notice';
       case 'set_split':
         // The operation as it is now: category, split and last change.
         final t = await BankTransaction.db.findById(session, targetId);
@@ -332,6 +338,9 @@ abstract final class ProposalService {
           ),
         );
         return info.loan.id;
+      case 'notice':
+        // "Understood": nothing to change.
+        return null;
       case 'set_split':
         final f = _fields(p.proposedData);
         final parts = [
@@ -543,7 +552,9 @@ abstract final class ProposalService {
       core.PeriodKind.month,
       today,
     );
-    final first = month.shift(-3);
+    // Up to six complete months: the amount from all of them, the decision
+    // on the last three (core.adviseGoals).
+    final first = month.shift(-6);
     final ids = await SpendingService.accounts(session, groupId, null);
     final categories = await SpendingService.categories(session, groupId);
     final ops = await SpendingService.operations(
@@ -561,7 +572,7 @@ abstract final class ProposalService {
           c.kind.equals(CategoryKind.expense),
     );
     final months = <int, List<int>>{for (final c in tops) c.id!: []};
-    for (var i = -3; i < 0; i++) {
+    for (var i = -6; i < 0; i++) {
       final p = month.shift(i);
       final s = core.summarizeSpending(
         categories,
@@ -592,6 +603,70 @@ abstract final class ProposalService {
           'from': first.start.toDb().toIso8601String(),
         },
       );
+    }
+    await _notices(session, groupId, today, month);
+  }
+
+  /// The engine's cards that change nothing (décision 0007): watch,
+  /// anticipate, advise. "Understood" or "Ignore"; each comes once.
+  static Future<void> _notices(
+    Session session,
+    int groupId,
+    core.LocalDate today,
+    core.Period month,
+  ) async {
+    Future<void> notice(
+      String reason,
+      int targetId,
+      String key,
+      Map<String, Object?> data,
+    ) => propose(
+      session,
+      groupId: groupId,
+      kind: 'notice',
+      targetId: targetId,
+      currentValue: null,
+      proposedValue: null,
+      proposedData: key,
+      reason: reason,
+      data: data,
+    );
+
+    // Anticipate: an account that will go below its alert threshold.
+    for (final a in await Access.visibleAccounts(session, groupId)) {
+      final f = await ForecastService.compute(session, a, today);
+      final below = f.firstBelowThresholdDate;
+      if (below == null) continue;
+      await notice('anticipate_overdraft', a.id!, 'overdraft:${a.id}:$below', {
+        'account': a.name,
+        'date': below.toIso8601String().substring(0, 10),
+        'lowest_cents': f.lowestBalanceCents,
+        'lowest_date': f.lowestDate.toIso8601String().substring(0, 10),
+        'threshold_cents': f.alertThresholdCents,
+      });
+    }
+    final insights = await InsightsService.compute(session, groupId, today);
+    // Watch: debits that stand out.
+    for (final u in insights.unusual) {
+      final t = u.transaction;
+      await notice('watch_${u.kind}', t.id!, 'unusual:${t.id}', {
+        'label': t.cleanLabel,
+        'amount_cents': t.amountCents,
+        'date': t.date.toIso8601String().substring(0, 10),
+        'usual_cents': u.usualCents,
+        'basis': u.basis,
+      });
+    }
+    // Advise: bank fees over the year, once a month.
+    if (insights.feeTotalCents >= 2000) {
+      await notice('advise_fees', groupId, 'fees:${month.start}', {
+        'total_cents': insights.feeTotalCents,
+        'months': insights.feePerMonthCents,
+        'lines': [
+          for (final l in insights.feeLines.take(3))
+            {'label': l.label, 'cents': l.cents, 'count': l.count},
+        ],
+      });
     }
   }
 }

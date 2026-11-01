@@ -16,6 +16,10 @@ OwnCoffer range vos comptes bancaires chez vous : il lit les relevés que vous t
 - L'**Accueil** résume où en est l'argent aujourd'hui et ce qui arrive.
 - Le bouton **?** en haut de chaque page ouvre l'aide de cette page.
 
+## Un problème, une idée ?
+
+**« Donner un avis »** (menu du compte sur téléphone, icône en haut sur grand écran) envoie un message à l'administrateur de votre serveur.
+
 ## Annuler
 
 Après la plupart des actions, un bouton **« Annuler »** apparaît en bas pendant quelques secondes : il remet les choses comme avant.

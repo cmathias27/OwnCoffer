@@ -1,0 +1,13 @@
+### Something the user asked the assistant to keep in mind ("je suis payé
+### le 28", "ne me propose pas de changer de banque"). Written by the user
+### only, sent to the model with each question; seen by nobody else.
+class: AiMemory
+table: ai_memories
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  text: String
+  createdAt: DateTime, default=now
+indexes:
+  ai_memories_user_idx:
+    fields: authUserId, groupId

@@ -2,6 +2,10 @@
 
 Vos crédits et paiements en plusieurs fois, ce qu'il reste à rembourser et votre taux d'endettement.
 
+## Trois familles
+
+La page range vos crédits en **Crédits** (immobilier, auto, études…), **Crédits à la consommation** (dont le renouvelable) et **Paiements en plusieurs fois**, chacune avec sa mensualité totale et ce qu'il reste à rembourser. Les puces en haut choisissent les familles affichées ; le menu de tri les classe par reste à rembourser, mensualité, date de fin ou organisme. Les crédits terminés passent en dernier.
+
 ## Ajouter un crédit
 
 - Depuis un prélèvement, c'est le plus simple : dans la fiche de l'opération, **« C'est une échéance de crédit »**. Le formulaire est prérempli, les échéances passées sont retrouvées et une règle classera les suivantes.

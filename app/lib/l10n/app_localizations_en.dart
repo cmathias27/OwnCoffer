@@ -4691,4 +4691,356 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantSettingsTitle => 'Assistant: settings';
+
+  @override
+  String get insightsTitle => 'Analyses';
+
+  @override
+  String get insightsIntro =>
+      'Computed by OwnCoffer, without AI, on the accounts you can see.';
+
+  @override
+  String get insightsReliability => 'How reliable the forecasts are';
+
+  @override
+  String insightsPlanned(int paid, int due, int percent) {
+    return '$paid planned operations out of $due came as planned over the last three months ($percent %).';
+  }
+
+  @override
+  String get insightsPlannedNone =>
+      'No planned operation over the last three months.';
+
+  @override
+  String insightsPlannedLate(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count did not come (late or missed).',
+      one: '1 did not come (late or missed).',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String insightsVariable(String month, String estimate, String actual) {
+    return 'Variable spending of $month: $estimate estimated beforehand, $actual really spent.';
+  }
+
+  @override
+  String get insightsVariableUnknown =>
+      'Not enough history yet to compare the estimated variable spending with reality.';
+
+  @override
+  String get insightsReliabilityHow =>
+      'Planned operations are counted from the due-date calendar; the variable spending estimate is the median of the three months before.';
+
+  @override
+  String get insightsUnusual => 'Unusual operations';
+
+  @override
+  String get insightsUnusualNone => 'Nothing unusual this month or last month.';
+
+  @override
+  String get insightsDuplicate =>
+      'same label and amount a few days apart: charged twice?';
+
+  @override
+  String insightsAboveUsual(String usual, int count) {
+    return 'usually $usual (median of $count operations)';
+  }
+
+  @override
+  String get insightsFees => 'Bank fees over 12 months';
+
+  @override
+  String get insightsFeesNone => 'No bank fee found over 12 months.';
+
+  @override
+  String insightsFeesTotal(String amount) {
+    return '$amount over 12 months';
+  }
+
+  @override
+  String get insightsFeesHow =>
+      'Operations classified as bank fees or overdraft interest, and those whose label starts like a fee (fees, commission, card fee…). Refunded fees are taken off.';
+
+  @override
+  String noticeOverdraft(String account, String date) {
+    return '\"$account\" will go below its threshold around $date';
+  }
+
+  @override
+  String noticeOverdraftWhy(String lowest, String date, String threshold) {
+    return 'Lowest point forecast: $lowest on $date, for a threshold of $threshold. From planned operations only.';
+  }
+
+  @override
+  String noticeUnusual(String label, String amount) {
+    return '\"$label\": $amount, much more than usual';
+  }
+
+  @override
+  String noticeUnusualWhy(String date, String usual, int count) {
+    return 'On $date. Usually $usual (median of $count operations).';
+  }
+
+  @override
+  String noticeDuplicate(String label, String amount) {
+    return '\"$label\" of $amount charged twice?';
+  }
+
+  @override
+  String noticeDuplicateWhy(String date) {
+    return 'On $date, same label and amount a few days apart. Check the statement.';
+  }
+
+  @override
+  String noticeFees(String amount) {
+    return '$amount of bank fees over 12 months';
+  }
+
+  @override
+  String get noticeFeesWhy =>
+      'The costliest ones below. A simpler offer or another bank might cost less: the Analyses page gives the details month by month.';
+
+  @override
+  String get noticeUnderstood => 'Understood';
+
+  @override
+  String get noticeIgnore => 'Ignore';
+
+  @override
+  String get noticeNoted => 'Noted.';
+
+  @override
+  String get noticeIgnored => 'Card ignored.';
+
+  @override
+  String get batchImportChoose => 'Several files';
+
+  @override
+  String batchImportTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Import $count files',
+      one: 'Import 1 file',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get batchImportHelp =>
+      'Each file is read first. The account is recognised from the file when it says so (OFX), otherwise it is the one chosen. Possible duplicates are left out; to check them one by one, import the file alone.';
+
+  @override
+  String get batchImportReading => 'Reading…';
+
+  @override
+  String batchImportPreview(int added, int duplicates, int possible) {
+    return '$added new, $duplicates already there, $possible possible duplicates left out';
+  }
+
+  @override
+  String get batchImportSameFile =>
+      'This file was already imported into this account.';
+
+  @override
+  String batchImportGo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Import $count files',
+      one: 'Import 1 file',
+      zero: 'Nothing to import',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashTitle => 'Trash';
+
+  @override
+  String get trashHelp =>
+      'Operations moved to the trash no longer count anywhere. Restore them, or delete them for good (with their split and invoices).';
+
+  @override
+  String get trashNone => 'The trash is empty.';
+
+  @override
+  String trashSince(String date) {
+    return 'trashed on $date';
+  }
+
+  @override
+  String get trashRestore => 'Restore';
+
+  @override
+  String get trashRestored => 'Operation restored.';
+
+  @override
+  String get trashDeleteForGood => 'Delete for good';
+
+  @override
+  String trashDeleteConfirm(String label) {
+    return 'Delete \"$label\" for good? This cannot be undone; importing the statement again will bring it back.';
+  }
+
+  @override
+  String get trashDeleted => 'Operation deleted.';
+
+  @override
+  String get trashEmpty => 'Empty';
+
+  @override
+  String trashEmptyConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Delete the $count operations in the trash for good?',
+      one: 'Delete the operation in the trash for good?',
+    );
+    return '$_temp0 This cannot be undone.';
+  }
+
+  @override
+  String get trashEmptied => 'Trash emptied.';
+
+  @override
+  String get chatHistory => 'Previous conversations';
+
+  @override
+  String get chatHistoryHelp =>
+      'Your latest 30 conversations, kept on your server and visible to you only. Tap one to go on with it.';
+
+  @override
+  String get chatHistoryNone => 'No conversation kept.';
+
+  @override
+  String get chatHistoryDelete => 'Delete this conversation';
+
+  @override
+  String get aiMemoriesTitle => 'What the assistant should know';
+
+  @override
+  String get aiMemoriesHelp =>
+      'A few sentences the assistant keeps in mind with each question, for instance \"I am paid on the 28th\" or \"do not suggest changing banks\". Only you see them; they are sent to the model with your questions.';
+
+  @override
+  String get aiMemoriesHint => 'Add something to keep in mind';
+
+  @override
+  String get aiMemoriesAdd => 'Add';
+
+  @override
+  String get aiMemoriesDelete => 'Forget';
+
+  @override
+  String get error_ai_memory_full =>
+      '20 things to keep in mind at most: forget one first.';
+
+  @override
+  String get feedbackTitle => 'Give feedback';
+
+  @override
+  String get feedbackIntro =>
+      'A problem, an idea, a question? Your message goes to the administrator of this server.';
+
+  @override
+  String get feedbackBug => 'Problem';
+
+  @override
+  String get feedbackIdea => 'Idea';
+
+  @override
+  String get feedbackQuestion => 'Question';
+
+  @override
+  String get feedbackHint => 'Describe what happens, or what you would like';
+
+  @override
+  String get feedbackPrivacy =>
+      'The message stays on this server, with the page you send it from and OwnCoffer\'s version. No bank data is joined: do not write any.';
+
+  @override
+  String get feedbackSend => 'Send';
+
+  @override
+  String get feedbackSent => 'Thank you, it is sent.';
+
+  @override
+  String get feedbackMine => 'Your messages';
+
+  @override
+  String get feedbackDone => 'dealt with';
+
+  @override
+  String get feedbackOpen => 'waiting';
+
+  @override
+  String get adminTabFeedback => 'Feedback';
+
+  @override
+  String get adminFeedbackHelp =>
+      'The users\' messages, newest first. Tick those dealt with: their author sees it.';
+
+  @override
+  String get adminFeedbackNone => 'No feedback yet.';
+
+  @override
+  String get error_feedback_too_many => '20 messages a day at most.';
+
+  @override
+  String get error_ai_conversation_access_denied =>
+      'This conversation no longer exists.';
+
+  @override
+  String get error_feedback_unknown => 'This message no longer exists.';
+
+  @override
+  String get chatModel => 'Change model';
+
+  @override
+  String get chatReviewChip => 'My month\'s review';
+
+  @override
+  String get chatReviewPrompt =>
+      'Review my month: where my budget, goals and accounts stand, what is coming, and what you advise.';
+
+  @override
+  String get chatSaveChip => 'Where to save?';
+
+  @override
+  String get chatSavePrompt =>
+      'Where could I save? Look at my spending, subscriptions, loans and bank fees, and suggest the most useful ideas, with figures.';
+
+  @override
+  String get chatAffordChip => 'Can I afford…?';
+
+  @override
+  String get chatAffordPrompt => 'Can I afford a purchase of €?';
+
+  @override
+  String get loanFamilyLoans => 'Loans';
+
+  @override
+  String get loanFamilyConsumer => 'Consumer credit';
+
+  @override
+  String loanFamilyTotals(String monthly, String remaining) {
+    return '$monthly / month · $remaining left';
+  }
+
+  @override
+  String get loanSortRemaining => 'Left to repay';
+
+  @override
+  String get loanSortMonthly => 'Instalment';
+
+  @override
+  String get loanSortEnd => 'End date';
+
+  @override
+  String get loanSortLender => 'Lender';
 }

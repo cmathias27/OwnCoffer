@@ -2,6 +2,10 @@
 
 Your loans and instalment payments, what is left to repay and your debt ratio.
 
+## Three families
+
+The page sorts your loans into **Loans** (mortgage, car, studies…), **Consumer credit** (revolving included) and **Payments in instalments**, each with its monthly total and what is left to repay. The chips at the top choose the families shown; the sort menu orders them by what is left to repay, instalment, end date or lender. Repaid loans come last.
+
 ## Add a loan
 
 - From a debit, the simplest way: in the operation's sheet, **"This is a loan instalment"**. The form is pre-filled, past instalments are found and a rule will classify the next ones.

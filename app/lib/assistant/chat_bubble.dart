@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
+import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../screens/advisor_screen.dart';
@@ -120,6 +121,19 @@ class _ChatPanelState extends State<ChatPanel> {
   PickedFile? _image;
   String? _error;
 
+  /// The past conversations, when shown instead of the current one.
+  List<AiConversation>? _history;
+
+  Future<void> _showHistory() async {
+    final l = AppLocalizations.of(context);
+    try {
+      final list = await client.ai.conversations(chat.membership!.group.id!);
+      if (mounted) setState(() => _history = list);
+    } on Object catch (e) {
+      if (mounted) setState(() => _error = errorText(l, e));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -196,14 +210,18 @@ class _ChatPanelState extends State<ChatPanel> {
                             l.assistantTitle,
                             style: theme.textTheme.titleMedium,
                           ),
-                          if (provider != null)
-                            Text(
-                              '${provider.name} · ${chat.status?.model ?? ''}',
-                              style: theme.textTheme.bodySmall,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          if (provider != null) _modelMenu(l, theme),
                         ],
                       ),
+                    ),
+                    IconButton(
+                      tooltip: l.chatHistory,
+                      icon: Icon(
+                        _history == null ? Icons.history : Icons.chat_outlined,
+                      ),
+                      onPressed: () => _history == null
+                          ? _showHistory()
+                          : setState(() => _history = null),
                     ),
                     IconButton(
                       tooltip: l.chatNew,
@@ -227,42 +245,74 @@ class _ChatPanelState extends State<ChatPanel> {
                 ),
               ),
             ),
-            Expanded(
-              child: ListView(
-                controller: _scroll,
-                padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                children: [
-                  if (chat.talk.isEmpty) ...[
-                    Text(l.chatIntro, style: theme.textTheme.bodySmall),
-                    if (provider != null && provider.kind != 'ollama')
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          l.assistantExternalWarning(provider.name),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: scheme.tertiary,
+            if (_history != null)
+              Expanded(child: _historyList(l))
+            else
+              Expanded(
+                child: ListView(
+                  controller: _scroll,
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+                  children: [
+                    if (chat.talk.isEmpty) ...[
+                      Text(l.chatIntro, style: theme.textTheme.bodySmall),
+                      if (provider != null && provider.kind != 'ollama')
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            l.assistantExternalWarning(provider.name),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: scheme.tertiary,
+                            ),
                           ),
                         ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final (icon, label, prompt, send) in [
+                            (
+                              Icons.insights_outlined,
+                              l.chatReviewChip,
+                              l.chatReviewPrompt,
+                              true,
+                            ),
+                            (
+                              Icons.savings_outlined,
+                              l.chatSaveChip,
+                              l.chatSavePrompt,
+                              true,
+                            ),
+                            // The purchase needs its amount: written, not sent.
+                            (
+                              Icons.shopping_bag_outlined,
+                              l.chatAffordChip,
+                              l.chatAffordPrompt,
+                              false,
+                            ),
+                            (
+                              Icons.rule,
+                              l.assistantClassifyChip,
+                              l.assistantClassifyPrompt,
+                              true,
+                            ),
+                          ])
+                            ActionChip(
+                              avatar: Icon(icon),
+                              label: Text(label),
+                              onPressed: chat.sending
+                                  ? null
+                                  : send
+                                  ? () => _send(prompt)
+                                  : () => _input.text = prompt,
+                            ),
+                        ],
                       ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        ActionChip(
-                          avatar: const Icon(Icons.rule),
-                          label: Text(l.assistantClassifyChip),
-                          onPressed: chat.sending
-                              ? null
-                              : () => _send(l.assistantClassifyPrompt),
-                        ),
-                      ],
-                    ),
+                    ],
+                    for (final (m, r) in chat.talk) ..._exchange(l, m, r),
                   ],
-                  for (final (m, r) in chat.talk) ..._exchange(l, m, r),
-                ],
+                ),
               ),
-            ),
             if (_error != null)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -275,6 +325,110 @@ class _ChatPanelState extends State<ChatPanel> {
           ],
         ),
       ),
+    );
+  }
+
+  /// The provider and model in use; a tap offers the others set up by the
+  /// administrator (the choice is the user's, as in the settings).
+  Widget _modelMenu(AppLocalizations l, ThemeData theme) {
+    final status = chat.status!;
+    final choices = [
+      for (final p in status.providers.where((p) => p.enabled))
+        for (final m in p.models.split(','))
+          if (m.trim().isNotEmpty) (provider: p, model: m.trim()),
+    ];
+    final current = '${chat.provider!.name} · ${status.model ?? ''}';
+    Future<void> choose(({AiProvider provider, String model}) c) async {
+      try {
+        await client.ai.setPreference(c.provider.id, c.model, true);
+      } on Object catch (e) {
+        if (mounted) setState(() => _error = errorText(l, e));
+      }
+      await chat.refreshStatus();
+    }
+
+    // A menu anchored in this layer's own overlay (no navigator here).
+    return MenuAnchor(
+      menuChildren: [
+        for (final c in choices)
+          MenuItemButton(
+            leadingIcon: Icon(
+              c.provider.id == status.providerId && c.model == status.model
+                  ? Icons.check
+                  : null,
+              size: 18,
+            ),
+            onPressed: () => choose(c),
+            child: Text(
+              '${c.provider.name} · ${c.model}'
+              '${c.provider.kind == 'ollama' ? ' (${l.assistantLocal})' : ''}',
+            ),
+          ),
+      ],
+      builder: (context, controller, _) => Tooltip(
+        message: l.chatModel,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: chat.sending || choices.length < 2
+              ? null
+              : () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Text(
+                  current,
+                  style: theme.textTheme.bodySmall,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              if (choices.length > 1)
+                const Icon(Icons.arrow_drop_down, size: 18),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _historyList(AppLocalizations l) {
+    final list = _history!;
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+      children: [
+        Text(l.chatHistoryHelp, style: Theme.of(context).textTheme.bodySmall),
+        if (list.isEmpty)
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(l.chatHistoryNone),
+          ),
+        for (final c in list)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.chat_bubble_outline),
+            title: Text(c.title, maxLines: 2, overflow: TextOverflow.ellipsis),
+            subtitle: Text(
+              MaterialLocalizations.of(context).formatMediumDate(
+                c.updatedAt.toLocal(),
+              ),
+            ),
+            selected: c.id == chat.conversationId,
+            onTap: () {
+              chat.resume(c);
+              setState(() => _history = null);
+            },
+            trailing: IconButton(
+              tooltip: l.chatHistoryDelete,
+              icon: const Icon(Icons.delete_outline),
+              onPressed: () async {
+                await client.ai.deleteConversation(c.id!);
+                if (c.id == chat.conversationId) chat.conversationId = null;
+                await _showHistory();
+              },
+            ),
+          ),
+      ],
     );
   }
 

@@ -9,6 +9,7 @@ import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/file_pick.dart';
 import '../util/format.dart';
+import 'batch_import.dart';
 
 /// Same limit as the server (ImportEndpoint.maxFileBytes), checked first to
 /// avoid sending a file that will be refused.
@@ -108,6 +109,27 @@ class _ImportScreenState extends State<ImportScreen> {
     }
     _file = file;
     await _runPreview();
+  }
+
+  /// Several statements at once, each previewed then imported.
+  Future<void> _pickMany() async {
+    final account = _account;
+    if (account == null) return;
+    final files = await pickFiles(extensions: ['.qif', '.ofx', '.csv', '.txt']);
+    if (files.isEmpty || !mounted) return;
+    final done = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => BatchImportDialog(
+        files: files,
+        accounts: widget.accounts,
+        defaultAccountId: account.id!,
+      ),
+    );
+    if (done == true) {
+      widget.onImported();
+      await _loadHistory();
+    }
   }
 
   Future<void> _runPreview() async {
@@ -324,6 +346,12 @@ class _ImportScreenState extends State<ImportScreen> {
                       label: Text(
                         _file == null ? l.importChooseFile : l.importOtherFile,
                       ),
+                    ),
+                  if (_canWrite)
+                    TextButton.icon(
+                      onPressed: _busy ? null : _pickMany,
+                      icon: const Icon(Icons.library_add_outlined),
+                      label: Text(l.batchImportChoose),
                     ),
                   if (_canWrite && _columns != null)
                     TextButton.icon(

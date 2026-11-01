@@ -159,7 +159,7 @@ class AdminEndpoint extends Endpoint {
     }
     final disk = HostState.instance.disk();
     return AdminHealth(
-      version: _version(),
+      version: serverVersion(),
       startedAt: startedAt,
       serverTime: DateTime.now().toUtc(),
       databaseOk: dbOk,
@@ -410,7 +410,7 @@ class AdminEndpoint extends Endpoint {
   /// Versions, automatic updates, history and release notes.
   Future<UpdateOverview> updates(Session session) async {
     await _requireServerAdmin(session);
-    return HostState.instance.updates(_version());
+    return HostState.instance.updates(serverVersion());
   }
 
   /// Turns automatic updates on or off (read by the host at each run).
@@ -441,7 +441,7 @@ class AdminEndpoint extends Endpoint {
   /// if the new version does not start).
   Future<void> requestInstall(Session session, String version) async {
     await _requireServerAdmin(session);
-    final o = HostState.instance.updates(_version());
+    final o = HostState.instance.updates(serverVersion());
     if (!RegExp(r'^v\d+\.\d+\.\d+$').hasMatch(version) ||
         o.current == null ||
         !_newer(version, o.current!)) {
@@ -503,7 +503,8 @@ class AdminEndpoint extends Endpoint {
   }
 
   /// Version of the web app bundled in the image (Flutter's version.json).
-  static String _version() {
+  /// The installed version ("dev" outside a published image).
+  static String serverVersion() {
     try {
       final f = File('web/app/version.json');
       if (!f.existsSync()) return 'dev';

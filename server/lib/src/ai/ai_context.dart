@@ -6,8 +6,10 @@ import 'package:serverpod/serverpod.dart';
 import '../core/dates.dart';
 import '../endpoints/analysis_endpoint.dart';
 import '../endpoints/goal_endpoint.dart';
+import '../endpoints/loan_endpoint.dart';
 import '../endpoints/scheduled_endpoint.dart';
 import '../finance/forecast_service.dart';
+import '../finance/insights_service.dart';
 import '../finance/proposal_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
@@ -86,6 +88,67 @@ class AiContext {
       {},
     ),
     _tool('get_categories', 'Categories of the group, with their id.', {}),
+    _tool(
+      'get_loans',
+      'Loans and instalment payments of the visible accounts: lender, kind, '
+          'rate, instalment, what is left to repay, interest left, next due '
+          'date, end date; total monthly instalments and debt ratio.',
+      {},
+    ),
+    _tool(
+      'get_subscriptions',
+      'Subscriptions (planned recurring debits marked as such): label, '
+          'amount, frequency, monthly cost; monthly and yearly totals.',
+      {},
+    ),
+    _tool(
+      'get_insights',
+      'Analyses computed by OwnCoffer: bank fees of the last 12 months (by '
+          'month and by label), unusual debits (much more than usual, or '
+          'charged twice), how reliable the forecasts were.',
+      {},
+    ),
+    _tool(
+      'get_advice',
+      "OwnCoffer's own advice for the user, computed without AI: goals to "
+          'set, raise or lower (with the months they come from), overdraft '
+          'ahead, unusual or doubled debits, bank fees. Explain and '
+          'prioritise them; the user accepts them in "Mon conseiller".',
+      {},
+    ),
+    _tool(
+      'simulate_purchase',
+      'What a purchase would do to an account, computed by the forecast '
+          'engine: balance on a target day, lowest point, overdraft risk, '
+          'paid cash, in 3 or 4 instalments, or next month, next to not '
+          'buying. Nothing is saved. Use it before advising on a purchase.',
+      {
+        'amount_cents': {'type': 'integer'},
+        'account_id': {
+          'type': 'integer',
+          'description': 'Defaults to the first current account.',
+        },
+        'date': {'type': 'string', 'description': 'Purchase day, YYYY-MM-DD.'},
+        'target': {
+          'type': 'string',
+          'description':
+              'Day to know the balance on, YYYY-MM-DD; by '
+              'default the 25th of next month.',
+        },
+      },
+      required: ['amount_cents'],
+    ),
+    _tool(
+      'simulate_early_repayment',
+      'What repaying part of a loan early would save, computed by the loan '
+          'engine: interest saved, instalments left, new end date. Nothing '
+          'is saved.',
+      {
+        'loan_id': {'type': 'integer'},
+        'amount_cents': {'type': 'integer'},
+      },
+      required: ['loan_id', 'amount_cents'],
+    ),
     _tool(
       'propose_category',
       'Propose a category for an operation. Nothing changes until the user '
@@ -177,6 +240,12 @@ class AiContext {
         'get_cashflow_forecast' => await _forecast(),
         'get_financial_goals' => await _goals(),
         'get_categories' => await _categories(),
+        'get_loans' => await _loans(),
+        'get_subscriptions' => await _subscriptions(),
+        'get_insights' => await _insights(),
+        'get_advice' => await _advice(),
+        'simulate_purchase' => await _simulatePurchase(args),
+        'simulate_early_repayment' => await _simulateRepayment(args),
         'propose_category' => await _proposeCategory(args),
         'propose_loan' => await _proposeLoan(args),
         _ => {'error': 'unknown function'},
@@ -413,6 +482,184 @@ class AiContext {
             'parent_id': c.parentId,
           },
       ],
+    };
+  }
+
+  Future<Map<String, Object?>> _loans() async {
+    final o = await LoanEndpoint().overview(session, groupId);
+    return {
+      'loans': [
+        for (final i in o.loans)
+          {
+            'id': i.loan.id,
+            'lender': i.loan.lender,
+            'label': i.loan.label,
+            'kind': i.loan.kind.name,
+            'annual_rate_milli': i.loan.annualRateMilli,
+            'instalment_cents': i.paymentCents,
+            'insurance_monthly_cents': i.loan.insuranceMonthlyCents,
+            'instalment_is_the_debited_one': i.paymentIsActual,
+            'principal_cents': i.loan.principalCents,
+            'remaining_cents': i.remainingCents,
+            'interest_left_cents': i.interestRemainingCents,
+            'paid_count': i.paidCount,
+            'total_count': i.totalCount,
+            'next_due_date': i.nextDueDate == null
+                ? null
+                : _iso(i.nextDueDate!),
+            'end_date': _iso(i.endDate),
+            'credit_limit_cents': i.loan.creditLimitCents,
+            'changes': i.loan.events?.length ?? 0,
+          },
+      ],
+      'total_remaining_cents': o.totalRemainingCents,
+      'total_monthly_cents': o.totalMonthlyCents,
+      'average_monthly_income_cents': o.monthlyIncomeCents,
+      'debt_ratio_per_mille': o.debtRatioPerMille,
+      'note': 'Estimates from the loan engine; the bank table prevails.',
+    };
+  }
+
+  Future<Map<String, Object?>> _subscriptions() async {
+    await _accounts();
+    final o = await ScheduledEndpoint().subscriptions(session, groupId);
+    return {
+      'subscriptions': [
+        for (final (k, x) in o.items.indexed)
+          {
+            'label': x.label,
+            'amount_cents': x.amountCents,
+            'frequency': x.frequency.name,
+            'monthly_cents': o.monthlyCents[k],
+            'next_due': x.nextDue == null ? null : _iso(x.nextDue!),
+          },
+      ],
+      'monthly_total_cents': o.monthlyTotalCents,
+      'yearly_total_cents': o.yearlyTotalCents,
+    };
+  }
+
+  Future<Map<String, Object?>> _insights() async {
+    await _accounts();
+    final i = await InsightsService.compute(session, groupId, _today());
+    return {
+      'bank_fees_12_months_cents': i.feeTotalCents,
+      'bank_fees_by_month': [
+        for (final (k, m) in i.feeMonths.indexed)
+          {'month': _iso(m).substring(0, 7), 'cents': i.feePerMonthCents[k]},
+      ],
+      'bank_fees_by_label': [
+        for (final f in i.feeLines)
+          {'label': f.label, 'cents': f.cents, 'count': f.count},
+      ],
+      'unusual_debits': [
+        for (final u in i.unusual)
+          {
+            'kind': u.kind,
+            'label': u.transaction.cleanLabel,
+            'amount_cents': u.transaction.amountCents,
+            'date': _iso(u.transaction.date),
+            'usual_cents': u.usualCents,
+          },
+      ],
+      'planned_due_3_months': i.plannedDue,
+      'planned_came_3_months': i.plannedPaid,
+      'variable_estimate_last_month_cents': i.variableEstimateCents,
+      'variable_actual_last_month_cents': i.variableActualCents,
+    };
+  }
+
+  Future<Map<String, Object?>> _advice() async {
+    await _accounts();
+    await ProposalService.refreshAdvice(session, groupId);
+    final open = await ActionProposal.db.find(
+      session,
+      where: (p) =>
+          p.authUserId.equals(Access.userId(session)) &
+          p.groupId.equals(groupId) &
+          p.status.equals('pending'),
+      orderByList: (p) => [p.createdAt.desc()],
+      limit: 30,
+    );
+    final names = await _names();
+    return {
+      'advice': [
+        for (final p in open)
+          {
+            'kind': p.kind,
+            'reason': p.reason,
+            if (p.kind == 'set_goal') 'category': names[p.targetId],
+            'current_cents': p.currentValue,
+            'proposed_cents': p.proposedValue,
+            'figures': jsonDecode(p.data),
+            'from': p.origin,
+          },
+      ],
+    };
+  }
+
+  Future<Map<String, Object?>> _simulatePurchase(Map<String, Object?> a) async {
+    final amount = (a['amount_cents'] as num?)?.toInt();
+    if (amount == null || amount <= 0) throw const FormatException();
+    final accounts = await _accounts();
+    final id = (a['account_id'] as num?)?.toInt();
+    final account = id == null
+        ? (accounts.where((x) => x.kind == AccountKind.checking).firstOrNull ??
+              accounts.firstOrNull)
+        : accounts.where((x) => x.id == id).firstOrNull;
+    if (account == null) {
+      throw AccessDeniedException(code: 'account_access_denied');
+    }
+    final today = _today().toDb();
+    final date = _day(a['date']) ?? today;
+    final next = DateTime.utc(today.year, today.month + 1, 25);
+    final r = await ScheduledEndpoint().simulatePurchase(
+      session,
+      account.id!,
+      today,
+      amount,
+      date,
+      _day(a['target']) ?? next,
+    );
+    return {
+      'account': account.name,
+      'alert_threshold_cents': r.alertThresholdCents,
+      'variable_spending_included': r.variableIncluded,
+      'target_day': _iso(r.target),
+      'scenarios': [
+        for (final x in r.scenarios)
+          {
+            'option': x.option.name,
+            'payments': [
+              for (final p in x.payments)
+                {'date': _iso(p.date), 'amount_cents': p.amountCents},
+            ],
+            'balance_on_target_cents': x.balanceOnTargetCents,
+            'lowest_cents': x.lowestBalanceCents,
+            'lowest_date': _iso(x.lowestDate),
+            'first_day_below_threshold': x.firstBelowThresholdDate == null
+                ? null
+                : _iso(x.firstBelowThresholdDate!),
+          },
+      ],
+      'note': 'Computed by the forecast engine; an estimate.',
+    };
+  }
+
+  Future<Map<String, Object?>> _simulateRepayment(
+    Map<String, Object?> a,
+  ) async {
+    final id = (a['loan_id'] as num?)?.toInt();
+    final amount = (a['amount_cents'] as num?)?.toInt();
+    if (id == null || amount == null) throw const FormatException();
+    await _accounts();
+    final r = await LoanEndpoint().simulate(session, id, amount);
+    return {
+      'amount_cents': r.amountCents,
+      'interest_saved_cents': r.interestSavedCents,
+      'instalments_left': r.installmentsLeft,
+      'new_end_date': r.endDate == null ? null : _iso(r.endDate!),
+      'note': 'Computed by the loan engine, keeping the instalment.',
     };
   }
 

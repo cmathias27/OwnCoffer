@@ -7631,6 +7631,546 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Assistant : réglages'**
   String get assistantSettingsTitle;
+
+  /// No description provided for @insightsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Analyses'**
+  String get insightsTitle;
+
+  /// No description provided for @insightsIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculées par OwnCoffer, sans IA, sur les comptes que vous voyez.'**
+  String get insightsIntro;
+
+  /// No description provided for @insightsReliability.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiabilité des prévisions'**
+  String get insightsReliability;
+
+  /// No description provided for @insightsPlanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'{paid} opérations prévues sur {due} sont arrivées comme prévu ces trois derniers mois ({percent} %).'**
+  String insightsPlanned(int paid, int due, int percent);
+
+  /// No description provided for @insightsPlannedNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération prévue ces trois derniers mois.'**
+  String get insightsPlannedNone;
+
+  /// No description provided for @insightsPlannedLate.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 n\'est pas arrivée (en retard ou manquée).} other{{count} ne sont pas arrivées (en retard ou manquées).}}'**
+  String insightsPlannedLate(int count);
+
+  /// No description provided for @insightsVariable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses variables de {month} : {estimate} estimés d\'avance, {actual} réellement dépensés.'**
+  String insightsVariable(String month, String estimate, String actual);
+
+  /// No description provided for @insightsVariableUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas encore assez d\'historique pour comparer les dépenses variables estimées à la réalité.'**
+  String get insightsVariableUnknown;
+
+  /// No description provided for @insightsReliabilityHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations prévues sont comptées d\'après le calendrier des échéances ; l\'estimation des dépenses variables est la médiane des trois mois qui précèdent.'**
+  String get insightsReliabilityHow;
+
+  /// No description provided for @insightsUnusual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations inhabituelles'**
+  String get insightsUnusual;
+
+  /// No description provided for @insightsUnusualNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien d\'inhabituel ce mois-ci ni le mois dernier.'**
+  String get insightsUnusualNone;
+
+  /// No description provided for @insightsDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'même libellé et même montant à quelques jours d\'écart : prélevé deux fois ?'**
+  String get insightsDuplicate;
+
+  /// No description provided for @insightsAboveUsual.
+  ///
+  /// In fr, this message translates to:
+  /// **'d\'habitude {usual} (médiane de {count} opérations)'**
+  String insightsAboveUsual(String usual, int count);
+
+  /// No description provided for @insightsFees.
+  ///
+  /// In fr, this message translates to:
+  /// **'Frais bancaires sur 12 mois'**
+  String get insightsFees;
+
+  /// No description provided for @insightsFeesNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun frais bancaire repéré sur 12 mois.'**
+  String get insightsFeesNone;
+
+  /// No description provided for @insightsFeesTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} sur 12 mois'**
+  String insightsFeesTotal(String amount);
+
+  /// No description provided for @insightsFeesHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations classées en frais bancaires ou agios, et celles dont le libellé commence comme un frais (frais, commission, agios, cotisation de carte…). Les remboursements de frais sont déduits.'**
+  String get insightsFeesHow;
+
+  /// No description provided for @noticeOverdraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {account} » passera sous son seuil vers le {date}'**
+  String noticeOverdraft(String account, String date);
+
+  /// No description provided for @noticeOverdraftWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point bas prévu : {lowest} le {date}, pour un seuil de {threshold}. D\'après les opérations prévues seulement.'**
+  String noticeOverdraftWhy(String lowest, String date, String threshold);
+
+  /// No description provided for @noticeUnusual.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {label} » : {amount}, bien plus que d\'habitude'**
+  String noticeUnusual(String label, String amount);
+
+  /// No description provided for @noticeUnusualWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le {date}. D\'habitude {usual} (médiane de {count} opérations).'**
+  String noticeUnusualWhy(String date, String usual, int count);
+
+  /// No description provided for @noticeDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {label} » de {amount} prélevé deux fois ?'**
+  String noticeDuplicate(String label, String amount);
+
+  /// No description provided for @noticeDuplicateWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le {date}, même libellé et même montant à quelques jours d\'écart. Vérifiez sur le relevé.'**
+  String noticeDuplicateWhy(String date);
+
+  /// No description provided for @noticeFees.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} de frais bancaires sur 12 mois'**
+  String noticeFees(String amount);
+
+  /// No description provided for @noticeFeesWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les plus coûteux ci-dessous. Une offre plus simple ou une autre banque coûterait peut-être moins : la page Analyses donne le détail mois par mois.'**
+  String get noticeFeesWhy;
+
+  /// No description provided for @noticeUnderstood.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compris'**
+  String get noticeUnderstood;
+
+  /// No description provided for @noticeIgnore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ignorer'**
+  String get noticeIgnore;
+
+  /// No description provided for @noticeNoted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Noté.'**
+  String get noticeNoted;
+
+  /// No description provided for @noticeIgnored.
+  ///
+  /// In fr, this message translates to:
+  /// **'Carte ignorée.'**
+  String get noticeIgnored;
+
+  /// No description provided for @batchImportChoose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plusieurs fichiers'**
+  String get batchImportChoose;
+
+  /// No description provided for @batchImportTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Importer 1 fichier} other{Importer {count} fichiers}}'**
+  String batchImportTitle(int count);
+
+  /// No description provided for @batchImportHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque fichier est lu d\'abord. Le compte est reconnu d\'après le fichier quand il le dit (OFX), sinon c\'est celui choisi. Les doublons possibles sont laissés de côté ; pour les vérifier un par un, importez le fichier seul.'**
+  String get batchImportHelp;
+
+  /// No description provided for @batchImportReading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture…'**
+  String get batchImportReading;
+
+  /// No description provided for @batchImportPreview.
+  ///
+  /// In fr, this message translates to:
+  /// **'{added} nouvelles, {duplicates} déjà présentes, {possible} doublons possibles laissés de côté'**
+  String batchImportPreview(int added, int duplicates, int possible);
+
+  /// No description provided for @batchImportSameFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier a déjà été importé dans ce compte.'**
+  String get batchImportSameFile;
+
+  /// No description provided for @batchImportGo.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Rien à importer} =1{Importer 1 fichier} other{Importer {count} fichiers}}'**
+  String batchImportGo(int count);
+
+  /// No description provided for @trashTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Corbeille'**
+  String get trashTitle;
+
+  /// No description provided for @trashHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations mises à la corbeille ne comptent plus nulle part. Restaurez-les, ou supprimez-les pour de bon (avec leur ventilation et leurs factures).'**
+  String get trashHelp;
+
+  /// No description provided for @trashNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'La corbeille est vide.'**
+  String get trashNone;
+
+  /// No description provided for @trashSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'mise à la corbeille le {date}'**
+  String trashSince(String date);
+
+  /// No description provided for @trashRestore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restaurer'**
+  String get trashRestore;
+
+  /// No description provided for @trashRestored.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération restaurée.'**
+  String get trashRestored;
+
+  /// No description provided for @trashDeleteForGood.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer définitivement'**
+  String get trashDeleteForGood;
+
+  /// No description provided for @trashDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer définitivement « {label} » ? Ce n\'est pas annulable ; un nouvel import du relevé la ramènera.'**
+  String trashDeleteConfirm(String label);
+
+  /// No description provided for @trashDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération supprimée.'**
+  String get trashDeleted;
+
+  /// No description provided for @trashEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vider'**
+  String get trashEmpty;
+
+  /// No description provided for @trashEmptyConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Supprimer définitivement l\'opération de la corbeille ?} other{Supprimer définitivement les {count} opérations de la corbeille ?}} Ce n\'est pas annulable.'**
+  String trashEmptyConfirm(int count);
+
+  /// No description provided for @trashEmptied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Corbeille vidée.'**
+  String get trashEmptied;
+
+  /// No description provided for @chatHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conversations précédentes'**
+  String get chatHistory;
+
+  /// No description provided for @chatHistoryHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos 30 dernières conversations, gardées sur votre serveur et visibles par vous seul. Touchez-en une pour la reprendre.'**
+  String get chatHistoryHelp;
+
+  /// No description provided for @chatHistoryNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune conversation gardée.'**
+  String get chatHistoryNone;
+
+  /// No description provided for @chatHistoryDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer cette conversation'**
+  String get chatHistoryDelete;
+
+  /// No description provided for @aiMemoriesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que l\'assistant doit savoir'**
+  String get aiMemoriesTitle;
+
+  /// No description provided for @aiMemoriesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quelques phrases que l\'assistant garde en tête à chaque question, par exemple « je suis payé le 28 » ou « ne me propose pas de changer de banque ». Vous seul les voyez ; elles sont envoyées au modèle avec vos questions.'**
+  String get aiMemoriesHelp;
+
+  /// No description provided for @aiMemoriesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une chose à retenir'**
+  String get aiMemoriesHint;
+
+  /// No description provided for @aiMemoriesAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get aiMemoriesAdd;
+
+  /// No description provided for @aiMemoriesDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Oublier'**
+  String get aiMemoriesDelete;
+
+  /// No description provided for @error_ai_memory_full.
+  ///
+  /// In fr, this message translates to:
+  /// **'20 choses à retenir au plus : oubliez-en une d\'abord.'**
+  String get error_ai_memory_full;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donner un avis'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un problème, une idée, une question ? Votre message va à l\'administrateur de ce serveur.'**
+  String get feedbackIntro;
+
+  /// No description provided for @feedbackBug.
+  ///
+  /// In fr, this message translates to:
+  /// **'Problème'**
+  String get feedbackBug;
+
+  /// No description provided for @feedbackIdea.
+  ///
+  /// In fr, this message translates to:
+  /// **'Idée'**
+  String get feedbackIdea;
+
+  /// No description provided for @feedbackQuestion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Question'**
+  String get feedbackQuestion;
+
+  /// No description provided for @feedbackHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Décrivez ce qui se passe, ou ce que vous aimeriez'**
+  String get feedbackHint;
+
+  /// No description provided for @feedbackPrivacy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le message reste sur ce serveur, avec la page d\'où vous l\'envoyez et la version d\'OwnCoffer. Aucune donnée bancaire n\'est jointe : n\'en écrivez pas.'**
+  String get feedbackPrivacy;
+
+  /// No description provided for @feedbackSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get feedbackSend;
+
+  /// No description provided for @feedbackSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Merci, c\'est envoyé.'**
+  String get feedbackSent;
+
+  /// No description provided for @feedbackMine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos messages'**
+  String get feedbackMine;
+
+  /// No description provided for @feedbackDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'traité'**
+  String get feedbackDone;
+
+  /// No description provided for @feedbackOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'en attente'**
+  String get feedbackOpen;
+
+  /// No description provided for @adminTabFeedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retours'**
+  String get adminTabFeedback;
+
+  /// No description provided for @adminFeedbackHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les messages des utilisateurs, du plus récent au plus ancien. Cochez ceux qui sont traités : l\'auteur le voit.'**
+  String get adminFeedbackHelp;
+
+  /// No description provided for @adminFeedbackNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun retour pour l\'instant.'**
+  String get adminFeedbackNone;
+
+  /// No description provided for @error_feedback_too_many.
+  ///
+  /// In fr, this message translates to:
+  /// **'20 messages par jour au plus.'**
+  String get error_feedback_too_many;
+
+  /// No description provided for @error_ai_conversation_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette conversation n\'existe plus.'**
+  String get error_ai_conversation_access_denied;
+
+  /// No description provided for @error_feedback_unknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce message n\'existe plus.'**
+  String get error_feedback_unknown;
+
+  /// No description provided for @chatModel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer de modèle'**
+  String get chatModel;
+
+  /// No description provided for @chatReviewChip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan de mon mois'**
+  String get chatReviewChip;
+
+  /// No description provided for @chatReviewPrompt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fais-moi le bilan de mon mois : où en sont mon budget, mes objectifs et mes comptes, ce qui arrive, et ce que tu me conseilles.'**
+  String get chatReviewPrompt;
+
+  /// No description provided for @chatSaveChip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Où économiser ?'**
+  String get chatSaveChip;
+
+  /// No description provided for @chatSavePrompt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Où pourrais-je économiser ? Regarde mes dépenses, mes abonnements, mes crédits et mes frais bancaires, et propose-moi les pistes les plus utiles, chiffrées.'**
+  String get chatSavePrompt;
+
+  /// No description provided for @chatAffordChip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Puis-je me permettre… ?'**
+  String get chatAffordChip;
+
+  /// No description provided for @chatAffordPrompt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Puis-je me permettre un achat de  € ?'**
+  String get chatAffordPrompt;
+
+  /// No description provided for @loanFamilyLoans.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédits'**
+  String get loanFamilyLoans;
+
+  /// No description provided for @loanFamilyConsumer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédits à la consommation'**
+  String get loanFamilyConsumer;
+
+  /// No description provided for @loanFamilyTotals.
+  ///
+  /// In fr, this message translates to:
+  /// **'{monthly} / mois · reste {remaining}'**
+  String loanFamilyTotals(String monthly, String remaining);
+
+  /// No description provided for @loanSortRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste à rembourser'**
+  String get loanSortRemaining;
+
+  /// No description provided for @loanSortMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mensualité'**
+  String get loanSortMonthly;
+
+  /// No description provided for @loanSortEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de fin'**
+  String get loanSortEnd;
+
+  /// No description provided for @loanSortLender.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisme'**
+  String get loanSortLender;
 }
 
 class _AppLocalizationsDelegate

@@ -36,8 +36,23 @@ class LoansScreen extends StatefulWidget {
   State<LoansScreen> createState() => LoansScreenState();
 }
 
+/// The three families of the Loans page.
+enum LoanFamily { loans, consumer, installments }
+
+LoanFamily loanFamily(LoanKind k) => switch (k) {
+  LoanKind.consumer || LoanKind.revolving => LoanFamily.consumer,
+  LoanKind.installments => LoanFamily.installments,
+  _ => LoanFamily.loans,
+};
+
+enum LoanSort { remaining, monthly, end, lender }
+
 class LoansScreenState extends State<LoansScreen> {
   LoanOverview? _data;
+
+  /// Families shown (all by default) and the order inside each.
+  final Set<LoanFamily> _shown = {...LoanFamily.values};
+  var _sort = LoanSort.remaining;
   List<InstalmentCandidate> _found = [];
   String? _error;
 
@@ -132,10 +147,37 @@ class LoansScreenState extends State<LoansScreen> {
     );
   }
 
-  static List<LoanInfo> _ordered(List<LoanInfo> loans) => [
-    ...loans.where((x) => x.loan.kind != LoanKind.installments),
-    ...loans.where((x) => x.loan.kind == LoanKind.installments),
-  ];
+  /// The loans of a family, in the chosen order; repaid ones last.
+  List<LoanInfo> _of(List<LoanInfo> loans, LoanFamily f) {
+    final list = [
+      for (final x in loans)
+        if (loanFamily(x.loan.kind) == f) x,
+    ];
+    int by(LoanInfo a, LoanInfo b) => switch (_sort) {
+      LoanSort.remaining => b.remainingCents.compareTo(a.remainingCents),
+      LoanSort.monthly =>
+        (b.paymentCents + b.loan.insuranceMonthlyCents).compareTo(
+          a.paymentCents + a.loan.insuranceMonthlyCents,
+        ),
+      LoanSort.end => a.endDate.compareTo(b.endDate),
+      LoanSort.lender => a.loan.lender.toLowerCase().compareTo(
+        b.loan.lender.toLowerCase(),
+      ),
+    };
+    list.sort((a, b) {
+      final done = (a.nextDueDate == null ? 1 : 0).compareTo(
+        b.nextDueDate == null ? 1 : 0,
+      );
+      return done != 0 ? done : by(a, b);
+    });
+    return list;
+  }
+
+  static String familyText(AppLocalizations l, LoanFamily f) => switch (f) {
+    LoanFamily.loans => l.loanFamilyLoans,
+    LoanFamily.consumer => l.loanFamilyConsumer,
+    LoanFamily.installments => l.loanSectionInstallments,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -188,31 +230,95 @@ class LoansScreenState extends State<LoansScreen> {
                       padding: const EdgeInsets.all(32),
                       child: Text(l.loansEmpty, textAlign: TextAlign.center),
                     ),
-                  for (final (i, info) in _ordered(d.loans).indexed) ...[
-                    // Payments in instalments come last, under their title.
-                    if (info.loan.kind == LoanKind.installments &&
-                        (i == 0 ||
-                            _ordered(d.loans)[i - 1].loan.kind !=
-                                LoanKind.installments))
+                  if (d.loans.isNotEmpty) ...[
+                    // What to show, and in which order.
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        for (final f in LoanFamily.values)
+                          if (d.loans.any((x) => loanFamily(x.loan.kind) == f))
+                            FilterChip(
+                              label: Text(familyText(l, f)),
+                              selected: _shown.contains(f),
+                              onSelected: (v) => setState(
+                                () => v ? _shown.add(f) : _shown.remove(f),
+                              ),
+                            ),
+                        DropdownButton<LoanSort>(
+                          value: _sort,
+                          underline: const SizedBox.shrink(),
+                          icon: const Icon(Icons.sort),
+                          items: [
+                            for (final o in LoanSort.values)
+                              DropdownMenuItem(
+                                value: o,
+                                child: Text(switch (o) {
+                                  LoanSort.remaining => l.loanSortRemaining,
+                                  LoanSort.monthly => l.loanSortMonthly,
+                                  LoanSort.end => l.loanSortEnd,
+                                  LoanSort.lender => l.loanSortLender,
+                                }),
+                              ),
+                          ],
+                          onChanged: (o) => setState(() => _sort = o!),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  for (final f in LoanFamily.values)
+                    if (_shown.contains(f) && _of(d.loans, f).isNotEmpty) ...[
                       Padding(
                         padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
-                        child: Text(
-                          l.loanSectionInstallments,
-                          style: theme.textTheme.titleMedium,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                familyText(l, f),
+                                style: theme.textTheme.titleMedium,
+                              ),
+                            ),
+                            // What the family weighs each month and in all.
+                            Text(
+                              l.loanFamilyTotals(
+                                context.money(
+                                  _of(d.loans, f)
+                                      .where((x) => x.nextDueDate != null)
+                                      .fold(
+                                        0,
+                                        (a, x) =>
+                                            a +
+                                            x.paymentCents +
+                                            x.loan.insuranceMonthlyCents,
+                                      ),
+                                ),
+                                context.money(
+                                  _of(d.loans, f).fold(
+                                    0,
+                                    (a, x) => a + x.remainingCents,
+                                  ),
+                                ),
+                              ),
+                              style: theme.textTheme.bodySmall,
+                            ),
+                          ],
                         ),
                       ),
-                    Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () => _open(info),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: _LoanSummary(info: info),
+                      for (final info in _of(d.loans, f))
+                        Card(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () => _open(info),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: _LoanSummary(info: info),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
+                    ],
                   Text(l.loansDisclaimer, style: theme.textTheme.bodySmall),
                 ],
               ),

@@ -12,6 +12,7 @@ import '../widgets/operation_sheet.dart';
 import '../widgets/operation_tile.dart';
 import '../widgets/undo.dart';
 import 'subscriptions_screen.dart';
+import 'trash_screen.dart';
 
 /// Operations of one account: search, filters, corrections, manual entry.
 class OperationsScreen extends StatefulWidget {
@@ -403,6 +404,21 @@ class _OperationsScreenState extends State<OperationsScreen> {
                   icon: const Icon(Icons.list_alt, size: 18),
                   label: Text(l.subscriptionsOpen),
                   onPressed: _openSubscriptions,
+                ),
+                TextButton.icon(
+                  icon: const Icon(Icons.delete_outline, size: 18),
+                  label: Text(l.trashTitle),
+                  onPressed: () async {
+                    final changed = await Navigator.of(context).push<bool>(
+                      MaterialPageRoute(
+                        builder: (_) => TrashScreen(
+                          membership: widget.membership,
+                          accounts: widget.accounts,
+                        ),
+                      ),
+                    );
+                    if (changed == true) _reload();
+                  },
                 ),
                 Text(
                   _provider != null && _providerSum != null && _total > 0

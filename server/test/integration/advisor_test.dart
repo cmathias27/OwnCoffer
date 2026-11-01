@@ -53,6 +53,12 @@ void main() {
           ),
         );
 
+    /// The proposals that change something (the information cards apart).
+    Future<List<ActionProposal>> advice(UuidValue u) async => [
+      for (final p in await endpoints.advisor.proposals(as(u), groupA))
+        if (p.kind != 'notice') p,
+    ];
+
     setUp(() async {
       db = sessionBuilder.build();
       alice = await user({'owncoffer.serverAdmin'});
@@ -98,20 +104,20 @@ void main() {
 
     test('goals proposed from the visible accounts only, accepted once, '
         'undone', () async {
-      final mine = await endpoints.advisor.proposals(as(alice), groupA);
+      final mine = await advice(alice);
       final food = cats['food']!.id;
       expect(
         mine.map((p) => (p.kind, p.targetId, p.proposedValue)).toSet(),
         {('set_goal', food, 21000), ('set_goal', cats['leisure']!.id, 40000)},
       );
-      final forBob = await endpoints.advisor.proposals(as(bob), groupA);
+      final forBob = await advice(bob);
       expect(
         forBob.map((p) => p.targetId),
         [food],
         reason: "bob does not see the restricted account's spending",
       );
       // Asking again does not repeat them.
-      expect(await endpoints.advisor.proposals(as(bob), groupA), hasLength(1));
+      expect(await advice(bob), hasLength(1));
 
       final p = forBob.single;
       await expectLater(endpoints.advisor.accept(as(alice), p.id!), denied);
@@ -133,8 +139,42 @@ void main() {
       );
     });
 
+    test('information cards: an overdraft ahead on a visible account only; '
+        'understood or ignored, they change nothing and come once', () async {
+      // Spending only: the accounts will go below their threshold.
+      final all = await endpoints.advisor.proposals(as(bob), groupA);
+      final cards = [
+        for (final p in all)
+          if (p.kind == 'notice') p,
+      ];
+      expect(
+        {for (final c in cards) (c.reason, c.targetId)},
+        {('anticipate_overdraft', shared.id)},
+        reason: "bob does not see alice's restricted account",
+      );
+      final before = await Goal.db.count(db);
+      await endpoints.advisor.accept(as(bob), cards.single.id!);
+      expect(await Goal.db.count(db), before);
+      expect(
+        (await endpoints.advisor.proposals(
+          as(bob),
+          groupA,
+        )).where((p) => p.kind == 'notice' && p.status == 'pending'),
+        isEmpty,
+        reason: 'not repeated once understood',
+      );
+      final alices = await endpoints.advisor.proposals(as(alice), groupA);
+      expect(
+        {
+          for (final p in alices)
+            if (p.reason == 'anticipate_overdraft') p.targetId,
+        },
+        {shared.id, restricted.id},
+      );
+    });
+
     test('a proposal whose data changed is not applied', () async {
-      final p = (await endpoints.advisor.proposals(as(bob), groupA)).single;
+      final p = (await advice(bob)).single;
       await endpoints.goal.set(as(bob), groupA, p.targetId, 15000);
       await expectLater(
         endpoints.advisor.accept(as(bob), p.id!),
@@ -148,7 +188,7 @@ void main() {
       );
       final goals = await endpoints.goal.list(as(bob), groupA);
       expect(goals.single.amountCents, 15000, reason: 'left as it was');
-      final now = await endpoints.advisor.proposals(as(bob), groupA);
+      final now = await advice(bob);
       expect(
         now.any((x) => x.id == p.id && x.status == 'expired'),
         isTrue,
@@ -158,14 +198,11 @@ void main() {
     test(
       'a reader may look but not accept; refused proposals stay refused',
       () async {
-        final r = (await endpoints.advisor.proposals(
-          as(reader),
-          groupA,
-        )).single;
+        final r = (await advice(reader)).single;
         await expectLater(endpoints.advisor.accept(as(reader), r.id!), denied);
         expect(await endpoints.goal.list(as(alice), groupA), isEmpty);
         await expectLater(endpoints.advisor.refuse(as(reader), r.id!), denied);
-        final b = (await endpoints.advisor.proposals(as(bob), groupA)).single;
+        final b = (await advice(bob)).single;
         expect(
           (await endpoints.advisor.refuse(as(bob), b.id!)).status,
           'refused',

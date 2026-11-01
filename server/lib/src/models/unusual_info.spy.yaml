@@ -1,0 +1,10 @@
+### A debit that stands out: much more than usual for its label (amount),
+### or the same label and amount a few days apart (duplicate).
+class: UnusualInfo
+fields:
+  kind: String
+  transaction: BankTransaction
+  ### Usual amount (median of earlier debits), or the other debit's amount.
+  usualCents: int
+  ### Earlier debits counted, or the other debit's id.
+  basis: int

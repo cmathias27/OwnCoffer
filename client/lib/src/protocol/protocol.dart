@@ -22,11 +22,15 @@ import 'package:owncoffer_client/src/protocol/admin_invitation_info.dart'
     as _idjaxr3o;
 import 'package:owncoffer_client/src/protocol/admin_user_info.dart'
     as _i4kcqb5h;
+import 'package:owncoffer_client/src/protocol/ai_conversation.dart'
+    as _i3twyez0;
+import 'package:owncoffer_client/src/protocol/ai_memory.dart' as _iofw4ha7;
 import 'package:owncoffer_client/src/protocol/ai_message.dart' as _iarsdlqt;
 import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
 import 'package:owncoffer_client/src/protocol/bank_transaction.dart'
     as _ivksw0b3;
 import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
+import 'package:owncoffer_client/src/protocol/feedback_info.dart' as _i6glypql;
 import 'package:owncoffer_client/src/protocol/goal.dart' as _ita8uvsc;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
@@ -50,6 +54,7 @@ import 'package:owncoffer_client/src/protocol/statement_import.dart'
     as _i5x9swls;
 import 'package:owncoffer_client/src/protocol/transaction_split.dart'
     as _idy91hap;
+import 'package:owncoffer_client/src/protocol/user_feedback.dart' as _i081ti63;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -67,6 +72,8 @@ import 'admin_health.dart' as _ihbeufm3;
 import 'admin_invitation_info.dart' as _ib01m0m7;
 import 'admin_stats.dart' as _iqygks5s;
 import 'admin_user_info.dart' as _is8wfuq8;
+import 'ai_conversation.dart' as _iemz15tg;
+import 'ai_memory.dart' as _itouryhh;
 import 'ai_message.dart' as _ikwoa06z;
 import 'ai_preference.dart' as _i5zygq2d;
 import 'ai_provider.dart' as _ibtxcndu;
@@ -88,6 +95,8 @@ import 'community_rule.dart' as _igloa2c5;
 import 'csv_columns.dart' as _iq9wp9wq;
 import 'due_calendar.dart' as _ic7yhr4p;
 import 'early_repayment.dart' as _ind4b83h;
+import 'fee_line.dart' as _ip53xvp1;
+import 'feedback_info.dart' as _i4v92iun;
 import 'finance_group.dart' as _iqh5irlt;
 import 'forecast_day.dart' as _ids0ngao;
 import 'forecast_event_info.dart' as _iuscnr1n;
@@ -99,6 +108,7 @@ import 'group_membership.dart' as _i54nduyh;
 import 'import_issue_info.dart' as _iso7nf03;
 import 'import_preview.dart' as _im8lwq6n;
 import 'import_preview_line.dart' as _i4e8elxc;
+import 'insights.dart' as _ivlpbhei;
 import 'instalment_candidate.dart' as _ia1npsti;
 import 'invalid_input_exception.dart' as _ijc83d8f;
 import 'invitation_info.dart' as _i9hwipt6;
@@ -149,8 +159,10 @@ import 'totp_enrollment.dart' as _iul1v2p7;
 import 'transaction_page.dart' as _i4rkvxa2;
 import 'transaction_split.dart' as _iqvm376u;
 import 'two_factor_status.dart' as _igcslm1n;
+import 'unusual_info.dart' as _iapfk8x9;
 import 'update_history_entry.dart' as _idu38kh6;
 import 'update_overview.dart' as _iv5yf7x0;
+import 'user_feedback.dart' as _iv6k6stc;
 import 'variable_category_info.dart' as _ic7yx6at;
 import 'variable_estimate_info.dart' as _in08zzvs;
 export 'access_denied_exception.dart';
@@ -165,6 +177,8 @@ export 'admin_health.dart';
 export 'admin_invitation_info.dart';
 export 'admin_stats.dart';
 export 'admin_user_info.dart';
+export 'ai_conversation.dart';
+export 'ai_memory.dart';
 export 'ai_message.dart';
 export 'ai_preference.dart';
 export 'ai_provider.dart';
@@ -186,6 +200,8 @@ export 'community_rule.dart';
 export 'csv_columns.dart';
 export 'due_calendar.dart';
 export 'early_repayment.dart';
+export 'fee_line.dart';
+export 'feedback_info.dart';
 export 'finance_group.dart';
 export 'forecast_day.dart';
 export 'forecast_event_info.dart';
@@ -197,6 +213,7 @@ export 'group_membership.dart';
 export 'import_issue_info.dart';
 export 'import_preview.dart';
 export 'import_preview_line.dart';
+export 'insights.dart';
 export 'instalment_candidate.dart';
 export 'invalid_input_exception.dart';
 export 'invitation_info.dart';
@@ -247,8 +264,10 @@ export 'totp_enrollment.dart';
 export 'transaction_page.dart';
 export 'transaction_split.dart';
 export 'two_factor_status.dart';
+export 'unusual_info.dart';
 export 'update_history_entry.dart';
 export 'update_overview.dart';
+export 'user_feedback.dart';
 export 'variable_category_info.dart';
 export 'variable_estimate_info.dart';
 export 'client.dart';
@@ -323,6 +342,12 @@ class Protocol extends _isc.SerializationManager {
     if (t == _is8wfuq8.AdminUserInfo) {
       return _is8wfuq8.AdminUserInfo.fromJson(data) as T;
     }
+    if (t == _iemz15tg.AiConversation) {
+      return _iemz15tg.AiConversation.fromJson(data) as T;
+    }
+    if (t == _itouryhh.AiMemory) {
+      return _itouryhh.AiMemory.fromJson(data) as T;
+    }
     if (t == _ikwoa06z.AiMessage) {
       return _ikwoa06z.AiMessage.fromJson(data) as T;
     }
@@ -386,6 +411,12 @@ class Protocol extends _isc.SerializationManager {
     if (t == _ind4b83h.EarlyRepayment) {
       return _ind4b83h.EarlyRepayment.fromJson(data) as T;
     }
+    if (t == _ip53xvp1.FeeLine) {
+      return _ip53xvp1.FeeLine.fromJson(data) as T;
+    }
+    if (t == _i4v92iun.FeedbackInfo) {
+      return _i4v92iun.FeedbackInfo.fromJson(data) as T;
+    }
     if (t == _iqh5irlt.FinanceGroup) {
       return _iqh5irlt.FinanceGroup.fromJson(data) as T;
     }
@@ -418,6 +449,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _i4e8elxc.ImportPreviewLine) {
       return _i4e8elxc.ImportPreviewLine.fromJson(data) as T;
+    }
+    if (t == _ivlpbhei.Insights) {
+      return _ivlpbhei.Insights.fromJson(data) as T;
     }
     if (t == _ia1npsti.InstalmentCandidate) {
       return _ia1npsti.InstalmentCandidate.fromJson(data) as T;
@@ -569,11 +603,17 @@ class Protocol extends _isc.SerializationManager {
     if (t == _igcslm1n.TwoFactorStatus) {
       return _igcslm1n.TwoFactorStatus.fromJson(data) as T;
     }
+    if (t == _iapfk8x9.UnusualInfo) {
+      return _iapfk8x9.UnusualInfo.fromJson(data) as T;
+    }
     if (t == _idu38kh6.UpdateHistoryEntry) {
       return _idu38kh6.UpdateHistoryEntry.fromJson(data) as T;
     }
     if (t == _iv5yf7x0.UpdateOverview) {
       return _iv5yf7x0.UpdateOverview.fromJson(data) as T;
+    }
+    if (t == _iv6k6stc.UserFeedback) {
+      return _iv6k6stc.UserFeedback.fromJson(data) as T;
     }
     if (t == _ic7yx6at.VariableCategoryInfo) {
       return _ic7yx6at.VariableCategoryInfo.fromJson(data) as T;
@@ -628,6 +668,13 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_is8wfuq8.AdminUserInfo?>()) {
       return (data != null ? _is8wfuq8.AdminUserInfo.fromJson(data) : null)
           as T;
+    }
+    if (t == _isc.getType<_iemz15tg.AiConversation?>()) {
+      return (data != null ? _iemz15tg.AiConversation.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_itouryhh.AiMemory?>()) {
+      return (data != null ? _itouryhh.AiMemory.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_ikwoa06z.AiMessage?>()) {
       return (data != null ? _ikwoa06z.AiMessage.fromJson(data) : null) as T;
@@ -698,6 +745,12 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _ind4b83h.EarlyRepayment.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_ip53xvp1.FeeLine?>()) {
+      return (data != null ? _ip53xvp1.FeeLine.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i4v92iun.FeedbackInfo?>()) {
+      return (data != null ? _i4v92iun.FeedbackInfo.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_iqh5irlt.FinanceGroup?>()) {
       return (data != null ? _iqh5irlt.FinanceGroup.fromJson(data) : null) as T;
     }
@@ -737,6 +790,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_i4e8elxc.ImportPreviewLine?>()) {
       return (data != null ? _i4e8elxc.ImportPreviewLine.fromJson(data) : null)
           as T;
+    }
+    if (t == _isc.getType<_ivlpbhei.Insights?>()) {
+      return (data != null ? _ivlpbhei.Insights.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_ia1npsti.InstalmentCandidate?>()) {
       return (data != null
@@ -937,6 +993,9 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _igcslm1n.TwoFactorStatus.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_iapfk8x9.UnusualInfo?>()) {
+      return (data != null ? _iapfk8x9.UnusualInfo.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_idu38kh6.UpdateHistoryEntry?>()) {
       return (data != null ? _idu38kh6.UpdateHistoryEntry.fromJson(data) : null)
           as T;
@@ -944,6 +1003,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_iv5yf7x0.UpdateOverview?>()) {
       return (data != null ? _iv5yf7x0.UpdateOverview.fromJson(data) : null)
           as T;
+    }
+    if (t == _isc.getType<_iv6k6stc.UserFeedback?>()) {
+      return (data != null ? _iv6k6stc.UserFeedback.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_ic7yx6at.VariableCategoryInfo?>()) {
       return (data != null
@@ -1029,6 +1091,27 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<DateTime>) {
+      return (data as List).map((e) => deserialize<DateTime>(e)).toList() as T;
+    }
+    if (t == List<_ip53xvp1.FeeLine>) {
+      return (data as List)
+              .map((e) => deserialize<_ip53xvp1.FeeLine>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i0mjlwv3.BankTransaction>) {
+      return (data as List)
+              .map((e) => deserialize<_i0mjlwv3.BankTransaction>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iapfk8x9.UnusualInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iapfk8x9.UnusualInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_inh9sy0f.LoanEvent>) {
       return (data as List)
               .map((e) => deserialize<_inh9sy0f.LoanEvent>(e))
@@ -1058,12 +1141,6 @@ class Protocol extends _isc.SerializationManager {
     if (t == List<_i8msyna2.CategoryFlow>) {
       return (data as List)
               .map((e) => deserialize<_i8msyna2.CategoryFlow>(e))
-              .toList()
-          as T;
-    }
-    if (t == List<_i0mjlwv3.BankTransaction>) {
-      return (data as List)
-              .map((e) => deserialize<_i0mjlwv3.BankTransaction>(e))
               .toList()
           as T;
     }
@@ -1108,9 +1185,6 @@ class Protocol extends _isc.SerializationManager {
               .map((e) => deserialize<_idndmjo8.ReleaseNotes>(e))
               .toList()
           as T;
-    }
-    if (t == List<DateTime>) {
-      return (data as List).map((e) => deserialize<DateTime>(e)).toList() as T;
     }
     if (t == List<_ic7yx6at.VariableCategoryInfo>) {
       return (data as List)
@@ -1169,6 +1243,18 @@ class Protocol extends _isc.SerializationManager {
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
+    if (t == List<_iofw4ha7.AiMemory>) {
+      return (data as List)
+              .map((e) => deserialize<_iofw4ha7.AiMemory>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i3twyez0.AiConversation>) {
+      return (data as List)
+              .map((e) => deserialize<_i3twyez0.AiConversation>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_iarsdlqt.AiMessage>) {
       return (data as List)
               .map((e) => deserialize<_iarsdlqt.AiMessage>(e))
@@ -1184,6 +1270,18 @@ class Protocol extends _isc.SerializationManager {
     if (t == List<_i37qqsjr.Category>) {
       return (data as List)
               .map((e) => deserialize<_i37qqsjr.Category>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i081ti63.UserFeedback>) {
+      return (data as List)
+              .map((e) => deserialize<_i081ti63.UserFeedback>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i6glypql.FeedbackInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_i6glypql.FeedbackInfo>(e))
               .toList()
           as T;
     }
@@ -1305,6 +1403,8 @@ class Protocol extends _isc.SerializationManager {
       _ib01m0m7.AdminInvitationInfo => 'AdminInvitationInfo',
       _iqygks5s.AdminStats => 'AdminStats',
       _is8wfuq8.AdminUserInfo => 'AdminUserInfo',
+      _iemz15tg.AiConversation => 'AiConversation',
+      _itouryhh.AiMemory => 'AiMemory',
       _ikwoa06z.AiMessage => 'AiMessage',
       _i5zygq2d.AiPreference => 'AiPreference',
       _ibtxcndu.AiProvider => 'AiProvider',
@@ -1326,6 +1426,8 @@ class Protocol extends _isc.SerializationManager {
       _iq9wp9wq.CsvColumns => 'CsvColumns',
       _ic7yhr4p.DueCalendar => 'DueCalendar',
       _ind4b83h.EarlyRepayment => 'EarlyRepayment',
+      _ip53xvp1.FeeLine => 'FeeLine',
+      _i4v92iun.FeedbackInfo => 'FeedbackInfo',
       _iqh5irlt.FinanceGroup => 'FinanceGroup',
       _ids0ngao.ForecastDay => 'ForecastDay',
       _iuscnr1n.ForecastEventInfo => 'ForecastEventInfo',
@@ -1337,6 +1439,7 @@ class Protocol extends _isc.SerializationManager {
       _iso7nf03.ImportIssueInfo => 'ImportIssueInfo',
       _im8lwq6n.ImportPreview => 'ImportPreview',
       _i4e8elxc.ImportPreviewLine => 'ImportPreviewLine',
+      _ivlpbhei.Insights => 'Insights',
       _ia1npsti.InstalmentCandidate => 'InstalmentCandidate',
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
       _i9hwipt6.InvitationInfo => 'InvitationInfo',
@@ -1387,8 +1490,10 @@ class Protocol extends _isc.SerializationManager {
       _i4rkvxa2.TransactionPage => 'TransactionPage',
       _iqvm376u.TransactionSplit => 'TransactionSplit',
       _igcslm1n.TwoFactorStatus => 'TwoFactorStatus',
+      _iapfk8x9.UnusualInfo => 'UnusualInfo',
       _idu38kh6.UpdateHistoryEntry => 'UpdateHistoryEntry',
       _iv5yf7x0.UpdateOverview => 'UpdateOverview',
+      _iv6k6stc.UserFeedback => 'UserFeedback',
       _ic7yx6at.VariableCategoryInfo => 'VariableCategoryInfo',
       _in08zzvs.VariableEstimateInfo => 'VariableEstimateInfo',
       _ => null,
@@ -1429,6 +1534,10 @@ class Protocol extends _isc.SerializationManager {
         return 'AdminStats';
       case _is8wfuq8.AdminUserInfo():
         return 'AdminUserInfo';
+      case _iemz15tg.AiConversation():
+        return 'AiConversation';
+      case _itouryhh.AiMemory():
+        return 'AiMemory';
       case _ikwoa06z.AiMessage():
         return 'AiMessage';
       case _i5zygq2d.AiPreference():
@@ -1471,6 +1580,10 @@ class Protocol extends _isc.SerializationManager {
         return 'DueCalendar';
       case _ind4b83h.EarlyRepayment():
         return 'EarlyRepayment';
+      case _ip53xvp1.FeeLine():
+        return 'FeeLine';
+      case _i4v92iun.FeedbackInfo():
+        return 'FeedbackInfo';
       case _iqh5irlt.FinanceGroup():
         return 'FinanceGroup';
       case _ids0ngao.ForecastDay():
@@ -1493,6 +1606,8 @@ class Protocol extends _isc.SerializationManager {
         return 'ImportPreview';
       case _i4e8elxc.ImportPreviewLine():
         return 'ImportPreviewLine';
+      case _ivlpbhei.Insights():
+        return 'Insights';
       case _ia1npsti.InstalmentCandidate():
         return 'InstalmentCandidate';
       case _ijc83d8f.InvalidInputException():
@@ -1593,10 +1708,14 @@ class Protocol extends _isc.SerializationManager {
         return 'TransactionSplit';
       case _igcslm1n.TwoFactorStatus():
         return 'TwoFactorStatus';
+      case _iapfk8x9.UnusualInfo():
+        return 'UnusualInfo';
       case _idu38kh6.UpdateHistoryEntry():
         return 'UpdateHistoryEntry';
       case _iv5yf7x0.UpdateOverview():
         return 'UpdateOverview';
+      case _iv6k6stc.UserFeedback():
+        return 'UserFeedback';
       case _ic7yx6at.VariableCategoryInfo():
         return 'VariableCategoryInfo';
       case _in08zzvs.VariableEstimateInfo():
@@ -1658,6 +1777,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'AdminUserInfo') {
       return deserialize<_is8wfuq8.AdminUserInfo>(data['data']);
+    }
+    if (dataClassName == 'AiConversation') {
+      return deserialize<_iemz15tg.AiConversation>(data['data']);
+    }
+    if (dataClassName == 'AiMemory') {
+      return deserialize<_itouryhh.AiMemory>(data['data']);
     }
     if (dataClassName == 'AiMessage') {
       return deserialize<_ikwoa06z.AiMessage>(data['data']);
@@ -1722,6 +1847,12 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'EarlyRepayment') {
       return deserialize<_ind4b83h.EarlyRepayment>(data['data']);
     }
+    if (dataClassName == 'FeeLine') {
+      return deserialize<_ip53xvp1.FeeLine>(data['data']);
+    }
+    if (dataClassName == 'FeedbackInfo') {
+      return deserialize<_i4v92iun.FeedbackInfo>(data['data']);
+    }
     if (dataClassName == 'FinanceGroup') {
       return deserialize<_iqh5irlt.FinanceGroup>(data['data']);
     }
@@ -1754,6 +1885,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'ImportPreviewLine') {
       return deserialize<_i4e8elxc.ImportPreviewLine>(data['data']);
+    }
+    if (dataClassName == 'Insights') {
+      return deserialize<_ivlpbhei.Insights>(data['data']);
     }
     if (dataClassName == 'InstalmentCandidate') {
       return deserialize<_ia1npsti.InstalmentCandidate>(data['data']);
@@ -1905,11 +2039,17 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'TwoFactorStatus') {
       return deserialize<_igcslm1n.TwoFactorStatus>(data['data']);
     }
+    if (dataClassName == 'UnusualInfo') {
+      return deserialize<_iapfk8x9.UnusualInfo>(data['data']);
+    }
     if (dataClassName == 'UpdateHistoryEntry') {
       return deserialize<_idu38kh6.UpdateHistoryEntry>(data['data']);
     }
     if (dataClassName == 'UpdateOverview') {
       return deserialize<_iv5yf7x0.UpdateOverview>(data['data']);
+    }
+    if (dataClassName == 'UserFeedback') {
+      return deserialize<_iv6k6stc.UserFeedback>(data['data']);
     }
     if (dataClassName == 'VariableCategoryInfo') {
       return deserialize<_ic7yx6at.VariableCategoryInfo>(data['data']);

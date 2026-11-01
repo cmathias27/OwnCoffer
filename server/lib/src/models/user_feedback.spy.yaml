@@ -1,0 +1,18 @@
+### A remark sent from the app to the server administrator (bug, idea,
+### question). Never sent outside the server; no bank data is joined.
+class: UserFeedback
+table: user_feedbacks
+fields:
+  authUserId: UuidValue?, relation(parent=serverpod_auth_core_user, onDelete=SetNull)
+  ### bug, idea or question.
+  kind: String
+  text: String
+  ### The page it was sent from, and the app's version.
+  page: String?
+  appVersion: String?
+  ### open or done.
+  status: String
+  createdAt: DateTime, default=now
+indexes:
+  user_feedbacks_created_idx:
+    fields: createdAt

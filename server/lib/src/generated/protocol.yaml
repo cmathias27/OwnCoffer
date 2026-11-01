@@ -50,18 +50,30 @@ ai:
   - testProvider:
   - readInvoice:
   - readLoanDocument:
+  - memories:
+  - addMemory:
+  - deleteMemory:
+  - conversations:
+  - saveConversation:
+  - deleteConversation:
   - setPreference:
   - chat:
 analysis:
   - report:
   - operations:
   - leftToLive:
+  - insights:
   - review:
 category:
   - list:
   - create:
   - update:
   - archive:
+feedback:
+  - send:
+  - mine:
+  - all:
+  - setDone:
 goal:
   - list:
   - set:
@@ -161,6 +173,9 @@ transaction:
   - setSplits:
   - setCleared:
   - setClearedMany:
+  - trashed:
+  - purge:
+  - emptyTrash:
   - trash:
   - restore:
   - createRuleFrom:

@@ -168,6 +168,21 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
         '${d['pattern'] ?? ''}',
         _category(p.proposedValue ?? 0),
       ),
+      'anticipate_overdraft' => l.noticeOverdraft(
+        '${d['account'] ?? ''}',
+        context.day(DateTime.tryParse('${d['date']}') ?? DateTime(2000)),
+      ),
+      'watch_amount' => l.noticeUnusual(
+        '${d['label'] ?? ''}',
+        context.money((d['amount_cents'] as num?)?.toInt() ?? 0),
+      ),
+      'watch_duplicate' => l.noticeDuplicate(
+        '${d['label'] ?? ''}',
+        context.money((d['amount_cents'] as num?)?.toInt() ?? 0),
+      ),
+      'advise_fees' => l.noticeFees(
+        context.money((d['total_cents'] as num?)?.toInt() ?? 0),
+      ),
       'ai_receipt_split' => l.advisorAiSplit('${d['label'] ?? ''}'),
       'ai_invoice_hints' => l.advisorAiInvoiceHints('${d['document'] ?? ''}'),
       'ai_loan_terms' => l.advisorAiLoanTerms('${d['lender'] ?? ''}'),
@@ -199,9 +214,15 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
       _ => const <int>[],
     };
     final ai = p.origin != 'engine';
+    final notice = p.kind == 'notice';
     final busy = _busy.contains(p.id);
     return SoftSection(
-      icon: Icons.lightbulb_outline,
+      icon: switch (p.reason) {
+        'anticipate_overdraft' => Icons.event_busy_outlined,
+        'watch_amount' || 'watch_duplicate' => Icons.visibility_outlined,
+        'advise_fees' => Icons.savings_outlined,
+        _ => Icons.lightbulb_outline,
+      },
       title: _title(l, p),
       children: [
         if (months.isNotEmpty)
@@ -234,6 +255,39 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
             Text('· $e', style: theme.textTheme.bodySmall),
           Text(l.advisorAiRuleUndo, style: theme.textTheme.bodySmall),
         ],
+        if (p.reason == 'anticipate_overdraft')
+          Text(
+            l.noticeOverdraftWhy(
+              context.money((d['lowest_cents'] as num?)?.toInt() ?? 0),
+              context.day(
+                DateTime.tryParse('${d['lowest_date']}') ?? DateTime(2000),
+              ),
+              context.money((d['threshold_cents'] as num?)?.toInt() ?? 0),
+            ),
+          ),
+        if (p.reason == 'watch_amount')
+          Text(
+            l.noticeUnusualWhy(
+              context.day(DateTime.tryParse('${d['date']}') ?? DateTime(2000)),
+              context.money((d['usual_cents'] as num?)?.toInt() ?? 0),
+              (d['basis'] as num?)?.toInt() ?? 0,
+            ),
+          ),
+        if (p.reason == 'watch_duplicate')
+          Text(
+            l.noticeDuplicateWhy(
+              context.day(DateTime.tryParse('${d['date']}') ?? DateTime(2000)),
+            ),
+          ),
+        if (p.reason == 'advise_fees') ...[
+          Text(l.noticeFeesWhy),
+          for (final x in (d['lines'] as List?) ?? const [])
+            if (x is Map)
+              Text(
+                '· ${x['label']} : ${context.money((x['cents'] as num).toInt())}'
+                ' (${x['count']})',
+              ),
+        ],
         if (p.reason == 'ai_receipt_split') ..._splitDetails(l, p, d),
         if (p.reason == 'ai_invoice_hints')
           Text(
@@ -264,7 +318,7 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
             ),
           ),
         const SizedBox(height: 4),
-        if (!ai)
+        if (!ai && !notice)
           Text(
             switch (p.reason) {
               'raise_goal' => l.advisorRaiseWhy,
@@ -304,15 +358,23 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
               TextButton(
                 onPressed: busy
                     ? null
-                    : () => _act(p, client.advisor.refuse, l.advisorRefused),
-                child: Text(l.advisorRefuse),
+                    : () => _act(
+                        p,
+                        client.advisor.refuse,
+                        notice ? l.noticeIgnored : l.advisorRefused,
+                      ),
+                child: Text(notice ? l.noticeIgnore : l.advisorRefuse),
               ),
               FilledButton.icon(
                 icon: const Icon(Icons.check),
-                label: Text(l.advisorAccept),
+                label: Text(notice ? l.noticeUnderstood : l.advisorAccept),
                 onPressed: busy
                     ? null
-                    : () => _act(p, client.advisor.accept, l.advisorAccepted),
+                    : () => _act(
+                        p,
+                        client.advisor.accept,
+                        notice ? l.noticeNoted : l.advisorAccepted,
+                      ),
               ),
             ],
           )
@@ -411,7 +473,7 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
       subtitle: Text(
         p.decidedAt == null ? status : '$status · ${context.day(p.decidedAt!)}',
       ),
-      trailing: p.status == 'executed' && _canWrite
+      trailing: p.status == 'executed' && _canWrite && p.kind != 'notice'
           ? TextButton(
               onPressed: _busy.contains(p.id)
                   ? null

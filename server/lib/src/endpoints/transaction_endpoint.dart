@@ -520,6 +520,49 @@ class TransactionEndpoint extends Endpoint {
     return rows;
   }
 
+  /// The trash: operations moved there, on the accounts the user may see,
+  /// most recently trashed first.
+  Future<List<BankTransaction>> trashed(Session session, int groupId) async {
+    final Set<int> ids = {
+      for (final a in await Access.visibleAccounts(session, groupId)) a.id!,
+    };
+    if (ids.isEmpty) return [];
+    return BankTransaction.db.find(
+      session,
+      where: (t) => t.accountId.inSet(ids) & t.deletedAt.notEquals(null),
+      orderByList: (t) => [t.deletedAt.desc(), t.id.desc()],
+      limit: 500,
+    );
+  }
+
+  /// Deletes an operation of the trash for good (its split and invoices
+  /// with it). Only from the trash.
+  Future<void> purge(Session session, int transactionId) async {
+    final t = await BankTransaction.db.findById(session, transactionId);
+    if (t == null || t.deletedAt == null) {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    final account = await _account(session, t, write: true);
+    await BankTransaction.db.deleteRow(session, t);
+    await _audit(session, account, 'purge', t.id, before: t);
+  }
+
+  /// Empties the trash of the accounts the user may change. Returns how
+  /// many operations were deleted.
+  Future<int> emptyTrash(Session session, int groupId) async {
+    await Access.requireMember(session, groupId, min: MemberRole.user);
+    var n = 0;
+    for (final t in await trashed(session, groupId)) {
+      try {
+        await purge(session, t.id!);
+        n++;
+      } on AccessDeniedException {
+        // A restricted account this user may only read: left as it is.
+      }
+    }
+    return n;
+  }
+
   /// Moves the operation to the trash (kept 30 days).
   Future<void> trash(Session session, int transactionId) async {
     final (t, account) = await _find(session, transactionId);

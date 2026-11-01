@@ -30,6 +30,9 @@ import 'package:owncoffer_server/src/generated/admin_invitation_info.dart'
 import 'package:owncoffer_server/src/generated/admin_stats.dart' as _izw0akf9;
 import 'package:owncoffer_server/src/generated/admin_user_info.dart'
     as _i3ew1lpl;
+import 'package:owncoffer_server/src/generated/ai_conversation.dart'
+    as _ixk78f40;
+import 'package:owncoffer_server/src/generated/ai_memory.dart' as _iugiong0;
 import 'package:owncoffer_server/src/generated/ai_message.dart' as _ijy47dz3;
 import 'package:owncoffer_server/src/generated/ai_provider.dart' as _iptn367l;
 import 'package:owncoffer_server/src/generated/ai_reply.dart' as _iggzqc7o;
@@ -48,6 +51,7 @@ import 'package:owncoffer_server/src/generated/csv_columns.dart' as _iytxq8gu;
 import 'package:owncoffer_server/src/generated/due_calendar.dart' as _ip0g1w23;
 import 'package:owncoffer_server/src/generated/early_repayment.dart'
     as _iy0obzyi;
+import 'package:owncoffer_server/src/generated/feedback_info.dart' as _ig8hdxvd;
 import 'package:owncoffer_server/src/generated/finance_group.dart' as _i6lqurfp;
 import 'package:owncoffer_server/src/generated/forecast_result.dart'
     as _isjvyxsm;
@@ -58,6 +62,7 @@ import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
 import 'package:owncoffer_server/src/generated/import_preview.dart'
     as _itw310ng;
+import 'package:owncoffer_server/src/generated/insights.dart' as _is8fifll;
 import 'package:owncoffer_server/src/generated/instalment_candidate.dart'
     as _i3mgyctl;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
@@ -117,6 +122,7 @@ import 'package:owncoffer_server/src/generated/two_factor_status.dart'
     as _iwevdd3r;
 import 'package:owncoffer_server/src/generated/update_overview.dart'
     as _id69z5rc;
+import 'package:owncoffer_server/src/generated/user_feedback.dart' as _izsddv95;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
@@ -270,6 +276,8 @@ class TestEndpoints {
 
   late final _CategoryEndpoint category;
 
+  late final _FeedbackEndpoint feedback;
+
   late final _GoalEndpoint goal;
 
   late final _GroupEndpoint group;
@@ -333,6 +341,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     category = _CategoryEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    feedback = _FeedbackEndpoint(
       endpoints,
       serializationManager,
     );
@@ -1948,6 +1960,202 @@ class _AiEndpoint {
     });
   }
 
+  _ida.Future<List<_iugiong0.AiMemory>> memories(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'memories',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'memories',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iugiong0.AiMemory>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iugiong0.AiMemory> addMemory(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    String text,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'addMemory',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'addMemory',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'text': text,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iugiong0.AiMemory>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> deleteMemory(
+    _ist.TestSessionBuilder sessionBuilder,
+    int memoryId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'deleteMemory',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'deleteMemory',
+          parameters: _ist.testObjectToJson({'memoryId': memoryId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_ixk78f40.AiConversation>> conversations(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'conversations',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'conversations',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ixk78f40.AiConversation>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ixk78f40.AiConversation> saveConversation(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    int? conversationId,
+    List<_ijy47dz3.AiMessage> messages,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'saveConversation',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'saveConversation',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'conversationId': conversationId,
+            'messages': messages,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ixk78f40.AiConversation>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> deleteConversation(
+    _ist.TestSessionBuilder sessionBuilder,
+    int conversationId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'deleteConversation',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'deleteConversation',
+          parameters: _ist.testObjectToJson({'conversationId': conversationId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<_i2x2xeqe.AiStatus> setPreference(
     _ist.TestSessionBuilder sessionBuilder,
     int? providerId,
@@ -2152,6 +2360,37 @@ class _AnalysisEndpoint {
     });
   }
 
+  _ida.Future<_is8fifll.Insights> insights(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'analysis',
+            method: 'insights',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'analysis',
+          methodName: 'insights',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_is8fifll.Insights>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<_ir8qupm5.MonthReview> review(
     _ist.TestSessionBuilder sessionBuilder,
     int groupId,
@@ -2337,6 +2576,151 @@ class _CategoryEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _FeedbackEndpoint {
+  _FeedbackEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<_izsddv95.UserFeedback> send(
+    _ist.TestSessionBuilder sessionBuilder,
+    String kind,
+    String text,
+    String? page,
+    String? appVersion,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'feedback',
+            method: 'send',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'feedback',
+          methodName: 'send',
+          parameters: _ist.testObjectToJson({
+            'kind': kind,
+            'text': text,
+            'page': page,
+            'appVersion': appVersion,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_izsddv95.UserFeedback>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_izsddv95.UserFeedback>> mine(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'feedback',
+            method: 'mine',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'feedback',
+          methodName: 'mine',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_izsddv95.UserFeedback>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_ig8hdxvd.FeedbackInfo>> all(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'feedback',
+            method: 'all',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'feedback',
+          methodName: 'all',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ig8hdxvd.FeedbackInfo>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_izsddv95.UserFeedback> setDone(
+    _ist.TestSessionBuilder sessionBuilder,
+    int feedbackId,
+    bool done,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'feedback',
+            method: 'setDone',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'feedback',
+          methodName: 'setDone',
+          parameters: _ist.testObjectToJson({
+            'feedbackId': feedbackId,
+            'done': done,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_izsddv95.UserFeedback>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -5512,6 +5896,99 @@ class _TransactionEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<List<_ivm4hoam.BankTransaction>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_ivm4hoam.BankTransaction>> trashed(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'transaction',
+            method: 'trashed',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transaction',
+          methodName: 'trashed',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ivm4hoam.BankTransaction>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> purge(
+    _ist.TestSessionBuilder sessionBuilder,
+    int transactionId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'transaction',
+            method: 'purge',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transaction',
+          methodName: 'purge',
+          parameters: _ist.testObjectToJson({'transactionId': transactionId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<int> emptyTrash(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'transaction',
+            method: 'emptyTrash',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transaction',
+          methodName: 'emptyTrash',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<int>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

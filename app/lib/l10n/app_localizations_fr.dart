@@ -4719,4 +4719,358 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get assistantSettingsTitle => 'Assistant : réglages';
+
+  @override
+  String get insightsTitle => 'Analyses';
+
+  @override
+  String get insightsIntro =>
+      'Calculées par OwnCoffer, sans IA, sur les comptes que vous voyez.';
+
+  @override
+  String get insightsReliability => 'Fiabilité des prévisions';
+
+  @override
+  String insightsPlanned(int paid, int due, int percent) {
+    return '$paid opérations prévues sur $due sont arrivées comme prévu ces trois derniers mois ($percent %).';
+  }
+
+  @override
+  String get insightsPlannedNone =>
+      'Aucune opération prévue ces trois derniers mois.';
+
+  @override
+  String insightsPlannedLate(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ne sont pas arrivées (en retard ou manquées).',
+      one: '1 n\'est pas arrivée (en retard ou manquée).',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String insightsVariable(String month, String estimate, String actual) {
+    return 'Dépenses variables de $month : $estimate estimés d\'avance, $actual réellement dépensés.';
+  }
+
+  @override
+  String get insightsVariableUnknown =>
+      'Pas encore assez d\'historique pour comparer les dépenses variables estimées à la réalité.';
+
+  @override
+  String get insightsReliabilityHow =>
+      'Les opérations prévues sont comptées d\'après le calendrier des échéances ; l\'estimation des dépenses variables est la médiane des trois mois qui précèdent.';
+
+  @override
+  String get insightsUnusual => 'Opérations inhabituelles';
+
+  @override
+  String get insightsUnusualNone =>
+      'Rien d\'inhabituel ce mois-ci ni le mois dernier.';
+
+  @override
+  String get insightsDuplicate =>
+      'même libellé et même montant à quelques jours d\'écart : prélevé deux fois ?';
+
+  @override
+  String insightsAboveUsual(String usual, int count) {
+    return 'd\'habitude $usual (médiane de $count opérations)';
+  }
+
+  @override
+  String get insightsFees => 'Frais bancaires sur 12 mois';
+
+  @override
+  String get insightsFeesNone => 'Aucun frais bancaire repéré sur 12 mois.';
+
+  @override
+  String insightsFeesTotal(String amount) {
+    return '$amount sur 12 mois';
+  }
+
+  @override
+  String get insightsFeesHow =>
+      'Opérations classées en frais bancaires ou agios, et celles dont le libellé commence comme un frais (frais, commission, agios, cotisation de carte…). Les remboursements de frais sont déduits.';
+
+  @override
+  String noticeOverdraft(String account, String date) {
+    return '« $account » passera sous son seuil vers le $date';
+  }
+
+  @override
+  String noticeOverdraftWhy(String lowest, String date, String threshold) {
+    return 'Point bas prévu : $lowest le $date, pour un seuil de $threshold. D\'après les opérations prévues seulement.';
+  }
+
+  @override
+  String noticeUnusual(String label, String amount) {
+    return '« $label » : $amount, bien plus que d\'habitude';
+  }
+
+  @override
+  String noticeUnusualWhy(String date, String usual, int count) {
+    return 'Le $date. D\'habitude $usual (médiane de $count opérations).';
+  }
+
+  @override
+  String noticeDuplicate(String label, String amount) {
+    return '« $label » de $amount prélevé deux fois ?';
+  }
+
+  @override
+  String noticeDuplicateWhy(String date) {
+    return 'Le $date, même libellé et même montant à quelques jours d\'écart. Vérifiez sur le relevé.';
+  }
+
+  @override
+  String noticeFees(String amount) {
+    return '$amount de frais bancaires sur 12 mois';
+  }
+
+  @override
+  String get noticeFeesWhy =>
+      'Les plus coûteux ci-dessous. Une offre plus simple ou une autre banque coûterait peut-être moins : la page Analyses donne le détail mois par mois.';
+
+  @override
+  String get noticeUnderstood => 'Compris';
+
+  @override
+  String get noticeIgnore => 'Ignorer';
+
+  @override
+  String get noticeNoted => 'Noté.';
+
+  @override
+  String get noticeIgnored => 'Carte ignorée.';
+
+  @override
+  String get batchImportChoose => 'Plusieurs fichiers';
+
+  @override
+  String batchImportTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importer $count fichiers',
+      one: 'Importer 1 fichier',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get batchImportHelp =>
+      'Chaque fichier est lu d\'abord. Le compte est reconnu d\'après le fichier quand il le dit (OFX), sinon c\'est celui choisi. Les doublons possibles sont laissés de côté ; pour les vérifier un par un, importez le fichier seul.';
+
+  @override
+  String get batchImportReading => 'Lecture…';
+
+  @override
+  String batchImportPreview(int added, int duplicates, int possible) {
+    return '$added nouvelles, $duplicates déjà présentes, $possible doublons possibles laissés de côté';
+  }
+
+  @override
+  String get batchImportSameFile =>
+      'Ce fichier a déjà été importé dans ce compte.';
+
+  @override
+  String batchImportGo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importer $count fichiers',
+      one: 'Importer 1 fichier',
+      zero: 'Rien à importer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashTitle => 'Corbeille';
+
+  @override
+  String get trashHelp =>
+      'Les opérations mises à la corbeille ne comptent plus nulle part. Restaurez-les, ou supprimez-les pour de bon (avec leur ventilation et leurs factures).';
+
+  @override
+  String get trashNone => 'La corbeille est vide.';
+
+  @override
+  String trashSince(String date) {
+    return 'mise à la corbeille le $date';
+  }
+
+  @override
+  String get trashRestore => 'Restaurer';
+
+  @override
+  String get trashRestored => 'Opération restaurée.';
+
+  @override
+  String get trashDeleteForGood => 'Supprimer définitivement';
+
+  @override
+  String trashDeleteConfirm(String label) {
+    return 'Supprimer définitivement « $label » ? Ce n\'est pas annulable ; un nouvel import du relevé la ramènera.';
+  }
+
+  @override
+  String get trashDeleted => 'Opération supprimée.';
+
+  @override
+  String get trashEmpty => 'Vider';
+
+  @override
+  String trashEmptyConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Supprimer définitivement les $count opérations de la corbeille ?',
+      one: 'Supprimer définitivement l\'opération de la corbeille ?',
+    );
+    return '$_temp0 Ce n\'est pas annulable.';
+  }
+
+  @override
+  String get trashEmptied => 'Corbeille vidée.';
+
+  @override
+  String get chatHistory => 'Conversations précédentes';
+
+  @override
+  String get chatHistoryHelp =>
+      'Vos 30 dernières conversations, gardées sur votre serveur et visibles par vous seul. Touchez-en une pour la reprendre.';
+
+  @override
+  String get chatHistoryNone => 'Aucune conversation gardée.';
+
+  @override
+  String get chatHistoryDelete => 'Supprimer cette conversation';
+
+  @override
+  String get aiMemoriesTitle => 'Ce que l\'assistant doit savoir';
+
+  @override
+  String get aiMemoriesHelp =>
+      'Quelques phrases que l\'assistant garde en tête à chaque question, par exemple « je suis payé le 28 » ou « ne me propose pas de changer de banque ». Vous seul les voyez ; elles sont envoyées au modèle avec vos questions.';
+
+  @override
+  String get aiMemoriesHint => 'Ajouter une chose à retenir';
+
+  @override
+  String get aiMemoriesAdd => 'Ajouter';
+
+  @override
+  String get aiMemoriesDelete => 'Oublier';
+
+  @override
+  String get error_ai_memory_full =>
+      '20 choses à retenir au plus : oubliez-en une d\'abord.';
+
+  @override
+  String get feedbackTitle => 'Donner un avis';
+
+  @override
+  String get feedbackIntro =>
+      'Un problème, une idée, une question ? Votre message va à l\'administrateur de ce serveur.';
+
+  @override
+  String get feedbackBug => 'Problème';
+
+  @override
+  String get feedbackIdea => 'Idée';
+
+  @override
+  String get feedbackQuestion => 'Question';
+
+  @override
+  String get feedbackHint =>
+      'Décrivez ce qui se passe, ou ce que vous aimeriez';
+
+  @override
+  String get feedbackPrivacy =>
+      'Le message reste sur ce serveur, avec la page d\'où vous l\'envoyez et la version d\'OwnCoffer. Aucune donnée bancaire n\'est jointe : n\'en écrivez pas.';
+
+  @override
+  String get feedbackSend => 'Envoyer';
+
+  @override
+  String get feedbackSent => 'Merci, c\'est envoyé.';
+
+  @override
+  String get feedbackMine => 'Vos messages';
+
+  @override
+  String get feedbackDone => 'traité';
+
+  @override
+  String get feedbackOpen => 'en attente';
+
+  @override
+  String get adminTabFeedback => 'Retours';
+
+  @override
+  String get adminFeedbackHelp =>
+      'Les messages des utilisateurs, du plus récent au plus ancien. Cochez ceux qui sont traités : l\'auteur le voit.';
+
+  @override
+  String get adminFeedbackNone => 'Aucun retour pour l\'instant.';
+
+  @override
+  String get error_feedback_too_many => '20 messages par jour au plus.';
+
+  @override
+  String get error_ai_conversation_access_denied =>
+      'Cette conversation n\'existe plus.';
+
+  @override
+  String get error_feedback_unknown => 'Ce message n\'existe plus.';
+
+  @override
+  String get chatModel => 'Changer de modèle';
+
+  @override
+  String get chatReviewChip => 'Bilan de mon mois';
+
+  @override
+  String get chatReviewPrompt =>
+      'Fais-moi le bilan de mon mois : où en sont mon budget, mes objectifs et mes comptes, ce qui arrive, et ce que tu me conseilles.';
+
+  @override
+  String get chatSaveChip => 'Où économiser ?';
+
+  @override
+  String get chatSavePrompt =>
+      'Où pourrais-je économiser ? Regarde mes dépenses, mes abonnements, mes crédits et mes frais bancaires, et propose-moi les pistes les plus utiles, chiffrées.';
+
+  @override
+  String get chatAffordChip => 'Puis-je me permettre… ?';
+
+  @override
+  String get chatAffordPrompt => 'Puis-je me permettre un achat de  € ?';
+
+  @override
+  String get loanFamilyLoans => 'Crédits';
+
+  @override
+  String get loanFamilyConsumer => 'Crédits à la consommation';
+
+  @override
+  String loanFamilyTotals(String monthly, String remaining) {
+    return '$monthly / mois · reste $remaining';
+  }
+
+  @override
+  String get loanSortRemaining => 'Reste à rembourser';
+
+  @override
+  String get loanSortMonthly => 'Mensualité';
+
+  @override
+  String get loanSortEnd => 'Date de fin';
+
+  @override
+  String get loanSortLender => 'Organisme';
 }
