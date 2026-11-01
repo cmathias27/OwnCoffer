@@ -47,6 +47,87 @@ class LoanEndpoint extends Endpoint {
     );
   }
 
+  static const _planCodes = {'banking.installments', 'banking.consumer_loan'};
+
+  /// Payments in instalments and small consumer loans still running that
+  /// are not in the loans yet: debits of the visible accounts classified in
+  /// those categories over the last 13 months, grouped by label (see
+  /// core.detectInstalmentPlans). Those of a loan already entered, linked
+  /// to it or recognised by its label, are left out.
+  Future<List<InstalmentCandidate>> detectedInstalments(
+    Session session,
+    int groupId,
+  ) async {
+    final loans = await _visible(session, groupId);
+    final visible = await _visibleIds(session, groupId);
+    if (visible.isEmpty) return [];
+    final categories = await Category.db.find(
+      session,
+      where: (c) => c.groupId.equals(groupId) & c.deletedAt.equals(null),
+    );
+    final kinds = <int, LoanKind>{};
+    for (final c in categories) {
+      if (!_planCodes.contains(c.standardCode)) continue;
+      final kind = c.standardCode == 'banking.installments'
+          ? LoanKind.installments
+          : LoanKind.consumer;
+      for (final id in descendantsOf(c.id!, categories)) {
+        kinds[id] = kind;
+      }
+    }
+    if (kinds.isEmpty) return [];
+    final today = _today();
+    final Set<int> categoryIds = kinds.keys.toSet();
+    final rows = await BankTransaction.db.find(
+      session,
+      where: (t) =>
+          t.accountId.inSet(visible) &
+          t.deletedAt.equals(null) &
+          t.categoryId.inSet(categoryIds) &
+          (t.amountCents < 0) &
+          (t.date >= today.addMonths(-13).toDb()),
+    );
+    final byId = {for (final t in rows) t.id!: t};
+    final linked = {for (final l in loans) ?l.scheduledId};
+    final plans = core.detectInstalmentPlans([
+      for (final t in rows)
+        (
+          id: t.id!,
+          accountId: t.accountId,
+          date: t.date.toLocalDate(),
+          amountCents: t.amountCents,
+          label: t.cleanLabel,
+        ),
+    ], today: today);
+    bool known(core.InstalmentPlan p) {
+      final name = core.normalizeForMatch(p.label);
+      return p.debits.any((d) => linked.contains(byId[d.id]!.scheduledId)) ||
+          loans.any(
+            (l) =>
+                (l.accountId == null || l.accountId == p.accountId) &&
+                l.matchPattern != null &&
+                core.startsWithWords(l.matchPattern!, name),
+          );
+    }
+
+    return [
+      for (final p in plans)
+        if (!known(p))
+          InstalmentCandidate(
+            accountId: p.accountId,
+            label: p.label,
+            kind: kinds[byId[p.debits.last.id]!.categoryId]!,
+            amountCents: p.amountCents,
+            paidCount: p.paidCount,
+            statedCount: p.statedCount,
+            suggestedCount: p.suggestedCount,
+            firstDate: p.first.toDb(),
+            lastDate: p.last.toDb(),
+            first: byId[p.debits.first.id]!,
+          ),
+    ];
+  }
+
   Future<List<LoanInstallment>> schedule(Session session, int loanId) async {
     final loan = await _find(session, loanId);
     return [

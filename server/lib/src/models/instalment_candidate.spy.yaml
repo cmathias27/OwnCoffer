@@ -1,0 +1,21 @@
+### A payment in instalments (or small consumer loan) found among the
+### debits of the visible accounts and not yet in the loans: shown on the
+### loans page so that it can be added in one touch.
+class: InstalmentCandidate
+fields:
+  accountId: int
+  ### Label without the instalment number ("ONEY 4X").
+  label: String
+  ### installments, or consumer for a consumer-loan category.
+  kind: LoanKind
+  ### Last instalment debited (positive).
+  amountCents: int
+  paidCount: int
+  ### Number of instalments written in the labels, when there is one.
+  statedCount: int?
+  ### Number of instalments to propose; the user sets the right one.
+  suggestedCount: int
+  firstDate: DateTime
+  lastDate: DateTime
+  ### The first instalment: the loan is declared from it.
+  first: BankTransaction

@@ -3308,4 +3308,44 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get budgetOperationsHint =>
       'Touch an operation to manage it: category, split, invoice, note, subscription…';
+
+  @override
+  String get loanFoundTitle => 'Found in your operations';
+
+  @override
+  String get loanFoundHelp =>
+      'Payments in instalments and small loans debited lately, not in your loans yet. Add them to follow what is left to pay; you set the number of instalments.';
+
+  @override
+  String loanFoundPaid(int count, String amount, String date) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count debits, the last of $amount, since $date',
+      one: '1 debit of $amount on $date',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String loanFoundStated(int count) {
+    return 'in $count instalments according to the label';
+  }
+
+  @override
+  String get loanFoundAdd => 'Add';
+
+  @override
+  String get loanInstallmentsCountHelp =>
+      'Touch − or + to set the number of instalments, those already debited included.';
+
+  @override
+  String get loanInstallmentsLess => 'One instalment less';
+
+  @override
+  String get loanInstallmentsMore => 'One instalment more';
+
+  @override
+  String get loanInstallmentsTotalHelp =>
+      'Computed: instalment × number of instalments. Change it if the purchase cost something else.';
 }

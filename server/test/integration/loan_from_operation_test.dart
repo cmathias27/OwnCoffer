@@ -232,6 +232,91 @@ void main() {
       expect(t.scheduledId, isNull);
     });
 
+    test('payments in instalments found in the operations, until they are '
+        'in the loans; isolation', () async {
+      final instalments = cats['banking.installments']!.id;
+      final oney = await debit(
+        shared,
+        due(2),
+        4650,
+        label: 'ONEY 4X 1/4',
+        categoryId: instalments,
+      );
+      await debit(
+        shared,
+        due(1),
+        4500,
+        label: 'ONEY 4X 2/4',
+        categoryId: instalments,
+      );
+      for (final m in [3, 2, 1]) {
+        await debit(
+          shared,
+          due(m),
+          12000,
+          label: 'COFIDIS',
+          categoryId: cats['banking.consumer_loan']!.id,
+        );
+      }
+      await debit(
+        restricted,
+        due(1),
+        2000,
+        label: 'KLARNA',
+        categoryId: instalments,
+      );
+      await debit(shared, due(1), 3000, label: 'ALMA 3X 1/3');
+
+      final all = await endpoints.loan.detectedInstalments(as(alice), groupA);
+      expect(all.map((c) => (c.label, c.kind, c.paidCount)), [
+        ('COFIDIS', LoanKind.consumer, 3),
+        ('ONEY 4X', LoanKind.installments, 2),
+        ('KLARNA', LoanKind.installments, 1),
+      ], reason: 'largest first; an unclassified debit is not proposed');
+      final found = all[1];
+      expect(found.first.id, oney.id, reason: 'declared from the first one');
+      expect(found.amountCents, 4500);
+      expect(found.statedCount, 4);
+      expect(found.suggestedCount, 4);
+
+      final forBob = await endpoints.loan.detectedInstalments(as(bob), groupA);
+      expect(
+        forBob.map((c) => c.label),
+        ['COFIDIS', 'ONEY 4X'],
+        reason: 'the restricted account stays hidden',
+      );
+      expect(
+        await endpoints.loan.detectedInstalments(as(reader), groupA),
+        hasLength(2),
+      );
+      await expectLater(
+        endpoints.loan.detectedInstalments(as(mallory), groupA),
+        denied,
+      );
+
+      await endpoints.loan.createFromTransaction(
+        as(bob),
+        oney.id!,
+        Loan(
+          groupId: 0,
+          kind: LoanKind.installments,
+          lender: 'ONEY 4X',
+          principalCents: 18150,
+          annualRateMilli: 0,
+          durationMonths: 4,
+          firstDueDate: due(2),
+        ),
+      );
+      expect(
+        (await endpoints.loan.detectedInstalments(
+          as(bob),
+          groupA,
+        )).map((c) => c.label),
+        ['COFIDIS'],
+        reason: 'once in the loans, no longer proposed',
+      );
+    });
+
     test('only from a debit', () async {
       final credit = await BankTransaction.db.insertRow(
         db,

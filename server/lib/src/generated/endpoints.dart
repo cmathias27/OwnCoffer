@@ -2016,6 +2016,25 @@ class Endpoints extends _is.EndpointDispatch {
                 params['groupId'],
               ),
         ),
+        'detectedInstalments': _is.MethodConnector(
+          name: 'detectedInstalments',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint)
+                  .detectedInstalments(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
         'schedule': _is.MethodConnector(
           name: 'schedule',
           params: {

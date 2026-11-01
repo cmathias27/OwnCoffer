@@ -12,6 +12,7 @@ import '../util/file_save.dart';
 import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/category_field.dart';
+import '../widgets/undo.dart';
 
 /// Indicative debt ratio above which French banks usually refuse a new loan
 /// (HCSF recommendation: 35 %).
@@ -36,6 +37,7 @@ class LoansScreen extends StatefulWidget {
 
 class LoansScreenState extends State<LoansScreen> {
   LoanOverview? _data;
+  List<InstalmentCandidate> _found = [];
   String? _error;
 
   bool get _canWrite => widget.membership.role != MemberRole.reader;
@@ -48,8 +50,15 @@ class LoansScreenState extends State<LoansScreen> {
 
   Future<void> reload() async {
     try {
-      final d = await client.loan.overview(widget.membership.group.id!);
-      if (mounted) setState(() => (_data = d, _error = null));
+      final groupId = widget.membership.group.id!;
+      final d = await client.loan.overview(groupId);
+      // A hint only: the page works without it.
+      final found = await client.loan
+          .detectedInstalments(groupId)
+          .catchError((Object _) => <InstalmentCandidate>[]);
+      if (mounted) {
+        setState(() => (_data = d, _found = found, _error = null));
+      }
     } on Object catch (e) {
       if (mounted) {
         setState(() => _error = errorText(AppLocalizations.of(context), e));
@@ -88,6 +97,38 @@ class LoansScreenState extends State<LoansScreen> {
       await reload();
       widget.onChanged?.call();
     }
+  }
+
+  /// Adds a payment in instalments found in the operations: the loan form,
+  /// filled from its first debit, with the count to adjust.
+  Future<void> _addFound(InstalmentCandidate c) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final r = await Navigator.of(context).push<LoanFromOperation>(
+      MaterialPageRoute(
+        builder: (_) => LoanFormScreen(
+          groupId: widget.membership.group.id!,
+          accounts: widget.accounts,
+          fromOperation: c.first,
+          initialKind: c.kind,
+          initialCount: c.suggestedCount,
+          initialLender: c.label,
+        ),
+      ),
+    );
+    if (r == null || !mounted) return;
+    await reload();
+    widget.onChanged?.call();
+    showUndo(
+      messenger,
+      l,
+      l.loanFromOperationDone(r.linkedCount, r.reclassifiedCount),
+      () => client.loan.undoCreate(r.info.loan.id!).then((_) {}),
+      after: () async {
+        await reload();
+        widget.onChanged?.call();
+      },
+    );
   }
 
   static List<LoanInfo> _ordered(List<LoanInfo> loans) => [
@@ -133,7 +174,15 @@ class LoansScreenState extends State<LoansScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  if (d.loans.isEmpty)
+                  if (_found.isNotEmpty) ...[
+                    _FoundInstalments(
+                      found: _found,
+                      accounts: {for (final a in widget.accounts) a.id!: a},
+                      onAdd: _canWrite ? _addFound : null,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  if (d.loans.isEmpty && _found.isEmpty)
                     Padding(
                       padding: const EdgeInsets.all(32),
                       child: Text(l.loansEmpty, textAlign: TextAlign.center),
@@ -167,6 +216,80 @@ class LoansScreenState extends State<LoansScreen> {
                 ],
               ),
             ),
+    );
+  }
+}
+
+/// Payments in instalments found in the operations, not in the loans yet.
+class _FoundInstalments extends StatelessWidget {
+  final List<InstalmentCandidate> found;
+  final Map<int, Account> accounts;
+  final ValueChanged<InstalmentCandidate>? onAdd;
+
+  const _FoundInstalments({
+    required this.found,
+    required this.accounts,
+    required this.onAdd,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    return Card(
+      margin: EdgeInsets.zero,
+      color: theme.colorScheme.secondaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.manage_search,
+                  color: theme.colorScheme.onSecondaryContainer,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    l.loanFoundTitle,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(l.loanFoundHelp, style: theme.textTheme.bodySmall),
+            const SizedBox(height: 8),
+            for (final c in found)
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(_kindIcon(c.kind)),
+                title: Text(c.label),
+                subtitle: Text(
+                  [
+                    l.loanFoundPaid(
+                      c.paidCount,
+                      context.money(c.amountCents),
+                      context.day(c.firstDate),
+                    ),
+                    if (c.statedCount != null)
+                      l.loanFoundStated(c.statedCount!),
+                    if (accounts.length > 1 && accounts[c.accountId] != null)
+                      accounts[c.accountId]!.name,
+                  ].join(' · '),
+                ),
+                trailing: onAdd == null
+                    ? null
+                    : FilledButton.tonal(
+                        onPressed: () => onAdd!(c),
+                        child: Text(l.loanFoundAdd),
+                      ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -1077,6 +1200,12 @@ class LoanFormScreen extends StatefulWidget {
   /// The group's categories when the caller has them (else loaded).
   final List<Category>? categories;
 
+  /// For a new loan: its kind, number of instalments and lender, e.g. a
+  /// payment in instalments found in the operations.
+  final LoanKind? initialKind;
+  final int? initialCount;
+  final String? initialLender;
+
   const LoanFormScreen({
     super.key,
     required this.groupId,
@@ -1085,6 +1214,9 @@ class LoanFormScreen extends StatefulWidget {
     this.returnInfo = false,
     this.fromOperation,
     this.categories,
+    this.initialKind,
+    this.initialCount,
+    this.initialLender,
   });
 
   @override
@@ -1094,24 +1226,36 @@ class LoanFormScreen extends StatefulWidget {
 class _LoanFormScreenState extends State<LoanFormScreen> {
   late final Loan? _l = widget.loan;
   late final BankTransaction? _op = widget.fromOperation;
-  late var _kind = _l?.kind ?? LoanKind.mortgage;
+  late var _kind = _l?.kind ?? widget.initialKind ?? LoanKind.mortgage;
   bool get _installments => _kind == LoanKind.installments;
   late final _lender = TextEditingController(
-    text: _l?.lender ?? _op?.cleanLabel,
+    text: _l?.lender ?? widget.initialLender ?? _op?.cleanLabel,
   );
   late final _label = TextEditingController(text: _l?.label);
   late final _principal = TextEditingController(
     text: _money(_l?.principalCents),
   );
   late final _rate = TextEditingController(
-    text: _l == null ? '' : _rateInput(_l.annualRateMilli),
+    text: _l != null
+        ? _rateInput(_l.annualRateMilli)
+        : _installments
+        ? '0'
+        : '',
   );
   late final _apr = TextEditingController(
     text: _l?.aprMilli == null ? '' : _rateInput(_l!.aprMilli!),
   );
   late final _months = TextEditingController(
-    text: _l == null ? '' : '${_l.durationMonths}',
+    text: _l != null
+        ? '${_l.durationMonths}'
+        : widget.initialCount == null
+        ? ''
+        : '${widget.initialCount}',
   );
+
+  /// For a new payment in instalments, the total follows the instalment
+  /// and the count until the user types one.
+  late var _totalFollows = _l == null;
   late final _insurance = TextEditingController(
     text: _money(_l?.insuranceMonthlyCents),
   );
@@ -1155,6 +1299,26 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
     for (final c in [_principal, _rate, _months, _insurance, _actual]) {
       c.addListener(() => setState(() {}));
     }
+    for (final c in [_months, _actual]) {
+      c.addListener(_followTotal);
+    }
+    _followTotal();
+  }
+
+  void _followTotal() {
+    if (!_installments || !_totalFollows) return;
+    final pay = parseUserAmount(_actual.text);
+    final n = int.tryParse(_months.text.trim());
+    if (pay == null || pay <= 0 || n == null || n < 1) return;
+    final total = _money(pay * n);
+    if (_principal.text != total) _principal.text = total;
+  }
+
+  /// One instalment more or less (2 to the maximum).
+  void _step(int delta) {
+    final n = (int.tryParse(_months.text.trim()) ?? 1) + delta;
+    if (n < 2 || n > core.maxLoanMonths) return;
+    _months.text = '$n';
   }
 
   @override
@@ -1362,6 +1526,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                           _rate.text = '0';
                           _apr.clear();
                           _insurance.clear();
+                          _followTotal();
                         }
                       }),
                     ),
@@ -1411,8 +1576,13 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         labelText: _installments
                             ? l.loanInstallmentsTotal
                             : l.loanPrincipal,
+                        helperText: _installments && _totalFollows
+                            ? l.loanInstallmentsTotalHelp
+                            : null,
+                        helperMaxLines: 2,
                         suffixText: '€',
                       ),
+                      onChanged: (_) => _totalFollows = false,
                       validator: (v) => (parseUserAmount(v ?? '') ?? 0) > 0
                           ? null
                           : l.amountInvalid,
@@ -1479,7 +1649,24 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         labelText: _installments
                             ? l.loanInstallmentsCount
                             : l.loanDurationMonths,
-                        helperText: _installments ? null : l.loanDurationHelp,
+                        helperText: _installments
+                            ? l.loanInstallmentsCountHelp
+                            : l.loanDurationHelp,
+                        helperMaxLines: 2,
+                        prefixIcon: _installments
+                            ? IconButton(
+                                tooltip: l.loanInstallmentsLess,
+                                icon: const Icon(Icons.remove),
+                                onPressed: () => _step(-1),
+                              )
+                            : null,
+                        suffixIcon: _installments
+                            ? IconButton(
+                                tooltip: l.loanInstallmentsMore,
+                                icon: const Icon(Icons.add),
+                                onPressed: () => _step(1),
+                              )
+                            : null,
                       ),
                       validator: (v) {
                         final n = int.tryParse(v?.trim() ?? '');

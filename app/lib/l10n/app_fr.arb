@@ -2487,5 +2487,34 @@
       }
     }
   },
-  "budgetOperationsHint": "Touchez une opération pour la gérer : catégorie, ventilation, facture, note, abonnement…"
+  "budgetOperationsHint": "Touchez une opération pour la gérer : catégorie, ventilation, facture, note, abonnement…",
+  "loanFoundTitle": "Repérés dans vos opérations",
+  "loanFoundHelp": "Paiements en plusieurs fois et petits crédits prélevés ces derniers mois, pas encore dans vos crédits. Ajoutez-les pour suivre ce qu'il reste à payer ; vous réglez le nombre de mensualités.",
+  "loanFoundPaid": "{count, plural, =1{1 prélèvement de {amount} le {date}} other{{count} prélèvements, le dernier de {amount}, depuis le {date}}}",
+  "@loanFoundPaid": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "loanFoundStated": "en {count} fois d'après le libellé",
+  "@loanFoundStated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loanFoundAdd": "Ajouter",
+  "loanInstallmentsCountHelp": "Touchez − ou + pour régler le nombre de mensualités, celles déjà prélevées comprises.",
+  "loanInstallmentsLess": "Une mensualité de moins",
+  "loanInstallmentsMore": "Une mensualité de plus",
+  "loanInstallmentsTotalHelp": "Calculé : mensualité × nombre de mensualités. Modifiable si l'achat coûtait autre chose."
 }

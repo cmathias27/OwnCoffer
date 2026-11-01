@@ -50,6 +50,8 @@ import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
 import 'package:owncoffer_client/src/protocol/import_preview.dart' as _ikjuebnd;
+import 'package:owncoffer_client/src/protocol/instalment_candidate.dart'
+    as _io211e4m;
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
     as _i2judacm;
 import 'package:owncoffer_client/src/protocol/invoice_info.dart' as _iej1c1us;
@@ -1144,6 +1146,19 @@ class EndpointLoan extends _isc.EndpointRef {
         'overview',
         {'groupId': groupId},
       );
+
+  /// Payments in instalments and small consumer loans still running that
+  /// are not in the loans yet: debits of the visible accounts classified in
+  /// those categories over the last 13 months, grouped by label (see
+  /// core.detectInstalmentPlans). Those of a loan already entered, linked
+  /// to it or recognised by its label, are left out.
+  _ida.Future<List<_io211e4m.InstalmentCandidate>> detectedInstalments(
+    int groupId,
+  ) => caller.callServerEndpoint<List<_io211e4m.InstalmentCandidate>>(
+    'loan',
+    'detectedInstalments',
+    {'groupId': groupId},
+  );
 
   _ida.Future<List<_i18weoko.LoanInstallment>> schedule(int loanId) =>
       caller.callServerEndpoint<List<_i18weoko.LoanInstallment>>(

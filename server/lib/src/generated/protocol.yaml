@@ -84,6 +84,7 @@ invoice:
   - send:
 loan:
   - overview:
+  - detectedInstalments:
   - schedule:
   - operations:
   - documents:

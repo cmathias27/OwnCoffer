@@ -27,6 +27,8 @@ import 'package:owncoffer_server/src/generated/category.dart' as _iemw1gpx;
 import 'package:owncoffer_server/src/generated/goal.dart' as _ix7anf6k;
 import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
+import 'package:owncoffer_server/src/generated/instalment_candidate.dart'
+    as _i3mgyctl;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/invoice_info.dart' as _iq9lo0p4;
@@ -89,6 +91,7 @@ import 'group_membership.dart' as _i54nduyh;
 import 'import_issue_info.dart' as _iso7nf03;
 import 'import_preview.dart' as _im8lwq6n;
 import 'import_preview_line.dart' as _i4e8elxc;
+import 'instalment_candidate.dart' as _ia1npsti;
 import 'invalid_input_exception.dart' as _ijc83d8f;
 import 'invitation.dart' as _ix00wubs;
 import 'invitation_info.dart' as _i9hwipt6;
@@ -179,6 +182,7 @@ export 'group_membership.dart';
 export 'import_issue_info.dart';
 export 'import_preview.dart';
 export 'import_preview_line.dart';
+export 'instalment_candidate.dart';
 export 'invalid_input_exception.dart';
 export 'invitation.dart';
 export 'invitation_info.dart';
@@ -2970,6 +2974,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i4e8elxc.ImportPreviewLine) {
       return _i4e8elxc.ImportPreviewLine.fromJson(data) as T;
     }
+    if (t == _ia1npsti.InstalmentCandidate) {
+      return _ia1npsti.InstalmentCandidate.fromJson(data) as T;
+    }
     if (t == _ijc83d8f.InvalidInputException) {
       return _ijc83d8f.InvalidInputException.fromJson(data) as T;
     }
@@ -3262,6 +3269,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_i4e8elxc.ImportPreviewLine?>()) {
       return (data != null ? _i4e8elxc.ImportPreviewLine.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ia1npsti.InstalmentCandidate?>()) {
+      return (data != null
+              ? _ia1npsti.InstalmentCandidate.fromJson(data)
+              : null)
           as T;
     }
     if (t == _is.getType<_ijc83d8f.InvalidInputException?>()) {
@@ -3704,6 +3717,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_i3mgyctl.InstalmentCandidate>) {
+      return (data as List)
+              .map((e) => deserialize<_i3mgyctl.InstalmentCandidate>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ictm0roz.LoanInstallment>) {
       return (data as List)
               .map((e) => deserialize<_ictm0roz.LoanInstallment>(e))
@@ -3794,6 +3813,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iso7nf03.ImportIssueInfo => 'ImportIssueInfo',
       _im8lwq6n.ImportPreview => 'ImportPreview',
       _i4e8elxc.ImportPreviewLine => 'ImportPreviewLine',
+      _ia1npsti.InstalmentCandidate => 'InstalmentCandidate',
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
       _ix00wubs.Invitation => 'Invitation',
       _i9hwipt6.InvitationInfo => 'InvitationInfo',
@@ -3937,6 +3957,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'ImportPreview';
       case _i4e8elxc.ImportPreviewLine():
         return 'ImportPreviewLine';
+      case _ia1npsti.InstalmentCandidate():
+        return 'InstalmentCandidate';
       case _ijc83d8f.InvalidInputException():
         return 'InvalidInputException';
       case _ix00wubs.Invitation():
@@ -4181,6 +4203,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'ImportPreviewLine') {
       return deserialize<_i4e8elxc.ImportPreviewLine>(data['data']);
+    }
+    if (dataClassName == 'InstalmentCandidate') {
+      return deserialize<_ia1npsti.InstalmentCandidate>(data['data']);
     }
     if (dataClassName == 'InvalidInputException') {
       return deserialize<_ijc83d8f.InvalidInputException>(data['data']);
