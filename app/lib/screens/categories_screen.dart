@@ -512,6 +512,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
               ],
               if (c == null) ...[
                 DropdownButtonFormField<CategoryKind>(
+                  isExpanded: true,
                   initialValue: _kind,
                   decoration: InputDecoration(labelText: l.categoryKindLabel),
                   items: [
@@ -703,6 +704,7 @@ class _RuleDialogState extends State<_RuleDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 DropdownButtonFormField<RuleMatchType>(
+                  isExpanded: true,
                   initialValue: _match,
                   decoration: InputDecoration(labelText: l.ruleMatchType),
                   items: [
@@ -730,6 +732,7 @@ class _RuleDialogState extends State<_RuleDialog> {
                 ),
                 gap,
                 DropdownButtonFormField<RuleDirection>(
+                  isExpanded: true,
                   initialValue: _direction,
                   decoration: InputDecoration(labelText: l.ruleDirection),
                   items: [

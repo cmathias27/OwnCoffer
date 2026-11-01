@@ -658,6 +658,7 @@ class _ScheduledDialogState extends State<_ScheduledDialog> {
                 ),
                 gap,
                 DropdownButtonFormField<ScheduleFrequency>(
+                  isExpanded: true,
                   initialValue: _frequency,
                   decoration: InputDecoration(labelText: l.frequencyLabel),
                   items: [

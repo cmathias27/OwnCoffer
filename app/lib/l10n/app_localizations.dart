@@ -5753,6 +5753,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Mise à jour terminée'**
   String get updateStepDone;
+
+  /// No description provided for @menuAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon compte'**
+  String get menuAccount;
 }
 
 class _AppLocalizationsDelegate

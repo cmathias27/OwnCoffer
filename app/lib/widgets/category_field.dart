@@ -356,6 +356,7 @@ class _NewCategoryDialogState extends State<_NewCategoryDialog> {
                 onSubmitted: (_) => _save(),
               ),
               DropdownButtonFormField<CategoryKind>(
+                isExpanded: true,
                 initialValue: _kind,
                 decoration: InputDecoration(labelText: l.categoryKindLabel),
                 items: [

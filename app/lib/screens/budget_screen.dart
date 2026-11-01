@@ -11,6 +11,7 @@ import '../widgets/budget_charts.dart';
 import '../widgets/undo.dart';
 import '../widgets/category_field.dart';
 import '../widgets/operation_sheet.dart';
+import '../widgets/soft.dart';
 import 'calendar_screen.dart';
 import 'compare_screen.dart';
 import 'review_screen.dart';
@@ -184,32 +185,24 @@ class BudgetScreenState extends State<BudgetScreen> {
     final r = _report;
     if (r == null) return;
     final changed = ValueNotifier(false);
-    await showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      builder: (_) => DraggableScrollableSheet(
-        expand: false,
-        initialChildSize: 0.7,
-        minChildSize: 0.3,
-        maxChildSize: 1,
-        builder: (context, scroll) => _OperationsList(
-          title: title,
-          load: () => client.analysis.operations(
-            _groupId,
-            _period,
-            r.start,
-            categoryId: categoryId,
-            unclassified: categoryId == null,
-            accountId: _accountId,
-          ),
-          membership: widget.membership,
-          categories: _categories,
-          accounts: widget.accounts,
-          changed: changed,
-          scroll: scroll,
+    await showSoftSheet<void>(
+      context,
+      scroll: true,
+      builder: (context, scroll) => _OperationsList(
+        title: title,
+        load: () => client.analysis.operations(
+          _groupId,
+          _period,
+          r.start,
+          categoryId: categoryId,
+          unclassified: categoryId == null,
+          accountId: _accountId,
         ),
+        membership: widget.membership,
+        categories: _categories,
+        accounts: widget.accounts,
+        changed: changed,
+        scroll: scroll!,
       ),
     );
     if (changed.value && mounted) await reload();
@@ -259,6 +252,7 @@ class BudgetScreenState extends State<BudgetScreen> {
                 Text(l.monthStartHelp),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<int>(
+                  isExpanded: true,
                   initialValue: day,
                   decoration: InputDecoration(labelText: l.monthStartLabel),
                   items: [

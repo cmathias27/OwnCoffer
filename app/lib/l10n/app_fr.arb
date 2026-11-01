@@ -2617,5 +2617,6 @@
   "updateStepStart": "Redémarrage d'OwnCoffer",
   "updateStepCheck": "Vérification que tout répond",
   "updateStepRollback": "Retour à la version précédente…",
-  "updateStepDone": "Mise à jour terminée"
+  "updateStepDone": "Mise à jour terminée",
+  "menuAccount": "Mon compte"
 }

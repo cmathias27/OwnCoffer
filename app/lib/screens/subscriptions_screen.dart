@@ -3,6 +3,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/soft.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 
@@ -57,10 +58,9 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
 
   Future<void> _actions(ScheduledTransaction s) async {
     final l = AppLocalizations.of(context);
-    final action = await showModalBottomSheet<int>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
+    final action = await showSoftSheet<int>(
+      context,
+      builder: (context, _) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

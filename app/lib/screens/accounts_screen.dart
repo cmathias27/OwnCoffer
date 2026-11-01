@@ -344,6 +344,7 @@ class _AccountDialogState extends State<AccountDialog> {
               const SizedBox(height: 12),
               if (widget.account == null)
                 DropdownButtonFormField<AccountKind>(
+                  isExpanded: true,
                   initialValue: _kind,
                   decoration: InputDecoration(labelText: l.accountKind),
                   items: [
