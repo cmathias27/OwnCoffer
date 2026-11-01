@@ -12,6 +12,7 @@ import 'accounts_screen.dart';
 import 'admin_screen.dart';
 import 'budget_screen.dart';
 import 'categories_screen.dart';
+import 'dashboard_screen.dart';
 import 'forecast_screen.dart';
 import 'import_screen.dart';
 import 'invoices_screen.dart';
@@ -33,7 +34,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   /// Shows the server administration button.
   var _isServerAdmin = false;
-  var _tab = 0;
+  var _tab = 8;
   List<Account> _accounts = [];
   Account? _openAccount;
   var _imports = 0;
@@ -44,11 +45,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final _categoriesKey = GlobalKey<CategoriesScreenState>();
   final _budgetKey = GlobalKey<BudgetScreenState>();
   final _loansKey = GlobalKey<LoansScreenState>();
+  final _dashboardKey = GlobalKey<DashboardScreenState>();
   final _invoicesKey = GlobalKey<InvoicesScreenState>();
 
   /// Tabs in display order (indexes of the stack below): budget next to the
   /// operations, loans next to the forecast, then invoices.
-  static const _order = [0, 1, 5, 2, 6, 7, 3, 4];
+  static const _order = [8, 0, 1, 5, 2, 6, 7, 3, 4];
 
   /// Tabs of the phone's bottom bar; the others are under "More".
   static const _phoneTabs = 4;
@@ -125,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (i == 4) _categoriesKey.currentState?.reload();
     if (i == 5) _budgetKey.currentState?.reload();
     if (i == 6) _loansKey.currentState?.reload();
+    if (i == 8) _dashboardKey.currentState?.reload();
     _loadAccounts();
     _loadUnread();
   }
@@ -171,6 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
       (Icons.pie_chart_outline, l.navBudget),
       (Icons.account_balance_outlined, l.navLoans),
       (Icons.description_outlined, l.navInvoices),
+      (Icons.home_outlined, l.navHome),
     ];
     final destinations = [for (final i in _order) tabs[i]];
     final shown = _order.indexOf(_tab);
@@ -231,6 +235,18 @@ class _HomeScreenState extends State<HomeScreen> {
               InvoicesScreen(
                 key: _invoicesKey,
                 membership: current,
+              ),
+              DashboardScreen(
+                key: _dashboardKey,
+                membership: current,
+                unread: _unread,
+                onOpen: (target) => switch (target) {
+                  DashboardTarget.accounts => _selectTab(0),
+                  DashboardTarget.operations => _selectTab(1),
+                  DashboardTarget.forecast => _selectTab(2),
+                  DashboardTarget.budget => _selectTab(5),
+                  DashboardTarget.notifications => _openNotifications(),
+                },
               ),
             ],
           );

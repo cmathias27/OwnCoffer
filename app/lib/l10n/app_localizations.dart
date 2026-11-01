@@ -6005,6 +6005,96 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Trop d\'opérations à la fois : 500 au plus.'**
   String get error_too_many;
+
+  /// No description provided for @navHome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accueil'**
+  String get navHome;
+
+  /// No description provided for @dashboardAdvisor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon conseiller : ce qu\'OwnCoffer vous propose'**
+  String get dashboardAdvisor;
+
+  /// No description provided for @dashboardBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun compte en euros} =1{Sur votre compte} other{Sur vos {count} comptes}}'**
+  String dashboardBalance(int count);
+
+  /// No description provided for @dashboardLowest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point bas des 30 prochains jours : {amount} sur {account}, le {date}'**
+  String dashboardLowest(String account, String amount, String date);
+
+  /// No description provided for @dashboardUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette semaine'**
+  String get dashboardUpcoming;
+
+  /// No description provided for @dashboardUpcomingNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune échéance prévue d\'ici 7 jours.'**
+  String get dashboardUpcomingNone;
+
+  /// No description provided for @dashboardSeeForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les prévisions'**
+  String get dashboardSeeForecast;
+
+  /// No description provided for @dashboardMonthSpending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois-ci'**
+  String get dashboardMonthSpending;
+
+  /// No description provided for @dashboardMonthTotals.
+  ///
+  /// In fr, this message translates to:
+  /// **'{expense} dépensés, {income} reçus'**
+  String dashboardMonthTotals(String expense, String income);
+
+  /// No description provided for @dashboardToClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération à classer} other{{count} opérations à classer}}'**
+  String dashboardToClassify(int count);
+
+  /// No description provided for @dashboardSeeBudget.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir le budget'**
+  String get dashboardSeeBudget;
+
+  /// No description provided for @dashboardWatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'À surveiller'**
+  String get dashboardWatch;
+
+  /// No description provided for @dashboardAllGood.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien à signaler : aucun compte ne passe sous son seuil d\'alerte dans les 30 jours.'**
+  String get dashboardAllGood;
+
+  /// No description provided for @dashboardBelow.
+  ///
+  /// In fr, this message translates to:
+  /// **'{account} passe sous son seuil d\'alerte le {date}'**
+  String dashboardBelow(String account, String date);
+
+  /// No description provided for @dashboardUnread.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 notification non lue} other{{count} notifications non lues}}'**
+  String dashboardUnread(int count);
 }
 
 class _AppLocalizationsDelegate

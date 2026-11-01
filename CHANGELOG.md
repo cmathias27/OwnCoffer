@@ -2,6 +2,20 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.23 (1er novembre 2026)
+
+### Accueil
+
+- Nouvel onglet **Accueil**, ouvert en premier : où en est l'argent aujourd'hui et ce qui arrive, sur les comptes que vous voyez.
+  - **Total des comptes** en grand, avec le **point bas des 30 prochains jours** (compte, montant, date) et le solde de chaque compte ;
+  - le **reste à vivre** jusqu'à la fin du mois budgétaire ;
+  - le **bilan du mois** (revenus, dépenses, épargne) ;
+  - **cette semaine** : les échéances des 7 prochains jours (abonnements, crédits, opérations prévues) ;
+  - **ce mois-ci** : dépensé, reçu, et les opérations à classer ;
+  - **à surveiller** : comptes qui passeront sous leur seuil d'alerte, notifications non lues.
+- Chaque carte mène à sa page (Comptes, Budget, Prévisions, Notifications). Une colonne sur téléphone, deux sur grand écran.
+- Sur téléphone, la barre du bas devient : Accueil, Comptes, Opérations, Budget et « Plus ».
+
 ## 0.3.22 (1er novembre 2026)
 
 ### Comparer avec une simulation : et si je changeais de contrat ?

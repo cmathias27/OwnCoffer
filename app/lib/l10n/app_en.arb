@@ -982,5 +982,20 @@
   "uncheckSelected": "Uncheck",
   "selectionStop": "Stop selecting",
   "operationsSelectHint": "Touch an operation's round to check it; long press to select several.",
-  "error_too_many": "Too many operations at once: 500 at most."
+  "error_too_many": "Too many operations at once: 500 at most.",
+  "navHome": "Home",
+  "dashboardAdvisor": "My advisor: what OwnCoffer proposes",
+  "dashboardBalance": "{count, plural, =0{No account in euros} =1{On your account} other{On your {count} accounts}}",
+  "dashboardLowest": "Lowest point in the next 30 days: {amount} on {account}, on {date}",
+  "dashboardUpcoming": "This week",
+  "dashboardUpcomingNone": "No due date in the next 7 days.",
+  "dashboardSeeForecast": "See the forecast",
+  "dashboardMonthSpending": "This month",
+  "dashboardMonthTotals": "{expense} spent, {income} received",
+  "dashboardToClassify": "{count, plural, =1{1 operation to classify} other{{count} operations to classify}}",
+  "dashboardSeeBudget": "See the budget",
+  "dashboardWatch": "To watch",
+  "dashboardAllGood": "Nothing to report: no account goes below its alert threshold within 30 days.",
+  "dashboardBelow": "{account} goes below its alert threshold on {date}",
+  "dashboardUnread": "{count, plural, =1{1 unread notification} other{{count} unread notifications}}"
 }
