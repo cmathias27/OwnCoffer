@@ -48,33 +48,50 @@ Future<bool> showOperationSheet(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
-    showDragHandle: true,
-    builder: (_) => DraggableScrollableSheet(
+    // A card floating above the page, rounded on every side.
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    builder: (context) => DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.7,
+      initialChildSize: 0.75,
       minChildSize: 0.3,
       maxChildSize: 1,
       snap: true,
-      snapSizes: const [0.7],
+      snapSizes: const [0.75],
       // Own messenger: "undo" bars show inside the sheet, above it.
-      builder: (_, scroll) => ScaffoldMessenger(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: OperationSheet(
-            groupId: membership.group.id!,
-            messenger: messenger,
-            onUndone: onUndone,
-            operation: operation,
-            subscription: subscription,
-            onOpenSubscriptions: closing(onOpenSubscriptions),
-            accounts: accounts,
-            categories: categories,
-            currency: currency,
-            canWrite: membership.role != MemberRole.reader,
-            onChanged: onChanged,
-            onHasInvoices: onHasInvoices,
-            onSameProvider: closing(onSameProvider),
-            scrollController: scroll,
+      builder: (_, scroll) => Padding(
+        padding: EdgeInsets.fromLTRB(
+          8,
+          0,
+          8,
+          8 + MediaQuery.of(context).padding.bottom,
+        ),
+        child: Material(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          elevation: 6,
+          shadowColor: Colors.black38,
+          borderRadius: BorderRadius.circular(32),
+          clipBehavior: Clip.antiAlias,
+          child: ScaffoldMessenger(
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: OperationSheet(
+                groupId: membership.group.id!,
+                messenger: messenger,
+                onUndone: onUndone,
+                operation: operation,
+                subscription: subscription,
+                onOpenSubscriptions: closing(onOpenSubscriptions),
+                accounts: accounts,
+                categories: categories,
+                currency: currency,
+                canWrite: membership.role != MemberRole.reader,
+                onChanged: onChanged,
+                onHasInvoices: onHasInvoices,
+                onSameProvider: closing(onSameProvider),
+                scrollController: scroll,
+              ),
+            ),
           ),
         ),
       ),
@@ -254,16 +271,29 @@ class _OperationSheetState extends State<OperationSheet> {
     return ListView(
       controller: widget.scrollController,
       padding: EdgeInsets.fromLTRB(
-        24,
+        12,
         0,
-        24,
+        12,
         24 + MediaQuery.of(context).viewInsets.bottom,
       ),
       children: [
-        Text(t.cleanLabel, style: theme.textTheme.titleLarge),
-        Text(
-          '${context.day(t.date)} · ${context.money(t.amountCents, currency: widget.currency)}',
-          style: theme.textTheme.titleMedium,
+        // Drag handle, part of the list so that it moves the sheet.
+        Center(
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 12),
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.outlineVariant,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
+        _Header(
+          label: t.cleanLabel,
+          date: context.day(t.date),
+          amount: context.money(t.amountCents, currency: widget.currency),
+          credit: t.amountCents > 0,
         ),
         if (_subscription != null)
           Padding(
@@ -290,313 +320,356 @@ class _OperationSheetState extends State<OperationSheet> {
               ],
             ),
           ),
-        const SizedBox(height: 8),
-        Text(
-          l.bankLabelValue(t.rawLabel),
-          style: theme.textTheme.bodySmall,
-        ),
-        if (widget.onSameProvider != null)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              icon: const Icon(Icons.storefront_outlined),
-              label: Text(l.sameProvider),
-              onPressed: widget.onSameProvider,
+        _Section(
+          icon: Icons.storefront_outlined,
+          title: l.sectionProvider,
+          children: [
+            Text(
+              l.bankLabelValue(t.rawLabel),
+              style: theme.textTheme.bodySmall,
             ),
-          ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Tooltip(
-            message: l.webSearchHelp,
-            child: TextButton.icon(
-              icon: const Icon(Icons.travel_explore),
-              label: Text(l.webSearch),
-              onPressed: () => openWebSearch(t.cleanLabel),
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
-        CategoryFormField(
-          // Rebuilt with the saved value after each change.
-          key: ValueKey('category-${t.categoryId}'),
-          categories: widget.categories.values.toList(),
-          initialValue: t.categoryId,
-          label: l.categoryLabel,
-          noneLabel: l.noCategory,
-          helperText: t.categoryId == null
-              ? null
-              : context.categorySourceName(t.categorySource),
-          onChanged: widget.canWrite
-              ? (id) async {
-                  final before = _snapshot;
-                  await _do(() => client.transaction.setCategory(t.id!, id));
-                  if (!mounted || _error != null) return;
-                  setState(() => _splits = []);
-                  _undoHere(l.categoryChanged, before);
-                }
-              : null,
-          onCreate: widget.canWrite
-              ? (context, name) async {
-                  final c = await showNewCategoryDialog(
-                    context,
-                    groupId: widget.groupId,
-                    name: name,
-                    kind: t.amountCents < 0
-                        ? CategoryKind.expense
-                        : CategoryKind.income,
-                    categories: widget.categories.values.toList(),
-                  );
-                  if (c != null) widget.categories[c.id!] = c;
-                  return c;
-                }
-              : null,
-        ),
-        if (_splits.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
-                Text(
-                  l.splitPartsSummary(_splits.length),
-                  style: theme.textTheme.labelLarge,
-                ),
-                for (final p in _splits)
-                  Text(
-                    '${widget.categories[p.categoryId] == null ? l.noCategory : context.categoryName(widget.categories[p.categoryId]!)}'
-                    ' · ${context.money(p.amountCents, currency: widget.currency)}'
-                    '${p.note == null ? '' : ' · ${p.note}'}',
-                    style: theme.textTheme.bodySmall,
+                if (widget.onSameProvider != null)
+                  _ActionTile(
+                    icon: const Icon(Icons.storefront_outlined),
+                    label: Text(l.sameProvider),
+                    onPressed: widget.onSameProvider,
                   ),
+                Tooltip(
+                  message: l.webSearchHelp,
+                  child: _ActionTile(
+                    icon: const Icon(Icons.travel_explore),
+                    label: Text(l.webSearch),
+                    onPressed: () => openWebSearch(t.cleanLabel),
+                  ),
+                ),
               ],
             ),
-          ),
-        if (widget.canWrite)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              icon: const Icon(Icons.call_split),
-              label: Text(l.splitAction),
-              onPressed: _split,
+            const SizedBox(height: 8),
+          ],
+        ),
+        _Section(
+          icon: Icons.category_outlined,
+          title: l.sectionClassification,
+          children: [
+            const SizedBox(height: 4),
+            CategoryFormField(
+              // Rebuilt with the saved value after each change.
+              key: ValueKey('category-${t.categoryId}'),
+              categories: widget.categories.values.toList(),
+              initialValue: t.categoryId,
+              label: l.categoryLabel,
+              noneLabel: l.noCategory,
+              helperText: t.categoryId == null
+                  ? null
+                  : context.categorySourceName(t.categorySource),
+              onChanged: widget.canWrite
+                  ? (id) async {
+                      final before = _snapshot;
+                      await _do(
+                        () => client.transaction.setCategory(t.id!, id),
+                      );
+                      if (!mounted || _error != null) return;
+                      setState(() => _splits = []);
+                      _undoHere(l.categoryChanged, before);
+                    }
+                  : null,
+              onCreate: widget.canWrite
+                  ? (context, name) async {
+                      final c = await showNewCategoryDialog(
+                        context,
+                        groupId: widget.groupId,
+                        name: name,
+                        kind: t.amountCents < 0
+                            ? CategoryKind.expense
+                            : CategoryKind.income,
+                        categories: widget.categories.values.toList(),
+                      );
+                      if (c != null) widget.categories[c.id!] = c;
+                      return c;
+                    }
+                  : null,
             ),
-          ),
-        if (widget.canWrite && t.categoryId != null && _splits.isEmpty)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              icon: const Icon(Icons.rule),
-              label: Text(l.alwaysClassify),
-              onPressed: () async {
-                final before = _snapshot;
-                try {
-                  final r = await client.transaction.createRuleFrom(
-                    t.id!,
-                    t.categoryId!,
-                  );
-                  if (!context.mounted) return;
-                  Navigator.of(context).pop(true);
-                  showUndo(
-                    widget.messenger,
-                    l,
-                    l.ruleCreated(r.reclassifiedCount),
-                    () async {
-                      // The operation first, so its manual choice no longer
-                      // teaches the history.
-                      await _restore(before);
-                      await client.rule.undoCreate(r.rule.id!);
-                    },
-                    after: widget.onUndone,
-                  );
-                } on Object catch (e) {
-                  setState(() => _error = errorText(l, e));
-                }
-              },
-            ),
-          ),
-        if (widget.canWrite && t.amountCents < 0 && _subscription == null)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              icon: const Icon(Icons.autorenew),
-              label: Text(
-                t.scheduledId == null
-                    ? l.subscriptionFromOperation
-                    : l.subscriptionMarkPlanned,
-              ),
-              onPressed: () async {
-                final wasPlanned = t.scheduledId != null;
-                try {
-                  final s = await client.scheduled.subscribeFrom(t.id!);
-                  if (!context.mounted) return;
-                  Navigator.of(context).pop(true);
-                  showUndo(
-                    widget.messenger,
-                    l,
-                    l.subscriptionCreated(
-                      s.label,
-                      s.nextDue == null ? '' : context.day(s.nextDue!),
+            if (_splits.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l.splitPartsSummary(_splits.length),
+                      style: theme.textTheme.labelLarge,
                     ),
-                    () => wasPlanned
-                        ? client.scheduled
-                              .update(s.id!, subscription: false)
-                              .then((_) {})
-                        : client.scheduled.delete(s.id!),
-                    after: widget.onUndone,
-                  );
-                } on Object catch (e) {
-                  setState(() => _error = errorText(l, e));
-                }
-              },
-            ),
-          ),
-        if (widget.canWrite && t.amountCents < 0)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              icon: const Icon(Icons.account_balance_outlined),
-              label: Text(l.loanFromOperation),
-              onPressed: () async {
-                final before = _snapshot;
-                // A loan already entered, or a new one.
-                final loans = await client.loan
-                    .overview(widget.groupId)
-                    .then((o) => o.loans, onError: (_) => <LoanInfo>[]);
-                if (!context.mounted) return;
-                if (loans.isNotEmpty) {
-                  final choice = await showDialog<({LoanInfo? loan})>(
-                    context: context,
-                    builder: (context) => SimpleDialog(
-                      title: Text(l.loanAttachTitle),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-                          child: Text(l.loanAttachHelp),
-                        ),
-                        for (final info in loans)
-                          SimpleDialogOption(
-                            onPressed: () =>
-                                Navigator.of(context).pop((loan: info)),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              leading: const Icon(
-                                Icons.account_balance_outlined,
+                    for (final p in _splits)
+                      Text(
+                        '${widget.categories[p.categoryId] == null ? l.noCategory : context.categoryName(widget.categories[p.categoryId]!)}'
+                        ' · ${context.money(p.amountCents, currency: widget.currency)}'
+                        '${p.note == null ? '' : ' · ${p.note}'}',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                if (widget.canWrite)
+                  _ActionTile(
+                    icon: const Icon(Icons.call_split),
+                    label: Text(l.splitAction),
+                    onPressed: _split,
+                  ),
+                if (widget.canWrite && t.categoryId != null && _splits.isEmpty)
+                  _ActionTile(
+                    icon: const Icon(Icons.rule),
+                    label: Text(l.alwaysClassify),
+                    onPressed: () async {
+                      final before = _snapshot;
+                      try {
+                        final r = await client.transaction.createRuleFrom(
+                          t.id!,
+                          t.categoryId!,
+                        );
+                        if (!context.mounted) return;
+                        Navigator.of(context).pop(true);
+                        showUndo(
+                          widget.messenger,
+                          l,
+                          l.ruleCreated(r.reclassifiedCount),
+                          () async {
+                            // The operation first, so its manual choice no longer
+                            // teaches the history.
+                            await _restore(before);
+                            await client.rule.undoCreate(r.rule.id!);
+                          },
+                          after: widget.onUndone,
+                        );
+                      } on Object catch (e) {
+                        setState(() => _error = errorText(l, e));
+                      }
+                    },
+                  ),
+                if (widget.canWrite &&
+                    t.amountCents < 0 &&
+                    _subscription == null)
+                  _ActionTile(
+                    icon: const Icon(Icons.autorenew),
+                    label: Text(
+                      t.scheduledId == null
+                          ? l.subscriptionFromOperation
+                          : l.subscriptionMarkPlanned,
+                    ),
+                    onPressed: () async {
+                      final wasPlanned = t.scheduledId != null;
+                      try {
+                        final s = await client.scheduled.subscribeFrom(t.id!);
+                        if (!context.mounted) return;
+                        Navigator.of(context).pop(true);
+                        showUndo(
+                          widget.messenger,
+                          l,
+                          l.subscriptionCreated(
+                            s.label,
+                            s.nextDue == null ? '' : context.day(s.nextDue!),
+                          ),
+                          () => wasPlanned
+                              ? client.scheduled
+                                    .update(s.id!, subscription: false)
+                                    .then((_) {})
+                              : client.scheduled.delete(s.id!),
+                          after: widget.onUndone,
+                        );
+                      } on Object catch (e) {
+                        setState(() => _error = errorText(l, e));
+                      }
+                    },
+                  ),
+                if (widget.canWrite && t.amountCents < 0)
+                  _ActionTile(
+                    icon: const Icon(Icons.account_balance_outlined),
+                    label: Text(l.loanFromOperation),
+                    onPressed: () async {
+                      final before = _snapshot;
+                      // A loan already entered, or a new one.
+                      final loans = await client.loan
+                          .overview(widget.groupId)
+                          .then((o) => o.loans, onError: (_) => <LoanInfo>[]);
+                      if (!context.mounted) return;
+                      if (loans.isNotEmpty) {
+                        final choice = await showDialog<({LoanInfo? loan})>(
+                          context: context,
+                          builder: (context) => SimpleDialog(
+                            title: Text(l.loanAttachTitle),
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  24,
+                                  0,
+                                  24,
+                                  8,
+                                ),
+                                child: Text(l.loanAttachHelp),
                               ),
-                              title: Text(
-                                info.loan.label == null
-                                    ? info.loan.lender
-                                    : '${info.loan.lender} · ${info.loan.label}',
+                              for (final info in loans)
+                                SimpleDialogOption(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop((loan: info)),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    leading: const Icon(
+                                      Icons.account_balance_outlined,
+                                    ),
+                                    title: Text(
+                                      info.loan.label == null
+                                          ? info.loan.lender
+                                          : '${info.loan.lender} · ${info.loan.label}',
+                                    ),
+                                    subtitle: Text(
+                                      '${loanKindText(l, info.loan.kind)} · '
+                                      '${context.money(info.paymentCents + info.loan.insuranceMonthlyCents)}',
+                                    ),
+                                  ),
+                                ),
+                              SimpleDialogOption(
+                                onPressed: () =>
+                                    Navigator.of(context).pop((loan: null)),
+                                child: ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: const Icon(Icons.add),
+                                  title: Text(l.loanAttachNew),
+                                ),
                               ),
-                              subtitle: Text(
-                                '${loanKindText(l, info.loan.kind)} · '
-                                '${context.money(info.paymentCents + info.loan.insuranceMonthlyCents)}',
+                            ],
+                          ),
+                        );
+                        // Dismissed without a choice: nothing.
+                        if (choice == null || !context.mounted) return;
+                        final picked = choice.loan;
+                        if (picked != null) {
+                          try {
+                            final r = await client.loan.attachTransaction(
+                              picked.loan.id!,
+                              t.id!,
+                            );
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop(true);
+                            showUndo(
+                              widget.messenger,
+                              l,
+                              l.loanAttachDone(
+                                r.linkedCount,
+                                r.reclassifiedCount,
+                              ),
+                              () async {
+                                await _restore(before);
+                                await client.loan.undoAttach(
+                                  picked.loan.id!,
+                                  t.id!,
+                                  ruleId: r.ruleId,
+                                );
+                              },
+                              after: widget.onUndone,
+                            );
+                          } on Object catch (e) {
+                            setState(() => _error = errorText(l, e));
+                          }
+                          return;
+                        }
+                      }
+                      if (!context.mounted) return;
+                      final r = await Navigator.of(context)
+                          .push<LoanFromOperation>(
+                            MaterialPageRoute(
+                              builder: (_) => LoanFormScreen(
+                                groupId: widget.groupId,
+                                accounts: widget.accounts,
+                                fromOperation: t,
+                                categories: widget.categories.values.toList(),
                               ),
                             ),
-                          ),
-                        SimpleDialogOption(
-                          onPressed: () =>
-                              Navigator.of(context).pop((loan: null)),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: const Icon(Icons.add),
-                            title: Text(l.loanAttachNew),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                  // Dismissed without a choice: nothing.
-                  if (choice == null || !context.mounted) return;
-                  final picked = choice.loan;
-                  if (picked != null) {
-                    try {
-                      final r = await client.loan.attachTransaction(
-                        picked.loan.id!,
-                        t.id!,
-                      );
-                      if (!context.mounted) return;
+                          );
+                      if (r == null || !context.mounted) return;
                       Navigator.of(context).pop(true);
                       showUndo(
                         widget.messenger,
                         l,
-                        l.loanAttachDone(r.linkedCount, r.reclassifiedCount),
+                        l.loanFromOperationDone(
+                          r.linkedCount,
+                          r.reclassifiedCount,
+                        ),
                         () async {
                           await _restore(before);
-                          await client.loan.undoAttach(
-                            picked.loan.id!,
-                            t.id!,
-                            ruleId: r.ruleId,
-                          );
+                          await client.loan.undoCreate(r.info.loan.id!);
                         },
                         after: widget.onUndone,
                       );
-                    } on Object catch (e) {
-                      setState(() => _error = errorText(l, e));
-                    }
-                    return;
-                  }
-                }
-                if (!context.mounted) return;
-                final r = await Navigator.of(context).push<LoanFromOperation>(
-                  MaterialPageRoute(
-                    builder: (_) => LoanFormScreen(
-                      groupId: widget.groupId,
-                      accounts: widget.accounts,
-                      fromOperation: t,
-                      categories: widget.categories.values.toList(),
-                    ),
-                  ),
-                );
-                if (r == null || !context.mounted) return;
-                Navigator.of(context).pop(true);
-                showUndo(
-                  widget.messenger,
-                  l,
-                  l.loanFromOperationDone(r.linkedCount, r.reclassifiedCount),
-                  () async {
-                    await _restore(before);
-                    await client.loan.undoCreate(r.info.loan.id!);
-                  },
-                  after: widget.onUndone,
-                );
-              },
-            ),
-          ),
-        SwitchListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(l.cleared),
-          value: t.cleared,
-          onChanged: widget.canWrite
-              ? (v) async {
-                  final messenger = ScaffoldMessenger.of(context);
-                  await _do(() => client.transaction.setCleared(t.id!, v));
-                  if (!mounted || _error != null) return;
-                  showUndo(
-                    messenger,
-                    l,
-                    l.clearedChanged,
-                    () async {
-                      final back = await client.transaction.setCleared(
-                        t.id!,
-                        !v,
-                      );
-                      widget.onChanged(back);
-                      if (mounted) setState(() => _t = back);
                     },
-                  );
-                }
-              : null,
+                  ),
+              ],
+            ),
+            const SizedBox(height: 8),
+          ],
         ),
-        TextField(
-          controller: _note,
-          enabled: widget.canWrite,
-          decoration: InputDecoration(labelText: l.noteLabel),
-          onSubmitted: (v) =>
-              _do(() => client.transaction.update(t.id!, note: v)),
+        _Section(
+          icon: Icons.edit_note,
+          title: l.sectionFollowUp,
+          children: [
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(l.cleared),
+              value: t.cleared,
+              onChanged: widget.canWrite
+                  ? (v) async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      await _do(() => client.transaction.setCleared(t.id!, v));
+                      if (!mounted || _error != null) return;
+                      showUndo(
+                        messenger,
+                        l,
+                        l.clearedChanged,
+                        () async {
+                          final back = await client.transaction.setCleared(
+                            t.id!,
+                            !v,
+                          );
+                          widget.onChanged(back);
+                          if (mounted) setState(() => _t = back);
+                        },
+                      );
+                    }
+                  : null,
+            ),
+            TextField(
+              controller: _note,
+              enabled: widget.canWrite,
+              decoration: InputDecoration(labelText: l.noteLabel),
+              onSubmitted: (v) =>
+                  _do(() => client.transaction.update(t.id!, note: v)),
+            ),
+            const SizedBox(height: 4),
+          ],
         ),
-        InvoiceSection(
-          transactionId: t.id!,
-          canWrite: widget.canWrite,
-          onHasInvoices: widget.onHasInvoices ?? (_) {},
+        _SameProvider(
+          operation: t,
+          accounts: widget.accounts,
+          categories: widget.categories,
+        ),
+        _Section(
+          icon: Icons.receipt_long_outlined,
+          title: l.sectionInvoices,
+          children: [
+            InvoiceSection(
+              transactionId: t.id!,
+              canWrite: widget.canWrite,
+              onHasInvoices: widget.onHasInvoices ?? (_) {},
+            ),
+          ],
         ),
         if (_error != null)
           Padding(
@@ -607,11 +680,19 @@ class _OperationSheetState extends State<OperationSheet> {
             ),
           ),
         if (widget.canWrite)
-          Align(
-            alignment: Alignment.centerLeft,
+          Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 16),
+              padding: const EdgeInsets.only(top: 20),
               child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: theme.colorScheme.error,
+                  side: BorderSide(color: theme.colorScheme.errorContainer),
+                  shape: const StadiumBorder(),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                ),
                 icon: const Icon(Icons.delete_outline),
                 label: Text(l.trash),
                 onPressed: () async {
@@ -630,6 +711,300 @@ class _OperationSheetState extends State<OperationSheet> {
             ),
           ),
       ],
+    );
+  }
+}
+
+/// The past operations with the same label (same provider), so that a
+/// debit can be checked against the previous ones: how many, since when,
+/// in total and on average, then the most recent.
+class _SameProvider extends StatefulWidget {
+  final BankTransaction operation;
+  final List<Account> accounts;
+  final Map<int, Category> categories;
+
+  const _SameProvider({
+    required this.operation,
+    required this.accounts,
+    required this.categories,
+  });
+
+  @override
+  State<_SameProvider> createState() => _SameProviderState();
+}
+
+class _SameProviderState extends State<_SameProvider> {
+  ProviderHistory? _history;
+
+  @override
+  void initState() {
+    super.initState();
+    client.transaction.sameProvider(widget.operation.id!).then((h) {
+      if (mounted) setState(() => _history = h);
+    }, onError: (_) {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final h = _history;
+    // Nothing to show while loading, on error or for a first operation.
+    if (h == null || h.items.isEmpty) return const SizedBox.shrink();
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final accounts = {for (final a in widget.accounts) a.id!: a};
+    String money(int cents, int accountId) => context.money(
+      cents,
+      currency: accounts[accountId]?.currency ?? 'EUR',
+    );
+    final currencyOf = widget.operation.accountId;
+    return _Section(
+      icon: Icons.history,
+      title: l.sameProviderTitle,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l.sameProviderHistory(
+                h.count,
+                h.since == null ? '' : context.day(h.since!),
+                money(h.totalCents, currencyOf),
+                money(h.averageCents, currencyOf),
+              ),
+              style: theme.textTheme.bodySmall,
+            ),
+            for (final x in h.items)
+              ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                title: Text(context.day(x.date)),
+                subtitle: Text(
+                  [
+                    if (widget.categories[x.categoryId] != null)
+                      context.categoryName(widget.categories[x.categoryId]!)
+                    else
+                      l.noCategory,
+                    if (accounts.length > 1 && accounts[x.accountId] != null)
+                      accounts[x.accountId]!.name,
+                  ].join(' · '),
+                ),
+                trailing: Text(
+                  money(x.amountCents, x.accountId),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ),
+            if (h.count - 1 > h.items.length)
+              Text(
+                l.sameProviderMore(h.count - 1 - h.items.length),
+                style: theme.textTheme.bodySmall,
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// The operation at a glance: a soft tinted card with round shapes behind,
+/// the amount large, its sign told by an icon as well as the colour.
+class _Header extends StatelessWidget {
+  final String label;
+  final String date;
+  final String amount;
+  final bool credit;
+
+  const _Header({
+    required this.label,
+    required this.date,
+    required this.amount,
+    required this.credit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final tint = credit ? scheme.tertiaryContainer : scheme.secondaryContainer;
+    final ink = credit
+        ? scheme.onTertiaryContainer
+        : scheme.onSecondaryContainer;
+    Widget blob(double size, double alpha) => Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: ink.withValues(alpha: alpha),
+      ),
+    );
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(28),
+      child: Container(
+        color: tint,
+        child: Stack(
+          children: [
+            Positioned(right: -40, top: -50, child: blob(160, 0.07)),
+            Positioned(right: 50, bottom: -60, child: blob(110, 0.05)),
+            Positioned(left: -30, bottom: -40, child: blob(80, 0.04)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 22),
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: scheme.surface.withValues(alpha: 0.7),
+                    ),
+                    child: Icon(
+                      credit ? Icons.south_west : Icons.north_east,
+                      color: ink,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: ink,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          amount,
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            color: ink,
+                            fontFamily: 'Manrope',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          date,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: ink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// One group of the sheet: a rounded tonal card with a small title.
+class _Section extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final List<Widget> children;
+
+  const _Section({
+    required this.icon,
+    required this.title,
+    required this.children,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    // A Material, not a coloured box, so that the rows' ink shows.
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Material(
+        color: theme.colorScheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(24),
+        clipBehavior: Clip.antiAlias,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Icon(icon, size: 18, color: theme.colorScheme.primary),
+                  const SizedBox(width: 8),
+                  Text(title, style: theme.textTheme.titleSmall),
+                ],
+              ),
+              const SizedBox(height: 6),
+              ...children,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// An action of the sheet as a tile: a round icon above its name, easy to
+/// spot and to touch on a phone.
+class _ActionTile extends StatelessWidget {
+  final Widget icon;
+  final Widget label;
+  final VoidCallback? onPressed;
+
+  const _ActionTile({
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    return SizedBox(
+      width: 108,
+      child: Material(
+        color: scheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(20),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 12, 8, 10),
+            child: Column(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: scheme.primaryContainer,
+                  ),
+                  child: IconTheme.merge(
+                    data: IconThemeData(
+                      size: 22,
+                      color: scheme.onPrimaryContainer,
+                    ),
+                    child: icon,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                DefaultTextStyle.merge(
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium,
+                  child: label,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

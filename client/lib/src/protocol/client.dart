@@ -71,6 +71,8 @@ import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/month_review.dart' as _ilg6npsn;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
+import 'package:owncoffer_client/src/protocol/provider_history.dart'
+    as _i26z4phw;
 import 'package:owncoffer_client/src/protocol/purchase_simulation.dart'
     as _is7p90bk;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
@@ -1795,6 +1797,22 @@ class EndpointTransaction extends _isc.EndpointRef {
         'splits',
         {'transactionId': transactionId},
       );
+
+  /// The other operations of the same provider (same cleaned label) on the
+  /// accounts of the group the user may see: the [limit] most recent (10
+  /// by default, at most 50), and how many there are in all, with their
+  /// total and average.
+  _ida.Future<_i26z4phw.ProviderHistory> sameProvider(
+    int transactionId, {
+    int? limit,
+  }) => caller.callServerEndpoint<_i26z4phw.ProviderHistory>(
+    'transaction',
+    'sameProvider',
+    {
+      'transactionId': transactionId,
+      'limit': limit,
+    },
+  );
 
   /// Splits the operation between categories (a receipt: groceries,
   /// household…): at least two parts of its sign adding up to its amount.

@@ -1,0 +1,13 @@
+### The past operations with the same cleaned label as one operation (same
+### provider: every EDF debit), on the accounts the user may see.
+class: ProviderHistory
+fields:
+  ### The most recent ones, newest first, the operation itself left out.
+  items: List<BankTransaction>
+  ### All of them, the operation included.
+  count: int
+  totalCents: int
+  ### Average of one operation.
+  averageCents: int
+  ### Date of the oldest one.
+  since: DateTime?

@@ -73,6 +73,8 @@ import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/month_review.dart' as _ir8qupm5;
 import 'package:owncoffer_server/src/generated/notification.dart' as _ieap9unx;
+import 'package:owncoffer_server/src/generated/provider_history.dart'
+    as _iujedgl9;
 import 'package:owncoffer_server/src/generated/purchase_simulation.dart'
     as _ikh9zr0h;
 import 'package:owncoffer_server/src/generated/rule.dart' as _inhqt802;
@@ -4625,6 +4627,41 @@ class _TransactionEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<List<_i84rsuuz.TransactionSplit>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iujedgl9.ProviderHistory> sameProvider(
+    _ist.TestSessionBuilder sessionBuilder,
+    int transactionId, {
+    int? limit,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'transaction',
+            method: 'sameProvider',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transaction',
+          methodName: 'sameProvider',
+          parameters: _ist.testObjectToJson({
+            'transactionId': transactionId,
+            'limit': limit,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iujedgl9.ProviderHistory>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

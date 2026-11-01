@@ -913,5 +913,12 @@
   "compareReference": "{name} (reference)",
   "compareByCategory": "By category",
   "compareGapHelp": "Gaps to the reference, in euros and as a percentage.",
-  "compareSame": "same"
+  "compareSame": "same",
+  "sameProviderTitle": "Past operations with the same label",
+  "sameProviderHistory": "{count} operations since {since} · total {total} · average {average}",
+  "sameProviderMore": "{count, plural, =1{and 1 older} other{and {count} older}}",
+  "sectionProvider": "Provider",
+  "sectionClassification": "Classification",
+  "sectionFollowUp": "Follow-up",
+  "sectionInvoices": "Invoices and receipts"
 }

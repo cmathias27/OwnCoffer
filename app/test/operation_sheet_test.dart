@@ -100,6 +100,19 @@ void main() {
         find.text('Libellé de la banque : CB LIDL', skipOffstage: false),
         findsOneWidget,
       );
+      // Actions as tiles: an icon and its name.
+      expect(
+        find.byIcon(Icons.call_split, skipOffstage: false),
+        findsOneWidget,
+      );
+      expect(
+        find.text('Ventiler entre plusieurs catégories', skipOffstage: false),
+        findsOneWidget,
+      );
+      for (final section in ['Fournisseur', 'Classement', 'Suivi']) {
+        expect(find.text(section, skipOffstage: false), findsOneWidget);
+      }
+      expect(find.textContaining('80,00', skipOffstage: false), findsOneWidget);
       expect(
         find.text('Abonnement « Courses »', skipOffstage: false),
         planned ? findsOneWidget : findsNothing,

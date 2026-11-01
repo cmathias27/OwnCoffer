@@ -2540,5 +2540,35 @@
   },
   "compareByCategory": "Par catégorie",
   "compareGapHelp": "Écarts par rapport à la référence, en euros et en pourcentage.",
-  "compareSame": "identique"
+  "compareSame": "identique",
+  "sameProviderTitle": "Opérations passées au même libellé",
+  "sameProviderHistory": "{count} opérations depuis le {since} · total {total} · moyenne {average}",
+  "sameProviderMore": "{count, plural, =1{et 1 plus ancienne} other{et {count} plus anciennes}}",
+  "@sameProviderHistory": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "since": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "@sameProviderMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sectionProvider": "Fournisseur",
+  "sectionClassification": "Classement",
+  "sectionFollowUp": "Suivi",
+  "sectionInvoices": "Factures et tickets"
 }

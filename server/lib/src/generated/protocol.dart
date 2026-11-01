@@ -117,6 +117,7 @@ import 'month_review.dart' as _i5m4pdin;
 import 'notification.dart' as _irt10kca;
 import 'occurrence_status.dart' as _it10dx4m;
 import 'period_totals.dart' as _imctw77w;
+import 'provider_history.dart' as _irsxtgs7;
 import 'purchase_option.dart' as _i46nnn14;
 import 'purchase_payment_info.dart' as _i60c7zzl;
 import 'purchase_scenario_info.dart' as _irvruma2;
@@ -208,6 +209,7 @@ export 'month_review.dart';
 export 'notification.dart';
 export 'occurrence_status.dart';
 export 'period_totals.dart';
+export 'provider_history.dart';
 export 'purchase_option.dart';
 export 'purchase_payment_info.dart';
 export 'purchase_scenario_info.dart';
@@ -3052,6 +3054,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _imctw77w.PeriodTotals) {
       return _imctw77w.PeriodTotals.fromJson(data) as T;
     }
+    if (t == _irsxtgs7.ProviderHistory) {
+      return _irsxtgs7.ProviderHistory.fromJson(data) as T;
+    }
     if (t == _i46nnn14.PurchaseOption) {
       return _i46nnn14.PurchaseOption.fromJson(data) as T;
     }
@@ -3364,6 +3369,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_imctw77w.PeriodTotals?>()) {
       return (data != null ? _imctw77w.PeriodTotals.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_irsxtgs7.ProviderHistory?>()) {
+      return (data != null ? _irsxtgs7.ProviderHistory.fromJson(data) : null)
+          as T;
     }
     if (t == _is.getType<_i46nnn14.PurchaseOption?>()) {
       return (data != null ? _i46nnn14.PurchaseOption.fromJson(data) : null)
@@ -3839,6 +3848,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _irt10kca.AppNotification => 'AppNotification',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
       _imctw77w.PeriodTotals => 'PeriodTotals',
+      _irsxtgs7.ProviderHistory => 'ProviderHistory',
       _i46nnn14.PurchaseOption => 'PurchaseOption',
       _i60c7zzl.PurchasePaymentInfo => 'PurchasePaymentInfo',
       _irvruma2.PurchaseScenarioInfo => 'PurchaseScenarioInfo',
@@ -4009,6 +4019,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'OccurrenceStatus';
       case _imctw77w.PeriodTotals():
         return 'PeriodTotals';
+      case _irsxtgs7.ProviderHistory():
+        return 'ProviderHistory';
       case _i46nnn14.PurchaseOption():
         return 'PurchaseOption';
       case _i60c7zzl.PurchasePaymentInfo():
@@ -4281,6 +4293,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'PeriodTotals') {
       return deserialize<_imctw77w.PeriodTotals>(data['data']);
+    }
+    if (dataClassName == 'ProviderHistory') {
+      return deserialize<_irsxtgs7.ProviderHistory>(data['data']);
     }
     if (dataClassName == 'PurchaseOption') {
       return deserialize<_i46nnn14.PurchaseOption>(data['data']);

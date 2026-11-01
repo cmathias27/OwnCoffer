@@ -5586,6 +5586,53 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'identique'**
   String get compareSame;
+
+  /// No description provided for @sameProviderTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations passées au même libellé'**
+  String get sameProviderTitle;
+
+  /// No description provided for @sameProviderHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} opérations depuis le {since} · total {total} · moyenne {average}'**
+  String sameProviderHistory(
+    int count,
+    String since,
+    String total,
+    String average,
+  );
+
+  /// No description provided for @sameProviderMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{et 1 plus ancienne} other{et {count} plus anciennes}}'**
+  String sameProviderMore(int count);
+
+  /// No description provided for @sectionProvider.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fournisseur'**
+  String get sectionProvider;
+
+  /// No description provided for @sectionClassification.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classement'**
+  String get sectionClassification;
+
+  /// No description provided for @sectionFollowUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivi'**
+  String get sectionFollowUp;
+
+  /// No description provided for @sectionInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures et tickets'**
+  String get sectionInvoices;
 }
 
 class _AppLocalizationsDelegate
