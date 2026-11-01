@@ -89,11 +89,27 @@ class AiContext {
     _tool(
       'propose_category',
       'Propose a category for an operation. Nothing changes until the user '
-          'accepts it in "Mon conseiller".',
+          'accepts it in "Mon conseiller". When the same merchant will come '
+          'back, also suggest a rule with rule_pattern: OwnCoffer checks it '
+          'matches this operation, counts the operations it would classify, '
+          'and proposes it separately.',
       {
         'transaction_id': {'type': 'integer'},
         'category_id': {'type': 'integer'},
         'reason': {'type': 'string', 'description': 'Why, in one sentence.'},
+        'rule_pattern': {
+          'type': 'string',
+          'description':
+              'Optional: the stable part of the label that names the '
+              'merchant (no dates, card or reference numbers, amounts).',
+        },
+        'rule_match': {
+          'type': 'string',
+          'enum': ['startsWith', 'contains'],
+          'description':
+              'How the label must contain rule_pattern; '
+              'startsWith by default.',
+        },
       },
       required: ['transaction_id', 'category_id', 'reason'],
     ),
@@ -432,7 +448,106 @@ class AiContext {
       model: model,
     );
     if (p != null) proposals.add(p);
-    return {'proposed': p != null, 'note': 'The user accepts it or not.'};
+    final rule = a['rule_pattern'] is String
+        ? await _proposeRule(t, c, a)
+        : null;
+    return {
+      'proposed': p != null,
+      'rule': ?rule,
+      'note': 'The user accepts it or not.',
+    };
+  }
+
+  static const _minPattern = 3;
+
+  /// The rule suggested with a category: checked and counted by the engine
+  /// on the visible accounts, proposed apart (the user may want one and not
+  /// the other). Returns what the model is told.
+  Future<Map<String, Object?>> _proposeRule(
+    BankTransaction t,
+    Category c,
+    Map<String, Object?> a,
+  ) async {
+    final pattern = core.normalizeForMatch(_short(a['rule_pattern']));
+    if (pattern.length < _minPattern || pattern.length > 100) {
+      return {'proposed': false, 'error': 'pattern too short or too long'};
+    }
+    final match = a['rule_match'] == 'contains'
+        ? RuleMatchType.contains
+        : RuleMatchType.startsWith;
+    final direction = t.amountCents < 0
+        ? RuleDirection.debit
+        : RuleDirection.credit;
+    final matcher = core.GroupRule<int>(
+      id: 0,
+      categoryId: c.id!,
+      pattern: pattern,
+      matchType: core.MatchType.values.byName(match.name),
+      direction: core.Direction.values.byName(direction.name),
+    );
+    core.CleanedLabel label(BankTransaction x) => core.CleanedLabel(
+      x.cleanLabel,
+      core.normalizeForMatch('${x.rawLabel} ${x.memo ?? ''}'),
+      core.OperationKind.other,
+    );
+    if (!matcher.matches(label(t), t.amountCents)) {
+      return {'proposed': false, 'error': 'pattern does not match the label'};
+    }
+    final exists = await Rule.db.count(
+      session,
+      where: (r) =>
+          r.groupId.equals(groupId) &
+          r.pattern.equals(pattern) &
+          r.matchType.equals(match) &
+          r.direction.equals(direction),
+    );
+    if (exists > 0) return {'proposed': false, 'error': 'rule exists'};
+    // What accepting would change, on the accounts this user may see (the
+    // same set the rule is applied to): manual choices are never changed.
+    final Set<int> ids = {for (final x in await _accounts()) x.id!};
+    final reached = [
+      for (final x in await BankTransaction.db.find(
+        session,
+        where: (x) =>
+            x.accountId.inSet(ids) &
+            x.deletedAt.equals(null) &
+            x.categorySource.notEquals(CategorySource.manual),
+        orderByList: (x) => [x.date.desc(), x.id.desc()],
+      ))
+        if (x.categoryId != c.id && matcher.matches(label(x), x.amountCents)) x,
+    ];
+    final fields = {
+      'pattern': pattern,
+      'match_type': match.name,
+      'direction': direction.name,
+    };
+    final p = await ProposalService.propose(
+      session,
+      groupId: groupId,
+      kind: 'create_rule',
+      targetId: t.id!,
+      currentValue: null,
+      proposedValue: c.id,
+      proposedData: jsonEncode(fields),
+      reason: 'ai_rule',
+      data: {
+        ...fields,
+        'label': t.cleanLabel,
+        'reclassified_count': reached.length,
+        'examples': [
+          for (final x in reached.take(3)) '${_iso(x.date)} ${x.cleanLabel}',
+        ],
+        'why': _short(a['reason']),
+      },
+      origin: origin,
+      provider: provider,
+      model: model,
+    );
+    if (p != null) proposals.add(p);
+    return {
+      'proposed': p != null,
+      'operations_it_would_classify': reached.length,
+    };
   }
 
   Future<Map<String, Object?>> _proposeLoan(Map<String, Object?> a) async {

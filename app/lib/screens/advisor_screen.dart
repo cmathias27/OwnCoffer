@@ -159,6 +159,11 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
         '${d['label'] ?? ''}',
         _category(p.proposedValue ?? 0),
       ),
+      'ai_rule' => l.advisorAiRule(
+        d['match_type'] == 'contains' ? l.matchContains : l.matchStartsWith,
+        '${d['pattern'] ?? ''}',
+        _category(p.proposedValue ?? 0),
+      ),
       'ai_loan' => l.advisorAiLoan(
         '${d['lender'] ?? ''}',
         context.money((d['principal_cents'] as num?)?.toInt() ?? 0),
@@ -207,6 +212,21 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
               '${d['why'] ?? ''}',
             ),
           ),
+        if (p.reason == 'ai_rule') ...[
+          Text(
+            l.advisorAiRuleWhy(
+              (d['reclassified_count'] as num?)?.toInt() ?? 0,
+              '${d['label'] ?? ''}',
+              '${d['why'] ?? ''}',
+            ),
+          ),
+          for (final e in switch (d['examples']) {
+            final List<dynamic> x => x,
+            _ => const [],
+          })
+            Text('· $e', style: theme.textTheme.bodySmall),
+          Text(l.advisorAiRuleUndo, style: theme.textTheme.bodySmall),
+        ],
         if (p.reason == 'ai_loan')
           Text(
             l.advisorAiLoanWhy(

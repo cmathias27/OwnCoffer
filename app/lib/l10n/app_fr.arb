@@ -2915,6 +2915,35 @@
       }
     }
   },
+  "advisorAiRule": "Créer la règle : libellé {match} « {pattern} » → « {category} »",
+  "@advisorAiRule": {
+    "placeholders": {
+      "match": {
+        "type": "String"
+      },
+      "pattern": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorAiRuleWhy": "Repérée sur « {label} ». {count, plural, =0{Aucune opération déjà importée n'est concernée} =1{1 opération déjà importée sera classée} other{{count} opérations déjà importées seront classées}} (compté par OwnCoffer, sans toucher à vos choix faits à la main), puis les suivantes à chaque import. {why}",
+  "@advisorAiRuleWhy": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "label": {
+        "type": "String"
+      },
+      "why": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorAiRuleUndo": "Vous pourrez annuler : la règle sera supprimée et ses opérations classées à nouveau sans elle.",
   "advisorAccept": "Accepter",
   "advisorRefuse": "Refuser",
   "advisorAccepted": "Proposition appliquée.",
@@ -3062,6 +3091,8 @@
     }
   },
   "assistantHint": "Posez une question, ou « classe mes opérations »…",
+  "assistantClassifyChip": "Classer les opérations à classer",
+  "assistantClassifyPrompt": "Propose une catégorie pour mes opérations à classer, et une règle quand le même commerçant reviendra.",
   "assistantSend": "Envoyer",
   "error_ai_off": "L'assistant est désactivé : activez-le et choisissez un modèle.",
   "error_ai_provider_unavailable": "Ce fournisseur ou ce modèle n'est pas disponible.",

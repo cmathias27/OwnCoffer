@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:owncoffer_server/src/ai/ai_adapter.dart';
 import 'package:owncoffer_server/src/ai/ai_gateway.dart';
 import 'package:owncoffer_server/src/generated/protocol.dart';
@@ -261,6 +263,193 @@ void main() {
         );
       },
     );
+
+    test('a rule suggested with a category is checked and counted by the '
+        'engine, applied on accept to the visible accounts only, undone '
+        'cleanly', () async {
+      final p = await endpoints.ai.saveProvider(as(admin), local(), null);
+      final categories = await endpoints.category.list(as(bob), groupA);
+      final food = categories.firstWhere((c) => c.standardCode == 'food');
+      final other = categories.firstWhere(
+        (c) => c.id != food.id && c.kind == CategoryKind.expense,
+      );
+      Future<BankTransaction> op(
+        Account a,
+        String label,
+        int day, {
+        int? manual,
+      }) => BankTransaction.db.insertRow(
+        db,
+        BankTransaction(
+          accountId: a.id!,
+          date: DateTime.utc(2026, 10, day),
+          amountCents: -830,
+          rawLabel: 'CB $label',
+          cleanLabel: label,
+          operationKind: 'card',
+          categoryId: manual,
+          categorySource: manual == null
+              ? CategorySource.none
+              : CategorySource.manual,
+        ),
+      );
+      final example = (await endpoints.transaction.list(
+        as(bob),
+        shared.id!,
+      )).items.single;
+      final again = await op(shared, 'BOULANGERIE DU PORT', 22);
+      final byHand = await op(shared, 'BOULANGERIE', 23, manual: other.id);
+      final hidden = await op(restricted, 'BOULANGERIE SECRETE', 24);
+      String args(String pattern) =>
+          '{"transaction_id": ${example.id}, "category_id": ${food.id}, '
+          '"reason": "Une boulangerie.", "rule_pattern": "$pattern"}';
+      final model = _ScriptedModel([
+        _call('1', 'propose_category', args('xyz')),
+        _call('2', 'propose_category', args('bo')),
+        _call('3', 'propose_category', args('Boulangerie')),
+        {'role': 'assistant', 'content': 'Proposé, avec une règle.'},
+      ]);
+      AiGateway.adapter = model;
+      await endpoints.ai.setPreference(as(bob), p.id, 'llama3.1', true);
+      final reply = await endpoints.ai.chat(
+        as(bob),
+        groupA,
+        [],
+        AiMessage(role: 'user', content: 'Classe les boulangeries'),
+      );
+      final sent = model.received.last.toString();
+      expect(sent, contains('pattern does not match the label'));
+      expect(sent, contains('pattern too short'));
+      expect(sent, isNot(contains('SECRET')), reason: 'restricted account');
+      expect(
+        [for (final x in reply.proposals) x.kind],
+        [
+          'set_category',
+          'create_rule',
+        ],
+        reason: 'the bad patterns proposed no rule',
+      );
+      final rule = reply.proposals.last;
+      expect(rule.proposedValue, food.id);
+      final data = jsonDecode(rule.data) as Map<String, Object?>;
+      expect(data['pattern'], 'BOULANGERIE');
+      expect(data['match_type'], 'startsWith');
+      expect(data['direction'], 'debit');
+      expect(
+        data['reclassified_count'],
+        2,
+        reason:
+            'the example and the other visible one, not the manual '
+            'choice, not the restricted account',
+      );
+      expect(data.toString(), isNot(contains('SECRET')));
+      expect(await Rule.db.count(db), 0, reason: 'nothing written yet');
+
+      await expectLater(
+        endpoints.advisor.accept(as(mallory), rule.id!),
+        denied,
+      );
+      final done = await endpoints.advisor.accept(as(bob), rule.id!);
+      expect(done.status, 'executed');
+      expect(
+        (await endpoints.advisor.accept(as(bob), rule.id!)).resultId,
+        done.resultId,
+        reason: 'applied once',
+      );
+      final created = (await Rule.db.find(db)).single;
+      expect(created.id, done.resultId);
+      expect(created.groupId, groupA);
+      Future<int?> cat(BankTransaction t) async =>
+          (await BankTransaction.db.findById(db, t.id!))!.categoryId;
+      expect(await cat(example), food.id);
+      expect(await cat(again), food.id);
+      expect(await cat(byHand), other.id, reason: 'a manual choice stays');
+      expect(await cat(hidden), isNull, reason: 'not visible to bob');
+      expect(
+        (await ActionProposal.db.findById(
+          db,
+          reply.proposals.first.id!,
+        ))!.status,
+        'expired',
+        reason: 'the category proposal is fulfilled by the rule',
+      );
+
+      await endpoints.advisor.undo(as(bob), rule.id!);
+      expect(await Rule.db.count(db), 0);
+      // Classified again without the rule (here by the history of the
+      // manual choice), never left with the rule's category.
+      for (final t in [example, again]) {
+        final now = (await BankTransaction.db.findById(db, t.id!))!;
+        expect(now.categorySource, isNot(CategorySource.groupRule));
+        expect(now.categoryId, isNot(food.id));
+      }
+      expect(await cat(byHand), other.id);
+    });
+
+    test('a suggested rule is refused when the same rule was made since, '
+        'and a reader may not accept it', () async {
+      final p = await endpoints.ai.saveProvider(as(admin), local(), null);
+      final food = (await endpoints.category.list(
+        as(bob),
+        groupA,
+      )).firstWhere((c) => c.standardCode == 'food');
+      final example = (await endpoints.transaction.list(
+        as(bob),
+        shared.id!,
+      )).items.single;
+      final reader = await user({});
+      await GroupMember.db.insertRow(
+        db,
+        GroupMember(
+          groupId: groupA,
+          authUserId: reader,
+          role: MemberRole.reader,
+        ),
+      );
+      AiGateway.adapter = _ScriptedModel([
+        _call(
+          '1',
+          'propose_category',
+          '{"transaction_id": ${example.id}, "category_id": ${food.id}, '
+              '"reason": "r", "rule_pattern": "boulangerie", '
+              '"rule_match": "contains"}',
+        ),
+        {'role': 'assistant', 'content': 'ok'},
+        _call(
+          '1',
+          'propose_category',
+          '{"transaction_id": ${example.id}, "category_id": ${food.id}, '
+              '"reason": "r", "rule_pattern": "boulangerie"}',
+        ),
+        {'role': 'assistant', 'content': 'ok'},
+      ]);
+      final ask = AiMessage(role: 'user', content: 'Classe');
+      await endpoints.ai.setPreference(as(reader), p.id, 'llama3.1', true);
+      final byReader = await endpoints.ai.chat(as(reader), groupA, [], ask);
+      await expectLater(
+        endpoints.advisor.accept(as(reader), byReader.proposals.last.id!),
+        denied,
+      );
+      expect(await Rule.db.count(db), 0);
+
+      await endpoints.ai.setPreference(as(bob), p.id, 'llama3.1', true);
+      final reply = await endpoints.ai.chat(as(bob), groupA, [], ask);
+      final rule = reply.proposals.last;
+      expect(rule.kind, 'create_rule');
+      await endpoints.rule.create(
+        as(bob),
+        groupA,
+        food.id!,
+        'boulangerie',
+        RuleMatchType.startsWith,
+        direction: RuleDirection.debit,
+      );
+      await expectLater(
+        endpoints.advisor.accept(as(bob), rule.id!),
+        code('proposal_stale'),
+      );
+      expect(await Rule.db.count(db), 1);
+    });
 
     test('cap, no vision, provider down: said plainly, never another '
         'provider', () async {
