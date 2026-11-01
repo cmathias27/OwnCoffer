@@ -26,6 +26,14 @@ Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). 
 - **« Ce que l'assistant doit savoir »** dans les réglages : quelques phrases envoyées avec chaque question, visibles par vous seul.
 - **Historique** dans la bulle : vos 30 dernières conversations, gardées sur votre serveur, à reprendre ou à supprimer.
 
+### Assistant : un vrai conseiller
+
+- L'assistant se comporte maintenant en **conseiller personnel** : il rassemble lui-même vos chiffres, puis donne un diagnostic et deux ou trois conseils chiffrés, du plus utile au moins utile. Il dit aussi ce qu'il n'a pas pu savoir.
+- Il lit désormais aussi vos **crédits**, vos **abonnements**, les **analyses** et les propositions de **Mon conseiller**.
+- Il peut faire **simuler** un achat (solde, point bas, comptant ou en plusieurs fois) et un **remboursement anticipé** de crédit : les calculs sont faits par OwnCoffer, rien n'est enregistré.
+- Raccourcis dans la bulle : « Bilan de mon mois », « Où économiser ? », « Puis-je me permettre… ? ».
+- **Menu du modèle** dans l'en-tête de la bulle : on change de modèle sans passer par les réglages.
+
 ### Assistant : l'icône ✨ ouvre ses réglages
 
 - L'icône ✨ en haut à droite ouvre toujours les **réglages de l'assistant** ; la conversation reste dans la bulle en bas à droite.

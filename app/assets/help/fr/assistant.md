@@ -9,7 +9,7 @@ OwnCoffer fonctionne entièrement sans IA. L'assistant est **désactivé par dé
 
 ## La bulle de discussion
 
-Une fois l'assistant activé, une **bulle** apparaît en bas à droite de l'écran. Touchez-la pour ouvrir la conversation, comme dans une messagerie : elle **reste ouverte quand vous changez de page**, et la bulle signale une réponse arrivée pendant qu'elle était réduite. L'en-tête permet de commencer une nouvelle conversation, d'ouvrir les réglages ou de réduire la fenêtre.
+Une fois l'assistant activé, une **bulle** apparaît en bas à droite de l'écran. Touchez-la pour ouvrir la conversation, comme dans une messagerie : elle **reste ouverte quand vous changez de page**, et la bulle signale une réponse arrivée pendant qu'elle était réduite. Touchez le nom du modèle dans l'en-tête pour **en changer**. L'en-tête permet aussi de commencer une nouvelle conversation, d'ouvrir les réglages ou de réduire la fenêtre.
 
 ## Ce qu'il garde en tête, et l'historique
 
@@ -18,6 +18,7 @@ Une fois l'assistant activé, une **bulle** apparaît en bas à droite de l'écr
 
 ## Ce qu'il peut faire
 
+- **Vous conseiller** : « Bilan de mon mois », « Où économiser ? », « Puis-je me permettre… ? ». Il rassemble lui-même vos chiffres (comptes, budget, objectifs, échéances, crédits, abonnements, analyses, propositions de Mon conseiller), puis donne un diagnostic et deux ou trois conseils chiffrés. Pour un achat ou un remboursement anticipé de crédit, il fait **simuler** le scénario par OwnCoffer.
 - **Répondre à vos questions** sur vos comptes : « combien ai-je dépensé en restaurants ce mois-ci ? », « quelles échéances arrivent ? ».
 - **Classer les opérations à classer** : le raccourci le demande pour vous. Il propose une catégorie et, pour un commerçant qui revient, une règle.
 - **Lire un document** (avec un modèle qui lit les images) : joignez la photo d'un tableau d'amortissement pour qu'il propose le crédit. Les tickets, factures et documents de crédit déjà gardés dans OwnCoffer se lisent aussi directement, depuis leur menu (bouton « Lire avec l'IA »).

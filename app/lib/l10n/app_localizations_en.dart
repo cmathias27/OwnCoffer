@@ -4997,4 +4997,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_feedback_unknown => 'This message no longer exists.';
+
+  @override
+  String get chatModel => 'Change model';
+
+  @override
+  String get chatReviewChip => 'My month\'s review';
+
+  @override
+  String get chatReviewPrompt =>
+      'Review my month: where my budget, goals and accounts stand, what is coming, and what you advise.';
+
+  @override
+  String get chatSaveChip => 'Where to save?';
+
+  @override
+  String get chatSavePrompt =>
+      'Where could I save? Look at my spending, subscriptions, loans and bank fees, and suggest the most useful ideas, with figures.';
+
+  @override
+  String get chatAffordChip => 'Can I afford…?';
+
+  @override
+  String get chatAffordPrompt => 'Can I afford a purchase of €?';
 }

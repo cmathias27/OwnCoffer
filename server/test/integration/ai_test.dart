@@ -599,6 +599,107 @@ void main() {
       expect(await endpoints.ai.memories(as(bob), groupA), isEmpty);
     });
 
+    test('loans, subscriptions and analyses are read on the visible '
+        'accounts only', () async {
+      final p = await endpoints.ai.saveProvider(as(admin), local(), null);
+      for (final (a, lender) in [
+        (shared, 'BanqueCommune'),
+        (restricted, 'BanqueSecrete'),
+      ]) {
+        await endpoints.loan.create(
+          as(admin),
+          groupA,
+          Loan(
+            groupId: 0,
+            accountId: a.id,
+            kind: LoanKind.car,
+            lender: lender,
+            principalCents: 1000000,
+            annualRateMilli: 3000,
+            durationMonths: 48,
+            firstDueDate: DateTime.utc(2026, 1, 5),
+          ),
+        );
+      }
+      final model = _ScriptedModel([
+        _call('1', 'get_loans', '{}'),
+        _call('2', 'get_subscriptions', '{}'),
+        _call('3', 'get_insights', '{}'),
+        {'role': 'assistant', 'content': 'Voilà.'},
+      ]);
+      AiGateway.adapter = model;
+      await endpoints.ai.setPreference(as(bob), p.id, 'llama3.1', true);
+      final reply = await endpoints.ai.chat(
+        as(bob),
+        groupA,
+        [],
+        AiMessage(role: 'user', content: 'Mes crédits ?'),
+      );
+      expect(reply.tools, ['get_loans', 'get_subscriptions', 'get_insights']);
+      final sent = model.received.last.toString();
+      expect(sent, contains('BanqueCommune'));
+      expect(sent, contains('monthly_total_cents'));
+      expect(sent, contains('bank_fees_12_months_cents'));
+      expect(sent, isNot(contains('BanqueSecrete')), reason: 'restricted');
+    });
+
+    test(
+      'advisor tools: scenarios computed by the engine, nothing saved',
+      () async {
+        final p = await endpoints.ai.saveProvider(as(admin), local(), null);
+        final loan = (await endpoints.loan.create(
+          as(admin),
+          groupA,
+          Loan(
+            groupId: 0,
+            accountId: shared.id,
+            kind: LoanKind.car,
+            lender: 'Banque',
+            principalCents: 1000000,
+            annualRateMilli: 4000,
+            durationMonths: 48,
+            firstDueDate: DateTime.utc(2026, 1, 5),
+          ),
+        )).loan;
+        final scheduledBefore = await ScheduledTransaction.db.count(db);
+        final model = _ScriptedModel([
+          _call('1', 'simulate_purchase', '{"amount_cents": 50000}'),
+          _call(
+            '2',
+            'simulate_early_repayment',
+            '{"loan_id": ${loan.id}, "amount_cents": 200000}',
+          ),
+          _call('3', 'get_advice', '{}'),
+          {'role': 'assistant', 'content': 'Mon conseil.'},
+        ]);
+        AiGateway.adapter = model;
+        await endpoints.ai.setPreference(as(bob), p.id, 'llama3.1', true);
+        await endpoints.ai.chat(
+          as(bob),
+          groupA,
+          [],
+          AiMessage(role: 'user', content: 'Puis-je acheter un vélo ?'),
+        );
+        final results = [
+          for (final m in model.received.last)
+            if (m['role'] == 'tool') jsonDecode(m['content']! as String) as Map,
+        ];
+        expect(results[0]['scenarios'], hasLength(5));
+        expect(results[0]['account'], 'Courant');
+        expect(results[1]['interest_saved_cents'], greaterThan(0));
+        expect(results[2]['advice'], isA<List>());
+        expect(
+          model.received.first.first['content'],
+          contains('personal financial advisor'),
+        );
+        expect(
+          await ScheduledTransaction.db.count(db),
+          scheduledBefore,
+          reason: 'a simulation saves nothing',
+        );
+      },
+    );
+
     test('cap, no vision, provider down: said plainly, never another '
         'provider', () async {
       final p = await endpoints.ai.saveProvider(as(admin), local(cap: 1), null);

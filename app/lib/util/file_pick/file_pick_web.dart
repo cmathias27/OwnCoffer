@@ -47,21 +47,26 @@ Future<List<PickedFile>> pickFiles(List<String> extensions) {
     ..type = 'file'
     ..multiple = true
     ..accept = extensions.join(',');
+  Future<void> read() async {
+    final files = input.files;
+    final result = <PickedFile>[];
+    try {
+      for (var i = 0; i < (files?.length ?? 0); i++) {
+        final f = files!.item(i)!;
+        final buffer = await f.arrayBuffer().toDart;
+        result.add(PickedFile(f.name, buffer.toDart.asUint8List()));
+      }
+      if (!done.isCompleted) done.complete(result);
+    } on Object catch (e) {
+      if (!done.isCompleted) done.completeError(e);
+    }
+  }
+
+  // A JS callback cannot return a Future: the reading runs on its own.
   input.addEventListener(
     'change',
-    (web.Event _) async {
-      final files = input.files;
-      final result = <PickedFile>[];
-      try {
-        for (var i = 0; i < (files?.length ?? 0); i++) {
-          final f = files!.item(i)!;
-          final buffer = await f.arrayBuffer().toDart;
-          result.add(PickedFile(f.name, buffer.toDart.asUint8List()));
-        }
-        if (!done.isCompleted) done.complete(result);
-      } on Object catch (e) {
-        if (!done.isCompleted) done.completeError(e);
-      }
+    (web.Event _) {
+      read();
     }.toJS,
   );
   input.addEventListener(

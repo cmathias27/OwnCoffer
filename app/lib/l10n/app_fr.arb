@@ -3389,5 +3389,12 @@
   "adminFeedbackNone": "Aucun retour pour l'instant.",
   "error_feedback_too_many": "20 messages par jour au plus.",
   "error_ai_conversation_access_denied": "Cette conversation n'existe plus.",
-  "error_feedback_unknown": "Ce message n'existe plus."
+  "error_feedback_unknown": "Ce message n'existe plus.",
+  "chatModel": "Changer de modèle",
+  "chatReviewChip": "Bilan de mon mois",
+  "chatReviewPrompt": "Fais-moi le bilan de mon mois : où en sont mon budget, mes objectifs et mes comptes, ce qui arrive, et ce que tu me conseilles.",
+  "chatSaveChip": "Où économiser ?",
+  "chatSavePrompt": "Où pourrais-je économiser ? Regarde mes dépenses, mes abonnements, mes crédits et mes frais bancaires, et propose-moi les pistes les plus utiles, chiffrées.",
+  "chatAffordChip": "Puis-je me permettre… ?",
+  "chatAffordPrompt": "Puis-je me permettre un achat de  € ?"
 }

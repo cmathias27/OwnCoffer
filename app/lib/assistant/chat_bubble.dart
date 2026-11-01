@@ -210,12 +210,7 @@ class _ChatPanelState extends State<ChatPanel> {
                             l.assistantTitle,
                             style: theme.textTheme.titleMedium,
                           ),
-                          if (provider != null)
-                            Text(
-                              '${provider.name} · ${chat.status?.model ?? ''}',
-                              style: theme.textTheme.bodySmall,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          if (provider != null) _modelMenu(l, theme),
                         ],
                       ),
                     ),
@@ -275,13 +270,42 @@ class _ChatPanelState extends State<ChatPanel> {
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-                          ActionChip(
-                            avatar: const Icon(Icons.rule),
-                            label: Text(l.assistantClassifyChip),
-                            onPressed: chat.sending
-                                ? null
-                                : () => _send(l.assistantClassifyPrompt),
-                          ),
+                          for (final (icon, label, prompt, send) in [
+                            (
+                              Icons.insights_outlined,
+                              l.chatReviewChip,
+                              l.chatReviewPrompt,
+                              true,
+                            ),
+                            (
+                              Icons.savings_outlined,
+                              l.chatSaveChip,
+                              l.chatSavePrompt,
+                              true,
+                            ),
+                            // The purchase needs its amount: written, not sent.
+                            (
+                              Icons.shopping_bag_outlined,
+                              l.chatAffordChip,
+                              l.chatAffordPrompt,
+                              false,
+                            ),
+                            (
+                              Icons.rule,
+                              l.assistantClassifyChip,
+                              l.assistantClassifyPrompt,
+                              true,
+                            ),
+                          ])
+                            ActionChip(
+                              avatar: Icon(icon),
+                              label: Text(label),
+                              onPressed: chat.sending
+                                  ? null
+                                  : send
+                                  ? () => _send(prompt)
+                                  : () => _input.text = prompt,
+                            ),
                         ],
                       ),
                     ],
@@ -299,6 +323,70 @@ class _ChatPanelState extends State<ChatPanel> {
               ),
             _composer(l, provider?.vision ?? false),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// The provider and model in use; a tap offers the others set up by the
+  /// administrator (the choice is the user's, as in the settings).
+  Widget _modelMenu(AppLocalizations l, ThemeData theme) {
+    final status = chat.status!;
+    final choices = [
+      for (final p in status.providers.where((p) => p.enabled))
+        for (final m in p.models.split(','))
+          if (m.trim().isNotEmpty) (provider: p, model: m.trim()),
+    ];
+    final current = '${chat.provider!.name} · ${status.model ?? ''}';
+    Future<void> choose(({AiProvider provider, String model}) c) async {
+      try {
+        await client.ai.setPreference(c.provider.id, c.model, true);
+      } on Object catch (e) {
+        if (mounted) setState(() => _error = errorText(l, e));
+      }
+      await chat.refreshStatus();
+    }
+
+    // A menu anchored in this layer's own overlay (no navigator here).
+    return MenuAnchor(
+      menuChildren: [
+        for (final c in choices)
+          MenuItemButton(
+            leadingIcon: Icon(
+              c.provider.id == status.providerId && c.model == status.model
+                  ? Icons.check
+                  : null,
+              size: 18,
+            ),
+            onPressed: () => choose(c),
+            child: Text(
+              '${c.provider.name} · ${c.model}'
+              '${c.provider.kind == 'ollama' ? ' (${l.assistantLocal})' : ''}',
+            ),
+          ),
+      ],
+      builder: (context, controller, _) => Tooltip(
+        message: l.chatModel,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: chat.sending || choices.length < 2
+              ? null
+              : () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Text(
+                  current,
+                  style: theme.textTheme.bodySmall,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              if (choices.length > 1)
+                const Icon(Icons.arrow_drop_down, size: 18),
+            ],
+          ),
         ),
       ),
     );

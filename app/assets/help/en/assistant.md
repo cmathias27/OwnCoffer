@@ -9,7 +9,7 @@ OwnCoffer works fully without AI. The assistant is **off by default**: everyone 
 
 ## The chat bubble
 
-Once the assistant is on, a **bubble** shows at the bottom right of the screen. Tap it to open the conversation, as in a messenger: it **stays open when you change page**, and the bubble shows a reply that arrived while it was minimised. Its header starts a new conversation, opens the settings or minimises the window.
+Once the assistant is on, a **bubble** shows at the bottom right of the screen. Tap it to open the conversation, as in a messenger: it **stays open when you change page**, and the bubble shows a reply that arrived while it was minimised. Tap the model's name in its header to **change it**. The header also starts a new conversation, opens the settings or minimises the window.
 
 ## What it keeps in mind, and the history
 
@@ -18,6 +18,7 @@ Once the assistant is on, a **bubble** shows at the bottom right of the screen. 
 
 ## What it can do
 
+- **Advise you**: "My month's review", "Where to save?", "Can I afford…?". It gathers your figures itself (accounts, budget, goals, due dates, loans, subscriptions, analyses, My advisor's proposals), then gives a diagnosis and two or three suggestions with figures. For a purchase or an early loan repayment, it has OwnCoffer **simulate** the scenario.
 - **Answer your questions** about your accounts: "how much did I spend in restaurants this month?", "which due dates are coming?".
 - **Classify the operations to classify**: the shortcut asks for you. It proposes a category and, for a merchant that comes back, a rule.
 - **Read a document** (with a model that reads images): attach the photo of an amortisation table for it to propose the loan. Receipts, invoices and loan documents already kept in OwnCoffer can also be read directly, from their menu ("Read with the AI" button).

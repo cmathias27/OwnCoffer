@@ -22,7 +22,7 @@ AiStatus _status({required bool enabled}) => AiStatus(
       name: 'Gemini',
       kind: 'openai',
       baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/',
-      models: 'gemini-3.8-flash',
+      models: 'gemini-3.8-flash,gemini-3.8-pro',
       toolCalling: true,
       vision: true,
       monthlyCap: 0,
@@ -85,6 +85,11 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Gemini · gemini-3.8-flash'), findsOneWidget);
       expect(find.text('Classer les opérations à classer'), findsOneWidget);
+      await tester.tap(find.byTooltip('Changer de modèle'));
+      await tester.pumpAndSettle();
+      expect(find.text('Gemini · gemini-3.8-pro'), findsOneWidget);
+      await tester.tapAt(const Offset(5, 5));
+      await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField), 'Bonjour');
       expect(find.text('Bonjour'), findsOneWidget);
 

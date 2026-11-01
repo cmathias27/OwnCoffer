@@ -1329,5 +1329,12 @@
   "adminFeedbackNone": "No feedback yet.",
   "error_feedback_too_many": "20 messages a day at most.",
   "error_ai_conversation_access_denied": "This conversation no longer exists.",
-  "error_feedback_unknown": "This message no longer exists."
+  "error_feedback_unknown": "This message no longer exists.",
+  "chatModel": "Change model",
+  "chatReviewChip": "My month's review",
+  "chatReviewPrompt": "Review my month: where my budget, goals and accounts stand, what is coming, and what you advise.",
+  "chatSaveChip": "Where to save?",
+  "chatSavePrompt": "Where could I save? Look at my spending, subscriptions, loans and bank fees, and suggest the most useful ideas, with figures.",
+  "chatAffordChip": "Can I afford…?",
+  "chatAffordPrompt": "Can I afford a purchase of €?"
 }

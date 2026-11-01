@@ -8087,6 +8087,48 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce message n\'existe plus.'**
   String get error_feedback_unknown;
+
+  /// No description provided for @chatModel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer de modèle'**
+  String get chatModel;
+
+  /// No description provided for @chatReviewChip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan de mon mois'**
+  String get chatReviewChip;
+
+  /// No description provided for @chatReviewPrompt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fais-moi le bilan de mon mois : où en sont mon budget, mes objectifs et mes comptes, ce qui arrive, et ce que tu me conseilles.'**
+  String get chatReviewPrompt;
+
+  /// No description provided for @chatSaveChip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Où économiser ?'**
+  String get chatSaveChip;
+
+  /// No description provided for @chatSavePrompt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Où pourrais-je économiser ? Regarde mes dépenses, mes abonnements, mes crédits et mes frais bancaires, et propose-moi les pistes les plus utiles, chiffrées.'**
+  String get chatSavePrompt;
+
+  /// No description provided for @chatAffordChip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Puis-je me permettre… ?'**
+  String get chatAffordChip;
+
+  /// No description provided for @chatAffordPrompt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Puis-je me permettre un achat de  € ?'**
+  String get chatAffordPrompt;
 }
 
 class _AppLocalizationsDelegate
