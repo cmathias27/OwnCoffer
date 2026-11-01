@@ -2,6 +2,22 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.25 (1er novembre 2026)
+
+### Assistant IA (facultatif) et passerelle IA
+
+- **L'IA est facultative** : OwnCoffer fonctionne entièrement sans, et elle est **désactivée par défaut** pour chacun.
+- **Administration > IA** (administrateur du serveur seulement, décision 0017) : ajouter des fournisseurs — un **modèle local avec Ollama** (les données restent chez vous) ou un **fournisseur en ligne compatible OpenAI** (Mistral, OpenAI, OpenRouter…). Adresse, clé d'API (chiffrée, jamais réaffichée ni écrite au journal), modèles proposés, capacités (appel des fonctions, lecture d'images), plafond mensuel de demandes par utilisateur, bouton « Tester la connexion ».
+- **Assistant** (icône ✨ en haut) : chacun choisit un fournisseur et un modèle, active l'assistant, et pose ses questions.
+  - L'IA lit vos chiffres **uniquement par les fonctions d'OwnCoffer** (aperçu des comptes, opérations, budget, échéances, prévisions, objectifs, catégories), **sur les comptes que vous voyez** ; elle ne lit jamais la base et ne calcule aucun montant elle-même.
+  - Elle **ne modifie rien** : elle peut **proposer** une catégorie pour une opération, ou **un crédit lu dans un document** (joignez une photo ou une capture d'un tableau d'amortissement à un modèle qui lit les images). Les propositions arrivent dans **Mon conseiller**, marquées « proposé par l'IA (fournisseur, modèle) », et ne s'appliquent qu'après votre accord.
+  - Chaque réponse dit quelles fonctions ont été consultées et, pour un fournisseur externe, ce qui lui a été envoyé ; un avertissement le rappelle avant d'écrire.
+  - Un fournisseur qui ne répond pas est signalé : **jamais de bascule** vers un autre.
+
+### Budget
+
+- Le Budget s'ouvre maintenant sur le **camembert**.
+
 ## 0.3.24 (1er novembre 2026)
 
 ### Mon conseiller (sans IA) et circuit des propositions

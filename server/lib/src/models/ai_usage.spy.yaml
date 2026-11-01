@@ -1,0 +1,13 @@
+### Requests made by a user to a provider in a month (yyyymm), for the
+### monthly cap.
+class: AiUsage
+table: ai_usage
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  providerId: int, relation(parent=ai_providers, onDelete=Cascade)
+  month: int
+  requests: int
+indexes:
+  ai_usage_idx:
+    fields: authUserId, providerId, month
+    unique: true

@@ -7,6 +7,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/admin_backups.dart';
 import '../widgets/admin_invitations.dart';
+import '../widgets/admin_ai.dart';
 import '../widgets/admin_updates.dart';
 import 'update_progress_screen.dart';
 import 'members_screen.dart';
@@ -112,7 +113,7 @@ class _AdminScreenState extends State<AdminScreen> {
     final l = AppLocalizations.of(context);
     final membership = widget.membership;
     return DefaultTabController(
-      length: membership == null ? 8 : 9,
+      length: membership == null ? 9 : 10,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.adminTitle),
@@ -129,6 +130,7 @@ class _AdminScreenState extends State<AdminScreen> {
               Tab(text: l.adminTabHealth),
               Tab(text: l.adminTabUpdates),
               Tab(text: l.adminTabBackups),
+              Tab(text: l.adminTabAi),
               Tab(text: l.adminTabUsers),
               Tab(text: l.adminTabInvitations),
               if (membership != null) Tab(text: l.adminTabMembers),
@@ -180,6 +182,7 @@ class _AdminScreenState extends State<AdminScreen> {
                     ),
                     onInstall: _install,
                   ),
+                  const AdminAiView(),
                   AdminBackupsView(
                     overview: _backups!,
                     onBackup: () => _act(

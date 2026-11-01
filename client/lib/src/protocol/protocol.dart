@@ -22,6 +22,7 @@ import 'package:owncoffer_client/src/protocol/admin_invitation_info.dart'
     as _idjaxr3o;
 import 'package:owncoffer_client/src/protocol/admin_user_info.dart'
     as _i4kcqb5h;
+import 'package:owncoffer_client/src/protocol/ai_message.dart' as _iarsdlqt;
 import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
 import 'package:owncoffer_client/src/protocol/bank_transaction.dart'
     as _ivksw0b3;
@@ -65,6 +66,12 @@ import 'admin_health.dart' as _ihbeufm3;
 import 'admin_invitation_info.dart' as _ib01m0m7;
 import 'admin_stats.dart' as _iqygks5s;
 import 'admin_user_info.dart' as _is8wfuq8;
+import 'ai_message.dart' as _ikwoa06z;
+import 'ai_preference.dart' as _i5zygq2d;
+import 'ai_provider.dart' as _ibtxcndu;
+import 'ai_reply.dart' as _ih3b4fxu;
+import 'ai_status.dart' as _idsjcs1s;
+import 'ai_usage.dart' as _iojy8c5d;
 import 'backup_info.dart' as _i73uehc4;
 import 'backup_overview.dart' as _in8hkpoa;
 import 'balance_check.dart' as _ip4e316z;
@@ -153,6 +160,12 @@ export 'admin_health.dart';
 export 'admin_invitation_info.dart';
 export 'admin_stats.dart';
 export 'admin_user_info.dart';
+export 'ai_message.dart';
+export 'ai_preference.dart';
+export 'ai_provider.dart';
+export 'ai_reply.dart';
+export 'ai_status.dart';
+export 'ai_usage.dart';
 export 'backup_info.dart';
 export 'backup_overview.dart';
 export 'balance_check.dart';
@@ -300,6 +313,24 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _is8wfuq8.AdminUserInfo) {
       return _is8wfuq8.AdminUserInfo.fromJson(data) as T;
+    }
+    if (t == _ikwoa06z.AiMessage) {
+      return _ikwoa06z.AiMessage.fromJson(data) as T;
+    }
+    if (t == _i5zygq2d.AiPreference) {
+      return _i5zygq2d.AiPreference.fromJson(data) as T;
+    }
+    if (t == _ibtxcndu.AiProvider) {
+      return _ibtxcndu.AiProvider.fromJson(data) as T;
+    }
+    if (t == _ih3b4fxu.AiReply) {
+      return _ih3b4fxu.AiReply.fromJson(data) as T;
+    }
+    if (t == _idsjcs1s.AiStatus) {
+      return _idsjcs1s.AiStatus.fromJson(data) as T;
+    }
+    if (t == _iojy8c5d.AiUsage) {
+      return _iojy8c5d.AiUsage.fromJson(data) as T;
     }
     if (t == _i73uehc4.BackupInfo) {
       return _i73uehc4.BackupInfo.fromJson(data) as T;
@@ -576,6 +607,24 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_is8wfuq8.AdminUserInfo?>()) {
       return (data != null ? _is8wfuq8.AdminUserInfo.fromJson(data) : null)
           as T;
+    }
+    if (t == _isc.getType<_ikwoa06z.AiMessage?>()) {
+      return (data != null ? _ikwoa06z.AiMessage.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i5zygq2d.AiPreference?>()) {
+      return (data != null ? _i5zygq2d.AiPreference.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ibtxcndu.AiProvider?>()) {
+      return (data != null ? _ibtxcndu.AiProvider.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ih3b4fxu.AiReply?>()) {
+      return (data != null ? _ih3b4fxu.AiReply.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_idsjcs1s.AiStatus?>()) {
+      return (data != null ? _idsjcs1s.AiStatus.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iojy8c5d.AiUsage?>()) {
+      return (data != null ? _iojy8c5d.AiUsage.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_i73uehc4.BackupInfo?>()) {
       return (data != null ? _i73uehc4.BackupInfo.fromJson(data) : null) as T;
@@ -880,6 +929,18 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ius3n358.ActionProposal>) {
+      return (data as List)
+              .map((e) => deserialize<_ius3n358.ActionProposal>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ibtxcndu.AiProvider>) {
+      return (data as List)
+              .map((e) => deserialize<_ibtxcndu.AiProvider>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_i73uehc4.BackupInfo>) {
       return (data as List)
               .map((e) => deserialize<_i73uehc4.BackupInfo>(e))
@@ -1054,6 +1115,15 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
+    }
+    if (t == List<_iarsdlqt.AiMessage>) {
+      return (data as List)
+              .map((e) => deserialize<_iarsdlqt.AiMessage>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ivksw0b3.BankTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ivksw0b3.BankTransaction>(e))
@@ -1155,9 +1225,6 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
-    if (t == List<String>) {
-      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
-    }
     try {
       return _iaic.Protocol().deserialize<T>(data, t);
     } on _isc.DeserializationTypeNotFoundException catch (_) {}
@@ -1181,6 +1248,12 @@ class Protocol extends _isc.SerializationManager {
       _ib01m0m7.AdminInvitationInfo => 'AdminInvitationInfo',
       _iqygks5s.AdminStats => 'AdminStats',
       _is8wfuq8.AdminUserInfo => 'AdminUserInfo',
+      _ikwoa06z.AiMessage => 'AiMessage',
+      _i5zygq2d.AiPreference => 'AiPreference',
+      _ibtxcndu.AiProvider => 'AiProvider',
+      _ih3b4fxu.AiReply => 'AiReply',
+      _idsjcs1s.AiStatus => 'AiStatus',
+      _iojy8c5d.AiUsage => 'AiUsage',
       _i73uehc4.BackupInfo => 'BackupInfo',
       _in8hkpoa.BackupOverview => 'BackupOverview',
       _ip4e316z.BalanceCheck => 'BalanceCheck',
@@ -1295,6 +1368,18 @@ class Protocol extends _isc.SerializationManager {
         return 'AdminStats';
       case _is8wfuq8.AdminUserInfo():
         return 'AdminUserInfo';
+      case _ikwoa06z.AiMessage():
+        return 'AiMessage';
+      case _i5zygq2d.AiPreference():
+        return 'AiPreference';
+      case _ibtxcndu.AiProvider():
+        return 'AiProvider';
+      case _ih3b4fxu.AiReply():
+        return 'AiReply';
+      case _idsjcs1s.AiStatus():
+        return 'AiStatus';
+      case _iojy8c5d.AiUsage():
+        return 'AiUsage';
       case _i73uehc4.BackupInfo():
         return 'BackupInfo';
       case _in8hkpoa.BackupOverview():
@@ -1504,6 +1589,24 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'AdminUserInfo') {
       return deserialize<_is8wfuq8.AdminUserInfo>(data['data']);
+    }
+    if (dataClassName == 'AiMessage') {
+      return deserialize<_ikwoa06z.AiMessage>(data['data']);
+    }
+    if (dataClassName == 'AiPreference') {
+      return deserialize<_i5zygq2d.AiPreference>(data['data']);
+    }
+    if (dataClassName == 'AiProvider') {
+      return deserialize<_ibtxcndu.AiProvider>(data['data']);
+    }
+    if (dataClassName == 'AiReply') {
+      return deserialize<_ih3b4fxu.AiReply>(data['data']);
+    }
+    if (dataClassName == 'AiStatus') {
+      return deserialize<_idsjcs1s.AiStatus>(data['data']);
+    }
+    if (dataClassName == 'AiUsage') {
+      return deserialize<_iojy8c5d.AiUsage>(data['data']);
     }
     if (dataClassName == 'BackupInfo') {
       return deserialize<_i73uehc4.BackupInfo>(data['data']);

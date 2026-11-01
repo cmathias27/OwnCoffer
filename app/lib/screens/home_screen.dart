@@ -11,6 +11,7 @@ import '../widgets/form_card.dart';
 import 'accounts_screen.dart';
 import 'admin_screen.dart';
 import 'advisor_screen.dart';
+import 'assistant_screen.dart';
 import 'budget_screen.dart';
 import 'categories_screen.dart';
 import 'dashboard_screen.dart';
@@ -278,6 +279,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(g.group.name),
                   ),
               ],
+            ),
+          if (current != null)
+            IconButton(
+              tooltip: l.assistantTitle,
+              icon: const Icon(Icons.auto_awesome_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => AssistantScreen(membership: current),
+                ),
+              ),
             ),
           IconButton(
             tooltip: l.notificationsUnread(_unread),

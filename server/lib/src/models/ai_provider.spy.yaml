@@ -1,0 +1,25 @@
+### An AI provider set up by the server administrator (décision 0017): the
+### users choose among them. Its key is encrypted and never sent back.
+class: AiProvider
+table: ai_providers
+fields:
+  name: String
+  ### openai (any API compatible with OpenAI's, external) or ollama (a
+  ### model on this server or the local network).
+  kind: String
+  ### Base of the API, e.g. https://api.mistral.ai/v1 or
+  ### http://192.168.1.10:11434/v1.
+  baseUrl: String
+  apiKeyBox: String?, scope=serverOnly
+  ### The key is set (the key itself never leaves the server).
+  hasKey: bool?, !persist
+  ### Models offered to the users, comma-separated.
+  models: String
+  ### Capabilities of its models (décision 0008): calling the engine's
+  ### functions, reading images.
+  toolCalling: bool
+  vision: bool
+  ### Requests per user and month; 0 means no limit.
+  monthlyCap: int
+  enabled: bool
+  createdAt: DateTime, default=now

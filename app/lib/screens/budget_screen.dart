@@ -105,7 +105,7 @@ class BudgetScreenState extends State<BudgetScreen> {
   LeftToLiveReport? _left;
   Map<int, Category> _categories = {};
   final Set<int> _expanded = {};
-  var _view = SpendingView.lines;
+  var _view = SpendingView.pie;
 
   /// Periods in the history (charts).
   var _periods = 6;

@@ -14,6 +14,8 @@ import 'dart:typed_data' as _idt;
 import 'package:owncoffer_server/src/generated/account_kind.dart' as _ihbhvzqt;
 import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
+import 'package:owncoffer_server/src/generated/ai_message.dart' as _ijy47dz3;
+import 'package:owncoffer_server/src/generated/ai_provider.dart' as _iptn367l;
 import 'package:owncoffer_server/src/generated/budget_period.dart' as _imscipj7;
 import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
 import 'package:owncoffer_server/src/generated/category_source.dart'
@@ -38,6 +40,7 @@ import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
 import '../endpoints/account_endpoint.dart' as _iaho7ul5;
 import '../endpoints/admin_endpoint.dart' as _i5t1w2d2;
 import '../endpoints/advisor_endpoint.dart' as _ioe4fqri;
+import '../endpoints/ai_endpoint.dart' as _igsjf4zh;
 import '../endpoints/analysis_endpoint.dart' as _i0sl0qub;
 import '../endpoints/category_endpoint.dart' as _ioevag4g;
 import '../endpoints/goal_endpoint.dart' as _i2k4izhk;
@@ -85,6 +88,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'advisor',
+          null,
+        ),
+      'ai': _igsjf4zh.AiEndpoint()
+        ..initialize(
+          server,
+          'ai',
           null,
         ),
       'analysis': _i0sl0qub.AnalysisEndpoint()
@@ -989,6 +998,144 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['proposalId'],
                   ),
+        ),
+      },
+    );
+    connectors['ai'] = _is.EndpointConnector(
+      name: 'ai',
+      endpoint: endpoints['ai']!,
+      methodConnectors: {
+        'status': _is.MethodConnector(
+          name: 'status',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['ai'] as _igsjf4zh.AiEndpoint).status(session),
+        ),
+        'saveProvider': _is.MethodConnector(
+          name: 'saveProvider',
+          params: {
+            'provider': _is.ParameterDescription(
+              name: 'provider',
+              type: _is.getType<_iptn367l.AiProvider>(),
+              nullable: false,
+            ),
+            'apiKey': _is.ParameterDescription(
+              name: 'apiKey',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['ai'] as _igsjf4zh.AiEndpoint).saveProvider(
+                session,
+                params['provider'],
+                params['apiKey'],
+              ),
+        ),
+        'deleteProvider': _is.MethodConnector(
+          name: 'deleteProvider',
+          params: {
+            'providerId': _is.ParameterDescription(
+              name: 'providerId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['ai'] as _igsjf4zh.AiEndpoint).deleteProvider(
+                    session,
+                    params['providerId'],
+                  ),
+        ),
+        'testProvider': _is.MethodConnector(
+          name: 'testProvider',
+          params: {
+            'providerId': _is.ParameterDescription(
+              name: 'providerId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['ai'] as _igsjf4zh.AiEndpoint).testProvider(
+                session,
+                params['providerId'],
+              ),
+        ),
+        'setPreference': _is.MethodConnector(
+          name: 'setPreference',
+          params: {
+            'providerId': _is.ParameterDescription(
+              name: 'providerId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'model': _is.ParameterDescription(
+              name: 'model',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'enabled': _is.ParameterDescription(
+              name: 'enabled',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['ai'] as _igsjf4zh.AiEndpoint).setPreference(
+                    session,
+                    params['providerId'],
+                    params['model'],
+                    params['enabled'],
+                  ),
+        ),
+        'chat': _is.MethodConnector(
+          name: 'chat',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'history': _is.ParameterDescription(
+              name: 'history',
+              type: _is.getType<List<_ijy47dz3.AiMessage>>(),
+              nullable: false,
+            ),
+            'message': _is.ParameterDescription(
+              name: 'message',
+              type: _is.getType<_ijy47dz3.AiMessage>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['ai'] as _igsjf4zh.AiEndpoint).chat(
+                session,
+                params['groupId'],
+                params['history'],
+                params['message'],
+              ),
         ),
       },
     );

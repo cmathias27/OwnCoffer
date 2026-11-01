@@ -3,6 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:owncoffer_app/client.dart';
 import 'package:owncoffer_app/l10n/app_localizations.dart';
+import 'package:owncoffer_app/screens/advisor_screen.dart';
+import 'package:owncoffer_app/screens/assistant_screen.dart';
 import 'package:owncoffer_app/screens/budget_screen.dart';
 import 'package:owncoffer_app/screens/compare_screen.dart';
 import 'package:owncoffer_app/screens/dashboard_screen.dart';
@@ -62,6 +64,8 @@ void main() {
     'home': () => Scaffold(
       body: DashboardScreen(membership: _membership, onOpen: (_) {}),
     ),
+    'advisor': () => AdvisorScreen(membership: _membership),
+    'assistant': () => AssistantScreen(membership: _membership),
     'loan form': () =>
         LoanFormScreen(groupId: 1, accounts: _accounts, categories: const []),
     'update': () => const UpdateProgressScreen(target: 'v0.3.21'),
