@@ -12,12 +12,71 @@ import '../widgets/undo.dart';
 import '../widgets/category_field.dart';
 import '../widgets/operation_sheet.dart';
 import 'calendar_screen.dart';
+import 'compare_screen.dart';
 import 'review_screen.dart';
 import 'subscriptions_screen.dart';
 
 /// How the categories of the period are shown: ranked lines, a table, a
 /// pie, or a chart of the last periods.
 enum SpendingView { lines, table, pie, chart }
+
+/// The name of a budget period: "Octobre 2026", "T4 2026", "2026", or its
+/// first and last days.
+String budgetPeriodLabel(
+  BuildContext context,
+  BudgetPeriod period,
+  DateTime start,
+  DateTime last,
+) {
+  final lang = Localizations.localeOf(context).languageCode;
+  DateTime local(DateTime d) => DateTime(d.year, d.month, d.day);
+  final range =
+      '${DateFormat.MMMd(lang).format(local(start))} – '
+      '${DateFormat.yMMMd(lang).format(local(last))}';
+  return switch (period) {
+    BudgetPeriod.year => '${start.year}',
+    BudgetPeriod.quarter when start.day == 1 => _quarter(context, start),
+    BudgetPeriod.quarter => '${_quarter(context, start)} · $range',
+    BudgetPeriod.month when start.day == 1 => toBeginningOfSentenceCase(
+      DateFormat.yMMMM(lang).format(local(start)),
+    ),
+    _ => range,
+  };
+}
+
+/// A short name for a chart axis: "oct.", "T4 2026", "2026", "27/10".
+String budgetPeriodShort(
+  BuildContext context,
+  BudgetPeriod period,
+  DateTime start,
+  int monthStartDay,
+) {
+  final lang = Localizations.localeOf(context).languageCode;
+  final d = DateTime(start.year, start.month, start.day);
+  return switch (period) {
+    BudgetPeriod.week => DateFormat.Md(lang).format(d),
+    BudgetPeriod.month =>
+      monthStartDay == 1
+          ? DateFormat.MMM(lang).format(d)
+          : DateFormat.Md(lang).format(d),
+    BudgetPeriod.quarter => _quarter(context, d),
+    BudgetPeriod.year => '${d.year}',
+  };
+}
+
+/// "T4 2026": a quarter is named after the month it starts in.
+String _quarter(BuildContext context, DateTime start) => AppLocalizations.of(
+  context,
+).periodQuarterName((start.month - 1) ~/ 3 + 1, '${start.year}');
+
+/// Euros on a chart axis: "850", "12 k".
+String budgetAxisMoney(BuildContext context, int cents) {
+  final euros = cents ~/ 100;
+  final lang = Localizations.localeOf(context).languageCode;
+  return euros >= 1000
+      ? '${NumberFormat.decimalPattern(lang).format(euros ~/ 1000)} k'
+      : NumberFormat.decimalPattern(lang).format(euros);
+}
 
 /// Where the money comes from and goes: a week, a month (from the group's
 /// start day), a quarter or a year, by category, with the monthly goals.
@@ -108,49 +167,14 @@ class BudgetScreenState extends State<BudgetScreen> {
     reload();
   }
 
-  String _periodLabel(BuildContext context, SpendingReport r) {
-    final lang = Localizations.localeOf(context).languageCode;
-    DateTime local(DateTime d) => DateTime(d.year, d.month, d.day);
-    final range =
-        '${DateFormat.MMMd(lang).format(local(r.start))} – '
-        '${DateFormat.yMMMd(lang).format(local(r.last))}';
-    return switch (r.period) {
-      BudgetPeriod.year => '${r.start.year}',
-      BudgetPeriod.quarter when r.start.day == 1 => _quarter(context, r.start),
-      BudgetPeriod.quarter => '${_quarter(context, r.start)} · $range',
-      BudgetPeriod.month when r.start.day == 1 => toBeginningOfSentenceCase(
-        DateFormat.yMMMM(lang).format(local(r.start)),
-      ),
-      _ => range,
-    };
-  }
+  String _periodLabel(BuildContext context, SpendingReport r) =>
+      budgetPeriodLabel(context, r.period, r.start, r.last);
 
-  /// "T4 2026": a quarter is named after the month it starts in.
-  String _quarter(BuildContext context, DateTime start) => AppLocalizations.of(
-    context,
-  ).periodQuarterName((start.month - 1) ~/ 3 + 1, '${start.year}');
+  String _historyLabel(BuildContext context, DateTime start) =>
+      budgetPeriodShort(context, _period, start, _startDay);
 
-  String _historyLabel(BuildContext context, DateTime start) {
-    final lang = Localizations.localeOf(context).languageCode;
-    final d = DateTime(start.year, start.month, start.day);
-    return switch (_period) {
-      BudgetPeriod.week => DateFormat.Md(lang).format(d),
-      BudgetPeriod.month =>
-        _startDay == 1
-            ? DateFormat.MMM(lang).format(d)
-            : DateFormat.Md(lang).format(d),
-      BudgetPeriod.quarter => _quarter(context, d),
-      BudgetPeriod.year => '${d.year}',
-    };
-  }
-
-  String _axisMoney(BuildContext context, int cents) {
-    final euros = cents ~/ 100;
-    final lang = Localizations.localeOf(context).languageCode;
-    return euros >= 1000
-        ? '${NumberFormat.decimalPattern(lang).format(euros ~/ 1000)} k'
-        : NumberFormat.decimalPattern(lang).format(euros);
-  }
+  String _axisMoney(BuildContext context, int cents) =>
+      budgetAxisMoney(context, cents);
 
   // --- actions ----------------------------------------------------------------
 
@@ -512,6 +536,20 @@ class BudgetScreenState extends State<BudgetScreen> {
                   date: _period == BudgetPeriod.month
                       ? _date
                       : todayUtcMidnight(),
+                ),
+              ),
+            ),
+            ActionChip(
+              avatar: const Icon(Icons.compare_arrows, size: 18),
+              label: Text(l.compareTitle),
+              onPressed: () => open(
+                CompareScreen(
+                  membership: widget.membership,
+                  accounts: widget.accounts,
+                  categories: _categories,
+                  period: _period,
+                  date: _report?.start ?? _date,
+                  accountId: _accountId,
                 ),
               ),
             ),

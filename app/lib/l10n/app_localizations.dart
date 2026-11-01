@@ -5484,6 +5484,108 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Calculé : mensualité × nombre de mensualités. Modifiable si l\'achat coûtait autre chose.'**
   String get loanInstallmentsTotalHelp;
+
+  /// No description provided for @compareTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comparer'**
+  String get compareTitle;
+
+  /// No description provided for @compareIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettez côte à côte des catégories dans le temps, plusieurs périodes ou plusieurs comptes. La première période (ou le premier compte) sert de référence pour les écarts.'**
+  String get compareIntro;
+
+  /// No description provided for @compareCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories'**
+  String get compareCategories;
+
+  /// No description provided for @comparePeriods.
+  ///
+  /// In fr, this message translates to:
+  /// **'Périodes'**
+  String get comparePeriods;
+
+  /// No description provided for @compareAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes'**
+  String get compareAccounts;
+
+  /// No description provided for @compareAddCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une catégorie'**
+  String get compareAddCategory;
+
+  /// No description provided for @compareAddPeriod.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une période'**
+  String get compareAddPeriod;
+
+  /// No description provided for @compareAddPeriodHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un jour de la période à ajouter'**
+  String get compareAddPeriodHelp;
+
+  /// No description provided for @compareNothing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez au moins une catégorie à comparer.'**
+  String get compareNothing;
+
+  /// No description provided for @compareOverTime.
+  ///
+  /// In fr, this message translates to:
+  /// **'Évolution'**
+  String get compareOverTime;
+
+  /// No description provided for @compareColumnPeriod.
+  ///
+  /// In fr, this message translates to:
+  /// **'Période'**
+  String get compareColumnPeriod;
+
+  /// No description provided for @compareTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total'**
+  String get compareTotal;
+
+  /// No description provided for @compareAverage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyenne par période'**
+  String get compareAverage;
+
+  /// No description provided for @compareReference.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} (référence)'**
+  String compareReference(String name);
+
+  /// No description provided for @compareByCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par catégorie'**
+  String get compareByCategory;
+
+  /// No description provided for @compareGapHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écarts par rapport à la référence, en euros et en pourcentage.'**
+  String get compareGapHelp;
+
+  /// No description provided for @compareSame.
+  ///
+  /// In fr, this message translates to:
+  /// **'identique'**
+  String get compareSame;
 }
 
 class _AppLocalizationsDelegate

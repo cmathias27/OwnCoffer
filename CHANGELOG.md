@@ -2,6 +2,17 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.18 (1er novembre 2026)
+
+### Budget : comparer
+
+- Nouveau bouton **« Comparer »** dans la page Budget, avec trois façons de comparer :
+  - **Catégories** : 1 à 4 catégories (ou sous-catégories), une courbe chacune sur les 6, 12 ou 24 dernières périodes, et un tableau période par période avec le total et la moyenne ;
+  - **Périodes** : par défaut cette période, la précédente et la même un an plus tôt ; on en ajoute ou en retire, jusqu'à 4. Une barre par période, d'abord pour le total, puis catégorie par catégorie, avec l'écart en euros et en pourcentage par rapport à la première ;
+  - **Comptes** : 2 à 4 comptes sur la même période, présentés de la même façon.
+- Semaine, mois, trimestre ou année ; dépenses ou revenus ; tous les comptes ou un seul.
+- Les chiffres viennent du même calcul que le budget, sur les seuls comptes que vous voyez.
+
 ## 0.3.17 (1er novembre 2026)
 
 ### Correction
