@@ -1326,6 +1326,25 @@ class Endpoints extends _is.EndpointDispatch {
                     accountId: params['accountId'],
                   ),
         ),
+        'insights': _is.MethodConnector(
+          name: 'insights',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['analysis'] as _i0sl0qub.AnalysisEndpoint)
+                  .insights(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
         'review': _is.MethodConnector(
           name: 'review',
           params: {

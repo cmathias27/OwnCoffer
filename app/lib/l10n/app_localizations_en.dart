@@ -4691,4 +4691,128 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantSettingsTitle => 'Assistant: settings';
+
+  @override
+  String get insightsTitle => 'Analyses';
+
+  @override
+  String get insightsIntro =>
+      'Computed by OwnCoffer, without AI, on the accounts you can see.';
+
+  @override
+  String get insightsReliability => 'How reliable the forecasts are';
+
+  @override
+  String insightsPlanned(int paid, int due, int percent) {
+    return '$paid planned operations out of $due came as planned over the last three months ($percent %).';
+  }
+
+  @override
+  String get insightsPlannedNone =>
+      'No planned operation over the last three months.';
+
+  @override
+  String insightsPlannedLate(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count did not come (late or missed).',
+      one: '1 did not come (late or missed).',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String insightsVariable(String month, String estimate, String actual) {
+    return 'Variable spending of $month: $estimate estimated beforehand, $actual really spent.';
+  }
+
+  @override
+  String get insightsVariableUnknown =>
+      'Not enough history yet to compare the estimated variable spending with reality.';
+
+  @override
+  String get insightsReliabilityHow =>
+      'Planned operations are counted from the due-date calendar; the variable spending estimate is the median of the three months before.';
+
+  @override
+  String get insightsUnusual => 'Unusual operations';
+
+  @override
+  String get insightsUnusualNone => 'Nothing unusual this month or last month.';
+
+  @override
+  String get insightsDuplicate =>
+      'same label and amount a few days apart: charged twice?';
+
+  @override
+  String insightsAboveUsual(String usual, int count) {
+    return 'usually $usual (median of $count operations)';
+  }
+
+  @override
+  String get insightsFees => 'Bank fees over 12 months';
+
+  @override
+  String get insightsFeesNone => 'No bank fee found over 12 months.';
+
+  @override
+  String insightsFeesTotal(String amount) {
+    return '$amount over 12 months';
+  }
+
+  @override
+  String get insightsFeesHow =>
+      'Operations classified as bank fees or overdraft interest, and those whose label starts like a fee (fees, commission, card fee…). Refunded fees are taken off.';
+
+  @override
+  String noticeOverdraft(String account, String date) {
+    return '\"$account\" will go below its threshold around $date';
+  }
+
+  @override
+  String noticeOverdraftWhy(String lowest, String date, String threshold) {
+    return 'Lowest point forecast: $lowest on $date, for a threshold of $threshold. From planned operations only.';
+  }
+
+  @override
+  String noticeUnusual(String label, String amount) {
+    return '\"$label\": $amount, much more than usual';
+  }
+
+  @override
+  String noticeUnusualWhy(String date, String usual, int count) {
+    return 'On $date. Usually $usual (median of $count operations).';
+  }
+
+  @override
+  String noticeDuplicate(String label, String amount) {
+    return '\"$label\" of $amount charged twice?';
+  }
+
+  @override
+  String noticeDuplicateWhy(String date) {
+    return 'On $date, same label and amount a few days apart. Check the statement.';
+  }
+
+  @override
+  String noticeFees(String amount) {
+    return '$amount of bank fees over 12 months';
+  }
+
+  @override
+  String get noticeFeesWhy =>
+      'The costliest ones below. A simpler offer or another bank might cost less: the Analyses page gives the details month by month.';
+
+  @override
+  String get noticeUnderstood => 'Understood';
+
+  @override
+  String get noticeIgnore => 'Ignore';
+
+  @override
+  String get noticeNoted => 'Noted.';
+
+  @override
+  String get noticeIgnored => 'Card ignored.';
 }

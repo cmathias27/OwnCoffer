@@ -58,6 +58,7 @@ import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
 import 'package:owncoffer_server/src/generated/import_preview.dart'
     as _itw310ng;
+import 'package:owncoffer_server/src/generated/insights.dart' as _is8fifll;
 import 'package:owncoffer_server/src/generated/instalment_candidate.dart'
     as _i3mgyctl;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
@@ -2145,6 +2146,37 @@ class _AnalysisEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_idzqc1lk.LeftToLiveReport>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_is8fifll.Insights> insights(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'analysis',
+            method: 'insights',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'analysis',
+          methodName: 'insights',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_is8fifll.Insights>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

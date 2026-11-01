@@ -50,7 +50,16 @@ List<GoalAdvice> adviseGoals(
   for (final MapEntry(key: id, value: spent) in months.entries) {
     if (spent.length < 3) continue;
     final last = spent.sublist(spent.length - 3);
-    final proposed = suggestedGoal(last);
+    // The amount from up to six months (steadier), the decision on the
+    // last three.
+    // Empty months before the first spending (history not imported yet,
+    // category not used) would only lower it.
+    var basis = spent.sublist(spent.length > 6 ? spent.length - 6 : 0);
+    final firstSpent = basis.indexWhere((c) => c > 0);
+    if (firstSpent > 0 && basis.length - firstSpent >= 3) {
+      basis = basis.sublist(firstSpent);
+    }
+    final proposed = suggestedGoal(basis);
     if (proposed == null) continue;
     final goal = goals[id];
     GoalAdviceKind? kind;
@@ -72,7 +81,7 @@ List<GoalAdvice> adviseGoals(
         categoryId: id,
         currentCents: goal,
         proposedCents: proposed,
-        monthsCents: last,
+        monthsCents: basis,
       ),
     );
   }

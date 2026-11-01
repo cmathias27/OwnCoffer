@@ -12,6 +12,7 @@ export 'src/banks/caisse_epargne.dart';
 export 'src/budget/advice.dart';
 export 'src/budget/contract_switch.dart';
 export 'src/budget/goals.dart';
+export 'src/budget/insights.dart';
 export 'src/budget/period.dart';
 export 'src/budget/review.dart';
 export 'src/budget/spending.dart';

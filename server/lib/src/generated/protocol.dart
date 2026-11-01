@@ -91,6 +91,7 @@ import 'community_rule.dart' as _igloa2c5;
 import 'csv_columns.dart' as _iq9wp9wq;
 import 'due_calendar.dart' as _ic7yhr4p;
 import 'early_repayment.dart' as _ind4b83h;
+import 'fee_line.dart' as _ip53xvp1;
 import 'finance_group.dart' as _iqh5irlt;
 import 'forecast_day.dart' as _ids0ngao;
 import 'forecast_event_info.dart' as _iuscnr1n;
@@ -102,6 +103,7 @@ import 'group_membership.dart' as _i54nduyh;
 import 'import_issue_info.dart' as _iso7nf03;
 import 'import_preview.dart' as _im8lwq6n;
 import 'import_preview_line.dart' as _i4e8elxc;
+import 'insights.dart' as _ivlpbhei;
 import 'instalment_candidate.dart' as _ia1npsti;
 import 'invalid_input_exception.dart' as _ijc83d8f;
 import 'invitation.dart' as _ix00wubs;
@@ -155,6 +157,7 @@ import 'totp_secret.dart' as _iac9sbwj;
 import 'transaction_page.dart' as _i4rkvxa2;
 import 'transaction_split.dart' as _iqvm376u;
 import 'two_factor_status.dart' as _igcslm1n;
+import 'unusual_info.dart' as _iapfk8x9;
 import 'update_history_entry.dart' as _idu38kh6;
 import 'update_overview.dart' as _iv5yf7x0;
 import 'variable_category_info.dart' as _ic7yx6at;
@@ -194,6 +197,7 @@ export 'community_rule.dart';
 export 'csv_columns.dart';
 export 'due_calendar.dart';
 export 'early_repayment.dart';
+export 'fee_line.dart';
 export 'finance_group.dart';
 export 'forecast_day.dart';
 export 'forecast_event_info.dart';
@@ -205,6 +209,7 @@ export 'group_membership.dart';
 export 'import_issue_info.dart';
 export 'import_preview.dart';
 export 'import_preview_line.dart';
+export 'insights.dart';
 export 'instalment_candidate.dart';
 export 'invalid_input_exception.dart';
 export 'invitation.dart';
@@ -258,6 +263,7 @@ export 'totp_secret.dart';
 export 'transaction_page.dart';
 export 'transaction_split.dart';
 export 'two_factor_status.dart';
+export 'unusual_info.dart';
 export 'update_history_entry.dart';
 export 'update_overview.dart';
 export 'variable_category_info.dart';
@@ -3666,6 +3672,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ind4b83h.EarlyRepayment) {
       return _ind4b83h.EarlyRepayment.fromJson(data) as T;
     }
+    if (t == _ip53xvp1.FeeLine) {
+      return _ip53xvp1.FeeLine.fromJson(data) as T;
+    }
     if (t == _iqh5irlt.FinanceGroup) {
       return _iqh5irlt.FinanceGroup.fromJson(data) as T;
     }
@@ -3698,6 +3707,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _i4e8elxc.ImportPreviewLine) {
       return _i4e8elxc.ImportPreviewLine.fromJson(data) as T;
+    }
+    if (t == _ivlpbhei.Insights) {
+      return _ivlpbhei.Insights.fromJson(data) as T;
     }
     if (t == _ia1npsti.InstalmentCandidate) {
       return _ia1npsti.InstalmentCandidate.fromJson(data) as T;
@@ -3858,6 +3870,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _igcslm1n.TwoFactorStatus) {
       return _igcslm1n.TwoFactorStatus.fromJson(data) as T;
     }
+    if (t == _iapfk8x9.UnusualInfo) {
+      return _iapfk8x9.UnusualInfo.fromJson(data) as T;
+    }
     if (t == _idu38kh6.UpdateHistoryEntry) {
       return _idu38kh6.UpdateHistoryEntry.fromJson(data) as T;
     }
@@ -3993,6 +4008,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _ind4b83h.EarlyRepayment.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_ip53xvp1.FeeLine?>()) {
+      return (data != null ? _ip53xvp1.FeeLine.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_iqh5irlt.FinanceGroup?>()) {
       return (data != null ? _iqh5irlt.FinanceGroup.fromJson(data) : null) as T;
     }
@@ -4032,6 +4050,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_i4e8elxc.ImportPreviewLine?>()) {
       return (data != null ? _i4e8elxc.ImportPreviewLine.fromJson(data) : null)
           as T;
+    }
+    if (t == _is.getType<_ivlpbhei.Insights?>()) {
+      return (data != null ? _ivlpbhei.Insights.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_ia1npsti.InstalmentCandidate?>()) {
       return (data != null
@@ -4241,6 +4262,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _igcslm1n.TwoFactorStatus.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_iapfk8x9.UnusualInfo?>()) {
+      return (data != null ? _iapfk8x9.UnusualInfo.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_idu38kh6.UpdateHistoryEntry?>()) {
       return (data != null ? _idu38kh6.UpdateHistoryEntry.fromJson(data) : null)
           as T;
@@ -4333,6 +4357,27 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<DateTime>) {
+      return (data as List).map((e) => deserialize<DateTime>(e)).toList() as T;
+    }
+    if (t == List<_ip53xvp1.FeeLine>) {
+      return (data as List)
+              .map((e) => deserialize<_ip53xvp1.FeeLine>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i0mjlwv3.BankTransaction>) {
+      return (data as List)
+              .map((e) => deserialize<_i0mjlwv3.BankTransaction>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iapfk8x9.UnusualInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iapfk8x9.UnusualInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_inh9sy0f.LoanEvent>) {
       return (data as List)
               .map((e) => deserialize<_inh9sy0f.LoanEvent>(e))
@@ -4362,12 +4407,6 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_i8msyna2.CategoryFlow>) {
       return (data as List)
               .map((e) => deserialize<_i8msyna2.CategoryFlow>(e))
-              .toList()
-          as T;
-    }
-    if (t == List<_i0mjlwv3.BankTransaction>) {
-      return (data as List)
-              .map((e) => deserialize<_i0mjlwv3.BankTransaction>(e))
               .toList()
           as T;
     }
@@ -4412,9 +4451,6 @@ class Protocol extends _is.DatabaseSerializationManager {
               .map((e) => deserialize<_idndmjo8.ReleaseNotes>(e))
               .toList()
           as T;
-    }
-    if (t == List<DateTime>) {
-      return (data as List).map((e) => deserialize<DateTime>(e)).toList() as T;
     }
     if (t == List<_ic7yx6at.VariableCategoryInfo>) {
       return (data as List)
@@ -4635,6 +4671,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iq9wp9wq.CsvColumns => 'CsvColumns',
       _ic7yhr4p.DueCalendar => 'DueCalendar',
       _ind4b83h.EarlyRepayment => 'EarlyRepayment',
+      _ip53xvp1.FeeLine => 'FeeLine',
       _iqh5irlt.FinanceGroup => 'FinanceGroup',
       _ids0ngao.ForecastDay => 'ForecastDay',
       _iuscnr1n.ForecastEventInfo => 'ForecastEventInfo',
@@ -4646,6 +4683,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iso7nf03.ImportIssueInfo => 'ImportIssueInfo',
       _im8lwq6n.ImportPreview => 'ImportPreview',
       _i4e8elxc.ImportPreviewLine => 'ImportPreviewLine',
+      _ivlpbhei.Insights => 'Insights',
       _ia1npsti.InstalmentCandidate => 'InstalmentCandidate',
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
       _ix00wubs.Invitation => 'Invitation',
@@ -4699,6 +4737,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i4rkvxa2.TransactionPage => 'TransactionPage',
       _iqvm376u.TransactionSplit => 'TransactionSplit',
       _igcslm1n.TwoFactorStatus => 'TwoFactorStatus',
+      _iapfk8x9.UnusualInfo => 'UnusualInfo',
       _idu38kh6.UpdateHistoryEntry => 'UpdateHistoryEntry',
       _iv5yf7x0.UpdateOverview => 'UpdateOverview',
       _ic7yx6at.VariableCategoryInfo => 'VariableCategoryInfo',
@@ -4787,6 +4826,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'DueCalendar';
       case _ind4b83h.EarlyRepayment():
         return 'EarlyRepayment';
+      case _ip53xvp1.FeeLine():
+        return 'FeeLine';
       case _iqh5irlt.FinanceGroup():
         return 'FinanceGroup';
       case _ids0ngao.ForecastDay():
@@ -4809,6 +4850,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'ImportPreview';
       case _i4e8elxc.ImportPreviewLine():
         return 'ImportPreviewLine';
+      case _ivlpbhei.Insights():
+        return 'Insights';
       case _ia1npsti.InstalmentCandidate():
         return 'InstalmentCandidate';
       case _ijc83d8f.InvalidInputException():
@@ -4915,6 +4958,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'TransactionSplit';
       case _igcslm1n.TwoFactorStatus():
         return 'TwoFactorStatus';
+      case _iapfk8x9.UnusualInfo():
+        return 'UnusualInfo';
       case _idu38kh6.UpdateHistoryEntry():
         return 'UpdateHistoryEntry';
       case _iv5yf7x0.UpdateOverview():
@@ -5054,6 +5099,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'EarlyRepayment') {
       return deserialize<_ind4b83h.EarlyRepayment>(data['data']);
     }
+    if (dataClassName == 'FeeLine') {
+      return deserialize<_ip53xvp1.FeeLine>(data['data']);
+    }
     if (dataClassName == 'FinanceGroup') {
       return deserialize<_iqh5irlt.FinanceGroup>(data['data']);
     }
@@ -5086,6 +5134,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'ImportPreviewLine') {
       return deserialize<_i4e8elxc.ImportPreviewLine>(data['data']);
+    }
+    if (dataClassName == 'Insights') {
+      return deserialize<_ivlpbhei.Insights>(data['data']);
     }
     if (dataClassName == 'InstalmentCandidate') {
       return deserialize<_ia1npsti.InstalmentCandidate>(data['data']);
@@ -5245,6 +5296,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'TwoFactorStatus') {
       return deserialize<_igcslm1n.TwoFactorStatus>(data['data']);
+    }
+    if (dataClassName == 'UnusualInfo') {
+      return deserialize<_iapfk8x9.UnusualInfo>(data['data']);
     }
     if (dataClassName == 'UpdateHistoryEntry') {
       return deserialize<_idu38kh6.UpdateHistoryEntry>(data['data']);

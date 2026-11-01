@@ -7,6 +7,7 @@ import '../finance/spending_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/scopes.dart';
+import '../finance/insights_service.dart';
 
 /// Income and expenses by category over a week, a month, a quarter or a
 /// year, computed
@@ -249,6 +250,18 @@ class AnalysisEndpoint extends Endpoint {
       daysLeft: r.daysLeft,
       perDayCents: r.perDayCents,
       accountIds: [for (final a in accounts) a.id!],
+    );
+  }
+
+  /// Bank fees, unusual debits and how reliable the forecasts were, on the
+  /// accounts the user may see (computed without AI).
+  Future<Insights> insights(Session session, int groupId) async {
+    await Access.requireMember(session, groupId);
+    final n = DateTime.now();
+    return InsightsService.compute(
+      session,
+      groupId,
+      core.LocalDate(n.year, n.month, n.day),
     );
   }
 

@@ -56,6 +56,7 @@ import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
 import 'package:owncoffer_client/src/protocol/import_preview.dart' as _ikjuebnd;
+import 'package:owncoffer_client/src/protocol/insights.dart' as _iocgvawp;
 import 'package:owncoffer_client/src/protocol/instalment_candidate.dart'
     as _io211e4m;
 import 'package:owncoffer_client/src/protocol/invitation_info.dart'
@@ -791,6 +792,15 @@ class EndpointAnalysis extends _isc.EndpointRef {
       'accountId': accountId,
     },
   );
+
+  /// Bank fees, unusual debits and how reliable the forecasts were, on the
+  /// accounts the user may see (computed without AI).
+  _ida.Future<_iocgvawp.Insights> insights(int groupId) =>
+      caller.callServerEndpoint<_iocgvawp.Insights>(
+        'analysis',
+        'insights',
+        {'groupId': groupId},
+      );
 
   /// Month-end review of the budget month containing [date]: rises and drops
   /// against the three previous months, goals exceeded, bank fees, biggest

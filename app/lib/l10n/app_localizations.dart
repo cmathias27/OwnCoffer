@@ -7631,6 +7631,180 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Assistant : réglages'**
   String get assistantSettingsTitle;
+
+  /// No description provided for @insightsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Analyses'**
+  String get insightsTitle;
+
+  /// No description provided for @insightsIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculées par OwnCoffer, sans IA, sur les comptes que vous voyez.'**
+  String get insightsIntro;
+
+  /// No description provided for @insightsReliability.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiabilité des prévisions'**
+  String get insightsReliability;
+
+  /// No description provided for @insightsPlanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'{paid} opérations prévues sur {due} sont arrivées comme prévu ces trois derniers mois ({percent} %).'**
+  String insightsPlanned(int paid, int due, int percent);
+
+  /// No description provided for @insightsPlannedNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération prévue ces trois derniers mois.'**
+  String get insightsPlannedNone;
+
+  /// No description provided for @insightsPlannedLate.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 n\'est pas arrivée (en retard ou manquée).} other{{count} ne sont pas arrivées (en retard ou manquées).}}'**
+  String insightsPlannedLate(int count);
+
+  /// No description provided for @insightsVariable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses variables de {month} : {estimate} estimés d\'avance, {actual} réellement dépensés.'**
+  String insightsVariable(String month, String estimate, String actual);
+
+  /// No description provided for @insightsVariableUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas encore assez d\'historique pour comparer les dépenses variables estimées à la réalité.'**
+  String get insightsVariableUnknown;
+
+  /// No description provided for @insightsReliabilityHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations prévues sont comptées d\'après le calendrier des échéances ; l\'estimation des dépenses variables est la médiane des trois mois qui précèdent.'**
+  String get insightsReliabilityHow;
+
+  /// No description provided for @insightsUnusual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations inhabituelles'**
+  String get insightsUnusual;
+
+  /// No description provided for @insightsUnusualNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien d\'inhabituel ce mois-ci ni le mois dernier.'**
+  String get insightsUnusualNone;
+
+  /// No description provided for @insightsDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'même libellé et même montant à quelques jours d\'écart : prélevé deux fois ?'**
+  String get insightsDuplicate;
+
+  /// No description provided for @insightsAboveUsual.
+  ///
+  /// In fr, this message translates to:
+  /// **'d\'habitude {usual} (médiane de {count} opérations)'**
+  String insightsAboveUsual(String usual, int count);
+
+  /// No description provided for @insightsFees.
+  ///
+  /// In fr, this message translates to:
+  /// **'Frais bancaires sur 12 mois'**
+  String get insightsFees;
+
+  /// No description provided for @insightsFeesNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun frais bancaire repéré sur 12 mois.'**
+  String get insightsFeesNone;
+
+  /// No description provided for @insightsFeesTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} sur 12 mois'**
+  String insightsFeesTotal(String amount);
+
+  /// No description provided for @insightsFeesHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations classées en frais bancaires ou agios, et celles dont le libellé commence comme un frais (frais, commission, agios, cotisation de carte…). Les remboursements de frais sont déduits.'**
+  String get insightsFeesHow;
+
+  /// No description provided for @noticeOverdraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {account} » passera sous son seuil vers le {date}'**
+  String noticeOverdraft(String account, String date);
+
+  /// No description provided for @noticeOverdraftWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point bas prévu : {lowest} le {date}, pour un seuil de {threshold}. D\'après les opérations prévues seulement.'**
+  String noticeOverdraftWhy(String lowest, String date, String threshold);
+
+  /// No description provided for @noticeUnusual.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {label} » : {amount}, bien plus que d\'habitude'**
+  String noticeUnusual(String label, String amount);
+
+  /// No description provided for @noticeUnusualWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le {date}. D\'habitude {usual} (médiane de {count} opérations).'**
+  String noticeUnusualWhy(String date, String usual, int count);
+
+  /// No description provided for @noticeDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {label} » de {amount} prélevé deux fois ?'**
+  String noticeDuplicate(String label, String amount);
+
+  /// No description provided for @noticeDuplicateWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le {date}, même libellé et même montant à quelques jours d\'écart. Vérifiez sur le relevé.'**
+  String noticeDuplicateWhy(String date);
+
+  /// No description provided for @noticeFees.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} de frais bancaires sur 12 mois'**
+  String noticeFees(String amount);
+
+  /// No description provided for @noticeFeesWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les plus coûteux ci-dessous. Une offre plus simple ou une autre banque coûterait peut-être moins : la page Analyses donne le détail mois par mois.'**
+  String get noticeFeesWhy;
+
+  /// No description provided for @noticeUnderstood.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compris'**
+  String get noticeUnderstood;
+
+  /// No description provided for @noticeIgnore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ignorer'**
+  String get noticeIgnore;
+
+  /// No description provided for @noticeNoted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Noté.'**
+  String get noticeNoted;
+
+  /// No description provided for @noticeIgnored.
+  ///
+  /// In fr, this message translates to:
+  /// **'Carte ignorée.'**
+  String get noticeIgnored;
 }
 
 class _AppLocalizationsDelegate

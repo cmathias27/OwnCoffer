@@ -1,0 +1,6 @@
+### Bank fees of one label over the last 12 months.
+class: FeeLine
+fields:
+  label: String
+  cents: int
+  count: int

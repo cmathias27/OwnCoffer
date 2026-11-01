@@ -4719,4 +4719,129 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get assistantSettingsTitle => 'Assistant : réglages';
+
+  @override
+  String get insightsTitle => 'Analyses';
+
+  @override
+  String get insightsIntro =>
+      'Calculées par OwnCoffer, sans IA, sur les comptes que vous voyez.';
+
+  @override
+  String get insightsReliability => 'Fiabilité des prévisions';
+
+  @override
+  String insightsPlanned(int paid, int due, int percent) {
+    return '$paid opérations prévues sur $due sont arrivées comme prévu ces trois derniers mois ($percent %).';
+  }
+
+  @override
+  String get insightsPlannedNone =>
+      'Aucune opération prévue ces trois derniers mois.';
+
+  @override
+  String insightsPlannedLate(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ne sont pas arrivées (en retard ou manquées).',
+      one: '1 n\'est pas arrivée (en retard ou manquée).',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String insightsVariable(String month, String estimate, String actual) {
+    return 'Dépenses variables de $month : $estimate estimés d\'avance, $actual réellement dépensés.';
+  }
+
+  @override
+  String get insightsVariableUnknown =>
+      'Pas encore assez d\'historique pour comparer les dépenses variables estimées à la réalité.';
+
+  @override
+  String get insightsReliabilityHow =>
+      'Les opérations prévues sont comptées d\'après le calendrier des échéances ; l\'estimation des dépenses variables est la médiane des trois mois qui précèdent.';
+
+  @override
+  String get insightsUnusual => 'Opérations inhabituelles';
+
+  @override
+  String get insightsUnusualNone =>
+      'Rien d\'inhabituel ce mois-ci ni le mois dernier.';
+
+  @override
+  String get insightsDuplicate =>
+      'même libellé et même montant à quelques jours d\'écart : prélevé deux fois ?';
+
+  @override
+  String insightsAboveUsual(String usual, int count) {
+    return 'd\'habitude $usual (médiane de $count opérations)';
+  }
+
+  @override
+  String get insightsFees => 'Frais bancaires sur 12 mois';
+
+  @override
+  String get insightsFeesNone => 'Aucun frais bancaire repéré sur 12 mois.';
+
+  @override
+  String insightsFeesTotal(String amount) {
+    return '$amount sur 12 mois';
+  }
+
+  @override
+  String get insightsFeesHow =>
+      'Opérations classées en frais bancaires ou agios, et celles dont le libellé commence comme un frais (frais, commission, agios, cotisation de carte…). Les remboursements de frais sont déduits.';
+
+  @override
+  String noticeOverdraft(String account, String date) {
+    return '« $account » passera sous son seuil vers le $date';
+  }
+
+  @override
+  String noticeOverdraftWhy(String lowest, String date, String threshold) {
+    return 'Point bas prévu : $lowest le $date, pour un seuil de $threshold. D\'après les opérations prévues seulement.';
+  }
+
+  @override
+  String noticeUnusual(String label, String amount) {
+    return '« $label » : $amount, bien plus que d\'habitude';
+  }
+
+  @override
+  String noticeUnusualWhy(String date, String usual, int count) {
+    return 'Le $date. D\'habitude $usual (médiane de $count opérations).';
+  }
+
+  @override
+  String noticeDuplicate(String label, String amount) {
+    return '« $label » de $amount prélevé deux fois ?';
+  }
+
+  @override
+  String noticeDuplicateWhy(String date) {
+    return 'Le $date, même libellé et même montant à quelques jours d\'écart. Vérifiez sur le relevé.';
+  }
+
+  @override
+  String noticeFees(String amount) {
+    return '$amount de frais bancaires sur 12 mois';
+  }
+
+  @override
+  String get noticeFeesWhy =>
+      'Les plus coûteux ci-dessous. Une offre plus simple ou une autre banque coûterait peut-être moins : la page Analyses donne le détail mois par mois.';
+
+  @override
+  String get noticeUnderstood => 'Compris';
+
+  @override
+  String get noticeIgnore => 'Ignorer';
+
+  @override
+  String get noticeNoted => 'Noté.';
+
+  @override
+  String get noticeIgnored => 'Carte ignorée.';
 }

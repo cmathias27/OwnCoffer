@@ -18,6 +18,7 @@ import 'calendar_screen.dart';
 import 'compare_screen.dart';
 import 'review_screen.dart';
 import 'subscriptions_screen.dart';
+import 'insights_screen.dart';
 
 /// How the categories of the period are shown: ranked lines, a table, a
 /// pie, or a chart of the last periods.
@@ -534,6 +535,12 @@ class BudgetScreenState extends State<BudgetScreen> {
                       : todayUtcMidnight(),
                 ),
               ),
+            ),
+            ActionChip(
+              avatar: const Icon(Icons.insights_outlined, size: 18),
+              label: Text(l.insightsTitle),
+              onPressed: () =>
+                  open(InsightsScreen(membership: widget.membership)),
             ),
             ActionChip(
               avatar: const Icon(Icons.lightbulb_outline, size: 18),

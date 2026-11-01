@@ -1,0 +1,22 @@
+### Analyses computed without AI (cahier des charges : analyses, frais
+### bancaires, anomalies, fiabilité des prévisions), on the accounts the
+### user may see. Every figure comes with what it is made of.
+class: Insights
+fields:
+  ### Bank fees of the last 12 budget months, oldest first.
+  feeMonths: List<DateTime>
+  feePerMonthCents: List<int>
+  feeTotalCents: int
+  feeLines: List<FeeLine>
+  feeOperations: List<BankTransaction>
+  ### Debits of this budget month and the previous one that stand out.
+  unusual: List<UnusualInfo>
+  ### Planned operations due in the last three complete months.
+  plannedDue: int
+  plannedPaid: int
+  plannedLate: int
+  ### Variable spending of the last complete month: estimated beforehand
+  ### (median of the three months before), and really spent.
+  variableMonth: DateTime?
+  variableEstimateCents: int?
+  variableActualCents: int?

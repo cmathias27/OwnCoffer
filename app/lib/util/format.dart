@@ -28,6 +28,10 @@ extension Formatting on BuildContext {
   String day(DateTime date) =>
       DateFormat.yMMMd(_lang).format(DateTime(date.year, date.month, date.day));
 
+  /// "octobre 2026".
+  String monthName(DateTime date) =>
+      DateFormat.yMMMM(_lang).format(DateTime(date.year, date.month, 1));
+
   String shortDay(DateTime date) =>
       DateFormat.MMMd(_lang).format(DateTime(date.year, date.month, date.day));
 
