@@ -136,6 +136,7 @@ transaction:
   - sameProvider:
   - setSplits:
   - setCleared:
+  - setClearedMany:
   - trash:
   - restore:
   - createRuleFrom:

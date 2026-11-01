@@ -1842,6 +1842,21 @@ class EndpointTransaction extends _isc.EndpointRef {
     },
   );
 
+  /// Checks or unchecks several operations at once (up to 500), all or
+  /// none: each must exist and be writable by the user. Returns the
+  /// operations as they were before, so that the change can be undone.
+  _ida.Future<List<_ivksw0b3.BankTransaction>> setClearedMany(
+    List<int> transactionIds,
+    bool cleared,
+  ) => caller.callServerEndpoint<List<_ivksw0b3.BankTransaction>>(
+    'transaction',
+    'setClearedMany',
+    {
+      'transactionIds': transactionIds,
+      'cleared': cleared,
+    },
+  );
+
   /// Moves the operation to the trash (kept 30 days).
   _ida.Future<void> trash(int transactionId) => caller.callServerEndpoint<void>(
     'transaction',

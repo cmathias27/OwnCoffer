@@ -3620,4 +3620,68 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get simHow =>
       'How: total paid each month, cost of switching counted at the start, prices raised each year by their rise, rounded to the cent.';
+
+  @override
+  String get checkOne => 'Check';
+
+  @override
+  String get uncheckOne => 'Uncheck';
+
+  @override
+  String get checkedOne => 'Operation checked.';
+
+  @override
+  String get uncheckedOne => 'Operation unchecked.';
+
+  @override
+  String checkedMany(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations checked.',
+      one: '1 operation checked.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String uncheckedMany(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations unchecked.',
+      one: '1 operation unchecked.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String selectedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count selected',
+      one: '1 selected',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get selectAll => 'Select all';
+
+  @override
+  String get checkSelected => 'Check';
+
+  @override
+  String get uncheckSelected => 'Uncheck';
+
+  @override
+  String get selectionStop => 'Stop selecting';
+
+  @override
+  String get operationsSelectHint =>
+      'Touch an operation\'s round to check it; long press to select several.';
+
+  @override
+  String get error_too_many => 'Too many operations at once: 500 at most.';
 }

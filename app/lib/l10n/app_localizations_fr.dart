@@ -3642,4 +3642,68 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get simHow =>
       'Calcul : total payé chaque mois, coût du changement compté au départ, prix relevés chaque année de leur hausse, arrondis au centime.';
+
+  @override
+  String get checkOne => 'Pointer';
+
+  @override
+  String get uncheckOne => 'Dépointer';
+
+  @override
+  String get checkedOne => 'Opération pointée.';
+
+  @override
+  String get uncheckedOne => 'Opération dépointée.';
+
+  @override
+  String checkedMany(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations pointées.',
+      one: '1 opération pointée.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String uncheckedMany(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations dépointées.',
+      one: '1 opération dépointée.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String selectedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sélectionnées',
+      one: '1 sélectionnée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get selectAll => 'Tout sélectionner';
+
+  @override
+  String get checkSelected => 'Pointer';
+
+  @override
+  String get uncheckSelected => 'Dépointer';
+
+  @override
+  String get selectionStop => 'Arrêter la sélection';
+
+  @override
+  String get operationsSelectHint =>
+      'Touchez le rond d\'une opération pour la pointer ; appui long pour en sélectionner plusieurs.';
+
+  @override
+  String get error_too_many => 'Trop d\'opérations à la fois : 500 au plus.';
 }

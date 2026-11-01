@@ -3449,6 +3449,32 @@ class Endpoints extends _is.EndpointDispatch {
                         params['cleared'],
                       ),
         ),
+        'setClearedMany': _is.MethodConnector(
+          name: 'setClearedMany',
+          params: {
+            'transactionIds': _is.ParameterDescription(
+              name: 'transactionIds',
+              type: _is.getType<List<int>>(),
+              nullable: false,
+            ),
+            'cleared': _is.ParameterDescription(
+              name: 'cleared',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .setClearedMany(
+                        session,
+                        params['transactionIds'],
+                        params['cleared'],
+                      ),
+        ),
         'trash': _is.MethodConnector(
           name: 'trash',
           params: {

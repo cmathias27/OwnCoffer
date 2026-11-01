@@ -13,6 +13,16 @@ Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). 
 - Le calcul est fait par le moteur commun et testé (coût du changement compté au départ, prix relevés chaque année, arrondis au centime). C'est une simulation : rien n'est modifié.
 - Les modes de comparaison sont maintenant des puces qui passent à la ligne sur téléphone.
 
+### Opérations : pointer une ou plusieurs opérations
+
+- **Toucher le rond** à gauche d'une opération la pointe (ou la dépointe) directement, sans ouvrir sa fiche ; « Annuler » est proposé.
+- **Appui long** sur une opération : mode sélection. On coche une ou plusieurs opérations (ou « Tout sélectionner »), puis **« Pointer »** ou **« Dépointer »** en une fois ; « Annuler » remet chacune comme elle était.
+- Le serveur vérifie les droits sur chaque compte et applique tout ou rien.
+
+### Budget : les opérations affichées comme dans la page Opérations
+
+- La liste des opérations d'une catégorie utilise les mêmes lignes que la page Opérations (pointage, catégorie, montant en couleur, compte quand il y en a plusieurs).
+
 ## 0.3.21 (1er novembre 2026)
 
 ### Affichage adapté au téléphone et à la tablette

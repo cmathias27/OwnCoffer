@@ -969,5 +969,18 @@
   "simKeep": "Keeping the contract",
   "simSwitch": "Switching",
   "simChart": "Total paid, month after month",
-  "simHow": "How: total paid each month, cost of switching counted at the start, prices raised each year by their rise, rounded to the cent."
+  "simHow": "How: total paid each month, cost of switching counted at the start, prices raised each year by their rise, rounded to the cent.",
+  "checkOne": "Check",
+  "uncheckOne": "Uncheck",
+  "checkedOne": "Operation checked.",
+  "uncheckedOne": "Operation unchecked.",
+  "checkedMany": "{count, plural, =1{1 operation checked.} other{{count} operations checked.}}",
+  "uncheckedMany": "{count, plural, =1{1 operation unchecked.} other{{count} operations unchecked.}}",
+  "selectedCount": "{count, plural, =1{1 selected} other{{count} selected}}",
+  "selectAll": "Select all",
+  "checkSelected": "Check",
+  "uncheckSelected": "Uncheck",
+  "selectionStop": "Stop selecting",
+  "operationsSelectHint": "Touch an operation's round to check it; long press to select several.",
+  "error_too_many": "Too many operations at once: 500 at most."
 }

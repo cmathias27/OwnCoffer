@@ -119,6 +119,57 @@ void main() {
       );
     });
 
+    test('check several operations at once: all or none; isolation', () async {
+      final page = await endpoints.transaction.list(as(alice), account.id!);
+      final ids = [for (final t in page.items.take(3)) t.id!];
+      final before = await endpoints.transaction.setClearedMany(
+        as(alice),
+        ids,
+        true,
+      );
+      expect(before.map((t) => t.id).toSet(), ids.toSet());
+      for (final id in ids) {
+        expect((await BankTransaction.db.findById(db, id))!.cleared, isTrue);
+      }
+      await expectLater(
+        endpoints.transaction.setClearedMany(as(reader), ids, false),
+        throwsA(isA<AccessDeniedException>()),
+        reason: 'a reader cannot write',
+      );
+      await expectLater(
+        endpoints.transaction.setClearedMany(as(mallory), ids, false),
+        throwsA(isA<AccessDeniedException>()),
+        reason: 'another group',
+      );
+      await expectLater(
+        endpoints.transaction.setClearedMany(as(alice), [
+          ...ids,
+          999999,
+        ], false),
+        throwsA(isA<AccessDeniedException>()),
+        reason: 'an unknown operation: nothing done',
+      );
+      for (final id in ids) {
+        expect(
+          (await BankTransaction.db.findById(db, id))!.cleared,
+          isTrue,
+          reason: 'left as they were',
+        );
+      }
+      await expectLater(
+        endpoints.transaction.setClearedMany(
+          as(alice),
+          [for (var i = 1; i <= 501; i++) i],
+          true,
+        ),
+        throwsA(isA<InvalidInputException>()),
+      );
+      expect(
+        await endpoints.transaction.setClearedMany(as(alice), [], true),
+        isEmpty,
+      );
+    });
+
     test('list: newest first, paging, search, filters', () async {
       final all = await endpoints.transaction.list(as(alice), account.id!);
       expect(all.total, 20);

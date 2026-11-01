@@ -9,6 +9,8 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/category_field.dart';
 import '../widgets/operation_sheet.dart';
+import '../widgets/operation_tile.dart';
+import '../widgets/undo.dart';
 import 'subscriptions_screen.dart';
 
 /// Operations of one account: search, filters, corrections, manual entry.
@@ -48,6 +50,9 @@ class _OperationsScreenState extends State<OperationsScreen> {
   String? _provider;
   int? _providerSum;
   final List<BankTransaction> _items = [];
+
+  /// Operations selected to be checked together (empty: not selecting).
+  final Set<int> _selected = {};
   var _total = 0;
   var _loading = false;
   String? _error;
@@ -113,6 +118,111 @@ class _OperationsScreenState extends State<OperationsScreen> {
     } finally {
       if (mounted) setState(() => _loading = false);
     }
+  }
+
+  /// Checks or unchecks one operation from the list, with undo.
+  Future<void> _toggleCleared(BankTransaction t) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final updated = await client.transaction.setCleared(t.id!, !t.cleared);
+      _replace(updated);
+      showUndo(
+        messenger,
+        l,
+        updated.cleared ? l.checkedOne : l.uncheckedOne,
+        () => client.transaction.setCleared(t.id!, t.cleared).then(_replace),
+      );
+    } on Object catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+    }
+  }
+
+  void _select(BankTransaction t) => setState(
+    () => _selected.contains(t.id)
+        ? _selected.remove(t.id)
+        : _selected.add(t.id!),
+  );
+
+  /// Checks or unchecks the selected operations at once, with undo.
+  Future<void> _clearSelected(bool cleared) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final ids = _selected.toList();
+    try {
+      final before = await client.transaction.setClearedMany(ids, cleared);
+      setState(() {
+        for (var i = 0; i < _items.length; i++) {
+          if (_selected.contains(_items[i].id)) {
+            _items[i] = _items[i].copyWith(cleared: cleared);
+          }
+        }
+        _selected.clear();
+      });
+      showUndo(
+        messenger,
+        l,
+        cleared ? l.checkedMany(ids.length) : l.uncheckedMany(ids.length),
+        () async {
+          // Back to how each one was.
+          for (final state in [true, false]) {
+            final group = [
+              for (final t in before)
+                if (t.cleared == state) t.id!,
+            ];
+            if (group.isNotEmpty) {
+              await client.transaction.setClearedMany(group, state);
+            }
+          }
+        },
+        after: _reload,
+      );
+    } on Object catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+    }
+  }
+
+  /// While selecting: how many, all, check, uncheck, stop.
+  Widget _selectionBar(BuildContext context, AppLocalizations l) {
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+      child: Material(
+        color: scheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(24),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 4,
+            children: [
+              IconButton(
+                tooltip: l.selectionStop,
+                icon: const Icon(Icons.close),
+                onPressed: () => setState(_selected.clear),
+              ),
+              Text(l.selectedCount(_selected.length)),
+              TextButton(
+                onPressed: () => setState(
+                  () => _selected.addAll([for (final t in _items) t.id!]),
+                ),
+                child: Text(l.selectAll),
+              ),
+              FilledButton.tonalIcon(
+                icon: const Icon(Icons.check_circle_outline),
+                label: Text(l.checkSelected),
+                onPressed: () => _clearSelected(true),
+              ),
+              TextButton.icon(
+                icon: const Icon(Icons.radio_button_unchecked),
+                label: Text(l.uncheckSelected),
+                onPressed: () => _clearSelected(false),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _replace(BankTransaction t) {
@@ -314,6 +424,18 @@ class _OperationsScreenState extends State<OperationsScreen> {
             ),
           ),
           const SizedBox(height: 8),
+          if (_selected.isNotEmpty)
+            _selectionBar(context, l)
+          else if (_canWrite && _items.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+              child: Text(
+                l.operationsSelectHint,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
           Expanded(
             child: _error != null
                 ? Center(child: Text(_error!))
@@ -339,7 +461,16 @@ class _OperationsScreenState extends State<OperationsScreen> {
                               )
                             : const SizedBox.shrink();
                       }
-                      return _OperationTile(
+                      return OperationTile(
+                        selected: _selected.isEmpty
+                            ? null
+                            : _selected.contains(_items[i].id),
+                        onLongPress: _canWrite
+                            ? () => _select(_items[i])
+                            : null,
+                        onToggleCleared: _canWrite
+                            ? () => _toggleCleared(_items[i])
+                            : null,
                         operation: _items[i],
                         category: _categories[_items[i].categoryId],
                         subscription: _subscriptions.containsKey(
@@ -347,103 +478,14 @@ class _OperationsScreenState extends State<OperationsScreen> {
                         ),
                         hasInvoice: _withInvoices.contains(_items[i].id),
                         currency: account?.currency ?? 'EUR',
-                        onTap: () => _open(_items[i]),
+                        onTap: () => _selected.isEmpty
+                            ? _open(_items[i])
+                            : _select(_items[i]),
                       );
                     },
                   ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _OperationTile extends StatelessWidget {
-  final BankTransaction operation;
-  final Category? category;
-
-  /// Realises a subscription: marked with an icon and a word.
-  final bool subscription;
-
-  /// Has an invoice: marked with a clip.
-  final bool hasInvoice;
-  final String currency;
-  final VoidCallback onTap;
-
-  const _OperationTile({
-    required this.operation,
-    required this.category,
-    required this.subscription,
-    required this.hasInvoice,
-    required this.currency,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final t = operation;
-    final c = category;
-    return ListTile(
-      onTap: onTap,
-      leading: Icon(
-        t.cleared ? Icons.check_circle : Icons.radio_button_unchecked,
-        color: t.cleared ? theme.colorScheme.primary : theme.disabledColor,
-      ),
-      title: Row(
-        children: [
-          Flexible(
-            child: Text(
-              t.cleanLabel,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          if (subscription) ...[
-            const SizedBox(width: 6),
-            Icon(
-              Icons.autorenew,
-              size: 16,
-              color: theme.colorScheme.primary,
-              semanticLabel: l.subscriptionBadge,
-            ),
-          ],
-          if (hasInvoice) ...[
-            const SizedBox(width: 6),
-            Icon(
-              Icons.attach_file,
-              size: 16,
-              color: theme.colorScheme.secondary,
-              semanticLabel: l.invoiceBadge,
-            ),
-          ],
-        ],
-      ),
-      subtitle: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text:
-                  '${context.shortDay(t.date)} · ${c == null ? l.toClassify : context.categoryName(c)}',
-              style: c == null
-                  ? TextStyle(color: theme.colorScheme.tertiary)
-                  : null,
-            ),
-            if (subscription)
-              TextSpan(
-                text: ' · ${l.subscriptionBadge}',
-                style: TextStyle(color: theme.colorScheme.primary),
-              ),
-          ],
-        ),
-      ),
-      trailing: Text(
-        context.money(t.amountCents, currency: currency),
-        style: theme.textTheme.titleSmall?.copyWith(
-          fontFamily: 'Manrope',
-          color: t.amountCents > 0 ? Colors.green.shade700 : null,
-        ),
       ),
     );
   }

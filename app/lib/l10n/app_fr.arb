@@ -2687,5 +2687,39 @@
   "simKeep": "En gardant le contrat",
   "simSwitch": "En changeant",
   "simChart": "Total payé, mois après mois",
-  "simHow": "Calcul : total payé chaque mois, coût du changement compté au départ, prix relevés chaque année de leur hausse, arrondis au centime."
+  "simHow": "Calcul : total payé chaque mois, coût du changement compté au départ, prix relevés chaque année de leur hausse, arrondis au centime.",
+  "checkOne": "Pointer",
+  "uncheckOne": "Dépointer",
+  "checkedOne": "Opération pointée.",
+  "uncheckedOne": "Opération dépointée.",
+  "checkedMany": "{count, plural, =1{1 opération pointée.} other{{count} opérations pointées.}}",
+  "@checkedMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "uncheckedMany": "{count, plural, =1{1 opération dépointée.} other{{count} opérations dépointées.}}",
+  "@uncheckedMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "selectedCount": "{count, plural, =1{1 sélectionnée} other{{count} sélectionnées}}",
+  "@selectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "selectAll": "Tout sélectionner",
+  "checkSelected": "Pointer",
+  "uncheckSelected": "Dépointer",
+  "selectionStop": "Arrêter la sélection",
+  "operationsSelectHint": "Touchez le rond d'une opération pour la pointer ; appui long pour en sélectionner plusieurs.",
+  "error_too_many": "Trop d'opérations à la fois : 500 au plus."
 }

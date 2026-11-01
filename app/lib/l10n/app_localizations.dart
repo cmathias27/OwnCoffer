@@ -5927,6 +5927,84 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Calcul : total payé chaque mois, coût du changement compté au départ, prix relevés chaque année de leur hausse, arrondis au centime.'**
   String get simHow;
+
+  /// No description provided for @checkOne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pointer'**
+  String get checkOne;
+
+  /// No description provided for @uncheckOne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépointer'**
+  String get uncheckOne;
+
+  /// No description provided for @checkedOne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération pointée.'**
+  String get checkedOne;
+
+  /// No description provided for @uncheckedOne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération dépointée.'**
+  String get uncheckedOne;
+
+  /// No description provided for @checkedMany.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération pointée.} other{{count} opérations pointées.}}'**
+  String checkedMany(int count);
+
+  /// No description provided for @uncheckedMany.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération dépointée.} other{{count} opérations dépointées.}}'**
+  String uncheckedMany(int count);
+
+  /// No description provided for @selectedCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 sélectionnée} other{{count} sélectionnées}}'**
+  String selectedCount(int count);
+
+  /// No description provided for @selectAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout sélectionner'**
+  String get selectAll;
+
+  /// No description provided for @checkSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pointer'**
+  String get checkSelected;
+
+  /// No description provided for @uncheckSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépointer'**
+  String get uncheckSelected;
+
+  /// No description provided for @selectionStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter la sélection'**
+  String get selectionStop;
+
+  /// No description provided for @operationsSelectHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez le rond d\'une opération pour la pointer ; appui long pour en sélectionner plusieurs.'**
+  String get operationsSelectHint;
+
+  /// No description provided for @error_too_many.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop d\'opérations à la fois : 500 au plus.'**
+  String get error_too_many;
 }
 
 class _AppLocalizationsDelegate
