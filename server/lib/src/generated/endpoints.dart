@@ -2759,6 +2759,37 @@ class Endpoints extends _is.EndpointDispatch {
                 params['amountCents'],
               ),
         ),
+        'simulateChange': _is.MethodConnector(
+          name: 'simulateChange',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'event': _is.ParameterDescription(
+              name: 'event',
+              type: _is.getType<_ifjfj2mv.LoanEvent>(),
+              nullable: false,
+            ),
+            'feesCents': _is.ParameterDescription(
+              name: 'feesCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['loan'] as _imitaxsf.LoanEndpoint).simulateChange(
+                    session,
+                    params['loanId'],
+                    params['event'],
+                    feesCents: params['feesCents'],
+                  ),
+        ),
         'addEvent': _is.MethodConnector(
           name: 'addEvent',
           params: {

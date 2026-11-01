@@ -297,6 +297,49 @@ class LoanEndpoint extends Endpoint {
     );
   }
 
+  /// What a change would do (renegotiation, new rate, new duration), with
+  /// its fees: before and after, the saving and when it pays off. Nothing
+  /// is saved; addEvent records it once chosen.
+  Future<LoanChangeSimulation> simulateChange(
+    Session session,
+    int loanId,
+    LoanEvent event, {
+    int? feesCents,
+  }) async {
+    final loan = await _find(session, loanId);
+    final u = event.date.toUtc();
+    try {
+      final c = core.compareLoanChange(
+        _terms(loan),
+        changes: _changes(loan),
+        today: _today(),
+        proposed: core.LoanChange(
+          date: core.LocalDate(u.year, u.month, u.day),
+          annualRateMilli: event.annualRateMilli,
+          paymentCents: event.paymentCents,
+          remainingMonths: event.remainingMonths,
+          drawCents: event.drawCents ?? 0,
+        ),
+        feesCents: feesCents ?? 0,
+      );
+      return LoanChangeSimulation(
+        paymentBeforeCents: c.paymentBeforeCents,
+        paymentAfterCents: c.paymentAfterCents,
+        interestBeforeCents: c.interestBeforeCents,
+        interestAfterCents: c.interestAfterCents,
+        instalmentsBefore: c.instalmentsBefore,
+        instalmentsAfter: c.instalmentsAfter,
+        endBefore: c.endBefore.toDb(),
+        endAfter: c.endAfter.toDb(),
+        feesCents: c.feesCents,
+        savingCents: c.savingCents,
+        breakEvenMonth: c.breakEvenMonth,
+      );
+    } on ArgumentError {
+      throw InvalidInputException(code: 'loan_event_invalid');
+    }
+  }
+
   static const _maxEvents = 50;
 
   /// Adds a change to the loan (new rate, renegotiation, money drawn or

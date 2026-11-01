@@ -4,6 +4,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
+import '../l10n/error_messages.dart';
 import '../screens/budget_screen.dart';
 import '../screens/loans_screen.dart';
 import '../util/format.dart';
@@ -15,7 +16,19 @@ import 'soft.dart';
 /// by the shared engine (core.simulateContractSwitch); nothing is changed.
 class ContractSimulation extends StatefulWidget {
   final GroupMembership membership;
-  const ContractSimulation({super.key, required this.membership});
+
+  /// Starts from this subscription, and offers to apply the new price to it.
+  final int? scheduledId;
+
+  /// After the new price is applied.
+  final VoidCallback? onApplied;
+
+  const ContractSimulation({
+    super.key,
+    required this.membership,
+    this.scheduledId,
+    this.onApplied,
+  });
 
   @override
   State<ContractSimulation> createState() => _ContractSimulationState();
@@ -35,7 +48,10 @@ class _ContractSimulationState extends State<ContractSimulation> {
   void initState() {
     super.initState();
     client.scheduled.subscriptions(widget.membership.group.id!).then((o) {
-      if (mounted) setState(() => _subscriptions = o);
+      if (!mounted) return;
+      setState(() => _subscriptions = o);
+      final i = o.items.indexWhere((s) => s.id == widget.scheduledId);
+      if (i >= 0) _pick(i);
     }, onError: (_) {});
     for (final c in [_current, _next, _cost, _currentRise, _nextRise]) {
       c.addListener(() => setState(() {}));
@@ -172,9 +188,64 @@ class _ContractSimulationState extends State<ContractSimulation> {
             padding: const EdgeInsets.all(16),
             child: Text(l.simFillIn, textAlign: TextAlign.center),
           )
-        else
+        else ...[
           _results(context, l, r),
+          if (_applicable != null) _apply(context, l),
+        ],
       ],
+    );
+  }
+
+  /// The subscription picked, when the new price can be applied to it.
+  ScheduledTransaction? get _applicable {
+    final o = _subscriptions, i = _picked;
+    if (o == null || i == null || widget.membership.role == MemberRole.reader) {
+      return null;
+    }
+    final s = o.items[i];
+    return s.frequency == ScheduleFrequency.once ? null : s;
+  }
+
+  /// The new monthly price as the amount of one debit of the subscription.
+  static int _perDebit(ScheduledTransaction s, int monthly) =>
+      switch (s.frequency) {
+        ScheduleFrequency.yearly => monthly * 12,
+        ScheduleFrequency.weekly => (monthly * 12 + 26) ~/ 52,
+        _ => monthly,
+      };
+
+  Widget _apply(BuildContext context, AppLocalizations l) {
+    final s = _applicable!;
+    final monthly = parseUserAmount(_next.text);
+    if (monthly == null || monthly <= 0) return const SizedBox.shrink();
+    final amount = -_perDebit(s, monthly);
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FilledButton.icon(
+            icon: const Icon(Icons.published_with_changes),
+            label: Text(l.simApply(s.label, context.money(amount))),
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await client.scheduled.update(s.id!, amountCents: amount);
+                messenger.showSnackBar(
+                  SnackBar(content: Text(l.simApplied(s.label))),
+                );
+                widget.onApplied?.call();
+              } on Object catch (e) {
+                messenger.showSnackBar(
+                  SnackBar(content: Text(errorText(l, e))),
+                );
+              }
+            },
+          ),
+          const SizedBox(height: 4),
+          Text(l.simApplyHelp, style: Theme.of(context).textTheme.bodySmall),
+        ],
+      ),
     );
   }
 

@@ -8171,6 +8171,161 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Organisme'**
   String get loanSortLender;
+
+  /// No description provided for @subscriptionChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer de contrat'**
+  String get subscriptionChange;
+
+  /// No description provided for @subscriptionChangeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comparer une autre offre sur 1 à 10 ans, puis appliquer le nouveau prix.'**
+  String get subscriptionChangeHelp;
+
+  /// No description provided for @simApply.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appliquer à « {label} » : {amount} par prélèvement'**
+  String simApply(String label, String amount);
+
+  /// No description provided for @simApplyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le prélèvement prévu prend ce nouveau montant : prévisions, budget et alertes le suivent. Les prélèvements passés ne changent pas.'**
+  String get simApplyHelp;
+
+  /// No description provided for @simApplied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau prix appliqué à « {label} ».'**
+  String simApplied(String label);
+
+  /// No description provided for @loanChangeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renégocier ou changer de taux'**
+  String get loanChangeTitle;
+
+  /// No description provided for @loanChangeCardHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simulez l\'offre de votre banque (taux, mensualité, durée, frais) avant de l\'enregistrer.'**
+  String get loanChangeCardHelp;
+
+  /// No description provided for @loanChangeIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {lender} » aujourd\'hui : taux {rate}, mensualité {payment}, {remaining} restant à rembourser. Indiquez l\'offre, au moins un nouveau taux, une nouvelle mensualité ou une nouvelle durée.'**
+  String loanChangeIntro(
+    String lender,
+    String rate,
+    String payment,
+    String remaining,
+  );
+
+  /// No description provided for @loanChangeOffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'offre'**
+  String get loanChangeOffer;
+
+  /// No description provided for @loanChangeMonthsSuffix.
+  ///
+  /// In fr, this message translates to:
+  /// **'mois'**
+  String get loanChangeMonthsSuffix;
+
+  /// No description provided for @loanChangeFees.
+  ///
+  /// In fr, this message translates to:
+  /// **'Frais du changement'**
+  String get loanChangeFees;
+
+  /// No description provided for @loanChangeFeesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Frais de dossier, indemnités de remboursement anticipé, garantie… Facultatif.'**
+  String get loanChangeFeesHelp;
+
+  /// No description provided for @loanChangeSimulate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simuler'**
+  String get loanChangeSimulate;
+
+  /// No description provided for @loanChangeSaves.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous économiseriez {amount}'**
+  String loanChangeSaves(String amount);
+
+  /// No description provided for @loanChangeCosts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cela vous coûterait {amount} de plus'**
+  String loanChangeCosts(String amount);
+
+  /// No description provided for @loanChangeNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui'**
+  String get loanChangeNow;
+
+  /// No description provided for @loanChangeAfter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Après'**
+  String get loanChangeAfter;
+
+  /// No description provided for @loanChangeInstalmentsLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéances restantes'**
+  String get loanChangeInstalmentsLeft;
+
+  /// No description provided for @loanChangeEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin'**
+  String get loanChangeEnd;
+
+  /// No description provided for @loanChangeFeesCounted.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} de frais déduits.'**
+  String loanChangeFeesCounted(String amount);
+
+  /// No description provided for @loanChangePaysOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'{months, plural, =1{Rentabilisé dès le premier mois.} other{Rentabilisé au bout de {months} mois.}}'**
+  String loanChangePaysOff(int months);
+
+  /// No description provided for @loanChangeNeverPaysOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jamais rentabilisé sur la durée du crédit.'**
+  String get loanChangeNeverPaysOff;
+
+  /// No description provided for @loanChangeHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculé par OwnCoffer à partir du tableau d\'amortissement, assurance comprise dans les prélèvements comparés. Indicatif : l\'offre de la banque fait foi.'**
+  String get loanChangeHow;
+
+  /// No description provided for @loanChangeRecord.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer ce changement'**
+  String get loanChangeRecord;
+
+  /// No description provided for @loanChangeNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renégociation'**
+  String get loanChangeNote;
 }
 
 class _AppLocalizationsDelegate

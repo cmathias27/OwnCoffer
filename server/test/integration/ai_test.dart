@@ -670,6 +670,18 @@ void main() {
             '{"loan_id": ${loan.id}, "amount_cents": 200000}',
           ),
           _call('3', 'get_advice', '{}'),
+          _call(
+            '4',
+            'simulate_contract_switch',
+            '{"current_monthly_cents": 4999, "new_monthly_cents": 2999, '
+                '"switch_cost_cents": 5000, "years": 3}',
+          ),
+          _call(
+            '5',
+            'simulate_loan_change',
+            '{"loan_id": ${loan.id}, "annual_rate_milli": 2500, '
+                '"fees_cents": 10000}',
+          ),
           {'role': 'assistant', 'content': 'Mon conseil.'},
         ]);
         AiGateway.adapter = model;
@@ -688,6 +700,12 @@ void main() {
         expect(results[0]['account'], 'Courant');
         expect(results[1]['interest_saved_cents'], greaterThan(0));
         expect(results[2]['advice'], isA<List>());
+        expect(results[3]['total_saving_cents'], 2000 * 36 - 5000);
+        expect(results[3]['break_even_month'], 3);
+        expect(
+          results[4]['instalment_after_cents'],
+          lessThan(results[4]['instalment_before_cents'] as int),
+        );
         expect(
           model.received.first.first['content'],
           contains('personal financial advisor'),

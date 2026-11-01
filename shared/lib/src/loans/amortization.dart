@@ -425,3 +425,98 @@ _earlyRepaymentWithChanges(
     interestSavedCents: status.interestRemainingCents - interest,
   );
 }
+
+/// A loan with and without a change (renegotiation, new rate): what is
+/// left to pay from [today] either way, the fees of the change, and when
+/// it pays off.
+class LoanChangeComparison {
+  /// The instalment from the change on, before and after it.
+  final int paymentBeforeCents;
+  final int paymentAfterCents;
+
+  /// Interest still to pay after [today], before and after.
+  final int interestBeforeCents;
+  final int interestAfterCents;
+
+  /// Instalments still to pay after [today], and the end dates.
+  final int instalmentsBefore;
+  final int instalmentsAfter;
+  final LocalDate endBefore;
+  final LocalDate endAfter;
+  final int feesCents;
+
+  /// Months after the change by the end of which the change has cost no
+  /// more than not changing (instalments and fees); null if never.
+  final int? breakEvenMonth;
+
+  const LoanChangeComparison({
+    required this.paymentBeforeCents,
+    required this.paymentAfterCents,
+    required this.interestBeforeCents,
+    required this.interestAfterCents,
+    required this.instalmentsBefore,
+    required this.instalmentsAfter,
+    required this.endBefore,
+    required this.endAfter,
+    required this.feesCents,
+    required this.breakEvenMonth,
+  });
+
+  /// Interest saved, fees taken off (negative: the change costs more).
+  int get savingCents => interestBeforeCents - interestAfterCents - feesCents;
+}
+
+LoanChangeComparison compareLoanChange(
+  LoanTerms terms, {
+  List<LoanChange> changes = const [],
+  required LocalDate today,
+  required LoanChange proposed,
+  int feesCents = 0,
+}) {
+  if (feesCents < 0 || feesCents > maxLoanPrincipalCents) {
+    throw ArgumentError.value(feesCents, 'feesCents');
+  }
+  final before = [
+    for (final i in amortize(terms, changes: changes))
+      if (i.date > today) i,
+  ];
+  final after = [
+    for (final i in amortize(terms, changes: [...changes, proposed]))
+      if (i.date > today) i,
+  ];
+  int interest(List<Installment> s) => s.fold(0, (a, i) => a + i.interestCents);
+  int paymentFrom(List<Installment> s) =>
+      s.where((i) => i.date >= proposed.date).firstOrNull?.paymentCents ??
+      (s.isEmpty ? 0 : s.first.paymentCents);
+  // Month by month from the change: what has left the account either way.
+  final b = [
+    for (final i in before)
+      if (i.date >= proposed.date) i.totalCents,
+  ];
+  final a = [
+    for (final i in after)
+      if (i.date >= proposed.date) i.totalCents,
+  ];
+  int? even;
+  var sumB = 0, sumA = feesCents;
+  for (var k = 0; k < (b.length > a.length ? b.length : a.length); k++) {
+    sumB += k < b.length ? b[k] : 0;
+    sumA += k < a.length ? a[k] : 0;
+    if (sumA <= sumB) {
+      even = k + 1;
+      break;
+    }
+  }
+  return LoanChangeComparison(
+    paymentBeforeCents: paymentFrom(before),
+    paymentAfterCents: paymentFrom(after),
+    interestBeforeCents: interest(before),
+    interestAfterCents: interest(after),
+    instalmentsBefore: before.length,
+    instalmentsAfter: after.length,
+    endBefore: before.isEmpty ? today : before.last.date,
+    endAfter: after.isEmpty ? today : after.last.date,
+    feesCents: feesCents,
+    breakEvenMonth: even,
+  );
+}

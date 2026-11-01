@@ -5073,4 +5073,110 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get loanSortLender => 'Organisme';
+
+  @override
+  String get subscriptionChange => 'Changer de contrat';
+
+  @override
+  String get subscriptionChangeHelp =>
+      'Comparer une autre offre sur 1 à 10 ans, puis appliquer le nouveau prix.';
+
+  @override
+  String simApply(String label, String amount) {
+    return 'Appliquer à « $label » : $amount par prélèvement';
+  }
+
+  @override
+  String get simApplyHelp =>
+      'Le prélèvement prévu prend ce nouveau montant : prévisions, budget et alertes le suivent. Les prélèvements passés ne changent pas.';
+
+  @override
+  String simApplied(String label) {
+    return 'Nouveau prix appliqué à « $label ».';
+  }
+
+  @override
+  String get loanChangeTitle => 'Renégocier ou changer de taux';
+
+  @override
+  String get loanChangeCardHelp =>
+      'Simulez l\'offre de votre banque (taux, mensualité, durée, frais) avant de l\'enregistrer.';
+
+  @override
+  String loanChangeIntro(
+    String lender,
+    String rate,
+    String payment,
+    String remaining,
+  ) {
+    return '« $lender » aujourd\'hui : taux $rate, mensualité $payment, $remaining restant à rembourser. Indiquez l\'offre, au moins un nouveau taux, une nouvelle mensualité ou une nouvelle durée.';
+  }
+
+  @override
+  String get loanChangeOffer => 'L\'offre';
+
+  @override
+  String get loanChangeMonthsSuffix => 'mois';
+
+  @override
+  String get loanChangeFees => 'Frais du changement';
+
+  @override
+  String get loanChangeFeesHelp =>
+      'Frais de dossier, indemnités de remboursement anticipé, garantie… Facultatif.';
+
+  @override
+  String get loanChangeSimulate => 'Simuler';
+
+  @override
+  String loanChangeSaves(String amount) {
+    return 'Vous économiseriez $amount';
+  }
+
+  @override
+  String loanChangeCosts(String amount) {
+    return 'Cela vous coûterait $amount de plus';
+  }
+
+  @override
+  String get loanChangeNow => 'Aujourd\'hui';
+
+  @override
+  String get loanChangeAfter => 'Après';
+
+  @override
+  String get loanChangeInstalmentsLeft => 'Échéances restantes';
+
+  @override
+  String get loanChangeEnd => 'Fin';
+
+  @override
+  String loanChangeFeesCounted(String amount) {
+    return '$amount de frais déduits.';
+  }
+
+  @override
+  String loanChangePaysOff(int months) {
+    String _temp0 = intl.Intl.pluralLogic(
+      months,
+      locale: localeName,
+      other: 'Rentabilisé au bout de $months mois.',
+      one: 'Rentabilisé dès le premier mois.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get loanChangeNeverPaysOff =>
+      'Jamais rentabilisé sur la durée du crédit.';
+
+  @override
+  String get loanChangeHow =>
+      'Calculé par OwnCoffer à partir du tableau d\'amortissement, assurance comprise dans les prélèvements comparés. Indicatif : l\'offre de la banque fait foi.';
+
+  @override
+  String get loanChangeRecord => 'Enregistrer ce changement';
+
+  @override
+  String get loanChangeNote => 'Renégociation';
 }

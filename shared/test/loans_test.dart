@@ -301,4 +301,64 @@ void main() {
       );
     });
   });
+
+  group('compare a change (renegotiation)', () {
+    final today = LocalDate(2027, 12, 15);
+    test('a lower rate: lower instalment, interest saved, fees taken off, '
+        'paid off after some months', () {
+      final c = compareLoanChange(
+        terms(rate: 4000),
+        today: today,
+        proposed: LoanChange(
+          date: LocalDate(2028, 1, 1),
+          annualRateMilli: 2500,
+        ),
+        feesCents: 150000,
+      );
+      expect(c.paymentAfterCents, lessThan(c.paymentBeforeCents));
+      expect(c.instalmentsAfter, c.instalmentsBefore, reason: 'same end');
+      expect(c.interestAfterCents, lessThan(c.interestBeforeCents));
+      expect(
+        c.savingCents,
+        c.interestBeforeCents - c.interestAfterCents - 150000,
+      );
+      expect(c.breakEvenMonth, isNotNull);
+      expect(
+        c.breakEvenMonth! * (c.paymentBeforeCents - c.paymentAfterCents),
+        greaterThanOrEqualTo(150000),
+        reason: 'the fees are paid back by the lower instalments',
+      );
+    });
+
+    test(
+      'a shorter duration: higher instalment, less interest, sooner end',
+      () {
+        final c = compareLoanChange(
+          terms(rate: 3000),
+          today: today,
+          proposed: LoanChange(
+            date: LocalDate(2028, 1, 1),
+            remainingMonths: 60,
+          ),
+        );
+        expect(c.paymentAfterCents, greaterThan(c.paymentBeforeCents));
+        expect(c.instalmentsAfter, lessThan(c.instalmentsBefore));
+        expect(c.endAfter < c.endBefore, isTrue);
+        expect(c.savingCents, greaterThan(0));
+      },
+    );
+
+    test('a higher rate never pays off', () {
+      final c = compareLoanChange(
+        terms(rate: 2000),
+        today: today,
+        proposed: LoanChange(
+          date: LocalDate(2028, 1, 1),
+          annualRateMilli: 5000,
+        ),
+      );
+      expect(c.savingCents, lessThan(0));
+      expect(c.breakEvenMonth, isNull);
+    });
+  });
 }

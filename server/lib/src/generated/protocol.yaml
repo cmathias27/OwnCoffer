@@ -120,6 +120,7 @@ loan:
   - downloadDocument:
   - deleteDocument:
   - simulate:
+  - simulateChange:
   - addEvent:
   - removeEvent:
   - create:

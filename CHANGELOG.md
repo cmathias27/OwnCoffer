@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.34 (1er novembre 2026)
+
+### Changer de contrat, renégocier un crédit
+
+- **Abonnements** : un bouton **« Changer de contrat »** sur chaque abonnement. Il compare une autre offre sur 1 à 10 ans (économie totale et par an, mois où le changement est rentabilisé, hausses de prix), puis **applique le nouveau prix** au prélèvement prévu. Prévisions, budget et alertes suivent ; les prélèvements passés ne changent pas.
+- **Crédits** : une carte **« Renégocier ou changer de taux »** dans la fiche. Elle simule l'offre de la banque (nouveau taux, mensualité ou durée, frais) et compare **aujourd'hui et après** : mensualité, intérêts restants, échéances, date de fin, **économie nette des frais** et **mois où c'est rentabilisé**. « Enregistrer ce changement » l'ajoute aux changements du crédit.
+- Calculs faits par le moteur commun et testés (intérêts restants, frais comptés au départ, rentabilité mois par mois).
+- L'**assistant** peut simuler ces deux cas pour vous conseiller, sans rien enregistrer.
+
 ## 0.3.33 (1er novembre 2026)
 
 ### Analyses, sans IA
