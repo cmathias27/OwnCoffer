@@ -3536,4 +3536,174 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get menuAccount => 'Mon compte';
+
+  @override
+  String get compareSimulation => 'Simulation';
+
+  @override
+  String get simIntro =>
+      'Et si je changeais de contrat ? Comparez ce que coûte un abonnement gardé tel quel, et une autre offre, sur plusieurs années. C\'est une simulation : rien n\'est modifié.';
+
+  @override
+  String get simContract => 'Le contrat actuel';
+
+  @override
+  String get simFrom => 'Partir de';
+
+  @override
+  String get simFreeAmount => 'Un montant libre';
+
+  @override
+  String get simCurrentMonthly => 'Prix actuel par mois';
+
+  @override
+  String get simCurrentRise => 'Hausse par an du contrat actuel';
+
+  @override
+  String get simRiseHelp =>
+      'Facultatif : de combien le prix augmente chaque année (exemple : 3).';
+
+  @override
+  String get simOffer => 'La nouvelle offre';
+
+  @override
+  String get simNewMonthly => 'Nouveau prix par mois';
+
+  @override
+  String get simSwitchCost => 'Coût du changement';
+
+  @override
+  String get simSwitchCostHelp =>
+      'Facultatif : frais de résiliation, d\'installation ou de dossier, payés une fois.';
+
+  @override
+  String get simNewRise => 'Hausse par an de la nouvelle offre';
+
+  @override
+  String get simOver => 'Sur';
+
+  @override
+  String simYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ans',
+      one: '1 an',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get simFillIn =>
+      'Indiquez le prix actuel et le nouveau prix pour voir la comparaison.';
+
+  @override
+  String simSaves(String amount, String period) {
+    return 'Vous économiseriez $amount sur $period.';
+  }
+
+  @override
+  String simCostsMore(String amount, String period) {
+    return 'Ce changement coûterait $amount de plus sur $period.';
+  }
+
+  @override
+  String get simPerMonth => 'par mois en moyenne';
+
+  @override
+  String get simPerYear => 'par an en moyenne';
+
+  @override
+  String get simNeverPaysOff =>
+      'Le changement n\'est jamais rentabilisé sur cette durée.';
+
+  @override
+  String get simPaysOffNow => 'Rentable dès le premier mois.';
+
+  @override
+  String simPaysOffAfter(int months) {
+    return 'Rentabilisé au bout de $months mois.';
+  }
+
+  @override
+  String simMonthLabel(int month) {
+    return 'mois $month';
+  }
+
+  @override
+  String get simKeep => 'En gardant le contrat';
+
+  @override
+  String get simSwitch => 'En changeant';
+
+  @override
+  String get simChart => 'Total payé, mois après mois';
+
+  @override
+  String get simHow =>
+      'Calcul : total payé chaque mois, coût du changement compté au départ, prix relevés chaque année de leur hausse, arrondis au centime.';
+
+  @override
+  String get checkOne => 'Pointer';
+
+  @override
+  String get uncheckOne => 'Dépointer';
+
+  @override
+  String get checkedOne => 'Opération pointée.';
+
+  @override
+  String get uncheckedOne => 'Opération dépointée.';
+
+  @override
+  String checkedMany(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations pointées.',
+      one: '1 opération pointée.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String uncheckedMany(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations dépointées.',
+      one: '1 opération dépointée.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String selectedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sélectionnées',
+      one: '1 sélectionnée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get selectAll => 'Tout sélectionner';
+
+  @override
+  String get checkSelected => 'Pointer';
+
+  @override
+  String get uncheckSelected => 'Dépointer';
+
+  @override
+  String get selectionStop => 'Arrêter la sélection';
+
+  @override
+  String get operationsSelectHint =>
+      'Touchez le rond d\'une opération pour la pointer ; appui long pour en sélectionner plusieurs.';
+
+  @override
+  String get error_too_many => 'Trop d\'opérations à la fois : 500 au plus.';
 }

@@ -9,6 +9,7 @@
 library;
 
 export 'src/banks/caisse_epargne.dart';
+export 'src/budget/contract_switch.dart';
 export 'src/budget/goals.dart';
 export 'src/budget/period.dart';
 export 'src/budget/review.dart';

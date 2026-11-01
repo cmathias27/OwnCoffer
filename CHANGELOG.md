@@ -2,6 +2,27 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.22 (1er novembre 2026)
+
+### Comparer avec une simulation : et si je changeais de contrat ?
+
+- Nouveau choix **« Simulation »** dans l'écran Comparer (page Budget) :
+  - partir d'un de vos **abonnements** (son prix mensuel est repris) ou d'un **montant libre** ;
+  - indiquer le **nouveau prix**, l'éventuel **coût du changement** (frais de résiliation, d'installation, de dossier) et, si besoin, la **hausse annuelle** de chaque offre ;
+  - sur **1, 3, 5 ou 10 ans** : l'économie (ou le surcoût) sur la durée, par mois et par an en moyenne, le **mois où le changement est rentabilisé**, et les deux courbes du total payé, en gardant le contrat ou en changeant.
+- Le calcul est fait par le moteur commun et testé (coût du changement compté au départ, prix relevés chaque année, arrondis au centime). C'est une simulation : rien n'est modifié.
+- Les modes de comparaison sont maintenant des puces qui passent à la ligne sur téléphone.
+
+### Opérations : pointer une ou plusieurs opérations
+
+- **Toucher le rond** à gauche d'une opération la pointe (ou la dépointe) directement, sans ouvrir sa fiche ; « Annuler » est proposé.
+- **Appui long** sur une opération : mode sélection. On coche une ou plusieurs opérations (ou « Tout sélectionner »), puis **« Pointer »** ou **« Dépointer »** en une fois ; « Annuler » remet chacune comme elle était.
+- Le serveur vérifie les droits sur chaque compte et applique tout ou rien.
+
+### Budget : les opérations affichées comme dans la page Opérations
+
+- La liste des opérations d'une catégorie utilise les mêmes lignes que la page Opérations (pointage, catégorie, montant en couleur, compte quand il y en a plusieurs).
+
 ## 0.3.21 (1er novembre 2026)
 
 ### Affichage adapté au téléphone et à la tablette

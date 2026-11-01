@@ -482,6 +482,44 @@ class TransactionEndpoint extends Endpoint {
     return updated;
   }
 
+  static const _maxBatch = 500;
+
+  /// Checks or unchecks several operations at once (up to 500), all or
+  /// none: each must exist and be writable by the user. Returns the
+  /// operations as they were before, so that the change can be undone.
+  Future<List<BankTransaction>> setClearedMany(
+    Session session,
+    List<int> transactionIds,
+    bool cleared,
+  ) async {
+    final Set<int> ids = transactionIds.toSet();
+    if (ids.isEmpty) return [];
+    if (ids.length > _maxBatch) {
+      throw InvalidInputException(code: 'too_many', field: 'transactionIds');
+    }
+    final rows = await BankTransaction.db.find(
+      session,
+      where: (t) => t.id.inSet(ids) & t.deletedAt.equals(null),
+    );
+    if (rows.length != ids.length) {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    final accounts = <int, Account>{};
+    for (final t in rows) {
+      accounts[t.accountId] ??= await _account(session, t, write: true);
+    }
+    final now = DateTime.now().toUtc();
+    await session.db.transaction((tx) async {
+      await BankTransaction.db.update(session, [
+        for (final t in rows) t.copyWith(cleared: cleared, updatedAt: now),
+      ], transaction: tx);
+    });
+    for (final a in accounts.values) {
+      await _audit(session, a, 'set_cleared_many', null);
+    }
+    return rows;
+  }
+
   /// Moves the operation to the trash (kept 30 days).
   Future<void> trash(Session session, int transactionId) async {
     final (t, account) = await _find(session, transactionId);

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:owncoffer_app/client.dart';
 import 'package:owncoffer_app/l10n/app_localizations.dart';
 import 'package:owncoffer_app/widgets/operation_sheet.dart';
+import 'package:owncoffer_app/widgets/operation_tile.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
 void main() {
@@ -119,4 +120,41 @@ void main() {
       );
     });
   }
+
+  testWidgets('a row: the round checks, a box while selecting', (
+    tester,
+  ) async {
+    final events = <String>[];
+    Widget row({bool? selected}) => MaterialApp(
+      locale: const Locale('fr'),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(
+        body: OperationTile(
+          operation: op,
+          category: null,
+          subscription: false,
+          hasInvoice: false,
+          currency: 'EUR',
+          selected: selected,
+          onTap: () => events.add('tap'),
+          onLongPress: () => events.add('long'),
+          onToggleCleared: () => events.add('check'),
+        ),
+      ),
+    );
+    await tester.pumpWidget(row());
+    await tester.tap(find.byTooltip('Pointer'));
+    await tester.longPress(find.text('LIDL'));
+    expect(events, ['check', 'long']);
+    await tester.pumpWidget(row(selected: true));
+    expect(find.byType(Checkbox), findsOneWidget);
+    await tester.tap(find.byType(Checkbox));
+    expect(events.last, 'tap', reason: 'the box toggles the selection');
+  });
 }

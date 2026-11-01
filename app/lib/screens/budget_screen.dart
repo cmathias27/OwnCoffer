@@ -11,6 +11,7 @@ import '../widgets/budget_charts.dart';
 import '../widgets/undo.dart';
 import '../widgets/category_field.dart';
 import '../widgets/operation_sheet.dart';
+import '../widgets/operation_tile.dart';
 import '../widgets/soft.dart';
 import 'calendar_screen.dart';
 import 'compare_screen.dart';
@@ -2020,41 +2021,16 @@ class _OperationsListState extends State<_OperationsList> {
               const Center(child: CircularProgressIndicator())
             else
               for (final t in items)
-                ListTile(
-                  contentPadding: const EdgeInsets.only(left: 4),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                OperationTile(
+                  operation: t,
+                  category: widget.categories[t.categoryId],
+                  subscription: false,
+                  hasInvoice: false,
+                  currency: accounts[t.accountId]?.currency ?? 'EUR',
+                  accountName: accounts.length > 1
+                      ? accounts[t.accountId]?.name
+                      : null,
                   onTap: () => _open(t),
-                  title: Text(
-                    t.cleanLabel,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    [
-                      context.shortDay(t.date),
-                      if (widget.categories[t.categoryId] != null)
-                        context.categoryName(widget.categories[t.categoryId]!),
-                      if (accounts.length > 1 && accounts[t.accountId] != null)
-                        accounts[t.accountId]!.name,
-                    ].join(' · '),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        context.money(
-                          t.amountCents,
-                          currency: accounts[t.accountId]?.currency ?? 'EUR',
-                        ),
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontFamily: 'Manrope',
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right),
-                    ],
-                  ),
                 ),
           ],
         );
