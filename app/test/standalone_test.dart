@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -36,6 +38,16 @@ void main() {
         -4250,
         'BOULANGERIE',
       );
+      // A document of a few MB, as a scanned invoice (limit of the server).
+      final big = Uint8List(3 * 1024 * 1024)
+        ..setAll(0, ascii.encode('%PDF-1.7\n'));
+      final tx = (await client.transaction.list(account.id!)).items.single;
+      final invoice = await client.invoice.upload(
+        tx.id!,
+        'facture.pdf',
+        ByteData.sublistView(big),
+      );
+      expect(invoice.invoice.sizeBytes, big.length);
       final forecast = await client.scheduled.forecast(
         account.id!,
         DateTime.utc(2026, 11, 2),

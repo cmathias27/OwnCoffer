@@ -81,6 +81,8 @@ shared:
           filePath: '${dataDir.path}/owncoffer.db',
         ),
         applyMigrations: true,
+        // As the Docker server: a 10 MB document once base64-encoded.
+        maxRequestSize: 14 * 1024 * 1024,
         // SQLite allows one writer: no session log in the database.
         sessionLogs: SessionLogConfig.buildDefault(
           databaseEnabled: false,
