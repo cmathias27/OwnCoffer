@@ -3684,4 +3684,81 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_too_many => 'Too many operations at once: 500 at most.';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get dashboardAdvisor => 'My advisor: what OwnCoffer proposes';
+
+  @override
+  String dashboardBalance(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'On your $count accounts',
+      one: 'On your account',
+      zero: 'No account in euros',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardLowest(String account, String amount, String date) {
+    return 'Lowest point in the next 30 days: $amount on $account, on $date';
+  }
+
+  @override
+  String get dashboardUpcoming => 'This week';
+
+  @override
+  String get dashboardUpcomingNone => 'No due date in the next 7 days.';
+
+  @override
+  String get dashboardSeeForecast => 'See the forecast';
+
+  @override
+  String get dashboardMonthSpending => 'This month';
+
+  @override
+  String dashboardMonthTotals(String expense, String income) {
+    return '$expense spent, $income received';
+  }
+
+  @override
+  String dashboardToClassify(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations to classify',
+      one: '1 operation to classify',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashboardSeeBudget => 'See the budget';
+
+  @override
+  String get dashboardWatch => 'To watch';
+
+  @override
+  String get dashboardAllGood =>
+      'Nothing to report: no account goes below its alert threshold within 30 days.';
+
+  @override
+  String dashboardBelow(String account, String date) {
+    return '$account goes below its alert threshold on $date';
+  }
+
+  @override
+  String dashboardUnread(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count unread notifications',
+      one: '1 unread notification',
+    );
+    return '$_temp0';
+  }
 }

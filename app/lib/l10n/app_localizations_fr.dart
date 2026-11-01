@@ -3706,4 +3706,82 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get error_too_many => 'Trop d\'opérations à la fois : 500 au plus.';
+
+  @override
+  String get navHome => 'Accueil';
+
+  @override
+  String get dashboardAdvisor =>
+      'Mon conseiller : ce qu\'OwnCoffer vous propose';
+
+  @override
+  String dashboardBalance(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Sur vos $count comptes',
+      one: 'Sur votre compte',
+      zero: 'Aucun compte en euros',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardLowest(String account, String amount, String date) {
+    return 'Point bas des 30 prochains jours : $amount sur $account, le $date';
+  }
+
+  @override
+  String get dashboardUpcoming => 'Cette semaine';
+
+  @override
+  String get dashboardUpcomingNone => 'Aucune échéance prévue d\'ici 7 jours.';
+
+  @override
+  String get dashboardSeeForecast => 'Voir les prévisions';
+
+  @override
+  String get dashboardMonthSpending => 'Ce mois-ci';
+
+  @override
+  String dashboardMonthTotals(String expense, String income) {
+    return '$expense dépensés, $income reçus';
+  }
+
+  @override
+  String dashboardToClassify(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations à classer',
+      one: '1 opération à classer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashboardSeeBudget => 'Voir le budget';
+
+  @override
+  String get dashboardWatch => 'À surveiller';
+
+  @override
+  String get dashboardAllGood =>
+      'Rien à signaler : aucun compte ne passe sous son seuil d\'alerte dans les 30 jours.';
+
+  @override
+  String dashboardBelow(String account, String date) {
+    return '$account passe sous son seuil d\'alerte le $date';
+  }
+
+  @override
+  String dashboardUnread(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count notifications non lues',
+      one: '1 notification non lue',
+    );
+    return '$_temp0';
+  }
 }

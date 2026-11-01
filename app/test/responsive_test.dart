@@ -5,6 +5,7 @@ import 'package:owncoffer_app/client.dart';
 import 'package:owncoffer_app/l10n/app_localizations.dart';
 import 'package:owncoffer_app/screens/budget_screen.dart';
 import 'package:owncoffer_app/screens/compare_screen.dart';
+import 'package:owncoffer_app/screens/dashboard_screen.dart';
 import 'package:owncoffer_app/screens/home_screen.dart';
 import 'package:owncoffer_app/screens/loans_screen.dart';
 import 'package:owncoffer_app/screens/update_progress_screen.dart';
@@ -57,6 +58,9 @@ void main() {
       categories: const {},
       period: BudgetPeriod.month,
       date: DateTime.utc(2026, 10, 15),
+    ),
+    'home': () => Scaffold(
+      body: DashboardScreen(membership: _membership, onOpen: (_) {}),
     ),
     'loan form': () =>
         LoanFormScreen(groupId: 1, accounts: _accounts, categories: const []),

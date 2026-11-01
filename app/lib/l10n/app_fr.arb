@@ -2721,5 +2721,74 @@
   "uncheckSelected": "Dépointer",
   "selectionStop": "Arrêter la sélection",
   "operationsSelectHint": "Touchez le rond d'une opération pour la pointer ; appui long pour en sélectionner plusieurs.",
-  "error_too_many": "Trop d'opérations à la fois : 500 au plus."
+  "error_too_many": "Trop d'opérations à la fois : 500 au plus.",
+  "navHome": "Accueil",
+  "dashboardAdvisor": "Mon conseiller : ce qu'OwnCoffer vous propose",
+  "dashboardBalance": "{count, plural, =0{Aucun compte en euros} =1{Sur votre compte} other{Sur vos {count} comptes}}",
+  "@dashboardBalance": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardLowest": "Point bas des 30 prochains jours : {amount} sur {account}, le {date}",
+  "@dashboardLowest": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardUpcoming": "Cette semaine",
+  "dashboardUpcomingNone": "Aucune échéance prévue d'ici 7 jours.",
+  "dashboardSeeForecast": "Voir les prévisions",
+  "dashboardMonthSpending": "Ce mois-ci",
+  "dashboardMonthTotals": "{expense} dépensés, {income} reçus",
+  "@dashboardMonthTotals": {
+    "placeholders": {
+      "expense": {
+        "type": "String"
+      },
+      "income": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardToClassify": "{count, plural, =1{1 opération à classer} other{{count} opérations à classer}}",
+  "@dashboardToClassify": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardSeeBudget": "Voir le budget",
+  "dashboardWatch": "À surveiller",
+  "dashboardAllGood": "Rien à signaler : aucun compte ne passe sous son seuil d'alerte dans les 30 jours.",
+  "dashboardBelow": "{account} passe sous son seuil d'alerte le {date}",
+  "@dashboardBelow": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardUnread": "{count, plural, =1{1 notification non lue} other{{count} notifications non lues}}",
+  "@dashboardUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
