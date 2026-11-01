@@ -1010,7 +1010,9 @@ class LoanEndpoint extends Endpoint {
     if (revolving) {
       return clean.copyWith(
         durationMonths: core
-            .amortize(_terms(clean.copyWith(durationMonths: core.maxLoanMonths)))
+            .amortize(
+              _terms(clean.copyWith(durationMonths: core.maxLoanMonths)),
+            )
             .length
             .clamp(1, core.maxLoanMonths),
       );

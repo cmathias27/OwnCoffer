@@ -673,6 +673,25 @@ class EndpointAi extends _isc.EndpointRef {
         {'providerId': providerId},
       );
 
+  /// Reads a receipt or invoice with the user's AI: a split (joined to an
+  /// operation) or its amount, date and merchant (waiting) are proposed in
+  /// "Mon conseiller". Nothing is changed here.
+  _ida.Future<_i6gcixlb.AiReply> readInvoice(int invoiceId) =>
+      caller.callServerEndpoint<_i6gcixlb.AiReply>(
+        'ai',
+        'readInvoice',
+        {'invoiceId': invoiceId},
+      );
+
+  /// Reads a loan document with the user's AI: the terms it states are
+  /// proposed for the loan in "Mon conseiller".
+  _ida.Future<_i6gcixlb.AiReply> readLoanDocument(int documentId) =>
+      caller.callServerEndpoint<_i6gcixlb.AiReply>(
+        'ai',
+        'readLoanDocument',
+        {'documentId': documentId},
+      );
+
   /// The user's choice: a provider set up by the administrator and one of
   /// its models, on or off.
   _ida.Future<_if0b0k6p.AiStatus> setPreference(

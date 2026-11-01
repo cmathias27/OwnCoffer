@@ -2,6 +2,35 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.31 (1er novembre 2026)
+
+### Lire les tickets, factures et documents de crédit avec l'IA
+
+- Avec l'assistant activé et un modèle qui lit les images, **« Lire avec l'IA »** apparaît dans le menu d'une facture et sur chaque document d'un crédit (✨) :
+  - **ticket joint à une opération** : ses lignes sont regroupées par catégorie et la **ventilation** de l'opération est proposée. Ce que les lignes n'expliquent pas (remise, arrondi, ligne illisible) devient une part à classer, **calculée par OwnCoffer** ;
+  - **facture en attente** : son **montant**, sa **date** et son **commerçant** sont proposés ;
+  - **document de crédit** (tableau d'amortissement, offre) : les **conditions** qu'il indique sont proposées pour le crédit, avec l'avant et l'après.
+- L'IA ne fait que **relever ce qui est écrit** ; OwnCoffer vérifie (un ticket qui dépasse le montant de l'opération est refusé, un taux hors limites n'est pas retenu), fait les sommes, et tout arrive dans **Mon conseiller** : rien ne change sans votre accord, et tout s'annule.
+- Avec un fournisseur en ligne, OwnCoffer demande d'abord votre accord pour envoyer le document. Seul le document part, rien d'autre. Les images sont lues par tous les modèles qui lisent les images ; les PDF, par Claude.
+
+### Crédits : taux variable, renégociation, crédit renouvelable
+
+- **« Ajouter un changement »** dans la fiche d'un crédit : **nouveau taux** (taux variable), **renégociation** (nouveau taux, nouvelle mensualité ou nouvelle durée), **remboursement anticipé**. Le tableau, le capital restant, les échéances prévues et la prévision du solde suivent ; un changement se retire d'un geste. Un changement qui ne permettrait jamais de rembourser est refusé.
+- Nouveau type **« Crédit renouvelable »** : montant utilisé, mensualité, taux et **plafond**. Chaque **nouvelle utilisation** s'ajoute ; la fiche montre ce qui reste **disponible**, et une utilisation au-delà du plafond est refusée.
+- Calculs faits par le moteur commun et testés (capital remboursé au centime près, date de fin gardée ou mensualité gardée selon le cas).
+
+### Réglages des notifications
+
+- Page Notifications, bouton **réglages** : pour chaque alerte (découvert prévu, objectif à 80 %, dépassé, dépassement annoncé, fin de garantie), **dans l'application** et **aussi par courriel** quand elle peut l'être. Chacun règle les siennes.
+
+### Journal du foyer
+
+- Les **administrateurs d'un foyer** ont maintenant leur **journal**, depuis la page Membres : qui a fait quoi dans le foyer, et quand, sans le contenu des changements (#37).
+
+### Aide
+
+- Les pages d'aide Crédits, Factures, Notifications, Membres, Mon conseiller, Assistant et Vos données sont à jour.
+
 ## 0.3.30 (1er novembre 2026)
 
 ### Aide dans l'application

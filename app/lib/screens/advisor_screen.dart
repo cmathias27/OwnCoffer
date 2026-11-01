@@ -168,6 +168,9 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
         '${d['pattern'] ?? ''}',
         _category(p.proposedValue ?? 0),
       ),
+      'ai_receipt_split' => l.advisorAiSplit('${d['label'] ?? ''}'),
+      'ai_invoice_hints' => l.advisorAiInvoiceHints('${d['document'] ?? ''}'),
+      'ai_loan_terms' => l.advisorAiLoanTerms('${d['lender'] ?? ''}'),
       'ai_loan' => l.advisorAiLoan(
         '${d['lender'] ?? ''}',
         context.money((d['principal_cents'] as num?)?.toInt() ?? 0),
@@ -231,6 +234,25 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
             Text('· $e', style: theme.textTheme.bodySmall),
           Text(l.advisorAiRuleUndo, style: theme.textTheme.bodySmall),
         ],
+        if (p.reason == 'ai_receipt_split') ..._splitDetails(l, p, d),
+        if (p.reason == 'ai_invoice_hints')
+          Text(
+            [
+              if (d['amount_cents'] != null)
+                context.money((d['amount_cents'] as num).toInt()),
+              if (d['date'] != null)
+                context.day(
+                  DateTime.tryParse('${d['date']}') ?? DateTime(2000),
+                ),
+              if (d['merchant'] != null) '${d['merchant']}',
+            ].join(' · '),
+          ),
+        if (p.reason == 'ai_loan_terms') ..._loanTermsDetails(l, d),
+        if (d['document'] != null && p.reason != 'ai_invoice_hints')
+          Text(
+            l.advisorReadIn('${d['document']}'),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         if (p.reason == 'ai_loan')
           Text(
             l.advisorAiLoanWhy(
@@ -299,6 +321,74 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
         const SizedBox(height: 4),
       ],
     );
+  }
+
+  /// The parts of a proposed split: category and amount, and what the
+  /// lines left (computed by OwnCoffer).
+  List<Widget> _splitDetails(
+    AppLocalizations l,
+    ActionProposal p,
+    Map<String, Object?> d,
+  ) {
+    final f = jsonDecode(p.proposedData ?? '{}');
+    final parts = f is Map && f['parts'] is List
+        ? f['parts'] as List
+        : const [];
+    final rest = (d['rest_cents'] as num?)?.toInt() ?? 0;
+    return [
+      Text(
+        l.advisorAiSplitWhy(
+          context.money((d['amount_cents'] as num?)?.toInt() ?? 0),
+          context.day(DateTime.tryParse('${d['date']}') ?? DateTime(2000)),
+        ),
+      ),
+      for (final x in parts)
+        if (x is Map)
+          Text(
+            '· ${x['category_id'] == null ? l.noCategory : _category((x['category_id'] as num).toInt())}'
+            ' : ${context.money((x['amount_cents'] as num).toInt())}'
+            '${x['note'] == null ? '' : ' (${x['note']})'}',
+          ),
+      if (rest > 0)
+        Text(
+          l.advisorAiSplitRest(context.money(rest)),
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+    ];
+  }
+
+  /// What a loan document would change, before → after.
+  List<Widget> _loanTermsDetails(AppLocalizations l, Map<String, Object?> d) {
+    final changed = d['changed'] is Map ? d['changed'] as Map : const {};
+    final before = d['before'] is Map ? d['before'] as Map : const {};
+    String show(String k, Object? v) {
+      if (v == null) return '—';
+      return switch (k) {
+        'annual_rate_milli' => rateTextFromMilli((v as num).toInt()),
+        'duration_months' => l.loanMonths((v as num).toInt()),
+        'first_due_date' => context.day(
+          DateTime.tryParse('$v') ?? DateTime(2000),
+        ),
+        _ => context.money((v as num).toInt()),
+      };
+    }
+
+    String name(String k) => switch (k) {
+      'principal_cents' => l.loanPrincipal,
+      'annual_rate_milli' => l.loanRate,
+      'duration_months' => l.loanDuration,
+      'payment_cents' => l.loanPaymentActual,
+      'insurance_monthly_cents' => l.loanInsurance,
+      'first_due_date' => l.loanFirstDue,
+      _ => k,
+    };
+    return [
+      for (final e in changed.entries)
+        Text(
+          '· ${name('${e.key}')} : ${show('${e.key}', before[e.key])} → '
+          '${show('${e.key}', e.value)}',
+        ),
+    ];
   }
 
   Widget _pastRow(BuildContext context, AppLocalizations l, ActionProposal p) {

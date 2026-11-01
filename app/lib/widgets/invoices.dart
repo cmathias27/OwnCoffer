@@ -11,6 +11,7 @@ import '../util/file_pick.dart';
 import '../util/file_save.dart';
 import '../util/format.dart';
 import 'admin_backups.dart';
+import 'ai_read.dart';
 
 /// Files accepted as invoices (checked again by the server).
 const invoiceExtensions = ['.pdf', '.png', '.jpg', '.jpeg', '.webp'];
@@ -309,6 +310,12 @@ class InvoiceTile extends StatelessWidget {
             case 'edit':
               final saved = await editInvoice(context, info);
               if (saved != null) onChanged(saved);
+            case 'ai':
+              await readWithAi(
+                context,
+                mimeType: i.mimeType,
+                read: () => client.ai.readInvoice(i.id!),
+              );
             case 'send':
               await sendInvoice(context, info);
             case 'delete':
@@ -321,6 +328,11 @@ class InvoiceTile extends StatelessWidget {
             PopupMenuItem(value: 'attach', child: Text(l.invoiceAttachTo)),
           if (canWrite && waiting)
             PopupMenuItem(value: 'hints', child: Text(l.invoiceHints)),
+          if (canWrite)
+            PopupMenuItem(
+              value: 'ai',
+              child: Text(waiting ? l.aiReadInvoice : l.aiReadReceipt),
+            ),
           if (canWrite)
             PopupMenuItem(value: 'edit', child: Text(l.invoiceEdit)),
           PopupMenuItem(value: 'send', child: Text(l.invoiceSend)),

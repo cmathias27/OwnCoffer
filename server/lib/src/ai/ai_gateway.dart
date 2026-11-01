@@ -250,6 +250,97 @@ abstract final class AiGateway {
     );
   }
 
+  static const _maxDocumentBytes = 8 * 1024 * 1024;
+
+  /// Reads one document (image, or PDF for Claude) with the user's own
+  /// provider and model: the model only reports what is written, through
+  /// the one function [tool] (OpenAI format); its arguments are returned
+  /// for the engine to check. Nothing else is sent: no account, no other
+  /// operation, only [context] (what the document is about) and the file.
+  static Future<
+    ({Map<String, Object?> fields, AiProvider provider, String model})
+  >
+  readDocument(
+    Session session,
+    int groupId, {
+    required List<int> bytes,
+    required String mimeType,
+    required String instructions,
+    required Map<String, Object?> tool,
+  }) async {
+    await Access.requireMember(session, groupId, min: MemberRole.user);
+    final (provider, model) = await _choice(session);
+    if (!provider.vision) throw InvalidInputException(code: 'ai_no_vision');
+    final mime = mimeType.toLowerCase();
+    final image = mime.startsWith('image/');
+    final pdf = mime == 'application/pdf' && provider.kind == 'anthropic';
+    if (!image && !pdf) {
+      throw InvalidInputException(code: 'ai_document_not_image');
+    }
+    if (bytes.length > _maxDocumentBytes) {
+      throw InvalidInputException(code: 'ai_document_too_large');
+    }
+    final user = Access.userId(session);
+    await _count(session, user, provider.id!);
+    await Audit.log(
+      session,
+      groupId: groupId,
+      action: 'read_document',
+      entity: 'ai',
+      rowId: provider.id,
+    );
+    final name = (tool['function'] as Map)['name'] as String;
+    final answer = await adapterFor(provider).chat(
+      baseUrl: provider.baseUrl,
+      apiKey: _key(provider),
+      model: model,
+      messages: [
+        {
+          'role': 'system',
+          'content':
+              'You read documents for OwnCoffer, a personal finance app. '
+              'Report only what is written in the document, by calling the '
+              'function $name once. Never compute, estimate or invent a '
+              'value: leave out what you cannot read. Amounts in cents.',
+        },
+        {
+          'role': 'user',
+          'content': [
+            {'type': 'text', 'text': instructions},
+            {
+              'type': 'image_url',
+              'image_url': {
+                'url': 'data:$mime;base64,${base64Encode(bytes)}',
+              },
+            },
+          ],
+        },
+      ],
+      tools: [tool],
+    );
+    final calls = answer['tool_calls'];
+    final call = calls is List
+        ? calls
+              .whereType<Map>()
+              .where(
+                (c) => (c['function'] as Map?)?['name'] == name,
+              )
+              .firstOrNull
+        : null;
+    if (call == null) throw const AiUnavailable('nothing read');
+    final raw = (call['function'] as Map)['arguments'];
+    Object? decoded;
+    try {
+      decoded = raw is String ? jsonDecode(raw) : raw;
+    } on FormatException {
+      decoded = null;
+    }
+    if (decoded is! Map<String, Object?>) {
+      throw const AiUnavailable('nothing read');
+    }
+    return (fields: decoded, provider: provider, model: model);
+  }
+
   static Future<List<String>> testProvider(AiProvider p) =>
       adapterFor(p).models(baseUrl: p.baseUrl, apiKey: _key(p));
 

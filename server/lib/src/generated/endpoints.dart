@@ -1105,6 +1105,43 @@ class Endpoints extends _is.EndpointDispatch {
                 params['providerId'],
               ),
         ),
+        'readInvoice': _is.MethodConnector(
+          name: 'readInvoice',
+          params: {
+            'invoiceId': _is.ParameterDescription(
+              name: 'invoiceId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['ai'] as _igsjf4zh.AiEndpoint).readInvoice(
+                session,
+                params['invoiceId'],
+              ),
+        ),
+        'readLoanDocument': _is.MethodConnector(
+          name: 'readLoanDocument',
+          params: {
+            'documentId': _is.ParameterDescription(
+              name: 'documentId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['ai'] as _igsjf4zh.AiEndpoint).readLoanDocument(
+                    session,
+                    params['documentId'],
+                  ),
+        ),
         'setPreference': _is.MethodConnector(
           name: 'setPreference',
           params: {

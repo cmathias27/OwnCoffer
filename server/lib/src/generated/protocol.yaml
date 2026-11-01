@@ -48,6 +48,8 @@ ai:
   - saveProvider:
   - deleteProvider:
   - testProvider:
+  - readInvoice:
+  - readLoanDocument:
   - setPreference:
   - chat:
 analysis:

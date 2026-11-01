@@ -11,7 +11,7 @@ OwnCoffer fonctionne entièrement sans IA. L'assistant est **désactivé par dé
 
 - **Répondre à vos questions** sur vos comptes : « combien ai-je dépensé en restaurants ce mois-ci ? », « quelles échéances arrivent ? ».
 - **Classer les opérations à classer** : le raccourci le demande pour vous. Il propose une catégorie et, pour un commerçant qui revient, une règle.
-- **Lire un document** (avec un modèle qui lit les images) : joignez la photo d'un tableau d'amortissement pour qu'il propose le crédit.
+- **Lire un document** (avec un modèle qui lit les images) : joignez la photo d'un tableau d'amortissement pour qu'il propose le crédit. Les tickets, factures et documents de crédit déjà gardés dans OwnCoffer se lisent aussi directement, depuis leur menu (bouton « Lire avec l'IA »).
 
 ## Ses limites, voulues
 

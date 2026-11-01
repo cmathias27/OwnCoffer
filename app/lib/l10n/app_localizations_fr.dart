@@ -4604,4 +4604,100 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_loan_over_limit =>
       'Ce montant dépasse le plafond de la réserve.';
+
+  @override
+  String get aiReadReceipt => 'Lire le ticket avec l\'IA';
+
+  @override
+  String get aiReadInvoice => 'Lire la facture avec l\'IA';
+
+  @override
+  String get aiReadLoan => 'Lire ce document avec l\'IA';
+
+  @override
+  String get aiReadTitle => 'Lire avec l\'IA';
+
+  @override
+  String aiReadExternal(String provider, String model) {
+    return 'Le document sera envoyé à $provider ($model), un fournisseur en ligne, pour être lu. L\'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.';
+  }
+
+  @override
+  String aiReadLocal(String provider, String model) {
+    return 'Le document sera lu par $provider ($model), sur votre réseau. L\'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.';
+  }
+
+  @override
+  String get aiReadGo => 'Lire';
+
+  @override
+  String get aiReadRunning => 'Lecture en cours…';
+
+  @override
+  String aiReadDone(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count propositions vous attendent dans Mon conseiller.',
+      one: 'Une proposition vous attend dans Mon conseiller.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get aiReadNothingNew => 'Rien de nouveau dans ce document.';
+
+  @override
+  String get aiReadNotReady =>
+      'Pour lire un document, activez l\'assistant (icône ✨) avec un modèle qui lit les images.';
+
+  @override
+  String get aiReadNoPdf =>
+      'Ce modèle ne lit que les images : joignez une photo ou une capture du document. (Claude lit aussi les PDF.)';
+
+  @override
+  String advisorAiSplit(String label) {
+    return 'Ventiler « $label » d\'après le ticket';
+  }
+
+  @override
+  String advisorAiSplitWhy(String amount, String date) {
+    return 'Opération de $amount du $date, répartie ainsi :';
+  }
+
+  @override
+  String advisorAiSplitRest(String amount) {
+    return 'Dont $amount que les lignes du ticket n\'expliquent pas (remise, arrondi, ligne illisible), à classer : calculé par OwnCoffer.';
+  }
+
+  @override
+  String advisorAiInvoiceHints(String name) {
+    return 'Compléter la facture « $name »';
+  }
+
+  @override
+  String advisorAiLoanTerms(String lender) {
+    return 'Mettre à jour le crédit « $lender » d\'après son document';
+  }
+
+  @override
+  String advisorReadIn(String name) {
+    return 'Lu dans « $name ».';
+  }
+
+  @override
+  String get error_receipt_mismatch =>
+      'Les lignes lues sur le ticket dépassent le montant de l\'opération : ce n\'est sans doute pas son ticket.';
+
+  @override
+  String get error_document_nothing_read =>
+      'L\'IA n\'a rien pu lire d\'utile dans ce document.';
+
+  @override
+  String get error_ai_document_not_image =>
+      'Ce modèle ne lit que les images : joignez une photo ou une capture du document.';
+
+  @override
+  String get error_ai_document_too_large =>
+      'Document trop lourd pour être lu (8 Mo au plus).';
 }

@@ -13,6 +13,7 @@ import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/category_field.dart';
 import '../widgets/undo.dart';
+import '../widgets/ai_read.dart';
 
 /// Indicative debt ratio above which French banks usually refuse a new loan
 /// (HCSF recommendation: 35 %).
@@ -850,10 +851,23 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                   ),
                   onTap: () => _openDocument(d),
                   trailing: widget.canWrite
-                      ? IconButton(
-                          tooltip: l.loanDocumentDelete,
-                          icon: const Icon(Icons.delete_outline),
-                          onPressed: () => _deleteDocument(d),
+                      ? Wrap(
+                          children: [
+                            IconButton(
+                              tooltip: l.aiReadLoan,
+                              icon: const Icon(Icons.auto_awesome_outlined),
+                              onPressed: () => readWithAi(
+                                context,
+                                mimeType: d.mimeType,
+                                read: () => client.ai.readLoanDocument(d.id!),
+                              ),
+                            ),
+                            IconButton(
+                              tooltip: l.loanDocumentDelete,
+                              icon: const Icon(Icons.delete_outline),
+                              onPressed: () => _deleteDocument(d),
+                            ),
+                          ],
                         )
                       : null,
                 ),

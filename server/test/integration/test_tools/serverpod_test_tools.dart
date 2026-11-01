@@ -1886,6 +1886,68 @@ class _AiEndpoint {
     });
   }
 
+  _ida.Future<_iggzqc7o.AiReply> readInvoice(
+    _ist.TestSessionBuilder sessionBuilder,
+    int invoiceId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'readInvoice',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'readInvoice',
+          parameters: _ist.testObjectToJson({'invoiceId': invoiceId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iggzqc7o.AiReply>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iggzqc7o.AiReply> readLoanDocument(
+    _ist.TestSessionBuilder sessionBuilder,
+    int documentId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'readLoanDocument',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'readLoanDocument',
+          parameters: _ist.testObjectToJson({'documentId': documentId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iggzqc7o.AiReply>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<_i2x2xeqe.AiStatus> setPreference(
     _ist.TestSessionBuilder sessionBuilder,
     int? providerId,

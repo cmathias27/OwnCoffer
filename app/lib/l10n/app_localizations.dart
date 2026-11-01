@@ -7463,6 +7463,138 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce montant dépasse le plafond de la réserve.'**
   String get error_loan_over_limit;
+
+  /// No description provided for @aiReadReceipt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire le ticket avec l\'IA'**
+  String get aiReadReceipt;
+
+  /// No description provided for @aiReadInvoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire la facture avec l\'IA'**
+  String get aiReadInvoice;
+
+  /// No description provided for @aiReadLoan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire ce document avec l\'IA'**
+  String get aiReadLoan;
+
+  /// No description provided for @aiReadTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire avec l\'IA'**
+  String get aiReadTitle;
+
+  /// No description provided for @aiReadExternal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le document sera envoyé à {provider} ({model}), un fournisseur en ligne, pour être lu. L\'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.'**
+  String aiReadExternal(String provider, String model);
+
+  /// No description provided for @aiReadLocal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le document sera lu par {provider} ({model}), sur votre réseau. L\'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.'**
+  String aiReadLocal(String provider, String model);
+
+  /// No description provided for @aiReadGo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire'**
+  String get aiReadGo;
+
+  /// No description provided for @aiReadRunning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture en cours…'**
+  String get aiReadRunning;
+
+  /// No description provided for @aiReadDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Une proposition vous attend dans Mon conseiller.} other{{count} propositions vous attendent dans Mon conseiller.}}'**
+  String aiReadDone(int count);
+
+  /// No description provided for @aiReadNothingNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien de nouveau dans ce document.'**
+  String get aiReadNothingNew;
+
+  /// No description provided for @aiReadNotReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour lire un document, activez l\'assistant (icône ✨) avec un modèle qui lit les images.'**
+  String get aiReadNotReady;
+
+  /// No description provided for @aiReadNoPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce modèle ne lit que les images : joignez une photo ou une capture du document. (Claude lit aussi les PDF.)'**
+  String get aiReadNoPdf;
+
+  /// No description provided for @advisorAiSplit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ventiler « {label} » d\'après le ticket'**
+  String advisorAiSplit(String label);
+
+  /// No description provided for @advisorAiSplitWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération de {amount} du {date}, répartie ainsi :'**
+  String advisorAiSplitWhy(String amount, String date);
+
+  /// No description provided for @advisorAiSplitRest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dont {amount} que les lignes du ticket n\'expliquent pas (remise, arrondi, ligne illisible), à classer : calculé par OwnCoffer.'**
+  String advisorAiSplitRest(String amount);
+
+  /// No description provided for @advisorAiInvoiceHints.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compléter la facture « {name} »'**
+  String advisorAiInvoiceHints(String name);
+
+  /// No description provided for @advisorAiLoanTerms.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre à jour le crédit « {lender} » d\'après son document'**
+  String advisorAiLoanTerms(String lender);
+
+  /// No description provided for @advisorReadIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu dans « {name} ».'**
+  String advisorReadIn(String name);
+
+  /// No description provided for @error_receipt_mismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les lignes lues sur le ticket dépassent le montant de l\'opération : ce n\'est sans doute pas son ticket.'**
+  String get error_receipt_mismatch;
+
+  /// No description provided for @error_document_nothing_read.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'IA n\'a rien pu lire d\'utile dans ce document.'**
+  String get error_document_nothing_read;
+
+  /// No description provided for @error_ai_document_not_image.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce modèle ne lit que les images : joignez une photo ou une capture du document.'**
+  String get error_ai_document_not_image;
+
+  /// No description provided for @error_ai_document_too_large.
+  ///
+  /// In fr, this message translates to:
+  /// **'Document trop lourd pour être lu (8 Mo au plus).'**
+  String get error_ai_document_too_large;
 }
 
 class _AppLocalizationsDelegate

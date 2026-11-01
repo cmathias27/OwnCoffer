@@ -4576,4 +4576,100 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_loan_over_limit => 'This amount goes over the credit limit.';
+
+  @override
+  String get aiReadReceipt => 'Read the receipt with the AI';
+
+  @override
+  String get aiReadInvoice => 'Read the invoice with the AI';
+
+  @override
+  String get aiReadLoan => 'Read this document with the AI';
+
+  @override
+  String get aiReadTitle => 'Read with the AI';
+
+  @override
+  String aiReadExternal(String provider, String model) {
+    return 'The document will be sent to $provider ($model), an online provider, to be read. The AI only reports what is written: OwnCoffer checks it, does the calculations and proposes the changes in My advisor.';
+  }
+
+  @override
+  String aiReadLocal(String provider, String model) {
+    return 'The document will be read by $provider ($model), on your network. The AI only reports what is written: OwnCoffer checks it, does the calculations and proposes the changes in My advisor.';
+  }
+
+  @override
+  String get aiReadGo => 'Read';
+
+  @override
+  String get aiReadRunning => 'Reading…';
+
+  @override
+  String aiReadDone(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count proposals await you in My advisor.',
+      one: 'A proposal awaits you in My advisor.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get aiReadNothingNew => 'Nothing new in this document.';
+
+  @override
+  String get aiReadNotReady =>
+      'To read a document, turn the assistant on (✨ icon) with a model that reads images.';
+
+  @override
+  String get aiReadNoPdf =>
+      'This model only reads images: attach a photo or a screenshot of the document. (Claude also reads PDFs.)';
+
+  @override
+  String advisorAiSplit(String label) {
+    return 'Split \"$label\" from the receipt';
+  }
+
+  @override
+  String advisorAiSplitWhy(String amount, String date) {
+    return 'Operation of $amount on $date, shared like this:';
+  }
+
+  @override
+  String advisorAiSplitRest(String amount) {
+    return 'Including $amount the receipt\'s lines do not explain (discount, rounding, unreadable line), to classify: computed by OwnCoffer.';
+  }
+
+  @override
+  String advisorAiInvoiceHints(String name) {
+    return 'Fill in the invoice \"$name\"';
+  }
+
+  @override
+  String advisorAiLoanTerms(String lender) {
+    return 'Update the loan \"$lender\" from its document';
+  }
+
+  @override
+  String advisorReadIn(String name) {
+    return 'Read in \"$name\".';
+  }
+
+  @override
+  String get error_receipt_mismatch =>
+      'The lines read on the receipt exceed the operation\'s amount: it is probably not its receipt.';
+
+  @override
+  String get error_document_nothing_read =>
+      'The AI could read nothing useful in this document.';
+
+  @override
+  String get error_ai_document_not_image =>
+      'This model only reads images: attach a photo or a screenshot of the document.';
+
+  @override
+  String get error_ai_document_too_large =>
+      'Document too large to be read (8 MB at most).';
 }

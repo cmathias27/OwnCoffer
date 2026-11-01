@@ -317,7 +317,7 @@ final class AnthropicAdapter extends _JsonHttp implements AiAdapter {
     ];
   }
 
-  /// A `data:` URL as a base64 image block.
+  /// A `data:` URL as a base64 image (or PDF document) block.
   static Map<String, Object?>? _image(String url) {
     final m = RegExp(
       r'^data:([^;]+);base64,(.*)$',
@@ -325,7 +325,8 @@ final class AnthropicAdapter extends _JsonHttp implements AiAdapter {
     ).firstMatch(url);
     if (m == null) return null;
     return {
-      'type': 'image',
+      // Claude reads PDF documents as well as images.
+      'type': m[1] == 'application/pdf' ? 'document' : 'image',
       'source': {'type': 'base64', 'media_type': m[1], 'data': m[2]},
     };
   }

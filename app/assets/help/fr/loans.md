@@ -19,6 +19,24 @@ La **mensualité prélevée** fait foi : le tableau, le capital restant et la da
 
 Avec un compte de prélèvement, les échéances entrent dans le **solde prévu**.
 
+## Changements : taux variable, renégociation
+
+Dans la fiche d'un crédit, **« Ajouter un changement »** :
+
+- **Nouveau taux** (taux variable) : à partir d'une date. La date de fin est gardée et la mensualité recalculée ; si la mensualité prélevée est connue, elle est gardée et c'est la date de fin qui bouge.
+- **Renégociation** : nouveau taux, et nouvelle mensualité ou nouvelle durée restante.
+- **Remboursement anticipé** : une somme remboursée en plus ; la mensualité est gardée, le crédit finit plus tôt.
+
+Le tableau, le capital restant, les échéances prévues et la prévision du solde suivent. Un changement se retire d'un geste. Un changement qui ne permettrait jamais de rembourser le crédit est refusé.
+
+## Crédit renouvelable
+
+Choisissez le type **« Crédit renouvelable »** : indiquez le **montant utilisé** aujourd'hui, la **mensualité** prélevée, le taux et, si vous le voulez, le **plafond** de la réserve. La durée en découle. Chaque **nouvelle utilisation** s'ajoute dans « Changements » ; la fiche montre ce qui reste **disponible**. Une utilisation au-delà du plafond est refusée.
+
+## Lire un document avec l'IA
+
+Avec l'assistant activé et un modèle qui lit les images, le bouton ✨ d'un document du crédit le fait lire : les conditions qu'il indique (taux, durée, mensualité, assurance…) sont **proposées** dans Mon conseiller, avec l'avant et l'après. Rien ne change sans votre accord.
+
 ## Taux d'endettement
 
 Mensualités divisées par les revenus moyens des trois derniers mois, avec un repère à 35 %. Il est indicatif : le calcul de votre banque fait foi.
