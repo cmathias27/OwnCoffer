@@ -9,6 +9,7 @@ import '../l10n/error_messages.dart';
 import '../util/file_pick.dart';
 import '../util/file_save.dart';
 import '../util/group_transfer.dart';
+import 'device_backup_screen.dart';
 import 'migrate_screen.dart';
 
 /// Download of the member's data in the current group: complete JSON, or
@@ -192,6 +193,20 @@ class _ExportScreenState extends State<ExportScreen> {
                 l.exportCsvHelp,
               ),
               if (isStandalone) ...[
+                const SizedBox(height: 12),
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.lock_clock_outlined),
+                    title: Text(l.deviceBackupTitle),
+                    subtitle: Text(l.deviceBackupIntro),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const DeviceBackupScreen(),
+                      ),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 12),
                 Card(
                   child: ListTile(

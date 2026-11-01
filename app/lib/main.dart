@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'state/session.dart';
 import 'assistant/chat_bubble.dart';
 import 'util/server_address.dart';
 import 'util/standalone.dart';
+import 'util/standalone_backups.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +31,7 @@ void main() async {
       ),
     ),
   );
+  restartStandalone = _startStandalone;
   switchToServer = (api, session) async {
     await ServerAddress.save(api);
     await ServerAddress.saveMode('server');
@@ -87,6 +90,8 @@ Future<void> _startStandalone() async {
   }
   await ServerAddress.saveMode('standalone');
   runApp(const OwnCofferApp());
+  // The daily encrypted backup, once the app is shown.
+  unawaited(StandaloneBackups.runIfDue());
 }
 
 /// Indigo main colour (docs/MAQUETTES.md).

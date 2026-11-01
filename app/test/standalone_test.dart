@@ -104,6 +104,64 @@ void main() {
     },
     timeout: const Timeout(Duration(minutes: 3)),
   );
+
+  test(
+    'standalone backup: encrypted, restored on another device',
+    () async {
+      final here = Directory.systemTemp.createTempSync('owncoffer-here-');
+      final there = Directory.systemTemp.createTempSync('owncoffer-there-');
+      addTearDown(() {
+        here.deleteSync(recursive: true);
+        there.deleteSync(recursive: true);
+      });
+      const pass = 'ma phrase de sauvegarde';
+      var server = await EmbeddedServer.start(dataDir: here);
+      var client = Client(server.api.toString())
+        ..authSessionManager = FlutterAuthSessionManager(storage: _Memory());
+      await client.auth.updateSignedInUser(
+        AuthSuccess.fromJson(await server.signIn()),
+      );
+      final group = (await client.group.create('Mes comptes')).group;
+      final account = await client.account.create(
+        group.id!,
+        'Courant',
+        AccountKind.checking,
+      );
+      await client.transaction.create(
+        account.id!,
+        DateTime.utc(2026, 11, 2),
+        -990,
+        'CAFE',
+      );
+      final backup = await server.backup(pass, metadata: {'app': 'test'});
+      expect(
+        latin1.decode(backup, allowInvalid: true),
+        isNot(contains('CAFE')),
+      );
+      client.close();
+      await server.stop();
+
+      expect(
+        () => DeviceBackup.restoreInto(there, backup, 'pas la bonne phrase'),
+        throwsA(isA<BackupPassphraseException>()),
+      );
+      await DeviceBackup.restoreInto(there, backup, pass);
+      server = await EmbeddedServer.start(dataDir: there);
+      client = Client(server.api.toString())
+        ..authSessionManager = FlutterAuthSessionManager(storage: _Memory());
+      await client.auth.updateSignedInUser(
+        AuthSuccess.fromJson(await server.signIn()),
+      );
+      final groups = await client.group.myGroups();
+      expect(groups.single.group.name, 'Mes comptes');
+      final restored = (await client.account.list(groups.single.group.id!));
+      final ops = await client.transaction.list(restored.single.id!);
+      expect(ops.items.single.cleanLabel, 'CAFE');
+      client.close();
+      await server.stop();
+    },
+    timeout: const Timeout(Duration(minutes: 3)),
+  );
 }
 
 /// The app keeps its session in the device's secure storage; here, memory.

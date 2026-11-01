@@ -8793,6 +8793,144 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Export trop volumineux pour être envoyé.'**
   String get error_import_too_big;
+
+  /// No description provided for @deviceBackupTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegardes de l\'appareil'**
+  String get deviceBackupTitle;
+
+  /// No description provided for @deviceBackupIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque jour, une sauvegarde complète et chiffrée de vos données est écrite dans un dossier ; les 10 dernières sont gardées. Choisissez un dossier synchronisé (Nextcloud, OneDrive…) pour en avoir une copie hors de l\'appareil.'**
+  String get deviceBackupIntro;
+
+  /// No description provided for @deviceBackupPassphrase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Phrase de passe (12 caractères au moins)'**
+  String get deviceBackupPassphrase;
+
+  /// No description provided for @deviceBackupPassphraseAgain.
+  ///
+  /// In fr, this message translates to:
+  /// **'La même, une seconde fois'**
+  String get deviceBackupPassphraseAgain;
+
+  /// No description provided for @deviceBackupPassphraseHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Elle chiffre les sauvegardes. Notez-la ailleurs (gestionnaire de mots de passe) : sans elle, une sauvegarde ne peut pas être restaurée, sur cet appareil ou un autre.'**
+  String get deviceBackupPassphraseHelp;
+
+  /// No description provided for @deviceBackupPassphraseTooShort.
+  ///
+  /// In fr, this message translates to:
+  /// **'12 caractères au moins.'**
+  String get deviceBackupPassphraseTooShort;
+
+  /// No description provided for @deviceBackupPassphraseMismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les deux phrases sont différentes.'**
+  String get deviceBackupPassphraseMismatch;
+
+  /// No description provided for @deviceBackupFolder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dossier : {folder}'**
+  String deviceBackupFolder(String folder);
+
+  /// No description provided for @deviceBackupChooseFolder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un dossier'**
+  String get deviceBackupChooseFolder;
+
+  /// No description provided for @deviceBackupEnable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer les sauvegardes'**
+  String get deviceBackupEnable;
+
+  /// No description provided for @deviceBackupDisable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter les sauvegardes'**
+  String get deviceBackupDisable;
+
+  /// No description provided for @deviceBackupLast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière sauvegarde : {when}'**
+  String deviceBackupLast(String when);
+
+  /// No description provided for @deviceBackupNever.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas encore de sauvegarde.'**
+  String get deviceBackupNever;
+
+  /// No description provided for @deviceBackupNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarder maintenant'**
+  String get deviceBackupNow;
+
+  /// No description provided for @deviceBackupDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde écrite : {path}'**
+  String deviceBackupDone(String path);
+
+  /// No description provided for @deviceBackupShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager la dernière sauvegarde'**
+  String get deviceBackupShare;
+
+  /// No description provided for @deviceBackupRestore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restaurer une sauvegarde'**
+  String get deviceBackupRestore;
+
+  /// No description provided for @deviceBackupRestoreHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remplace toutes les données de cet appareil par celles d\'une sauvegarde (d\'ici ou d\'un autre appareil).'**
+  String get deviceBackupRestoreHelp;
+
+  /// No description provided for @deviceBackupRestoreConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remplacer toutes les données de cet appareil par cette sauvegarde ? Les données actuelles seront perdues, sauf si elles sont dans une autre sauvegarde.'**
+  String get deviceBackupRestoreConfirm;
+
+  /// No description provided for @deviceBackupRestorePassphrase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Phrase de passe de cette sauvegarde'**
+  String get deviceBackupRestorePassphrase;
+
+  /// No description provided for @deviceBackupWrongPassphrase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mauvaise phrase de passe, ou fichier modifié.'**
+  String get deviceBackupWrongPassphrase;
+
+  /// No description provided for @deviceBackupNotABackup.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier n\'est pas une sauvegarde OwnCoffer.'**
+  String get deviceBackupNotABackup;
+
+  /// No description provided for @deviceBackupReplace.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remplacer'**
+  String get deviceBackupReplace;
 }
 
 class _AppLocalizationsDelegate

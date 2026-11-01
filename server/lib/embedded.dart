@@ -1,14 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:serverpod_auth_idp_server/core.dart';
 
 import 'src/auth/email_config.dart';
 import 'src/generated/serverpod.dart';
+import 'src/standalone/device_backup.dart';
 import 'src/standalone/local_owner.dart';
 import 'src/standalone/sqlite_migrations.g.dart';
 import 'src/startup.dart';
+
+export 'src/standalone/device_backup.dart'
+    show BackupPassphraseException, DeviceBackup;
 
 /// The OwnCoffer server running inside the Windows or Android app, on a
 /// SQLite file, for one person on one device (decision 0022). Same
@@ -34,6 +40,48 @@ class EmbeddedServer {
   }
 
   Future<void> stop() => pod.shutdown(exitProcess: false);
+
+  /// The app's private folder this server runs on.
+  late final Directory dataDir;
+
+  /// An encrypted backup of everything (decision 0022): a consistent copy
+  /// of the database, made while the server runs, and its secrets.
+  Future<Uint8List> backup(
+    String passphrase, {
+    Map<String, Object?> metadata = const {},
+  }) async {
+    final copy = File(
+      '${dataDir.path}/backup-${DateTime.now().microsecondsSinceEpoch}.db',
+    );
+    final session = await pod.createSession(enableLogging: false);
+    try {
+      final path = copy.path.replaceAll("'", "''");
+      await session.db.unsafeExecute("VACUUM INTO '$path'");
+    } finally {
+      await session.close();
+    }
+    try {
+      final database = await copy.readAsBytes();
+      final passwords = await File(
+        '${dataDir.path}/config/passwords.yaml',
+      ).readAsString();
+      final meta = {
+        'createdAt': DateTime.now().toUtc().toIso8601String(),
+        ...metadata,
+      };
+      // The key derivation takes a second or two: off the app's thread.
+      return await Isolate.run(
+        () => DeviceBackup.seal(
+          passphrase: passphrase,
+          database: database,
+          passwords: passwords,
+          metadata: meta,
+        ),
+      );
+    } finally {
+      if (copy.existsSync()) await copy.delete();
+    }
+  }
 
   /// Starts the server on [dataDir], the app's private folder: it receives
   /// the secrets (config/passwords.yaml, created once and never sent), the
@@ -117,7 +165,7 @@ shared:
     return EmbeddedServer._(
       pod,
       Uri.parse('http://127.0.0.1:${pod.server.port}/'),
-    );
+    )..dataDir = dataDir;
   }
 }
 

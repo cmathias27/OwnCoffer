@@ -43,6 +43,9 @@ Ce qu'il vous reste à dépenser jusqu'à la prochaine paie, une fois payées le
 **Mes données sont-elles sauvegardées ?**
 Si l'administrateur a installé les mises à jour automatiques (`docker/install-auto-update.sh`), oui : chaque nuit et avant chaque mise à jour, **chiffrées**. Chaque nuit, la dernière sauvegarde est aussi **restaurée dans une base d'essai** pour vérifier qu'elle est bonne. L'onglet Sauvegardes de l'administration montre le résultat.
 
+**Et en mode autonome (sans serveur) ?**
+Activez les « Sauvegardes de l'appareil » (page « Exporter mes données ») : chaque jour, une sauvegarde chiffrée avec votre phrase de passe va dans un dossier, de préférence synchronisé (Nextcloud, OneDrive). « Restaurer une sauvegarde » remet tout, sur un nouvel appareil aussi. Sans la phrase de passe, une sauvegarde ne peut pas être relue.
+
 **Où est la clé des sauvegardes ? Que se passe-t-il si je la perds ?**
 Dans `docker/backup.key`, sur le serveur, lisible par root seulement. **Gardez-en une copie ailleurs** (gestionnaire de mots de passe). Sans elle, les sauvegardes chiffrées ne peuvent pas être relues : personne ne peut les déchiffrer, pas même le projet. Tant que le serveur fonctionne, rien n'est perdu ; en cas de panne du disque, c'est la copie de la clé qui permet de restaurer.
 
