@@ -1,9 +1,9 @@
 # Installer OwnCoffer sur un serveur Docker
 
-Prérequis : un serveur avec Docker et `docker compose`, et un accès extérieur par Cloudflare (décisions 0012 et 0015).
+Prérequis : un serveur Linux avec Docker et `docker compose`, `git` et `gpg` (paquet `gnupg`, pour chiffrer les sauvegardes), et un accès extérieur par Cloudflare (décisions 0012 et 0015). Comptez une vingtaine de minutes.
 
 ```sh
-git clone --branch v0.1.1 https://github.com/cmathias27/OwnCoffer.git
+git clone --branch v1.0.0 https://github.com/cmathias27/OwnCoffer.git
 cd OwnCoffer
 ./docker/generate-env.sh        # crée docker/.env avec des secrets aléatoires
 nano docker/.env                # régler OWNCOFFER_PUBLIC_URL, le port, la version
@@ -12,7 +12,7 @@ docker compose -f docker/compose.yaml up -d
 
 L'application répond sur `http://127.0.0.1:8080` (port et adresse réglables dans `docker/.env`). Si le port 8080 est déjà pris sur votre serveur, changez `OWNCOFFER_PORT`. Faites pointer le connecteur Cloudflare vers cette adresse : Cloudflare gère le HTTPS.
 
-**Version** : `OWNCOFFER_TAG` choisit l'image. `0.1.1` (par défaut) est la version publiée ; `edge` suit la branche `main`, pour tester ce qui vient d'être fusionné. Les versions et leurs nouveautés sont listées dans [CHANGELOG.md](../CHANGELOG.md).
+**Version** : `OWNCOFFER_TAG` choisit l'image. La valeur par défaut est la version publiée que vous venez de récupérer ; `edge` suit la branche `main`, pour tester ce qui vient d'être fusionné. Les versions et leurs nouveautés sont listées dans [CHANGELOG.md](../CHANGELOG.md).
 
 ## Premier lancement
 
@@ -45,21 +45,37 @@ Les migrations de la base s'appliquent automatiquement au démarrage.
 ## Sauvegarder
 
 ```sh
-./docker/backup.sh            # écrit docker/backups/owncoffer-<date>-manual.dump
+sudo ./docker/backup.sh       # écrit docker/backups/owncoffer-<date>-manual.dump.gpg
 ```
 
-Avec les mises à jour automatiques (plus bas), une sauvegarde est faite chaque nuit et avant chaque mise à jour. Sont gardées **sur le même serveur** les 30 dernières de nuit, les 10 dernières manuelles et les 10 dernières d'avant mise à jour : copiez régulièrement `docker/backups/` ailleurs.
+Avec les mises à jour automatiques (plus bas), une sauvegarde est faite **chaque nuit** et **avant chaque mise à jour**. Sont gardées **sur le même serveur** les 30 dernières de nuit, les 10 dernières manuelles et les 10 dernières d'avant mise à jour : copiez régulièrement `docker/backups/` ailleurs (décision 0019).
 
-La page **Administration du serveur** de l'application (onglet Sauvegardes) montre leur liste, signale une sauvegarde de nuit manquante ou en échec, et permet d'en demander une tout de suite (une toutes les 10 minutes au plus). Elle ne permet ni de télécharger ni de restaurer une sauvegarde : cela se fait sur le serveur.
+**Chiffrement** : chaque sauvegarde est chiffrée (gpg, AES-256) avec la clé `docker/backup.key`, créée à la première sauvegarde. **Gardez une copie de cette clé hors du serveur** (gestionnaire de mots de passe) : sans elle, aucune sauvegarde ne peut être relue. Grâce à elle, les copies de `docker/backups/` peuvent aller sur un disque USB ou un stockage en ligne sans exposer vos opérations. Sans gpg sur le serveur, la sauvegarde est faite en clair et la page d'administration le signale ; `OWNCOFFER_BACKUP_ENCRYPT=false` dans `docker/.env` désactive le chiffrement.
 
-Le fichier contient vos opérations bancaires : rangez-le dans un endroit chiffré, jamais dans le dépôt. Gardez aussi une copie de `docker/.env`, sans laquelle la double authentification ne se déchiffre plus.
-
-Restaurer sur une installation vide :
+**Restauration testée chaque nuit** : juste après la sauvegarde, `docker/restore-test.sh` la déchiffre et la restaure dans une base PostgreSQL **jetable**, sans réseau, jamais dans la vôtre, puis compte les tables et les opérations. Pour tester à la main :
 
 ```sh
-docker compose -f docker/compose.yaml exec -T postgres \
-  pg_restore -U owncoffer -d owncoffer --clean --if-exists < owncoffer-AAAA-MM-JJ.dump
+sudo ./docker/restore-test.sh                       # la dernière sauvegarde
+sudo ./docker/restore-test.sh docker/backups/<fichier>
 ```
+
+La page **Administration du serveur** (onglet Sauvegardes) montre la liste, le chiffrement, le résultat du dernier test de restauration, signale une sauvegarde de nuit manquante ou en échec, et permet de demander une sauvegarde ou un test tout de suite (un toutes les 10 minutes au plus). Elle ne permet ni de télécharger ni de restaurer une sauvegarde : cela se fait sur le serveur.
+
+Gardez aussi une copie de `docker/.env`, sans laquelle la double authentification ne se déchiffre plus.
+
+Restaurer (remplace toutes les données actuelles ; faites d'abord une sauvegarde) :
+
+```sh
+docker compose -f docker/compose.yaml stop owncoffer
+sudo ./docker/backup-cat.sh docker/backups/owncoffer-AAAAMMJJ-HHMMSS-daily.dump.gpg |
+  docker compose -f docker/compose.yaml exec -T postgres \
+    pg_restore -U owncoffer -d owncoffer --clean --if-exists --no-owner
+docker compose -f docker/compose.yaml start owncoffer
+```
+
+Sur une nouvelle machine, indiquez la copie de la clé : `OWNCOFFER_BACKUP_KEY=/chemin/backup.key ./docker/backup-cat.sh …`.
+
+**Vos données hors du serveur** : chaque membre peut aussi exporter ce qu'il voit (menu du compte, « Exporter mes données ») : un fichier JSON complet ou les opérations en CSV pour un tableur. Cet export ne remplace pas les sauvegardes, seules à tout restaurer.
 
 ## Mettre à jour
 
@@ -86,10 +102,11 @@ Pour recevoir chaque **version publiée** sans intervenir, installez les unités
 ```
 
 - `owncoffer-update.timer`, toutes les 15 minutes : si une nouvelle version `vX.Y.Z` est publiée et son image disponible, `docker/auto-update.sh` **sauvegarde la base**, passe les fichiers et l'image à cette version, redémarre et vérifie que l'API répond. Sinon, il **revient à la version précédente et restaure la sauvegarde**, puis n'essaie plus cette version : il attend la suivante. L'image `edge` (développement) n'est jamais installée ainsi.
-- `owncoffer-backup.timer`, chaque nuit à 3 h 30 : sauvegarde dans `docker/backups/` (30 dernières gardées, dossier lisible par root seulement).
-- `owncoffer-request.path` : dès que la page d'administration dépose une demande dans `docker/state/`, `docker/handle-requests.sh` l'exécute. Seules des actions prévues à l'avance sont possibles (une sauvegarde), quel que soit le contenu des fichiers.
+- `owncoffer-backup.timer`, chaque nuit à 3 h 30 : sauvegarde chiffrée dans `docker/backups/` (30 dernières gardées, dossier lisible par root seulement), puis test de restauration dans une base jetable.
+- `owncoffer-request.path` : dès que la page d'administration dépose une demande dans `docker/state/`, `docker/handle-requests.sh` l'exécute. Seules des actions prévues à l'avance sont possibles (une sauvegarde, un test de restauration, une recherche ou une installation de version publiée), quel que soit le contenu des fichiers.
 - `docker/state/` est le **dossier d'échange** entre l'hôte et l'application (monté dans le conteneur, appartenant à l'utilisateur 10001 de l'image) : les scripts y écrivent la liste des sauvegardes et leur résultat, l'application y dépose ses demandes. Il ne contient jamais de données bancaires.
 - Journal : `journalctl -u owncoffer-update -u owncoffer-backup -u owncoffer-request`.
+- Avant d'installer une version, vous pouvez vérifier sa signature : voir [PUBLICATION.md](PUBLICATION.md).
 - Une installation antérieure à la 0.3.8 reçoit `owncoffer-request.path` et le dossier d'échange toute seule, à la mise à jour automatique suivante. Pour ne pas attendre : relancez `./docker/install-auto-update.sh`, que l'on peut lancer autant de fois qu'on veut.
 
 Le script refuse d'agir si des fichiers suivis par git ont été modifiés à la main dans le dossier d'installation : réglez tout dans `docker/.env`.

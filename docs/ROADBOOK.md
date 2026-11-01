@@ -165,19 +165,26 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 
 Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. Fin de phase = **1.0 serveur + web**.
 
-- [ ] Sauvegardes chiffrées chaque nuit et avant chaque mise à jour, restauration testée automatiquement
-- [ ] Service de mise à jour (Stable et Bêta), notification à l'admin, retour arrière en cas d'échec
-- [ ] Console d'administration : utilisateurs, sessions, IP bloquées, retours, état du serveur
-- [ ] Mode démo et export complet des données (JSON, CSV)
-- [ ] Traductions FR et EN complètes, accessibilité, rapidité avec 100 000 opérations
-- [ ] Documentation : installation, utilisation, FAQ — *en partie : `docs/INSTALLATION.md` ; aide dans l'application, une page par écran en FR et EN, dans la 0.3.30 ; reste la FAQ*
-- [ ] Publication signée, notes de version, liste des composants (SBOM)
-- [ ] Audit de sécurité externe si possible
+- [x] Sauvegardes chiffrées chaque nuit et avant chaque mise à jour, restauration testée automatiquement (décision 0019 ; chaque nuit sur le serveur, et de bout en bout dans la CI)
+- [x] Service de mise à jour, notification à l'admin, retour arrière en cas d'échec — *canal Bêta séparé non fait : `edge` suit `main` pour les essais*
+- [x] Console d'administration : utilisateurs, sessions, IP bloquées, retours, état du serveur
+- [x] Mode démo et export complet des données (JSON, CSV)
+- [x] Traductions FR et EN complètes, accessibilité (tests des règles Flutter, texte à 200 %), rapidité avec 100 000 opérations (test mesuré à chaque pull request)
+- [x] Documentation : [installation](INSTALLATION.md), [utilisation](UTILISATION.md), [FAQ](FAQ.md), aide dans l'application (une page par écran, FR et EN)
+- [x] Publication signée (Sigstore), notes de version, liste des composants (SBOM) — décision 0021, [PUBLICATION.md](PUBLICATION.md)
+- [ ] Audit de sécurité externe si possible — *préparé : périmètre, modèle de menace, revue interne et points ouverts dans [AUDIT_SECURITE.md](AUDIT_SECURITE.md) ; reste à trouver l'auditeur*
 
 **Validation** : une personne extérieure installe OwnCoffer seule en moins de 30 minutes ; une mise à jour et une restauration réussissent sans intervention.
 
 ## Ensuite
 
-**Phase 6 — Applications Windows et Android natives** (Android est déjà couvert entre-temps par l'application web installable) : même code Flutter connecté au serveur, hors-ligne et synchronisation, page « Télécharger », mises à jour automatiques, puis version autonome sans serveur.
+**Phase 6 — Applications Windows et Android natives** (Android est déjà couvert entre-temps par l'application web installable), décision 0020 :
+
+- [x] Même code Flutter connecté au serveur : adresse du serveur au premier lancement, fichiers, enregistrement et liens natifs
+- [x] Compilées par la CI, jointes à chaque version : Windows (zip, non signé) et Android (APK hors Play Store) — [APPLICATIONS.md](APPLICATIONS.md)
+- [ ] Clé Android stable (secrets GitHub) et certificat de signature Windows
+- [ ] Hors-ligne et synchronisation
+- [ ] Page « Télécharger » dans l'application web, mises à jour automatiques des applications
+- [ ] Version autonome sans serveur
 
 Les autres fonctionnalités du cahier des charges marquées « Après 1.0 » s'ajouteront une par une, selon les avis des utilisateurs.

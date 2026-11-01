@@ -25,6 +25,7 @@ import 'operations_screen.dart';
 import 'security_screen.dart';
 import '../help/help.dart';
 import '../assistant/chat_controller.dart';
+import 'export_screen.dart';
 import 'feedback_screen.dart';
 
 /// Signed-in shell: navigation rail on wide screens, bottom bar on phones.
@@ -375,6 +376,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text(l.menuSecurity),
                     ),
                   ),
+                if (current != null)
+                  PopupMenuItem(
+                    value: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => ExportScreen(membership: current),
+                      ),
+                    ),
+                    child: ListTile(
+                      leading: const Icon(Icons.download_outlined),
+                      title: Text(l.exportTitle),
+                    ),
+                  ),
                 PopupMenuItem(
                   value: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
@@ -434,6 +447,16 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.shield_outlined),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(builder: (_) => const SecurityScreen()),
+              ),
+            ),
+          if (wide && current != null)
+            IconButton(
+              tooltip: l.exportTitle,
+              icon: const Icon(Icons.download_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => ExportScreen(membership: current),
+                ),
               ),
             ),
           if (wide)

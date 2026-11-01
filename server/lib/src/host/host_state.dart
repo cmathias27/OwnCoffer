@@ -42,7 +42,7 @@ class HostState {
   }
 
   static final _backupName = RegExp(
-    r'^owncoffer-\d{8}-\d{6}-([a-z0-9.-]{1,40})\.dump$',
+    r'^owncoffer-\d{8}-\d{6}-([a-z0-9.-]{1,40})\.dump(\.gpg)?$',
   );
 
   BackupOverview backups() {
@@ -68,6 +68,7 @@ class HostState {
             name: parts[0],
             label: m[1]!,
             bytes: bytes,
+            encrypted: m[2] != null,
             createdAt: at,
           ),
         );
@@ -84,6 +85,26 @@ class HostState {
       lastMessage: (last['message'] ?? '').isEmpty ? null : last['message'],
       lastDailyAt: list.where((b) => b.label == 'daily').firstOrNull?.createdAt,
       requestPending: _file('request-backup').existsSync(),
+      lastEncrypted: list.firstOrNull?.encrypted,
+      restoreTest: restoreTest(),
+      restoreTestPending: _file('request-restore-test').existsSync(),
+    );
+  }
+
+  /// Last restore test written by docker/restore-test.sh, if any.
+  RestoreTestInfo? restoreTest() {
+    final r = _keyValues('restore-test');
+    final at = _epoch(r['at']);
+    if (at == null) return null;
+    String? text(String key) => (r[key] ?? '').isEmpty ? null : r[key];
+    return RestoreTestInfo(
+      at: at,
+      ok: r['ok'] == 'true',
+      file: r['file'] ?? '',
+      tables: int.tryParse(r['tables'] ?? ''),
+      operations: int.tryParse(r['operations'] ?? ''),
+      seconds: int.tryParse(r['seconds'] ?? ''),
+      message: text('message'),
     );
   }
 

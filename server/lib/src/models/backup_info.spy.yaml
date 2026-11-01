@@ -6,3 +6,5 @@ fields:
   label: String
   bytes: int
   createdAt: DateTime
+  ### Encrypted with docker/backup.key (.dump.gpg).
+  encrypted: bool, default=false

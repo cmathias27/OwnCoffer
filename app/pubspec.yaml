@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.3.34+40
+version: 1.0.0+41
 
 environment:
   sdk: '^3.12.2'
@@ -38,6 +38,15 @@ dependencies:
   serverpod_auth_idp_client: 4.0.4
   serverpod_auth_idp_flutter: 4.0.4
   serverpod_flutter: 4.0.4
+  # Windows and Android apps (decision 0020), all BSD-3-Clause:
+  # file dialogs, links, files and sharing (Flutter and Dart teams,
+  # Flutter Community), the server address kept on the device.
+  file_selector: ^1.1.0
+  url_launcher: ^6.3.3
+  path_provider: ^2.1.6
+  share_plus: ^13.3.1
+  http: ^1.6.0
+  flutter_secure_storage: ^10.0.0
 
 dev_dependencies:
   # Used for agents to drive the app through the Dart MCP

@@ -9,7 +9,7 @@ Cette page n'est visible que par l'**administrateur du serveur**. Elle ne montre
 - **Invitations** : toutes les invitations en attente, à révoquer ; inviter dans n'importe quel foyer.
 - **IP bloquées** après trop d'échecs de connexion, à débloquer.
 - **Journal** des dernières actions sensibles : qui, quoi, quand.
-- **Sauvegardes** : sauvegarde de chaque nuit, « Sauvegarder maintenant », liste. La restauration se fait sur le serveur seulement : les sauvegardes contiennent toutes les données bancaires.
+- **Sauvegardes** : sauvegarde de chaque nuit, chiffrée avec la clé `docker/backup.key` (gardez-en une copie hors du serveur), « Sauvegarder maintenant », liste. Chaque nuit, la dernière sauvegarde est restaurée dans une base d'essai pour vérifier qu'elle est bonne ; « Tester la restauration » le refait tout de suite. La restauration réelle se fait sur le serveur seulement : les sauvegardes contiennent toutes les données bancaires.
 - **Mises à jour** : version en service, dernière publiée, mises à jour automatiques ou non. L'installation sauvegarde d'abord et revient en arrière si la nouvelle version ne démarre pas.
 - **IA** : les fournisseurs d'IA proposés aux utilisateurs.
 - **Retours** : les messages envoyés par les utilisateurs avec « Donner un avis » ; cochez ceux qui sont traités.

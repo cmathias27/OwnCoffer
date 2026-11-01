@@ -407,6 +407,15 @@ class AdminEndpoint extends Endpoint {
     await _audit(session, 'request_backup', 'host', 'backup');
   }
 
+  /// Asks the host to check now that the newest backup restores into a
+  /// throw-away database (docker/restore-test.sh; at most one every 10
+  /// minutes). The live database is never touched.
+  Future<void> requestRestoreTest(Session session) async {
+    await _requireServerAdmin(session);
+    _request('restore-test');
+    await _audit(session, 'request_restore_test', 'host', 'backup');
+  }
+
   /// Versions, automatic updates, history and release notes.
   Future<UpdateOverview> updates(Session session) async {
     await _requireServerAdmin(session);

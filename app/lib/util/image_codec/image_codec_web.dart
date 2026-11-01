@@ -30,7 +30,10 @@ Future<RgbaImage> decodeImage(Uint8List bytes, int maxSide) async {
   }
 }
 
-Future<Uint8List> encodeJpeg(RgbaImage image, double quality) async {
+/// Scans are JPEG on the web.
+const scanExtension = 'jpg';
+
+Future<Uint8List> encodeScan(RgbaImage image, double quality) async {
   final canvas = web.HTMLCanvasElement()
     ..width = image.width
     ..height = image.height;

@@ -95,6 +95,24 @@ void main() {
     ),
   };
 
+  // Accessibility (roadbook phase 5): every button named for screen
+  // readers, on each screen as it shows while loading or with no data.
+  for (final MapEntry(key: name, value: build) in screens.entries) {
+    testWidgets('$name: every button has a name', (tester) async {
+      final handle = tester.ensureSemantics();
+      tester.view.physicalSize = const Size(768, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(_app(build()));
+      for (var i = 0; i < 4; i++) {
+        await tester.pump(const Duration(milliseconds: 250));
+      }
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await tester.pumpWidget(const SizedBox());
+      handle.dispose();
+    });
+  }
+
   for (final width in [360.0, 768.0, 1200.0]) {
     for (final MapEntry(key: name, value: build) in screens.entries) {
       testWidgets('$name fits at $width px', (tester) async {

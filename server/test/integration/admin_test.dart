@@ -69,6 +69,7 @@ void main() {
         () => endpoints.admin.setBlocked(as(mallory), bob, true),
         () => endpoints.admin.backups(as(mallory)),
         () => endpoints.admin.requestBackup(as(mallory)),
+        () => endpoints.admin.requestRestoreTest(as(mallory)),
         () => endpoints.admin.groups(as(mallory)),
         () => endpoints.admin.updates(as(mallory)),
         () => endpoints.admin.setAutoUpdate(as(mallory), false),
@@ -244,6 +245,46 @@ void main() {
         );
       });
 
+      test('encrypted backups and the last restore test', () async {
+        File('${dir.path}/backups.tsv').writeAsStringSync(
+          'owncoffer-20261030-033000-daily.dump\t5000\t1793331000\n'
+          'owncoffer-20261031-033000-daily.dump.gpg\t5100\t1793417400\n'
+          'owncoffer-20261031-033000-daily.dump.gpg.part\t1\t1793417400\n',
+        );
+        var o = await endpoints.admin.backups(as(admin));
+        expect(o.backups.map((b) => b.encrypted), [true, false]);
+        expect(o.lastEncrypted, isTrue);
+        expect(o.restoreTest, isNull);
+        expect(o.restoreTestPending, isFalse);
+
+        File('${dir.path}/restore-test').writeAsStringSync(
+          'at=1793417500\nfile=owncoffer-20261031-033000-daily.dump.gpg\n'
+          'ok=true\ntables=42\noperations=1234\nseconds=9\nmessage=\n',
+        );
+        await endpoints.admin.requestRestoreTest(as(admin));
+        o = await endpoints.admin.backups(as(admin));
+        final t = o.restoreTest!;
+        expect(t.ok, isTrue);
+        expect(t.at, DateTime.utc(2026, 10, 31, 3, 31, 40));
+        expect(t.file, 'owncoffer-20261031-033000-daily.dump.gpg');
+        expect((t.tables, t.operations, t.seconds), (42, 1234, 9));
+        expect(t.message, isNull);
+        expect(o.restoreTestPending, isTrue);
+        expect(
+          File('${dir.path}/request-restore-test').existsSync(),
+          isTrue,
+        );
+
+        File('${dir.path}/restore-test').writeAsStringSync(
+          'at=1793417500\nfile=x.dump.gpg\nok=false\ntables=\n'
+          'message=the backup could not be restored\n',
+        );
+        final failed = (await endpoints.admin.backups(as(admin))).restoreTest!;
+        expect(failed.ok, isFalse);
+        expect(failed.tables, isNull);
+        expect(failed.message, 'the backup could not be restored');
+      });
+
       test('installation progress and free disk space, as the host wrote '
           'them; anything else ignored', () async {
         var o = await endpoints.admin.updates(as(admin));
@@ -339,6 +380,10 @@ void main() {
         expect(o.available, isFalse);
         await expectLater(
           endpoints.admin.requestBackup(as(admin)),
+          throwsA(isA<InvalidInputException>()),
+        );
+        await expectLater(
+          endpoints.admin.requestRestoreTest(as(admin)),
           throwsA(isA<InvalidInputException>()),
         );
         final u = await endpoints.admin.updates(as(admin));

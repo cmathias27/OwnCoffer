@@ -5179,4 +5179,108 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get loanChangeNote => 'Renégociation';
+
+  @override
+  String get adminBackupEncrypted =>
+      'Chiffrées avec la clé docker/backup.key. Sans elle, une sauvegarde ne peut pas être relue : gardez-en une copie hors du serveur (gestionnaire de mots de passe, clé USB).';
+
+  @override
+  String get adminBackupNotEncrypted =>
+      'La dernière sauvegarde n\'est pas chiffrée. Installez gpg sur le serveur (apt install gnupg) : les suivantes le seront.';
+
+  @override
+  String get adminBackupEncryptedTooltip => 'Chiffrée';
+
+  @override
+  String adminRestoreTestOk(
+    String when,
+    int tables,
+    int operations,
+    String file,
+  ) {
+    return 'Restauration vérifiée le $when : $tables tables et $operations opérations relues dans une base d\'essai ($file).';
+  }
+
+  @override
+  String adminRestoreTestFailed(String when, String file, String message) {
+    return 'Le test de restauration du $when a échoué ($file) : $message';
+  }
+
+  @override
+  String get adminRestoreTestNever =>
+      'Aucune restauration testée pour l\'instant. Elle l\'est chaque nuit, juste après la sauvegarde.';
+
+  @override
+  String get adminRestoreTestNow => 'Tester la restauration';
+
+  @override
+  String get adminRestoreTestRequested =>
+      'Test demandé : la dernière sauvegarde est restaurée dans une base d\'essai, jamais dans la vôtre. Le résultat apparaît ici dans une minute environ.';
+
+  @override
+  String get adminRestoreTestPending =>
+      'Test demandé, en cours sur le serveur…';
+
+  @override
+  String get serverAddressTitle => 'Votre serveur OwnCoffer';
+
+  @override
+  String get serverAddressIntro =>
+      'L\'application se connecte à votre propre serveur OwnCoffer. Saisissez son adresse, celle que vous ouvrez dans le navigateur (par exemple comptes.exemple.fr).';
+
+  @override
+  String get serverAddressLabel => 'Adresse du serveur';
+
+  @override
+  String get serverAddressInvalid =>
+      'Adresse non valable. Elle doit commencer par https:// (http:// seulement sur votre réseau local).';
+
+  @override
+  String get serverAddressUnreachable =>
+      'Aucun serveur OwnCoffer ne répond à cette adresse. Vérifiez-la, et que le serveur est allumé.';
+
+  @override
+  String get serverAddressConnect => 'Se connecter';
+
+  @override
+  String get serverAddressChange => 'Changer de serveur';
+
+  @override
+  String serverAddressCurrent(String address) {
+    return 'Serveur : $address';
+  }
+
+  @override
+  String get exportTitle => 'Exporter mes données';
+
+  @override
+  String exportIntro(String group) {
+    return 'Téléchargez une copie de vos données du groupe « $group » : tout ce que vous pouvez voir, rien de plus. Le fichier est créé par votre serveur et ne va nulle part ailleurs que sur votre appareil.';
+  }
+
+  @override
+  String get exportJsonTitle => 'Export complet (JSON)';
+
+  @override
+  String get exportJsonHelp =>
+      'Comptes, opérations (corbeille comprise), ventilations, catégories, règles, objectifs, opérations prévues, crédits, pointages, imports, factures (sans leur fichier) et vos données de l\'assistant. Montants en centimes. Pour garder une archive ou passer à un autre logiciel.';
+
+  @override
+  String get exportCsvTitle => 'Opérations pour un tableur (CSV)';
+
+  @override
+  String get exportCsvHelp =>
+      'Une ligne par opération, corbeille exclue : date, compte, libellés, note, montant, catégorie, pointage. S\'ouvre dans LibreOffice Calc ou Excel.';
+
+  @override
+  String get exportDownload => 'Télécharger';
+
+  @override
+  String exportDone(String name) {
+    return 'Export prêt : $name';
+  }
+
+  @override
+  String get exportNote =>
+      'Ce fichier contient vos opérations bancaires : rangez-le dans un endroit sûr. Il ne remplace pas les sauvegardes du serveur, qui seules permettent de tout restaurer.';
 }

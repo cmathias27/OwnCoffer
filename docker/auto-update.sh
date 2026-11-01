@@ -64,7 +64,9 @@ fi
 
 # Installations made before the administration page (0.3.8) lack the
 # request unit and the shared folder: add them once (we run as root).
-if [[ $(id -u) == 0 && ! -f /etc/systemd/system/owncoffer-request.path ]]; then
+# Those made before 1.0 lack the nightly restore test: rewrite the units.
+if [[ $(id -u) == 0 ]] && { [[ ! -f /etc/systemd/system/owncoffer-request.path ]] ||
+  ! grep -q restore-test /etc/systemd/system/owncoffer-backup.service 2>/dev/null; }; then
   log "installing the units of the administration page"
   docker/install-auto-update.sh --quiet || log "could not install them"
 fi
@@ -253,8 +255,15 @@ compose up -d postgres
 # Empty schema first: tables added by the failed version must not remain.
 compose exec -T postgres psql -q -U owncoffer -d owncoffer \
   -c 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
-compose exec -T postgres \
-  pg_restore -U owncoffer -d owncoffer --no-owner < "$dump"
+# Encrypted backups (.dump.gpg) are decrypted on the fly; the key stays in
+# docker/backup.key, which git never touches.
+if [[ $dump == *.gpg ]]; then
+  gpg --batch --quiet --pinentry-mode loopback --decrypt \
+    --passphrase-file docker/backup.key "$dump"
+else
+  cat "$dump"
+fi | compose exec -T postgres \
+  pg_restore -U owncoffer -d owncoffer --no-owner
 compose up -d --remove-orphans
 if healthy; then
   record "$target" rollback "$target did not answer; back on $current"

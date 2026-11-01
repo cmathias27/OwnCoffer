@@ -5,7 +5,7 @@
 - OwnCoffer runs on **your server**. Your statements, operations, invoices and documents are stored there, and nowhere else.
 - It **never connects to your bank**: you give it the statements yourself.
 - **No telemetry**: OwnCoffer sends nothing to anyone unless you ask.
-- On a phone, the installed app does not keep your financial data in cache.
+- On a phone, the installed app does not keep your financial data in cache. Neither do the Windows and Android apps: they keep only your server's address and your session.
 
 ## When something leaves the server
 
@@ -15,7 +15,11 @@
 
 ## Backups
 
-The server backs up the database every night. Remember to copy one elsewhere, encrypted: a backup on the same disk does not protect against that disk failing.
+The server backs up the database every night, **encrypted**, and checks right away that it restores. Remember to copy one elsewhere: a backup on the same disk does not protect against that disk failing.
+
+## Take your data with you
+
+**"Export my data"** (account menu, or the icon at the top on a large screen) downloads everything you can see: a complete **JSON** file, or your operations as **CSV** for a spreadsheet. The file is made by your server and goes only to your device.
 
 ## Free software
 

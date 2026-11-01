@@ -1,0 +1,12 @@
+### Result of the last restore test of a backup into a throw-away database
+### (docker/restore-test.sh): a file name and counts, no bank data.
+class: RestoreTestInfo
+fields:
+  at: DateTime
+  ok: bool
+  ### Backup tested.
+  file: String
+  tables: int?
+  operations: int?
+  seconds: int?
+  message: String?

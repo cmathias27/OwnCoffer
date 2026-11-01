@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Installs the systemd units of this OwnCoffer installation (run as root):
 #   owncoffer-update.timer   every 15 minutes: docker/auto-update.sh
-#   owncoffer-backup.timer   every night at 03:30: docker/backup.sh daily
+#   owncoffer-backup.timer   every night at 03:30: docker/backup.sh daily,
+#                            then docker/restore-test.sh
 #   owncoffer-request.path   as soon as the administration page leaves a
 #                            request in docker/state/: docker/handle-requests.sh
 # Logs: journalctl -u owncoffer-update -u owncoffer-backup -u owncoffer-request
@@ -41,12 +42,14 @@ EOF
 
 cat > /etc/systemd/system/owncoffer-backup.service <<EOF
 [Unit]
-Description=OwnCoffer: nightly database backup
+Description=OwnCoffer: nightly database backup and restore test
 After=docker.service
 
 [Service]
 Type=oneshot
 ExecStart=$dir/docker/backup.sh daily
+# Then checks that this backup really restores (throw-away container).
+ExecStart=$dir/docker/restore-test.sh
 EOF
 
 cat > /etc/systemd/system/owncoffer-backup.timer <<EOF

@@ -9,6 +9,7 @@ import '../util/format.dart';
 class AdminBackupsView extends StatelessWidget {
   final BackupOverview overview;
   final VoidCallback onBackup;
+  final VoidCallback? onRestoreTest;
 
   /// For tests: "now".
   final DateTime? now;
@@ -17,6 +18,7 @@ class AdminBackupsView extends StatelessWidget {
     super.key,
     required this.overview,
     required this.onBackup,
+    this.onRestoreTest,
     this.now,
   });
 
@@ -104,6 +106,29 @@ class AdminBackupsView extends StatelessWidget {
                     o.lastMessage ?? '',
                   ),
                 ),
+              if (o.lastEncrypted == false)
+                status(true, l.adminBackupNotEncrypted),
+              if (o.restoreTest case final t?)
+                status(
+                  !t.ok,
+                  t.ok
+                      ? l.adminRestoreTestOk(
+                          when(context, t.at),
+                          t.tables ?? 0,
+                          t.operations ?? 0,
+                          t.file,
+                        )
+                      : l.adminRestoreTestFailed(
+                          when(context, t.at),
+                          t.file,
+                          t.message ?? '',
+                        ),
+                )
+              else if (o.backups.isNotEmpty)
+                ListTile(
+                  leading: const Icon(Icons.info_outline),
+                  title: Text(l.adminRestoreTestNever),
+                ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                 child: Wrap(
@@ -121,6 +146,19 @@ class AdminBackupsView extends StatelessWidget {
                         l.adminBackupPending,
                         style: theme.textTheme.bodySmall,
                       ),
+                    if (onRestoreTest != null)
+                      OutlinedButton.icon(
+                        icon: const Icon(Icons.fact_check_outlined),
+                        label: Text(l.adminRestoreTestNow),
+                        onPressed: o.restoreTestPending || o.backups.isEmpty
+                            ? null
+                            : onRestoreTest,
+                      ),
+                    if (o.restoreTestPending)
+                      Text(
+                        l.adminRestoreTestPending,
+                        style: theme.textTheme.bodySmall,
+                      ),
                   ],
                 ),
               ),
@@ -129,6 +167,10 @@ class AdminBackupsView extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(l.adminBackupsHelp, style: theme.textTheme.bodySmall),
+        if (o.lastEncrypted == true) ...[
+          const SizedBox(height: 4),
+          Text(l.adminBackupEncrypted, style: theme.textTheme.bodySmall),
+        ],
         const SizedBox(height: 8),
         if (o.backups.isEmpty) Text(l.adminBackupsEmpty),
         for (final b in o.backups)
@@ -150,6 +192,16 @@ class AdminBackupsView extends StatelessWidget {
             subtitle: Text(
               '${when(context, b.createdAt)} · ${bytes(context, b.bytes)}',
             ),
+            trailing: b.encrypted
+                ? Tooltip(
+                    message: l.adminBackupEncryptedTooltip,
+                    child: Icon(
+                      Icons.lock_outline,
+                      size: 18,
+                      semanticLabel: l.adminBackupEncryptedTooltip,
+                    ),
+                  )
+                : null,
           ),
         const SizedBox(height: 16),
         Text(l.adminRestoreTitle, style: theme.textTheme.titleSmall),
@@ -158,9 +210,10 @@ class AdminBackupsView extends StatelessWidget {
         const SizedBox(height: 4),
         SelectableText(
           'docker compose -f docker/compose.yaml stop owncoffer\n'
+          'docker/backup-cat.sh docker/backups/<fichier> | '
           'docker compose -f docker/compose.yaml exec -T postgres '
           'pg_restore -U owncoffer -d owncoffer --clean --if-exists '
-          '--no-owner < docker/backups/<fichier>.dump\n'
+          '--no-owner\n'
           'docker compose -f docker/compose.yaml start owncoffer',
           style: theme.textTheme.bodySmall?.copyWith(fontFamily: 'monospace'),
         ),

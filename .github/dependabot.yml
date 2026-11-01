@@ -1,0 +1,17 @@
+# Dependency updates (SECURITY.md). Each update is a pull request checked by
+# the CI; licences must stay compatible with AGPL-3.0 (CLAUDE.md).
+version: 2
+updates:
+  - package-ecosystem: pub
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: docker
+    directory: /docker
+    schedule:
+      interval: weekly
