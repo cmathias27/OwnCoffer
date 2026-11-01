@@ -5,7 +5,7 @@ OwnCoffer fonctionne entièrement sans IA. L'assistant est **désactivé par dé
 ## L'activer
 
 1. L'administrateur du serveur ajoute un fournisseur dans **Administration > IA** (Ollama sur votre réseau, Gemini, ChatGPT, Claude…).
-2. Dans **Assistant : réglages** (icône ✨ tant qu'il n'est pas activé), choisissez le **fournisseur** et le **modèle**, puis activez l'assistant.
+2. Dans **Assistant : réglages** (icône ✨ en haut à droite), choisissez le **fournisseur** et le **modèle**, puis activez l'assistant.
 
 ## La bulle de discussion
 

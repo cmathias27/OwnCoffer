@@ -5,7 +5,7 @@ OwnCoffer works fully without AI. The assistant is **off by default**: everyone 
 ## Turn it on
 
 1. The server administrator adds a provider in **Server administration > AI** (Ollama on your network, Gemini, ChatGPT, Claude…).
-2. In **Assistant: settings** (✨ icon while it is off), choose the **provider** and the **model**, then turn the assistant on.
+2. In **Assistant: settings** (✨ icon at the top right), choose the **provider** and the **model**, then turn the assistant on.
 
 ## The chat bubble
 

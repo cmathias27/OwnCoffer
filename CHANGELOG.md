@@ -26,6 +26,10 @@ Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). 
 - **« Ce que l'assistant doit savoir »** dans les réglages : quelques phrases envoyées avec chaque question, visibles par vous seul.
 - **Historique** dans la bulle : vos 30 dernières conversations, gardées sur votre serveur, à reprendre ou à supprimer.
 
+### Assistant : l'icône ✨ ouvre ses réglages
+
+- L'icône ✨ en haut à droite ouvre toujours les **réglages de l'assistant** ; la conversation reste dans la bulle en bas à droite.
+
 ### Donner un avis
 
 - **« Donner un avis »** (menu du compte, ou icône en haut sur grand écran) : un problème, une idée, une question, envoyés à l'administrateur du serveur avec la page et la version. L'administrateur les lit dans l'onglet **Retours** et les marque traités ; l'auteur voit où en est son message.

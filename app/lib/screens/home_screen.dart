@@ -303,24 +303,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           if (current != null)
-            // The conversation when the assistant is on, its settings
-            // otherwise.
-            ListenableBuilder(
-              listenable: chat,
-              builder: (context, _) => IconButton(
-                tooltip: chat.available ? l.chatOpen : l.assistantSettingsTitle,
-                icon: const Icon(Icons.auto_awesome_outlined),
-                onPressed: chat.available
-                    ? () => chat.setOpen(!chat.open)
-                    : () => Navigator.of(context)
-                          .push(
-                            MaterialPageRoute<void>(
-                              builder: (_) =>
-                                  AssistantScreen(membership: current),
-                            ),
-                          )
-                          .then((_) => chat.refreshStatus()),
-              ),
+            // The assistant's settings; the conversation is in the bubble.
+            IconButton(
+              tooltip: l.assistantSettingsTitle,
+              icon: const Icon(Icons.auto_awesome_outlined),
+              onPressed: () => Navigator.of(context)
+                  .push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => AssistantScreen(membership: current),
+                    ),
+                  )
+                  .then((_) => chat.refreshStatus()),
             ),
           // Wide screens: the help of the open tab; phones find it in the
           // account menu, so that the title keeps its room.
