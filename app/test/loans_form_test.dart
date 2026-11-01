@@ -125,4 +125,72 @@ void main() {
     expect(find.textContaining('s\'écarte de plus de 5 %'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('payment in instalments found: count set with − and +, the '
+      'total follows until typed', (tester) async {
+    tester.view.physicalSize = const Size(800, 2400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final op = BankTransaction(
+      id: 8,
+      accountId: 3,
+      date: DateTime.utc(2026, 9, 12),
+      amountCents: -4500,
+      rawLabel: 'PRLV ONEY 4X 1/4',
+      cleanLabel: 'ONEY 4X 1/4',
+      operationKind: 'directDebit',
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('fr'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: LoanFormScreen(
+          groupId: 1,
+          accounts: [
+            Account(
+              id: 3,
+              groupId: 1,
+              name: 'Courant',
+              kind: AccountKind.checking,
+            ),
+          ],
+          fromOperation: op,
+          categories: const [],
+          initialKind: LoanKind.installments,
+          initialCount: 4,
+          initialLender: 'ONEY 4X',
+        ),
+      ),
+    );
+    await tester.pump();
+    Finder field(String label) =>
+        find.widgetWithText(TextFormField, label).first;
+    String text(String label) =>
+        tester.widget<TextFormField>(field(label)).controller!.text;
+    expect(find.text('ONEY 4X'), findsOneWidget, reason: 'lender');
+    expect(text('Nombre d\'échéances'), '4');
+    expect(text('Montant total de l\'achat'), '180,00');
+
+    await tester.tap(find.byTooltip('Une mensualité de plus'));
+    await tester.pump();
+    expect(text('Nombre d\'échéances'), '5');
+    expect(text('Montant total de l\'achat'), '225,00');
+    for (var i = 0; i < 5; i++) {
+      await tester.tap(find.byTooltip('Une mensualité de moins'));
+    }
+    await tester.pump();
+    expect(text('Nombre d\'échéances'), '2', reason: 'never under 2');
+
+    await tester.enterText(field('Montant total de l\'achat'), '95');
+    await tester.tap(find.byTooltip('Une mensualité de plus'));
+    await tester.pump();
+    expect(text('Montant total de l\'achat'), '95', reason: 'typed: kept');
+    expect(tester.takeException(), isNull);
+  });
 }

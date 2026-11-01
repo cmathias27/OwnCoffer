@@ -3329,4 +3329,44 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get budgetOperationsHint =>
       'Touchez une opération pour la gérer : catégorie, ventilation, facture, note, abonnement…';
+
+  @override
+  String get loanFoundTitle => 'Repérés dans vos opérations';
+
+  @override
+  String get loanFoundHelp =>
+      'Paiements en plusieurs fois et petits crédits prélevés ces derniers mois, pas encore dans vos crédits. Ajoutez-les pour suivre ce qu\'il reste à payer ; vous réglez le nombre de mensualités.';
+
+  @override
+  String loanFoundPaid(int count, String amount, String date) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count prélèvements, le dernier de $amount, depuis le $date',
+      one: '1 prélèvement de $amount le $date',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String loanFoundStated(int count) {
+    return 'en $count fois d\'après le libellé';
+  }
+
+  @override
+  String get loanFoundAdd => 'Ajouter';
+
+  @override
+  String get loanInstallmentsCountHelp =>
+      'Touchez − ou + pour régler le nombre de mensualités, celles déjà prélevées comprises.';
+
+  @override
+  String get loanInstallmentsLess => 'Une mensualité de moins';
+
+  @override
+  String get loanInstallmentsMore => 'Une mensualité de plus';
+
+  @override
+  String get loanInstallmentsTotalHelp =>
+      'Calculé : mensualité × nombre de mensualités. Modifiable si l\'achat coûtait autre chose.';
 }

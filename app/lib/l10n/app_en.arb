@@ -887,5 +887,14 @@
   "pieHelpSub": "Touch a sub-category to see its operations.",
   "chartSemantic": "Main categories over time",
   "chartHelp": "The {count} largest categories over these periods. Touch the chart to read the amounts, or a category to see its operations in the current period.",
-  "budgetOperationsHint": "Touch an operation to manage it: category, split, invoice, note, subscription…"
+  "budgetOperationsHint": "Touch an operation to manage it: category, split, invoice, note, subscription…",
+  "loanFoundTitle": "Found in your operations",
+  "loanFoundHelp": "Payments in instalments and small loans debited lately, not in your loans yet. Add them to follow what is left to pay; you set the number of instalments.",
+  "loanFoundPaid": "{count, plural, =1{1 debit of {amount} on {date}} other{{count} debits, the last of {amount}, since {date}}}",
+  "loanFoundStated": "in {count} instalments according to the label",
+  "loanFoundAdd": "Add",
+  "loanInstallmentsCountHelp": "Touch − or + to set the number of instalments, those already debited included.",
+  "loanInstallmentsLess": "One instalment less",
+  "loanInstallmentsMore": "One instalment more",
+  "loanInstallmentsTotalHelp": "Computed: instalment × number of instalments. Change it if the purchase cost something else."
 }

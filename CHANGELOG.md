@@ -2,6 +2,16 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.17 (1er novembre 2026)
+
+### Crédits : micro-crédits et paiements en plusieurs fois repérés
+
+- L'onglet Crédits montre **« Repérés dans vos opérations »** : les paiements en plusieurs fois (Oney, Alma, Klarna, 4x CB…) et petits crédits (Cofidis, Floa…) prélevés ces derniers mois, qui ne sont pas encore dans vos crédits. Pour chacun : nombre de prélèvements, dernier montant, date du premier, et le nombre d'échéances quand le libellé le donne (« 4X », « 2/4 », « en 3 fois »).
+- **« Ajouter »** ouvre la fiche du crédit déjà remplie à partir du premier prélèvement : organisme, mensualité, taux à 0 % pour un paiement en plusieurs fois, et nombre de mensualités proposé.
+- **Nombre de mensualités réglable** avec les boutons − et + : le montant total suit (mensualité × nombre), et reste modifiable à la main. Les prélèvements passés sont rattachés au crédit, et les suivants sont prévus.
+- Un paiement terminé (toutes les échéances prélevées) ou sans prélèvement depuis plus de deux mois n'est plus proposé. Un paiement déjà dans vos crédits non plus.
+- Seules les opérations classées dans « Paiements en plusieurs fois » ou « Crédits à la consommation » sont examinées, et seulement sur les comptes que vous voyez.
+
 ## 0.3.16 (1er novembre 2026)
 
 ### Budget : plusieurs vues des dépenses et des revenus

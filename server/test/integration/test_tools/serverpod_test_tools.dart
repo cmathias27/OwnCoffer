@@ -52,6 +52,8 @@ import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
 import 'package:owncoffer_server/src/generated/import_preview.dart'
     as _itw310ng;
+import 'package:owncoffer_server/src/generated/instalment_candidate.dart'
+    as _i3mgyctl;
 import 'package:owncoffer_server/src/generated/invitation_info.dart'
     as _ip1vy3u6;
 import 'package:owncoffer_server/src/generated/invoice_info.dart' as _iq9lo0p4;
@@ -2995,6 +2997,37 @@ class _LoanEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_i5w8yuam.LoanOverview>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_i3mgyctl.InstalmentCandidate>> detectedInstalments(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'detectedInstalments',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'detectedInstalments',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_i3mgyctl.InstalmentCandidate>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

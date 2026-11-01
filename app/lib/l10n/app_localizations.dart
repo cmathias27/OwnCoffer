@@ -5430,6 +5430,60 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Touchez une opération pour la gérer : catégorie, ventilation, facture, note, abonnement…'**
   String get budgetOperationsHint;
+
+  /// No description provided for @loanFoundTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Repérés dans vos opérations'**
+  String get loanFoundTitle;
+
+  /// No description provided for @loanFoundHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiements en plusieurs fois et petits crédits prélevés ces derniers mois, pas encore dans vos crédits. Ajoutez-les pour suivre ce qu\'il reste à payer ; vous réglez le nombre de mensualités.'**
+  String get loanFoundHelp;
+
+  /// No description provided for @loanFoundPaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 prélèvement de {amount} le {date}} other{{count} prélèvements, le dernier de {amount}, depuis le {date}}}'**
+  String loanFoundPaid(int count, String amount, String date);
+
+  /// No description provided for @loanFoundStated.
+  ///
+  /// In fr, this message translates to:
+  /// **'en {count} fois d\'après le libellé'**
+  String loanFoundStated(int count);
+
+  /// No description provided for @loanFoundAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get loanFoundAdd;
+
+  /// No description provided for @loanInstallmentsCountHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez − ou + pour régler le nombre de mensualités, celles déjà prélevées comprises.'**
+  String get loanInstallmentsCountHelp;
+
+  /// No description provided for @loanInstallmentsLess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une mensualité de moins'**
+  String get loanInstallmentsLess;
+
+  /// No description provided for @loanInstallmentsMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une mensualité de plus'**
+  String get loanInstallmentsMore;
+
+  /// No description provided for @loanInstallmentsTotalHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculé : mensualité × nombre de mensualités. Modifiable si l\'achat coûtait autre chose.'**
+  String get loanInstallmentsTotalHelp;
 }
 
 class _AppLocalizationsDelegate
