@@ -37,6 +37,7 @@ import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
 import '../endpoints/account_endpoint.dart' as _iaho7ul5;
 import '../endpoints/admin_endpoint.dart' as _i5t1w2d2;
+import '../endpoints/advisor_endpoint.dart' as _ioe4fqri;
 import '../endpoints/analysis_endpoint.dart' as _i0sl0qub;
 import '../endpoints/category_endpoint.dart' as _ioevag4g;
 import '../endpoints/goal_endpoint.dart' as _i2k4izhk;
@@ -78,6 +79,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'admin',
+          null,
+        ),
+      'advisor': _ioe4fqri.AdvisorEndpoint()
+        ..initialize(
+          server,
+          'advisor',
           null,
         ),
       'analysis': _i0sl0qub.AnalysisEndpoint()
@@ -900,6 +907,88 @@ class Endpoints extends _is.EndpointDispatch {
                 Map<String, dynamic> params,
               ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
                   .sendTestEmail(session),
+        ),
+      },
+    );
+    connectors['advisor'] = _is.EndpointConnector(
+      name: 'advisor',
+      endpoint: endpoints['advisor']!,
+      methodConnectors: {
+        'proposals': _is.MethodConnector(
+          name: 'proposals',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['advisor'] as _ioe4fqri.AdvisorEndpoint).proposals(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'accept': _is.MethodConnector(
+          name: 'accept',
+          params: {
+            'proposalId': _is.ParameterDescription(
+              name: 'proposalId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['advisor'] as _ioe4fqri.AdvisorEndpoint).accept(
+                    session,
+                    params['proposalId'],
+                  ),
+        ),
+        'refuse': _is.MethodConnector(
+          name: 'refuse',
+          params: {
+            'proposalId': _is.ParameterDescription(
+              name: 'proposalId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['advisor'] as _ioe4fqri.AdvisorEndpoint).refuse(
+                    session,
+                    params['proposalId'],
+                  ),
+        ),
+        'undo': _is.MethodConnector(
+          name: 'undo',
+          params: {
+            'proposalId': _is.ParameterDescription(
+              name: 'proposalId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['advisor'] as _ioe4fqri.AdvisorEndpoint).undo(
+                    session,
+                    params['proposalId'],
+                  ),
         ),
       },
     );

@@ -12,6 +12,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
+import 'package:owncoffer_client/src/protocol/action_proposal.dart'
+    as _ihgp0l1x;
 import 'package:owncoffer_client/src/protocol/admin_audit_info.dart'
     as _icr6cafh;
 import 'package:owncoffer_client/src/protocol/admin_group_info.dart'
@@ -56,6 +58,7 @@ import 'account.dart' as _iulmo8pc;
 import 'account_access.dart' as _idkoqesg;
 import 'account_kind.dart' as _ifkquxga;
 import 'account_visibility.dart' as _ioxxcdxl;
+import 'action_proposal.dart' as _ius3n358;
 import 'admin_audit_info.dart' as _ie0chd06;
 import 'admin_group_info.dart' as _ixpxctu5;
 import 'admin_health.dart' as _ihbeufm3;
@@ -143,6 +146,7 @@ export 'account.dart';
 export 'account_access.dart';
 export 'account_kind.dart';
 export 'account_visibility.dart';
+export 'action_proposal.dart';
 export 'admin_audit_info.dart';
 export 'admin_group_info.dart';
 export 'admin_health.dart';
@@ -275,6 +279,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ioxxcdxl.AccountVisibility) {
       return _ioxxcdxl.AccountVisibility.fromJson(data) as T;
+    }
+    if (t == _ius3n358.ActionProposal) {
+      return _ius3n358.ActionProposal.fromJson(data) as T;
     }
     if (t == _ie0chd06.AdminAuditInfo) {
       return _ie0chd06.AdminAuditInfo.fromJson(data) as T;
@@ -540,6 +547,10 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_ioxxcdxl.AccountVisibility?>()) {
       return (data != null ? _ioxxcdxl.AccountVisibility.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ius3n358.ActionProposal?>()) {
+      return (data != null ? _ius3n358.ActionProposal.fromJson(data) : null)
           as T;
     }
     if (t == _isc.getType<_ie0chd06.AdminAuditInfo?>()) {
@@ -1037,6 +1048,12 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ihgp0l1x.ActionProposal>) {
+      return (data as List)
+              .map((e) => deserialize<_ihgp0l1x.ActionProposal>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ivksw0b3.BankTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ivksw0b3.BankTransaction>(e))
@@ -1157,6 +1174,7 @@ class Protocol extends _isc.SerializationManager {
       _idkoqesg.AccountAccess => 'AccountAccess',
       _ifkquxga.AccountKind => 'AccountKind',
       _ioxxcdxl.AccountVisibility => 'AccountVisibility',
+      _ius3n358.ActionProposal => 'ActionProposal',
       _ie0chd06.AdminAuditInfo => 'AdminAuditInfo',
       _ixpxctu5.AdminGroupInfo => 'AdminGroupInfo',
       _ihbeufm3.AdminHealth => 'AdminHealth',
@@ -1263,6 +1281,8 @@ class Protocol extends _isc.SerializationManager {
         return 'AccountKind';
       case _ioxxcdxl.AccountVisibility():
         return 'AccountVisibility';
+      case _ius3n358.ActionProposal():
+        return 'ActionProposal';
       case _ie0chd06.AdminAuditInfo():
         return 'AdminAuditInfo';
       case _ixpxctu5.AdminGroupInfo():
@@ -1463,6 +1483,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'AccountVisibility') {
       return deserialize<_ioxxcdxl.AccountVisibility>(data['data']);
+    }
+    if (dataClassName == 'ActionProposal') {
+      return deserialize<_ius3n358.ActionProposal>(data['data']);
     }
     if (dataClassName == 'AdminAuditInfo') {
       return deserialize<_ie0chd06.AdminAuditInfo>(data['data']);

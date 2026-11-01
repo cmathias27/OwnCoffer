@@ -2790,5 +2790,143 @@
         "type": "int"
       }
     }
-  }
+  },
+  "advisorTitle": "Mon conseiller",
+  "advisorIntro": "Ce qu'OwnCoffer vous propose, d'après les comptes que vous voyez. Chaque proposition montre ses chiffres et son calcul ; rien ne change tant que vous ne l'acceptez pas, et tout changement accepté peut être annulé.",
+  "advisorNothing": "Rien à proposer pour l'instant",
+  "advisorNothingHelp": "Les propositions viennent de vos trois derniers mois complets : objectifs à fixer, à relever ou à baisser. Revenez après le prochain import.",
+  "advisorPast": "Décidées ces 30 derniers jours",
+  "advisorSuggestGoal": "Fixer un objectif « {category} » : {amount} par mois",
+  "@advisorSuggestGoal": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorRaiseGoal": "Relever l'objectif « {category} » : {from} → {to}",
+  "@advisorRaiseGoal": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorLowerGoal": "Baisser l'objectif « {category} » : {from} → {to}",
+  "@advisorLowerGoal": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorOther": "Proposition",
+  "advisorGoalWhy": "Dépenses des trois derniers mois : {months}. Leur moyenne, arrondie à la dizaine d'euros supérieure, donne {amount}.",
+  "@advisorGoalWhy": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorSuggestWhy": "Cette catégorie a des dépenses chaque mois et pas encore d'objectif : un objectif réaliste vous préviendra à 80 % et à 100 %.",
+  "advisorRaiseWhy": "L'objectif a été dépassé au moins deux mois sur trois : un objectif réaliste reste utile au lieu d'alerter tous les mois.",
+  "advisorLowerWhy": "Les dépenses sont restées sous la moitié de l'objectif trois mois de suite : un objectif plus serré garde la marge que vous avez prise.",
+  "advisorByEngine": "Calculé par OwnCoffer, sans IA.",
+  "advisorByAi": "Proposé par l'IA ({provider}, {model}) : vérifiez avant d'accepter.",
+  "@advisorByAi": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      },
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorAiCategory": "Classer « {label} » dans « {category} »",
+  "@advisorAiCategory": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorAiCategoryWhy": "Opération du {date}, {amount}. {why}",
+  "@advisorAiCategoryWhy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "why": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorAiLoan": "Créer le crédit « {lender} » : {principal} sur {months} mois",
+  "@advisorAiLoan": {
+    "placeholders": {
+      "lender": {
+        "type": "String"
+      },
+      "principal": {
+        "type": "String"
+      },
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "advisorAiLoanWhy": "Lu dans le document : taux {rate}, mensualité {payment}, première échéance le {date}. Vous pourrez tout corriger ensuite dans l'onglet Crédits.",
+  "@advisorAiLoanWhy": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      },
+      "payment": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "advisorAccept": "Accepter",
+  "advisorRefuse": "Refuser",
+  "advisorAccepted": "Proposition appliquée.",
+  "advisorRefused": "Proposition refusée.",
+  "advisorUndone": "Changement annulé.",
+  "advisorReaderHelp": "En lecture seule : un membre peut accepter cette proposition.",
+  "advisorStatusExecuted": "Appliquée",
+  "advisorStatusRefused": "Refusée",
+  "advisorStatusExpired": "Retirée : les données ont changé",
+  "advisorStatusUndone": "Annulée",
+  "error_proposal_stale": "Les données ont changé depuis cette proposition : elle a été retirée, sans rien modifier.",
+  "error_proposal_closed": "Cette proposition a déjà été traitée.",
+  "error_proposal_access_denied": "Cette proposition n'existe pas ou n'est pas à vous.",
+  "error_proposal_unknown": "Cette proposition ne peut pas être appliquée : elle est incomplète."
 }

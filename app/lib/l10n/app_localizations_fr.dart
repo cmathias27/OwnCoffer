@@ -3784,4 +3784,130 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get advisorTitle => 'Mon conseiller';
+
+  @override
+  String get advisorIntro =>
+      'Ce qu\'OwnCoffer vous propose, d\'après les comptes que vous voyez. Chaque proposition montre ses chiffres et son calcul ; rien ne change tant que vous ne l\'acceptez pas, et tout changement accepté peut être annulé.';
+
+  @override
+  String get advisorNothing => 'Rien à proposer pour l\'instant';
+
+  @override
+  String get advisorNothingHelp =>
+      'Les propositions viennent de vos trois derniers mois complets : objectifs à fixer, à relever ou à baisser. Revenez après le prochain import.';
+
+  @override
+  String get advisorPast => 'Décidées ces 30 derniers jours';
+
+  @override
+  String advisorSuggestGoal(String category, String amount) {
+    return 'Fixer un objectif « $category » : $amount par mois';
+  }
+
+  @override
+  String advisorRaiseGoal(String category, String from, String to) {
+    return 'Relever l\'objectif « $category » : $from → $to';
+  }
+
+  @override
+  String advisorLowerGoal(String category, String from, String to) {
+    return 'Baisser l\'objectif « $category » : $from → $to';
+  }
+
+  @override
+  String get advisorOther => 'Proposition';
+
+  @override
+  String advisorGoalWhy(String months, String amount) {
+    return 'Dépenses des trois derniers mois : $months. Leur moyenne, arrondie à la dizaine d\'euros supérieure, donne $amount.';
+  }
+
+  @override
+  String get advisorSuggestWhy =>
+      'Cette catégorie a des dépenses chaque mois et pas encore d\'objectif : un objectif réaliste vous préviendra à 80 % et à 100 %.';
+
+  @override
+  String get advisorRaiseWhy =>
+      'L\'objectif a été dépassé au moins deux mois sur trois : un objectif réaliste reste utile au lieu d\'alerter tous les mois.';
+
+  @override
+  String get advisorLowerWhy =>
+      'Les dépenses sont restées sous la moitié de l\'objectif trois mois de suite : un objectif plus serré garde la marge que vous avez prise.';
+
+  @override
+  String get advisorByEngine => 'Calculé par OwnCoffer, sans IA.';
+
+  @override
+  String advisorByAi(String provider, String model) {
+    return 'Proposé par l\'IA ($provider, $model) : vérifiez avant d\'accepter.';
+  }
+
+  @override
+  String advisorAiCategory(String label, String category) {
+    return 'Classer « $label » dans « $category »';
+  }
+
+  @override
+  String advisorAiCategoryWhy(String date, String amount, String why) {
+    return 'Opération du $date, $amount. $why';
+  }
+
+  @override
+  String advisorAiLoan(String lender, String principal, int months) {
+    return 'Créer le crédit « $lender » : $principal sur $months mois';
+  }
+
+  @override
+  String advisorAiLoanWhy(String rate, String payment, String date) {
+    return 'Lu dans le document : taux $rate, mensualité $payment, première échéance le $date. Vous pourrez tout corriger ensuite dans l\'onglet Crédits.';
+  }
+
+  @override
+  String get advisorAccept => 'Accepter';
+
+  @override
+  String get advisorRefuse => 'Refuser';
+
+  @override
+  String get advisorAccepted => 'Proposition appliquée.';
+
+  @override
+  String get advisorRefused => 'Proposition refusée.';
+
+  @override
+  String get advisorUndone => 'Changement annulé.';
+
+  @override
+  String get advisorReaderHelp =>
+      'En lecture seule : un membre peut accepter cette proposition.';
+
+  @override
+  String get advisorStatusExecuted => 'Appliquée';
+
+  @override
+  String get advisorStatusRefused => 'Refusée';
+
+  @override
+  String get advisorStatusExpired => 'Retirée : les données ont changé';
+
+  @override
+  String get advisorStatusUndone => 'Annulée';
+
+  @override
+  String get error_proposal_stale =>
+      'Les données ont changé depuis cette proposition : elle a été retirée, sans rien modifier.';
+
+  @override
+  String get error_proposal_closed => 'Cette proposition a déjà été traitée.';
+
+  @override
+  String get error_proposal_access_denied =>
+      'Cette proposition n\'existe pas ou n\'est pas à vous.';
+
+  @override
+  String get error_proposal_unknown =>
+      'Cette proposition ne peut pas être appliquée : elle est incomplète.';
 }

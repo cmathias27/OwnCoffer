@@ -17,6 +17,8 @@ import 'package:owncoffer_client/src/protocol/account.dart' as _i4motmly;
 import 'package:owncoffer_client/src/protocol/account_kind.dart' as _ighjli9i;
 import 'package:owncoffer_client/src/protocol/account_visibility.dart'
     as _i33sijhq;
+import 'package:owncoffer_client/src/protocol/action_proposal.dart'
+    as _ihgp0l1x;
 import 'package:owncoffer_client/src/protocol/admin_audit_info.dart'
     as _icr6cafh;
 import 'package:owncoffer_client/src/protocol/admin_group_info.dart'
@@ -565,6 +567,47 @@ class EndpointAdmin extends _isc.EndpointRef {
     'sendTestEmail',
     {},
   );
+}
+
+/// "Mon conseiller" without AI (décision 0007): proposals computed by the
+/// engine for the user, from the accounts they may see, applied only when
+/// they accept them (décision 0009).
+/// {@category Endpoint}
+class EndpointAdvisor extends _isc.EndpointRef {
+  EndpointAdvisor(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'advisor';
+
+  /// The user's open proposals, refreshed first, then those decided in the
+  /// last 30 days; newest first.
+  _ida.Future<List<_ihgp0l1x.ActionProposal>> proposals(int groupId) =>
+      caller.callServerEndpoint<List<_ihgp0l1x.ActionProposal>>(
+        'advisor',
+        'proposals',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<_ihgp0l1x.ActionProposal> accept(int proposalId) =>
+      caller.callServerEndpoint<_ihgp0l1x.ActionProposal>(
+        'advisor',
+        'accept',
+        {'proposalId': proposalId},
+      );
+
+  _ida.Future<_ihgp0l1x.ActionProposal> refuse(int proposalId) =>
+      caller.callServerEndpoint<_ihgp0l1x.ActionProposal>(
+        'advisor',
+        'refuse',
+        {'proposalId': proposalId},
+      );
+
+  _ida.Future<_ihgp0l1x.ActionProposal> undo(int proposalId) =>
+      caller.callServerEndpoint<_ihgp0l1x.ActionProposal>(
+        'advisor',
+        'undo',
+        {'proposalId': proposalId},
+      );
 }
 
 /// Income and expenses by category over a week, a month, a quarter or a
@@ -1988,6 +2031,7 @@ class Client extends _isc.ServerpodClientShared {
     jwtRefresh = EndpointJwtRefresh(this);
     account = EndpointAccount(this);
     admin = EndpointAdmin(this);
+    advisor = EndpointAdvisor(this);
     analysis = EndpointAnalysis(this);
     category = EndpointCategory(this);
     goal = EndpointGoal(this);
@@ -2012,6 +2056,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointAccount account;
 
   late final EndpointAdmin admin;
+
+  late final EndpointAdvisor advisor;
 
   late final EndpointAnalysis analysis;
 
@@ -2049,6 +2095,7 @@ class Client extends _isc.ServerpodClientShared {
     'jwtRefresh': jwtRefresh,
     'account': account,
     'admin': admin,
+    'advisor': advisor,
     'analysis': analysis,
     'category': category,
     'goal': goal,
