@@ -4198,4 +4198,25 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_mcp_token_access_denied =>
       'Ce jeton n\'existe pas ou n\'est pas à vous.';
+
+  @override
+  String get demoBanner => 'Démonstration : toutes les données sont fictives.';
+
+  @override
+  String get adminDemoFill => 'Remplir avec le foyer de démonstration';
+
+  @override
+  String get adminDemoHelp =>
+      'Instance de démonstration : remplit le foyer actuel (vide) avec trois comptes, douze mois d\'opérations fictives, des abonnements, des objectifs et un crédit.';
+
+  @override
+  String get adminDemoDone => 'Foyer de démonstration rempli.';
+
+  @override
+  String get error_demo_only =>
+      'Possible seulement sur une instance de démonstration.';
+
+  @override
+  String get error_demo_group_not_empty =>
+      'Le foyer doit être vide (aucun compte) pour y charger la démonstration.';
 }

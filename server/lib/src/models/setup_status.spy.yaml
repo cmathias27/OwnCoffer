@@ -2,3 +2,6 @@
 class: SetupStatus
 fields:
   needsSetup: bool
+  ### A demonstration instance (OWNCOFFER_DEMO=true): fictitious data only;
+  ### the app says so on every page.
+  demo: bool?

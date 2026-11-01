@@ -3102,5 +3102,11 @@
     }
   },
   "mcpRevoke": "Révoquer",
-  "error_mcp_token_access_denied": "Ce jeton n'existe pas ou n'est pas à vous."
+  "error_mcp_token_access_denied": "Ce jeton n'existe pas ou n'est pas à vous.",
+  "demoBanner": "Démonstration : toutes les données sont fictives.",
+  "adminDemoFill": "Remplir avec le foyer de démonstration",
+  "adminDemoHelp": "Instance de démonstration : remplit le foyer actuel (vide) avec trois comptes, douze mois d'opérations fictives, des abonnements, des objectifs et un crédit.",
+  "adminDemoDone": "Foyer de démonstration rempli.",
+  "error_demo_only": "Possible seulement sur une instance de démonstration.",
+  "error_demo_group_not_empty": "Le foyer doit être vide (aucun compte) pour y charger la démonstration."
 }

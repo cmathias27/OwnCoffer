@@ -567,6 +567,14 @@ class EndpointAdmin extends _isc.EndpointRef {
         {'version': version},
       );
 
+  /// Demonstration instance only: fills the empty group [groupId] with the
+  /// fictitious household (DemoSeed).
+  _ida.Future<void> fillDemo(int groupId) => caller.callServerEndpoint<void>(
+    'admin',
+    'fillDemo',
+    {'groupId': groupId},
+  );
+
   /// Sends a test email to the administrator; returns the address. Without
   /// SMTP configuration it is written to the server log.
   _ida.Future<String> sendTestEmail() => caller.callServerEndpoint<String>(

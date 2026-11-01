@@ -4172,4 +4172,24 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_mcp_token_access_denied =>
       'This token does not exist or is not yours.';
+
+  @override
+  String get demoBanner => 'Demonstration: all the data is fictitious.';
+
+  @override
+  String get adminDemoFill => 'Fill with the demo household';
+
+  @override
+  String get adminDemoHelp =>
+      'Demonstration instance: fills the current (empty) household with three accounts, twelve months of fictitious operations, subscriptions, goals and a loan.';
+
+  @override
+  String get adminDemoDone => 'Demo household filled.';
+
+  @override
+  String get error_demo_only => 'Only possible on a demonstration instance.';
+
+  @override
+  String get error_demo_group_not_empty =>
+      'The household must be empty (no account) to load the demonstration.';
 }

@@ -2,6 +2,19 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.27 (1er novembre 2026)
+
+### Instance de démonstration
+
+- Pour montrer OwnCoffer **sans aucune vraie donnée** : une instance à part, lancée avec `OWNCOFFER_DEMO=true` dans son propre projet Docker (guide : `docs/DEMO.md`).
+- Sur une telle instance, **Administration > Santé > « Remplir avec le foyer de démonstration »** charge dans le foyer (vide) un **foyer fictif** : trois comptes, douze mois d'opérations (salaires, loyer, courses, carburant, restaurants, abonnements…), quelques opérations à classer, des échéances et abonnements, trois objectifs, un crédit auto et un paiement en 4 fois en cours. Toujours les mêmes données, datées par rapport au jour du remplissage.
+- Un **bandeau « Démonstration : toutes les données sont fictives »** s'affiche sur chaque page.
+- Sur une instance normale, le remplissage est impossible (vérifié par un test).
+
+### Correction
+
+- **Administration** : les onglets « IA » et « Sauvegardes » affichaient chacun le contenu de l'autre (depuis la 0.3.25). C'est corrigé.
+
 ## 0.3.26 (1er novembre 2026)
 
 ### OwnCoffer depuis un autre assistant (MCP)

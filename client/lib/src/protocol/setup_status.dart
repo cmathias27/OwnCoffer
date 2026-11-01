@@ -15,29 +15,46 @@ import 'package:serverpod_client/serverpod_client.dart' as _isc;
 /// `needsSetup`: no account exists yet; the first launch wizard is shown.
 abstract class SetupStatus
     implements _isc.SerializableModel, _isc.ProtocolSerialization {
-  SetupStatus._({required this.needsSetup});
+  SetupStatus._({
+    required this.needsSetup,
+    this.demo,
+  });
 
-  factory SetupStatus({required bool needsSetup}) = _SetupStatusImpl;
+  factory SetupStatus({
+    required bool needsSetup,
+    bool? demo,
+  }) = _SetupStatusImpl;
 
   factory SetupStatus.fromJson(Map<String, dynamic> jsonSerialization) {
     return SetupStatus(
       needsSetup: _isc.BoolJsonExtension.fromJson(
         jsonSerialization['needsSetup'],
       ),
+      demo: jsonSerialization['demo'] == null
+          ? null
+          : _isc.BoolJsonExtension.fromJson(jsonSerialization['demo']),
     );
   }
 
   bool needsSetup;
 
+  /// A demonstration instance (OWNCOFFER_DEMO=true): fictitious data only;
+  /// the app says so on every page.
+  bool? demo;
+
   /// Returns a shallow copy of this [SetupStatus]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
-  SetupStatus copyWith({bool? needsSetup});
+  SetupStatus copyWith({
+    bool? needsSetup,
+    bool? demo,
+  });
   @override
   Map<String, dynamic> toJson() {
     return {
       '__className__': 'SetupStatus',
       'needsSetup': needsSetup,
+      if (demo != null) 'demo': demo,
     };
   }
 
@@ -46,6 +63,7 @@ abstract class SetupStatus
     return {
       '__className__': 'SetupStatus',
       'needsSetup': needsSetup,
+      if (demo != null) 'demo': demo,
     };
   }
 
@@ -55,15 +73,28 @@ abstract class SetupStatus
   }
 }
 
+class _Undefined {}
+
 class _SetupStatusImpl extends SetupStatus {
-  _SetupStatusImpl({required bool needsSetup})
-    : super._(needsSetup: needsSetup);
+  _SetupStatusImpl({
+    required bool needsSetup,
+    bool? demo,
+  }) : super._(
+         needsSetup: needsSetup,
+         demo: demo,
+       );
 
   /// Returns a shallow copy of this [SetupStatus]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
   @override
-  SetupStatus copyWith({bool? needsSetup}) {
-    return SetupStatus(needsSetup: needsSetup ?? this.needsSetup);
+  SetupStatus copyWith({
+    bool? needsSetup,
+    Object? demo = _Undefined,
+  }) {
+    return SetupStatus(
+      needsSetup: needsSetup ?? this.needsSetup,
+      demo: demo is bool? ? demo : this.demo,
+    );
   }
 }

@@ -1108,5 +1108,11 @@
   "mcpNeverUsed": "{prefix} · never used",
   "mcpLastUsed": "{prefix} · used on {date}",
   "mcpRevoke": "Revoke",
-  "error_mcp_token_access_denied": "This token does not exist or is not yours."
+  "error_mcp_token_access_denied": "This token does not exist or is not yours.",
+  "demoBanner": "Demonstration: all the data is fictitious.",
+  "adminDemoFill": "Fill with the demo household",
+  "adminDemoHelp": "Demonstration instance: fills the current (empty) household with three accounts, twelve months of fictitious operations, subscriptions, goals and a loan.",
+  "adminDemoDone": "Demo household filled.",
+  "error_demo_only": "Only possible on a demonstration instance.",
+  "error_demo_group_not_empty": "The household must be empty (no account) to load the demonstration."
 }

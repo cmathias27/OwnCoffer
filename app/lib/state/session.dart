@@ -13,6 +13,9 @@ class SessionController extends ChangeNotifier {
   int? currentGroupId;
   Object? lastError;
 
+  /// A demonstration instance: fictitious data, said on every page.
+  var demo = false;
+
   /// Token from an invitation link (`?invitation=…`), kept until accepted.
   String? pendingInvitation = Uri.base.queryParameters['invitation'];
 
@@ -34,7 +37,9 @@ class SessionController extends ChangeNotifier {
 
   Future<void> refresh() async {
     try {
-      if ((await client.setup.status()).needsSetup) {
+      final setup = await client.setup.status();
+      demo = setup.demo ?? false;
+      if (setup.needsSetup) {
         _set(SessionStage.setup);
         return;
       }

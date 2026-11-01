@@ -34,6 +34,9 @@ class _AdminScreenState extends State<AdminScreen> {
   List<AdminAuditInfo> _audit = [];
   BackupOverview? _backups;
   UpdateOverview? _updates;
+
+  /// A demonstration instance (fictitious data can be loaded).
+  var _demo = false;
   List<AdminInvitationInfo> _invitations = [];
   List<AdminGroupInfo> _groups = [];
   String? _error;
@@ -47,6 +50,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Future<void> _load() async {
     try {
       final health = await client.admin.health();
+      _demo = (await client.setup.status()).demo ?? false;
       final stats = await client.admin.stats();
       final users = await client.admin.users();
       final bans = await client.admin.bannedIps();
@@ -149,6 +153,12 @@ class _AdminScreenState extends State<AdminScreen> {
                   AdminHealthView(
                     health: _health!,
                     stats: _stats!,
+                    onFillDemo: _demo && membership != null
+                        ? () => _act(
+                            () => client.admin.fillDemo(membership.group.id!),
+                            l.adminDemoDone,
+                          )
+                        : null,
                     onTestEmail: () async {
                       final l = AppLocalizations.of(context);
                       final messenger = ScaffoldMessenger.of(context);
@@ -182,7 +192,6 @@ class _AdminScreenState extends State<AdminScreen> {
                     ),
                     onInstall: _install,
                   ),
-                  const AdminAiView(),
                   AdminBackupsView(
                     overview: _backups!,
                     onBackup: () => _act(
@@ -190,6 +199,7 @@ class _AdminScreenState extends State<AdminScreen> {
                       l.adminBackupRequested,
                     ),
                   ),
+                  const AdminAiView(),
                   _UsersView(
                     users: _users,
                     onBlock: (u, blocked) => _act(
@@ -246,11 +256,15 @@ class AdminHealthView extends StatelessWidget {
   final AdminStats stats;
   final VoidCallback onTestEmail;
 
+  /// Demonstration instance: fills the current household (null: hidden).
+  final VoidCallback? onFillDemo;
+
   const AdminHealthView({
     super.key,
     required this.health,
     required this.stats,
     required this.onTestEmail,
+    this.onFillDemo,
   });
 
   @override
@@ -383,6 +397,22 @@ class AdminHealthView extends StatelessWidget {
               ),
             ),
           ),
+          if (onFillDemo != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l.adminDemoHelp, style: theme.textTheme.bodySmall),
+                  const SizedBox(height: 6),
+                  FilledButton.tonalIcon(
+                    icon: const Icon(Icons.science_outlined),
+                    label: Text(l.adminDemoFill),
+                    onPressed: onFillDemo,
+                  ),
+                ],
+              ),
+            ),
           if (h.publicUrl.isNotEmpty)
             row(Icons.public, l.adminPublicUrl, h.publicUrl),
         ]),
