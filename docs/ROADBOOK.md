@@ -84,9 +84,9 @@ Objectif : un serveur vide mais complet, qui se lance en une commande et se test
 - [x] `docker/compose.yaml` : réseau Docker privé, **un seul port** configurable publié par un proxy Caddy (app web et API sous `/api/`), PostgreSQL et ports internes jamais publiés ; volume de données ; `.env.example` commenté et générateur de secrets ; démarrage par `docker compose up -d` (décisions 0012 et 0015)
 - [x] Base de données v1 avec migrations : utilisateurs, sessions, groupes, membres, comptes, opérations, catégories, catégories standard, règles, imports, journal d'audit
 - [x] Montants en centimes (entiers) partout, dates d'opération sans fuseau
-- [ ] Intégration continue GitHub Actions : analyse, formatage, tests, image Docker `ghcr.io/cmathias27/owncoffer:edge`
+- [x] Intégration continue GitHub Actions : analyse, formatage, tests, image Docker `ghcr.io/cmathias27/owncoffer:edge`
 - [ ] Sécurité automatique : Dependabot, CodeQL, vérification des licences des dépendances
-- [ ] Page d'état minimale : version, connexion à la base, espace disque
+- [x] Page d'état minimale : version, connexion à la base, espace disque — *Administration > Santé et chiffres, 0.3.7 et 0.3.20*
 - [x] Bilingue dès le départ : textes de l'interface dans des fichiers de traduction FR et EN
 - [x] Application web installable (PWA) : manifeste, icônes, écran d'accueil Android ; aucune donnée financière mise en cache sur l'appareil (décision 0011)
 
@@ -170,7 +170,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] Console d'administration : utilisateurs, sessions, IP bloquées, retours, état du serveur
 - [ ] Mode démo et export complet des données (JSON, CSV)
 - [ ] Traductions FR et EN complètes, accessibilité, rapidité avec 100 000 opérations
-- [ ] Documentation : installation, utilisation, FAQ
+- [ ] Documentation : installation, utilisation, FAQ — *en partie : `docs/INSTALLATION.md` ; aide dans l'application, une page par écran en FR et EN, dans la 0.3.30 ; reste la FAQ*
 - [ ] Publication signée, notes de version, liste des composants (SBOM)
 - [ ] Audit de sécurité externe si possible
 

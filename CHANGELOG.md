@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.30 (1er novembre 2026)
+
+### Aide dans l'application
+
+- Un bouton **?** en haut de chaque page ouvre **l'aide de cette page** : à quoi elle sert, comment s'en servir, ce qu'il faut savoir. Sur téléphone, l'aide est dans le menu « Mon compte ».
+- **« Toute l'aide »** réunit les 17 pages : premiers pas, accueil, comptes, opérations, import, catégories et règles, budget, prévisions, crédits, factures, Mon conseiller, assistant IA, notifications, membres, sécurité, administration du serveur, et vos données.
+- En français et en anglais, selon la langue de l'application. Les textes sont livrés avec l'application : l'aide marche sans connexion et n'appelle rien à l'extérieur.
+- Les pages sont aussi lisibles sur GitHub, dans `app/assets/help/`.
+
 ## 0.3.29 (1er novembre 2026)
 
 ### IA : Gemini, ChatGPT et Claude prêts à l'emploi

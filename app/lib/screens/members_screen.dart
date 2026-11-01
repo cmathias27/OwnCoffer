@@ -5,6 +5,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../help/help.dart';
 
 /// Members of the group; invitations for administrators.
 class MembersScreen extends StatefulWidget {
@@ -139,7 +140,10 @@ class _MembersScreenState extends State<MembersScreen> {
           );
     if (embedded) return body;
     return Scaffold(
-      appBar: AppBar(title: Text(l.membersTitle)),
+      appBar: AppBar(
+        title: Text(l.membersTitle),
+        actions: const [HelpButton(HelpTopic.members)],
+      ),
       floatingActionButton: _isAdmin
           ? FloatingActionButton.extended(
               onPressed: _invite,

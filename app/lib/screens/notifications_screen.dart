@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/budget_charts.dart';
+import '../help/help.dart';
 
 /// The user's notifications. Texts are built here from the type and the
 /// figures stored by the server, so they follow the user's language.
@@ -79,6 +80,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       appBar: AppBar(
         title: Text(l.notificationsTitle),
         actions: [
+          const HelpButton(HelpTopic.notifications),
           if (unread > 0)
             TextButton(
               onPressed: _markAll,

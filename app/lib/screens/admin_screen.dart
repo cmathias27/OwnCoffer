@@ -12,6 +12,7 @@ import '../widgets/admin_updates.dart';
 import 'update_progress_screen.dart';
 import 'members_screen.dart';
 import 'security_screen.dart';
+import '../help/help.dart';
 
 /// Server administration (server administrator only): health, figures,
 /// accounts, banned IPs and the audit log. Never a group's financial data.
@@ -122,6 +123,7 @@ class _AdminScreenState extends State<AdminScreen> {
         appBar: AppBar(
           title: Text(l.adminTitle),
           actions: [
+            const HelpButton(HelpTopic.admin),
             IconButton(
               tooltip: l.adminRefresh,
               icon: const Icon(Icons.refresh),

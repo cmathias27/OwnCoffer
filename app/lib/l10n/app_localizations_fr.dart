@@ -12,6 +12,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appTitle => 'OwnCoffer';
 
   @override
+  String get helpTitle => 'Aide';
+
+  @override
+  String get helpButton => 'Aide sur cette page';
+
+  @override
+  String get helpAll => 'Toute l\'aide';
+
+  @override
+  String get helpIntro =>
+      'Une page par écran. Le bouton ? en haut de chaque page ouvre directement la sienne.';
+
+  @override
   String get signOut => 'Se déconnecter';
 
   @override

@@ -1,6 +1,10 @@
 {
   "@@locale": "fr",
   "appTitle": "OwnCoffer",
+  "helpTitle": "Aide",
+  "helpButton": "Aide sur cette page",
+  "helpAll": "Toute l'aide",
+  "helpIntro": "Une page par écran. Le bouton ? en haut de chaque page ouvre directement la sienne.",
   "signOut": "Se déconnecter",
   "language": "Langue",
   "error_generic": "Une erreur est survenue. Réessayez.",
