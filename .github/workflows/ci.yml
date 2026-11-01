@@ -283,8 +283,11 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+      # Only the apps: docker/build-push-action also leaves a build record
+      # (*.dockerbuild) that download-artifact cannot extract.
       - uses: actions/download-artifact@v4
         with:
+          pattern: owncoffer-*
           path: dist
           merge-multiple: true
       - name: Liste des composants (SBOM) du code

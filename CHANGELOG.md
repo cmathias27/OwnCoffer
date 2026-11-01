@@ -2,6 +2,10 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.0.1 (novembre 2026)
+
+- **Publication** : la version GitHub (applications Windows et Android, listes des composants, signatures) n'avait pas pu être créée pour la 1.0.0 ; elle l'est pour celle-ci. Rien ne change dans le serveur ni dans l'application.
+
 ## 1.0.0 (novembre 2026)
 
 Première version stable du serveur et de l'application web (fin de la phase 5), et premières applications Windows et Android.
