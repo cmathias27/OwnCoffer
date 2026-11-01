@@ -10,6 +10,7 @@ import '../util/file_pick.dart';
 import '../widgets/mcp_tokens.dart';
 import '../widgets/soft.dart';
 import 'advisor_screen.dart';
+import '../help/help.dart';
 
 /// The assistant (optional AI, décisions 0006 and 0008): the user's choice
 /// of provider and model, then a conversation in which the AI reads the
@@ -129,7 +130,10 @@ class _AssistantScreenState extends State<AssistantScreen> {
     final l = AppLocalizations.of(context);
     final s = _status;
     return Scaffold(
-      appBar: AppBar(title: Text(l.assistantTitle)),
+      appBar: AppBar(
+        title: Text(l.assistantTitle),
+        actions: const [HelpButton(HelpTopic.assistant)],
+      ),
       body: _error != null
           ? Center(child: Text(_error!))
           : s == null

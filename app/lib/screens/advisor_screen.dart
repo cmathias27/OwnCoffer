@@ -9,6 +9,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/category_field.dart';
 import '../widgets/soft.dart';
+import '../help/help.dart';
 
 /// "Mon conseiller", without AI: what the engine proposes, with its figures
 /// and its calculation. Nothing changes until the user accepts; every
@@ -95,7 +96,10 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
         if (p.status != 'pending') p,
     ];
     return Scaffold(
-      appBar: AppBar(title: Text(l.advisorTitle)),
+      appBar: AppBar(
+        title: Text(l.advisorTitle),
+        actions: const [HelpButton(HelpTopic.advisor)],
+      ),
       body: RefreshIndicator(
         onRefresh: _load,
         child: ListView(

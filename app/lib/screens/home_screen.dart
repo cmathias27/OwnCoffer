@@ -23,6 +23,7 @@ import 'members_screen.dart';
 import 'notifications_screen.dart';
 import 'operations_screen.dart';
 import 'security_screen.dart';
+import '../help/help.dart';
 
 /// Signed-in shell: navigation rail on wide screens, bottom bar on phones.
 class HomeScreen extends StatefulWidget {
@@ -133,6 +134,19 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadAccounts();
     _loadUnread();
   }
+
+  /// The help page of the open tab (indexes of the stack).
+  HelpTopic get _helpTopic => switch (_tab) {
+    0 => HelpTopic.accounts,
+    1 => HelpTopic.operations,
+    2 => HelpTopic.forecast,
+    3 => HelpTopic.import,
+    4 => HelpTopic.categories,
+    5 => HelpTopic.budget,
+    6 => HelpTopic.loans,
+    7 => HelpTopic.invoices,
+    _ => HelpTopic.home,
+  };
 
   /// Phone: the tabs that do not fit in the bottom bar.
   Future<void> _more(
@@ -290,6 +304,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+          // Wide screens: the help of the open tab; phones find it in the
+          // account menu, so that the title keeps its room.
+          if (wide) HelpButton(_helpTopic),
           IconButton(
             tooltip: l.notificationsUnread(_unread),
             onPressed: _openNotifications,
@@ -347,6 +364,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text(l.menuSecurity),
                     ),
                   ),
+                PopupMenuItem(
+                  value: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => HelpPage(topic: _helpTopic),
+                    ),
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.help_outline),
+                    title: Text(l.helpTitle),
+                  ),
+                ),
                 PopupMenuItem(
                   value: s.signOut,
                   child: ListTile(

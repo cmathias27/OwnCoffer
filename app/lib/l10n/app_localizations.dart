@@ -104,6 +104,30 @@ abstract class AppLocalizations {
   /// **'OwnCoffer'**
   String get appTitle;
 
+  /// No description provided for @helpTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide'**
+  String get helpTitle;
+
+  /// No description provided for @helpButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide sur cette page'**
+  String get helpButton;
+
+  /// No description provided for @helpAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toute l\'aide'**
+  String get helpAll;
+
+  /// No description provided for @helpIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une page par écran. Le bouton ? en haut de chaque page ouvre directement la sienne.'**
+  String get helpIntro;
+
   /// No description provided for @signOut.
   ///
   /// In fr, this message translates to:

@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../help/help.dart';
 
 /// Two-factor authentication: enable (QR code, first code, backup codes),
 /// renew backup codes, disable.
@@ -105,7 +106,10 @@ class _SecurityScreenState extends State<SecurityScreen> {
           );
     if (widget.embedded) return body;
     return Scaffold(
-      appBar: AppBar(title: Text(l.securityTitle)),
+      appBar: AppBar(
+        title: Text(l.securityTitle),
+        actions: const [HelpButton(HelpTopic.security)],
+      ),
       body: body,
     );
   }

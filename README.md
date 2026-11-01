@@ -35,6 +35,7 @@
 | [Décisions](docs/decisions/) | Les choix d'architecture et leurs raisons |
 | [Catégories standard](docs/CATEGORIES_STANDARD.md) | Le catalogue commun de catégories (FR / EN) |
 | [Maquettes](docs/MAQUETTES.md) | Les écrans dessinés et le style retenu |
+| [Aide de l'application](app/assets/help/fr/start.md) | Les pages d'aide affichées dans l'app, une par écran (aussi [en anglais](app/assets/help/en/start.md)) |
 
 ## Technologies prévues
 

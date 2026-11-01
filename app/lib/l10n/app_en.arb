@@ -1,6 +1,10 @@
 {
   "@@locale": "en",
   "appTitle": "OwnCoffer",
+  "helpTitle": "Help",
+  "helpButton": "Help on this page",
+  "helpAll": "All the help",
+  "helpIntro": "One page per screen. The ? button at the top of each page opens its own directly.",
   "signOut": "Sign out",
   "language": "Language",
   "error_generic": "Something went wrong. Please try again.",
