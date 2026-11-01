@@ -254,7 +254,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Construction (publiée en :edge sur main, en :X.Y.Z sur une version)
         id: build
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/Dockerfile
