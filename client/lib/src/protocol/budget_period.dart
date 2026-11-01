@@ -15,6 +15,7 @@ import 'package:serverpod_client/serverpod_client.dart' as _isc;
 enum BudgetPeriod implements _isc.SerializableModel {
   week,
   month,
+  quarter,
   year;
 
   static BudgetPeriod fromJson(String name) {
@@ -23,6 +24,8 @@ enum BudgetPeriod implements _isc.SerializableModel {
         return BudgetPeriod.week;
       case 'month':
         return BudgetPeriod.month;
+      case 'quarter':
+        return BudgetPeriod.quarter;
       case 'year':
         return BudgetPeriod.year;
       default:

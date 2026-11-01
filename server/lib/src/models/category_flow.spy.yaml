@@ -9,6 +9,9 @@ fields:
   previousCents: int
   ### Average over the three previous periods.
   averageCents: int
+  ### Same category over each period of the report's history, oldest
+  ### first, the current one last (empty in the month review).
+  history: List<int>
   ### Monthly goal (month view only).
   goalCents: int?
   ### Spending expected at the end of the current month, goal categories

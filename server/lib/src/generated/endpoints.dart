@@ -930,6 +930,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'periods': _is.ParameterDescription(
+              name: 'periods',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -942,6 +947,7 @@ class Endpoints extends _is.EndpointDispatch {
                     params['period'],
                     params['date'],
                     accountId: params['accountId'],
+                    periods: params['periods'],
                   ),
         ),
         'operations': _is.MethodConnector(

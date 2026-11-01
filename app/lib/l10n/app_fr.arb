@@ -922,7 +922,7 @@
     }
   },
   "budgetHistoryTitle": "Revenus et dépenses",
-  "budgetHistorySemantic": "Revenus et dépenses des six dernières périodes",
+  "budgetHistorySemantic": "Revenus et dépenses des dernières périodes",
   "rankingExpenses": "Classement des dépenses",
   "rankingIncome": "Classement des revenus",
   "rankingEmpty": "Rien sur cette période.",
@@ -2423,5 +2423,69 @@
   "scanEnhance": "Améliorer la lisibilité (fond blanc, texte foncé)",
   "scanWholePhoto": "Toute la photo",
   "scanDetectAgain": "Coins trouvés",
-  "scanApply": "Recadrer"
+  "scanApply": "Recadrer",
+  "periodQuarter": "Trimestre",
+  "periodQuarterName": "T{quarter} {year}",
+  "@periodQuarterName": {
+    "placeholders": {
+      "quarter": {
+        "type": "int"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "spendingView": "Affichage",
+  "spendingViewLines": "Lignes",
+  "spendingViewTable": "Tableau",
+  "spendingViewPie": "Camembert",
+  "spendingViewChart": "Graphique",
+  "spendingPeriods": "Sur {count} périodes",
+  "@spendingPeriods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spendingPeriodsHelp": "Nombre de périodes montrées par les graphiques dans le temps",
+  "sharePercent": "{percent} %",
+  "@sharePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "tableCategory": "Catégorie",
+  "tableAmount": "Montant",
+  "tableShare": "Part",
+  "tablePrevious": "Période précédente",
+  "tableAverage": "Moyenne des 3 précédentes",
+  "tableCount": "Opérations",
+  "pieOthers": "Autres",
+  "pieDirect": "{category} (sans sous-catégorie)",
+  "@pieDirect": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "pieTotal": "Total",
+  "pieAllCategories": "Toutes les catégories",
+  "pieSemantic": "Répartition par catégorie",
+  "pieHelp": "Touchez une catégorie pour voir sa répartition ou ses opérations ; « Autres » ouvre le tableau complet.",
+  "pieHelpSub": "Touchez une sous-catégorie pour voir ses opérations.",
+  "chartSemantic": "Évolution des principales catégories",
+  "chartHelp": "Les {count} catégories les plus importantes sur ces périodes. Touchez le graphique pour lire les montants, ou une catégorie pour voir ses opérations de la période en cours.",
+  "@chartHelp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "budgetOperationsHint": "Touchez une opération pour la gérer : catégorie, ventilation, facture, note, abonnement…"
 }

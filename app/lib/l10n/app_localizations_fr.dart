@@ -1449,7 +1449,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get budgetHistorySemantic =>
-      'Revenus et dépenses des six dernières périodes';
+      'Revenus et dépenses des dernières périodes';
 
   @override
   String get rankingExpenses => 'Classement des dépenses';
@@ -3237,4 +3237,96 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scanApply => 'Recadrer';
+
+  @override
+  String get periodQuarter => 'Trimestre';
+
+  @override
+  String periodQuarterName(int quarter, String year) {
+    return 'T$quarter $year';
+  }
+
+  @override
+  String get spendingView => 'Affichage';
+
+  @override
+  String get spendingViewLines => 'Lignes';
+
+  @override
+  String get spendingViewTable => 'Tableau';
+
+  @override
+  String get spendingViewPie => 'Camembert';
+
+  @override
+  String get spendingViewChart => 'Graphique';
+
+  @override
+  String spendingPeriods(int count) {
+    return 'Sur $count périodes';
+  }
+
+  @override
+  String get spendingPeriodsHelp =>
+      'Nombre de périodes montrées par les graphiques dans le temps';
+
+  @override
+  String sharePercent(int percent) {
+    return '$percent %';
+  }
+
+  @override
+  String get tableCategory => 'Catégorie';
+
+  @override
+  String get tableAmount => 'Montant';
+
+  @override
+  String get tableShare => 'Part';
+
+  @override
+  String get tablePrevious => 'Période précédente';
+
+  @override
+  String get tableAverage => 'Moyenne des 3 précédentes';
+
+  @override
+  String get tableCount => 'Opérations';
+
+  @override
+  String get pieOthers => 'Autres';
+
+  @override
+  String pieDirect(String category) {
+    return '$category (sans sous-catégorie)';
+  }
+
+  @override
+  String get pieTotal => 'Total';
+
+  @override
+  String get pieAllCategories => 'Toutes les catégories';
+
+  @override
+  String get pieSemantic => 'Répartition par catégorie';
+
+  @override
+  String get pieHelp =>
+      'Touchez une catégorie pour voir sa répartition ou ses opérations ; « Autres » ouvre le tableau complet.';
+
+  @override
+  String get pieHelpSub =>
+      'Touchez une sous-catégorie pour voir ses opérations.';
+
+  @override
+  String get chartSemantic => 'Évolution des principales catégories';
+
+  @override
+  String chartHelp(int count) {
+    return 'Les $count catégories les plus importantes sur ces périodes. Touchez le graphique pour lire les montants, ou une catégorie pour voir ses opérations de la période en cours.';
+  }
+
+  @override
+  String get budgetOperationsHint =>
+      'Touchez une opération pour la gérer : catégorie, ventilation, facture, note, abonnement…';
 }
