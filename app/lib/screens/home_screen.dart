@@ -10,6 +10,7 @@ import '../state/session.dart';
 import '../widgets/form_card.dart';
 import 'accounts_screen.dart';
 import 'admin_screen.dart';
+import 'advisor_screen.dart';
 import 'budget_screen.dart';
 import 'categories_screen.dart';
 import 'dashboard_screen.dart';
@@ -240,6 +241,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 key: _dashboardKey,
                 membership: current,
                 unread: _unread,
+                onAdvisor: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => AdvisorScreen(membership: current),
+                  ),
+                ),
                 onOpen: (target) => switch (target) {
                   DashboardTarget.accounts => _selectTab(0),
                   DashboardTarget.operations => _selectTab(1),

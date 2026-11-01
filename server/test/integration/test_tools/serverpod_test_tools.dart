@@ -18,6 +18,8 @@ import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
 import 'package:owncoffer_server/src/generated/account_kind.dart' as _ihbhvzqt;
 import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
+import 'package:owncoffer_server/src/generated/action_proposal.dart'
+    as _ijqvws8i;
 import 'package:owncoffer_server/src/generated/admin_audit_info.dart'
     as _i1g569d8;
 import 'package:owncoffer_server/src/generated/admin_group_info.dart'
@@ -250,6 +252,8 @@ class TestEndpoints {
 
   late final _AdminEndpoint admin;
 
+  late final _AdvisorEndpoint advisor;
+
   late final _AnalysisEndpoint analysis;
 
   late final _CategoryEndpoint category;
@@ -299,6 +303,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     admin = _AdminEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    advisor = _AdvisorEndpoint(
       endpoints,
       serializationManager,
     );
@@ -1545,6 +1553,141 @@ class _AdminEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<String>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _AdvisorEndpoint {
+  _AdvisorEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<List<_ijqvws8i.ActionProposal>> proposals(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'advisor',
+            method: 'proposals',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'advisor',
+          methodName: 'proposals',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ijqvws8i.ActionProposal>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ijqvws8i.ActionProposal> accept(
+    _ist.TestSessionBuilder sessionBuilder,
+    int proposalId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'advisor',
+            method: 'accept',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'advisor',
+          methodName: 'accept',
+          parameters: _ist.testObjectToJson({'proposalId': proposalId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ijqvws8i.ActionProposal>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ijqvws8i.ActionProposal> refuse(
+    _ist.TestSessionBuilder sessionBuilder,
+    int proposalId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'advisor',
+            method: 'refuse',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'advisor',
+          methodName: 'refuse',
+          parameters: _ist.testObjectToJson({'proposalId': proposalId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ijqvws8i.ActionProposal>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ijqvws8i.ActionProposal> undo(
+    _ist.TestSessionBuilder sessionBuilder,
+    int proposalId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'advisor',
+            method: 'undo',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'advisor',
+          methodName: 'undo',
+          parameters: _ist.testObjectToJson({'proposalId': proposalId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ijqvws8i.ActionProposal>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

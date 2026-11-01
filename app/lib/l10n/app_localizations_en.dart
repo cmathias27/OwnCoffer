@@ -3761,4 +3761,130 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get advisorTitle => 'My advisor';
+
+  @override
+  String get advisorIntro =>
+      'What OwnCoffer proposes, from the accounts you see. Each proposal shows its figures and its calculation; nothing changes until you accept it, and every accepted change can be undone.';
+
+  @override
+  String get advisorNothing => 'Nothing to propose for now';
+
+  @override
+  String get advisorNothingHelp =>
+      'Proposals come from your last three complete months: goals to set, raise or lower. Come back after the next import.';
+
+  @override
+  String get advisorPast => 'Decided in the last 30 days';
+
+  @override
+  String advisorSuggestGoal(String category, String amount) {
+    return 'Set a goal \"$category\": $amount a month';
+  }
+
+  @override
+  String advisorRaiseGoal(String category, String from, String to) {
+    return 'Raise the goal \"$category\": $from → $to';
+  }
+
+  @override
+  String advisorLowerGoal(String category, String from, String to) {
+    return 'Lower the goal \"$category\": $from → $to';
+  }
+
+  @override
+  String get advisorOther => 'Proposal';
+
+  @override
+  String advisorGoalWhy(String months, String amount) {
+    return 'Spending of the last three months: $months. Their average, rounded up to the next ten euros, gives $amount.';
+  }
+
+  @override
+  String get advisorSuggestWhy =>
+      'This category has spending every month and no goal yet: a realistic goal will warn you at 80% and 100%.';
+
+  @override
+  String get advisorRaiseWhy =>
+      'The goal was exceeded at least two months out of three: a realistic goal stays useful instead of warning every month.';
+
+  @override
+  String get advisorLowerWhy =>
+      'Spending stayed under half the goal three months in a row: a tighter goal keeps the margin you gained.';
+
+  @override
+  String get advisorByEngine => 'Computed by OwnCoffer, without AI.';
+
+  @override
+  String advisorByAi(String provider, String model) {
+    return 'Proposed by the AI ($provider, $model): check before accepting.';
+  }
+
+  @override
+  String advisorAiCategory(String label, String category) {
+    return 'Classify \"$label\" as \"$category\"';
+  }
+
+  @override
+  String advisorAiCategoryWhy(String date, String amount, String why) {
+    return 'Operation of $date, $amount. $why';
+  }
+
+  @override
+  String advisorAiLoan(String lender, String principal, int months) {
+    return 'Create the loan \"$lender\": $principal over $months months';
+  }
+
+  @override
+  String advisorAiLoanWhy(String rate, String payment, String date) {
+    return 'Read in the document: rate $rate, instalment $payment, first due date $date. You can correct everything afterwards in the Loans tab.';
+  }
+
+  @override
+  String get advisorAccept => 'Accept';
+
+  @override
+  String get advisorRefuse => 'Refuse';
+
+  @override
+  String get advisorAccepted => 'Proposal applied.';
+
+  @override
+  String get advisorRefused => 'Proposal refused.';
+
+  @override
+  String get advisorUndone => 'Change undone.';
+
+  @override
+  String get advisorReaderHelp =>
+      'Read-only: a member can accept this proposal.';
+
+  @override
+  String get advisorStatusExecuted => 'Applied';
+
+  @override
+  String get advisorStatusRefused => 'Refused';
+
+  @override
+  String get advisorStatusExpired => 'Withdrawn: the data changed';
+
+  @override
+  String get advisorStatusUndone => 'Undone';
+
+  @override
+  String get error_proposal_stale =>
+      'The data changed since this proposal: it was withdrawn, without changing anything.';
+
+  @override
+  String get error_proposal_closed => 'This proposal was already dealt with.';
+
+  @override
+  String get error_proposal_access_denied =>
+      'This proposal does not exist or is not yours.';
+
+  @override
+  String get error_proposal_unknown =>
+      'This proposal cannot be applied: it is incomplete.';
 }

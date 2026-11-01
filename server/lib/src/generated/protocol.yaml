@@ -37,6 +37,11 @@ admin:
   - requestUpdateCheck:
   - requestInstall:
   - sendTestEmail:
+advisor:
+  - proposals:
+  - accept:
+  - refuse:
+  - undo:
 analysis:
   - report:
   - operations:

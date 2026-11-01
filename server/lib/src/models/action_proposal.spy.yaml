@@ -1,0 +1,46 @@
+### A change proposed by the advisor (the engine, later an AI), applied
+### only once the user accepts it, by the financial commands service
+### (décision 0009). Never a real bank operation.
+class: ActionProposal
+table: action_proposals
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  ### Made for this user, from the accounts they may see: nobody else sees
+  ### it (its figures may come from a restricted account).
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  ### engine or ai, and for an AI its provider and model.
+  origin: String
+  provider: String?
+  model: String?
+  ### set_goal (target: category, value: amount in cents, null = no goal),
+  ### set_category (target: operation, value: category id) or create_loan
+  ### (target: the group, fields in proposedData).
+  kind: String
+  targetId: int
+  currentValue: int?
+  proposedValue: int?
+  ### Fields of a change that is more than one value (create_loan: the
+  ### loan as JSON, as the loan form fills it).
+  proposedData: String?
+  ### Why, as a code the app turns into a sentence (raise_goal…), and the
+  ### figures behind it as JSON.
+  reason: String
+  data: String
+  ### The data it rests on; a proposal whose data changed is not applied.
+  dataVersion: String
+  ### pending, executed, refused, expired, undone.
+  status: String
+  ### One open proposal per change: the advisor does not repeat itself.
+  dedupKey: String
+  createdAt: DateTime, default=now
+  decidedAt: DateTime?
+  decidedBy: UuidValue?
+  executedAt: DateTime?
+  ### What the change created (create_loan: the loan), to undo it.
+  resultId: int?
+indexes:
+  action_proposals_user_idx:
+    fields: authUserId, groupId, status
+  action_proposals_dedup_idx:
+    fields: authUserId, groupId, dedupKey
+    unique: true

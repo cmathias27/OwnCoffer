@@ -12,6 +12,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:owncoffer_server/src/generated/account.dart' as _iul9ey3g;
+import 'package:owncoffer_server/src/generated/action_proposal.dart'
+    as _ijqvws8i;
 import 'package:owncoffer_server/src/generated/admin_audit_info.dart'
     as _i1g569d8;
 import 'package:owncoffer_server/src/generated/admin_group_info.dart'
@@ -57,6 +59,7 @@ import 'account.dart' as _iulmo8pc;
 import 'account_access.dart' as _idkoqesg;
 import 'account_kind.dart' as _ifkquxga;
 import 'account_visibility.dart' as _ioxxcdxl;
+import 'action_proposal.dart' as _ius3n358;
 import 'admin_audit_info.dart' as _ie0chd06;
 import 'admin_group_info.dart' as _ixpxctu5;
 import 'admin_health.dart' as _ihbeufm3;
@@ -149,6 +152,7 @@ export 'account.dart';
 export 'account_access.dart';
 export 'account_kind.dart';
 export 'account_visibility.dart';
+export 'action_proposal.dart';
 export 'admin_audit_info.dart';
 export 'admin_group_info.dart';
 export 'admin_health.dart';
@@ -435,6 +439,209 @@ class Protocol extends _is.DatabaseSerializationManager {
           ],
           type: 'btree',
           isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'action_proposals',
+      dartName: 'ActionProposal',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'origin',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'provider',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'model',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'kind',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'targetId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'currentValue',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'proposedValue',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'proposedData',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'reason',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'data',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'dataVersion',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'status',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'dedupKey',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+        _isp.ColumnDefinition(
+          name: 'decidedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'decidedBy',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: true,
+          dartType: 'UuidValue?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'executedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'resultId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'action_proposals_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'action_proposals_fk_1',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'action_proposals_user_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'status',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'action_proposals_dedup_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'dedupKey',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
           isPrimary: false,
         ),
       ],
@@ -2874,6 +3081,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ioxxcdxl.AccountVisibility) {
       return _ioxxcdxl.AccountVisibility.fromJson(data) as T;
     }
+    if (t == _ius3n358.ActionProposal) {
+      return _ius3n358.ActionProposal.fromJson(data) as T;
+    }
     if (t == _ie0chd06.AdminAuditInfo) {
       return _ie0chd06.AdminAuditInfo.fromJson(data) as T;
     }
@@ -3153,6 +3363,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_ioxxcdxl.AccountVisibility?>()) {
       return (data != null ? _ioxxcdxl.AccountVisibility.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ius3n358.ActionProposal?>()) {
+      return (data != null ? _ius3n358.ActionProposal.fromJson(data) : null)
           as T;
     }
     if (t == _is.getType<_ie0chd06.AdminAuditInfo?>()) {
@@ -3665,6 +3879,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ijqvws8i.ActionProposal>) {
+      return (data as List)
+              .map((e) => deserialize<_ijqvws8i.ActionProposal>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ivm4hoam.BankTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ivm4hoam.BankTransaction>(e))
@@ -3788,6 +4008,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _idkoqesg.AccountAccess => 'AccountAccess',
       _ifkquxga.AccountKind => 'AccountKind',
       _ioxxcdxl.AccountVisibility => 'AccountVisibility',
+      _ius3n358.ActionProposal => 'ActionProposal',
       _ie0chd06.AdminAuditInfo => 'AdminAuditInfo',
       _ixpxctu5.AdminGroupInfo => 'AdminGroupInfo',
       _ihbeufm3.AdminHealth => 'AdminHealth',
@@ -3899,6 +4120,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'AccountKind';
       case _ioxxcdxl.AccountVisibility():
         return 'AccountVisibility';
+      case _ius3n358.ActionProposal():
+        return 'ActionProposal';
       case _ie0chd06.AdminAuditInfo():
         return 'AdminAuditInfo';
       case _ixpxctu5.AdminGroupInfo():
@@ -4113,6 +4336,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'AccountVisibility') {
       return deserialize<_ioxxcdxl.AccountVisibility>(data['data']);
+    }
+    if (dataClassName == 'ActionProposal') {
+      return deserialize<_ius3n358.ActionProposal>(data['data']);
     }
     if (dataClassName == 'AdminAuditInfo') {
       return deserialize<_ie0chd06.AdminAuditInfo>(data['data']);
@@ -4420,6 +4646,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _iulmo8pc.Account.t;
       case _idkoqesg.AccountAccess:
         return _idkoqesg.AccountAccess.t;
+      case _ius3n358.ActionProposal:
+        return _ius3n358.ActionProposal.t;
       case _i1613bfs.AuditEntry:
         return _i1613bfs.AuditEntry.t;
       case _i0b7vj86.BackupCode:

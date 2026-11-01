@@ -61,6 +61,10 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'invoice_access_denied' => l.error_invoice_access_denied,
   'mail_not_configured' => l.error_mail_not_configured,
   'send_limit' => l.error_send_limit,
+  'proposal_stale' => l.error_proposal_stale,
+  'proposal_closed' => l.error_proposal_closed,
+  'proposal_access_denied' => l.error_proposal_access_denied,
+  'proposal_unknown' => l.error_proposal_unknown,
   'too_many' => l.error_too_many,
   'invalid_month_start_day' => l.error_invalid_month_start_day,
   // File format errors of shared/ come prefixed with `import_`.

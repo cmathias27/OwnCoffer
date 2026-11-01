@@ -2,6 +2,20 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.24 (1er novembre 2026)
+
+### Mon conseiller (sans IA) et circuit des propositions
+
+- Nouvel écran **Mon conseiller** (bouton dans le Budget, lien depuis l'Accueil) : ce qu'OwnCoffer vous propose, calculé par le moteur, **sans IA**.
+  - **Fixer un objectif** pour une catégorie dépensée chaque mois qui n'en a pas ;
+  - **le relever** quand il a été dépassé au moins deux mois sur trois ;
+  - **le baisser** quand les dépenses sont restées sous la moitié trois mois de suite.
+- Chaque proposition montre **ses chiffres et son calcul** (dépenses des trois derniers mois complets, moyenne arrondie à la dizaine d'euros supérieure) et dit qu'elle est calculée sans IA.
+- **Rien ne change sans votre accord** : « Accepter » applique, « Refuser » écarte. Tout ce qui est accepté **peut être annulé** depuis l'historique des 30 derniers jours.
+- Les propositions sont faites **pour vous seul**, d'après les comptes que vous voyez : leurs chiffres ne révèlent jamais un compte restreint à un autre membre.
+- Garanties (décision 0009), vérifiées par des tests : les droits sont revérifiés au moment d'accepter ; une proposition dont les données ont changé est **retirée sans rien modifier** ; un double clic ne l'applique **qu'une fois** ; tout est noté au journal ; un lecteur peut consulter mais pas accepter.
+- Le circuit sait aussi **créer un crédit** à partir de champs lus dans un document : il servira à l'assistant IA (tableau d'amortissement → crédit dans l'onglet Crédits, après votre validation).
+
 ## 0.3.23 (1er novembre 2026)
 
 ### Accueil

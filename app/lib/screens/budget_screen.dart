@@ -13,6 +13,7 @@ import '../widgets/category_field.dart';
 import '../widgets/operation_sheet.dart';
 import '../widgets/operation_tile.dart';
 import '../widgets/soft.dart';
+import 'advisor_screen.dart';
 import 'calendar_screen.dart';
 import 'compare_screen.dart';
 import 'review_screen.dart';
@@ -533,6 +534,12 @@ class BudgetScreenState extends State<BudgetScreen> {
                       : todayUtcMidnight(),
                 ),
               ),
+            ),
+            ActionChip(
+              avatar: const Icon(Icons.lightbulb_outline, size: 18),
+              label: Text(l.advisorTitle),
+              onPressed: () =>
+                  open(AdvisorScreen(membership: widget.membership)),
             ),
             ActionChip(
               avatar: const Icon(Icons.compare_arrows, size: 18),

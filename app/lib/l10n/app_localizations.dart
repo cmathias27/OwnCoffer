@@ -6095,6 +6095,204 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{count, plural, =1{1 notification non lue} other{{count} notifications non lues}}'**
   String dashboardUnread(int count);
+
+  /// No description provided for @advisorTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon conseiller'**
+  String get advisorTitle;
+
+  /// No description provided for @advisorIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qu\'OwnCoffer vous propose, d\'après les comptes que vous voyez. Chaque proposition montre ses chiffres et son calcul ; rien ne change tant que vous ne l\'acceptez pas, et tout changement accepté peut être annulé.'**
+  String get advisorIntro;
+
+  /// No description provided for @advisorNothing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien à proposer pour l\'instant'**
+  String get advisorNothing;
+
+  /// No description provided for @advisorNothingHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les propositions viennent de vos trois derniers mois complets : objectifs à fixer, à relever ou à baisser. Revenez après le prochain import.'**
+  String get advisorNothingHelp;
+
+  /// No description provided for @advisorPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Décidées ces 30 derniers jours'**
+  String get advisorPast;
+
+  /// No description provided for @advisorSuggestGoal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fixer un objectif « {category} » : {amount} par mois'**
+  String advisorSuggestGoal(String category, String amount);
+
+  /// No description provided for @advisorRaiseGoal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relever l\'objectif « {category} » : {from} → {to}'**
+  String advisorRaiseGoal(String category, String from, String to);
+
+  /// No description provided for @advisorLowerGoal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Baisser l\'objectif « {category} » : {from} → {to}'**
+  String advisorLowerGoal(String category, String from, String to);
+
+  /// No description provided for @advisorOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposition'**
+  String get advisorOther;
+
+  /// No description provided for @advisorGoalWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses des trois derniers mois : {months}. Leur moyenne, arrondie à la dizaine d\'euros supérieure, donne {amount}.'**
+  String advisorGoalWhy(String months, String amount);
+
+  /// No description provided for @advisorSuggestWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette catégorie a des dépenses chaque mois et pas encore d\'objectif : un objectif réaliste vous préviendra à 80 % et à 100 %.'**
+  String get advisorSuggestWhy;
+
+  /// No description provided for @advisorRaiseWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'objectif a été dépassé au moins deux mois sur trois : un objectif réaliste reste utile au lieu d\'alerter tous les mois.'**
+  String get advisorRaiseWhy;
+
+  /// No description provided for @advisorLowerWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les dépenses sont restées sous la moitié de l\'objectif trois mois de suite : un objectif plus serré garde la marge que vous avez prise.'**
+  String get advisorLowerWhy;
+
+  /// No description provided for @advisorByEngine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculé par OwnCoffer, sans IA.'**
+  String get advisorByEngine;
+
+  /// No description provided for @advisorByAi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposé par l\'IA ({provider}, {model}) : vérifiez avant d\'accepter.'**
+  String advisorByAi(String provider, String model);
+
+  /// No description provided for @advisorAiCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classer « {label} » dans « {category} »'**
+  String advisorAiCategory(String label, String category);
+
+  /// No description provided for @advisorAiCategoryWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération du {date}, {amount}. {why}'**
+  String advisorAiCategoryWhy(String date, String amount, String why);
+
+  /// No description provided for @advisorAiLoan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer le crédit « {lender} » : {principal} sur {months} mois'**
+  String advisorAiLoan(String lender, String principal, int months);
+
+  /// No description provided for @advisorAiLoanWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu dans le document : taux {rate}, mensualité {payment}, première échéance le {date}. Vous pourrez tout corriger ensuite dans l\'onglet Crédits.'**
+  String advisorAiLoanWhy(String rate, String payment, String date);
+
+  /// No description provided for @advisorAccept.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accepter'**
+  String get advisorAccept;
+
+  /// No description provided for @advisorRefuse.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refuser'**
+  String get advisorRefuse;
+
+  /// No description provided for @advisorAccepted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposition appliquée.'**
+  String get advisorAccepted;
+
+  /// No description provided for @advisorRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposition refusée.'**
+  String get advisorRefused;
+
+  /// No description provided for @advisorUndone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changement annulé.'**
+  String get advisorUndone;
+
+  /// No description provided for @advisorReaderHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'En lecture seule : un membre peut accepter cette proposition.'**
+  String get advisorReaderHelp;
+
+  /// No description provided for @advisorStatusExecuted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appliquée'**
+  String get advisorStatusExecuted;
+
+  /// No description provided for @advisorStatusRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refusée'**
+  String get advisorStatusRefused;
+
+  /// No description provided for @advisorStatusExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirée : les données ont changé'**
+  String get advisorStatusExpired;
+
+  /// No description provided for @advisorStatusUndone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulée'**
+  String get advisorStatusUndone;
+
+  /// No description provided for @error_proposal_stale.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les données ont changé depuis cette proposition : elle a été retirée, sans rien modifier.'**
+  String get error_proposal_stale;
+
+  /// No description provided for @error_proposal_closed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette proposition a déjà été traitée.'**
+  String get error_proposal_closed;
+
+  /// No description provided for @error_proposal_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette proposition n\'existe pas ou n\'est pas à vous.'**
+  String get error_proposal_access_denied;
+
+  /// No description provided for @error_proposal_unknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette proposition ne peut pas être appliquée : elle est incomplète.'**
+  String get error_proposal_unknown;
 }
 
 class _AppLocalizationsDelegate
