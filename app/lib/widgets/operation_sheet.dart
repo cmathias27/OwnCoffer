@@ -140,7 +140,7 @@ class OperationSheet extends StatefulWidget {
 
 class _OperationSheetState extends State<OperationSheet> {
   late BankTransaction _t = widget.operation;
-  late ScheduledTransaction? _subscription = _subscription;
+  late ScheduledTransaction? _subscription = widget.subscription;
   late final _note = TextEditingController(text: widget.operation.note);
   List<TransactionSplit> _splits = [];
   String? _error;

@@ -4,6 +4,10 @@ Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). 
 
 ## 0.3.17 (1er novembre 2026)
 
+### Correction
+
+- **Fiche d'opération grise** (depuis la 0.3.16) : toucher une opération, dans la page Opérations comme dans le Budget, ouvrait une fenêtre grise au lieu de sa fiche. C'est corrigé, et un test vérifie maintenant que la fiche s'affiche dans les deux cas.
+
 ### Crédits : micro-crédits et paiements en plusieurs fois repérés
 
 - L'onglet Crédits montre **« Repérés dans vos opérations »** : les paiements en plusieurs fois (Oney, Alma, Klarna, 4x CB…) et petits crédits (Cofidis, Floa…) prélevés ces derniers mois, qui ne sont pas encore dans vos crédits. Pour chacun : nombre de prélèvements, dernier montant, date du premier, et le nombre d'échéances quand le libellé le donne (« 4X », « 2/4 », « en 3 fois »).
