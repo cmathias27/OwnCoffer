@@ -39,7 +39,7 @@ RUN dart build cli --target bin/main.dart --output build \
  && mkdir -p config web migrations
 
 # --- Runtime ------------------------------------------------------------------
-FROM alpine:3.22
+FROM alpine:3.24
 # Fixed ids: the host gives this user the shared docker/state folder.
 RUN addgroup -S -g 10001 owncoffer && adduser -S -u 10001 -G owncoffer owncoffer
 WORKDIR /app
