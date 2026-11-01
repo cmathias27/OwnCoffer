@@ -71,9 +71,7 @@ shared:
   // Serverpod listens on every interface: only this device may talk to it.
   pod.server.addMiddleware((Handler next) {
     return (Request req) async {
-      if (!InternetAddress(
-        req.connectionInfo.remote.address.toString(),
-      ).isLoopback) {
+      if (!isLocalAddress(req.connectionInfo.remote.address.toString())) {
         return Response.forbidden(body: Body.fromString('local_only'));
       }
       return next(req);
@@ -82,4 +80,13 @@ shared:
   await pod.start();
   final port = pod.server.port;
   return (pod: pod, api: Uri.parse('http://127.0.0.1:$port/'));
+}
+
+/// This device only: 127.0.0.1, ::1, and 127.0.0.1 seen through an IPv6
+/// socket (::ffff:127.0.0.1), as on any machine with IPv6.
+bool isLocalAddress(String address) {
+  var a = address.trim().toLowerCase();
+  if (a.startsWith('::ffff:')) a = a.substring(7);
+  final ip = InternetAddress.tryParse(a);
+  return ip != null && ip.isLoopback;
 }
