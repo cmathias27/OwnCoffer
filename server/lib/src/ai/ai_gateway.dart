@@ -14,8 +14,13 @@ import 'ai_context.dart';
 /// the only access to data (AiContext). Nothing is logged of the
 /// conversation itself, only that a request was made.
 abstract final class AiGateway {
-  /// Replaced in tests: no network there.
-  static AiAdapter adapter = OpenAiCompatibleAdapter();
+  /// Set in tests: no network there.
+  static AiAdapter? adapter;
+
+  /// Claude by its own API; everything else speaks OpenAI's.
+  static AiAdapter adapterFor(AiProvider p) =>
+      adapter ??
+      (p.kind == 'anthropic' ? AnthropicAdapter() : OpenAiCompatibleAdapter());
 
   static const _maxRounds = 6;
   static const _maxHistory = 20;
@@ -187,7 +192,7 @@ abstract final class AiGateway {
     final used = <String>[];
     final key = _key(provider);
     for (var round = 0; round < _maxRounds; round++) {
-      final answer = await adapter.chat(
+      final answer = await adapterFor(provider).chat(
         baseUrl: provider.baseUrl,
         apiKey: key,
         model: model,
@@ -209,6 +214,9 @@ abstract final class AiGateway {
         'role': 'assistant',
         'content': answer['content'],
         'tool_calls': calls,
+        // Claude's own blocks, sent back unchanged on the next round.
+        if (answer['_anthropic_content'] != null)
+          '_anthropic_content': answer['_anthropic_content'],
       });
       for (final c in calls) {
         if (c is! Map) continue;
@@ -243,5 +251,9 @@ abstract final class AiGateway {
   }
 
   static Future<List<String>> testProvider(AiProvider p) =>
-      adapter.models(baseUrl: p.baseUrl, apiKey: _key(p));
+      adapterFor(p).models(baseUrl: p.baseUrl, apiKey: _key(p));
+
+  /// The models of a provider being set up, with the key just typed.
+  static Future<List<String>> modelsWith(AiProvider p, String? apiKey) =>
+      adapterFor(p).models(baseUrl: p.baseUrl, apiKey: apiKey ?? _key(p));
 }

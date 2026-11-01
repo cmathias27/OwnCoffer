@@ -2,6 +2,19 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.29 (1er novembre 2026)
+
+### IA : Gemini, ChatGPT et Claude prêts à l'emploi
+
+- **Administration > IA > Ajouter un fournisseur** propose maintenant **Google Gemini**, **OpenAI ChatGPT** et **Anthropic Claude** déjà réglés : il suffit de **coller la clé d'API**. L'aide indique où obtenir chaque clé (guide : `docs/INSTALLATION.md`, « Brancher une IA »).
+- Laissée vide, la **liste des modèles est demandée au fournisseur** à l'enregistrement, ce qui vérifie aussi la clé : une clé refusée n'est pas enregistrée.
+- Les erreurs disent maintenant **ce que répond le fournisseur** (« API key not valid », quota dépassé…), jamais la clé.
+- **Claude** est appelé par l'API d'Anthropic elle-même (ses blocs de réponse renvoyés tels quels entre deux appels de fonctions), sans basculement automatique vers un autre modèle.
+
+### Correction
+
+- **Gemini** refusait les demandes de l'assistant : la description des fonctions sans paramètre ne lui convenait pas, et ses modèles étaient listés sous la forme `models/gemini-…`. C'est corrigé.
+
 ## 0.3.28 (1er novembre 2026)
 
 ### Assistant IA : une règle avec la catégorie

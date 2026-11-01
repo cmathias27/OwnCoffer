@@ -72,6 +72,7 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'ai_provider_unavailable' => l.error_ai_provider_unavailable,
   'ai_cap_reached' => l.error_ai_cap_reached,
   'ai_unavailable' => l.error_ai_unavailable,
+  'ai_no_models' => l.error_ai_no_models,
   'ai_no_vision' => l.error_ai_no_vision,
   'ai_message_too_long' => l.error_ai_message_too_long,
   'ai_invalid_url' => l.error_ai_invalid_url,
@@ -86,6 +87,10 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
 /// User-facing text for any error thrown by a server call.
 String errorText(AppLocalizations l, Object error) => switch (error) {
   AccessDeniedException(:final code) => serverErrorText(l, code),
+  // The AI provider's own reason (e.g. "API key not valid"), as it gave it.
+  InvalidInputException(:final code, :final field)
+      when code == 'ai_unavailable' && field != null =>
+    '${serverErrorText(l, code)} ${l.error_ai_reason(field)}',
   InvalidInputException(:final code) => serverErrorText(l, code),
   EmailAccountLoginException(:final reason) => switch (reason) {
     EmailAccountLoginExceptionReason.tooManyAttempts =>

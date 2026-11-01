@@ -41,6 +41,24 @@ class _ScriptedModel implements AiAdapter {
   }) async => ['llama3.1', 'mistral'];
 }
 
+/// A provider that refuses the key, as Gemini does.
+class _RefusingModel implements AiAdapter {
+  @override
+  Future<Map<String, Object?>> chat({
+    required String baseUrl,
+    required String? apiKey,
+    required String model,
+    required List<Map<String, Object?>> messages,
+    List<Map<String, Object?>>? tools,
+  }) async => throw const AiUnavailable('HTTP 400: API key not valid.');
+
+  @override
+  Future<List<String>> models({
+    required String baseUrl,
+    String? apiKey,
+  }) async => throw const AiUnavailable('HTTP 400: API key not valid.');
+}
+
 Map<String, Object?> _call(String id, String name, String args) => {
   'role': 'assistant',
   'content': null,
@@ -449,6 +467,74 @@ void main() {
         code('proposal_stale'),
       );
       expect(await Rule.db.count(db), 1);
+    });
+
+    test('only the key typed: the models are asked to the provider, which '
+        "also checks the key; its reason is shown, the key never", () async {
+      final model = _ScriptedModel([]);
+      AiGateway.adapter = model;
+      final gemini = AiProvider(
+        name: 'Gemini',
+        kind: 'openai',
+        baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+        models: '',
+        toolCalling: true,
+        vision: true,
+        monthlyCap: 0,
+        enabled: true,
+      );
+      final saved = await endpoints.ai.saveProvider(
+        as(admin),
+        gemini,
+        'AIza-secret',
+      );
+      expect(saved.models, 'llama3.1,mistral');
+      expect(model.keys, isEmpty, reason: 'no chat, only the list');
+      final claude = await endpoints.ai.saveProvider(
+        as(admin),
+        gemini.copyWith(
+          name: 'Claude',
+          kind: 'anthropic',
+          baseUrl: 'https://api.anthropic.com/v1',
+          models: 'claude-opus-5-5',
+        ),
+        'sk-ant-secret',
+      );
+      expect(claude.kind, 'anthropic');
+      expect(AiGateway.isExternal(claude.baseUrl), isTrue);
+
+      AiGateway.adapter = _RefusingModel();
+      await expectLater(
+        endpoints.ai.saveProvider(
+          as(admin),
+          gemini.copyWith(name: 'Gemini 2'),
+          'AIza-wrong',
+        ),
+        throwsA(
+          isA<InvalidInputException>()
+              .having((e) => e.code, 'code', 'ai_unavailable')
+              .having((e) => e.field, 'reason', contains('API key not valid'))
+              .having((e) => e.field, 'reason', isNot(contains('AIza'))),
+        ),
+      );
+      expect(
+        await AiProvider.db.count(
+          db,
+          where: (p) => p.name.equals('Gemini 2'),
+        ),
+        0,
+        reason: 'nothing saved with a key the provider refuses',
+      );
+      await expectLater(
+        endpoints.ai.testProvider(as(admin), saved.id!),
+        throwsA(
+          isA<InvalidInputException>().having(
+            (e) => e.field,
+            'reason',
+            contains('API key not valid'),
+          ),
+        ),
+      );
     });
 
     test('cap, no vision, provider down: said plainly, never another '

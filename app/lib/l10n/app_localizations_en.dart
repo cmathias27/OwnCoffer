@@ -3971,6 +3971,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'An online provider (Mistral, OpenAI, OpenRouter…): questions and the useful figures are sent to it, which the app tells the user.';
 
   @override
+  String get adminAiPreset => 'Provider';
+
+  @override
+  String get adminAiGeminiHelp =>
+      'Paste a Google AI Studio API key (aistudio.google.com, \"Get API key\"). The list of models is asked to Google when saving if you leave it empty.';
+
+  @override
+  String get adminAiChatGptHelp =>
+      'Paste an OpenAI API key (platform.openai.com, \"API keys\"): billed per use, apart from the ChatGPT subscription. The list of models is asked to OpenAI when saving if you leave it empty.';
+
+  @override
+  String get adminAiClaudeHelp =>
+      'Paste an Anthropic API key (platform.claude.com, \"API keys\"): billed per use, apart from the Claude subscription. OwnCoffer uses the Claude API itself, not an OpenAI compatibility layer.';
+
+  @override
+  String get adminAiSentOutside =>
+      'Online provider: questions and the useful figures are sent to it, which the app reminds every user of.';
+
+  @override
   String get adminAiName => 'Displayed name';
 
   @override
@@ -3991,7 +4010,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminAiModelsHelp =>
-      'Comma-separated, for example: llama3.1, mistral-small';
+      'Comma-separated, for example: llama3.1, mistral-small. Leave empty to ask the provider for the list.';
 
   @override
   String get adminAiCap => 'Monthly cap per user';
@@ -4133,6 +4152,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_ai_unavailable =>
       'The AI provider does not answer. No other was used instead.';
+
+  @override
+  String error_ai_reason(String reason) {
+    return 'Provider\'s answer: $reason';
+  }
+
+  @override
+  String get error_ai_no_models =>
+      'The provider offered no chat model: enter one.';
 
   @override
   String get error_ai_no_vision => 'This model does not read images.';

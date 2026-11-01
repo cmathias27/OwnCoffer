@@ -17,7 +17,9 @@ class AiEndpoint extends Endpoint {
   @override
   Set<Scope> get requiredScopes => {accessScope};
 
-  static const _kinds = {'openai', 'ollama'};
+  static const _kinds = {'openai', 'ollama', 'anthropic'};
+
+  static const _maxModels = 40;
 
   static AiProvider _public(AiProvider p) =>
       p.copyWith(apiKeyBox: null, hasKey: p.apiKeyBox != null);
@@ -91,13 +93,29 @@ class AiEndpoint extends Endpoint {
         : apiKey.trim().isEmpty
         ? null
         : AiGateway.encryptKey(apiKey.trim());
+    var models = [
+      for (final m in provider.models.split(','))
+        if (m.trim().isNotEmpty) m.trim(),
+    ];
+    if (models.isEmpty) {
+      // Only the key typed: the provider says which models it offers (this
+      // also checks the address and the key before anything is saved).
+      try {
+        models = (await AiGateway.modelsWith(
+          provider.copyWith(baseUrl: url.toString(), apiKeyBox: box),
+          apiKey?.trim().isEmpty ?? true ? null : apiKey!.trim(),
+        )).take(_maxModels).toList();
+      } on AiUnavailable catch (e) {
+        throw InvalidInputException(code: 'ai_unavailable', field: e.reason);
+      }
+      if (models.isEmpty) {
+        throw InvalidInputException(code: 'ai_no_models', field: 'models');
+      }
+    }
     final clean = provider.copyWith(
       name: name,
       baseUrl: url.toString(),
-      models: [
-        for (final m in provider.models.split(','))
-          if (m.trim().isNotEmpty) m.trim(),
-      ].join(','),
+      models: models.join(','),
       apiKeyBox: box,
       hasKey: null,
     );
@@ -138,8 +156,9 @@ class AiEndpoint extends Endpoint {
     if (p == null) throw InvalidInputException(code: 'ai_provider_unavailable');
     try {
       return await AiGateway.testProvider(p);
-    } on AiUnavailable {
-      throw InvalidInputException(code: 'ai_unavailable');
+    } on AiUnavailable catch (e) {
+      // The provider's own reason (never the key): shown to the user.
+      throw InvalidInputException(code: 'ai_unavailable', field: e.reason);
     }
   }
 
@@ -189,8 +208,9 @@ class AiEndpoint extends Endpoint {
   ) async {
     try {
       return await AiGateway.chat(session, groupId, history, message);
-    } on AiUnavailable {
-      throw InvalidInputException(code: 'ai_unavailable');
+    } on AiUnavailable catch (e) {
+      // The provider's own reason (never the key): shown to the user.
+      throw InvalidInputException(code: 'ai_unavailable', field: e.reason);
     }
   }
 }
