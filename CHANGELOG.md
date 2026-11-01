@@ -2,6 +2,17 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.26 (1er novembre 2026)
+
+### OwnCoffer depuis un autre assistant (MCP)
+
+- OwnCoffer est maintenant aussi un **serveur MCP** (*Model Context Protocol*), à l'adresse `/mcp` de votre instance : un assistant que vous utilisez déjà (Claude Desktop ou tout client MCP) peut **lire vos chiffres et faire des propositions**, avec exactement les mêmes fonctions et les mêmes limites que l'assistant intégré.
+- Dans l'écran **Assistant**, section « Depuis un autre assistant (MCP) » : **créer un jeton personnel** pour le foyer (affiché une seule fois, avec l'adresse à donner à l'assistant), voir sa dernière utilisation, le **révoquer** à tout moment.
+- Le jeton agit **avec vos droits, sur les comptes que vous voyez** ; il cesse de fonctionner si vous quittez le foyer ou si votre compte est bloqué. Seule son empreinte est gardée sur le serveur.
+- **Rien ne s'écrit directement** : les propositions (catégorie, crédit lu dans un document) arrivent dans Mon conseiller, comme celles de l'assistant intégré. Chaque appel est noté au journal.
+- Avec MCP, les données lues partent vers le modèle de l'assistant que vous avez choisi : c'est rappelé à la création du jeton (décision 0018).
+- Fonctionne même sans fournisseur d'IA configuré sur le serveur.
+
 ## 0.3.25 (1er novembre 2026)
 
 ### Assistant IA (facultatif) et passerelle IA

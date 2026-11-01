@@ -152,7 +152,8 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 - [x] Passerelle IA (décision 0008) : interface commune, choix du fournisseur et du modèle par utilisateur, capacités par modèle, aucun basculement automatique vers l'externe, affichage de ce qui quitte le serveur ; clé chiffrée, plafond mensuel — *0.3.25, fournisseurs configurés par l'administrateur (décision 0017)*
 - [x] Premiers connecteurs : un externe (compatible API OpenAI) et un local (Ollama) — *0.3.25 : un seul adaptateur, Ollama parlant la même API*
 - [x] Fonctions de contexte financier en lecture seule (`get_account_overview`, `get_transactions`, `get_budget_status`, `get_upcoming_expenses`, `get_cashflow_forecast`, `get_financial_goals`), limitées aux comptes visibles
-- [ ] Catégorisation d'appoint par l'IA, avec la règle suggérée
+- [x] **Serveur MCP** (demandé le 1er novembre 2026) : mêmes fonctions que l'assistant, jeton personnel révocable, comptes visibles, propositions seulement — *0.3.26, décision 0018*
+- [ ] Catégorisation d'appoint par l'IA, avec la règle suggérée — *en partie dans la 0.3.25 : l'assistant propose des catégories ; reste la règle suggérée*
 - [ ] Lecture de documents : tickets (sans IA : saisie assistée ; avec IA : ventilation ligne par ligne), offres de prêt et confirmations de paiement fractionné (avec IA) ; **tableaux d'amortissement et captures d'écran** des documents du crédit gardés sur le serveur (0.3.1) : l'IA propose les conditions du crédit (mensualité, taux, durée, capital restant) et l'utilisateur valide — demandé le 31 octobre 2026
 - [ ] Assistant IA (en option) : interroge le moteur, explique, pose les scénarios en langage naturel ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable
 - [ ] Licence Serverpod clarifiée avant d'ouvrir la bêta à d'autres personnes (décision 0001)

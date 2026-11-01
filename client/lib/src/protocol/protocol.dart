@@ -40,6 +40,7 @@ import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/loan_document.dart' as _ixzu9i3x;
 import 'package:owncoffer_client/src/protocol/loan_installment.dart'
     as _i18weoko;
+import 'package:owncoffer_client/src/protocol/mcp_token.dart' as _ioxkfsho;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
@@ -115,6 +116,8 @@ import 'loan_info.dart' as _ijbwwnsd;
 import 'loan_installment.dart' as _ics9k3ng;
 import 'loan_kind.dart' as _i1700pxx;
 import 'loan_overview.dart' as _itnp0u8s;
+import 'mcp_token.dart' as _ibm9fvwa;
+import 'mcp_token_created.dart' as _iqv371vc;
 import 'member_info.dart' as _i2slp771;
 import 'member_role.dart' as _insyygng;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
@@ -209,6 +212,8 @@ export 'loan_info.dart';
 export 'loan_installment.dart';
 export 'loan_kind.dart';
 export 'loan_overview.dart';
+export 'mcp_token.dart';
+export 'mcp_token_created.dart';
 export 'member_info.dart';
 export 'member_role.dart';
 export 'missed_occurrence_info.dart';
@@ -460,6 +465,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _itnp0u8s.LoanOverview) {
       return _itnp0u8s.LoanOverview.fromJson(data) as T;
+    }
+    if (t == _ibm9fvwa.McpToken) {
+      return _ibm9fvwa.McpToken.fromJson(data) as T;
+    }
+    if (t == _iqv371vc.McpTokenCreated) {
+      return _iqv371vc.McpTokenCreated.fromJson(data) as T;
     }
     if (t == _i2slp771.MemberInfo) {
       return _i2slp771.MemberInfo.fromJson(data) as T;
@@ -778,6 +789,13 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_itnp0u8s.LoanOverview?>()) {
       return (data != null ? _itnp0u8s.LoanOverview.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ibm9fvwa.McpToken?>()) {
+      return (data != null ? _ibm9fvwa.McpToken.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iqv371vc.McpTokenCreated?>()) {
+      return (data != null ? _iqv371vc.McpTokenCreated.fromJson(data) : null)
+          as T;
     }
     if (t == _isc.getType<_i2slp771.MemberInfo?>()) {
       return (data != null ? _i2slp771.MemberInfo.fromJson(data) : null) as T;
@@ -1203,6 +1221,12 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ioxkfsho.McpToken>) {
+      return (data as List)
+              .map((e) => deserialize<_ioxkfsho.McpToken>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_igwx4n0s.AppNotification>) {
       return (data as List)
               .map((e) => deserialize<_igwx4n0s.AppNotification>(e))
@@ -1297,6 +1321,8 @@ class Protocol extends _isc.SerializationManager {
       _ics9k3ng.LoanInstallment => 'LoanInstallment',
       _i1700pxx.LoanKind => 'LoanKind',
       _itnp0u8s.LoanOverview => 'LoanOverview',
+      _ibm9fvwa.McpToken => 'McpToken',
+      _iqv371vc.McpTokenCreated => 'McpTokenCreated',
       _i2slp771.MemberInfo => 'MemberInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
@@ -1466,6 +1492,10 @@ class Protocol extends _isc.SerializationManager {
         return 'LoanKind';
       case _itnp0u8s.LoanOverview():
         return 'LoanOverview';
+      case _ibm9fvwa.McpToken():
+        return 'McpToken';
+      case _iqv371vc.McpTokenCreated():
+        return 'McpTokenCreated';
       case _i2slp771.MemberInfo():
         return 'MemberInfo';
       case _insyygng.MemberRole():
@@ -1736,6 +1766,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'LoanOverview') {
       return deserialize<_itnp0u8s.LoanOverview>(data['data']);
+    }
+    if (dataClassName == 'McpToken') {
+      return deserialize<_ibm9fvwa.McpToken>(data['data']);
+    }
+    if (dataClassName == 'McpTokenCreated') {
+      return deserialize<_iqv371vc.McpTokenCreated>(data['data']);
     }
     if (dataClassName == 'MemberInfo') {
       return deserialize<_i2slp771.MemberInfo>(data['data']);

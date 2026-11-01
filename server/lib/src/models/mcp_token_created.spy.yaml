@@ -1,0 +1,5 @@
+### A new token, shown once: it is not kept in clear.
+class: McpTokenCreated
+fields:
+  token: McpToken
+  secret: String

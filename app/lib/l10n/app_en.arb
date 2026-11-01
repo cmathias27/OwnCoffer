@@ -1093,5 +1093,20 @@
   "error_ai_no_vision": "This model does not read images.",
   "error_ai_message_too_long": "Message too long (4,000 characters at most).",
   "error_ai_invalid_url": "Invalid address: http:// or https://, without credentials in it.",
-  "error_ai_invalid_kind": "Unknown provider type."
+  "error_ai_invalid_kind": "Unknown provider type.",
+  "mcpTitle": "From another assistant (MCP)",
+  "mcpIntro": "An assistant you already use (Claude Desktop or any MCP client) can read your figures and make proposals, with the same functions and limits as the built-in assistant: the accounts you see, nothing changes without your consent. The data it reads goes to that assistant's model.",
+  "mcpCreate": "Create a token",
+  "mcpCreateHelp": "The token gives access to this household, with your rights. You can revoke it at any time.",
+  "mcpName": "Name (to recognise it)",
+  "mcpCreated": "Token created",
+  "mcpCreatedHelp": "Copy it now: it will not be shown again. In your assistant, add an \"HTTP\" MCP server with this address and the header Authorization: Bearer followed by the token.",
+  "mcpAddress": "Address",
+  "mcpSecret": "Token",
+  "mcpCopy": "Copy the token",
+  "mcpDone": "Done",
+  "mcpNeverUsed": "{prefix} · never used",
+  "mcpLastUsed": "{prefix} · used on {date}",
+  "mcpRevoke": "Revoke",
+  "error_mcp_token_access_denied": "This token does not exist or is not yours."
 }

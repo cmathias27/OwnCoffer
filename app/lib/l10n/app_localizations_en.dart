@@ -4119,4 +4119,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_ai_invalid_kind => 'Unknown provider type.';
+
+  @override
+  String get mcpTitle => 'From another assistant (MCP)';
+
+  @override
+  String get mcpIntro =>
+      'An assistant you already use (Claude Desktop or any MCP client) can read your figures and make proposals, with the same functions and limits as the built-in assistant: the accounts you see, nothing changes without your consent. The data it reads goes to that assistant\'s model.';
+
+  @override
+  String get mcpCreate => 'Create a token';
+
+  @override
+  String get mcpCreateHelp =>
+      'The token gives access to this household, with your rights. You can revoke it at any time.';
+
+  @override
+  String get mcpName => 'Name (to recognise it)';
+
+  @override
+  String get mcpCreated => 'Token created';
+
+  @override
+  String get mcpCreatedHelp =>
+      'Copy it now: it will not be shown again. In your assistant, add an \"HTTP\" MCP server with this address and the header Authorization: Bearer followed by the token.';
+
+  @override
+  String get mcpAddress => 'Address';
+
+  @override
+  String get mcpSecret => 'Token';
+
+  @override
+  String get mcpCopy => 'Copy the token';
+
+  @override
+  String get mcpDone => 'Done';
+
+  @override
+  String mcpNeverUsed(String prefix) {
+    return '$prefix · never used';
+  }
+
+  @override
+  String mcpLastUsed(String prefix, String date) {
+    return '$prefix · used on $date';
+  }
+
+  @override
+  String get mcpRevoke => 'Revoke';
+
+  @override
+  String get error_mcp_token_access_denied =>
+      'This token does not exist or is not yours.';
 }

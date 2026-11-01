@@ -7,6 +7,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/file_pick.dart';
+import '../widgets/mcp_tokens.dart';
 import '../widgets/soft.dart';
 import 'advisor_screen.dart';
 
@@ -146,6 +147,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               _settings(context, l, s),
+                              McpTokensSection(membership: widget.membership),
                               if (s.enabled && _provider != null)
                                 for (final (m, r) in _talk)
                                   ..._exchange(context, l, m, r),
