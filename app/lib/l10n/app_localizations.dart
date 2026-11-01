@@ -6671,6 +6671,96 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Type de fournisseur inconnu.'**
   String get error_ai_invalid_kind;
+
+  /// No description provided for @mcpTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Depuis un autre assistant (MCP)'**
+  String get mcpTitle;
+
+  /// No description provided for @mcpIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un assistant que vous utilisez déjà (Claude Desktop ou tout client MCP) peut lire vos chiffres et faire des propositions, avec les mêmes fonctions et les mêmes limites que l\'assistant intégré : les comptes que vous voyez, rien ne change sans votre accord. Les données qu\'il lit partent vers le modèle de cet assistant.'**
+  String get mcpIntro;
+
+  /// No description provided for @mcpCreate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un jeton'**
+  String get mcpCreate;
+
+  /// No description provided for @mcpCreateHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le jeton donne accès à ce foyer, avec vos droits. Vous pourrez le révoquer à tout moment.'**
+  String get mcpCreateHelp;
+
+  /// No description provided for @mcpName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom (pour le reconnaître)'**
+  String get mcpName;
+
+  /// No description provided for @mcpCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeton créé'**
+  String get mcpCreated;
+
+  /// No description provided for @mcpCreatedHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copiez-le maintenant : il ne sera plus affiché. Dans votre assistant, ajoutez un serveur MCP « HTTP » avec cette adresse et l\'en-tête Authorization: Bearer suivi du jeton.'**
+  String get mcpCreatedHelp;
+
+  /// No description provided for @mcpAddress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse'**
+  String get mcpAddress;
+
+  /// No description provided for @mcpSecret.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeton'**
+  String get mcpSecret;
+
+  /// No description provided for @mcpCopy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier le jeton'**
+  String get mcpCopy;
+
+  /// No description provided for @mcpDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est noté'**
+  String get mcpDone;
+
+  /// No description provided for @mcpNeverUsed.
+  ///
+  /// In fr, this message translates to:
+  /// **'{prefix} · jamais utilisé'**
+  String mcpNeverUsed(String prefix);
+
+  /// No description provided for @mcpLastUsed.
+  ///
+  /// In fr, this message translates to:
+  /// **'{prefix} · utilisé le {date}'**
+  String mcpLastUsed(String prefix, String date);
+
+  /// No description provided for @mcpRevoke.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révoquer'**
+  String get mcpRevoke;
+
+  /// No description provided for @error_mcp_token_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce jeton n\'existe pas ou n\'est pas à vous.'**
+  String get error_mcp_token_access_denied;
 }
 
 class _AppLocalizationsDelegate

@@ -75,6 +75,9 @@ import 'package:owncoffer_server/src/generated/loan_info.dart' as _io3uq7xs;
 import 'package:owncoffer_server/src/generated/loan_installment.dart'
     as _ictm0roz;
 import 'package:owncoffer_server/src/generated/loan_overview.dart' as _i5w8yuam;
+import 'package:owncoffer_server/src/generated/mcp_token.dart' as _iv5jjynk;
+import 'package:owncoffer_server/src/generated/mcp_token_created.dart'
+    as _ic03aecq;
 import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/month_review.dart' as _ir8qupm5;
@@ -276,6 +279,8 @@ class TestEndpoints {
 
   late final _LoanEndpoint loan;
 
+  late final _McpEndpoint mcp;
+
   late final _NotificationEndpoint notification;
 
   late final _RuleEndpoint rule;
@@ -349,6 +354,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     loan = _LoanEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    mcp = _McpEndpoint(
       endpoints,
       serializationManager,
     );
@@ -3849,6 +3858,113 @@ class _LoanEndpoint {
           endpointPath: 'loan',
           methodName: 'delete',
           parameters: _ist.testObjectToJson({'loanId': loanId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _McpEndpoint {
+  _McpEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<List<_iv5jjynk.McpToken>> tokens(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'mcp',
+            method: 'tokens',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'mcp',
+          methodName: 'tokens',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iv5jjynk.McpToken>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ic03aecq.McpTokenCreated> create(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    String name,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'mcp',
+            method: 'create',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'mcp',
+          methodName: 'create',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'name': name,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ic03aecq.McpTokenCreated>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> revoke(
+    _ist.TestSessionBuilder sessionBuilder,
+    int tokenId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'mcp',
+            method: 'revoke',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'mcp',
+          methodName: 'revoke',
+          parameters: _ist.testObjectToJson({'tokenId': tokenId}),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =

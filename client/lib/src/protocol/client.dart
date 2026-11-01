@@ -73,6 +73,9 @@ import 'package:owncoffer_client/src/protocol/loan_info.dart' as _iwrqx7d4;
 import 'package:owncoffer_client/src/protocol/loan_installment.dart'
     as _i18weoko;
 import 'package:owncoffer_client/src/protocol/loan_overview.dart' as _i1y07bmb;
+import 'package:owncoffer_client/src/protocol/mcp_token.dart' as _ioxkfsho;
+import 'package:owncoffer_client/src/protocol/mcp_token_created.dart'
+    as _i9n2kr6t;
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/month_review.dart' as _ilg6npsn;
@@ -1444,6 +1447,41 @@ class EndpointLoan extends _isc.EndpointRef {
   );
 }
 
+/// The user's MCP tokens (décision 0018): listed, created (the secret is
+/// shown once), revoked.
+/// {@category Endpoint}
+class EndpointMcp extends _isc.EndpointRef {
+  EndpointMcp(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'mcp';
+
+  _ida.Future<List<_ioxkfsho.McpToken>> tokens() =>
+      caller.callServerEndpoint<List<_ioxkfsho.McpToken>>(
+        'mcp',
+        'tokens',
+        {},
+      );
+
+  _ida.Future<_i9n2kr6t.McpTokenCreated> create(
+    int groupId,
+    String name,
+  ) => caller.callServerEndpoint<_i9n2kr6t.McpTokenCreated>(
+    'mcp',
+    'create',
+    {
+      'groupId': groupId,
+      'name': name,
+    },
+  );
+
+  _ida.Future<void> revoke(int tokenId) => caller.callServerEndpoint<void>(
+    'mcp',
+    'revoke',
+    {'tokenId': tokenId},
+  );
+}
+
 /// The current user's notifications.
 /// {@category Endpoint}
 class EndpointNotification extends _isc.EndpointRef {
@@ -2123,6 +2161,7 @@ class Client extends _isc.ServerpodClientShared {
     invitation = EndpointInvitation(this);
     invoice = EndpointInvoice(this);
     loan = EndpointLoan(this);
+    mcp = EndpointMcp(this);
     notification = EndpointNotification(this);
     rule = EndpointRule(this);
     scheduled = EndpointScheduled(this);
@@ -2160,6 +2199,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointLoan loan;
 
+  late final EndpointMcp mcp;
+
   late final EndpointNotification notification;
 
   late final EndpointRule rule;
@@ -2190,6 +2231,7 @@ class Client extends _isc.ServerpodClientShared {
     'invitation': invitation,
     'invoice': invoice,
     'loan': loan,
+    'mcp': mcp,
     'notification': notification,
     'rule': rule,
     'scheduled': scheduled,

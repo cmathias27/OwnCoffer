@@ -49,6 +49,7 @@ import '../endpoints/import_endpoint.dart' as _i51ek8od;
 import '../endpoints/invitation_endpoint.dart' as _iipval89;
 import '../endpoints/invoice_endpoint.dart' as _ito116jz;
 import '../endpoints/loan_endpoint.dart' as _imitaxsf;
+import '../endpoints/mcp_endpoint.dart' as _i7ut3egp;
 import '../endpoints/notification_endpoint.dart' as _ihb11yhk;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
@@ -142,6 +143,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'loan',
+          null,
+        ),
+      'mcp': _i7ut3egp.McpEndpoint()
+        ..initialize(
+          server,
+          'mcp',
           null,
         ),
       'notification': _ihb11yhk.NotificationEndpoint()
@@ -2578,6 +2585,64 @@ class Endpoints extends _is.EndpointDispatch {
               ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint).delete(
                 session,
                 params['loanId'],
+              ),
+        ),
+      },
+    );
+    connectors['mcp'] = _is.EndpointConnector(
+      name: 'mcp',
+      endpoint: endpoints['mcp']!,
+      methodConnectors: {
+        'tokens': _is.MethodConnector(
+          name: 'tokens',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['mcp'] as _i7ut3egp.McpEndpoint).tokens(session),
+        ),
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['mcp'] as _i7ut3egp.McpEndpoint).create(
+                session,
+                params['groupId'],
+                params['name'],
+              ),
+        ),
+        'revoke': _is.MethodConnector(
+          name: 'revoke',
+          params: {
+            'tokenId': _is.ParameterDescription(
+              name: 'tokenId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['mcp'] as _i7ut3egp.McpEndpoint).revoke(
+                session,
+                params['tokenId'],
               ),
         ),
       },

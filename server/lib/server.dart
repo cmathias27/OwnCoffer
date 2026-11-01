@@ -12,6 +12,7 @@ import 'src/onboarding/onboarding.dart';
 import 'src/security/ip_guard.dart';
 import 'src/security/ip_middleware.dart';
 import 'src/web/routes/app_config_route.dart';
+import 'src/web/routes/mcp_route.dart';
 
 /// The starting point of the Serverpod server.
 void run(List<String> args) async {
@@ -52,6 +53,9 @@ void run(List<String> args) async {
     ),
     '/assets/assets/config.json',
   );
+
+  // The MCP server (décision 0018), before the app's catch-all route.
+  pod.webServer.addRoute(McpRoute(), '/mcp');
 
   // Checks if the flutter web app has been built and serves it if it has.
   final appDir = Directory(Uri(path: 'web/app').toFilePath());

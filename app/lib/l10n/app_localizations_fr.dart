@@ -4145,4 +4145,57 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get error_ai_invalid_kind => 'Type de fournisseur inconnu.';
+
+  @override
+  String get mcpTitle => 'Depuis un autre assistant (MCP)';
+
+  @override
+  String get mcpIntro =>
+      'Un assistant que vous utilisez déjà (Claude Desktop ou tout client MCP) peut lire vos chiffres et faire des propositions, avec les mêmes fonctions et les mêmes limites que l\'assistant intégré : les comptes que vous voyez, rien ne change sans votre accord. Les données qu\'il lit partent vers le modèle de cet assistant.';
+
+  @override
+  String get mcpCreate => 'Créer un jeton';
+
+  @override
+  String get mcpCreateHelp =>
+      'Le jeton donne accès à ce foyer, avec vos droits. Vous pourrez le révoquer à tout moment.';
+
+  @override
+  String get mcpName => 'Nom (pour le reconnaître)';
+
+  @override
+  String get mcpCreated => 'Jeton créé';
+
+  @override
+  String get mcpCreatedHelp =>
+      'Copiez-le maintenant : il ne sera plus affiché. Dans votre assistant, ajoutez un serveur MCP « HTTP » avec cette adresse et l\'en-tête Authorization: Bearer suivi du jeton.';
+
+  @override
+  String get mcpAddress => 'Adresse';
+
+  @override
+  String get mcpSecret => 'Jeton';
+
+  @override
+  String get mcpCopy => 'Copier le jeton';
+
+  @override
+  String get mcpDone => 'C\'est noté';
+
+  @override
+  String mcpNeverUsed(String prefix) {
+    return '$prefix · jamais utilisé';
+  }
+
+  @override
+  String mcpLastUsed(String prefix, String date) {
+    return '$prefix · utilisé le $date';
+  }
+
+  @override
+  String get mcpRevoke => 'Révoquer';
+
+  @override
+  String get error_mcp_token_access_denied =>
+      'Ce jeton n\'existe pas ou n\'est pas à vous.';
 }

@@ -40,6 +40,7 @@ import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/loan_document.dart' as _ib7nzwu9;
 import 'package:owncoffer_server/src/generated/loan_installment.dart'
     as _ictm0roz;
+import 'package:owncoffer_server/src/generated/mcp_token.dart' as _iv5jjynk;
 import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:owncoffer_server/src/generated/notification.dart' as _ieap9unx;
 import 'package:owncoffer_server/src/generated/rule.dart' as _inhqt802;
@@ -120,6 +121,8 @@ import 'loan_info.dart' as _ijbwwnsd;
 import 'loan_installment.dart' as _ics9k3ng;
 import 'loan_kind.dart' as _i1700pxx;
 import 'loan_overview.dart' as _itnp0u8s;
+import 'mcp_token.dart' as _ibm9fvwa;
+import 'mcp_token_created.dart' as _iqv371vc;
 import 'member_info.dart' as _i2slp771;
 import 'member_role.dart' as _insyygng;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
@@ -219,6 +222,8 @@ export 'loan_info.dart';
 export 'loan_installment.dart';
 export 'loan_kind.dart';
 export 'loan_overview.dart';
+export 'mcp_token.dart';
+export 'mcp_token_created.dart';
 export 'member_info.dart';
 export 'member_role.dart';
 export 'missed_occurrence_info.dart';
@@ -2392,6 +2397,121 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'mcp_tokens',
+      dartName: 'McpToken',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'name',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'tokenHash',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'prefix',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+        _isp.ColumnDefinition(
+          name: 'lastUsedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'revokedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'mcp_tokens_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'mcp_tokens_fk_1',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'mcp_tokens_hash_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'tokenHash',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'mcp_tokens_user_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'notifications',
       dartName: 'AppNotification',
       schema: 'public',
@@ -3515,6 +3635,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _itnp0u8s.LoanOverview) {
       return _itnp0u8s.LoanOverview.fromJson(data) as T;
     }
+    if (t == _ibm9fvwa.McpToken) {
+      return _ibm9fvwa.McpToken.fromJson(data) as T;
+    }
+    if (t == _iqv371vc.McpTokenCreated) {
+      return _iqv371vc.McpTokenCreated.fromJson(data) as T;
+    }
     if (t == _i2slp771.MemberInfo) {
       return _i2slp771.MemberInfo.fromJson(data) as T;
     }
@@ -3847,6 +3973,13 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_itnp0u8s.LoanOverview?>()) {
       return (data != null ? _itnp0u8s.LoanOverview.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ibm9fvwa.McpToken?>()) {
+      return (data != null ? _ibm9fvwa.McpToken.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iqv371vc.McpTokenCreated?>()) {
+      return (data != null ? _iqv371vc.McpTokenCreated.fromJson(data) : null)
+          as T;
     }
     if (t == _is.getType<_i2slp771.MemberInfo?>()) {
       return (data != null ? _i2slp771.MemberInfo.fromJson(data) : null) as T;
@@ -4275,6 +4408,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_iv5jjynk.McpToken>) {
+      return (data as List)
+              .map((e) => deserialize<_iv5jjynk.McpToken>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ieap9unx.AppNotification>) {
       return (data as List)
               .map((e) => deserialize<_ieap9unx.AppNotification>(e))
@@ -4376,6 +4515,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ics9k3ng.LoanInstallment => 'LoanInstallment',
       _i1700pxx.LoanKind => 'LoanKind',
       _itnp0u8s.LoanOverview => 'LoanOverview',
+      _ibm9fvwa.McpToken => 'McpToken',
+      _iqv371vc.McpTokenCreated => 'McpTokenCreated',
       _i2slp771.MemberInfo => 'MemberInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
@@ -4554,6 +4695,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'LoanKind';
       case _itnp0u8s.LoanOverview():
         return 'LoanOverview';
+      case _ibm9fvwa.McpToken():
+        return 'McpToken';
+      case _iqv371vc.McpTokenCreated():
+        return 'McpTokenCreated';
       case _i2slp771.MemberInfo():
         return 'MemberInfo';
       case _insyygng.MemberRole():
@@ -4843,6 +4988,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'LoanOverview') {
       return deserialize<_itnp0u8s.LoanOverview>(data['data']);
     }
+    if (dataClassName == 'McpToken') {
+      return deserialize<_ibm9fvwa.McpToken>(data['data']);
+    }
+    if (dataClassName == 'McpTokenCreated') {
+      return deserialize<_iqv371vc.McpTokenCreated>(data['data']);
+    }
     if (dataClassName == 'MemberInfo') {
       return deserialize<_i2slp771.MemberInfo>(data['data']);
     }
@@ -5030,6 +5181,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _ixhwb2ta.LoanDocument.t;
       case _i05ovdfs.LoanDocumentBlob:
         return _i05ovdfs.LoanDocumentBlob.t;
+      case _ibm9fvwa.McpToken:
+        return _ibm9fvwa.McpToken.t;
       case _irt10kca.AppNotification:
         return _irt10kca.AppNotification.t;
       case _ivw87pdb.Rule:

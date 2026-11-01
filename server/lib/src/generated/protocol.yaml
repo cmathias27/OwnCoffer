@@ -111,6 +111,10 @@ loan:
   - undoAttach:
   - undoCreate:
   - delete:
+mcp:
+  - tokens:
+  - create:
+  - revoke:
 notification:
   - list:
   - unreadCount:

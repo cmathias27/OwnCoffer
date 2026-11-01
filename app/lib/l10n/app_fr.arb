@@ -3070,5 +3070,37 @@
   "error_ai_no_vision": "Ce modèle ne lit pas les images.",
   "error_ai_message_too_long": "Message trop long (4 000 caractères au plus).",
   "error_ai_invalid_url": "Adresse invalide : http:// ou https://, sans identifiant dedans.",
-  "error_ai_invalid_kind": "Type de fournisseur inconnu."
+  "error_ai_invalid_kind": "Type de fournisseur inconnu.",
+  "mcpTitle": "Depuis un autre assistant (MCP)",
+  "mcpIntro": "Un assistant que vous utilisez déjà (Claude Desktop ou tout client MCP) peut lire vos chiffres et faire des propositions, avec les mêmes fonctions et les mêmes limites que l'assistant intégré : les comptes que vous voyez, rien ne change sans votre accord. Les données qu'il lit partent vers le modèle de cet assistant.",
+  "mcpCreate": "Créer un jeton",
+  "mcpCreateHelp": "Le jeton donne accès à ce foyer, avec vos droits. Vous pourrez le révoquer à tout moment.",
+  "mcpName": "Nom (pour le reconnaître)",
+  "mcpCreated": "Jeton créé",
+  "mcpCreatedHelp": "Copiez-le maintenant : il ne sera plus affiché. Dans votre assistant, ajoutez un serveur MCP « HTTP » avec cette adresse et l'en-tête Authorization: Bearer suivi du jeton.",
+  "mcpAddress": "Adresse",
+  "mcpSecret": "Jeton",
+  "mcpCopy": "Copier le jeton",
+  "mcpDone": "C'est noté",
+  "mcpNeverUsed": "{prefix} · jamais utilisé",
+  "@mcpNeverUsed": {
+    "placeholders": {
+      "prefix": {
+        "type": "String"
+      }
+    }
+  },
+  "mcpLastUsed": "{prefix} · utilisé le {date}",
+  "@mcpLastUsed": {
+    "placeholders": {
+      "prefix": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "mcpRevoke": "Révoquer",
+  "error_mcp_token_access_denied": "Ce jeton n'existe pas ou n'est pas à vous."
 }

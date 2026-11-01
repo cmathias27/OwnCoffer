@@ -1,0 +1,21 @@
+### A personal token letting an MCP client (an assistant on the user's
+### computer) use OwnCoffer's functions for one group, as this user
+### (décision 0018). Only its hash is kept; it can be revoked.
+class: McpToken
+table: mcp_tokens
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  name: String
+  tokenHash: String?, scope=serverOnly
+  ### The first characters, to recognise it in the list.
+  prefix: String
+  createdAt: DateTime, default=now
+  lastUsedAt: DateTime?
+  revokedAt: DateTime?
+indexes:
+  mcp_tokens_hash_idx:
+    fields: tokenHash
+    unique: true
+  mcp_tokens_user_idx:
+    fields: authUserId
