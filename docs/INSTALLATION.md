@@ -3,7 +3,7 @@
 Prérequis : un serveur Linux avec Docker et `docker compose`, `git` et `gpg` (paquet `gnupg`, pour chiffrer les sauvegardes), et un accès extérieur par Cloudflare (décisions 0012 et 0015). Comptez une vingtaine de minutes.
 
 ```sh
-git clone --branch v1.0.3 https://github.com/cmathias27/OwnCoffer.git
+git clone --branch v1.0.4 https://github.com/cmathias27/OwnCoffer.git
 cd OwnCoffer
 ./docker/generate-env.sh        # crée docker/.env avec des secrets aléatoires
 nano docker/.env                # régler OWNCOFFER_PUBLIC_URL, le port, la version

@@ -5253,4 +5253,76 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get exportNote =>
       'This file holds your bank operations: keep it somewhere safe. It does not replace the server\'s backups, the only way to restore everything.';
+
+  @override
+  String get appsTitle => 'Apps';
+
+  @override
+  String get appsIntro =>
+      'OwnCoffer also comes as a Windows and an Android app, connected to this server. They install without an app store.';
+
+  @override
+  String appsThisApp(String version) {
+    return 'This app: $version';
+  }
+
+  @override
+  String appsServer(String version) {
+    return 'Server: $version';
+  }
+
+  @override
+  String get appsUnknown => 'unknown';
+
+  @override
+  String get appsUpToDate => 'The app is up to date.';
+
+  @override
+  String appsUpdate(String version) {
+    return 'A new version of the app is available: $version. Download it below and install it over this one.';
+  }
+
+  @override
+  String get appsNewerThanServer =>
+      'This app is newer than the server. Everything should work; if not, ask the administrator to update the server.';
+
+  @override
+  String get appsDevServer =>
+      'The server is not a published version: the downloads point to the latest version.';
+
+  @override
+  String get appsAndroid => 'Android';
+
+  @override
+  String get appsAndroidHelp =>
+      'APK file, Android 7 or newer. When opening it, allow installing from this source.';
+
+  @override
+  String get appsWindows => 'Windows';
+
+  @override
+  String get appsWindowsHelp =>
+      'Zip folder, Windows 10 or 11 (64-bit). Unzip it and run owncoffer.exe; if Windows warns, \"More info\" then \"Run anyway\".';
+
+  @override
+  String get appsDownload => 'Download';
+
+  @override
+  String get appsAllFiles => 'All versions, checksums and signatures';
+
+  @override
+  String get appsNote =>
+      'The files come from the project\'s releases page on GitHub: the download goes through GitHub, only when you ask. The apps are not signed by a publisher yet.';
+
+  @override
+  String get appsWebHint =>
+      'On a phone, you can also install this web page: browser menu, \"Add to home screen\".';
+
+  @override
+  String appsBanner(String version) {
+    return 'New version of the app: $version';
+  }
+
+  @override
+  String get appsBannerLater => 'Later';
 }

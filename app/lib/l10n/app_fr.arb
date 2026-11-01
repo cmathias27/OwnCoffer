@@ -3512,5 +3512,52 @@
       }
     }
   },
-  "exportNote": "Ce fichier contient vos opérations bancaires : rangez-le dans un endroit sûr. Il ne remplace pas les sauvegardes du serveur, qui seules permettent de tout restaurer."
+  "exportNote": "Ce fichier contient vos opérations bancaires : rangez-le dans un endroit sûr. Il ne remplace pas les sauvegardes du serveur, qui seules permettent de tout restaurer.",
+  "appsTitle": "Applications",
+  "appsIntro": "OwnCoffer existe aussi en application Windows et Android, connectée à ce serveur. Elles s'installent sans magasin d'applications.",
+  "appsThisApp": "Cette application : {version}",
+  "@appsThisApp": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appsServer": "Serveur : {version}",
+  "@appsServer": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appsUnknown": "inconnue",
+  "appsUpToDate": "L'application est à jour.",
+  "appsUpdate": "Une nouvelle version de l'application est disponible : {version}. Téléchargez-la ci-dessous et installez-la par-dessus celle-ci.",
+  "@appsUpdate": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appsNewerThanServer": "Cette application est plus récente que le serveur. Tout devrait fonctionner ; en cas de souci, demandez à l'administrateur de mettre le serveur à jour.",
+  "appsDevServer": "Le serveur n'est pas une version publiée : les téléchargements renvoient vers la dernière version.",
+  "appsAndroid": "Android",
+  "appsAndroidHelp": "Fichier APK, Android 7 ou plus récent. À l'ouverture, autorisez l'installation depuis cette source.",
+  "appsWindows": "Windows",
+  "appsWindowsHelp": "Dossier zip, Windows 10 ou 11 (64 bits). Décompressez-le et lancez owncoffer.exe ; si Windows avertit, « Informations complémentaires » puis « Exécuter quand même ».",
+  "appsDownload": "Télécharger",
+  "appsAllFiles": "Toutes les versions, empreintes et signatures",
+  "appsNote": "Les fichiers viennent de la page des versions du projet sur GitHub : le téléchargement se fait depuis GitHub, seulement quand vous le demandez. Les applications ne sont pas encore signées par un éditeur.",
+  "appsWebHint": "Sur téléphone, vous pouvez aussi installer cette page web : menu du navigateur, « Ajouter à l'écran d'accueil ».",
+  "appsBanner": "Nouvelle version de l'application : {version}",
+  "@appsBanner": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appsBannerLater": "Plus tard"
 }

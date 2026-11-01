@@ -2,7 +2,7 @@
 
 Les applications Windows et Android sont la même application que la version web, connectée à **votre** serveur OwnCoffer (décision 0020). Elles ne gardent sur l'appareil que l'adresse du serveur et votre session : vos opérations restent sur le serveur.
 
-Elles sont jointes à chaque version, sur la page **Releases** du dépôt GitHub :
+Le plus simple : dans l'application web, menu du compte → **« Applications »**. La page propose les deux fichiers dans la version de votre serveur. Ils sont aussi joints à chaque version, sur la page **Releases** du dépôt GitHub :
 
 | Fichier | Pour |
 | --- | --- |
@@ -18,7 +18,7 @@ Elles ne sont **pas encore signées par un éditeur** ni publiées sur le Micros
 3. Windows SmartScreen affiche « Windows a protégé votre ordinateur » : c'est parce que l'application n'a pas de certificat d'éditeur. Cliquez sur **Informations complémentaires**, puis **Exécuter quand même**.
 4. Saisissez l'adresse de votre serveur (celle que vous ouvrez dans le navigateur).
 
-Mettre à jour : remplacez le dossier par celui de la nouvelle version. Votre session est conservée.
+Mettre à jour : quand le serveur passe à une nouvelle version, une bannière le signale dans l'application ; « Télécharger » ouvre la page Applications. Remplacez le dossier par celui de la nouvelle version : votre session est conservée.
 
 ## Android
 
@@ -27,7 +27,7 @@ Mettre à jour : remplacez le dossier par celui de la nouvelle version. Votre se
 3. Play Protect peut avertir d'une application inconnue : choisissez **Installer quand même**.
 4. Saisissez l'adresse de votre serveur.
 
-Mettre à jour : installez le nouvel APK par-dessus. Si Android refuse (« conflit avec un paquet existant »), c'est que les deux versions n'ont pas été signées avec la même clé : désinstallez l'ancienne, puis installez la nouvelle. Vous n'y perdez que la session : vos données sont sur le serveur.
+Mettre à jour : quand le serveur passe à une nouvelle version, une bannière le signale ; « Télécharger » ouvre la page Applications. Installez le nouvel APK par-dessus. Si Android refuse (« conflit avec un paquet existant »), c'est que les deux versions n'ont pas été signées avec la même clé : désinstallez l'ancienne, puis installez la nouvelle. Vous n'y perdez que la session : vos données sont sur le serveur.
 
 > Pour le mainteneur : pour que chaque APK remplace le précédent, créez une fois une clé (`keytool -genkeypair -v -keystore owncoffer.jks -keyalg RSA -keysize 4096 -validity 10000 -alias owncoffer`) et ajoutez dans les secrets GitHub du dépôt `ANDROID_KEYSTORE_BASE64` (`base64 -w0 owncoffer.jks`), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` et `ANDROID_KEY_PASSWORD`. Gardez la clé précieusement : une autre clé obligera tout le monde à désinstaller.
 
@@ -67,4 +67,4 @@ flutter build windows --release    # build\windows\x64\runner\Release\ (sous Win
 
 ## Pas encore
 
-Hors-ligne et synchronisation, mises à jour automatiques des applications, page « Télécharger » dans l'application web, version autonome sans serveur, magasins d'applications : phase 6 du [roadbook](ROADBOOK.md).
+Hors-ligne et synchronisation, installation automatique des mises à jour des applications, version autonome sans serveur, magasins d'applications : phase 6 du [roadbook](ROADBOOK.md).

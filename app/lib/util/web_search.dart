@@ -13,3 +13,7 @@ Uri webSearchUri(String cleanLabel) => Uri.https('www.google.com', '/search', {
 /// Opens the search in a new tab, without telling Google where it comes from.
 void openWebSearch(String cleanLabel) =>
     impl.openInNewTab(webSearchUri(cleanLabel));
+
+/// Opens [uri] outside the app (new tab, or the system browser), only when
+/// the user asks: the downloads of the Windows and Android apps.
+void openLink(Uri uri) => impl.openInNewTab(uri);

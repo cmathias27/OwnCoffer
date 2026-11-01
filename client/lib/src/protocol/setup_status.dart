@@ -18,11 +18,13 @@ abstract class SetupStatus
   SetupStatus._({
     required this.needsSetup,
     this.demo,
+    this.serverVersion,
   });
 
   factory SetupStatus({
     required bool needsSetup,
     bool? demo,
+    String? serverVersion,
   }) = _SetupStatusImpl;
 
   factory SetupStatus.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -33,6 +35,7 @@ abstract class SetupStatus
       demo: jsonSerialization['demo'] == null
           ? null
           : _isc.BoolJsonExtension.fromJson(jsonSerialization['demo']),
+      serverVersion: jsonSerialization['serverVersion'] as String?,
     );
   }
 
@@ -42,12 +45,17 @@ abstract class SetupStatus
   /// the app says so on every page.
   bool? demo;
 
+  /// Version of the server (1.0.2; "dev" for a development build): the
+  /// Windows and Android apps compare it with their own.
+  String? serverVersion;
+
   /// Returns a shallow copy of this [SetupStatus]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
   SetupStatus copyWith({
     bool? needsSetup,
     bool? demo,
+    String? serverVersion,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -55,6 +63,7 @@ abstract class SetupStatus
       '__className__': 'SetupStatus',
       'needsSetup': needsSetup,
       if (demo != null) 'demo': demo,
+      if (serverVersion != null) 'serverVersion': serverVersion,
     };
   }
 
@@ -64,6 +73,7 @@ abstract class SetupStatus
       '__className__': 'SetupStatus',
       'needsSetup': needsSetup,
       if (demo != null) 'demo': demo,
+      if (serverVersion != null) 'serverVersion': serverVersion,
     };
   }
 
@@ -79,9 +89,11 @@ class _SetupStatusImpl extends SetupStatus {
   _SetupStatusImpl({
     required bool needsSetup,
     bool? demo,
+    String? serverVersion,
   }) : super._(
          needsSetup: needsSetup,
          demo: demo,
+         serverVersion: serverVersion,
        );
 
   /// Returns a shallow copy of this [SetupStatus]
@@ -91,10 +103,14 @@ class _SetupStatusImpl extends SetupStatus {
   SetupStatus copyWith({
     bool? needsSetup,
     Object? demo = _Undefined,
+    Object? serverVersion = _Undefined,
   }) {
     return SetupStatus(
       needsSetup: needsSetup ?? this.needsSetup,
       demo: demo is bool? ? demo : this.demo,
+      serverVersion: serverVersion is String?
+          ? serverVersion
+          : this.serverVersion,
     );
   }
 }

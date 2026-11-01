@@ -4,6 +4,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../util/app_versions.dart';
 import '../util/format.dart';
 
 /// A remark for the server administrator: a bug, an idea, a question. It
@@ -50,7 +51,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     if (_text.text.trim().isEmpty) return;
     setState(() => (_busy = true, _error = null));
     try {
-      await client.feedback.send(_kind, _text.text, widget.page, null);
+      await client.feedback.send(
+        _kind,
+        _text.text,
+        widget.page,
+        '${await AppVersions.app()} ${AppVersions.platform}',
+      );
       _text.clear();
       if (mounted) {
         ScaffoldMessenger.of(

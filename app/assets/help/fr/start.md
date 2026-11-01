@@ -23,3 +23,7 @@ OwnCoffer range vos comptes bancaires chez vous : il lit les relevés que vous t
 ## Annuler
 
 Après la plupart des actions, un bouton **« Annuler »** apparaît en bas pendant quelques secondes : il remet les choses comme avant.
+
+## Sur Windows ou Android
+
+Menu du compte → **« Applications »** : les applications Windows et Android à télécharger, dans la version de votre serveur. Quand le serveur est mis à jour, une bannière prévient dans l'application.

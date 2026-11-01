@@ -1,6 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../demo/demo_seed.dart';
+import 'admin_endpoint.dart';
 import '../generated/protocol.dart';
 import '../onboarding/onboarding.dart';
 import '../security/ip_guard.dart';
@@ -10,6 +11,7 @@ class SetupEndpoint extends Endpoint {
   Future<SetupStatus> status(Session session) async => SetupStatus(
     needsSetup: await Onboarding.needsSetup(session),
     demo: DemoSeed.enabled,
+    serverVersion: AdminEndpoint.serverVersion(),
   );
 
   /// Checks the setup code from the server log and allows [email] to

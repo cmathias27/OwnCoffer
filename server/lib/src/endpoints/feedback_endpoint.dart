@@ -55,11 +55,25 @@ class FeedbackEndpoint extends Endpoint {
         kind: kind,
         text: clean,
         page: short(page, 60),
-        // The server's own version, whatever the app said.
-        appVersion: AdminEndpoint.serverVersion(),
+        // The server's own version; the app's (Windows and Android apps
+        // can lag behind) only when it looks like one.
+        appVersion: _versions(AdminEndpoint.serverVersion(), appVersion),
         status: 'open',
       ),
     );
+  }
+
+  /// `1.0.3`, or `1.0.3 · app 1.0.2 android` when the app tells another
+  /// version: anything that is not a short version and platform is ignored.
+  static String _versions(String server, String? app) {
+    final a = app?.trim() ?? '';
+    if (!RegExp(
+          r'^[0-9]+\.[0-9]+\.[0-9]+( (web|android|windows|ios|linux|macos))?$',
+        ).hasMatch(a) ||
+        a == server) {
+      return server;
+    }
+    return '$server · app $a';
   }
 
   /// The user's own remarks, newest first.
