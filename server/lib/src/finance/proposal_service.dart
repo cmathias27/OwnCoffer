@@ -7,25 +7,33 @@ import 'package:serverpod/serverpod.dart';
 import '../core/dates.dart';
 import '../endpoints/goal_endpoint.dart';
 import '../endpoints/loan_endpoint.dart';
+import '../endpoints/rule_endpoint.dart';
 import '../endpoints/transaction_endpoint.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
+import 'classification_service.dart';
 import 'spending_service.dart';
 
 /// The circuit of décision 0009: proposals are stored here, checked again
 /// when the user accepts them, and applied only by [_execute] through the
 /// same endpoints the app uses (same rights, same checks, same audit).
 abstract final class ProposalService {
-  static const kinds = {'set_goal', 'set_category', 'create_loan'};
+  static const kinds = {
+    'set_goal',
+    'set_category',
+    'create_loan',
+    'create_rule',
+  };
 
   /// What [kind] on [targetId] rests on now: a proposal made on other data
   /// is not applied.
   static Future<String> dataVersion(
     Session session,
     String kind,
-    int targetId,
-  ) async {
+    int targetId, [
+    String? proposedData,
+  ]) async {
     switch (kind) {
       case 'set_goal':
         final g = await Goal.db.findFirstRow(
@@ -40,6 +48,26 @@ abstract final class ProposalService {
       case 'create_loan':
         // A new loan rests on nothing that can change.
         return 'loan:new';
+      case 'create_rule':
+        // The example operation (target) may be classified in the meantime;
+        // what matters is that the same rule was not created since.
+        final f = _fields(proposedData);
+        final t = await BankTransaction.db.findById(session, targetId);
+        final a = t == null
+            ? null
+            : await Account.db.findById(session, t.accountId);
+        final same = a == null
+            ? 0
+            : await Rule.db.count(
+                session,
+                where: (r) =>
+                    r.groupId.equals(a.groupId) &
+                    r.pattern.equals('${f['pattern']}') &
+                    r.matchType.equals(_matchType(f)) &
+                    r.direction.equals(_direction(f)),
+              );
+        return 'rule:${f['pattern']}:${f['match_type']}:${f['direction']}:'
+            '${a?.groupId ?? 'none'}:$same';
     }
     throw ArgumentError.value(kind, 'kind');
   }
@@ -63,7 +91,7 @@ abstract final class ProposalService {
   }) async {
     if (!kinds.contains(kind)) throw ArgumentError.value(kind, 'kind');
     final user = forUser ?? Access.userId(session);
-    final version = await dataVersion(session, kind, targetId);
+    final version = await dataVersion(session, kind, targetId, proposedData);
     final key =
         '$kind:$targetId:$proposedValue:$version:'
         '${proposedData == null ? '' : sha256.convert(utf8.encode(proposedData))}';
@@ -115,7 +143,8 @@ abstract final class ProposalService {
     if (p.status != 'pending') {
       throw InvalidInputException(code: 'proposal_closed');
     }
-    if (await dataVersion(session, p.kind, p.targetId) != p.dataVersion) {
+    if (await dataVersion(session, p.kind, p.targetId, p.proposedData) !=
+        p.dataVersion) {
       final expired = await ActionProposal.db.updateRow(
         session,
         p.copyWith(status: 'expired', decidedAt: DateTime.now().toUtc()),
@@ -148,6 +177,7 @@ abstract final class ProposalService {
       ),
     );
     await _audit(session, done, 'execute');
+    if (p.kind == 'create_rule') await _closeCovered(session, p);
     return done;
   }
 
@@ -180,6 +210,15 @@ abstract final class ProposalService {
     if (p.kind == 'create_loan') {
       if (p.resultId != null) {
         await LoanEndpoint().delete(session, p.resultId!);
+      }
+    } else if (p.kind == 'create_rule') {
+      // The rule is deleted and its operations classified again without it;
+      // a rule the user already deleted leaves nothing to undo.
+      final rule = p.resultId == null
+          ? null
+          : await Rule.db.findById(session, p.resultId!);
+      if (rule != null && rule.groupId == p.groupId) {
+        await RuleEndpoint().undoCreate(session, rule.id!);
       }
     } else {
       await _execute(session, p, p.currentValue);
@@ -240,8 +279,68 @@ abstract final class ProposalService {
           ),
         );
         return info.loan.id;
+      case 'create_rule':
+        final f = _fields(p.proposedData);
+        if (value == null || f['pattern'] is! String) {
+          throw InvalidInputException(code: 'proposal_unknown');
+        }
+        // The rule page's own checks apply (rights, category, pattern).
+        final rule = await RuleEndpoint().create(
+          session,
+          p.groupId,
+          value,
+          f['pattern'] as String,
+          _matchType(f),
+          direction: _direction(f),
+        );
+        final visible = await Access.visibleAccounts(session, p.groupId);
+        await ClassificationService.applyRule(session, rule, {
+          for (final a in visible) a.id!,
+        });
+        return rule.id;
       default:
         throw InvalidInputException(code: 'proposal_unknown');
+    }
+  }
+
+  static Map<String, Object?> _fields(String? json) {
+    final f = jsonDecode(json ?? '{}');
+    return f is Map<String, Object?> ? f : const {};
+  }
+
+  static RuleMatchType _matchType(Map<String, Object?> f) =>
+      RuleMatchType.values
+          .where((m) => m.name == f['match_type'])
+          .firstOrNull ??
+      RuleMatchType.startsWith;
+
+  static RuleDirection _direction(Map<String, Object?> f) =>
+      RuleDirection.values.where((d) => d.name == f['direction']).firstOrNull ??
+      RuleDirection.any;
+
+  /// Once a rule is accepted, the user's open category proposals it already
+  /// fulfilled (the operation now has the proposed category) are closed: they
+  /// would only be refused as stale.
+  static Future<void> _closeCovered(
+    Session session,
+    ActionProposal rule,
+  ) async {
+    final open = await ActionProposal.db.find(
+      session,
+      where: (x) =>
+          x.authUserId.equals(rule.authUserId) &
+          x.groupId.equals(rule.groupId) &
+          x.kind.equals('set_category') &
+          x.status.equals('pending'),
+    );
+    for (final x in open) {
+      final t = await BankTransaction.db.findById(session, x.targetId);
+      if (t == null || t.categoryId != x.proposedValue) continue;
+      final closed = await ActionProposal.db.updateRow(
+        session,
+        x.copyWith(status: 'expired', decidedAt: DateTime.now().toUtc()),
+      );
+      await _audit(session, closed, 'expire');
     }
   }
 
@@ -289,7 +388,8 @@ abstract final class ProposalService {
           p.status.equals('pending'),
     );
     for (final p in open) {
-      if (await dataVersion(session, p.kind, p.targetId) != p.dataVersion) {
+      if (await dataVersion(session, p.kind, p.targetId, p.proposedData) !=
+          p.dataVersion) {
         await ActionProposal.db.updateRow(
           session,
           p.copyWith(status: 'expired', decidedAt: DateTime.now().toUtc()),

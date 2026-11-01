@@ -3866,6 +3866,27 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String advisorAiRule(String match, String pattern, String category) {
+    return 'Créer la règle : libellé $match « $pattern » → « $category »';
+  }
+
+  @override
+  String advisorAiRuleWhy(int count, String label, String why) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations déjà importées seront classées',
+      one: '1 opération déjà importée sera classée',
+      zero: 'Aucune opération déjà importée n\'est concernée',
+    );
+    return 'Repérée sur « $label ». $_temp0 (compté par OwnCoffer, sans toucher à vos choix faits à la main), puis les suivantes à chaque import. $why';
+  }
+
+  @override
+  String get advisorAiRuleUndo =>
+      'Vous pourrez annuler : la règle sera supprimée et ses opérations classées à nouveau sans elle.';
+
+  @override
   String get advisorAccept => 'Accepter';
 
   @override
@@ -4113,6 +4134,13 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get assistantHint =>
       'Posez une question, ou « classe mes opérations »…';
+
+  @override
+  String get assistantClassifyChip => 'Classer les opérations à classer';
+
+  @override
+  String get assistantClassifyPrompt =>
+      'Propose une catégorie pour mes opérations à classer, et une règle quand le même commerçant reviendra.';
 
   @override
   String get assistantSend => 'Envoyer';

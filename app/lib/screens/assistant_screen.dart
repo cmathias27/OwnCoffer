@@ -151,6 +151,27 @@ class _AssistantScreenState extends State<AssistantScreen> {
                               if (s.enabled && _provider != null)
                                 for (final (m, r) in _talk)
                                   ..._exchange(context, l, m, r),
+                              if (s.enabled &&
+                                  _provider != null &&
+                                  _talk.isEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Wrap(
+                                    children: [
+                                      ActionChip(
+                                        avatar: const Icon(Icons.rule),
+                                        label: Text(l.assistantClassifyChip),
+                                        onPressed: _sending
+                                            ? null
+                                            : () {
+                                                _input.text =
+                                                    l.assistantClassifyPrompt;
+                                                _send();
+                                              },
+                                      ),
+                                    ],
+                                  ),
+                                ),
                             ],
                           ),
                         ),

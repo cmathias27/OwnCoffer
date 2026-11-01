@@ -2,6 +2,17 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 0.3.28 (1er novembre 2026)
+
+### Assistant IA : une règle avec la catégorie
+
+- Quand l'assistant propose une catégorie pour une opération dont le commerçant reviendra, il peut aussi **proposer la règle** qui classera les suivantes (« libellé commence par « BOULANGERIE » → Alimentation »).
+- C'est **OwnCoffer qui vérifie** la règle avant de la proposer : elle doit correspondre au libellé de l'opération, ne pas exister déjà, et avoir un texte d'au moins trois caractères ; sinon elle n'est pas proposée.
+- La carte de **Mon conseiller** dit **combien d'opérations déjà importées seront classées** (compté par le moteur, sur les comptes que vous voyez, sans toucher à vos choix faits à la main), avec quelques exemples. La règle et la catégorie s'acceptent séparément.
+- Rien ne change avant votre accord ; une fois acceptée, la règle s'applique aussitôt et **peut être annulée** : elle est supprimée et ses opérations sont classées à nouveau sans elle. Si la même règle a été créée entre-temps, la proposition est retirée sans rien modifier.
+- Dans l'écran **Assistant**, un raccourci **« Classer les opérations à classer »** pose la question pour vous.
+- Fonctionne aussi depuis un autre assistant (MCP).
+
 ## 0.3.27 (1er novembre 2026)
 
 ### Instance de démonstration

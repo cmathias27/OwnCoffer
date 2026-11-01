@@ -6210,6 +6210,24 @@ abstract class AppLocalizations {
   /// **'Lu dans le document : taux {rate}, mensualité {payment}, première échéance le {date}. Vous pourrez tout corriger ensuite dans l\'onglet Crédits.'**
   String advisorAiLoanWhy(String rate, String payment, String date);
 
+  /// No description provided for @advisorAiRule.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer la règle : libellé {match} « {pattern} » → « {category} »'**
+  String advisorAiRule(String match, String pattern, String category);
+
+  /// No description provided for @advisorAiRuleWhy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Repérée sur « {label} ». {count, plural, =0{Aucune opération déjà importée n\'est concernée} =1{1 opération déjà importée sera classée} other{{count} opérations déjà importées seront classées}} (compté par OwnCoffer, sans toucher à vos choix faits à la main), puis les suivantes à chaque import. {why}'**
+  String advisorAiRuleWhy(int count, String label, String why);
+
+  /// No description provided for @advisorAiRuleUndo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous pourrez annuler : la règle sera supprimée et ses opérations classées à nouveau sans elle.'**
+  String get advisorAiRuleUndo;
+
   /// No description provided for @advisorAccept.
   ///
   /// In fr, this message translates to:
@@ -6617,6 +6635,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Posez une question, ou « classe mes opérations »…'**
   String get assistantHint;
+
+  /// No description provided for @assistantClassifyChip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classer les opérations à classer'**
+  String get assistantClassifyChip;
+
+  /// No description provided for @assistantClassifyPrompt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propose une catégorie pour mes opérations à classer, et une règle quand le même commerçant reviendra.'**
+  String get assistantClassifyPrompt;
 
   /// No description provided for @assistantSend.
   ///

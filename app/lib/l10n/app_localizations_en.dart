@@ -3843,6 +3843,27 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String advisorAiRule(String match, String pattern, String category) {
+    return 'Create the rule: label $match \"$pattern\" → \"$category\"';
+  }
+
+  @override
+  String advisorAiRuleWhy(int count, String label, String why) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations already imported will be classified',
+      one: '1 operation already imported will be classified',
+      zero: 'No operation already imported is concerned',
+    );
+    return 'Spotted on \"$label\". $_temp0 (counted by OwnCoffer, never changing your own choices), then the next ones at each import. $why';
+  }
+
+  @override
+  String get advisorAiRuleUndo =>
+      'You can undo it: the rule will be deleted and its operations classified again without it.';
+
+  @override
   String get advisorAccept => 'Accept';
 
   @override
@@ -4087,6 +4108,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantHint => 'Ask a question, or \"classify my operations\"…';
+
+  @override
+  String get assistantClassifyChip => 'Classify the operations to classify';
+
+  @override
+  String get assistantClassifyPrompt =>
+      'Propose a category for my operations to classify, and a rule when the same merchant will come back.';
 
   @override
   String get assistantSend => 'Send';
