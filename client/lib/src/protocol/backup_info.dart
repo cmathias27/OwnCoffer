@@ -20,13 +20,15 @@ abstract class BackupInfo
     required this.label,
     required this.bytes,
     required this.createdAt,
-  });
+    bool? encrypted,
+  }) : encrypted = encrypted ?? false;
 
   factory BackupInfo({
     required String name,
     required String label,
     required int bytes,
     required DateTime createdAt,
+    bool? encrypted,
   }) = _BackupInfoImpl;
 
   factory BackupInfo.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -37,6 +39,9 @@ abstract class BackupInfo
       createdAt: _isc.DateTimeJsonExtension.fromJson(
         jsonSerialization['createdAt'],
       ),
+      encrypted: jsonSerialization['encrypted'] == null
+          ? null
+          : _isc.BoolJsonExtension.fromJson(jsonSerialization['encrypted']),
     );
   }
 
@@ -49,6 +54,9 @@ abstract class BackupInfo
 
   DateTime createdAt;
 
+  /// Encrypted with docker/backup.key (.dump.gpg).
+  bool encrypted;
+
   /// Returns a shallow copy of this [BackupInfo]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
@@ -57,6 +65,7 @@ abstract class BackupInfo
     String? label,
     int? bytes,
     DateTime? createdAt,
+    bool? encrypted,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -66,6 +75,7 @@ abstract class BackupInfo
       'label': label,
       'bytes': bytes,
       'createdAt': createdAt.toJson(),
+      'encrypted': encrypted,
     };
   }
 
@@ -77,6 +87,7 @@ abstract class BackupInfo
       'label': label,
       'bytes': bytes,
       'createdAt': createdAt.toJson(),
+      'encrypted': encrypted,
     };
   }
 
@@ -92,11 +103,13 @@ class _BackupInfoImpl extends BackupInfo {
     required String label,
     required int bytes,
     required DateTime createdAt,
+    bool? encrypted,
   }) : super._(
          name: name,
          label: label,
          bytes: bytes,
          createdAt: createdAt,
+         encrypted: encrypted,
        );
 
   /// Returns a shallow copy of this [BackupInfo]
@@ -108,12 +121,14 @@ class _BackupInfoImpl extends BackupInfo {
     String? label,
     int? bytes,
     DateTime? createdAt,
+    bool? encrypted,
   }) {
     return BackupInfo(
       name: name ?? this.name,
       label: label ?? this.label,
       bytes: bytes ?? this.bytes,
       createdAt: createdAt ?? this.createdAt,
+      encrypted: encrypted ?? this.encrypted,
     );
   }
 }

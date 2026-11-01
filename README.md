@@ -2,7 +2,7 @@
 
 **Vos comptes bancaires, chez vous.** Application libre et gratuite de gestion de comptes bancaires, auto-hébergée, pour une personne, un couple ou une famille.
 
-> **Statut : alpha 0.1.** Première version utilisable, pour un usage personnel : import des relevés Caisse d'Épargne, classement, solde prévu et alerte de découvert. Installation : [docs/INSTALLATION.md](docs/INSTALLATION.md) ; nouveautés : [CHANGELOG.md](CHANGELOG.md) ; suite : [roadbook](docs/ROADBOOK.md).
+> **Statut : version 1.0** du serveur et de l'application web, premières applications Windows et Android. Installation : [docs/INSTALLATION.md](docs/INSTALLATION.md) ; utilisation : [docs/UTILISATION.md](docs/UTILISATION.md) ; questions : [docs/FAQ.md](docs/FAQ.md) ; nouveautés : [CHANGELOG.md](CHANGELOG.md) ; suite : [roadbook](docs/ROADBOOK.md).
 
 ## Ce que fera OwnCoffer
 
@@ -23,8 +23,8 @@
 
 ## Plateformes
 
-1. **Serveur + application web** — en premier.
-2. **Applications Windows et Android** — ensuite, sur le même serveur, puis en version autonome.
+1. **Serveur + application web** — version 1.0.
+2. **Applications Windows et Android** — premières versions, sur le même serveur ([docs/APPLICATIONS.md](docs/APPLICATIONS.md)) ; hors-ligne et version autonome ensuite.
 
 ## Documentation
 
@@ -35,6 +35,11 @@
 | [Décisions](docs/decisions/) | Les choix d'architecture et leurs raisons |
 | [Catégories standard](docs/CATEGORIES_STANDARD.md) | Le catalogue commun de catégories (FR / EN) |
 | [Maquettes](docs/MAQUETTES.md) | Les écrans dessinés et le style retenu |
+| [Installation](docs/INSTALLATION.md) | Installer, sauvegarder, mettre à jour le serveur |
+| [Utilisation](docs/UTILISATION.md) et [FAQ](docs/FAQ.md) | Se servir de l'application, questions fréquentes |
+| [Applications](docs/APPLICATIONS.md) | Installer les applications Windows et Android |
+| [Publication](docs/PUBLICATION.md) | Vérifier une version signée, ses composants (SBOM) |
+| [Audit de sécurité](docs/AUDIT_SECURITE.md) | Périmètre, revue interne, points ouverts |
 | [Aide de l'application](app/assets/help/fr/start.md) | Les pages d'aide affichées dans l'app, une par écran (aussi [en anglais](app/assets/help/en/start.md)) |
 
 ## Technologies prévues
@@ -49,4 +54,4 @@ Les idées et retours sont bienvenus dès maintenant : ouvrez une [issue](../../
 
 ### English
 
-OwnCoffer is a free, open-source, self-hosted personal finance app: import bank statements (QIF, OFX, CSV), automatic categorisation with community rules, cash-flow forecasts, budget goals and alerts, loans tracking, and optional AI document reading with the provider of your choice. Server + web app first, then Windows and Android. The project is in its design phase; documentation is in French for now, and the app will ship in French and English. Licensed under AGPL-3.0.
+OwnCoffer is a free, open-source, self-hosted personal finance app: import bank statements (QIF, OFX, CSV), automatic categorisation with community rules, cash-flow forecasts, budget goals and alerts, loans tracking, and optional AI document reading with the provider of your choice. Server + web app at version 1.0, with first Windows and Android apps. Documentation is in French for now; the app is in French and English. Licensed under AGPL-3.0.

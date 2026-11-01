@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../state/session.dart';
+import '../util/server_address.dart';
 import '../widgets/form_card.dart';
 import 'account_flow.dart';
 
@@ -95,6 +96,13 @@ class _SignInScreenState extends State<SignInScreen> {
           onPressed: () => setState(() => _flow = AccountFlowMode.register),
           child: Text(l.haveInvitation),
         ),
+        // Windows and Android: the server this app talks to.
+        if (ServerAddress.needed)
+          TextButton.icon(
+            icon: const Icon(Icons.dns_outlined),
+            onPressed: changeServer,
+            label: Text(l.serverAddressChange),
+          ),
       ],
     );
   }

@@ -5,14 +5,27 @@ import 'client.dart';
 import 'l10n/app_localizations.dart';
 import 'l10n/error_messages.dart';
 import 'screens/home_screen.dart';
+import 'screens/server_address_screen.dart';
 import 'screens/setup_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/two_factor_screen.dart';
 import 'state/session.dart';
 import 'assistant/chat_bubble.dart';
+import 'util/server_address.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  askServerAddress = () async =>
+      runApp(OwnCofferApp(home: ServerAddressScreen(onSaved: _start)));
+  // Windows and Android: the user's server is asked once (decision 0020).
+  if (ServerAddress.needed && await ServerAddress.load() == null) {
+    await askServerAddress();
+    return;
+  }
+  await _start();
+}
+
+Future<void> _start() async {
   await initializeClient();
   runApp(const OwnCofferApp());
 }
@@ -106,7 +119,11 @@ ThemeData _buildTheme(Brightness brightness) {
 final _navigator = GlobalKey<NavigatorState>();
 
 class OwnCofferApp extends StatelessWidget {
-  const OwnCofferApp({super.key});
+  /// Another first page (the server address of the native apps), shown
+  /// before the client exists: no assistant bubble then.
+  final Widget? home;
+
+  const OwnCofferApp({super.key, this.home});
 
   @override
   Widget build(BuildContext context) {
@@ -129,14 +146,16 @@ class OwnCofferApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       navigatorKey: _navigator,
       // The assistant's bubble stays above every page.
-      builder: (context, child) =>
-          ChatLayer(navigator: _navigator, child: child ?? const SizedBox()),
-      home: const _Root(),
+      builder: home != null
+          ? null
+          : (context, child) => ChatLayer(
+              navigator: _navigator,
+              child: child ?? const SizedBox(),
+            ),
+      home: home ?? const _Root(),
     );
   }
 }
-
-/// Placeholder until the operations screens (phase 3).
 
 /// Shows the screen matching the session: setup, sign-in, code, or the app.
 class _Root extends StatefulWidget {
@@ -185,6 +204,11 @@ class _RootState extends State<_Root> {
                 onPressed: _session.refresh,
                 child: Text(AppLocalizations.of(context).retry),
               ),
+              if (ServerAddress.needed)
+                TextButton(
+                  onPressed: changeServer,
+                  child: Text(AppLocalizations.of(context).serverAddressChange),
+                ),
             ],
           ),
         ),

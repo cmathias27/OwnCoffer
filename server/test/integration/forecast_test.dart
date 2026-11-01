@@ -1,5 +1,8 @@
+import 'package:owncoffer_server/src/core/dates.dart';
+import 'package:owncoffer_server/src/finance/forecast_service.dart';
 import 'package:owncoffer_server/src/generated/protocol.dart';
 import 'package:owncoffer_server/src/security/scopes.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 import 'package:test/test.dart';
@@ -70,6 +73,54 @@ void main() {
         AccountKind.checking,
         initialBalanceCents: 30000,
       );
+    });
+
+    test('balances summed by the database = the shared engine', () async {
+      final ops = [
+        await op(-400, -12345, 'OLD'),
+        await op(-1, 250000, 'SALAIRE'),
+        await op(0, -999, 'TODAY'),
+        await op(3, -5000, 'FUTURE'),
+      ];
+      await BankTransaction.db.updateRow(db, ops[1].copyWith(cleared: true));
+      final trashed = await op(-2, -777777, 'TRASH');
+      await BankTransaction.db.updateRow(
+        db,
+        trashed.copyWith(deletedAt: DateTime.now()),
+      );
+      final t = today.toLocalDate();
+      final got = await ForecastService.balancesOf(db, account, t);
+      final rows = await BankTransaction.db.find(
+        db,
+        where: (x) =>
+            x.accountId.equals(account.id!) & x.deletedAt.equals(null),
+      );
+      final want = core.computeBalances(
+        initialBalanceCents: account.initialBalanceCents,
+        operations: [
+          for (final r in rows)
+            core.BalanceInput(
+              r.date.toLocalDate(),
+              r.amountCents,
+              cleared: r.cleared,
+            ),
+        ],
+        today: t,
+      );
+      expect(
+        (got.clearedCents, got.currentCents, got.allRealCents),
+        (want.clearedCents, want.currentCents, want.allRealCents),
+      );
+      expect(got.currentCents, 30000 - 12345 + 250000 - 999);
+      expect(got.clearedCents, 30000 + 250000);
+      expect(got.allRealCents, 30000 - 12345 + 250000 - 999 - 5000);
+      // Only the last 60 days and the future are loaded one by one.
+      final recent = await ForecastService.recentOperations(db, account, t);
+      expect(recent.map((r) => r.cleanLabel).toSet(), {
+        'SALAIRE',
+        'TODAY',
+        'FUTURE',
+      });
     });
 
     test('day-by-day forecast, low point and overdraft date', () async {

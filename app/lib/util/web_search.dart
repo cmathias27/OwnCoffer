@@ -1,5 +1,6 @@
 import 'web_search/web_search_stub.dart'
     if (dart.library.js_interop) 'web_search/web_search_web.dart'
+    if (dart.library.io) 'web_search/web_search_io.dart'
     as impl;
 
 /// Google search for an operation label the user does not recognise. Only

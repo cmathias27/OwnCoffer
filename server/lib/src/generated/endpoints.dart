@@ -46,6 +46,7 @@ import '../endpoints/advisor_endpoint.dart' as _ioe4fqri;
 import '../endpoints/ai_endpoint.dart' as _igsjf4zh;
 import '../endpoints/analysis_endpoint.dart' as _i0sl0qub;
 import '../endpoints/category_endpoint.dart' as _ioevag4g;
+import '../endpoints/export_endpoint.dart' as _i0kmk8zv;
 import '../endpoints/feedback_endpoint.dart' as _iebcplle;
 import '../endpoints/goal_endpoint.dart' as _i2k4izhk;
 import '../endpoints/group_endpoint.dart' as _iknqvl2r;
@@ -111,6 +112,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'category',
+          null,
+        ),
+      'export': _i0kmk8zv.ExportEndpoint()
+        ..initialize(
+          server,
+          'export',
           null,
         ),
       'feedback': _iebcplle.FeedbackEndpoint()
@@ -865,6 +872,16 @@ class Endpoints extends _is.EndpointDispatch {
                 Map<String, dynamic> params,
               ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
                   .requestBackup(session),
+        ),
+        'requestRestoreTest': _is.MethodConnector(
+          name: 'requestRestoreTest',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .requestRestoreTest(session),
         ),
         'updates': _is.MethodConnector(
           name: 'updates',
@@ -1640,6 +1657,56 @@ class Endpoints extends _is.EndpointDispatch {
                   (endpoints['category'] as _ioevag4g.CategoryEndpoint).archive(
                     session,
                     params['categoryId'],
+                  ),
+        ),
+      },
+    );
+    connectors['export'] = _is.EndpointConnector(
+      name: 'export',
+      endpoint: endpoints['export']!,
+      methodConnectors: {
+        'groupJson': _is.MethodConnector(
+          name: 'groupJson',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['export'] as _i0kmk8zv.ExportEndpoint).groupJson(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'transactionsCsv': _is.MethodConnector(
+          name: 'transactionsCsv',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'language': _is.ParameterDescription(
+              name: 'language',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['export'] as _i0kmk8zv.ExportEndpoint)
+                  .transactionsCsv(
+                    session,
+                    params['groupId'],
+                    params['language'],
                   ),
         ),
       },

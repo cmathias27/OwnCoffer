@@ -8,13 +8,13 @@ OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de 
 - Fonctionnalités détaillées : `docs/CAHIER_DES_CHARGES.md`.
 - Décisions d'architecture : `docs/decisions/` — à respecter ; pour en changer une, écrire une nouvelle décision.
 
-**Phase actuelle : phase 4 — Prévoir, piloter et IA** (commencée le 31 octobre 2026 à la demande de l'utilisateur, sans attendre la fin du mois d'essai de l'alpha ; versions 0.2.0 à 0.3.x déjà publiées, notes dans `CHANGELOG.md`). Continuer à corriger en priorité ce que l'utilisateur remonte de son usage réel (#20). Ordre convenu : abonnements mis en évidence dans la page Opérations ; dépenses variables et alerte anticipée d'objectif ; simulateur d'achat ; accueil et tableau de bord ; corbeille, import groupé, frais bancaires ; puis circuit des propositions (décision 0009), « Mon conseiller » sans IA, et enfin la passerelle IA.
+**Phase actuelle : phase 5 terminée (version 1.0 préparée, audit externe à trouver), phase 6 commencée** — applications Windows et Android connectées au serveur, décision 0020 ; reste hors-ligne, page « Télécharger », mises à jour des applications, version autonome. Continuer à corriger en priorité ce que l'utilisateur remonte de son usage réel (#20).
 
 ## Pile technique décidée
 
 - Serveur : **Serverpod** (Dart) — décision 0001. Voir son point de vigilance licence.
 - Base : **PostgreSQL**, migrations Serverpod, Row Level Security en seconde barrière.
-- Interface : **Flutter web**, installable sur téléphone (PWA, sans cache de données financières) ; Windows et Android natifs en phase 6 — décisions 0005 et 0011.
+- Interface : **Flutter web**, installable sur téléphone (PWA, sans cache de données financières) ; applications Windows et Android du même code, connectées au serveur — décisions 0005, 0011 et 0020. Tout code propre au navigateur passe par `app/lib/util/` (versions `_web` et `_io`).
 - Déploiement : `docker compose` sur un serveur Docker existant, exposé par une redirection **Cloudflare** (HTTPS géré par Cloudflare) ; réseau Docker privé, seul un proxy Caddy publie **un seul port** configurable (app web et API sous `/api/`), PostgreSQL et ports internes jamais publiés ; IP réelle via `CF-Connecting-IP` seulement si la requête vient de Cloudflare ou du connecteur local — décisions 0002, 0012 et 0015.
 - CI : GitHub Actions ; image `ghcr.io/cmathias27/owncoffer`.
 
@@ -54,7 +54,9 @@ docs/     cahier des charges, roadbook, décisions
 - Après toute modification de `server/lib` (points d'accès, modèles `.spy.yaml`) : `serverpod generate`, puis `serverpod create-migration` si un modèle de table a changé.
 - `inSet` attend un `Set<T>` explicitement typé (`final Set<int> ids = {...}`).
 - Avant chaque push : `./tool/check.sh` (mêmes vérifications que la CI).
-- Publier une version : mettre à jour `CHANGELOG.md`, `app/pubspec.yaml` et `OWNCOFFER_TAG` de `docker/.env.example`, puis l'étiquette `vX.Y.Z` sur `main` (la CI publie l'image `:X.Y.Z`).
+- Publier une version : mettre à jour `CHANGELOG.md`, `app/pubspec.yaml` et `OWNCOFFER_TAG` de `docker/.env.example`, puis l'étiquette `vX.Y.Z` sur `main` (la CI publie l'image signée `:X.Y.Z`, les applications, les SBOM et la version GitHub — `docs/PUBLICATION.md`).
+- Sauvegardes : ne jamais casser la lecture des anciens formats (`.dump`) ni le retour arrière de `docker/auto-update.sh` ; `tool/test_backup_restore.sh` (Docker requis) les teste de bout en bout.
+- Le test `server/test/integration/performance_test.dart` mesure les pages principales sur 100 000 opérations : ne pas charger tout l'historique d'un compte quand une somme SQL suffit.
 
 ## Façon de travailler
 

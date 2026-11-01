@@ -109,13 +109,15 @@ class _InvoiceScanScreenState extends State<InvoiceScanScreen> {
       final size = core.scanOutputSize(_corners);
       final out = core.warpDocument(img, _corners, size.width, size.height);
       if (_enhance) core.enhanceDocument(out);
-      final jpeg = await encodeJpeg(out);
+      final scan = await encodeScan(out);
       final name = widget.photo.name;
       final ext = core.fileExtension(name);
       final stem = ext.isEmpty
           ? name
           : name.substring(0, name.length - ext.length - 1);
-      if (mounted) Navigator.pop(context, PickedFile('$stem.jpg', jpeg));
+      if (mounted) {
+        Navigator.pop(context, PickedFile('$stem.$scanExtension', scan));
+      }
     } on Object {
       if (mounted) {
         setState(

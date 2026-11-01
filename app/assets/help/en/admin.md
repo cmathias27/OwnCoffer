@@ -9,7 +9,7 @@ This page is only visible to the **server administrator**. It never shows a hous
 - **Invitations**: all pending invitations, to revoke; invite into any household.
 - **Blocked IPs** after too many failed sign-ins, to unblock.
 - **Log** of the latest sensitive actions: who, what, when.
-- **Backups**: nightly backup, "Back up now", list. Restoring is done on the server only: backups hold all the bank data.
+- **Backups**: nightly backup, encrypted with the key `docker/backup.key` (keep a copy away from the server), "Back up now", list. Every night the latest backup is restored into a test database to check it is sound; "Test the restore" does it right away. A real restore is done on the server only: backups hold all the bank data.
 - **Updates**: running version, latest published, automatic updates or not. Installing backs up first and rolls back if the new version does not start.
 - **AI**: the AI providers offered to the users.
 - **Feedback**: the messages users send with "Give feedback"; tick those dealt with.

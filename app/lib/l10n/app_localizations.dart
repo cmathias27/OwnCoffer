@@ -8326,6 +8326,167 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Renégociation'**
   String get loanChangeNote;
+
+  /// No description provided for @adminBackupEncrypted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffrées avec la clé docker/backup.key. Sans elle, une sauvegarde ne peut pas être relue : gardez-en une copie hors du serveur (gestionnaire de mots de passe, clé USB).'**
+  String get adminBackupEncrypted;
+
+  /// No description provided for @adminBackupNotEncrypted.
+  ///
+  /// In fr, this message translates to:
+  /// **'La dernière sauvegarde n\'est pas chiffrée. Installez gpg sur le serveur (apt install gnupg) : les suivantes le seront.'**
+  String get adminBackupNotEncrypted;
+
+  /// No description provided for @adminBackupEncryptedTooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffrée'**
+  String get adminBackupEncryptedTooltip;
+
+  /// No description provided for @adminRestoreTestOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restauration vérifiée le {when} : {tables} tables et {operations} opérations relues dans une base d\'essai ({file}).'**
+  String adminRestoreTestOk(
+    String when,
+    int tables,
+    int operations,
+    String file,
+  );
+
+  /// No description provided for @adminRestoreTestFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le test de restauration du {when} a échoué ({file}) : {message}'**
+  String adminRestoreTestFailed(String when, String file, String message);
+
+  /// No description provided for @adminRestoreTestNever.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune restauration testée pour l\'instant. Elle l\'est chaque nuit, juste après la sauvegarde.'**
+  String get adminRestoreTestNever;
+
+  /// No description provided for @adminRestoreTestNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tester la restauration'**
+  String get adminRestoreTestNow;
+
+  /// No description provided for @adminRestoreTestRequested.
+  ///
+  /// In fr, this message translates to:
+  /// **'Test demandé : la dernière sauvegarde est restaurée dans une base d\'essai, jamais dans la vôtre. Le résultat apparaît ici dans une minute environ.'**
+  String get adminRestoreTestRequested;
+
+  /// No description provided for @adminRestoreTestPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Test demandé, en cours sur le serveur…'**
+  String get adminRestoreTestPending;
+
+  /// No description provided for @serverAddressTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre serveur OwnCoffer'**
+  String get serverAddressTitle;
+
+  /// No description provided for @serverAddressIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'application se connecte à votre propre serveur OwnCoffer. Saisissez son adresse, celle que vous ouvrez dans le navigateur (par exemple comptes.exemple.fr).'**
+  String get serverAddressIntro;
+
+  /// No description provided for @serverAddressLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse du serveur'**
+  String get serverAddressLabel;
+
+  /// No description provided for @serverAddressInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse non valable. Elle doit commencer par https:// (http:// seulement sur votre réseau local).'**
+  String get serverAddressInvalid;
+
+  /// No description provided for @serverAddressUnreachable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun serveur OwnCoffer ne répond à cette adresse. Vérifiez-la, et que le serveur est allumé.'**
+  String get serverAddressUnreachable;
+
+  /// No description provided for @serverAddressConnect.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter'**
+  String get serverAddressConnect;
+
+  /// No description provided for @serverAddressChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer de serveur'**
+  String get serverAddressChange;
+
+  /// No description provided for @serverAddressCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Serveur : {address}'**
+  String serverAddressCurrent(String address);
+
+  /// No description provided for @exportTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter mes données'**
+  String get exportTitle;
+
+  /// No description provided for @exportIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléchargez une copie de vos données du groupe « {group} » : tout ce que vous pouvez voir, rien de plus. Le fichier est créé par votre serveur et ne va nulle part ailleurs que sur votre appareil.'**
+  String exportIntro(String group);
+
+  /// No description provided for @exportJsonTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Export complet (JSON)'**
+  String get exportJsonTitle;
+
+  /// No description provided for @exportJsonHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes, opérations (corbeille comprise), ventilations, catégories, règles, objectifs, opérations prévues, crédits, pointages, imports, factures (sans leur fichier) et vos données de l\'assistant. Montants en centimes. Pour garder une archive ou passer à un autre logiciel.'**
+  String get exportJsonHelp;
+
+  /// No description provided for @exportCsvTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations pour un tableur (CSV)'**
+  String get exportCsvTitle;
+
+  /// No description provided for @exportCsvHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une ligne par opération, corbeille exclue : date, compte, libellés, note, montant, catégorie, pointage. S\'ouvre dans LibreOffice Calc ou Excel.'**
+  String get exportCsvHelp;
+
+  /// No description provided for @exportDownload.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger'**
+  String get exportDownload;
+
+  /// No description provided for @exportDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Export prêt : {name}'**
+  String exportDone(String name);
+
+  /// No description provided for @exportNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier contient vos opérations bancaires : rangez-le dans un endroit sûr. Il ne remplace pas les sauvegardes du serveur, qui seules permettent de tout restaurer.'**
+  String get exportNote;
 }
 
 class _AppLocalizationsDelegate

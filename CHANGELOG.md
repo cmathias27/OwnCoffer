@@ -2,6 +2,47 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.0.0 (novembre 2026)
+
+Première version stable du serveur et de l'application web (fin de la phase 5), et premières applications Windows et Android.
+
+### Sauvegardes chiffrées, restauration vérifiée chaque nuit
+
+- Chaque sauvegarde est **chiffrée** (gpg, AES-256) avec la clé `docker/backup.key`, créée à la première sauvegarde. **Gardez-en une copie hors du serveur** : sans elle, aucune sauvegarde ne peut être relue. Les copies de `docker/backups/` peuvent ainsi aller sur un disque USB ou en ligne sans exposer vos opérations.
+- Chaque nuit, juste après la sauvegarde, elle est **restaurée dans une base d'essai** jetable, sans réseau, jamais dans la vôtre : on vérifie qu'elle se relit et on compte tables et opérations. Une sauvegarde abîmée ou modifiée est signalée.
+- Page **Administration → Sauvegardes** : chiffrement de chaque sauvegarde (cadenas), résultat du dernier test de restauration, bouton **« Tester la restauration »**, alerte si une sauvegarde n'a pas pu être chiffrée (gpg absent du serveur).
+- Le retour arrière d'une mise à jour sait restaurer les sauvegardes chiffrées comme les anciennes. `docker/backup-cat.sh` déchiffre une sauvegarde pour la restaurer à la main ([INSTALLATION.md](docs/INSTALLATION.md)).
+- Installations existantes : rien à faire. À la première mise à jour automatique, le test de nuit s'installe ; la clé est créée à la sauvegarde suivante. Installez `gnupg` sur le serveur s'il manque.
+
+### Exporter ses données
+
+- **« Exporter mes données »** (menu du compte, ou icône en haut sur grand écran) : un **JSON complet** (comptes, opérations, ventilations, catégories, règles, objectifs, opérations prévues, crédits, pointages, imports, factures sans leur fichier, données de l'assistant ; montants en centimes) ou les **opérations en CSV** pour LibreOffice Calc ou Excel.
+- Seul ce que vous voyez est exporté (un compte restreint reste hors de l'export des autres membres), sans aucun secret. Chaque export est noté dans le journal du groupe. Une formule glissée dans un libellé n'est jamais exécutée par le tableur.
+
+### Rapide avec 100 000 opérations
+
+- Les prévisions, le reste à vivre et le simulateur d'achat ne chargent plus tout l'historique : les soldes sont calculés par la base. Avec 100 000 opérations, la prévision passe de 2,6 s à 0,2 s.
+- Un test mesure à chaque modification les pages principales sur 100 000 opérations fictives : listes et recherche des opérations, prévisions, budget, analyses, calendrier, export.
+
+### Accessibilité
+
+- Tests automatiques des règles d'accessibilité sur les écrans principaux : chaque bouton a un nom lu par les lecteurs d'écran, zones à toucher assez grandes, contrastes suffisants en thème clair et sombre, texte agrandi à 200 % sur téléphone, en français et en anglais.
+
+### Applications Windows et Android
+
+- L'application existe maintenant pour **Windows** (zip à décompresser) et **Android** (APK à installer hors Play Store), jointes à chaque version. Elles ne sont pas encore signées par un éditeur : Windows et Android avertissent au premier lancement ([APPLICATIONS.md](docs/APPLICATIONS.md)).
+- Au premier lancement, elles demandent l'adresse de votre serveur et vérifient qu'il répond ; HTTPS obligatoire hors réseau local. « Changer de serveur » sur la page de connexion. Elles ne gardent aucune donnée financière sur l'appareil.
+- Import de relevés, factures et photos, enregistrement des exports et liens fonctionnent comme dans le navigateur.
+
+### Publication signée
+
+- Chaque version est publiée par la CI avec ses notes, l'image Docker **signée** (Sigstore) avec sa provenance, les applications, la **liste des composants (SBOM)** du code et de l'image, les empreintes `SHA256SUMS` et une signature pour chaque fichier. Vérification : [PUBLICATION.md](docs/PUBLICATION.md).
+- Dépendances surveillées : Dependabot, et recherche des vulnérabilités connues à chaque pull request.
+
+### Documentation
+
+- [Guide d'utilisation](docs/UTILISATION.md), [questions fréquentes](docs/FAQ.md), [applications](docs/APPLICATIONS.md), [publication](docs/PUBLICATION.md), et [préparation de l'audit de sécurité](docs/AUDIT_SECURITE.md) (périmètre, modèle de menace, revue interne, points ouverts). L'audit externe reste à faire.
+
 ## 0.3.34 (1er novembre 2026)
 
 ### Changer de contrat, renégocier un crédit

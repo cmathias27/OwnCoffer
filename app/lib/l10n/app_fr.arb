@@ -3436,5 +3436,81 @@
   "loanChangeNeverPaysOff": "Jamais rentabilisé sur la durée du crédit.",
   "loanChangeHow": "Calculé par OwnCoffer à partir du tableau d'amortissement, assurance comprise dans les prélèvements comparés. Indicatif : l'offre de la banque fait foi.",
   "loanChangeRecord": "Enregistrer ce changement",
-  "loanChangeNote": "Renégociation"
+  "loanChangeNote": "Renégociation",
+  "adminBackupEncrypted": "Chiffrées avec la clé docker/backup.key. Sans elle, une sauvegarde ne peut pas être relue : gardez-en une copie hors du serveur (gestionnaire de mots de passe, clé USB).",
+  "adminBackupNotEncrypted": "La dernière sauvegarde n'est pas chiffrée. Installez gpg sur le serveur (apt install gnupg) : les suivantes le seront.",
+  "adminBackupEncryptedTooltip": "Chiffrée",
+  "adminRestoreTestOk": "Restauration vérifiée le {when} : {tables} tables et {operations} opérations relues dans une base d'essai ({file}).",
+  "@adminRestoreTestOk": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "tables": {
+        "type": "int"
+      },
+      "operations": {
+        "type": "int"
+      },
+      "file": {
+        "type": "String"
+      }
+    }
+  },
+  "adminRestoreTestFailed": "Le test de restauration du {when} a échoué ({file}) : {message}",
+  "@adminRestoreTestFailed": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "file": {
+        "type": "String"
+      },
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "adminRestoreTestNever": "Aucune restauration testée pour l'instant. Elle l'est chaque nuit, juste après la sauvegarde.",
+  "adminRestoreTestNow": "Tester la restauration",
+  "adminRestoreTestRequested": "Test demandé : la dernière sauvegarde est restaurée dans une base d'essai, jamais dans la vôtre. Le résultat apparaît ici dans une minute environ.",
+  "adminRestoreTestPending": "Test demandé, en cours sur le serveur…",
+  "serverAddressTitle": "Votre serveur OwnCoffer",
+  "serverAddressIntro": "L'application se connecte à votre propre serveur OwnCoffer. Saisissez son adresse, celle que vous ouvrez dans le navigateur (par exemple comptes.exemple.fr).",
+  "serverAddressLabel": "Adresse du serveur",
+  "serverAddressInvalid": "Adresse non valable. Elle doit commencer par https:// (http:// seulement sur votre réseau local).",
+  "serverAddressUnreachable": "Aucun serveur OwnCoffer ne répond à cette adresse. Vérifiez-la, et que le serveur est allumé.",
+  "serverAddressConnect": "Se connecter",
+  "serverAddressChange": "Changer de serveur",
+  "serverAddressCurrent": "Serveur : {address}",
+  "@serverAddressCurrent": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "exportTitle": "Exporter mes données",
+  "exportIntro": "Téléchargez une copie de vos données du groupe « {group} » : tout ce que vous pouvez voir, rien de plus. Le fichier est créé par votre serveur et ne va nulle part ailleurs que sur votre appareil.",
+  "@exportIntro": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "exportJsonTitle": "Export complet (JSON)",
+  "exportJsonHelp": "Comptes, opérations (corbeille comprise), ventilations, catégories, règles, objectifs, opérations prévues, crédits, pointages, imports, factures (sans leur fichier) et vos données de l'assistant. Montants en centimes. Pour garder une archive ou passer à un autre logiciel.",
+  "exportCsvTitle": "Opérations pour un tableur (CSV)",
+  "exportCsvHelp": "Une ligne par opération, corbeille exclue : date, compte, libellés, note, montant, catégorie, pointage. S'ouvre dans LibreOffice Calc ou Excel.",
+  "exportDownload": "Télécharger",
+  "exportDone": "Export prêt : {name}",
+  "@exportDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "exportNote": "Ce fichier contient vos opérations bancaires : rangez-le dans un endroit sûr. Il ne remplace pas les sauvegardes du serveur, qui seules permettent de tout restaurer."
 }

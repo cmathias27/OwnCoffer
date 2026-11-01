@@ -91,12 +91,9 @@ abstract final class ForecastService {
             s.accountId.equals(account.id!) & s.deletedAt.equals(null),
         transaction: tx,
       );
-      final ops = await BankTransaction.db.find(
-        session,
-        where: (t) =>
-            t.accountId.equals(account.id!) & t.deletedAt.equals(null),
-        transaction: tx,
-      );
+      // Only the recent and future operations are needed one by one; the
+      // balances are summed by the database (100 000 operations).
+      final ops = await recentOperations(session, account, today, tx: tx);
 
       // 1. Reconcile first, so a realised occurrence is never counted twice.
       final byId = {for (final s in scheduledRows) s.id!: s};
@@ -140,18 +137,7 @@ abstract final class ForecastService {
       }
 
       // 2. Balances.
-      final balances = core.computeBalances(
-        initialBalanceCents: account.initialBalanceCents,
-        operations: [
-          for (final t in ops)
-            core.BalanceInput(
-              t.date.toLocalDate(),
-              t.amountCents,
-              cleared: t.cleared,
-            ),
-        ],
-        today: today,
-      );
+      final balances = await balancesOf(session, account, today, tx: tx);
 
       // 3. Forecast (proposals not yet confirmed still count as expected).
       final f = _engine(
@@ -220,6 +206,56 @@ abstract final class ForecastService {
     });
   }
 
+  /// Days before today whose operations may still realise a scheduled
+  /// occurrence (reconciliation looks 60 days back).
+  static const _reconcileDays = 60;
+
+  /// Operations of [account] from 60 days before [today] on, future ones
+  /// included: what reconciliation and the forecast look at one by one.
+  static Future<List<BankTransaction>> recentOperations(
+    Session session,
+    Account account,
+    core.LocalDate today, {
+    Transaction? tx,
+  }) => BankTransaction.db.find(
+    session,
+    where: (t) =>
+        t.accountId.equals(account.id!) &
+        t.deletedAt.equals(null) &
+        (t.date > today.addDays(-_reconcileDays).toDb()),
+    transaction: tx,
+  );
+
+  /// The balances of [account], summed by the database: the same as
+  /// [core.computeBalances] over all its operations, without loading them.
+  static Future<core.AccountBalances> balancesOf(
+    Session session,
+    Account account,
+    core.LocalDate today, {
+    Transaction? tx,
+  }) async {
+    final rows = await session.db.unsafeQuery(
+      'SELECT '
+      'COALESCE(SUM("amountCents") FILTER (WHERE "cleared"), 0)::bigint, '
+      'COALESCE(SUM("amountCents") FILTER (WHERE "date" <= @today), 0)::bigint, '
+      'COALESCE(SUM("amountCents"), 0)::bigint '
+      'FROM "transactions" '
+      'WHERE "accountId" = @account AND "deletedAt" IS NULL',
+      parameters: QueryParameters.named({
+        'account': account.id!,
+        'today': today.toDb(),
+      }),
+      transaction: tx,
+    );
+    final r = rows.first;
+    final initial = account.initialBalanceCents;
+    return core.AccountBalances(
+      core.sumCents([initial, r[0] as int]),
+      core.sumCents([initial, r[1] as int]),
+      core.sumCents([initial, r[2] as int]),
+    );
+  }
+
   /// The shared engine on the account's data, with [extra] planned
   /// operations (purchase simulator).
   static core.Forecast _engine(
@@ -274,20 +310,8 @@ abstract final class ForecastService {
       session,
       where: (s) => s.accountId.equals(account.id!) & s.deletedAt.equals(null),
     );
-    final ops = await BankTransaction.db.find(
-      session,
-      where: (t) => t.accountId.equals(account.id!) & t.deletedAt.equals(null),
-    );
-    final balance = core
-        .computeBalances(
-          initialBalanceCents: account.initialBalanceCents,
-          operations: [
-            for (final t in ops)
-              core.BalanceInput(t.date.toLocalDate(), t.amountCents),
-          ],
-          today: today,
-        )
-        .currentCents;
+    final ops = await recentOperations(session, account, today);
+    final balance = (await balancesOf(session, account, today)).currentCents;
     return core.simulatePurchase(
       amountCents: amountCents,
       date: date,

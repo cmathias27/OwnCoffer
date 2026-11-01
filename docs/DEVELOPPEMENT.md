@@ -39,3 +39,24 @@ cd server && dart test       # serveur, avec la base de test
 ```
 
 Avant de pousser, `./tool/check.sh` refait toutes les vérifications de la CI (code généré à jour, formatage, analyse, tests).
+
+D'autres vérifications tournent dans la CI :
+
+```sh
+./tool/test_backup_restore.sh   # sauvegarde chiffrée et restauration (Docker, données fictives)
+```
+
+`server/test/integration/performance_test.dart` insère 100 000 opérations fictives et affiche le temps des pages principales (`[perf] …`) ; il échoue si l'une devient trop lente.
+
+## Applications Windows et Android
+
+Même code que l'application web (décision 0020). Ce qui dépend du navigateur passe par `app/lib/util/`, avec une version `_web` et une version `_io` (Windows, Android) choisies à la compilation.
+
+```sh
+cd app
+flutter run -d windows                                   # sous Windows
+flutter build apk --release                              # Android (SDK Android requis)
+flutter run --dart-define=SERVER_URL=http://10.0.2.2:8080/api/   # émulateur Android, serveur local (HTTP en débogage seulement)
+```
+
+La CI compile les deux à chaque pull request (artefacts `owncoffer-android` et `owncoffer-windows`) : voir [APPLICATIONS.md](APPLICATIONS.md).

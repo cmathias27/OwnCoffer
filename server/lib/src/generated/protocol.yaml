@@ -32,6 +32,7 @@ admin:
   - revokeInvitation:
   - backups:
   - requestBackup:
+  - requestRestoreTest:
   - updates:
   - setAutoUpdate:
   - requestUpdateCheck:
@@ -69,6 +70,9 @@ category:
   - create:
   - update:
   - archive:
+export:
+  - groupJson:
+  - transactionsCsv:
 feedback:
   - send:
   - mine:

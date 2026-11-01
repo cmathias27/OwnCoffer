@@ -16,12 +16,16 @@ Nous accusons réception sous 7 jours et vous tenons informé jusqu'à la correc
 
 ## Versions prises en charge
 
-Le projet est en conception : aucune version n'est encore publiée. À partir de la 1.0, seule la dernière version stable recevra des correctifs de sécurité.
+Seule la **dernière version publiée** reçoit des correctifs de sécurité. Les serveurs en mises à jour automatiques l'installent d'eux-mêmes ([docs/INSTALLATION.md](docs/INSTALLATION.md)).
 
 ## Principes appliqués
 
-- Permissions vérifiées dans le serveur puis dans PostgreSQL (Row Level Security).
+- Permissions vérifiées par le serveur à chaque requête, avec un test d'isolation entre groupes pour chaque point d'accès ; la Row Level Security de PostgreSQL est repoussée (décision 0016).
 - Mots de passe hachés avec Argon2, double authentification, blocage automatique des IP après plusieurs échecs.
 - HTTPS obligatoire pour l'accès extérieur ; base de données jamais exposée.
 - Aucune télémétrie ; clés API chiffrées et jamais journalisées.
-- Analyse automatique du code et des dépendances (CodeQL, Dependabot).
+- Sauvegardes chiffrées, restauration testée chaque nuit (décision 0019).
+- Versions signées (Sigstore) avec la liste de leurs composants (SBOM) (décision 0021).
+- Dépendances surveillées : Dependabot et recherche des vulnérabilités connues (OSV) à chaque pull request.
+
+Le périmètre et l'état de l'audit de sécurité sont décrits dans [docs/AUDIT_SECURITE.md](docs/AUDIT_SECURITE.md).

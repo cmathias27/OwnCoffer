@@ -43,3 +43,10 @@ server/web/app/
 **/sp_*.db*
 .pub-cache/
 .mcp.json
+docker/backup.key
+*.dump.gpg
+
+# Android signing key (CI secrets only)
+app/android/key.properties
+*.jks
+*.keystore

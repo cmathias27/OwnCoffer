@@ -202,6 +202,10 @@ class _AdminScreenState extends State<AdminScreen> {
                       () => client.admin.requestBackup(),
                       l.adminBackupRequested,
                     ),
+                    onRestoreTest: () => _act(
+                      () => client.admin.requestRestoreTest(),
+                      l.adminRestoreTestRequested,
+                    ),
                   ),
                   const AdminAiView(),
                   _UsersView(

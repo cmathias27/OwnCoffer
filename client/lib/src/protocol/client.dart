@@ -546,6 +546,15 @@ class EndpointAdmin extends _isc.EndpointRef {
     {},
   );
 
+  /// Asks the host to check now that the newest backup restores into a
+  /// throw-away database (docker/restore-test.sh; at most one every 10
+  /// minutes). The live database is never touched.
+  _ida.Future<void> requestRestoreTest() => caller.callServerEndpoint<void>(
+    'admin',
+    'requestRestoreTest',
+    {},
+  );
+
   /// Versions, automatic updates, history and release notes.
   _ida.Future<_ighiaz9s.UpdateOverview> updates() =>
       caller.callServerEndpoint<_ighiaz9s.UpdateOverview>(
@@ -944,6 +953,39 @@ class EndpointCategory extends _isc.EndpointRef {
     'category',
     'archive',
     {'categoryId': categoryId},
+  );
+}
+
+/// Export of the member's data in a group: complete JSON, or the
+/// operations as CSV. Only what the member may see; every export is logged.
+/// {@category Endpoint}
+class EndpointExport extends _isc.EndpointRef {
+  EndpointExport(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'export';
+
+  /// Everything visible in [groupId], as one JSON document (amounts in
+  /// cents, see docs/UTILISATION.md for the layout).
+  _ida.Future<String> groupJson(int groupId) =>
+      caller.callServerEndpoint<String>(
+        'export',
+        'groupJson',
+        {'groupId': groupId},
+      );
+
+  /// The operations of the visible accounts, for a spreadsheet.
+  /// [language]: `fr` (default: `;`, decimal comma) or `en`.
+  _ida.Future<String> transactionsCsv(
+    int groupId,
+    String? language,
+  ) => caller.callServerEndpoint<String>(
+    'export',
+    'transactionsCsv',
+    {
+      'groupId': groupId,
+      'language': language,
+    },
   );
 }
 
@@ -2420,6 +2462,7 @@ class Client extends _isc.ServerpodClientShared {
     ai = EndpointAi(this);
     analysis = EndpointAnalysis(this);
     category = EndpointCategory(this);
+    export = EndpointExport(this);
     feedback = EndpointFeedback(this);
     goal = EndpointGoal(this);
     group = EndpointGroup(this);
@@ -2452,6 +2495,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointAnalysis analysis;
 
   late final EndpointCategory category;
+
+  late final EndpointExport export;
 
   late final EndpointFeedback feedback;
 
@@ -2493,6 +2538,7 @@ class Client extends _isc.ServerpodClientShared {
     'ai': ai,
     'analysis': analysis,
     'category': category,
+    'export': export,
     'feedback': feedback,
     'goal': goal,
     'group': group,

@@ -145,6 +145,7 @@ import 'purchase_scenario_info.dart' as _irvruma2;
 import 'purchase_simulation.dart' as _idtt2l34;
 import 'reconciliation_proposal.dart' as _i7qmkh8w;
 import 'release_notes.dart' as _idndmjo8;
+import 'restore_test_info.dart' as _ir5r6xs5;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_application.dart' as _ie66uvh9;
 import 'rule_direction.dart' as _i13yq1r7;
@@ -251,6 +252,7 @@ export 'purchase_scenario_info.dart';
 export 'purchase_simulation.dart';
 export 'reconciliation_proposal.dart';
 export 'release_notes.dart';
+export 'restore_test_info.dart';
 export 'rule.dart';
 export 'rule_application.dart';
 export 'rule_direction.dart';
@@ -562,6 +564,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _idndmjo8.ReleaseNotes) {
       return _idndmjo8.ReleaseNotes.fromJson(data) as T;
+    }
+    if (t == _ir5r6xs5.RestoreTestInfo) {
+      return _ir5r6xs5.RestoreTestInfo.fromJson(data) as T;
     }
     if (t == _ivw87pdb.Rule) {
       return _ivw87pdb.Rule.fromJson(data) as T;
@@ -941,6 +946,10 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_idndmjo8.ReleaseNotes?>()) {
       return (data != null ? _idndmjo8.ReleaseNotes.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ir5r6xs5.RestoreTestInfo?>()) {
+      return (data != null ? _ir5r6xs5.RestoreTestInfo.fromJson(data) : null)
+          as T;
     }
     if (t == _isc.getType<_ivw87pdb.Rule?>()) {
       return (data != null ? _ivw87pdb.Rule.fromJson(data) : null) as T;
@@ -1487,6 +1496,7 @@ class Protocol extends _isc.SerializationManager {
       _idtt2l34.PurchaseSimulation => 'PurchaseSimulation',
       _i7qmkh8w.ReconciliationProposal => 'ReconciliationProposal',
       _idndmjo8.ReleaseNotes => 'ReleaseNotes',
+      _ir5r6xs5.RestoreTestInfo => 'RestoreTestInfo',
       _ivw87pdb.Rule => 'Rule',
       _ie66uvh9.RuleApplication => 'RuleApplication',
       _i13yq1r7.RuleDirection => 'RuleDirection',
@@ -1692,6 +1702,8 @@ class Protocol extends _isc.SerializationManager {
         return 'ReconciliationProposal';
       case _idndmjo8.ReleaseNotes():
         return 'ReleaseNotes';
+      case _ir5r6xs5.RestoreTestInfo():
+        return 'RestoreTestInfo';
       case _ivw87pdb.Rule():
         return 'Rule';
       case _ie66uvh9.RuleApplication():
@@ -2010,6 +2022,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'ReleaseNotes') {
       return deserialize<_idndmjo8.ReleaseNotes>(data['data']);
+    }
+    if (dataClassName == 'RestoreTestInfo') {
+      return deserialize<_ir5r6xs5.RestoreTestInfo>(data['data']);
     }
     if (dataClassName == 'Rule') {
       return deserialize<_ivw87pdb.Rule>(data['data']);

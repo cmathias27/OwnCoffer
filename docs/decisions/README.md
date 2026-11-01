@@ -20,5 +20,10 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0014](0014-cible-classement-automatique-alpha.md) | Cible de classement automatique pour l'alpha : 70 % | Décidé |
 | [0015](0015-reseau-docker-isole-proxy.md) | Réseau Docker isolé, proxy Caddy sur le port unique | Décidé |
 | [0016](0016-rls-apres-alpha.md) | Row Level Security repoussée après l'alpha ; test d'isolation obligatoire | Décidé |
+| [0017](0017-configuration-ia-par-administrateur.md) | Fournisseurs d'IA configurés par l'administrateur du serveur | Décidé |
+| [0018](0018-serveur-mcp-jeton-personnel.md) | OwnCoffer comme serveur MCP, par jeton personnel | Décidé |
+| [0019](0019-sauvegardes-chiffrees.md) | Sauvegardes chiffrées, restauration testée chaque nuit | Décidé |
+| [0020](0020-applications-windows-android.md) | Applications Windows et Android, client du serveur, hors magasins | Décidé |
+| [0021](0021-publication-signee-sbom.md) | Publication signée (Sigstore) et liste des composants (SBOM) | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.

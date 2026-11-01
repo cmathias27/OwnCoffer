@@ -108,4 +108,81 @@ void main() {
     );
     expect(find.text('sudo docker/install-auto-update.sh'), findsOneWidget);
   });
+
+  testWidgets('backups: encrypted, restore test result and request', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(380, 2400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    var tests = 0;
+    BackupOverview overview({RestoreTestInfo? test, bool pending = false}) =>
+        BackupOverview(
+          available: true,
+          backups: [
+            BackupInfo(
+              name: 'owncoffer-20261102-033000-daily.dump.gpg',
+              label: 'daily',
+              bytes: 4096,
+              createdAt: DateTime.utc(2026, 11, 2, 3, 30),
+              encrypted: true,
+            ),
+          ],
+          lastAt: DateTime.utc(2026, 11, 2, 3, 30),
+          lastLabel: 'daily',
+          lastOk: true,
+          lastDailyAt: DateTime.utc(2026, 11, 2, 3, 30),
+          requestPending: false,
+          lastEncrypted: true,
+          restoreTest: test,
+          restoreTestPending: pending,
+        );
+    Future<void> show(BackupOverview o) => tester.pumpWidget(
+      _app(
+        AdminBackupsView(
+          now: now,
+          onBackup: () {},
+          onRestoreTest: () => tests++,
+          overview: o,
+        ),
+      ),
+    );
+
+    await show(overview());
+    expect(find.textContaining('Aucune restauration testée'), findsOneWidget);
+    expect(find.textContaining('docker/backup.key'), findsOneWidget);
+    expect(find.byIcon(Icons.lock_outline), findsOneWidget);
+    await tester.tap(find.text('Tester la restauration'));
+    expect(tests, 1);
+
+    await show(
+      overview(
+        test: RestoreTestInfo(
+          at: DateTime.utc(2026, 11, 2, 3, 31),
+          ok: true,
+          file: 'owncoffer-20261102-033000-daily.dump.gpg',
+          tables: 42,
+          operations: 1234,
+          seconds: 8,
+        ),
+      ),
+    );
+    expect(find.textContaining('42 tables et 1234 opérations'), findsOneWidget);
+
+    await show(
+      overview(
+        pending: true,
+        test: RestoreTestInfo(
+          at: DateTime.utc(2026, 11, 2, 3, 31),
+          ok: false,
+          file: 'x.dump.gpg',
+          message: 'the backup could not be restored',
+        ),
+      ),
+    );
+    expect(find.textContaining('a échoué'), findsOneWidget);
+    expect(find.text('Test demandé, en cours sur le serveur…'), findsOneWidget);
+    await tester.tap(find.text('Tester la restauration'));
+    expect(tests, 1);
+  });
 }

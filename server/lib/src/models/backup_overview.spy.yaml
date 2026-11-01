@@ -14,3 +14,9 @@ fields:
   lastDailyAt: DateTime?
   ### A manual backup was asked for and not yet carried out.
   requestPending: bool
+  ### The newest backup is encrypted (null: no backup yet).
+  lastEncrypted: bool?
+  ### Last automatic check that a backup restores (docker/restore-test.sh).
+  restoreTest: RestoreTestInfo?
+  ### A restore test was asked for and not yet carried out.
+  restoreTestPending: bool, default=false
