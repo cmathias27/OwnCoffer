@@ -23,6 +23,10 @@ The **debited instalment** is what counts: the table, the remaining principal an
 
 With a debit account, the instalments enter the **forecast balance**.
 
+## Renegotiate or change the rate
+
+The **"Renegotiate or change the rate"** card of a loan's sheet simulates your bank's offer: new rate, new instalment or new duration, and the **fees** of the change. OwnCoffer compares **today and after**: instalment, interest left, instalments, end date, then the **saving net of fees** and the **month it pays off**. **"Record this change"** adds it to the loan's changes.
+
 ## Changes: variable rate, renegotiation
 
 In a loan's sheet, **"Add a change"**:

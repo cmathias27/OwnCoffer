@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../widgets/soft.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import '../widgets/contract_simulation.dart';
 
 /// Subscriptions of the group (planned operations marked as such), with
 /// what they cost per month and per year.
@@ -71,6 +72,12 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
               ),
             ),
             ListTile(
+              leading: const Icon(Icons.swap_horiz),
+              title: Text(l.subscriptionChange),
+              subtitle: Text(l.subscriptionChangeHelp),
+              onTap: () => Navigator.of(context).pop(2),
+            ),
+            ListTile(
               leading: const Icon(Icons.label_off_outlined),
               title: Text(l.subscriptionUnmark),
               subtitle: Text(l.subscriptionUnmarkHelp),
@@ -87,6 +94,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
       ),
     );
     if (action == null) return;
+    if (action == 2) return _change(s);
     try {
       if (action == 0) {
         await client.scheduled.update(s.id!, subscription: false);
@@ -101,6 +109,30 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
         ).showSnackBar(SnackBar(content: Text(errorText(l, e))));
       }
     }
+  }
+
+  /// Replace the contract: simulate the new price, then apply it.
+  Future<void> _change(ScheduledTransaction s) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context).subscriptionChange),
+          ),
+          body: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              ContractSimulation(
+                membership: widget.membership,
+                scheduledId: s.id,
+                onApplied: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await _load();
   }
 
   @override
@@ -178,15 +210,33 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.autorenew),
                     title: Text(s.label),
-                    subtitle: Text(
-                      [
-                        _frequency(l, s),
-                        if (s.nextDue != null)
-                          l.subscriptionNext(context.day(s.nextDue!)),
-                        if (accounts.length > 1 &&
-                            accounts[s.accountId] != null)
-                          accounts[s.accountId]!.name,
-                      ].join(' · '),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          [
+                            _frequency(l, s),
+                            if (s.nextDue != null)
+                              l.subscriptionNext(context.day(s.nextDue!)),
+                            if (accounts.length > 1 &&
+                                accounts[s.accountId] != null)
+                              accounts[s.accountId]!.name,
+                          ].join(' · '),
+                        ),
+                        if (_canWrite)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextButton.icon(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                visualDensity: VisualDensity.compact,
+                              ),
+                              icon: const Icon(Icons.swap_horiz, size: 18),
+                              label: Text(l.subscriptionChange),
+                              onPressed: () => _change(s),
+                            ),
+                          ),
+                      ],
                     ),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

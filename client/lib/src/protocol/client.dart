@@ -71,6 +71,8 @@ import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/left_to_live_report.dart'
     as _iqfjeddm;
 import 'package:owncoffer_client/src/protocol/loan.dart' as _ig538h6x;
+import 'package:owncoffer_client/src/protocol/loan_change_simulation.dart'
+    as _in49arm1;
 import 'package:owncoffer_client/src/protocol/loan_document.dart' as _ixzu9i3x;
 import 'package:owncoffer_client/src/protocol/loan_event.dart' as _iz3v8osk;
 import 'package:owncoffer_client/src/protocol/loan_from_operation.dart'
@@ -1528,6 +1530,23 @@ class EndpointLoan extends _isc.EndpointRef {
     {
       'loanId': loanId,
       'amountCents': amountCents,
+    },
+  );
+
+  /// What a change would do (renegotiation, new rate, new duration), with
+  /// its fees: before and after, the saving and when it pays off. Nothing
+  /// is saved; addEvent records it once chosen.
+  _ida.Future<_in49arm1.LoanChangeSimulation> simulateChange(
+    int loanId,
+    _iz3v8osk.LoanEvent event, {
+    int? feesCents,
+  }) => caller.callServerEndpoint<_in49arm1.LoanChangeSimulation>(
+    'loan',
+    'simulateChange',
+    {
+      'loanId': loanId,
+      'event': event,
+      'feesCents': feesCents,
     },
   );
 

@@ -22,7 +22,7 @@ Un objectif est un montant mensuel pour une catégorie de dépenses. OwnCoffer p
 
 - **Revue du mois** : hausses et baisses, objectifs dépassés, frais bancaires, plus grosses dépenses, abonnements qui ont changé.
 - **Calendrier** des échéances du mois, avec leur état.
-- **Abonnements** : leur coût par mois et par an.
+- **Abonnements** : leur coût par mois et par an. Sur chacun, **« Changer de contrat »** compare une autre offre sur 1 à 10 ans (économie, mois où c'est rentabilisé), puis **applique le nouveau prix** au prélèvement prévu.
 - **Comparer** : des catégories, des périodes ou des comptes entre eux, et la **simulation d'un changement de contrat** (économie sur 1 à 10 ans, mois où le changement est rentabilisé).
 - **Analyses** : la fiabilité des prévisions (opérations prévues arrivées comme prévu, dépenses variables estimées face à la réalité), les opérations inhabituelles (bien plus que d'habitude, ou prélevées deux fois) et les frais bancaires des 12 derniers mois.
 - **Mon conseiller** : les objectifs que vous pourriez fixer ou ajuster, et les points à surveiller.

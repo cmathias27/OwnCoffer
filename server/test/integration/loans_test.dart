@@ -310,6 +310,35 @@ void main() {
       );
     });
 
+    test('a renegotiation is simulated before and after, nothing saved; '
+        'another household is refused', () async {
+      final info = await endpoints.loan.create(
+        as(bob),
+        groupA,
+        mortgage(accountId: shared.id),
+      );
+      final event = LoanEvent(
+        date: DateTime.utc(now.year + 1, 1, 1),
+        annualRateMilli: 500,
+      );
+      final sim = await endpoints.loan.simulateChange(
+        as(bob),
+        info.loan.id!,
+        event,
+        feesCents: 50000,
+      );
+      expect(sim.paymentAfterCents, lessThan(sim.paymentBeforeCents));
+      expect(
+        sim.savingCents,
+        sim.interestBeforeCents - sim.interestAfterCents - 50000,
+      );
+      expect((await Loan.db.findById(db, info.loan.id!))!.events, isNull);
+      await expectLater(
+        endpoints.loan.simulateChange(as(mallory), info.loan.id!, event),
+        denied,
+      );
+    });
+
     test('early repayment simulation', () async {
       final info = await endpoints.loan.create(as(bob), groupA, mortgage());
       final r = await endpoints.loan.simulate(

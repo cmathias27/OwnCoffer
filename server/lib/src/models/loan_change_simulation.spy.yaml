@@ -1,0 +1,17 @@
+### A loan with and without a change (renegotiation, new rate), computed
+### by the loan engine (core.compareLoanChange). Nothing is saved.
+class: LoanChangeSimulation
+fields:
+  paymentBeforeCents: int
+  paymentAfterCents: int
+  interestBeforeCents: int
+  interestAfterCents: int
+  instalmentsBefore: int
+  instalmentsAfter: int
+  endBefore: DateTime
+  endAfter: DateTime
+  feesCents: int
+  ### Interest saved, fees taken off (negative: the change costs more).
+  savingCents: int
+  ### Months after the change by which it has paid off; null if never.
+  breakEvenMonth: int?

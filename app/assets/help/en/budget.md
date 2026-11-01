@@ -22,7 +22,7 @@ A goal is a monthly amount for a spending category. OwnCoffer warns you at **80 
 
 - **Month review**: rises and falls, goals exceeded, bank fees, biggest expenses, subscriptions that changed.
 - **Due-date calendar** of the month, with their state.
-- **Subscriptions**: their cost per month and per year.
+- **Subscriptions**: their cost per month and per year. On each, **"Change contract"** compares another offer over 1 to 10 years (saving, month it pays off), then **applies the new price** to the planned debit.
 - **Compare**: categories, periods or accounts with each other, and the **simulation of a contract change** (savings over 1 to 10 years, month when the change pays off).
 - **Analyses**: how reliable the forecasts were (planned operations that came as planned, estimated variable spending against reality), unusual operations (much more than usual, or charged twice) and the bank fees of the last 12 months.
 - **My advisor**: the goals you could set or adjust, and the points to watch.

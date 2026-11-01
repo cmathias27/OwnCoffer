@@ -139,6 +139,38 @@ class AiContext {
       required: ['amount_cents'],
     ),
     _tool(
+      'simulate_contract_switch',
+      'What replacing a contract (internet box, insurance, energy…) would '
+          'save, computed by OwnCoffer: total over the years, per year, the '
+          'month it pays off. Prices per month in cents; rises per year in '
+          'thousandths (30 = 3 %). Nothing is saved.',
+      {
+        'current_monthly_cents': {'type': 'integer'},
+        'new_monthly_cents': {'type': 'integer'},
+        'switch_cost_cents': {'type': 'integer'},
+        'years': {'type': 'integer', 'description': '1 to 10.'},
+        'current_yearly_rise_per_mille': {'type': 'integer'},
+        'new_yearly_rise_per_mille': {'type': 'integer'},
+      },
+      required: ['current_monthly_cents', 'new_monthly_cents'],
+    ),
+    _tool(
+      'simulate_loan_change',
+      'What renegotiating a loan would do, computed by the loan engine: '
+          'instalment, interest left, instalments left and end date, before '
+          'and after; saving with the fees; the month it pays off. Nothing '
+          'is saved.',
+      {
+        'loan_id': {'type': 'integer'},
+        'date': {'type': 'string', 'description': 'From, YYYY-MM-DD.'},
+        'annual_rate_milli': {'type': 'integer'},
+        'payment_cents': {'type': 'integer'},
+        'remaining_months': {'type': 'integer'},
+        'fees_cents': {'type': 'integer'},
+      },
+      required: ['loan_id'],
+    ),
+    _tool(
       'simulate_early_repayment',
       'What repaying part of a loan early would save, computed by the loan '
           'engine: interest saved, instalments left, new end date. Nothing '
@@ -246,6 +278,8 @@ class AiContext {
         'get_advice' => await _advice(),
         'simulate_purchase' => await _simulatePurchase(args),
         'simulate_early_repayment' => await _simulateRepayment(args),
+        'simulate_contract_switch' => _simulateSwitch(args),
+        'simulate_loan_change' => await _simulateLoanChange(args),
         'propose_category' => await _proposeCategory(args),
         'propose_loan' => await _proposeLoan(args),
         _ => {'error': 'unknown function'},
@@ -643,6 +677,65 @@ class AiContext {
           },
       ],
       'note': 'Computed by the forecast engine; an estimate.',
+    };
+  }
+
+  Map<String, Object?> _simulateSwitch(Map<String, Object?> a) {
+    int n(String k) => (a[k] as num?)?.toInt() ?? 0;
+    final years = n('years') == 0 ? 5 : n('years').clamp(1, 10);
+    try {
+      final r = core.simulateContractSwitch(
+        currentMonthlyCents: n('current_monthly_cents'),
+        newMonthlyCents: n('new_monthly_cents'),
+        months: years * 12,
+        switchCostCents: n('switch_cost_cents'),
+        currentYearlyIncreasePerMille: n('current_yearly_rise_per_mille'),
+        newYearlyIncreasePerMille: n('new_yearly_rise_per_mille'),
+      );
+      return {
+        'years': years,
+        'total_saving_cents': r.totalSavingCents,
+        'yearly_saving_cents': r.yearlySavingCents,
+        'break_even_month': r.breakEvenMonth,
+        'kept_total_cents': r.keepCents.last,
+        'switched_total_cents': r.switchCents.last,
+      };
+    } on ArgumentError {
+      throw const FormatException();
+    }
+  }
+
+  Future<Map<String, Object?>> _simulateLoanChange(
+    Map<String, Object?> a,
+  ) async {
+    final id = (a['loan_id'] as num?)?.toInt();
+    if (id == null) throw const FormatException();
+    await _accounts();
+    final n = DateTime.now().toUtc();
+    final r = await LoanEndpoint().simulateChange(
+      session,
+      id,
+      LoanEvent(
+        date: _day(a['date']) ?? DateTime.utc(n.year, n.month + 1, 1),
+        annualRateMilli: (a['annual_rate_milli'] as num?)?.toInt(),
+        paymentCents: (a['payment_cents'] as num?)?.toInt(),
+        remainingMonths: (a['remaining_months'] as num?)?.toInt(),
+      ),
+      feesCents: (a['fees_cents'] as num?)?.toInt(),
+    );
+    return {
+      'instalment_before_cents': r.paymentBeforeCents,
+      'instalment_after_cents': r.paymentAfterCents,
+      'interest_left_before_cents': r.interestBeforeCents,
+      'interest_left_after_cents': r.interestAfterCents,
+      'instalments_left_before': r.instalmentsBefore,
+      'instalments_left_after': r.instalmentsAfter,
+      'end_before': _iso(r.endBefore),
+      'end_after': _iso(r.endAfter),
+      'fees_cents': r.feesCents,
+      'saving_cents': r.savingCents,
+      'break_even_month': r.breakEvenMonth,
+      'note': 'Computed by the loan engine; the bank offer prevails.',
     };
   }
 

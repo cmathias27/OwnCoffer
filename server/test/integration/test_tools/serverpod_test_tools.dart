@@ -73,6 +73,8 @@ import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
 import 'package:owncoffer_server/src/generated/left_to_live_report.dart'
     as _idzqc1lk;
 import 'package:owncoffer_server/src/generated/loan.dart' as _i2yv792g;
+import 'package:owncoffer_server/src/generated/loan_change_simulation.dart'
+    as _iczduvrd;
 import 'package:owncoffer_server/src/generated/loan_document.dart' as _ib7nzwu9;
 import 'package:owncoffer_server/src/generated/loan_event.dart' as _ifjfj2mv;
 import 'package:owncoffer_server/src/generated/loan_from_operation.dart'
@@ -4148,6 +4150,43 @@ class _LoanEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_iy0obzyi.EarlyRepayment>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iczduvrd.LoanChangeSimulation> simulateChange(
+    _ist.TestSessionBuilder sessionBuilder,
+    int loanId,
+    _ifjfj2mv.LoanEvent event, {
+    int? feesCents,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'simulateChange',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'simulateChange',
+          parameters: _ist.testObjectToJson({
+            'loanId': loanId,
+            'event': event,
+            'feesCents': feesCents,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iczduvrd.LoanChangeSimulation>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

@@ -124,6 +124,7 @@ import 'ip_ban.dart' as _i88cvd1d;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'left_to_live_report.dart' as _ibb3lpoc;
 import 'loan.dart' as _i7jednjp;
+import 'loan_change_simulation.dart' as _inp2quao;
 import 'loan_document.dart' as _ixhwb2ta;
 import 'loan_document_blob.dart' as _i05ovdfs;
 import 'loan_event.dart' as _inh9sy0f;
@@ -234,6 +235,7 @@ export 'ip_ban.dart';
 export 'ip_ban_info.dart';
 export 'left_to_live_report.dart';
 export 'loan.dart';
+export 'loan_change_simulation.dart';
 export 'loan_document.dart';
 export 'loan_document_blob.dart';
 export 'loan_event.dart';
@@ -4036,6 +4038,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i7jednjp.Loan) {
       return _i7jednjp.Loan.fromJson(data) as T;
     }
+    if (t == _inp2quao.LoanChangeSimulation) {
+      return _inp2quao.LoanChangeSimulation.fromJson(data) as T;
+    }
     if (t == _ixhwb2ta.LoanDocument) {
       return _ixhwb2ta.LoanDocument.fromJson(data) as T;
     }
@@ -4399,6 +4404,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_i7jednjp.Loan?>()) {
       return (data != null ? _i7jednjp.Loan.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_inp2quao.LoanChangeSimulation?>()) {
+      return (data != null
+              ? _inp2quao.LoanChangeSimulation.fromJson(data)
+              : null)
+          as T;
     }
     if (t == _is.getType<_ixhwb2ta.LoanDocument?>()) {
       return (data != null ? _ixhwb2ta.LoanDocument.fromJson(data) : null) as T;
@@ -5028,6 +5039,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _ibb3lpoc.LeftToLiveReport => 'LeftToLiveReport',
       _i7jednjp.Loan => 'Loan',
+      _inp2quao.LoanChangeSimulation => 'LoanChangeSimulation',
       _ixhwb2ta.LoanDocument => 'LoanDocument',
       _i05ovdfs.LoanDocumentBlob => 'LoanDocumentBlob',
       _inh9sy0f.LoanEvent => 'LoanEvent',
@@ -5215,6 +5227,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'LeftToLiveReport';
       case _i7jednjp.Loan():
         return 'Loan';
+      case _inp2quao.LoanChangeSimulation():
+        return 'LoanChangeSimulation';
       case _ixhwb2ta.LoanDocument():
         return 'LoanDocument';
       case _i05ovdfs.LoanDocumentBlob():
@@ -5523,6 +5537,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'Loan') {
       return deserialize<_i7jednjp.Loan>(data['data']);
+    }
+    if (dataClassName == 'LoanChangeSimulation') {
+      return deserialize<_inp2quao.LoanChangeSimulation>(data['data']);
     }
     if (dataClassName == 'LoanDocument') {
       return deserialize<_ixhwb2ta.LoanDocument>(data['data']);

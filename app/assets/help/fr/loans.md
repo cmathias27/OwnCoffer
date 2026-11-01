@@ -23,6 +23,10 @@ La **mensualité prélevée** fait foi : le tableau, le capital restant et la da
 
 Avec un compte de prélèvement, les échéances entrent dans le **solde prévu**.
 
+## Renégocier ou changer de taux
+
+La carte **« Renégocier ou changer de taux »** de la fiche d'un crédit simule l'offre de votre banque : nouveau taux, nouvelle mensualité ou nouvelle durée, et les **frais** du changement. OwnCoffer compare **aujourd'hui et après** : mensualité, intérêts restants, échéances, date de fin, puis l'**économie nette** des frais et le **mois où c'est rentabilisé**. **« Enregistrer ce changement »** l'ajoute aux changements du crédit.
+
 ## Changements : taux variable, renégociation
 
 Dans la fiche d'un crédit, **« Ajouter un changement »** :

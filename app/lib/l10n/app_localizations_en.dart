@@ -5043,4 +5043,110 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loanSortLender => 'Lender';
+
+  @override
+  String get subscriptionChange => 'Change contract';
+
+  @override
+  String get subscriptionChangeHelp =>
+      'Compare another offer over 1 to 10 years, then apply the new price.';
+
+  @override
+  String simApply(String label, String amount) {
+    return 'Apply to \"$label\": $amount per debit';
+  }
+
+  @override
+  String get simApplyHelp =>
+      'The planned debit takes this new amount: forecasts, budget and alerts follow it. Past debits do not change.';
+
+  @override
+  String simApplied(String label) {
+    return 'New price applied to \"$label\".';
+  }
+
+  @override
+  String get loanChangeTitle => 'Renegotiate or change the rate';
+
+  @override
+  String get loanChangeCardHelp =>
+      'Simulate your bank\'s offer (rate, instalment, duration, fees) before recording it.';
+
+  @override
+  String loanChangeIntro(
+    String lender,
+    String rate,
+    String payment,
+    String remaining,
+  ) {
+    return '\"$lender\" today: rate $rate, instalment $payment, $remaining left to repay. Enter the offer: at least a new rate, instalment or duration.';
+  }
+
+  @override
+  String get loanChangeOffer => 'The offer';
+
+  @override
+  String get loanChangeMonthsSuffix => 'months';
+
+  @override
+  String get loanChangeFees => 'Fees of the change';
+
+  @override
+  String get loanChangeFeesHelp =>
+      'Arrangement fees, early repayment penalties, guarantee… Optional.';
+
+  @override
+  String get loanChangeSimulate => 'Simulate';
+
+  @override
+  String loanChangeSaves(String amount) {
+    return 'You would save $amount';
+  }
+
+  @override
+  String loanChangeCosts(String amount) {
+    return 'It would cost you $amount more';
+  }
+
+  @override
+  String get loanChangeNow => 'Today';
+
+  @override
+  String get loanChangeAfter => 'After';
+
+  @override
+  String get loanChangeInstalmentsLeft => 'Instalments left';
+
+  @override
+  String get loanChangeEnd => 'End';
+
+  @override
+  String loanChangeFeesCounted(String amount) {
+    return '$amount of fees taken off.';
+  }
+
+  @override
+  String loanChangePaysOff(int months) {
+    String _temp0 = intl.Intl.pluralLogic(
+      months,
+      locale: localeName,
+      other: 'Paid off after $months months.',
+      one: 'Paid off from the first month.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get loanChangeNeverPaysOff =>
+      'Never paid off over the loan\'s duration.';
+
+  @override
+  String get loanChangeHow =>
+      'Computed by OwnCoffer from the amortisation table, insurance included in the debits compared. Indicative: the bank\'s offer prevails.';
+
+  @override
+  String get loanChangeRecord => 'Record this change';
+
+  @override
+  String get loanChangeNote => 'Renegotiation';
 }

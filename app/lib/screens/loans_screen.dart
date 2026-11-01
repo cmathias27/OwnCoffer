@@ -14,6 +14,7 @@ import '../widgets/budget_charts.dart';
 import '../widgets/category_field.dart';
 import '../widgets/undo.dart';
 import '../widgets/ai_read.dart';
+import 'loan_change_screen.dart';
 
 /// Indicative debt ratio above which French banks usually refuse a new loan
 /// (HCSF recommendation: 35 %).
@@ -812,6 +813,50 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
     }
   }
 
+  /// Renegotiate or change the rate, simulated before being recorded.
+  Widget _renegotiateCard(
+    BuildContext context,
+    AppLocalizations l,
+    ThemeData theme,
+  ) => Card(
+    margin: EdgeInsets.zero,
+    color: theme.colorScheme.secondaryContainer,
+    child: InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: () async {
+        final saved = await Navigator.of(context).push<LoanInfo>(
+          MaterialPageRoute(builder: (_) => LoanChangeScreen(info: _info)),
+        );
+        if (saved != null && mounted) {
+          setState(() => (_info = saved, _changed = true, _simulation = null));
+          await _load();
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Icon(
+              Icons.handshake_outlined,
+              color: theme.colorScheme.onSecondaryContainer,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l.loanChangeTitle, style: theme.textTheme.titleMedium),
+                  Text(l.loanChangeCardHelp, style: theme.textTheme.bodySmall),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right),
+          ],
+        ),
+      ),
+    ),
+  );
+
   Future<void> _addEvent() async {
     final event = await showDialog<LoanEvent>(
       context: context,
@@ -1245,6 +1290,11 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 12),
+            if (widget.canWrite &&
+                info.nextDueDate != null &&
+                loan.kind != LoanKind.installments)
+              _renegotiateCard(context, l, theme),
             const SizedBox(height: 12),
             _eventsCard(context, l, theme),
             const SizedBox(height: 12),
