@@ -13,6 +13,7 @@ import '../onboarding/onboarding.dart';
 import '../security/access.dart';
 import '../security/ip_guard.dart';
 import '../security/scopes.dart';
+import '../core/portable_sql.dart';
 
 /// Server administration (server administrator only): accounts, health,
 /// figures, audit log, banned IPs. Nothing here shows a group's financial
@@ -142,7 +143,10 @@ class AdminEndpoint extends Endpoint {
     int? dbBytes;
     try {
       final r = await session.db.unsafeQuery(
-        'SELECT pg_database_size(current_database())',
+        session.onSqlite
+            ? 'SELECT page_count * page_size '
+                  'FROM pragma_page_count(), pragma_page_size()'
+            : 'SELECT pg_database_size(current_database())',
       );
       dbBytes = r.first.first as int;
     } on Object {

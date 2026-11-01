@@ -12,9 +12,12 @@ import 'screens/two_factor_screen.dart';
 import 'state/session.dart';
 import 'assistant/chat_bubble.dart';
 import 'util/server_address.dart';
+import 'util/standalone.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // TRIAL (decision 0022): does nothing unless asked.
+  await startStandaloneTrial();
   askServerAddress = () async =>
       runApp(OwnCofferApp(home: ServerAddressScreen(onSaved: _start)));
   // Windows and Android: the user's server is asked once (decision 0020).

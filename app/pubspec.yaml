@@ -35,6 +35,8 @@ dependencies:
   owncoffer_shared: any
   owncoffer_client:
     path: ../client
+  # TRIAL (decision 0022): the server embedded in the native apps.
+  owncoffer_server: any
   serverpod_auth_idp_client: 4.0.4
   serverpod_auth_idp_flutter: 4.0.4
   serverpod_flutter: 4.0.4
