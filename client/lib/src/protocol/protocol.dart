@@ -108,6 +108,8 @@ import 'group_membership.dart' as _i54nduyh;
 import 'import_issue_info.dart' as _iso7nf03;
 import 'import_preview.dart' as _im8lwq6n;
 import 'import_preview_line.dart' as _i4e8elxc;
+import 'import_result.dart' as _i9wd9bq3;
+import 'imported_document.dart' as _ij21v5rw;
 import 'insights.dart' as _ivlpbhei;
 import 'instalment_candidate.dart' as _ia1npsti;
 import 'invalid_input_exception.dart' as _ijc83d8f;
@@ -215,6 +217,8 @@ export 'group_membership.dart';
 export 'import_issue_info.dart';
 export 'import_preview.dart';
 export 'import_preview_line.dart';
+export 'import_result.dart';
+export 'imported_document.dart';
 export 'insights.dart';
 export 'instalment_candidate.dart';
 export 'invalid_input_exception.dart';
@@ -453,6 +457,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _i4e8elxc.ImportPreviewLine) {
       return _i4e8elxc.ImportPreviewLine.fromJson(data) as T;
+    }
+    if (t == _i9wd9bq3.ImportResult) {
+      return _i9wd9bq3.ImportResult.fromJson(data) as T;
+    }
+    if (t == _ij21v5rw.ImportedDocument) {
+      return _ij21v5rw.ImportedDocument.fromJson(data) as T;
     }
     if (t == _ivlpbhei.Insights) {
       return _ivlpbhei.Insights.fromJson(data) as T;
@@ -801,6 +811,13 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _i4e8elxc.ImportPreviewLine.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_i9wd9bq3.ImportResult?>()) {
+      return (data != null ? _i9wd9bq3.ImportResult.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ij21v5rw.ImportedDocument?>()) {
+      return (data != null ? _ij21v5rw.ImportedDocument.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_ivlpbhei.Insights?>()) {
       return (data != null ? _ivlpbhei.Insights.fromJson(data) : null) as T;
     }
@@ -1108,6 +1125,12 @@ class Protocol extends _isc.SerializationManager {
     if (t == List<_i4e8elxc.ImportPreviewLine>) {
       return (data as List)
               .map((e) => deserialize<_i4e8elxc.ImportPreviewLine>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ij21v5rw.ImportedDocument>) {
+      return (data as List)
+              .map((e) => deserialize<_ij21v5rw.ImportedDocument>(e))
               .toList()
           as T;
     }
@@ -1459,6 +1482,8 @@ class Protocol extends _isc.SerializationManager {
       _iso7nf03.ImportIssueInfo => 'ImportIssueInfo',
       _im8lwq6n.ImportPreview => 'ImportPreview',
       _i4e8elxc.ImportPreviewLine => 'ImportPreviewLine',
+      _i9wd9bq3.ImportResult => 'ImportResult',
+      _ij21v5rw.ImportedDocument => 'ImportedDocument',
       _ivlpbhei.Insights => 'Insights',
       _ia1npsti.InstalmentCandidate => 'InstalmentCandidate',
       _ijc83d8f.InvalidInputException => 'InvalidInputException',
@@ -1628,6 +1653,10 @@ class Protocol extends _isc.SerializationManager {
         return 'ImportPreview';
       case _i4e8elxc.ImportPreviewLine():
         return 'ImportPreviewLine';
+      case _i9wd9bq3.ImportResult():
+        return 'ImportResult';
+      case _ij21v5rw.ImportedDocument():
+        return 'ImportedDocument';
       case _ivlpbhei.Insights():
         return 'Insights';
       case _ia1npsti.InstalmentCandidate():
@@ -1911,6 +1940,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'ImportPreviewLine') {
       return deserialize<_i4e8elxc.ImportPreviewLine>(data['data']);
+    }
+    if (dataClassName == 'ImportResult') {
+      return deserialize<_i9wd9bq3.ImportResult>(data['data']);
+    }
+    if (dataClassName == 'ImportedDocument') {
+      return deserialize<_ij21v5rw.ImportedDocument>(data['data']);
     }
     if (dataClassName == 'Insights') {
       return deserialize<_ivlpbhei.Insights>(data['data']);

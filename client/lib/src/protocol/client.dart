@@ -60,6 +60,7 @@ import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
 import 'package:owncoffer_client/src/protocol/import_preview.dart' as _ikjuebnd;
+import 'package:owncoffer_client/src/protocol/import_result.dart' as _i4a7ax0k;
 import 'package:owncoffer_client/src/protocol/insights.dart' as _iocgvawp;
 import 'package:owncoffer_client/src/protocol/instalment_candidate.dart'
     as _io211e4m;
@@ -2359,6 +2360,68 @@ class EndpointTransaction extends _isc.EndpointRef {
   );
 }
 
+/// Import of an export into a new group (decision 0022): moving from the
+/// standalone app to a server, back, or between servers. Only the server
+/// administrator, who alone creates groups; the export is sent in parts
+/// (an export of 100 000 operations is about 40 MB).
+/// {@category Endpoint}
+class EndpointTransfer extends _isc.EndpointRef {
+  EndpointTransfer(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'transfer';
+
+  /// Starts an upload; returns its token.
+  _ida.Future<String> begin() => caller.callServerEndpoint<String>(
+    'transfer',
+    'begin',
+    {},
+  );
+
+  /// One part of the export, in order.
+  _ida.Future<void> part(
+    String token,
+    String text,
+  ) => caller.callServerEndpoint<void>(
+    'transfer',
+    'part',
+    {
+      'token': token,
+      'text': text,
+    },
+  );
+
+  /// Creates the group from the parts sent. [name]: another name for it.
+  _ida.Future<_i4a7ax0k.ImportResult> finish(
+    String token,
+    String? name,
+  ) => caller.callServerEndpoint<_i4a7ax0k.ImportResult>(
+    'transfer',
+    'finish',
+    {
+      'token': token,
+      'name': name,
+    },
+  );
+
+  /// The file of one imported document ([ImportResult.documents]).
+  _ida.Future<void> document(
+    int groupId,
+    String kind,
+    int id,
+    _idt.ByteData content,
+  ) => caller.callServerEndpoint<void>(
+    'transfer',
+    'document',
+    {
+      'groupId': groupId,
+      'kind': kind,
+      'id': id,
+      'content': content,
+    },
+  );
+}
+
 /// Two-factor authentication. Needs a signed-in user, but not [accessScope]:
 /// [verify] is how a password-only session gets full access.
 /// {@category Endpoint}
@@ -2476,6 +2539,7 @@ class Client extends _isc.ServerpodClientShared {
     scheduled = EndpointScheduled(this);
     setup = EndpointSetup(this);
     transaction = EndpointTransaction(this);
+    transfer = EndpointTransfer(this);
     twoFactor = EndpointTwoFactor(this);
     modules = Modules(this);
   }
@@ -2524,6 +2588,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointTransaction transaction;
 
+  late final EndpointTransfer transfer;
+
   late final EndpointTwoFactor twoFactor;
 
   late final Modules modules;
@@ -2552,6 +2618,7 @@ class Client extends _isc.ServerpodClientShared {
     'scheduled': scheduled,
     'setup': setup,
     'transaction': transaction,
+    'transfer': transfer,
     'twoFactor': twoFactor,
   };
 

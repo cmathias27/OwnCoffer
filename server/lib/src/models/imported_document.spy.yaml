@@ -1,0 +1,10 @@
+### An invoice or loan document recreated by an import, waiting for its file.
+class: ImportedDocument
+fields:
+  ### invoice or loanDocument
+  kind: String
+  ### Its id in the export, to find the file at the source.
+  oldId: int
+  ### Its id here, to send the file to.
+  newId: int
+  sizeBytes: int

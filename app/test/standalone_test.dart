@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:owncoffer_client/owncoffer_client.dart';
+import 'package:owncoffer_app/util/group_transfer.dart';
 import 'package:owncoffer_server/embedded.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
@@ -54,6 +55,23 @@ void main() {
       );
       expect(forecast.currentBalanceCents, -4250);
 
+      // Moved to a server (here the same one): a new group with everything,
+      // the invoice's file included; the source group stays.
+      final moved = await GroupTransfer.send(
+        from: client,
+        to: client,
+        groupId: group.id!,
+      );
+      expect(moved.transactions, 1);
+      expect(moved.documents.single.kind, 'invoice');
+      final copy = (await client.account.list(moved.groupId)).single;
+      final copied = (await client.transaction.list(copy.id!)).items.single;
+      final file = (await client.invoice.forTransaction(copied.id!)).single;
+      expect(
+        (await client.invoice.download(file.invoice.id!)).lengthInBytes,
+        big.length,
+      );
+
       // Another device of the network: refused.
       final lan = (await NetworkInterface.list(
         type: InternetAddressType.IPv4,
@@ -76,9 +94,11 @@ void main() {
         AuthSuccess.fromJson(await server.signIn()),
       );
       final groups = await client.group.myGroups();
-      expect(groups.map((g) => g.group.name), ['Mes comptes']);
+      // The group and its copy made by the move.
+      expect(groups.map((g) => g.group.name), ['Mes comptes', 'Mes comptes']);
       final page = await client.transaction.list(account.id!);
       expect(page.items.single.cleanLabel, 'BOULANGERIE');
+      expect(groups.map((g) => g.group.id), contains(moved.groupId));
       client.close();
       await server.stop();
     },

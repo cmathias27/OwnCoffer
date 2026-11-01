@@ -188,7 +188,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] Installation automatique des mises à jour des applications
 - [ ] Version autonome sans serveur (décision 0022) :
   - [x] le serveur embarqué dans l'application, sur SQLite ; choix « seul sur cet appareil » ou « serveur » au premier lancement ; tous les tests du serveur aussi sur SQLite — *1.1.0*
-  - [ ] « Migrer vers un serveur » (et retour) par l'export complet, factures comprises
+  - [x] « Migrer vers un serveur » (et retour par « Importer un export ») par l'export complet, factures comprises — *1.1.0*
   - [ ] Sauvegarde chiffrée automatique vers un dossier
   - [ ] Chiffrement du fichier SQLite
 

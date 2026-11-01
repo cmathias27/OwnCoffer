@@ -62,6 +62,7 @@ import 'package:owncoffer_server/src/generated/group_membership.dart'
     as _idq93byd;
 import 'package:owncoffer_server/src/generated/import_preview.dart'
     as _itw310ng;
+import 'package:owncoffer_server/src/generated/import_result.dart' as _i0htyavp;
 import 'package:owncoffer_server/src/generated/insights.dart' as _is8fifll;
 import 'package:owncoffer_server/src/generated/instalment_candidate.dart'
     as _i3mgyctl;
@@ -306,6 +307,8 @@ class TestEndpoints {
 
   late final _TransactionEndpoint transaction;
 
+  late final _TransferEndpoint transfer;
+
   late final _TwoFactorEndpoint twoFactor;
 }
 
@@ -401,6 +404,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     transaction = _TransactionEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    transfer = _TransferEndpoint(
       endpoints,
       serializationManager,
     );
@@ -6240,6 +6247,154 @@ class _TransactionEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_i09rkxx8.RuleApplication>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _TransferEndpoint {
+  _TransferEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<String> begin(_ist.TestSessionBuilder sessionBuilder) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'transfer',
+            method: 'begin',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transfer',
+          methodName: 'begin',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<String>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> part(
+    _ist.TestSessionBuilder sessionBuilder,
+    String token,
+    String text,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'transfer',
+            method: 'part',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transfer',
+          methodName: 'part',
+          parameters: _ist.testObjectToJson({
+            'token': token,
+            'text': text,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_i0htyavp.ImportResult> finish(
+    _ist.TestSessionBuilder sessionBuilder,
+    String token,
+    String? name,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'transfer',
+            method: 'finish',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transfer',
+          methodName: 'finish',
+          parameters: _ist.testObjectToJson({
+            'token': token,
+            'name': name,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_i0htyavp.ImportResult>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<void> document(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    String kind,
+    int id,
+    _idt.ByteData content,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'transfer',
+            method: 'document',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transfer',
+          methodName: 'document',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'kind': kind,
+            'id': id,
+            'content': content,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<void>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

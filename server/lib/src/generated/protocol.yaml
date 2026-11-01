@@ -184,6 +184,11 @@ transaction:
   - trash:
   - restore:
   - createRuleFrom:
+transfer:
+  - begin:
+  - part:
+  - finish:
+  - document:
 twoFactor:
   - status:
   - begin:

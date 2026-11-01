@@ -6,7 +6,10 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../util/file_pick.dart';
 import '../util/file_save.dart';
+import '../util/group_transfer.dart';
+import 'migrate_screen.dart';
 
 /// Download of the member's data in the current group: complete JSON, or
 /// the operations as CSV. Made by the server, saved on the device only.
@@ -23,6 +26,11 @@ class ExportScreen extends StatefulWidget {
   /// For tests: today.
   final DateTime? now;
 
+  /// The server administrator may import an export into a new group (the
+  /// standalone owner is one); [onImported] reloads the groups.
+  final bool canImport;
+  final Future<void> Function()? onImported;
+
   const ExportScreen({
     super.key,
     required this.membership,
@@ -30,6 +38,8 @@ class ExportScreen extends StatefulWidget {
     this.csv,
     this.save,
     this.now,
+    this.canImport = false,
+    this.onImported,
   });
 
   @override
@@ -82,6 +92,36 @@ class _ExportScreenState extends State<ExportScreen> {
         await openOrSaveFile(name, mime, bytes);
       }
       messenger.showSnackBar(SnackBar(content: Text(l.exportDone(name))));
+    } on Object catch (e) {
+      if (mounted) setState(() => _error = errorText(l, e));
+    } finally {
+      if (mounted) setState(() => _busy = null);
+    }
+  }
+
+  Future<void> _import() async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final file = await pickFile(extensions: const ['.json']);
+    if (file == null || !mounted) return;
+    setState(() => (_busy = 'import', _error = null));
+    try {
+      final result = await GroupTransfer.importJson(
+        client,
+        utf8.decode(file.bytes),
+      );
+      await widget.onImported?.call();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            l.importExportDone(
+              result.groupName,
+              result.accounts,
+              result.transactions,
+            ),
+          ),
+        ),
+      );
     } on Object catch (e) {
       if (mounted) setState(() => _error = errorText(l, e));
     } finally {
@@ -151,6 +191,65 @@ class _ExportScreenState extends State<ExportScreen> {
                 l.exportCsvTitle,
                 l.exportCsvHelp,
               ),
+              if (isStandalone) ...[
+                const SizedBox(height: 12),
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.cloud_upload_outlined),
+                    title: Text(l.migrateTitle),
+                    subtitle: Text(l.migrateIntro),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const MigrateScreen(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+              if (widget.canImport) ...[
+                const SizedBox(height: 12),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.upload_file_outlined),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                l.importExportTitle,
+                                style: theme.textTheme.titleMedium,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(l.importExportHelp),
+                        const SizedBox(height: 12),
+                        Align(
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: OutlinedButton.icon(
+                            icon: _busy == 'import'
+                                ? const SizedBox.square(
+                                    dimension: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : const Icon(Icons.folder_open_outlined),
+                            label: Text(l.importExportChoose),
+                            onPressed: _busy == null ? _import : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
               if (_error != null) ...[
                 const SizedBox(height: 12),
                 Text(_error!, style: TextStyle(color: theme.colorScheme.error)),

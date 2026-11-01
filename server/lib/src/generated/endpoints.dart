@@ -60,6 +60,7 @@ import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
 import '../endpoints/transaction_endpoint.dart' as _iyokctnp;
+import '../endpoints/transfer_endpoint.dart' as _ikqanwsd;
 import '../endpoints/two_factor_endpoint.dart' as _ivxdn6q3;
 
 class Endpoints extends _is.EndpointDispatch {
@@ -196,6 +197,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'transaction',
+          null,
+        ),
+      'transfer': _ikqanwsd.TransferEndpoint()
+        ..initialize(
+          server,
+          'transfer',
           null,
         ),
       'twoFactor': _ivxdn6q3.TwoFactorEndpoint()
@@ -4417,6 +4424,109 @@ class Endpoints extends _is.EndpointDispatch {
                         params['categoryId'],
                         matchType: params['matchType'],
                       ),
+        ),
+      },
+    );
+    connectors['transfer'] = _is.EndpointConnector(
+      name: 'transfer',
+      endpoint: endpoints['transfer']!,
+      methodConnectors: {
+        'begin': _is.MethodConnector(
+          name: 'begin',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['transfer'] as _ikqanwsd.TransferEndpoint)
+                  .begin(session),
+        ),
+        'part': _is.MethodConnector(
+          name: 'part',
+          params: {
+            'token': _is.ParameterDescription(
+              name: 'token',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'text': _is.ParameterDescription(
+              name: 'text',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transfer'] as _ikqanwsd.TransferEndpoint).part(
+                    session,
+                    params['token'],
+                    params['text'],
+                  ),
+        ),
+        'finish': _is.MethodConnector(
+          name: 'finish',
+          params: {
+            'token': _is.ParameterDescription(
+              name: 'token',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transfer'] as _ikqanwsd.TransferEndpoint).finish(
+                    session,
+                    params['token'],
+                    params['name'],
+                  ),
+        ),
+        'document': _is.MethodConnector(
+          name: 'document',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'kind': _is.ParameterDescription(
+              name: 'kind',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'id': _is.ParameterDescription(
+              name: 'id',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'content': _is.ParameterDescription(
+              name: 'content',
+              type: _is.getType<_idt.ByteData>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['transfer'] as _ikqanwsd.TransferEndpoint)
+                  .document(
+                    session,
+                    params['groupId'],
+                    params['kind'],
+                    params['id'],
+                    params['content'],
+                  ),
         ),
       },
     );

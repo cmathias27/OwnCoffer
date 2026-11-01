@@ -60,8 +60,11 @@ Oui, de deux façons : l'application web s'installe depuis le navigateur (« Ajo
 **Windows ou Android me disent que l'application n'est pas sûre.**
 Elles ne sont pas encore signées par un éditeur reconnu (certificat payant) ni publiées sur un magasin. Téléchargez-les uniquement depuis la page des versions du dépôt, et vérifiez leur empreinte et leur signature ([PUBLICATION.md](PUBLICATION.md)).
 
+**Puis-je utiliser OwnCoffer sans serveur ?**
+Oui, avec l'application Windows ou Android : au premier lancement, « Utiliser seul sur cet appareil ». Tout fonctionne, vos données restent sur l'appareil. Plus tard, « Migrer vers un serveur » envoie tout sur un serveur OwnCoffer, factures comprises.
+
 **L'application fonctionne-t-elle sans connexion ?**
-Pas encore : elle lit tout sur votre serveur. Le mode hors-ligne est prévu en phase 6.
+En mode autonome, oui : tout est sur l'appareil. Connectée à un serveur, pas encore : elle lit tout sur le serveur. Le mode hors-ligne est prévu en phase 6.
 
 ## Sécurité
 

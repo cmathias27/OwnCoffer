@@ -9,7 +9,9 @@ Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). 
 - Au premier lancement, deux choix : **« Utiliser seul sur cet appareil »** ou **« Se connecter à un serveur »**.
 - **Seul sur cet appareil** : rien d'autre à installer. Le vrai serveur OwnCoffer tourne dans l'application, avec toutes ses fonctions : import, classement, prévisions, budget, crédits, factures, analyses, conseiller, assistant IA. Vos données restent dans le dossier privé de l'application, et seul cet appareil peut y accéder. Pas de mot de passe : l'application vous ouvre directement vos comptes.
 - **« Changer de mode »** (menu du compte) revient au choix du premier lancement ; les données du mode autonome restent sur l'appareil et reviennent quand vous le choisissez à nouveau.
-- À venir : « Migrer vers un serveur » (tout envoyer sur un serveur OwnCoffer), et une sauvegarde chiffrée automatique vers un dossier. En attendant, faites un « Exporter mes données » de temps en temps.
+- **« Migrer vers un serveur »** (page « Exporter mes données ») : envoie tout sur un serveur OwnCoffer, factures et documents compris, dans un nouveau groupe dont vous devenez l'administrateur ; puis « Utiliser maintenant le serveur ». Les données restent aussi sur l'appareil. Il faut le compte d'administrateur du serveur.
+- **« Importer un export »** (même page, pour l'administrateur du serveur, et en mode autonome) : recrée un export JSON d'OwnCoffer dans un nouveau groupe, par exemple pour revenir d'un serveur vers l'appareil, ou changer de serveur.
+- À venir : une sauvegarde chiffrée automatique vers un dossier. En attendant, faites un « Exporter mes données » de temps en temps.
 - Les applications déjà connectées à un serveur ne changent pas.
 
 ## 1.0.4 (novembre 2026)

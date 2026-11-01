@@ -7,6 +7,10 @@
 
 Le choix se fait au premier lancement ; « Changer de mode » (menu du compte) y revient sans rien effacer.
 
+**Passer du mode autonome à un serveur** : page « Exporter mes données » → **« Migrer vers un serveur »**. Saisissez l'adresse du serveur et connectez-vous avec son compte d'administrateur ; tout est envoyé, factures et documents compris, dans un nouveau groupe dont vous devenez l'administrateur. Ensuite, « Utiliser maintenant le serveur ». Les données restent aussi sur l'appareil.
+
+**Revenir d'un serveur vers l'appareil** : sur le serveur, « Exporter mes données » (JSON complet) ; sur l'appareil en mode autonome, « Importer un export ». Les fichiers des factures ne font pas partie de l'export JSON.
+
 Les applications Windows et Android sont la même application que la version web, connectée à **votre** serveur OwnCoffer (décision 0020). Avec un serveur, elles ne gardent sur l'appareil que l'adresse du serveur et votre session : vos opérations restent sur le serveur.
 
 Le plus simple : dans l'application web, menu du compte → **« Applications »**. La page propose les deux fichiers dans la version de votre serveur. Ils sont aussi joints à chaque version, sur la page **Releases** du dépôt GitHub :
@@ -74,4 +78,4 @@ flutter build windows --release    # build\windows\x64\runner\Release\ (sous Win
 
 ## Pas encore
 
-Hors-ligne et synchronisation, installation automatique des mises à jour des applications, migration du mode autonome vers un serveur et sauvegarde chiffrée automatique, magasins d'applications : phase 6 du [roadbook](ROADBOOK.md).
+Hors-ligne et synchronisation, installation automatique des mises à jour des applications, sauvegarde chiffrée automatique du mode autonome, magasins d'applications : phase 6 du [roadbook](ROADBOOK.md).

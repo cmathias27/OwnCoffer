@@ -29,6 +29,14 @@ void main() async {
       ),
     ),
   );
+  switchToServer = (api, session) async {
+    await ServerAddress.save(api);
+    await ServerAddress.saveMode('server');
+    isStandalone = false;
+    await initializeClient();
+    await client.auth.updateSignedInUser(session);
+    runApp(const OwnCofferApp());
+  };
   // Windows and Android: the first launch asks how to work (decisions
   // 0020 and 0022); the web app is served by its server.
   if (ServerAddress.needed) {
