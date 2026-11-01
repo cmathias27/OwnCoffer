@@ -158,6 +158,51 @@ class GroupEndpoint extends Endpoint {
     ];
   }
 
+  /// The group's log, for its administrators (#37): who did what and when
+  /// in this group, newest first, without the data. Somebody who is no
+  /// longer a member shows without their address.
+  Future<List<AdminAuditInfo>> audit(
+    Session session,
+    int groupId, {
+    int? limit,
+    int? offset,
+  }) async {
+    await Access.requireMember(session, groupId, min: MemberRole.admin);
+    final rows = await AuditEntry.db.find(
+      session,
+      where: (a) => a.groupId.equals(groupId),
+      orderByList: (a) => [a.createdAt.desc(), a.id.desc()],
+      limit: (limit ?? 100).clamp(1, 500),
+      offset: (offset ?? 0).clamp(0, 1 << 30),
+    );
+    final Set<UuidValue> members = {
+      for (final m in await GroupMember.db.find(
+        session,
+        where: (m) => m.groupId.equals(groupId),
+      ))
+        m.authUserId,
+    };
+    final emails = members.isEmpty
+        ? const <UuidValue, String?>{}
+        : {
+            for (final p in await UserProfile.db.find(
+              session,
+              where: (p) => p.authUserId.inSet(members),
+            ))
+              p.authUserId: p.email,
+          };
+    return [
+      for (final a in rows)
+        AdminAuditInfo(
+          createdAt: a.createdAt,
+          action: a.action,
+          entity: a.entity,
+          email: emails[a.authUserId],
+          groupId: a.groupId,
+        ),
+    ];
+  }
+
   /// Changes a member's role. The group always keeps at least one admin.
   Future<GroupMember> setRole(
     Session session,

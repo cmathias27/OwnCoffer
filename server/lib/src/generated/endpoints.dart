@@ -23,7 +23,10 @@ import 'package:owncoffer_server/src/generated/category_source.dart'
 import 'package:owncoffer_server/src/generated/csv_columns.dart' as _iytxq8gu;
 import 'package:owncoffer_server/src/generated/frequency.dart' as _iugtcrzz;
 import 'package:owncoffer_server/src/generated/loan.dart' as _i2yv792g;
+import 'package:owncoffer_server/src/generated/loan_event.dart' as _ifjfj2mv;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
+import 'package:owncoffer_server/src/generated/notification_settings.dart'
+    as _id4w1v6o;
 import 'package:owncoffer_server/src/generated/rule_direction.dart'
     as _ini8nmtb;
 import 'package:owncoffer_server/src/generated/rule_match_type.dart'
@@ -1627,6 +1630,36 @@ class Endpoints extends _is.EndpointDispatch {
                     params['groupId'],
                   ),
         ),
+        'audit': _is.MethodConnector(
+          name: 'audit',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'limit': _is.ParameterDescription(
+              name: 'limit',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'offset': _is.ParameterDescription(
+              name: 'offset',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['group'] as _iknqvl2r.GroupEndpoint).audit(
+                session,
+                params['groupId'],
+                limit: params['limit'],
+                offset: params['offset'],
+              ),
+        ),
         'setRole': _is.MethodConnector(
           name: 'setRole',
           params: {
@@ -2446,6 +2479,55 @@ class Endpoints extends _is.EndpointDispatch {
                 params['amountCents'],
               ),
         ),
+        'addEvent': _is.MethodConnector(
+          name: 'addEvent',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'event': _is.ParameterDescription(
+              name: 'event',
+              type: _is.getType<_ifjfj2mv.LoanEvent>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint).addEvent(
+                session,
+                params['loanId'],
+                params['event'],
+              ),
+        ),
+        'removeEvent': _is.MethodConnector(
+          name: 'removeEvent',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'index': _is.ParameterDescription(
+              name: 'index',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['loan'] as _imitaxsf.LoanEndpoint).removeEvent(
+                    session,
+                    params['loanId'],
+                    params['index'],
+                  ),
+        ),
         'create': _is.MethodConnector(
           name: 'create',
           params: {
@@ -2731,6 +2813,37 @@ class Endpoints extends _is.EndpointDispatch {
               ) async =>
                   (endpoints['notification'] as _ihb11yhk.NotificationEndpoint)
                       .markAllRead(session),
+        ),
+        'settings': _is.MethodConnector(
+          name: 'settings',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['notification'] as _ihb11yhk.NotificationEndpoint)
+                      .settings(session),
+        ),
+        'saveSettings': _is.MethodConnector(
+          name: 'saveSettings',
+          params: {
+            'settings': _is.ParameterDescription(
+              name: 'settings',
+              type: _is.getType<_id4w1v6o.NotificationSettings>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['notification'] as _ihb11yhk.NotificationEndpoint)
+                      .saveSettings(
+                        session,
+                        params['settings'],
+                      ),
         ),
       },
     );

@@ -131,7 +131,7 @@ class LoanEndpoint extends Endpoint {
   Future<List<LoanInstallment>> schedule(Session session, int loanId) async {
     final loan = await _find(session, loanId);
     return [
-      for (final i in core.amortize(_terms(loan)))
+      for (final i in core.amortize(_terms(loan), changes: _changes(loan)))
         LoanInstallment(
           number: i.number,
           date: i.date.toDb(),
@@ -283,13 +283,123 @@ class LoanEndpoint extends Endpoint {
     if (amountCents <= 0 || amountCents > core.maxLoanPrincipalCents) {
       throw InvalidInputException(code: 'amount_out_of_range');
     }
-    final r = core.simulateEarlyRepayment(_terms(loan), _today(), amountCents);
+    final r = core.simulateEarlyRepayment(
+      _terms(loan),
+      _today(),
+      amountCents,
+      changes: _changes(loan),
+    );
     return EarlyRepayment(
       amountCents: amountCents,
       interestSavedCents: r.interestSavedCents,
       installmentsLeft: r.schedule.length,
       endDate: r.schedule.isEmpty ? null : r.schedule.last.date.toDb(),
     );
+  }
+
+  static const _maxEvents = 50;
+
+  /// Adds a change to the loan (new rate, renegotiation, money drawn or
+  /// repaid): the schedule, the planned instalments and the forecast follow.
+  /// Refused when the loan would no longer be repaid, or when a revolving
+  /// credit would go over its limit.
+  Future<LoanInfo> addEvent(
+    Session session,
+    int loanId,
+    LoanEvent event,
+  ) async {
+    final current = await _find(session, loanId, write: true);
+    final events = [...?current.events];
+    if (events.length >= _maxEvents) {
+      throw InvalidInputException(code: 'loan_event_invalid');
+    }
+    final note = event.note?.trim();
+    if (note != null && note.length > 200) {
+      throw InvalidInputException(code: 'invalid_name', field: 'note');
+    }
+    final u = event.date.toUtc();
+    final day = core.LocalDate(u.year, u.month, u.day);
+    if (day < current.firstDueDate.toLocalDate()) {
+      throw InvalidInputException(code: 'loan_event_invalid');
+    }
+    final clean = LoanEvent(
+      date: day.toDb(),
+      annualRateMilli: event.annualRateMilli,
+      paymentCents: event.paymentCents,
+      remainingMonths: event.remainingMonths,
+      drawCents: event.drawCents == 0 ? null : event.drawCents,
+      note: note == null || note.isEmpty ? null : note,
+    );
+    events
+      ..add(clean)
+      ..sort((a, b) => a.date.compareTo(b.date));
+    final next = current.copyWith(events: events);
+    _checkEvents(next, day);
+    return _saveEvents(session, current, next, 'add_event');
+  }
+
+  /// Removes the change at [index] (as listed in the loan, oldest first).
+  Future<LoanInfo> removeEvent(Session session, int loanId, int index) async {
+    final current = await _find(session, loanId, write: true);
+    final events = [...?current.events];
+    if (index < 0 || index >= events.length) {
+      throw InvalidInputException(code: 'loan_event_invalid');
+    }
+    events.removeAt(index);
+    final next = current.copyWith(events: events.isEmpty ? null : events);
+    _checkEvents(next, null);
+    return _saveEvents(session, current, next, 'remove_event');
+  }
+
+  static void _checkEvents(Loan loan, core.LocalDate? added) {
+    final List<core.Installment> schedule;
+    try {
+      schedule = core.amortize(_terms(loan), changes: _changes(loan));
+    } on ArgumentError {
+      throw InvalidInputException(code: 'loan_event_invalid');
+    }
+    // An instalment that repays no capital (below the interest), or a loan
+    // stretched to the longest supported duration, would never be repaid:
+    // the engine only settles it with its last allowed instalment.
+    if (schedule.length >= core.maxLoanMonths ||
+        schedule
+            .take(schedule.length - 1)
+            .any((i) => i.principalCents <= 0 && i.remainingCents > 0)) {
+      throw InvalidInputException(code: 'loan_event_unpaid');
+    }
+    final limit = loan.creditLimitCents;
+    if (limit != null) {
+      // What is owed right after each draw, before its instalment.
+      for (final i in schedule) {
+        if (i.remainingCents + i.principalCents > limit &&
+            (added == null || i.date >= added)) {
+          throw InvalidInputException(code: 'loan_over_limit');
+        }
+      }
+    }
+  }
+
+  Future<LoanInfo> _saveEvents(
+    Session session,
+    Loan current,
+    Loan next,
+    String action,
+  ) async {
+    final saved = await session.db.transaction((tx) async {
+      final row = await Loan.db.updateRow(session, next, transaction: tx);
+      return _syncSchedule(session, row, tx);
+    });
+    await _afterChange(session, saved);
+    await Audit.log(
+      session,
+      groupId: current.groupId,
+      action: action,
+      entity: 'loan',
+      rowId: saved.id,
+      before: current,
+      after: saved,
+    );
+    return _info(saved, _today());
   }
 
   Future<LoanInfo> create(Session session, int groupId, Loan loan) async {
@@ -322,6 +432,7 @@ class LoanEndpoint extends Endpoint {
           scheduledId: current.scheduledId,
           matchPattern: current.matchPattern,
           ruleId: current.ruleId,
+          events: current.events,
           createdAt: current.createdAt,
         ),
         transaction: tx,
@@ -742,13 +853,31 @@ class LoanEndpoint extends Endpoint {
     paymentCents: l.paymentCents,
   );
 
+  /// The loan's events for the engine (oldest first).
+  static List<core.LoanChange> _changes(Loan l) => [
+    for (final e in l.events ?? const <LoanEvent>[])
+      core.LoanChange(
+        date: e.date.toLocalDate(),
+        annualRateMilli: e.annualRateMilli,
+        paymentCents: e.paymentCents,
+        remainingMonths: e.remainingMonths,
+        drawCents: e.drawCents ?? 0,
+      ),
+  ];
+
+  /// The instalment now: after events, the one of the next due date.
+  static int _currentPayment(Loan l, core.LoanStatus s) =>
+      (l.events?.isNotEmpty ?? false)
+      ? (s.next?.paymentCents ?? _terms(l).payment)
+      : _terms(l).payment;
+
   static LoanInfo _info(Loan l, core.LocalDate today) {
     final terms = _terms(l);
-    final schedule = core.amortize(terms);
+    final schedule = core.amortize(terms, changes: _changes(l));
     final s = core.loanStatus(terms, schedule, today);
     return LoanInfo(
       loan: l,
-      paymentCents: terms.payment,
+      paymentCents: _currentPayment(l, s),
       paymentIsActual: l.paymentCents != null,
       paidCount: s.paidCount,
       totalCount: s.totalCount,
@@ -842,6 +971,19 @@ class LoanEndpoint extends Endpoint {
     if (apr != null && (apr < 0 || apr > core.maxLoanRateMilli)) {
       throw InvalidInputException(code: 'loan_terms_invalid');
     }
+    final limit = loan.creditLimitCents;
+    if (limit != null &&
+        (limit <= 0 ||
+            limit > core.maxLoanPrincipalCents ||
+            limit < loan.principalCents)) {
+      throw InvalidInputException(code: 'loan_over_limit');
+    }
+    // A revolving credit is repaid by its instalment: there is no duration
+    // to enter, it follows from the instalment.
+    final revolving = loan.kind == LoanKind.revolving;
+    if (revolving && loan.paymentCents == null) {
+      throw InvalidInputException(code: 'loan_terms_invalid');
+    }
     final u = loan.firstDueDate.toUtc();
     final clean = Loan(
       groupId: groupId,
@@ -858,11 +1000,20 @@ class LoanEndpoint extends Endpoint {
       feesCents: loan.feesCents,
       categoryId: loan.categoryId,
       paymentCents: loan.paymentCents,
+      creditLimitCents: revolving ? limit : null,
     );
     try {
       _terms(clean);
     } on ArgumentError {
       throw InvalidInputException(code: 'loan_terms_invalid');
+    }
+    if (revolving) {
+      return clean.copyWith(
+        durationMonths: core
+            .amortize(_terms(clean.copyWith(durationMonths: core.maxLoanMonths)))
+            .length
+            .clamp(1, core.maxLoanMonths),
+      );
     }
     return clean;
   }
@@ -880,7 +1031,7 @@ class LoanEndpoint extends Endpoint {
     await _dropScheduled(session, loan, tx);
     final status = core.loanStatus(
       _terms(loan),
-      core.amortize(_terms(loan)),
+      core.amortize(_terms(loan), changes: _changes(loan)),
       _today(),
     );
     final next = status.next;
@@ -904,7 +1055,7 @@ class LoanEndpoint extends Endpoint {
       );
     }
     final terms = _terms(loan);
-    final payment = terms.payment;
+    final payment = _currentPayment(loan, status);
     final s = await ScheduledTransaction.db.insertRow(
       session,
       ScheduledTransaction(
@@ -917,7 +1068,7 @@ class LoanEndpoint extends Endpoint {
         frequency: ScheduleFrequency.monthly,
         startDate: loan.firstDueDate,
         // With the actual instalment, as many as it takes.
-        occurrenceCount: core.amortize(terms).length,
+        occurrenceCount: core.amortize(terms, changes: _changes(loan)).length,
         nextDue: (next?.date ?? _today().addDays(1)).toDb(),
         matchPattern:
             loan.matchPattern ??
@@ -1026,7 +1177,7 @@ class LoanEndpoint extends Endpoint {
       id,
       transaction: tx,
     ))!;
-    final schedule = core.amortize(_terms(loan));
+    final schedule = core.amortize(_terms(loan), changes: _changes(loan));
     final today = _today();
     final ops = await BankTransaction.db.find(
       session,

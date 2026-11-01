@@ -171,4 +171,134 @@ void main() {
     final r = simulateEarlyRepayment(t, LocalDate(2026, 6, 10), 1000000);
     expect(r.schedule.first.paymentCents, 90000);
   });
+
+  group('changes (variable rate, renegotiation, revolving credit)', () {
+    int total(List<Installment> s) => s.fold(0, (a, i) => a + i.principalCents);
+
+    test('no change: the same schedule as before', () {
+      expect(
+        amortize(terms(), changes: const []).map((i) => i.paymentCents),
+        amortize(terms()).map((i) => i.paymentCents),
+      );
+    });
+
+    test('a rate change keeps the end date; the instalment is computed '
+        'again on what is left', () {
+      final base = amortize(terms());
+      final s = amortize(
+        terms(),
+        changes: [
+          LoanChange(date: LocalDate(2028, 1, 1), annualRateMilli: 2000),
+        ],
+      );
+      expect(s.length, base.length, reason: 'same end date');
+      expect(s.last.date, base.last.date);
+      expect(total(s), 10000000, reason: 'the capital is repaid exactly');
+      // Before: unchanged. From January 2028 (instalment 25): new rate.
+      expect(s[23].paymentCents, base[23].paymentCents);
+      expect(
+        s[24].paymentCents,
+        loanPaymentCents(base[23].remainingCents, 2000, 96),
+      );
+      expect(s[24].paymentCents, greaterThan(base[24].paymentCents));
+      expect(s.last.remainingCents, 0);
+    });
+
+    test('a renegotiation with a new duration', () {
+      final s = amortize(
+        terms(),
+        changes: [
+          LoanChange(
+            date: LocalDate(2027, 1, 1),
+            annualRateMilli: 500,
+            remainingMonths: 60,
+          ),
+        ],
+      );
+      expect(s.length, 12 + 60);
+      expect(total(s), 10000000);
+      expect(
+        s[12].paymentCents,
+        loanPaymentCents(s[11].remainingCents, 500, 60),
+      );
+    });
+
+    test('a new instalment: the end date follows it', () {
+      final base = amortize(terms());
+      final s = amortize(
+        terms(),
+        changes: [
+          LoanChange(
+            date: LocalDate(2027, 1, 1),
+            paymentCents: base[12].paymentCents * 2,
+          ),
+        ],
+      );
+      expect(s.length, lessThan(base.length));
+      expect(total(s), 10000000);
+      expect(s.last.remainingCents, 0);
+    });
+
+    test('revolving credit: a draw adds to what is owed, the instalment '
+        'is kept, the end moves', () {
+      final revolving = LoanTerms(
+        principalCents: 300000,
+        annualRateMilli: 19000,
+        months: 600,
+        firstDue: LocalDate(2026, 1, 5),
+        paymentCents: 10000,
+      );
+      final base = amortize(revolving);
+      final s = amortize(
+        revolving,
+        changes: [LoanChange(date: LocalDate(2026, 6, 1), drawCents: 150000)],
+      );
+      expect(total(s), 450000, reason: 'the draw is repaid too');
+      expect(s.length, greaterThan(base.length));
+      expect(s[6].paymentCents, 10000, reason: 'the instalment is kept');
+      final status = loanStatus(revolving, s, LocalDate(2026, 6, 10));
+      expect(status.paidCount, 6);
+      expect(
+        status.remainingCents,
+        s[5].remainingCents,
+        reason: 'what the unpaid instalments still repay',
+      );
+    });
+
+    test('early repayment on a loan with changes', () {
+      final changes = [
+        LoanChange(date: LocalDate(2027, 1, 1), annualRateMilli: 1500),
+      ];
+      final today = LocalDate(2028, 3, 15);
+      final before = loanStatus(
+        terms(),
+        amortize(terms(), changes: changes),
+        today,
+      );
+      final r = simulateEarlyRepayment(
+        terms(),
+        today,
+        1000000,
+        changes: changes,
+      );
+      expect(r.interestSavedCents, greaterThan(0));
+      expect(r.schedule.length, lessThan(before.totalCount - before.paidCount));
+      expect(total(r.schedule), before.remainingCents - 1000000);
+    });
+
+    test('a change must change something, within the limits', () {
+      expect(
+        () => LoanChange(date: LocalDate(2026, 1, 1)),
+        throwsArgumentError,
+      );
+      expect(
+        () => LoanChange(date: LocalDate(2026, 1, 1), annualRateMilli: -1),
+        throwsArgumentError,
+      );
+      expect(
+        () => LoanChange(date: LocalDate(2026, 1, 1), remainingMonths: 0),
+        throwsArgumentError,
+      );
+    });
+  });
 }

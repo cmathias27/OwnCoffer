@@ -1,4 +1,5 @@
-### A fixed-rate loan with constant monthly instalments. The schedule is
+### A loan with monthly instalments: fixed rate, or changed by its events
+### (variable rate, renegotiation, revolving credit). The schedule is
 ### computed (shared/loans), never stored; indicative, the bank's table
 ### prevails.
 class: Loan
@@ -33,6 +34,11 @@ fields:
   ### Group rule classifying the instalments, created with the loan when it
   ### is declared from an operation.
   ruleId: int?, relation(parent=rules, onDelete=SetNull)
+  ### Revolving credit: the amount that may be drawn in all.
+  creditLimitCents: int?
+  ### Changes since the start (rate, instalment, duration, money drawn or
+  ### repaid), oldest first.
+  events: List<LoanEvent>?
   createdAt: DateTime, default=now
   deletedAt: DateTime?
 indexes:

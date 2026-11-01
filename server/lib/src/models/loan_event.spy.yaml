@@ -1,0 +1,12 @@
+### Something that changed a loan from a date on (core.LoanChange): a new
+### rate (variable rate, renegotiation), a new instalment, a new remaining
+### duration, money drawn (revolving credit, > 0) or repaid early (< 0).
+### Kept in the loan; the schedule is computed again from them.
+class: LoanEvent
+fields:
+  date: DateTime
+  annualRateMilli: int?
+  paymentCents: int?
+  remainingMonths: int?
+  drawCents: int?
+  note: String?

@@ -10,6 +10,7 @@ import '../generated/protocol.dart';
 import '../i18n/messages.dart';
 import '../mail/mail_service.dart';
 import 'alert_service.dart';
+import 'notification_settings_service.dart';
 
 /// Reminder a month before the end of an invoice's warranty: one
 /// notification and one email per member who can see the invoice and per
@@ -76,6 +77,8 @@ abstract final class WarrantyAlertService {
     final key = 'warranty:${invoice.id}:$until';
     var created = 0;
     for (final user in recipients) {
+      final settings = await NotificationSettingsService.of(session, user);
+      if (!settings.warrantyApp) continue;
       final exists = await AppNotification.db.count(
         session,
         where: (n) => n.authUserId.equals(user) & n.dedupKey.equals(key),
@@ -97,7 +100,7 @@ abstract final class WarrantyAlertService {
         ),
       );
       created++;
-      await _email(session, n, title, until);
+      if (settings.warrantyEmail) await _email(session, n, title, until);
     }
     return created;
   }

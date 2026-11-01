@@ -13,6 +13,7 @@ import '../mail/mail_service.dart';
 import 'forecast_service.dart';
 import 'goal_alert_service.dart';
 import 'warranty_alert_service.dart';
+import 'notification_settings_service.dart';
 
 /// Overdraft alert (roadbook phase 3, issue #53): when the forecast of an
 /// account goes below its alert threshold, every member who can see the
@@ -66,6 +67,8 @@ abstract final class AlertService {
 
     var created = 0;
     for (final user in await recipients(session, account)) {
+      final settings = await NotificationSettingsService.of(session, user);
+      if (!settings.overdraftApp) continue;
       final exists = await AppNotification.db.count(
         session,
         where: (n) => n.authUserId.equals(user) & n.dedupKey.equals(key),
@@ -83,7 +86,9 @@ abstract final class AlertService {
         ),
       );
       created++;
-      await _email(session, n, account, f, firstDay);
+      if (settings.overdraftEmail) {
+        await _email(session, n, account, f, firstDay);
+      }
     }
     return created;
   }

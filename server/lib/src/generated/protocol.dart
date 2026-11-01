@@ -116,6 +116,7 @@ import 'left_to_live_report.dart' as _ibb3lpoc;
 import 'loan.dart' as _i7jednjp;
 import 'loan_document.dart' as _ixhwb2ta;
 import 'loan_document_blob.dart' as _i05ovdfs;
+import 'loan_event.dart' as _inh9sy0f;
 import 'loan_from_operation.dart' as _ibgzxro1;
 import 'loan_info.dart' as _ijbwwnsd;
 import 'loan_installment.dart' as _ics9k3ng;
@@ -128,6 +129,7 @@ import 'member_role.dart' as _insyygng;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
 import 'month_review.dart' as _i5m4pdin;
 import 'notification.dart' as _irt10kca;
+import 'notification_settings.dart' as _iwwkm5c2;
 import 'occurrence_status.dart' as _it10dx4m;
 import 'period_totals.dart' as _imctw77w;
 import 'provider_history.dart' as _irsxtgs7;
@@ -217,6 +219,7 @@ export 'left_to_live_report.dart';
 export 'loan.dart';
 export 'loan_document.dart';
 export 'loan_document_blob.dart';
+export 'loan_event.dart';
 export 'loan_from_operation.dart';
 export 'loan_info.dart';
 export 'loan_installment.dart';
@@ -229,6 +232,7 @@ export 'member_role.dart';
 export 'missed_occurrence_info.dart';
 export 'month_review.dart';
 export 'notification.dart';
+export 'notification_settings.dart';
 export 'occurrence_status.dart';
 export 'period_totals.dart';
 export 'provider_history.dart';
@@ -2314,6 +2318,18 @@ class Protocol extends _is.DatabaseSerializationManager {
           dartType: 'int?',
         ),
         _isp.ColumnDefinition(
+          name: 'creditLimitCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'events',
+          columnType: _isp.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<protocol:LoanEvent>?',
+        ),
+        _isp.ColumnDefinition(
           name: 'createdAt',
           columnType: _isp.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
@@ -2506,6 +2522,111 @@ class Protocol extends _is.DatabaseSerializationManager {
           ],
           type: 'btree',
           isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'notification_settings',
+      dartName: 'NotificationSettings',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'overdraftApp',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'true',
+        ),
+        _isp.ColumnDefinition(
+          name: 'overdraftEmail',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'true',
+        ),
+        _isp.ColumnDefinition(
+          name: 'goalWarning',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'true',
+        ),
+        _isp.ColumnDefinition(
+          name: 'goalOver',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'true',
+        ),
+        _isp.ColumnDefinition(
+          name: 'goalForecast',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'true',
+        ),
+        _isp.ColumnDefinition(
+          name: 'warrantyApp',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'true',
+        ),
+        _isp.ColumnDefinition(
+          name: 'warrantyEmail',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'true',
+        ),
+        _isp.ColumnDefinition(
+          name: 'updatedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'notification_settings_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'notification_settings_user_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
           isPrimary: false,
         ),
       ],
@@ -3620,6 +3741,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i05ovdfs.LoanDocumentBlob) {
       return _i05ovdfs.LoanDocumentBlob.fromJson(data) as T;
     }
+    if (t == _inh9sy0f.LoanEvent) {
+      return _inh9sy0f.LoanEvent.fromJson(data) as T;
+    }
     if (t == _ibgzxro1.LoanFromOperation) {
       return _ibgzxro1.LoanFromOperation.fromJson(data) as T;
     }
@@ -3655,6 +3779,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _irt10kca.AppNotification) {
       return _irt10kca.AppNotification.fromJson(data) as T;
+    }
+    if (t == _iwwkm5c2.NotificationSettings) {
+      return _iwwkm5c2.NotificationSettings.fromJson(data) as T;
     }
     if (t == _it10dx4m.OccurrenceStatus) {
       return _it10dx4m.OccurrenceStatus.fromJson(data) as T;
@@ -3957,6 +4084,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _i05ovdfs.LoanDocumentBlob.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_inh9sy0f.LoanEvent?>()) {
+      return (data != null ? _inh9sy0f.LoanEvent.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_ibgzxro1.LoanFromOperation?>()) {
       return (data != null ? _ibgzxro1.LoanFromOperation.fromJson(data) : null)
           as T;
@@ -3998,6 +4128,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_irt10kca.AppNotification?>()) {
       return (data != null ? _irt10kca.AppNotification.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_iwwkm5c2.NotificationSettings?>()) {
+      return (data != null
+              ? _iwwkm5c2.NotificationSettings.fromJson(data)
+              : null)
           as T;
     }
     if (t == _is.getType<_it10dx4m.OccurrenceStatus?>()) {
@@ -4195,6 +4331,20 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data as List)
               .map((e) => deserialize<_i4e8elxc.ImportPreviewLine>(e))
               .toList()
+          as T;
+    }
+    if (t == List<_inh9sy0f.LoanEvent>) {
+      return (data as List)
+              .map((e) => deserialize<_inh9sy0f.LoanEvent>(e))
+              .toList()
+          as T;
+    }
+    if (t == _is.getType<List<_inh9sy0f.LoanEvent>?>()) {
+      return (data != null
+              ? (data as List)
+                    .map((e) => deserialize<_inh9sy0f.LoanEvent>(e))
+                    .toList()
+              : null)
           as T;
     }
     if (t == List<_ijbwwnsd.LoanInfo>) {
@@ -4510,6 +4660,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i7jednjp.Loan => 'Loan',
       _ixhwb2ta.LoanDocument => 'LoanDocument',
       _i05ovdfs.LoanDocumentBlob => 'LoanDocumentBlob',
+      _inh9sy0f.LoanEvent => 'LoanEvent',
       _ibgzxro1.LoanFromOperation => 'LoanFromOperation',
       _ijbwwnsd.LoanInfo => 'LoanInfo',
       _ics9k3ng.LoanInstallment => 'LoanInstallment',
@@ -4522,6 +4673,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
       _i5m4pdin.MonthReview => 'MonthReview',
       _irt10kca.AppNotification => 'AppNotification',
+      _iwwkm5c2.NotificationSettings => 'NotificationSettings',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
       _imctw77w.PeriodTotals => 'PeriodTotals',
       _irsxtgs7.ProviderHistory => 'ProviderHistory',
@@ -4685,6 +4837,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'LoanDocument';
       case _i05ovdfs.LoanDocumentBlob():
         return 'LoanDocumentBlob';
+      case _inh9sy0f.LoanEvent():
+        return 'LoanEvent';
       case _ibgzxro1.LoanFromOperation():
         return 'LoanFromOperation';
       case _ijbwwnsd.LoanInfo():
@@ -4709,6 +4863,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'MonthReview';
       case _irt10kca.AppNotification():
         return 'AppNotification';
+      case _iwwkm5c2.NotificationSettings():
+        return 'NotificationSettings';
       case _it10dx4m.OccurrenceStatus():
         return 'OccurrenceStatus';
       case _imctw77w.PeriodTotals():
@@ -4973,6 +5129,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'LoanDocumentBlob') {
       return deserialize<_i05ovdfs.LoanDocumentBlob>(data['data']);
     }
+    if (dataClassName == 'LoanEvent') {
+      return deserialize<_inh9sy0f.LoanEvent>(data['data']);
+    }
     if (dataClassName == 'LoanFromOperation') {
       return deserialize<_ibgzxro1.LoanFromOperation>(data['data']);
     }
@@ -5008,6 +5167,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'AppNotification') {
       return deserialize<_irt10kca.AppNotification>(data['data']);
+    }
+    if (dataClassName == 'NotificationSettings') {
+      return deserialize<_iwwkm5c2.NotificationSettings>(data['data']);
     }
     if (dataClassName == 'OccurrenceStatus') {
       return deserialize<_it10dx4m.OccurrenceStatus>(data['data']);
@@ -5185,6 +5347,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _ibm9fvwa.McpToken.t;
       case _irt10kca.AppNotification:
         return _irt10kca.AppNotification.t;
+      case _iwwkm5c2.NotificationSettings:
+        return _iwwkm5c2.NotificationSettings.t;
       case _ivw87pdb.Rule:
         return _ivw87pdb.Rule.t;
       case _ifol8nrg.ScheduledTransaction:

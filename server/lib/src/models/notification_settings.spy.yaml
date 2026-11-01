@@ -1,0 +1,22 @@
+### What a user wants to be told, and how: one row per user, absent means
+### everything on (the default). An alert turned off in the app is not
+### created at all, so it is not emailed either.
+class: NotificationSettings
+table: notification_settings
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  ### Forecast overdraft of an account.
+  overdraftApp: bool, default=true
+  overdraftEmail: bool, default=true
+  ### Goals: 80 %, 100 %, and overrun announced by the projection.
+  goalWarning: bool, default=true
+  goalOver: bool, default=true
+  goalForecast: bool, default=true
+  ### End of an invoice's warranty, a month before.
+  warrantyApp: bool, default=true
+  warrantyEmail: bool, default=true
+  updatedAt: DateTime, default=now
+indexes:
+  notification_settings_user_idx:
+    fields: authUserId
+    unique: true

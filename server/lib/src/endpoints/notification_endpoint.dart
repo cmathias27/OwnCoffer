@@ -1,7 +1,9 @@
 import 'package:serverpod/serverpod.dart';
 
+import '../finance/notification_settings_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
+import '../security/audit.dart';
 import '../security/scopes.dart';
 
 /// The current user's notifications.
@@ -56,5 +58,41 @@ class NotificationEndpoint extends Endpoint {
     await AppNotification.db.update(session, [
       for (final n in unread) n.copyWith(readAt: now),
     ]);
+  }
+
+  /// The user's own choices (everything on by default).
+  Future<NotificationSettings> settings(Session session) =>
+      NotificationSettingsService.of(session, Access.userId(session));
+
+  /// Saves the user's choices; always for the user signed in, whatever
+  /// [settings] says. An email needs its alert in the app.
+  Future<NotificationSettings> saveSettings(
+    Session session,
+    NotificationSettings settings,
+  ) async {
+    final user = Access.userId(session);
+    final current = await NotificationSettings.db.findFirstRow(
+      session,
+      where: (s) => s.authUserId.equals(user),
+    );
+    final clean = settings.copyWith(
+      id: current?.id,
+      authUserId: user,
+      overdraftEmail: settings.overdraftApp && settings.overdraftEmail,
+      warrantyEmail: settings.warrantyApp && settings.warrantyEmail,
+      updatedAt: DateTime.now().toUtc(),
+    );
+    final saved = current == null
+        ? await NotificationSettings.db.insertRow(session, clean)
+        : await NotificationSettings.db.updateRow(session, clean);
+    await Audit.log(
+      session,
+      groupId: null,
+      action: 'update',
+      entity: 'notification_settings',
+      rowId: saved.id,
+      after: saved,
+    );
+    return saved;
   }
 }

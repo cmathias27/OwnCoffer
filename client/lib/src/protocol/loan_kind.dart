@@ -19,7 +19,8 @@ enum LoanKind implements _isc.SerializableModel {
   student,
   personal,
   other,
-  installments;
+  installments,
+  revolving;
 
   static LoanKind fromJson(String name) {
     switch (name) {
@@ -37,6 +38,8 @@ enum LoanKind implements _isc.SerializableModel {
         return LoanKind.other;
       case 'installments':
         return LoanKind.installments;
+      case 'revolving':
+        return LoanKind.revolving;
       default:
         throw ArgumentError('Value "$name" cannot be converted to "LoanKind"');
     }

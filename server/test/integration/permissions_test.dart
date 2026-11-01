@@ -129,6 +129,23 @@ void main() {
         );
       });
 
+      test("the household's log: its administrators only, its own lines "
+          'only (#37)', () async {
+        await expectLater(endpoints.group.audit(as(mallory), groupA), denied);
+        await expectLater(endpoints.group.audit(as(bob), groupA), denied);
+        await expectLater(endpoints.group.audit(as(carol), groupA), denied);
+        final mine = await endpoints.group.audit(as(alice), groupA);
+        expect(mine, isNotEmpty, reason: 'the accounts created in setUp');
+        expect(mine.every((a) => a.groupId == groupA), isTrue);
+        final theirs = await endpoints.group.audit(as(mallory), groupB);
+        expect(theirs.every((a) => a.groupId == groupB), isTrue);
+        expect(
+          mine.where((a) => a.entity == 'account').length,
+          2,
+          reason: "alice's two accounts, not mallory's",
+        );
+      });
+
       test('cannot create an account in it', () async {
         await expectLater(
           endpoints.account.create(as(mallory), groupA, 'x', AccountKind.cash),

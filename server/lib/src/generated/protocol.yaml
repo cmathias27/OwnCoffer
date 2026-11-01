@@ -70,6 +70,7 @@ group:
   - rename:
   - setMonthStartDay:
   - members:
+  - audit:
   - setRole:
   - removeMember:
 import:
@@ -105,6 +106,8 @@ loan:
   - downloadDocument:
   - deleteDocument:
   - simulate:
+  - addEvent:
+  - removeEvent:
   - create:
   - update:
   - createFromTransaction:
@@ -121,6 +124,8 @@ notification:
   - unreadCount:
   - markRead:
   - markAllRead:
+  - settings:
+  - saveSettings:
 rule:
   - list:
   - create:
