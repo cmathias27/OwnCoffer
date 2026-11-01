@@ -59,6 +59,9 @@ Future<void> initializeClient({String? url}) async {
 /// signed in with [session] (after a move, decision 0022).
 late Future<void> Function(Uri api, AuthSuccess session) switchToServer;
 
+/// Set by main(): starts the standalone mode again (after a restore).
+late Future<void> Function() restartStandalone;
+
 /// Set by main(): shows the first launch choice again (native apps).
 late Future<void> Function() askServerAddress;
 

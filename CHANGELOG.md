@@ -11,7 +11,7 @@ Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). 
 - **« Changer de mode »** (menu du compte) revient au choix du premier lancement ; les données du mode autonome restent sur l'appareil et reviennent quand vous le choisissez à nouveau.
 - **« Migrer vers un serveur »** (page « Exporter mes données ») : envoie tout sur un serveur OwnCoffer, factures et documents compris, dans un nouveau groupe dont vous devenez l'administrateur ; puis « Utiliser maintenant le serveur ». Les données restent aussi sur l'appareil. Il faut le compte d'administrateur du serveur.
 - **« Importer un export »** (même page, pour l'administrateur du serveur, et en mode autonome) : recrée un export JSON d'OwnCoffer dans un nouveau groupe, par exemple pour revenir d'un serveur vers l'appareil, ou changer de serveur.
-- À venir : une sauvegarde chiffrée automatique vers un dossier. En attendant, faites un « Exporter mes données » de temps en temps.
+- **Sauvegardes de l'appareil** (page « Exporter mes données », mode autonome) : chaque jour, une sauvegarde complète **chiffrée avec votre phrase de passe** est écrite dans un dossier (sous Windows, au choix : un dossier Nextcloud ou OneDrive en garde une copie ailleurs ; sous Android, le dossier de l'application, et « Partager la dernière sauvegarde » l'envoie où vous voulez). Les 10 dernières sont gardées. **« Restaurer une sauvegarde »** remet tout, sur cet appareil ou un nouveau. Notez la phrase de passe ailleurs : sans elle, une sauvegarde ne peut pas être relue.
 - Les applications déjà connectées à un serveur ne changent pas.
 
 ## 1.0.4 (novembre 2026)

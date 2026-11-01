@@ -5441,4 +5441,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_import_too_big => 'Export too big to be sent.';
+
+  @override
+  String get deviceBackupTitle => 'Device backups';
+
+  @override
+  String get deviceBackupIntro =>
+      'Every day, a full encrypted backup of your data is written to a folder; the 10 newest are kept. Choose a synced folder (Nextcloud, OneDrive…) to have a copy away from the device.';
+
+  @override
+  String get deviceBackupPassphrase => 'Passphrase (at least 12 characters)';
+
+  @override
+  String get deviceBackupPassphraseAgain => 'The same, once more';
+
+  @override
+  String get deviceBackupPassphraseHelp =>
+      'It encrypts the backups. Write it down elsewhere (password manager): without it a backup cannot be restored, on this device or another.';
+
+  @override
+  String get deviceBackupPassphraseTooShort => 'At least 12 characters.';
+
+  @override
+  String get deviceBackupPassphraseMismatch => 'The two passphrases differ.';
+
+  @override
+  String deviceBackupFolder(String folder) {
+    return 'Folder: $folder';
+  }
+
+  @override
+  String get deviceBackupChooseFolder => 'Choose a folder';
+
+  @override
+  String get deviceBackupEnable => 'Turn backups on';
+
+  @override
+  String get deviceBackupDisable => 'Turn backups off';
+
+  @override
+  String deviceBackupLast(String when) {
+    return 'Last backup: $when';
+  }
+
+  @override
+  String get deviceBackupNever => 'No backup yet.';
+
+  @override
+  String get deviceBackupNow => 'Back up now';
+
+  @override
+  String deviceBackupDone(String path) {
+    return 'Backup written: $path';
+  }
+
+  @override
+  String get deviceBackupShare => 'Share the latest backup';
+
+  @override
+  String get deviceBackupRestore => 'Restore a backup';
+
+  @override
+  String get deviceBackupRestoreHelp =>
+      'Replaces all the data on this device by a backup\'s (from here or another device).';
+
+  @override
+  String get deviceBackupRestoreConfirm =>
+      'Replace all the data on this device by this backup? The current data will be lost, unless it is in another backup.';
+
+  @override
+  String get deviceBackupRestorePassphrase => 'Passphrase of this backup';
+
+  @override
+  String get deviceBackupWrongPassphrase =>
+      'Wrong passphrase, or a changed file.';
+
+  @override
+  String get deviceBackupNotABackup => 'This file is not an OwnCoffer backup.';
+
+  @override
+  String get deviceBackupReplace => 'Replace';
 }

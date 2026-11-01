@@ -9,6 +9,8 @@ Le choix se fait au premier lancement ; « Changer de mode » (menu du compte) y
 
 **Passer du mode autonome à un serveur** : page « Exporter mes données » → **« Migrer vers un serveur »**. Saisissez l'adresse du serveur et connectez-vous avec son compte d'administrateur ; tout est envoyé, factures et documents compris, dans un nouveau groupe dont vous devenez l'administrateur. Ensuite, « Utiliser maintenant le serveur ». Les données restent aussi sur l'appareil.
 
+**Sauvegardes du mode autonome** : page « Exporter mes données » → **« Sauvegardes de l'appareil »**. Choisissez une phrase de passe (12 caractères au moins, à noter dans un gestionnaire de mots de passe) et, sous Windows, un dossier : un dossier Nextcloud ou OneDrive en garde une copie hors de l'appareil. Une sauvegarde chiffrée y est écrite chaque jour, et les 10 dernières sont gardées. Sous Android, elles vont dans `Android/data/org.owncoffer.app/files/backups` ; « Partager la dernière sauvegarde » en envoie une copie où vous voulez. **« Restaurer une sauvegarde »** remet tout, sur cet appareil ou un nouveau, en mode autonome.
+
 **Revenir d'un serveur vers l'appareil** : sur le serveur, « Exporter mes données » (JSON complet) ; sur l'appareil en mode autonome, « Importer un export ». Les fichiers des factures ne font pas partie de l'export JSON.
 
 Les applications Windows et Android sont la même application que la version web, connectée à **votre** serveur OwnCoffer (décision 0020). Avec un serveur, elles ne gardent sur l'appareil que l'adresse du serveur et votre session : vos opérations restent sur le serveur.
@@ -78,4 +80,4 @@ flutter build windows --release    # build\windows\x64\runner\Release\ (sous Win
 
 ## Pas encore
 
-Hors-ligne et synchronisation, installation automatique des mises à jour des applications, sauvegarde chiffrée automatique du mode autonome, magasins d'applications : phase 6 du [roadbook](ROADBOOK.md).
+Hors-ligne et synchronisation, installation automatique des mises à jour des applications, magasins d'applications : phase 6 du [roadbook](ROADBOOK.md).

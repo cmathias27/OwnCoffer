@@ -3621,5 +3621,49 @@
   "error_import_newer_format": "Cet export vient d'une version plus récente d'OwnCoffer : mettez d'abord à jour.",
   "error_import_document_mismatch": "Ce document ne correspond pas à celui attendu, ou a déjà été reçu.",
   "error_import_unknown_upload": "Envoi inconnu ou expiré : recommencez.",
-  "error_import_too_big": "Export trop volumineux pour être envoyé."
+  "error_import_too_big": "Export trop volumineux pour être envoyé.",
+  "deviceBackupTitle": "Sauvegardes de l'appareil",
+  "deviceBackupIntro": "Chaque jour, une sauvegarde complète et chiffrée de vos données est écrite dans un dossier ; les 10 dernières sont gardées. Choisissez un dossier synchronisé (Nextcloud, OneDrive…) pour en avoir une copie hors de l'appareil.",
+  "deviceBackupPassphrase": "Phrase de passe (12 caractères au moins)",
+  "deviceBackupPassphraseAgain": "La même, une seconde fois",
+  "deviceBackupPassphraseHelp": "Elle chiffre les sauvegardes. Notez-la ailleurs (gestionnaire de mots de passe) : sans elle, une sauvegarde ne peut pas être restaurée, sur cet appareil ou un autre.",
+  "deviceBackupPassphraseTooShort": "12 caractères au moins.",
+  "deviceBackupPassphraseMismatch": "Les deux phrases sont différentes.",
+  "deviceBackupFolder": "Dossier : {folder}",
+  "@deviceBackupFolder": {
+    "placeholders": {
+      "folder": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceBackupChooseFolder": "Choisir un dossier",
+  "deviceBackupEnable": "Activer les sauvegardes",
+  "deviceBackupDisable": "Arrêter les sauvegardes",
+  "deviceBackupLast": "Dernière sauvegarde : {when}",
+  "@deviceBackupLast": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceBackupNever": "Pas encore de sauvegarde.",
+  "deviceBackupNow": "Sauvegarder maintenant",
+  "deviceBackupDone": "Sauvegarde écrite : {path}",
+  "@deviceBackupDone": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceBackupShare": "Partager la dernière sauvegarde",
+  "deviceBackupRestore": "Restaurer une sauvegarde",
+  "deviceBackupRestoreHelp": "Remplace toutes les données de cet appareil par celles d'une sauvegarde (d'ici ou d'un autre appareil).",
+  "deviceBackupRestoreConfirm": "Remplacer toutes les données de cet appareil par cette sauvegarde ? Les données actuelles seront perdues, sauf si elles sont dans une autre sauvegarde.",
+  "deviceBackupRestorePassphrase": "Phrase de passe de cette sauvegarde",
+  "deviceBackupWrongPassphrase": "Mauvaise phrase de passe, ou fichier modifié.",
+  "deviceBackupNotABackup": "Ce fichier n'est pas une sauvegarde OwnCoffer.",
+  "deviceBackupReplace": "Remplacer"
 }

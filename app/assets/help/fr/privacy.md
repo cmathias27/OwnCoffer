@@ -15,7 +15,7 @@
 
 ## Sauvegardes
 
-Le serveur sauvegarde la base chaque nuit, **chiffrée**, et vérifie aussitôt qu'elle se restaure. Pensez à en copier une ailleurs : une sauvegarde sur le même disque ne protège pas d'une panne de ce disque.
+Le serveur sauvegarde la base chaque nuit, **chiffrée**, et vérifie aussitôt qu'elle se restaure. En mode autonome (Windows, Android), activez les « Sauvegardes de l'appareil » : une sauvegarde chiffrée par jour dans le dossier de votre choix. Pensez à en copier une ailleurs : une sauvegarde sur le même disque ne protège pas d'une panne de ce disque.
 
 ## Emporter vos données
 

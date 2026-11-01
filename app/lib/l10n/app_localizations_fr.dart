@@ -5471,4 +5471,88 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get error_import_too_big => 'Export trop volumineux pour être envoyé.';
+
+  @override
+  String get deviceBackupTitle => 'Sauvegardes de l\'appareil';
+
+  @override
+  String get deviceBackupIntro =>
+      'Chaque jour, une sauvegarde complète et chiffrée de vos données est écrite dans un dossier ; les 10 dernières sont gardées. Choisissez un dossier synchronisé (Nextcloud, OneDrive…) pour en avoir une copie hors de l\'appareil.';
+
+  @override
+  String get deviceBackupPassphrase =>
+      'Phrase de passe (12 caractères au moins)';
+
+  @override
+  String get deviceBackupPassphraseAgain => 'La même, une seconde fois';
+
+  @override
+  String get deviceBackupPassphraseHelp =>
+      'Elle chiffre les sauvegardes. Notez-la ailleurs (gestionnaire de mots de passe) : sans elle, une sauvegarde ne peut pas être restaurée, sur cet appareil ou un autre.';
+
+  @override
+  String get deviceBackupPassphraseTooShort => '12 caractères au moins.';
+
+  @override
+  String get deviceBackupPassphraseMismatch =>
+      'Les deux phrases sont différentes.';
+
+  @override
+  String deviceBackupFolder(String folder) {
+    return 'Dossier : $folder';
+  }
+
+  @override
+  String get deviceBackupChooseFolder => 'Choisir un dossier';
+
+  @override
+  String get deviceBackupEnable => 'Activer les sauvegardes';
+
+  @override
+  String get deviceBackupDisable => 'Arrêter les sauvegardes';
+
+  @override
+  String deviceBackupLast(String when) {
+    return 'Dernière sauvegarde : $when';
+  }
+
+  @override
+  String get deviceBackupNever => 'Pas encore de sauvegarde.';
+
+  @override
+  String get deviceBackupNow => 'Sauvegarder maintenant';
+
+  @override
+  String deviceBackupDone(String path) {
+    return 'Sauvegarde écrite : $path';
+  }
+
+  @override
+  String get deviceBackupShare => 'Partager la dernière sauvegarde';
+
+  @override
+  String get deviceBackupRestore => 'Restaurer une sauvegarde';
+
+  @override
+  String get deviceBackupRestoreHelp =>
+      'Remplace toutes les données de cet appareil par celles d\'une sauvegarde (d\'ici ou d\'un autre appareil).';
+
+  @override
+  String get deviceBackupRestoreConfirm =>
+      'Remplacer toutes les données de cet appareil par cette sauvegarde ? Les données actuelles seront perdues, sauf si elles sont dans une autre sauvegarde.';
+
+  @override
+  String get deviceBackupRestorePassphrase =>
+      'Phrase de passe de cette sauvegarde';
+
+  @override
+  String get deviceBackupWrongPassphrase =>
+      'Mauvaise phrase de passe, ou fichier modifié.';
+
+  @override
+  String get deviceBackupNotABackup =>
+      'Ce fichier n\'est pas une sauvegarde OwnCoffer.';
+
+  @override
+  String get deviceBackupReplace => 'Remplacer';
 }

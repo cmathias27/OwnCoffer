@@ -15,7 +15,7 @@
 
 ## Backups
 
-The server backs up the database every night, **encrypted**, and checks right away that it restores. Remember to copy one elsewhere: a backup on the same disk does not protect against that disk failing.
+The server backs up the database every night, **encrypted**, and checks right away that it restores. In standalone mode (Windows, Android), turn on "Device backups": one encrypted backup a day in the folder you choose. Remember to copy one elsewhere: a backup on the same disk does not protect against that disk failing.
 
 ## Take your data with you
 
