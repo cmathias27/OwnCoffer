@@ -4681,6 +4681,38 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String advisorLoanCheck(int count) {
+    return 'Tableau comparé au calcul d\'OwnCoffer : $count échéance(s) vérifiée(s).';
+  }
+
+  @override
+  String get advisorLoanCheckOk => 'Les chiffres lus correspondent au calcul.';
+
+  @override
+  String advisorLoanCheckGap(
+    int number,
+    String field,
+    String read,
+    String computed,
+  ) {
+    return 'Échéance $number, $field : le document indique $read, OwnCoffer calcule $computed.';
+  }
+
+  @override
+  String advisorLoanCheckInterest(String read, String computed) {
+    return 'Total des intérêts : le document indique $read, OwnCoffer calcule $computed.';
+  }
+
+  @override
+  String get advisorLoanFieldPayment => 'mensualité';
+
+  @override
+  String get advisorLoanFieldInterest => 'intérêts';
+
+  @override
+  String get advisorLoanFieldRemaining => 'capital restant dû';
+
+  @override
   String advisorReadIn(String name) {
     return 'Lu dans « $name ».';
   }

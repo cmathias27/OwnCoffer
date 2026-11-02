@@ -347,7 +347,10 @@ abstract final class DocumentReader {
           'screenshot of the bank). Report the terms it states: capital '
           'borrowed, nominal annual rate in thousandths of a percent '
           '(3.45 % = 3450), duration in months, monthly instalment without '
-          'insurance, monthly insurance, first due date.',
+          'insurance, monthly insurance, first due date. If the document has an '
+          'amortisation table, also report its first rows as printed '
+          '(instalment number, payment without insurance, interest, capital '
+          'still owed after it, all in cents) and the total interest.',
       tool: _tool('loan_terms', 'The terms the document states.', {
         'principal_cents': {'type': 'integer'},
         'annual_rate_milli': {'type': 'integer'},
@@ -355,6 +358,20 @@ abstract final class DocumentReader {
         'payment_cents': {'type': 'integer'},
         'insurance_monthly_cents': {'type': 'integer'},
         'first_due_date': {'type': 'string', 'description': 'YYYY-MM-DD.'},
+        'total_interest_cents': {'type': 'integer'},
+        'schedule': {
+          'type': 'array',
+          'description': 'First rows of the amortisation table.',
+          'items': {
+            'type': 'object',
+            'properties': {
+              'number': {'type': 'integer'},
+              'payment_cents': {'type': 'integer'},
+              'interest_cents': {'type': 'integer'},
+              'remaining_cents': {'type': 'integer'},
+            },
+          },
+        },
       }),
     );
     final f = read.fields;
@@ -386,20 +403,21 @@ abstract final class DocumentReader {
     if (changed.isEmpty) return _reply(read.provider, read.model, const []);
     // The loan engine must accept the terms as they would be.
     final merged = {...before, ...changed};
+    final core.LoanTerms terms;
     try {
-      core.LoanTerms(
+      terms = core.LoanTerms(
         principalCents: merged['principal_cents']! as int,
         annualRateMilli: merged['annual_rate_milli']! as int,
         months: merged['duration_months']! as int,
-        firstDue: DateTime.parse(
-          merged['first_due_date']! as String,
-        ).toLocalDate(),
+        // `_day` gives UTC midnight whatever the server's time zone is.
+        firstDue: _day(merged['first_due_date'])!.toLocalDate(),
         insuranceMonthlyCents: merged['insurance_monthly_cents']! as int,
         paymentCents: merged['payment_cents'] as int?,
       );
     } on ArgumentError {
       throw InvalidInputException(code: 'loan_terms_invalid');
     }
+    final check = _checkSchedule(terms, f);
     final p = await ProposalService.propose(
       session,
       groupId: loan.groupId,
@@ -415,12 +433,93 @@ abstract final class DocumentReader {
         'document': doc.fileName,
         'changed': changed,
         'before': before,
+        'check': ?check,
       },
       origin: 'ai',
       provider: read.provider.name,
       model: read.model,
     );
     return _reply(read.provider, read.model, [?p]);
+  }
+
+  /// Largest gap, in cents, between a figure of the document and the same
+  /// figure computed by the engine that is not reported (banks round
+  /// differently).
+  static const scheduleToleranceCents = 100;
+  static const _maxScheduleRows = 24;
+  static const _maxMismatches = 10;
+
+  /// Compares the rows the model read from an amortisation table with the
+  /// schedule the loan engine computes from [terms]. The model reads, the
+  /// engine decides: every figure shown comes from the engine. Null when the
+  /// document has no table and no total to check.
+  static Map<String, Object?>? _checkSchedule(
+    core.LoanTerms terms,
+    Map<String, Object?> f,
+  ) {
+    final schedule = core.amortize(terms);
+    final mismatches = <Map<String, Object?>>[];
+    var compared = 0;
+    final seen = <int>{};
+    for (final x in ((f['schedule'] as List?) ?? const []).take(
+      _maxScheduleRows,
+    )) {
+      if (x is! Map) continue;
+      final number = (x['number'] as num?)?.toInt();
+      if (number == null ||
+          number < 1 ||
+          number > schedule.length ||
+          !seen.add(number)) {
+        continue;
+      }
+      final row = schedule[number - 1];
+      final figures = {
+        'payment_cents': row.paymentCents,
+        'interest_cents': row.interestCents,
+        'remaining_cents': row.remainingCents,
+      };
+      var counted = false;
+      for (final e in figures.entries) {
+        final read = (x[e.key] as num?)?.toInt();
+        if (read == null || read < 0 || read > core.maxLoanPrincipalCents) {
+          continue;
+        }
+        counted = true;
+        if ((read - e.value).abs() > scheduleToleranceCents &&
+            mismatches.length < _maxMismatches) {
+          mismatches.add({
+            'number': number,
+            'field': e.key,
+            'read': read,
+            'computed': e.value,
+          });
+        }
+      }
+      if (counted) compared++;
+    }
+    final readInterest = (f['total_interest_cents'] as num?)?.toInt();
+    int? totalGap;
+    final computedInterest = schedule.fold(0, (a, i) => a + i.interestCents);
+    if (readInterest != null &&
+        readInterest >= 0 &&
+        readInterest <= core.maxLoanPrincipalCents) {
+      final gap = (readInterest - computedInterest).abs();
+      totalGap = gap > scheduleToleranceCents + computedInterest ~/ 200
+          ? gap
+          : 0;
+    } else {
+      totalGap = null;
+    }
+    if (compared == 0 && totalGap == null) return null;
+    return {
+      'rows_compared': compared,
+      'mismatches': mismatches,
+      if (totalGap != null) ...{
+        'total_interest_read': readInterest,
+        'total_interest_computed': computedInterest,
+        'total_interest_differs': totalGap > 0,
+      },
+    };
   }
 
   static AiReply _reply(

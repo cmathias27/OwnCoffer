@@ -444,12 +444,39 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
       'first_due_date' => l.loanFirstDue,
       _ => k,
     };
+    final check = d['check'] is Map ? d['check'] as Map : null;
+    final gaps = check?['mismatches'] is List
+        ? (check!['mismatches'] as List).whereType<Map>().toList()
+        : const <Map>[];
+    String field(Object? k) => switch (k) {
+      'payment_cents' => l.advisorLoanFieldPayment,
+      'interest_cents' => l.advisorLoanFieldInterest,
+      _ => l.advisorLoanFieldRemaining,
+    };
+    String money(Object? v) => context.money((v as num?)?.toInt() ?? 0);
+    final interestDiffers = check?['total_interest_differs'] == true;
     return [
       for (final e in changed.entries)
         Text(
           '· ${name('${e.key}')} : ${show('${e.key}', before[e.key])} → '
           '${show('${e.key}', e.value)}',
         ),
+      if (check != null) ...[
+        const SizedBox(height: 4),
+        if ((check['rows_compared'] as num?) != 0)
+          Text(
+            l.advisorLoanCheck((check['rows_compared'] as num?)?.toInt() ?? 0),
+          ),
+        for (final g in gaps)
+          Text(
+            '· ${l.advisorLoanCheckGap((g['number'] as num).toInt(), field(g['field']), money(g['read']), money(g['computed']))}',
+          ),
+        if (interestDiffers)
+          Text(
+            '· ${l.advisorLoanCheckInterest(money(check['total_interest_read']), money(check['total_interest_computed']))}',
+          ),
+        if (gaps.isEmpty && !interestDiffers) Text(l.advisorLoanCheckOk),
+      ],
     ];
   }
 

@@ -5,6 +5,7 @@ import 'package:owncoffer_server/src/ai/ai_adapter.dart';
 import 'package:owncoffer_server/src/ai/ai_gateway.dart';
 import 'package:owncoffer_server/src/generated/protocol.dart';
 import 'package:owncoffer_server/src/security/scopes.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 import 'package:test/test.dart';
@@ -308,6 +309,83 @@ void main() {
         code('document_nothing_read'),
         reason: 'a rate out of range is not read',
       );
+    });
+
+    test('an amortisation table is compared with the engine: only the gaps '
+        'are reported, and reading changes nothing', () async {
+      final loan = (await endpoints.loan.create(
+        as(bob),
+        groupA,
+        Loan(
+          groupId: 0,
+          kind: LoanKind.mortgage,
+          lender: 'Banque',
+          principalCents: 10000000,
+          annualRateMilli: 1000,
+          durationMonths: 120,
+          firstDueDate: DateTime.utc(2026, 1, 5),
+        ),
+      )).loan;
+      final doc = await endpoints.loan.uploadDocument(
+        as(bob),
+        loan.id!,
+        'tableau.png',
+        _png(),
+      );
+      // The table is checked against the engine: a row that matches is not
+      // reported, a wrong one is, with the engine's figure.
+      final terms = core.LoanTerms(
+        principalCents: 10000000,
+        annualRateMilli: 1250,
+        months: 120,
+        firstDue: core.LocalDate(2026, 1, 5),
+        insuranceMonthlyCents: 1800,
+      );
+      final schedule = core.amortize(terms);
+      AiGateway.adapter = _Reader('loan_terms', {
+        'principal_cents': 10000000,
+        'annual_rate_milli': 1250,
+        'duration_months': 120,
+        'insurance_monthly_cents': 1800,
+        'total_interest_cents': 1,
+        'schedule': [
+          {
+            'number': 1,
+            'payment_cents': schedule[0].paymentCents,
+            'interest_cents': schedule[0].interestCents,
+            'remaining_cents': schedule[0].remainingCents,
+          },
+          {
+            'number': 2,
+            'payment_cents': schedule[1].paymentCents + 5000,
+            'interest_cents': schedule[1].interestCents,
+            'remaining_cents': schedule[1].remainingCents,
+          },
+        ],
+      });
+      final checked = (await endpoints.ai.readLoanDocument(
+        as(bob),
+        doc.id!,
+      )).proposals.single;
+      final check =
+          (jsonDecode(checked.data) as Map)['check'] as Map<String, dynamic>;
+      expect(check['rows_compared'], 2);
+      expect(check['mismatches'], [
+        {
+          'number': 2,
+          'field': 'payment_cents',
+          'read': schedule[1].paymentCents + 5000,
+          'computed': schedule[1].paymentCents,
+        },
+      ]);
+      expect(check['total_interest_differs'], isTrue);
+      expect(
+        check['total_interest_computed'],
+        schedule.fold<int>(0, (a, i) => a + i.interestCents),
+      );
+      // Reading changes nothing: the loan is as it was until accepted.
+      final now = (await Loan.db.findById(db, loan.id!))!;
+      expect(now.annualRateMilli, 1000);
     });
   });
 }
