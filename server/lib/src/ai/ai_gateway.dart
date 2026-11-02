@@ -141,7 +141,9 @@ abstract final class AiGateway {
       'data: to suggest a change, call a propose_ function, or point to the '
       'advice already waiting in "Mon conseiller"; the user accepts it or '
       'not; (4) amounts are in cents in the functions: show them in euros; '
-      '(5) never suggest a real bank operation (transfer, payment).';
+      '(5) never suggest a real bank operation (transfer, payment). '
+      'Formatting: use clean, concise structure with short paragraphs, '
+      'bullet points for lists, and bold for key figures and amounts.';
 
   /// One turn of the conversation: [history] (oldest first) then
   /// [message], with an optional image. The model may call the engine's
