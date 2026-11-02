@@ -191,5 +191,10 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
   - [x] « Migrer vers un serveur » (et retour par « Importer un export ») par l'export complet, factures comprises — *1.1.0*
   - [x] Sauvegarde chiffrée automatique vers un dossier, restauration sur cet appareil ou un autre — *1.1.0*
   - [ ] Chiffrement du fichier SQLite
+- [ ] **Scan automatique des tickets à l'appareil photo** (demandé le 2 novembre 2026), en partant de la lecture de documents existante (0.3.31) :
+  - [ ] recadrage automatique : bords du ticket détectés, perspective redressée, contraste amélioré, déclenchement quand l'image est nette (scanner de documents du système sur Android ; sur le web, quatre coins à placer ou traitement sur le serveur)
+  - [ ] lecture du texte sur l'appareil, sans IA et hors ligne (utilisable en version autonome) ; avec l'IA de l'utilisateur quand elle est configurée, lecture structurée plus fiable (montant, date, commerçant, TVA, lignes)
+  - [ ] pré-remplissage de l'opération (montant, date, libellé, catégorie) et rapprochement avec l'opération bancaire correspondante, le ticket joint comme justificatif
+  - [ ] écran de vérification : champs incertains signalés, rien n'est enregistré sans validation
 
 Les autres fonctionnalités du cahier des charges marquées « Après 1.0 » s'ajouteront une par une, selon les avis des utilisateurs.
