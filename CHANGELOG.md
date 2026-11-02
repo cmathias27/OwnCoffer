@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.1.2 (novembre 2026)
+
+### Application Android : le mode autonome s'ouvre
+
+- Correction : sur certains téléphones Android, le mode « Utiliser seul sur cet appareil » échouait à la connexion (« The native Argon2 library could not be loaded… getauxval »). Le serveur intégré à l'application n'utilise plus cette bibliothèque : la session de l'appareil est désormais une session gardée par le serveur intégré lui-même.
+- Rien à faire : les données déjà présentes sur l'appareil (Windows) sont gardées.
+- Les APK sont désormais signés avec une clé fixe : à partir de la 1.1.1, une nouvelle version s'installe par-dessus l'ancienne, sans désinstaller ni perdre la configuration.
+
 ## 1.1.1 (novembre 2026)
 
 ### Application Android : mode autonome
