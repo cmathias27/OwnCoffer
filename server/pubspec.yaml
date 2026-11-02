@@ -15,6 +15,10 @@ dependencies:
   owncoffer_shared: any
   serverpod: 4.0.4
   serverpod_auth_idp_server: 4.0.4
+  # Already used by Serverpod for SQLite; the standalone start checks the
+  # database file opens before starting (decision 0022).
+  sqlite3: ^3.8.0
+  sqlite_async: ^0.14.5
 
 dev_dependencies:
   lints: '>=3.0.0 <7.0.0'

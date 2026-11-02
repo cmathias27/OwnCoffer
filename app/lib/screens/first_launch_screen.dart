@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../l10n/app_localizations.dart';
 import '../widgets/form_card.dart';
@@ -91,21 +92,64 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
   }
 }
 
-/// While the embedded server starts (a second or two).
+/// While the embedded server starts (a second or two); if it fails, the
+/// reason, to retry or go back to the first launch choice.
 class StartingScreen extends StatelessWidget {
-  const StartingScreen({super.key});
+  /// What failed (step and error), shown so it can be reported.
+  final String? error;
+  final Future<void> Function()? onRetry;
+  final Future<void> Function()? onBack;
+
+  const StartingScreen({super.key, this.error, this.onRetry, this.onBack});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    body: Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const CircularProgressIndicator(),
-          const SizedBox(height: 16),
-          Text(AppLocalizations.of(context).startingStandalone),
-        ],
-      ),
-    ),
-  );
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final error = this.error;
+    if (error == null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(height: 16),
+              Text(l.startingStandalone),
+            ],
+          ),
+        ),
+      );
+    }
+    return FormCard(
+      title: l.standaloneStartFailed,
+      intro: l.standaloneStartFailedHelp,
+      children: [
+        SelectableText(
+          error,
+          key: const Key('standalone-error'),
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton.icon(
+            icon: const Icon(Icons.copy_outlined),
+            label: Text(l.copy),
+            onPressed: () => Clipboard.setData(ClipboardData(text: error)),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (onBack != null)
+              TextButton(onPressed: onBack, child: Text(l.back)),
+            const SizedBox(width: 8),
+            if (onRetry != null)
+              FilledButton(onPressed: onRetry, child: Text(l.retry)),
+          ],
+        ),
+      ],
+    );
+  }
 }

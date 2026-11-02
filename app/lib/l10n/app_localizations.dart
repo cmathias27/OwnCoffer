@@ -8650,6 +8650,18 @@ abstract class AppLocalizations {
   /// **'Ouverture de vos comptes…'**
   String get startingStandalone;
 
+  /// No description provided for @standaloneStartFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible d\'ouvrir vos comptes sur cet appareil'**
+  String get standaloneStartFailed;
+
+  /// No description provided for @standaloneStartFailedHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayez. Si cela recommence, copiez le détail ci-dessous et envoyez-le (il ne contient aucune donnée bancaire). « Retour » permet aussi de se connecter à un serveur.'**
+  String get standaloneStartFailedHelp;
+
   /// No description provided for @standaloneChangeMode.
   ///
   /// In fr, this message translates to:
