@@ -22,7 +22,9 @@ void main() {
   testWidgets('Markdown marks are rendered, not shown', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
-        home: Scaffold(body: SingleChildScrollView(child: ChatMarkdown(_reply))),
+        home: Scaffold(
+          body: SingleChildScrollView(child: ChatMarkdown(_reply)),
+        ),
       ),
     );
     final texts = [for (final b in _blocks(tester)) b.textSpan!.toPlainText()];
