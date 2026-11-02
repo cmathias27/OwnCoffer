@@ -3568,6 +3568,8 @@
   "firstLaunchServerHelp": "Pour un foyer ou plusieurs appareils : votre serveur OwnCoffer (Docker), avec la version web.",
   "firstLaunchBack": "Retour",
   "startingStandalone": "Ouverture de vos comptes…",
+  "standaloneStartFailed": "Impossible d'ouvrir vos comptes sur cet appareil",
+  "standaloneStartFailedHelp": "Réessayez. Si cela recommence, copiez le détail ci-dessous et envoyez-le (il ne contient aucune donnée bancaire). « Retour » permet aussi de se connecter à un serveur.",
   "standaloneChangeMode": "Changer de mode",
   "standaloneModeNote": "Mode autonome : vos données sont sur cet appareil.",
   "appsStandaloneHint": "Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées.",

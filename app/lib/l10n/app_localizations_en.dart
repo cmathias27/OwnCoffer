@@ -5354,6 +5354,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get startingStandalone => 'Opening your accounts…';
 
   @override
+  String get standaloneStartFailed =>
+      'Your accounts could not be opened on this device';
+
+  @override
+  String get standaloneStartFailedHelp =>
+      'Try again. If it happens again, copy the details below and send them (they contain no bank data). “Back” also lets you connect to a server instead.';
+
+  @override
   String get standaloneChangeMode => 'Change mode';
 
   @override

@@ -5,6 +5,8 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:serverpod_auth_idp_server/core.dart';
+import 'package:sqlite3/sqlite3.dart' as sqlite3;
+import 'package:sqlite_async/sqlite_async.dart';
 
 import 'src/auth/email_config.dart';
 import 'src/generated/serverpod.dart';
@@ -113,6 +115,11 @@ shared:
       await f.writeAsString(e.value);
     }
 
+    // Serverpod retries a database it cannot open every 10 seconds, without
+    // end: check the file opens first, so a failure shows its reason.
+    final dbPath = '${dataDir.path}/owncoffer.db';
+    await _checkDatabase(dbPath);
+
     final pod = Serverpod(
       const ['--apply-migrations'],
       serverDirectory: dataDir,
@@ -126,7 +133,7 @@ shared:
           publicScheme: 'http',
         ),
         database: SqliteDatabaseConfig(
-          filePath: '${dataDir.path}/owncoffer.db',
+          filePath: dbPath,
         ),
         applyMigrations: true,
         // As the Docker server: a 10 MB document once base64-encoded.
@@ -166,6 +173,24 @@ shared:
       pod,
       Uri.parse('http://127.0.0.1:${pod.server.port}/'),
     )..dataDir = dataDir;
+  }
+}
+
+/// Opens the database file as Serverpod does (SQLite library, then its
+/// connection pool), and fails with the reason if it cannot.
+Future<void> _checkDatabase(String path) async {
+  try {
+    sqlite3.sqlite3.open(path).close();
+  } on Object catch (e) {
+    throw StateError('SQLite cannot open the database: $e');
+  }
+  final db = SqliteDatabase(path: path);
+  try {
+    await db.get('SELECT 1').timeout(const Duration(seconds: 30));
+  } on Object catch (e) {
+    throw StateError('SQLite pool cannot open the database: $e');
+  } finally {
+    await db.close().timeout(const Duration(seconds: 5), onTimeout: () {});
   }
 }
 

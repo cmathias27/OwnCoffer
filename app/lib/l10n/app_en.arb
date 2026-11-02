@@ -1422,6 +1422,8 @@
   "firstLaunchServerHelp": "For a household or several devices: your OwnCoffer server (Docker), with the web version.",
   "firstLaunchBack": "Back",
   "startingStandalone": "Opening your accounts…",
+  "standaloneStartFailed": "Your accounts could not be opened on this device",
+  "standaloneStartFailedHelp": "Try again. If it happens again, copy the details below and send them (they contain no bank data). “Back” also lets you connect to a server instead.",
   "standaloneChangeMode": "Change mode",
   "standaloneModeNote": "Standalone mode: your data is on this device.",
   "appsStandaloneHint": "Standalone mode: new versions are on the project's releases page (link below). Install it over this one: your data is kept.",

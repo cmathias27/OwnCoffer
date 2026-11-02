@@ -74,24 +74,78 @@ Future<void> _askAddress() async => runApp(
 );
 
 /// Standalone mode: the server starts inside the app, the device's owner
-/// is signed in, and their first group is created (decision 0022).
+/// is signed in, and their first group is created (decision 0022). A
+/// failure or a step that never ends shows the reason instead of waiting
+/// forever.
 Future<void> _startStandalone() async {
   runApp(const OwnCofferApp(home: StartingScreen()));
-  final local = await startStandalone();
+  try {
+    await _openStandalone();
+  } on Object catch (e, stack) {
+    debugPrint('Standalone start failed: $e\n$stack');
+    runApp(
+      OwnCofferApp(
+        home: StartingScreen(
+          error: '$e',
+          onRetry: _startStandalone,
+          onBack: askServerAddress,
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> _openStandalone() async {
+  // The first start creates the database: allow a slow phone some time.
+  final local = await _step(
+    'start',
+    startStandalone(),
+    const Duration(minutes: 3),
+  );
   isStandalone = true;
   await initializeClient(url: local.api.toString());
   // A fresh session at each start: the server only answers this device.
-  await client.auth.updateSignedInUser(
-    AuthSuccess.fromJson(await local.signIn()),
+  final session = await _step('sign-in', local.signIn());
+  await _step(
+    'session',
+    client.auth.updateSignedInUser(AuthSuccess.fromJson(session)),
   );
-  if ((await client.group.myGroups()).isEmpty) {
+  if ((await _step('groups', client.group.myGroups())).isEmpty) {
     final fr = PlatformDispatcher.instance.locale.languageCode != 'en';
-    await client.group.create(fr ? 'Mes comptes' : 'My accounts');
+    await _step(
+      'group',
+      client.group.create(fr ? 'Mes comptes' : 'My accounts'),
+    );
   }
-  await ServerAddress.saveMode('standalone');
+  await _step('mode', ServerAddress.saveMode('standalone'));
   runApp(const OwnCofferApp());
   // The daily encrypted backup, once the app is shown.
   unawaited(StandaloneBackups.runIfDue());
+}
+
+/// One step of the standalone start, named in the error shown if it fails
+/// or takes longer than [limit].
+Future<T> _step<T>(
+  String name,
+  Future<T> future, [
+  Duration limit = const Duration(seconds: 30),
+]) async {
+  try {
+    return await future.timeout(limit);
+  } on TimeoutException {
+    throw StandaloneStartError(name, 'no answer after ${limit.inSeconds} s');
+  } on Object catch (e) {
+    throw StandaloneStartError(name, e);
+  }
+}
+
+class StandaloneStartError implements Exception {
+  final String step;
+  final Object cause;
+  StandaloneStartError(this.step, this.cause);
+
+  @override
+  String toString() => '[$step] $cause';
 }
 
 /// Indigo main colour (docs/MAQUETTES.md).

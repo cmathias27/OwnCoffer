@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.1.1 (novembre 2026)
+
+### Application Android : mode autonome
+
+- Le mode « Utiliser seul sur cet appareil » ne reste plus bloqué indéfiniment sur « Ouverture de vos comptes… ». Si l'ouverture échoue ou ne répond pas, l'application affiche la raison (bouton « Copier » pour nous l'envoyer, sans aucune donnée bancaire), avec « Réessayer » et « Retour » pour choisir plutôt un serveur.
+- Avant de démarrer, l'application vérifie que sa base de données s'ouvre : en cas de problème, l'erreur réelle est affichée au lieu de nouvelles tentatives sans fin.
+
 ## 1.1.0 (novembre 2026)
 
 ### Applications Windows et Android : utiliser OwnCoffer seul, sans serveur
