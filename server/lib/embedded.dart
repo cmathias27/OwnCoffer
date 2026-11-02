@@ -95,10 +95,10 @@ class EmbeddedServer {
     await dataDir.create(recursive: true);
     final config = Directory('${dataDir.path}/config')..createSync();
     final passwords = File('${config.path}/passwords.yaml');
+    final random = Random.secure();
+    String secret() =>
+        base64Url.encode(List<int>.generate(32, (_) => random.nextInt(256)));
     if (!passwords.existsSync()) {
-      final random = Random.secure();
-      String secret() =>
-          base64Url.encode(List<int>.generate(32, (_) => random.nextInt(256)));
       passwords.writeAsStringSync('''
 shared:
   serviceSecret: '${secret()}'
@@ -106,6 +106,13 @@ shared:
   jwtHmacSha512PrivateKey: '${secret()}'
   jwtRefreshTokenHashPepper: '${secret()}'
 ''');
+    }
+    // Added in 1.1.2: devices set up earlier get it at their next start.
+    if (!passwords.readAsStringSync().contains('$_sessionPepper:')) {
+      passwords.writeAsStringSync(
+        "  $_sessionPepper: '${secret()}'\n",
+        mode: FileMode.append,
+      );
     }
     final dir = Directory('${dataDir.path}/migrations');
     if (dir.existsSync()) await dir.delete(recursive: true);
@@ -146,7 +153,14 @@ shared:
       ),
     );
     pod.initializeAuthServices(
-      tokenManagerBuilders: [JwtConfigFromPasswords()],
+      // Server-side sessions, not JWT: JWT refresh tokens are hashed with
+      // the native Argon2 library, which some Android phones cannot load
+      // (missing getauxval). These sessions hash with SHA-512, in Dart.
+      tokenManagerBuilders: [
+        ServerSideSessionsConfig(
+          sessionKeyHashPepper: _password(passwords, _sessionPepper),
+        ),
+      ],
       identityProviderBuilders: [buildEmailIdpConfig()],
     );
     // Documents stay in the database file, as on the Docker server.
@@ -174,6 +188,19 @@ shared:
       Uri.parse('http://127.0.0.1:${pod.server.port}/'),
     )..dataDir = dataDir;
   }
+}
+
+const _sessionPepper = 'serverSideSessionKeyHashPepper';
+
+/// The value of [key] in the shared section of [passwords] (written above,
+/// one quoted value per line).
+String _password(File passwords, String key) {
+  final match = RegExp(
+    "^\\s*$key:\\s*'([^']+)'",
+    multiLine: true,
+  ).firstMatch(passwords.readAsStringSync());
+  if (match == null) throw StateError('Missing $key in passwords.yaml');
+  return match.group(1)!;
 }
 
 /// Opens the database file as Serverpod does (SQLite library, then its

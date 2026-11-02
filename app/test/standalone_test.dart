@@ -22,9 +22,12 @@ void main() {
       var client = Client(server.api.toString())
         ..authSessionManager = FlutterAuthSessionManager(storage: _Memory());
       expect((await client.setup.status()).needsSetup, isFalse);
-      await client.auth.updateSignedInUser(
-        AuthSuccess.fromJson(await server.signIn()),
-      );
+      final signIn = AuthSuccess.fromJson(await server.signIn());
+      // No JWT refresh token: it is hashed by the native Argon2 library,
+      // which some Android phones cannot load.
+      expect(signIn.refreshToken, isNull);
+      expect(signIn.authStrategy, isNot('jwt'));
+      await client.auth.updateSignedInUser(signIn);
       expect((await client.twoFactor.status()).fullAccess, isTrue);
       expect(await client.group.myGroups(), isEmpty);
       final group = (await client.group.create('Mes comptes')).group;
