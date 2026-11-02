@@ -197,4 +197,18 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
   - [ ] pré-remplissage de l'opération (montant, date, libellé, catégorie) et rapprochement avec l'opération bancaire correspondante, le ticket joint comme justificatif
   - [ ] écran de vérification : champs incertains signalés, rien n'est enregistré sans validation
 
+**Améliorations proposées** (2 novembre 2026), à planifier selon l'usage réel — l'IA lit et explique, le moteur calcule, l'utilisateur valide :
+
+- [ ] **Lisibilité de la conversation avec l'IA** (remontée le 2 novembre 2026) : les réponses sont affichées en texte brut, donc le gras, les titres, les listes et les tableaux de l'IA apparaissent avec leurs signes (`**`, `###`, `-`) ; mise en forme des réponses (petit rendu Markdown maison, sans dépendance, comme l'aide), largeur des bulles adaptée à la fenêtre, consigne de mise en forme dans la passerelle IA, test avec le texte à 200 %
+- [ ] **Latence de l'IA** (remontée le 1er novembre 2026) : mesurer où part le temps (passerelle externe, modèle ou OwnCoffer), afficher la réponse au fur et à mesure et l'étape en cours (« lecture du document… »), modèle plus rapide pour les tâches simples (classement)
+- [ ] **Crédit rapproché des prélèvements réels** : mensualité manquante, en double ou d'un autre montant signalée par le moteur, sans IA
+- [ ] Tableau d'amortissement lu en entier (changement de taux ou pause d'échéances en cours de crédit)
+- [ ] Remboursement anticipé simulé avec l'indemnité lue dans l'offre de prêt (calcul du moteur)
+- [ ] **Abonnements mis en évidence** dans Opérations : total mensuel, rappel avant une hausse de prix
+- [ ] Récapitulatif mensuel : prévision à 30 jours, alertes et propositions en attente sur une page (calculé par le moteur, explication facultative par l'IA)
+- [ ] Coût et volume de l'IA par fonction (lecture de documents, classement, discussion), en plus du plafond mensuel
+- [ ] Tests du serveur lancés aussi dans un fuseau horaire autre que l'UTC (un bug de date a échappé à la CI ; corrigé en 1.2.0)
+- [ ] `check.sh` : message clair quand `server/config/passwords.yaml` manque (« lancez `./tool/setup_dev.sh` ») ; jeu de documents factices (tableau d'amortissement, ticket, facture) pour tester la lecture
+- [ ] Avant le scan des tickets : courte décision sur la bibliothèque de lecture du texte sur l'appareil (licence compatible AGPL, aucune télémétrie, fonctionne hors ligne)
+
 Les autres fonctionnalités du cahier des charges marquées « Après 1.0 » s'ajouteront une par une, selon les avis des utilisateurs.

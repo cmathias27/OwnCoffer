@@ -2,6 +2,22 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.2.0 (novembre 2026)
+
+### Tableau d'amortissement vérifié par le moteur
+
+- Quand l'IA lit le document d'un crédit, elle relève aussi les premières échéances du tableau et le total des intérêts. OwnCoffer les compare à son propre calcul (tolérance de 1 € pour les arrondis des banques) et montre les écarts dans la proposition de « Mon conseiller ».
+- L'IA lit, le moteur calcule : tous les chiffres affichés viennent du moteur, et rien n'est modifié tant que vous n'avez pas accepté la proposition.
+
+### Conversation avec l'IA plus lisible
+
+- Les réponses de l'assistant sont maintenant structurées en paragraphes, titres, listes, gras et code, avec une largeur de conversation adaptée aux écrans larges.
+- L'IA reçoit une consigne de mise en forme claire, sans modifier ses règles de sécurité ni ses calculs.
+
+### Correction
+
+- Les dates d'échéance lues dans un document de crédit restent correctes quel que soit le fuseau horaire du serveur.
+
 ## 1.1.2 (novembre 2026)
 
 ### Application Android : le mode autonome s'ouvre

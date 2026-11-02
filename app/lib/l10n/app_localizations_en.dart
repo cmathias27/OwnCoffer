@@ -4653,6 +4653,38 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String advisorLoanCheck(int count) {
+    return 'Table compared with OwnCoffer\'s calculation: $count instalment(s) checked.';
+  }
+
+  @override
+  String get advisorLoanCheckOk => 'The figures read match the calculation.';
+
+  @override
+  String advisorLoanCheckGap(
+    int number,
+    String field,
+    String read,
+    String computed,
+  ) {
+    return 'Instalment $number, $field: the document says $read, OwnCoffer calculates $computed.';
+  }
+
+  @override
+  String advisorLoanCheckInterest(String read, String computed) {
+    return 'Total interest: the document says $read, OwnCoffer calculates $computed.';
+  }
+
+  @override
+  String get advisorLoanFieldPayment => 'payment';
+
+  @override
+  String get advisorLoanFieldInterest => 'interest';
+
+  @override
+  String get advisorLoanFieldRemaining => 'remaining capital';
+
+  @override
   String advisorReadIn(String name) {
     return 'Read in \"$name\".';
   }

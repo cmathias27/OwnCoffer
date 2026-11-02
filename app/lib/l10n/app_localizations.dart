@@ -7566,6 +7566,53 @@ abstract class AppLocalizations {
   /// **'Mettre à jour le crédit « {lender} » d\'après son document'**
   String advisorAiLoanTerms(String lender);
 
+  /// No description provided for @advisorLoanCheck.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau comparé au calcul d\'OwnCoffer : {count} échéance(s) vérifiée(s).'**
+  String advisorLoanCheck(int count);
+
+  /// No description provided for @advisorLoanCheckOk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les chiffres lus correspondent au calcul.'**
+  String get advisorLoanCheckOk;
+
+  /// No description provided for @advisorLoanCheckGap.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance {number}, {field} : le document indique {read}, OwnCoffer calcule {computed}.'**
+  String advisorLoanCheckGap(
+    int number,
+    String field,
+    String read,
+    String computed,
+  );
+
+  /// No description provided for @advisorLoanCheckInterest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total des intérêts : le document indique {read}, OwnCoffer calcule {computed}.'**
+  String advisorLoanCheckInterest(String read, String computed);
+
+  /// No description provided for @advisorLoanFieldPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'mensualité'**
+  String get advisorLoanFieldPayment;
+
+  /// No description provided for @advisorLoanFieldInterest.
+  ///
+  /// In fr, this message translates to:
+  /// **'intérêts'**
+  String get advisorLoanFieldInterest;
+
+  /// No description provided for @advisorLoanFieldRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'capital restant dû'**
+  String get advisorLoanFieldRemaining;
+
   /// No description provided for @advisorReadIn.
   ///
   /// In fr, this message translates to:

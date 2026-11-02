@@ -8,6 +8,7 @@ import '../screens/advisor_screen.dart';
 import '../screens/assistant_screen.dart';
 import '../util/file_pick.dart';
 import 'chat_controller.dart';
+import 'chat_markdown.dart';
 
 /// Above every page: the assistant's bubble at the bottom right and, once
 /// opened, the conversation in a small window (a whole screen on a phone),
@@ -57,8 +58,8 @@ class _Floating extends StatelessWidget {
               left: phone ? 0 : null,
               top: phone ? 0 : null,
               bottom: phone ? 0 : 16 + padding.bottom,
-              width: phone ? null : 400,
-              height: phone ? null : (size.height - 96).clamp(320, 600),
+              width: phone ? null : (size.width - 32).clamp(320, 640),
+              height: phone ? null : (size.height - 96).clamp(320, 760),
               child: ChatPanel(navigator: navigator),
             )
           else
@@ -435,25 +436,29 @@ class _ChatPanelState extends State<ChatPanel> {
   List<Widget> _exchange(AppLocalizations l, AiMessage m, AiReply? r) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    // A bubble takes most of the window, whatever its size (phone, small
+    // window or large screen), instead of a fixed narrow column.
     Widget bubble(Widget child, {required bool mine}) => Align(
       alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 320),
-        child: Container(
-          margin: const EdgeInsets.only(top: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          decoration: BoxDecoration(
-            color: mine ? scheme.primary : scheme.surfaceContainerHigh,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(20),
-              topRight: const Radius.circular(20),
-              bottomLeft: Radius.circular(mine ? 20 : 4),
-              bottomRight: Radius.circular(mine ? 4 : 20),
+      child: LayoutBuilder(
+        builder: (context, box) => ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: box.maxWidth * 0.94),
+          child: Container(
+            margin: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: mine ? scheme.primary : scheme.surfaceContainerHigh,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(20),
+                bottomLeft: Radius.circular(mine ? 20 : 4),
+                bottomRight: Radius.circular(mine ? 4 : 20),
+              ),
             ),
-          ),
-          child: DefaultTextStyle.merge(
-            style: TextStyle(color: mine ? scheme.onPrimary : null),
-            child: child,
+            child: DefaultTextStyle.merge(
+              style: TextStyle(color: mine ? scheme.onPrimary : null),
+              child: child,
+            ),
           ),
         ),
       ),
@@ -493,7 +498,9 @@ class _ChatPanelState extends State<ChatPanel> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SelectableText(r.text.isEmpty ? l.assistantNoAnswer : r.text),
+                  r.text.isEmpty
+                      ? SelectableText(l.assistantNoAnswer)
+                      : ChatMarkdown(r.text),
                   if (r.tools.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
