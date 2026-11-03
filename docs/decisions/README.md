@@ -26,5 +26,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0020](0020-applications-windows-android.md) | Applications Windows et Android, client du serveur, hors magasins | Décidé |
 | [0021](0021-publication-signee-sbom.md) | Publication signée (Sigstore) et liste des composants (SBOM) | Décidé |
 | [0022](0022-version-autonome-serveur-embarque.md) | Version autonome : le serveur embarqué dans l'application, sur SQLite | Décidé |
+| [0023](0023-lecture-du-texte-sur-l-appareil.md) | Lecture du texte des tickets sur l'appareil, un moteur par plateforme | Proposée |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.
