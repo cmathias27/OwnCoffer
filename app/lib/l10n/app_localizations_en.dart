@@ -3150,6 +3150,39 @@ class AppLocalizationsEn extends AppLocalizations {
       'All optional: the amount, date and merchant are used to propose the right operation, now or after the next import. Meanwhile, every member of the group sees the invoice.';
 
   @override
+  String get receiptCheckTitle => 'Check the ticket';
+
+  @override
+  String get receiptCheckIntro =>
+      'These details were proposed by reading the ticket. Check them before continuing: nothing is saved automatically.';
+
+  @override
+  String get receiptCheckUncertain => 'Check this';
+
+  @override
+  String get receiptCheckAmount => 'Amount paid';
+
+  @override
+  String get receiptCheckMerchant => 'Merchant';
+
+  @override
+  String get receiptCheckDate => 'Date';
+
+  @override
+  String get receiptCheckCancel => 'Cancel';
+
+  @override
+  String get receiptCheckConfirm => 'Use these details';
+
+  @override
+  String get receiptCheckNoValue => 'Not found';
+
+  @override
+  String receiptCheckSource(String source) {
+    return 'Read: $source';
+  }
+
+  @override
   String get invoiceHintAmount => 'Amount paid';
 
   @override

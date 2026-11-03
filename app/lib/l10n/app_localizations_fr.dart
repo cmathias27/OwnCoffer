@@ -3167,6 +3167,39 @@ class AppLocalizationsFr extends AppLocalizations {
       'Tout est facultatif : le montant, la date et le commerçant servent à proposer la bonne opération, maintenant ou après le prochain import. En attendant, tous les membres du groupe voient la facture.';
 
   @override
+  String get receiptCheckTitle => 'Vérifier le ticket';
+
+  @override
+  String get receiptCheckIntro =>
+      'Ces informations sont proposées par la lecture du ticket. Vérifiez-les avant de continuer : rien n\'est enregistré automatiquement.';
+
+  @override
+  String get receiptCheckUncertain => 'À vérifier';
+
+  @override
+  String get receiptCheckAmount => 'Montant payé';
+
+  @override
+  String get receiptCheckMerchant => 'Commerçant';
+
+  @override
+  String get receiptCheckDate => 'Date';
+
+  @override
+  String get receiptCheckCancel => 'Annuler';
+
+  @override
+  String get receiptCheckConfirm => 'Utiliser ces informations';
+
+  @override
+  String get receiptCheckNoValue => 'Non trouvé';
+
+  @override
+  String receiptCheckSource(String source) {
+    return 'Lu : $source';
+  }
+
+  @override
   String get invoiceHintAmount => 'Montant payé';
 
   @override

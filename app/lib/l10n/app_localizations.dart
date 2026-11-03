@@ -5155,6 +5155,66 @@ abstract class AppLocalizations {
   /// **'Tout est facultatif : le montant, la date et le commerçant servent à proposer la bonne opération, maintenant ou après le prochain import. En attendant, tous les membres du groupe voient la facture.'**
   String get invoiceHintsHelp;
 
+  /// No description provided for @receiptCheckTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier le ticket'**
+  String get receiptCheckTitle;
+
+  /// No description provided for @receiptCheckIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces informations sont proposées par la lecture du ticket. Vérifiez-les avant de continuer : rien n\'est enregistré automatiquement.'**
+  String get receiptCheckIntro;
+
+  /// No description provided for @receiptCheckUncertain.
+  ///
+  /// In fr, this message translates to:
+  /// **'À vérifier'**
+  String get receiptCheckUncertain;
+
+  /// No description provided for @receiptCheckAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant payé'**
+  String get receiptCheckAmount;
+
+  /// No description provided for @receiptCheckMerchant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commerçant'**
+  String get receiptCheckMerchant;
+
+  /// No description provided for @receiptCheckDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date'**
+  String get receiptCheckDate;
+
+  /// No description provided for @receiptCheckCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get receiptCheckCancel;
+
+  /// No description provided for @receiptCheckConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utiliser ces informations'**
+  String get receiptCheckConfirm;
+
+  /// No description provided for @receiptCheckNoValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non trouvé'**
+  String get receiptCheckNoValue;
+
+  /// No description provided for @receiptCheckSource.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lu : {source}'**
+  String receiptCheckSource(String source);
+
   /// No description provided for @invoiceHintAmount.
   ///
   /// In fr, this message translates to:
