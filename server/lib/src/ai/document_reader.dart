@@ -391,9 +391,9 @@ abstract final class DocumentReader {
         principalCents: merged['principal_cents']! as int,
         annualRateMilli: merged['annual_rate_milli']! as int,
         months: merged['duration_months']! as int,
-        firstDue: DateTime.parse(
-          merged['first_due_date']! as String,
-        ).toLocalDate(),
+        // `_day`, not `DateTime.parse`: a bare date would be read as local
+        // midnight, which is not UTC midnight outside UTC.
+        firstDue: _day(merged['first_due_date'])!.toLocalDate(),
         insuranceMonthlyCents: merged['insurance_monthly_cents']! as int,
         paymentCents: merged['payment_cents'] as int?,
       );
