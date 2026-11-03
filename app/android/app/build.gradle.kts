@@ -68,3 +68,9 @@ kotlin {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Local receipt text recognition, no network (decision 0023):
+    // Tesseract and Leptonica native libraries, Apache-2.0 and BSD-2-Clause.
+    implementation("cz.adaptech.tesseract4android:tesseract4android:4.9.0")
+}
