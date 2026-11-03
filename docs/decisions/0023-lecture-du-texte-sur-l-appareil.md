@@ -30,3 +30,7 @@ Aucune bibliothèque unique ne couvre les trois (vérifié sur pub.dev et npm le
 - Poids : les modèles de langue et le `.wasm` ajoutent quelques dizaines de Mo au total ; le web les charge seulement au premier scan.
 - **Points à vérifier avant d'écrire du code** : licence exacte de chaque paquet Dart au moment de l'ajout (règle du CLAUDE.md) et compatibilité de `platform_ocr` avec notre version de Flutter, qualité réelle sur des tickets thermiques faux, taille ajoutée à l'APK et au zip Windows, comportement d'`image_picker` quand le recadrage automatique sera ajouté.
 - Le recadrage automatique (bords, perspective, netteté) est une décision à part : scanner de documents du système sur Android, quatre coins à placer sur le web.
+
+## Mise en œuvre sur Android (3 novembre 2026)
+
+`flutter_tesseract_ocr` 0.4.31 a été écarté : son `android/build.gradle` utilise `jcenter()` et le plugin Android 7.1.2, refusés par le Gradle 9 du projet. L'application appelle directement **Tesseract4Android** 4.9.0 (Apache-2.0, publié uniquement sur JitPack, dépôt limité au groupe `cz.adaptech.tesseract4android`) par un canal `org.owncoffer.app/text_reader` dans `MainActivity.kt`, sur un fil séparé. Les modèles `fra` et `eng` de `tessdata_fast` (identiques à ceux du dépôt amont, licence dans `app/assets/tessdata/LICENSE`) sont copiés une fois dans le dossier privé de l'application. Les applications web et Windows embarquent aussi ces modèles (environ 5 Mo) sans les utiliser tant que leur moteur n'est pas ajouté.
