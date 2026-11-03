@@ -2,6 +2,25 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.3.0 (novembre 2026)
+
+### Degrés d'autonomie et champ d'action de l'IA (décision 0017)
+
+- L'administrateur du serveur configure le degré d'autonomie global de l'IA selon une échelle graduée de 1 à 5 :
+  1. **Lecture seule** : consultation du contexte et réponses aux questions ; aucune proposition d'action ni analyse de justificatifs.
+  2. **Consultation de documents** : extraction des justificatifs et contrats soumis (tickets, factures, crédits) pour présentation et vérification par l'utilisateur ; aucune proposition proactive.
+  3. **Propositions avec validation (par défaut)** : l'IA prépare des propositions structurées (catégorisations, crédits) validées explicitement par l'utilisateur (décision 0009).
+  4. **Automatisation limitée** : exécution automatique des actions simples et réversibles avec journal d'audit complet ; confirmation requise pour le reste.
+  5. **Contrôle total interne** : gestion autonome au sein d'OwnCoffer (budgets, règles, alertes). Frontière stricte : OwnCoffer n'effectue jamais d'opération bancaire réelle (virements, paiements).
+- La restriction est appliquée de façon étanche au niveau du protocole (passerelle IA, outils déclarés au modèle, serveur MCP).
+- Sélecteur dédié avec descriptions interactives dans l'onglet Administration > IA.
+
+### Lecture locale et scan des tickets de caisse (décision 0023)
+
+- **Extraction locale du texte** : détection pure Dart du total, de la date, de l'heure, du commerçant et des lignes de TVA sur les tickets.
+- **OCR natif Android** : reconnaissance optique de caractères intégrée avec Tesseract4Android (hors-ligne, respect total de la vie privée, sans fuite de données).
+- **Écran de contrôle et de vérification** : avant tout enregistrement, l'utilisateur visualise le ticket et les champs extraits, corrige les incertitudes éventuelles et valide.
+
 ## 1.2.0 (novembre 2026)
 
 ### Tableau d'amortissement vérifié par le moteur
