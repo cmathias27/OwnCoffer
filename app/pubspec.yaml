@@ -54,6 +54,9 @@ dependencies:
   image_picker: ^1.2.4
   # Version of this app, compared with the server's (BSD-3-Clause).
   package_info_plus: ^10.2.2
+  # Local receipt text recognition on Android, no network (BSD-3-Clause;
+  # Tesseract4Android and Tesseract itself are Apache-2.0).
+  flutter_tesseract_ocr: 0.4.31
 
 dev_dependencies:
   # Used for agents to drive the app through the Dart MCP
@@ -104,6 +107,10 @@ flutter:
     # In-app help, one Markdown page per screen (French and English).
     - assets/help/fr/
     - assets/help/en/
+    # Receipt text recognition (decision 0023): Tesseract "fast" models for
+    # French and English, Apache-2.0, bundled so that nothing is downloaded.
+    - assets/tessdata_config.json
+    - assets/tessdata/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
