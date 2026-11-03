@@ -57,7 +57,44 @@ class AiEndpoint extends Endpoint {
           ? 0
           : await AiGateway.usedThisMonth(session, user, pref!.providerId!),
       canConfigure: admin,
+      autonomyLevel: await AiGateway.autonomyLevel(session),
     );
+  }
+
+  /// Sets the server-wide AI autonomy level (1-5):
+  /// 1: read-only context query
+  /// 2: document reading (receipts/loans)
+  /// 3: proposals (requiring user validation, baseline 0009)
+  /// 4: limited automation with audit log
+  /// 5: full internal control within OwnCoffer (strictly excluding bank ops)
+  Future<int> setAutonomyLevel(Session session, int level) async {
+    await _requireAdmin(session);
+    if (level < 1 || level > 5) {
+      throw InvalidInputException(code: 'invalid_ai_autonomy_level');
+    }
+    final current = await AiServerSettings.db.findFirstRow(session);
+    if (current == null) {
+      await AiServerSettings.db.insertRow(
+        session,
+        AiServerSettings(autonomyLevel: level),
+      );
+    } else {
+      await AiServerSettings.db.updateRow(
+        session,
+        current.copyWith(
+          autonomyLevel: level,
+          updatedAt: DateTime.now().toUtc(),
+        ),
+      );
+    }
+    await Audit.log(
+      session,
+      groupId: null,
+      action: 'set_ai_autonomy',
+      entity: 'ai_server_settings',
+      rowId: level,
+    );
+    return level;
   }
 
   /// Creates or changes a provider. [apiKey]: null keeps the current key,

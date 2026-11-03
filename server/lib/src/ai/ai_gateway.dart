@@ -71,6 +71,10 @@ abstract final class AiGateway {
       ))?.requests ??
       0;
 
+  /// Current server-wide AI autonomy level configured by the admin (1-5).
+  static Future<int> autonomyLevel(Session session) async =>
+      (await AiServerSettings.db.findFirstRow(session))?.autonomyLevel ?? 3;
+
   static Future<void> _count(Session session, UuidValue user, int id) async {
     final month = _month(DateTime.now().toUtc());
     final row = await AiUsage.db.findFirstRow(
@@ -205,11 +209,13 @@ abstract final class AiGateway {
         wire(m.copyWith(imageBase64: null)),
       wire(message),
     ];
+    final level = await autonomyLevel(session);
     final context = AiContext(
       session,
       groupId,
       provider: provider.name,
       model: model,
+      autonomyLevel: level,
     );
     final used = <String>[];
     final key = _key(provider);
@@ -219,7 +225,7 @@ abstract final class AiGateway {
         apiKey: key,
         model: model,
         messages: messages,
-        tools: provider.toolCalling ? AiContext.tools : null,
+        tools: provider.toolCalling ? AiContext.toolsFor(level) : null,
       );
       final calls = answer['tool_calls'];
       if (calls is! List || calls.isEmpty) {
@@ -292,6 +298,10 @@ abstract final class AiGateway {
   }) async {
     await Access.requireMember(session, groupId, min: MemberRole.user);
     final (provider, model) = await _choice(session);
+    final level = await autonomyLevel(session);
+    if (level < 2) {
+      throw InvalidInputException(code: 'ai_autonomy_documents_disabled');
+    }
     if (!provider.vision) throw InvalidInputException(code: 'ai_no_vision');
     final mime = mimeType.toLowerCase();
     final image = mime.startsWith('image/');

@@ -6,6 +6,7 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 
 import '../ai/ai_context.dart';
+import '../ai/ai_gateway.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
@@ -99,6 +100,7 @@ abstract final class McpServer {
       token.copyWith(lastUsedAt: DateTime.now().toUtc()),
     );
     if (id == null) return (status: 202, body: null);
+    final autonomyLevel = await AiGateway.autonomyLevel(session);
     switch (method) {
       case 'initialize':
         return (
@@ -123,7 +125,7 @@ abstract final class McpServer {
           status: 200,
           body: _result(id, {
             'tools': [
-              for (final t in AiContext.tools)
+              for (final t in AiContext.toolsFor(autonomyLevel))
                 {
                   'name': (t['function'] as Map)['name'],
                   'description': (t['function'] as Map)['description'],
@@ -136,7 +138,9 @@ abstract final class McpServer {
         final params = message['params'];
         final name = params is Map ? params['name'] : null;
         final args = params is Map ? params['arguments'] : null;
-        if (name is! String || !AiContext.names.contains(name)) {
+        if (name is! String ||
+            !AiContext.names.contains(name) ||
+            (autonomyLevel < 3 && name.startsWith('propose_'))) {
           return (status: 200, body: _error(id, -32602, 'Unknown tool'));
         }
         await Audit.log(
@@ -152,6 +156,7 @@ abstract final class McpServer {
           origin: 'mcp',
           provider: 'MCP',
           model: token.name,
+          autonomyLevel: autonomyLevel,
         );
         final text = await context.call(
           name,

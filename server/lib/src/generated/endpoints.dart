@@ -1075,6 +1075,25 @@ class Endpoints extends _is.EndpointDispatch {
               ) async =>
                   (endpoints['ai'] as _igsjf4zh.AiEndpoint).status(session),
         ),
+        'setAutonomyLevel': _is.MethodConnector(
+          name: 'setAutonomyLevel',
+          params: {
+            'level': _is.ParameterDescription(
+              name: 'level',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['ai'] as _igsjf4zh.AiEndpoint).setAutonomyLevel(
+                    session,
+                    params['level'],
+                  ),
+        ),
         'saveProvider': _is.MethodConnector(
           name: 'saveProvider',
           params: {

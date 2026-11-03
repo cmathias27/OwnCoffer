@@ -25,7 +25,8 @@ abstract class AiStatus
     required this.enabled,
     required this.usedThisMonth,
     required this.canConfigure,
-  });
+    int? autonomyLevel,
+  }) : autonomyLevel = autonomyLevel ?? 3;
 
   factory AiStatus({
     required List<_ibtxcndu.AiProvider> providers,
@@ -34,6 +35,7 @@ abstract class AiStatus
     required bool enabled,
     required int usedThisMonth,
     required bool canConfigure,
+    int? autonomyLevel,
   }) = _AiStatusImpl;
 
   factory AiStatus.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -48,6 +50,7 @@ abstract class AiStatus
       canConfigure: _is.BoolJsonExtension.fromJson(
         jsonSerialization['canConfigure'],
       ),
+      autonomyLevel: jsonSerialization['autonomyLevel'] as int?,
     );
   }
 
@@ -64,6 +67,9 @@ abstract class AiStatus
   /// The user may set up providers (server administrator).
   bool canConfigure;
 
+  /// The server-wide AI autonomy level configured by the administrator (1-5).
+  int autonomyLevel;
+
   /// Returns a shallow copy of this [AiStatus]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -74,6 +80,7 @@ abstract class AiStatus
     bool? enabled,
     int? usedThisMonth,
     bool? canConfigure,
+    int? autonomyLevel,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -85,6 +92,7 @@ abstract class AiStatus
       'enabled': enabled,
       'usedThisMonth': usedThisMonth,
       'canConfigure': canConfigure,
+      'autonomyLevel': autonomyLevel,
     };
   }
 
@@ -98,6 +106,7 @@ abstract class AiStatus
       'enabled': enabled,
       'usedThisMonth': usedThisMonth,
       'canConfigure': canConfigure,
+      'autonomyLevel': autonomyLevel,
     };
   }
 
@@ -117,6 +126,7 @@ class _AiStatusImpl extends AiStatus {
     required bool enabled,
     required int usedThisMonth,
     required bool canConfigure,
+    int? autonomyLevel,
   }) : super._(
          providers: providers,
          providerId: providerId,
@@ -124,6 +134,7 @@ class _AiStatusImpl extends AiStatus {
          enabled: enabled,
          usedThisMonth: usedThisMonth,
          canConfigure: canConfigure,
+         autonomyLevel: autonomyLevel,
        );
 
   /// Returns a shallow copy of this [AiStatus]
@@ -137,6 +148,7 @@ class _AiStatusImpl extends AiStatus {
     bool? enabled,
     int? usedThisMonth,
     bool? canConfigure,
+    int? autonomyLevel,
   }) {
     return AiStatus(
       providers:
@@ -146,6 +158,7 @@ class _AiStatusImpl extends AiStatus {
       enabled: enabled ?? this.enabled,
       usedThisMonth: usedThisMonth ?? this.usedThisMonth,
       canConfigure: canConfigure ?? this.canConfigure,
+      autonomyLevel: autonomyLevel ?? this.autonomyLevel,
     );
   }
 }

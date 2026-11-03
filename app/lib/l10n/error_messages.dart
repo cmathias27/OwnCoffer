@@ -93,6 +93,9 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'ai_message_too_long' => l.error_ai_message_too_long,
   'ai_invalid_url' => l.error_ai_invalid_url,
   'ai_invalid_kind' => l.error_ai_invalid_kind,
+  'ai_autonomy_read_only' => l.error_ai_autonomy_read_only,
+  'ai_autonomy_documents_disabled' => l.error_ai_autonomy_documents_disabled,
+  'invalid_ai_autonomy_level' => l.error_invalid_ai_autonomy_level,
   'mcp_token_access_denied' => l.error_mcp_token_access_denied,
   'invalid_month_start_day' => l.error_invalid_month_start_day,
   // File format errors of shared/ come prefixed with `import_`.

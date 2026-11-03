@@ -16,6 +16,7 @@ class AdminAiView extends StatefulWidget {
 
 class _AdminAiViewState extends State<AdminAiView> {
   List<AiProvider>? _providers;
+  int? _autonomyLevel;
   String? _error;
 
   @override
@@ -27,10 +28,35 @@ class _AdminAiViewState extends State<AdminAiView> {
   Future<void> _load() async {
     try {
       final s = await client.ai.status();
-      if (mounted) setState(() => (_providers = s.providers, _error = null));
+      if (mounted) {
+        setState(() {
+          _providers = s.providers;
+          _autonomyLevel = s.autonomyLevel;
+          _error = null;
+        });
+      }
     } on Object catch (e) {
       if (mounted) {
         setState(() => _error = errorText(AppLocalizations.of(context), e));
+      }
+    }
+  }
+
+  Future<void> _setAutonomy(int? level) async {
+    if (level == null || level == _autonomyLevel) return;
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final saved = await client.ai.setAutonomyLevel(level);
+      if (mounted) {
+        setState(() => _autonomyLevel = saved);
+        messenger.showSnackBar(
+          SnackBar(content: Text(l.adminAiAutonomySaved)),
+        );
+      }
+    } on Object catch (e) {
+      if (mounted) {
+        messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
       }
     }
   }
@@ -95,6 +121,77 @@ class _AdminAiViewState extends State<AdminAiView> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.tune_outlined),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l.adminAiAutonomyTitle,
+                        style: theme.textTheme.titleMedium,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(l.adminAiAutonomyHelp, style: theme.textTheme.bodyMedium),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<int>(
+                  isExpanded: true,
+                  initialValue: _autonomyLevel ?? 3,
+                  decoration: InputDecoration(
+                    labelText: l.adminAiAutonomyTitle,
+                    border: const OutlineInputBorder(),
+                  ),
+                  items: [
+                    DropdownMenuItem(
+                      value: 1,
+                      child: Text(l.adminAiAutonomyLevel1Title),
+                    ),
+                    DropdownMenuItem(
+                      value: 2,
+                      child: Text(l.adminAiAutonomyLevel2Title),
+                    ),
+                    DropdownMenuItem(
+                      value: 3,
+                      child: Text(l.adminAiAutonomyLevel3Title),
+                    ),
+                    DropdownMenuItem(
+                      value: 4,
+                      child: Text(l.adminAiAutonomyLevel4Title),
+                    ),
+                    DropdownMenuItem(
+                      value: 5,
+                      child: Text(l.adminAiAutonomyLevel5Title),
+                    ),
+                  ],
+                  onChanged: _setAutonomy,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  switch (_autonomyLevel ?? 3) {
+                    1 => l.adminAiAutonomyLevel1Desc,
+                    2 => l.adminAiAutonomyLevel2Desc,
+                    3 => l.adminAiAutonomyLevel3Desc,
+                    4 => l.adminAiAutonomyLevel4Desc,
+                    5 => l.adminAiAutonomyLevel5Desc,
+                    _ => '',
+                  },
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
         Text(l.adminAiIntro, style: theme.textTheme.bodyMedium),
         const SizedBox(height: 12),
         Align(

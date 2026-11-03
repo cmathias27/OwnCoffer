@@ -1846,6 +1846,37 @@ class _AiEndpoint {
     });
   }
 
+  _ida.Future<int> setAutonomyLevel(
+    _ist.TestSessionBuilder sessionBuilder,
+    int level,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'setAutonomyLevel',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'setAutonomyLevel',
+          parameters: _ist.testObjectToJson({'level': level}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<int>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<_iptn367l.AiProvider> saveProvider(
     _ist.TestSessionBuilder sessionBuilder,
     _iptn367l.AiProvider provider,

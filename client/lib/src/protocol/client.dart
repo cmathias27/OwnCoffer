@@ -662,6 +662,19 @@ class EndpointAi extends _isc.EndpointRef {
         {},
       );
 
+  /// Sets the server-wide AI autonomy level (1-5):
+  /// 1: read-only context query
+  /// 2: document reading (receipts/loans)
+  /// 3: proposals (requiring user validation, baseline 0009)
+  /// 4: limited automation with audit log
+  /// 5: full internal control within OwnCoffer (strictly excluding bank ops)
+  _ida.Future<int> setAutonomyLevel(int level) =>
+      caller.callServerEndpoint<int>(
+        'ai',
+        'setAutonomyLevel',
+        {'level': level},
+      );
+
   /// Creates or changes a provider. [apiKey]: null keeps the current key,
   /// empty removes it.
   _ida.Future<_iupqajx2.AiProvider> saveProvider(

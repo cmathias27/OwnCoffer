@@ -6402,6 +6402,102 @@ abstract class AppLocalizations {
   /// **'IA'**
   String get adminTabAi;
 
+  /// No description provided for @adminAiAutonomyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Degré d\'autonomie de l\'IA'**
+  String get adminAiAutonomyTitle;
+
+  /// No description provided for @adminAiAutonomyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Définit le niveau de liberté de l\'IA sur l\'ensemble du serveur. L\'IA ne peut jamais effectuer d\'opération bancaire réelle (virement, paiement) : OwnCoffer n\'en a pas le pouvoir.'**
+  String get adminAiAutonomyHelp;
+
+  /// No description provided for @adminAiAutonomyLevel1Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'1 — Lecture seule'**
+  String get adminAiAutonomyLevel1Title;
+
+  /// No description provided for @adminAiAutonomyLevel1Desc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consultation des données et réponses aux questions. Aucune proposition d\'action ni analyse de justificatifs.'**
+  String get adminAiAutonomyLevel1Desc;
+
+  /// No description provided for @adminAiAutonomyLevel2Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'2 — Consultation de documents'**
+  String get adminAiAutonomyLevel2Title;
+
+  /// No description provided for @adminAiAutonomyLevel2Desc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Extraction des informations de factures, tickets et crédits soumis par l\'utilisateur. Aucune proposition proactive.'**
+  String get adminAiAutonomyLevel2Desc;
+
+  /// No description provided for @adminAiAutonomyLevel3Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'3 — Propositions avec validation (recommandé)'**
+  String get adminAiAutonomyLevel3Title;
+
+  /// No description provided for @adminAiAutonomyLevel3Desc.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'IA soumet des propositions structurées (catégorisations, crédits) que l\'utilisateur valide explicitement dans l\'application.'**
+  String get adminAiAutonomyLevel3Desc;
+
+  /// No description provided for @adminAiAutonomyLevel4Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'4 — Automatisation limitée'**
+  String get adminAiAutonomyLevel4Title;
+
+  /// No description provided for @adminAiAutonomyLevel4Desc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Application automatique des actions simples et réversibles avec journal d\'audit complet ; confirmation pour le reste.'**
+  String get adminAiAutonomyLevel4Desc;
+
+  /// No description provided for @adminAiAutonomyLevel5Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'5 — Contrôle total interne'**
+  String get adminAiAutonomyLevel5Title;
+
+  /// No description provided for @adminAiAutonomyLevel5Desc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gestion autonome des budgets, règles et alertes au sein d\'OwnCoffer. Jamais d\'action bancaire externe.'**
+  String get adminAiAutonomyLevel5Desc;
+
+  /// No description provided for @adminAiAutonomySaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Degré d\'autonomie de l\'IA enregistré.'**
+  String get adminAiAutonomySaved;
+
+  /// No description provided for @error_ai_autonomy_read_only.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le serveur est configuré en mode lecture seule : l\'IA ne peut pas soumettre de proposition d\'action.'**
+  String get error_ai_autonomy_read_only;
+
+  /// No description provided for @error_ai_autonomy_documents_disabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'analyse de documents par l\'IA est désactivée par l\'administrateur du serveur.'**
+  String get error_ai_autonomy_documents_disabled;
+
+  /// No description provided for @error_invalid_ai_autonomy_level.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le niveau d\'autonomie demandé est invalide (doit être compris entre 1 et 5).'**
+  String get error_invalid_ai_autonomy_level;
+
   /// No description provided for @adminAiIntro.
   ///
   /// In fr, this message translates to:
