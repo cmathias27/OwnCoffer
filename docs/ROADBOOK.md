@@ -193,13 +193,14 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
   - [ ] Chiffrement du fichier SQLite
 - [ ] **Scan automatique des tickets à l'appareil photo** (demandé le 2 novembre 2026), en partant de la lecture de documents existante (0.3.31) :
   - [ ] recadrage automatique : bords du ticket détectés, perspective redressée, contraste amélioré, déclenchement quand l'image est nette (scanner de documents du système sur Android ; sur le web, quatre coins à placer ou traitement sur le serveur)
-  - [ ] lecture du texte sur l'appareil, sans IA et hors ligne (utilisable en version autonome) ; avec l'IA de l'utilisateur quand elle est configurée, lecture structurée plus fiable (montant, date, commerçant, TVA, lignes)
+  - [x] lecture du texte sur l'appareil, sans IA et hors ligne (utilisable en version autonome) ; avec l'IA de l'utilisateur quand elle est configurée, lecture structurée plus fiable (montant, date, commerçant, TVA, lignes) — *1.3.0 (décision 0023, PR #129, #130, #133)*
   - [ ] pré-remplissage de l'opération (montant, date, libellé, catégorie) et rapprochement avec l'opération bancaire correspondante, le ticket joint comme justificatif
-  - [ ] écran de vérification : champs incertains signalés, rien n'est enregistré sans validation
+  - [x] écran de vérification : champs incertains signalés, rien n'est enregistré sans validation — *1.3.0 (PR #131)*
 
 **Améliorations proposées** (2 novembre 2026), à planifier selon l'usage réel — l'IA lit et explique, le moteur calcule, l'utilisateur valide :
 
-- [ ] **Lisibilité de la conversation avec l'IA** (remontée le 2 novembre 2026) : les réponses sont affichées en texte brut, donc le gras, les titres, les listes et les tableaux de l'IA apparaissent avec leurs signes (`**`, `###`, `-`) ; mise en forme des réponses (petit rendu Markdown maison, sans dépendance, comme l'aide), largeur des bulles adaptée à la fenêtre, consigne de mise en forme dans la passerelle IA, test avec le texte à 200 %
+- [x] **Degrés d'autonomie et champ d'action de l'IA configurés par l'administrateur** : échelle graduée de 1 à 5 (lecture seule, consultation de documents, propositions avec validation, automatisation limitée, contrôle total interne strictement borné hors opérations bancaires réelles) — *1.3.0 (décision 0017, PR #134)*
+- [x] **Lisibilité de la conversation avec l'IA** (remontée le 2 novembre 2026) : les réponses sont affichées en texte brut, donc le gras, les titres, les listes et les tableaux de l'IA apparaissent avec leurs signes (`**`, `###`, `-`) ; mise en forme des réponses (petit rendu Markdown maison, sans dépendance, comme l'aide), largeur des bulles adaptée à la fenêtre, consigne de mise en forme dans la passerelle IA, test avec le texte à 200 % — *1.2.0*
 - [ ] **Latence de l'IA** (remontée le 1er novembre 2026) : mesurer où part le temps (passerelle externe, modèle ou OwnCoffer), afficher la réponse au fur et à mesure et l'étape en cours (« lecture du document… »), modèle plus rapide pour les tâches simples (classement)
 - [ ] **Crédit rapproché des prélèvements réels** : mensualité manquante, en double ou d'un autre montant signalée par le moteur, sans IA
 - [ ] Tableau d'amortissement lu en entier (changement de taux ou pause d'échéances en cours de crédit)
@@ -207,7 +208,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] **Abonnements mis en évidence** dans Opérations : total mensuel, rappel avant une hausse de prix
 - [ ] Récapitulatif mensuel : prévision à 30 jours, alertes et propositions en attente sur une page (calculé par le moteur, explication facultative par l'IA)
 - [ ] Coût et volume de l'IA par fonction (lecture de documents, classement, discussion), en plus du plafond mensuel
-- [ ] Tests du serveur lancés aussi dans un fuseau horaire autre que l'UTC (un bug de date a échappé à la CI ; corrigé en 1.2.0)
+- [x] Tests du serveur lancés aussi dans un fuseau horaire autre que l'UTC (un bug de date a échappé à la CI ; corrigé en 1.2.0) — *1.2.0*
 - [ ] `check.sh` : message clair quand `server/config/passwords.yaml` manque (« lancez `./tool/setup_dev.sh` ») ; jeu de documents factices (tableau d'amortissement, ticket, facture) pour tester la lecture
 - [x] Avant le scan des tickets : courte décision sur la bibliothèque de lecture du texte sur l'appareil (licence compatible AGPL, aucune télémétrie, fonctionne hors ligne) — [0023](decisions/0023-lecture-du-texte-sur-l-appareil.md)
 
