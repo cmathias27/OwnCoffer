@@ -209,6 +209,6 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] Coût et volume de l'IA par fonction (lecture de documents, classement, discussion), en plus du plafond mensuel
 - [ ] Tests du serveur lancés aussi dans un fuseau horaire autre que l'UTC (un bug de date a échappé à la CI ; corrigé en 1.2.0)
 - [ ] `check.sh` : message clair quand `server/config/passwords.yaml` manque (« lancez `./tool/setup_dev.sh` ») ; jeu de documents factices (tableau d'amortissement, ticket, facture) pour tester la lecture
-- [ ] Avant le scan des tickets : courte décision sur la bibliothèque de lecture du texte sur l'appareil (licence compatible AGPL, aucune télémétrie, fonctionne hors ligne)
+- [x] Avant le scan des tickets : courte décision sur la bibliothèque de lecture du texte sur l'appareil (licence compatible AGPL, aucune télémétrie, fonctionne hors ligne) — [0023](decisions/0023-lecture-du-texte-sur-l-appareil.md)
 
 Les autres fonctionnalités du cahier des charges marquées « Après 1.0 » s'ajouteront une par une, selon les avis des utilisateurs.
