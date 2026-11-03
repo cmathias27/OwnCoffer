@@ -1,0 +1,12 @@
+### Server-wide AI settings configured by the server administrator.
+class: AiServerSettings
+table: ai_server_settings
+fields:
+  ### Autonomy level allowed on this server (1 to 5):
+  ### 1: Read-only (context queries only, no proposals or document analysis)
+  ### 2: Document consultation (reads receipts/invoices and loan documents)
+  ### 3: Proposals (propose actions in "Mon conseiller" requiring user confirmation)
+  ### 4: Limited automation (reversible operations with audit trail)
+  ### 5: Full internal control (autonomous internal actions, never external bank operations)
+  autonomyLevel: int, default=3
+  updatedAt: DateTime, default=now

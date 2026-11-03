@@ -78,6 +78,7 @@ import 'ai_message.dart' as _ikwoa06z;
 import 'ai_preference.dart' as _i5zygq2d;
 import 'ai_provider.dart' as _ibtxcndu;
 import 'ai_reply.dart' as _ih3b4fxu;
+import 'ai_server_settings.dart' as _i670pg82;
 import 'ai_status.dart' as _idsjcs1s;
 import 'ai_usage.dart' as _iojy8c5d;
 import 'backup_info.dart' as _i73uehc4;
@@ -187,6 +188,7 @@ export 'ai_message.dart';
 export 'ai_preference.dart';
 export 'ai_provider.dart';
 export 'ai_reply.dart';
+export 'ai_server_settings.dart';
 export 'ai_status.dart';
 export 'ai_usage.dart';
 export 'backup_info.dart';
@@ -367,6 +369,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ih3b4fxu.AiReply) {
       return _ih3b4fxu.AiReply.fromJson(data) as T;
+    }
+    if (t == _i670pg82.AiServerSettings) {
+      return _i670pg82.AiServerSettings.fromJson(data) as T;
     }
     if (t == _idsjcs1s.AiStatus) {
       return _idsjcs1s.AiStatus.fromJson(data) as T;
@@ -707,6 +712,10 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_ih3b4fxu.AiReply?>()) {
       return (data != null ? _ih3b4fxu.AiReply.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i670pg82.AiServerSettings?>()) {
+      return (data != null ? _i670pg82.AiServerSettings.fromJson(data) : null)
+          as T;
     }
     if (t == _isc.getType<_idsjcs1s.AiStatus?>()) {
       return (data != null ? _idsjcs1s.AiStatus.fromJson(data) : null) as T;
@@ -1452,6 +1461,7 @@ class Protocol extends _isc.SerializationManager {
       _i5zygq2d.AiPreference => 'AiPreference',
       _ibtxcndu.AiProvider => 'AiProvider',
       _ih3b4fxu.AiReply => 'AiReply',
+      _i670pg82.AiServerSettings => 'AiServerSettings',
       _idsjcs1s.AiStatus => 'AiStatus',
       _iojy8c5d.AiUsage => 'AiUsage',
       _i73uehc4.BackupInfo => 'BackupInfo',
@@ -1593,6 +1603,8 @@ class Protocol extends _isc.SerializationManager {
         return 'AiProvider';
       case _ih3b4fxu.AiReply():
         return 'AiReply';
+      case _i670pg82.AiServerSettings():
+        return 'AiServerSettings';
       case _idsjcs1s.AiStatus():
         return 'AiStatus';
       case _iojy8c5d.AiUsage():
@@ -1850,6 +1862,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'AiReply') {
       return deserialize<_ih3b4fxu.AiReply>(data['data']);
+    }
+    if (dataClassName == 'AiServerSettings') {
+      return deserialize<_i670pg82.AiServerSettings>(data['data']);
     }
     if (dataClassName == 'AiStatus') {
       return deserialize<_idsjcs1s.AiStatus>(data['data']);

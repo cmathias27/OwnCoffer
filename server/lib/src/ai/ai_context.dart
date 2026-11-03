@@ -26,6 +26,7 @@ class AiContext {
   final String origin;
   final String? provider;
   final String? model;
+  final int autonomyLevel;
 
   /// Proposals made during the conversation.
   final List<ActionProposal> proposals = [];
@@ -36,6 +37,7 @@ class AiContext {
     this.origin = 'ai',
     this.provider,
     this.model,
+    this.autonomyLevel = 3,
   });
 
   static const _maxTransactions = 100;
@@ -260,9 +262,23 @@ class AiContext {
     for (final t in tools) (t['function'] as Map)['name'] as String,
   };
 
+  /// Definitions filtered by the allowed autonomy level (1-5).
+  static List<Map<String, Object?>> toolsFor(int autonomyLevel) => [
+    for (final t in tools)
+      if (autonomyLevel >= 3 ||
+          !((t['function'] as Map)['name'] as String).startsWith('propose_'))
+        t,
+  ];
+
   /// Runs [name] with [args]; the result as JSON text for the model. Errors
   /// are returned to the model as text, never thrown at it.
   Future<String> call(String name, Map<String, Object?> args) async {
+    // Enforce server-admin autonomy globally, not just in the UI. Level 1 is
+    // read-only context, 2 permits document extraction, and 3+ permits
+    // structured proposals. Automatic execution is intentionally unsupported.
+    if (name.startsWith('propose_') && autonomyLevel < 3) {
+      return jsonEncode({'error': 'ai_autonomy_read_only'});
+    }
     try {
       final result = switch (name) {
         'get_account_overview' => await _overview(),

@@ -164,5 +164,30 @@ void main() {
       );
       expect((await send(t.secret, rpc('tools/list'))).status, 401);
     });
+
+    test(
+      'autonomy level restricts MCP tools to read-only when below level 3',
+      () async {
+        final t = await endpoints.mcp.create(as(bob), groupA, 'ReadOnlyAgent');
+        await endpoints.ai.setAutonomyLevel(as(alice), 1);
+
+        final list = await send(t.secret, rpc('tools/list'));
+        final names = [
+          for (final x in ((list.body!['result'] as Map)['tools'] as List))
+            (x as Map)['name'],
+        ];
+        expect(names, contains('get_transactions'));
+        expect(names, isNot(contains('propose_category')));
+
+        final callPropose = await send(
+          t.secret,
+          rpc('tools/call', {
+            'name': 'propose_category',
+            'arguments': {'transaction_id': 1, 'category_id': 1},
+          }),
+        );
+        expect(callPropose.body!['error'], isNotNull);
+      },
+    );
   });
 }

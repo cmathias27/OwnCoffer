@@ -753,6 +753,87 @@ void main() {
       );
     });
 
+    test(
+      'server-wide AI autonomy levels (read-only to full internal control)',
+      () async {
+        // Default is level 3 (proposals)
+        expect((await endpoints.ai.status(as(bob))).autonomyLevel, 3);
+
+        // Only server admin can configure
+        await expectLater(
+          endpoints.ai.setAutonomyLevel(as(bob), 1),
+          denied,
+        );
+        await expectLater(
+          endpoints.ai.setAutonomyLevel(as(admin), 0),
+          code('invalid_ai_autonomy_level'),
+        );
+        await expectLater(
+          endpoints.ai.setAutonomyLevel(as(admin), 6),
+          code('invalid_ai_autonomy_level'),
+        );
+
+        final p = await endpoints.ai.saveProvider(as(admin), local(), null);
+        await endpoints.ai.setPreference(as(bob), p.id, 'llama3.1', true);
+
+        // Level 1: Read-only
+        await endpoints.ai.setAutonomyLevel(as(admin), 1);
+        expect((await endpoints.ai.status(as(bob))).autonomyLevel, 1);
+
+        // Level 1 blocks readDocument
+        await expectLater(
+          AiGateway.readDocument(
+            as(bob).build(),
+            groupA,
+            bytes: [1, 2, 3],
+            mimeType: 'image/png',
+            instructions: 'Read',
+            tool: {
+              'type': 'function',
+              'function': {'name': 'read_invoice'},
+            },
+          ),
+          code('ai_autonomy_documents_disabled'),
+        );
+
+        // Level 1 filters out propose_* tools and rejects calls to them
+        final model = _ScriptedModel([
+          _call(
+            '1',
+            'propose_category',
+            '{"transaction_id": 1, "category_id": 1, "reason": "test"}',
+          ),
+          {'role': 'assistant', 'content': 'Lecture seule respectée.'},
+        ]);
+        AiGateway.adapter = model;
+        final reply = await endpoints.ai.chat(
+          as(bob),
+          groupA,
+          [],
+          AiMessage(role: 'user', content: 'Classe'),
+        );
+        expect(reply.proposals, isEmpty);
+        expect(
+          model.received.last.toString(),
+          contains('ai_autonomy_read_only'),
+        );
+
+        // Level 2: Document consultation
+        await endpoints.ai.setAutonomyLevel(as(admin), 2);
+        expect((await endpoints.ai.status(as(bob))).autonomyLevel, 2);
+
+        // Level 3: Proposals with validation
+        await endpoints.ai.setAutonomyLevel(as(admin), 3);
+        expect((await endpoints.ai.status(as(bob))).autonomyLevel, 3);
+
+        // Levels 4 & 5: Limited automation and full internal control
+        await endpoints.ai.setAutonomyLevel(as(admin), 4);
+        expect((await endpoints.ai.status(as(bob))).autonomyLevel, 4);
+        await endpoints.ai.setAutonomyLevel(as(admin), 5);
+        expect((await endpoints.ai.status(as(bob))).autonomyLevel, 5);
+      },
+    );
+
     test('external or local', () {
       expect(AiGateway.isExternal('https://api.mistral.ai/v1'), isTrue);
       expect(AiGateway.isExternal('http://192.168.1.10:11434/v1'), isFalse);

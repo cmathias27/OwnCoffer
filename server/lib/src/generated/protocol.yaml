@@ -46,6 +46,7 @@ advisor:
   - undo:
 ai:
   - status:
+  - setAutonomyLevel:
   - saveProvider:
   - deleteProvider:
   - testProvider:

@@ -3959,6 +3959,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminTabAi => 'AI';
 
   @override
+  String get adminAiAutonomyTitle => 'AI autonomy level';
+
+  @override
+  String get adminAiAutonomyHelp =>
+      'Sets the level of freedom granted to AI across the entire server. AI can never perform real banking operations (transfers, payments): OwnCoffer does not have that capability.';
+
+  @override
+  String get adminAiAutonomyLevel1Title => '1 — Read-only';
+
+  @override
+  String get adminAiAutonomyLevel1Desc =>
+      'Context querying and answering questions only. No action proposals or document analysis.';
+
+  @override
+  String get adminAiAutonomyLevel2Title => '2 — Document consultation';
+
+  @override
+  String get adminAiAutonomyLevel2Desc =>
+      'Extracts information from user-submitted receipts, invoices and loans. No proactive proposals.';
+
+  @override
+  String get adminAiAutonomyLevel3Title =>
+      '3 — Proposals with validation (recommended)';
+
+  @override
+  String get adminAiAutonomyLevel3Desc =>
+      'The AI produces structured proposals (categories, loans) that the user explicitly validates in the app.';
+
+  @override
+  String get adminAiAutonomyLevel4Title => '4 — Limited automation';
+
+  @override
+  String get adminAiAutonomyLevel4Desc =>
+      'Automatic execution of simple, reversible actions with full audit log; confirmation required for the rest.';
+
+  @override
+  String get adminAiAutonomyLevel5Title => '5 — Full internal control';
+
+  @override
+  String get adminAiAutonomyLevel5Desc =>
+      'Autonomous management of budgets, rules and alerts within OwnCoffer. Never performs external banking operations.';
+
+  @override
+  String get adminAiAutonomySaved => 'AI autonomy level saved.';
+
+  @override
+  String get error_ai_autonomy_read_only =>
+      'The server is configured in read-only mode: the AI cannot submit action proposals.';
+
+  @override
+  String get error_ai_autonomy_documents_disabled =>
+      'Document analysis by AI is disabled by the server administrator.';
+
+  @override
+  String get error_invalid_ai_autonomy_level =>
+      'The requested autonomy level is invalid (must be between 1 and 5).';
+
+  @override
   String get adminAiIntro =>
       'The AI providers the users may choose. The AI stays off for each until they turn it on. It reads only the accounts the user sees, through the engine\'s functions, and only proposes: nothing changes without validation.';
 

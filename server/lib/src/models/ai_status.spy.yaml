@@ -9,3 +9,5 @@ fields:
   usedThisMonth: int
   ### The user may set up providers (server administrator).
   canConfigure: bool
+  ### The server-wide AI autonomy level configured by the administrator (1-5).
+  autonomyLevel: int, default=3

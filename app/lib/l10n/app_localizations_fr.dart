@@ -3982,6 +3982,64 @@ class AppLocalizationsFr extends AppLocalizations {
   String get adminTabAi => 'IA';
 
   @override
+  String get adminAiAutonomyTitle => 'Degré d\'autonomie de l\'IA';
+
+  @override
+  String get adminAiAutonomyHelp =>
+      'Définit le niveau de liberté de l\'IA sur l\'ensemble du serveur. L\'IA ne peut jamais effectuer d\'opération bancaire réelle (virement, paiement) : OwnCoffer n\'en a pas le pouvoir.';
+
+  @override
+  String get adminAiAutonomyLevel1Title => '1 — Lecture seule';
+
+  @override
+  String get adminAiAutonomyLevel1Desc =>
+      'Consultation des données et réponses aux questions. Aucune proposition d\'action ni analyse de justificatifs.';
+
+  @override
+  String get adminAiAutonomyLevel2Title => '2 — Consultation de documents';
+
+  @override
+  String get adminAiAutonomyLevel2Desc =>
+      'Extraction des informations de factures, tickets et crédits soumis par l\'utilisateur. Aucune proposition proactive.';
+
+  @override
+  String get adminAiAutonomyLevel3Title =>
+      '3 — Propositions avec validation (recommandé)';
+
+  @override
+  String get adminAiAutonomyLevel3Desc =>
+      'L\'IA soumet des propositions structurées (catégorisations, crédits) que l\'utilisateur valide explicitement dans l\'application.';
+
+  @override
+  String get adminAiAutonomyLevel4Title => '4 — Automatisation limitée';
+
+  @override
+  String get adminAiAutonomyLevel4Desc =>
+      'Application automatique des actions simples et réversibles avec journal d\'audit complet ; confirmation pour le reste.';
+
+  @override
+  String get adminAiAutonomyLevel5Title => '5 — Contrôle total interne';
+
+  @override
+  String get adminAiAutonomyLevel5Desc =>
+      'Gestion autonome des budgets, règles et alertes au sein d\'OwnCoffer. Jamais d\'action bancaire externe.';
+
+  @override
+  String get adminAiAutonomySaved => 'Degré d\'autonomie de l\'IA enregistré.';
+
+  @override
+  String get error_ai_autonomy_read_only =>
+      'Le serveur est configuré en mode lecture seule : l\'IA ne peut pas soumettre de proposition d\'action.';
+
+  @override
+  String get error_ai_autonomy_documents_disabled =>
+      'L\'analyse de documents par l\'IA est désactivée par l\'administrateur du serveur.';
+
+  @override
+  String get error_invalid_ai_autonomy_level =>
+      'Le niveau d\'autonomie demandé est invalide (doit être compris entre 1 et 5).';
+
+  @override
   String get adminAiIntro =>
       'Les fournisseurs d\'IA que les utilisateurs peuvent choisir. L\'IA reste désactivée pour chacun tant qu\'il ne l\'active pas. Elle ne lit que les comptes que l\'utilisateur voit, par les fonctions du moteur, et ne fait que proposer : rien ne change sans validation.';
 
