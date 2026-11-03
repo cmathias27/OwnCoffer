@@ -26,6 +26,7 @@ export 'src/data/community_rules.dart';
 export 'src/data/standard_categories.dart';
 export 'src/documents/invoice_match.dart';
 export 'src/documents/invoice_name.dart';
+export 'src/documents/receipt_text.dart';
 export 'src/documents/scan.dart';
 export 'src/documents/zip.dart';
 export 'src/forecast/forecast.dart';
