@@ -7817,6 +7817,30 @@ abstract class AppLocalizations {
   /// **'Ce PDF dépasse la limite de 5 pages pour la lecture par l\'IA.'**
   String get error_ai_document_too_many_pages;
 
+  /// No description provided for @error_pdf_empty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier PDF est vide.'**
+  String get error_pdf_empty;
+
+  /// No description provided for @error_pdf_too_large.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le document PDF ou ses images dépassent la taille autorisée (8 Mo au plus).'**
+  String get error_pdf_too_large;
+
+  /// No description provided for @error_pdf_render_failed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de convertir les pages du PDF en image.'**
+  String get error_pdf_render_failed;
+
+  /// No description provided for @error_pdf_invalid_or_encrypted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le PDF est protégé par mot de passe ou illisible.'**
+  String get error_pdf_invalid_or_encrypted;
+
   /// No description provided for @chatOpen.
   ///
   /// In fr, this message translates to:

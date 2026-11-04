@@ -1,6 +1,7 @@
 import 'package:owncoffer_client/owncoffer_client.dart';
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart';
 
+import '../util/pdf_to_images.dart';
 import 'app_localizations.dart';
 
 /// User-facing text for a server error code (AccessDeniedException and
@@ -105,8 +106,20 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   _ => l.error_generic,
 };
 
-/// User-facing text for any error thrown by a server call.
+/// User-facing text for a local PDF-to-images conversion error.
+String pdfConversionErrorText(AppLocalizations l, String code) =>
+    switch (code) {
+      'empty' => l.error_pdf_empty,
+      'too_large' => l.error_pdf_too_large,
+      'too_many_pages' => l.error_ai_document_too_many_pages,
+      'render_failed' => l.error_pdf_render_failed,
+      'invalid_or_encrypted' => l.error_pdf_invalid_or_encrypted,
+      _ => l.error_generic,
+    };
+
+/// User-facing text for any error thrown by a server call or local conversion.
 String errorText(AppLocalizations l, Object error) => switch (error) {
+  PdfConversionException(:final code) => pdfConversionErrorText(l, code),
   AccessDeniedException(:final code) => serverErrorText(l, code),
   // The AI provider's own reason (e.g. "API key not valid"), as it gave it.
   InvalidInputException(:final code, :final field)

@@ -25,4 +25,17 @@ void main() {
       ),
     );
   });
+
+  test('unsupported platform throws render_failed exception', () async {
+    expect(
+      () => PdfToImages.convert(Uint8List.fromList([1, 2, 3, 4, 5])),
+      throwsA(
+        isA<PdfConversionException>().having(
+          (e) => e.code,
+          'code',
+          'render_failed',
+        ),
+      ),
+    );
+  });
 }

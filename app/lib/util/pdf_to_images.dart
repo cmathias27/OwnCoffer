@@ -19,6 +19,9 @@ abstract final class PdfToImages {
     if (bytes.length > maxBytes) {
       throw const PdfConversionException('too_large');
     }
+    if (!await hasPdfSupport()) {
+      throw const PdfConversionException('render_failed');
+    }
     PdfDocument? document;
     try {
       document = await PdfDocument.openData(bytes);
@@ -36,7 +39,9 @@ abstract final class PdfToImages {
           final longestSide = page.width > page.height
               ? page.width
               : page.height;
-          final scale = maxPageSide / longestSide;
+          final scale = longestSide > maxPageSide
+              ? maxPageSide / longestSide
+              : 1.0;
           final image = await page.render(
             width: (page.width * scale).clamp(1, maxPageSide).toDouble(),
             height: (page.height * scale).clamp(1, maxPageSide).toDouble(),
@@ -51,7 +56,8 @@ abstract final class PdfToImages {
           if (totalBytes > maxTotalImageBytes) {
             throw const PdfConversionException('too_large');
           }
-          pages.add(PickedFile('page_$number.jpg', image.bytes));
+          final ext = _isPng(image.bytes) ? 'png' : 'jpg';
+          pages.add(PickedFile('page_$number.$ext', image.bytes));
         } finally {
           await page.close();
         }
@@ -59,12 +65,21 @@ abstract final class PdfToImages {
       return pages;
     } on PdfConversionException {
       rethrow;
+    } on StateError {
+      throw const PdfConversionException('render_failed');
     } on Object {
       throw const PdfConversionException('invalid_or_encrypted');
     } finally {
       await document?.close();
     }
   }
+
+  static bool _isPng(List<int> bytes) =>
+      bytes.length >= 8 &&
+      bytes[0] == 0x89 &&
+      bytes[1] == 0x50 &&
+      bytes[2] == 0x4E &&
+      bytes[3] == 0x47;
 }
 
 class PdfConversionException implements Exception {

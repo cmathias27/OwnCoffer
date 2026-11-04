@@ -53,6 +53,11 @@ ByteData _png() => ByteData.sublistView(
   Uint8List.fromList([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 1, 2]),
 );
 
+/// A tiny file with the magic bytes of a JPEG image (never decoded here).
+ByteData _jpeg() => ByteData.sublistView(
+  Uint8List.fromList([0xFF, 0xD8, 0xFF, 1, 2]),
+);
+
 void main() {
   withServerpod('Documents read by the AI (0008, 0009)', (
     sessionBuilder,
@@ -181,9 +186,16 @@ void main() {
       );
       expect(reply.isExternal, isTrue);
       final sent = model.received.single.toString();
-      expect(sent, contains('data:image/jpeg;base64,'));
-      expect(sent, isNot(contains('data:image/png;base64,')));
+      expect(sent, contains('data:image/png;base64,'));
       expect(sent, isNot(contains('Courant')), reason: 'only the document');
+      model.received.clear();
+      await endpoints.ai.readInvoice(
+        as(bob),
+        invoice.invoice.id!,
+        pageImagesBase64: [base64Encode(_jpeg().buffer.asUint8List())],
+      );
+      final sentJpeg = model.received.single.toString();
+      expect(sentJpeg, contains('data:image/jpeg;base64,'));
       await expectLater(
         endpoints.ai.readInvoice(
           as(bob),

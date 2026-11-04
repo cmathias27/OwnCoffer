@@ -4838,6 +4838,21 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ce PDF dépasse la limite de 5 pages pour la lecture par l\'IA.';
 
   @override
+  String get error_pdf_empty => 'Le fichier PDF est vide.';
+
+  @override
+  String get error_pdf_too_large =>
+      'Le document PDF ou ses images dépassent la taille autorisée (8 Mo au plus).';
+
+  @override
+  String get error_pdf_render_failed =>
+      'Impossible de convertir les pages du PDF en image.';
+
+  @override
+  String get error_pdf_invalid_or_encrypted =>
+      'Le PDF est protégé par mot de passe ou illisible.';
+
+  @override
   String get chatOpen => 'Discuter avec l\'assistant';
 
   @override
