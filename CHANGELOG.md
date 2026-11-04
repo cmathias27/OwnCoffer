@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.4.1 (novembre 2026)
+
+### Correctifs
+
+- **Conversion PDF sur le Web** : intégration locale des bibliothèques `pdf.js` et `pdf.worker` dans l'application web (Mozilla pdfjs-dist v4.6.82, Apache-2.0), sans appel réseau externe, corrigeant l'échec de conversion côté navigateur.
+- **Détection des types d'images** : détection automatique du format réel (PNG, JPEG, WebP, GIF) par magic bytes lors de la lecture de documents par l'IA, résolvant les rejets de requêtes vision lorsque le navigateur envoie du PNG issu d'un canvas.
+- **Gestion d'erreurs et messages utilisateur** : restitution de messages clairs et localisés en cas d'erreur de conversion PDF (fichier vide, trop lourd, chiffré ou non supporté) à la place du message générique inconnu.
+
 ## 1.4.0 (novembre 2026)
 
 ### Lecture des PDF avec les modèles de vision
