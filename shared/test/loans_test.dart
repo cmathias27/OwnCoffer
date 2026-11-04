@@ -125,6 +125,26 @@ void main() {
     expect(loanPrincipalForPaymentCents(1000, 1000, 601), isNull);
   });
 
+  test('months deduced from capital, rate and instalment', () {
+    // 15 000 € at 4.90 % with 189,19 € -> exactly 96 months (8 years).
+    expect(loanMonthsForPaymentCents(1500000, 4900, 18919), 96);
+    // 15 000 € at 4.90 % with 213,19 € -> 84 months (7 years).
+    expect(loanMonthsForPaymentCents(1500000, 4900, 21319), 84);
+    // 200 000 € at 3.45 % with 1 154,79 € -> 240 months (20 years).
+    expect(loanMonthsForPaymentCents(20000000, 3450, 115479), 240);
+    // Interest-free: ceil(principal / payment).
+    expect(loanMonthsForPaymentCents(1000000, 0, 10000), 100);
+    expect(loanMonthsForPaymentCents(1000000, 0, 30000), 34);
+    // Payment does not cover interest: refused.
+    // 10 000 € at 12 % -> first month interest = 100 €.
+    expect(loanMonthsForPaymentCents(1000000, 12000, 9900), isNull);
+    expect(loanMonthsForPaymentCents(1000000, 12000, 10000), isNull);
+    // Out of range: refused.
+    expect(loanMonthsForPaymentCents(0, 1000, 5000), isNull);
+    expect(loanMonthsForPaymentCents(100000, 1000, 0), isNull);
+    expect(loanMonthsForPaymentCents(100000, 60000, 5000), isNull);
+  });
+
   test('the actual instalment drives the schedule; the duration follows', () {
     // 100 000 € at 1 %: 876,04 € computed over 120 months. The bank debits
     // 900 €: repaid sooner.

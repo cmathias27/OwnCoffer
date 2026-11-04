@@ -184,6 +184,60 @@ int? loanPrincipalForPaymentCents(
   return best;
 }
 
+/// The number of monthly instalments needed to repay [principalCents] at
+/// [annualRateMilli] with [paymentCents] per instalment (capital + interest).
+/// Null when the payment does not cover the first month's interest, or exceeds
+/// [maxLoanMonths].
+int? loanMonthsForPaymentCents(
+  int principalCents,
+  int annualRateMilli,
+  int paymentCents,
+) {
+  if (principalCents <= 0 || principalCents > maxLoanPrincipalCents) {
+    return null;
+  }
+  if (annualRateMilli < 0 || annualRateMilli > maxLoanRateMilli) {
+    return null;
+  }
+  if (paymentCents <= 0) {
+    return null;
+  }
+  if (annualRateMilli == 0) {
+    final m = (principalCents + paymentCents - 1) ~/ paymentCents;
+    return (m >= 1 && m <= maxLoanMonths) ? m : null;
+  }
+  final firstMonthInterest = _monthInterest(principalCents, annualRateMilli);
+  if (paymentCents <= firstMonthInterest) {
+    return null;
+  }
+  final t = annualRateMilli / 1200000;
+  final ratio = principalCents * t / paymentCents;
+  if (ratio >= 1.0) {
+    return null;
+  }
+  final est = (-math.log(1 - ratio) / math.log(1 + t)).round();
+  if (est <= 0 || est > maxLoanMonths) {
+    return null;
+  }
+  try {
+    final schedule = amortize(
+      LoanTerms(
+        principalCents: principalCents,
+        annualRateMilli: annualRateMilli,
+        months: est.clamp(1, maxLoanMonths),
+        firstDue: LocalDate(2000, 1, 1),
+        paymentCents: paymentCents,
+      ),
+    );
+    if (schedule.isEmpty || schedule.length > maxLoanMonths) {
+      return null;
+    }
+    return schedule.length;
+  } on ArgumentError {
+    return null;
+  }
+}
+
 /// Interest of one month on [remainingCents], rounded half up.
 int _monthInterest(int remainingCents, int annualRateMilli) =>
     (remainingCents * annualRateMilli + 600000) ~/ 1200000;

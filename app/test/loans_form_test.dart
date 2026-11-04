@@ -231,6 +231,130 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets(
+    'duration deduced from debit and capital, breakdown and fill payment',
+    (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 2400);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('fr'),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const LoanFormScreen(
+            groupId: 1,
+            accounts: [],
+            categories: [],
+            initialKind: LoanKind.personal,
+          ),
+        ),
+      );
+      await tester.pump();
+
+      Finder field(String label) =>
+          find.widgetWithText(TextFormField, label).first;
+      String text(String label) =>
+          tester.widget<TextFormField>(field(label)).controller!.text;
+
+      // Enter capital, rate, insurance, and duration.
+      await tester.enterText(field('Capital emprunté'), '15000');
+      await tester.enterText(field('Taux nominal'), '4,90');
+      await tester.enterText(field('Assurance par mois'), '24');
+      await tester.enterText(field('Durée en mois'), '96');
+      await tester.pump();
+
+      // "Remplir avec la mensualité calculée" is available when actual payment is empty
+      final fillButton = find.text('Remplir avec la mensualité calculée');
+      expect(fillButton, findsOneWidget);
+      await tester.tap(fillButton);
+      await tester.pump();
+
+      // 15 000 € at 4.90 % over 96 months: credit is 189.19 €, insurance 24.00 € -> 213.19 €
+      expect(text('Mensualité prélevée (assurance comprise)'), '213,19');
+
+      // Breakdown text is displayed
+      expect(find.textContaining('crédit +'), findsOneWidget);
+      expect(find.textContaining('assurance ='), findsOneWidget);
+
+      // Clear duration and test deducing duration from the debit
+      await tester.enterText(field('Durée en mois'), '');
+      await tester.pump();
+      expect(text('Durée en mois'), '');
+
+      final deduceMonthsButton = find.text(
+        'Calculer la durée à partir de ce prélèvement',
+      );
+      expect(deduceMonthsButton, findsOneWidget);
+      await tester.tap(deduceMonthsButton);
+      await tester.pump();
+
+      expect(text('Durée en mois'), '96');
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'existing loan with past firstDue displays status today in preview',
+    (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 2400);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      final pastDate = DateTime.utc(
+        DateTime.now().year - 2,
+        DateTime.now().month,
+        1,
+      );
+      final loan = Loan(
+        groupId: 1,
+        id: 42,
+        kind: LoanKind.personal,
+        lender: 'Ma Banque',
+        label: 'Prêt Conso',
+        principalCents: 1500000,
+        annualRateMilli: 4900,
+        durationMonths: 96,
+        firstDueDate: pastDate,
+        insuranceMonthlyCents: 2400,
+        paymentCents: 18919,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('fr'),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: LoanFormScreen(
+            groupId: 1,
+            accounts: const [],
+            categories: const [],
+            loan: loan,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.textContaining("Aujourd'hui ("), findsOneWidget);
+      expect(
+        find.textContaining('intérêts prochaine échéance'),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   test('three families: loans, consumer credit, payments in instalments', () {
     expect(
       {for (final k in LoanKind.values) k: loanFamily(k)},

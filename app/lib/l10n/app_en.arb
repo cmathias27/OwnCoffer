@@ -511,6 +511,38 @@
   "loanObservedInstalment": "Observed debit: {amount} (insurance included)",
   "loanDeducePrincipal": "Compute the capital from this debit",
   "loanDeduceNeedsTerms": "Enter the rate and the duration first.",
+  "loanDeduceMonths": "Compute the duration from this debit",
+  "loanDeduceMonthsNeedsTerms": "Enter the borrowed capital, the rate and the monthly instalment first.",
+  "loanDeducePayment": "Fill with computed monthly instalment",
+  "loanFirstDueHelp": "Date of the first instalment. For an ongoing loan, you can enter the original first due date (OwnCoffer computes past instalments) or the next due date with remaining balance.",
+  "loanBreakdownDetail": "{credit} credit + {insurance} insurance = {total} debited",
+  "@loanBreakdownDetail": {
+    "placeholders": {
+      "credit": {
+        "type": "String"
+      },
+      "insurance": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "loanStatusTodayPreview": "Today ({count} past instalments): remaining balance {remaining}, next instalment interest {interest}.",
+  "@loanStatusTodayPreview": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "String"
+      },
+      "interest": {
+        "type": "String"
+      }
+    }
+  },
   "loanInstalmentMismatch": "The computed instalment ({amount}) is more than 5% away from the debit: check the capital, rate, duration and insurance.",
   "loanFirstDueFromOperationHelp": "Date of the very first instalment. If you do not know it, keep this debit's date and enter the remaining duration: the computed capital is then the capital still owed.",
   "loanCategoryDefaultHelp": "Without a choice, the category of the loan type is used (e.g. Mortgage).",

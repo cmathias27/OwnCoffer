@@ -1906,6 +1906,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loanDeduceNeedsTerms => 'Enter the rate and the duration first.';
 
   @override
+  String get loanDeduceMonths => 'Compute the duration from this debit';
+
+  @override
+  String get loanDeduceMonthsNeedsTerms =>
+      'Enter the borrowed capital, the rate and the monthly instalment first.';
+
+  @override
+  String get loanDeducePayment => 'Fill with computed monthly instalment';
+
+  @override
+  String get loanFirstDueHelp =>
+      'Date of the first instalment. For an ongoing loan, you can enter the original first due date (OwnCoffer computes past instalments) or the next due date with remaining balance.';
+
+  @override
+  String loanBreakdownDetail(String credit, String insurance, String total) {
+    return '$credit credit + $insurance insurance = $total debited';
+  }
+
+  @override
+  String loanStatusTodayPreview(int count, String remaining, String interest) {
+    return 'Today ($count past instalments): remaining balance $remaining, next instalment interest $interest.';
+  }
+
+  @override
   String loanInstalmentMismatch(String amount) {
     return 'The computed instalment ($amount) is more than 5% away from the debit: check the capital, rate, duration and insurance.';
   }

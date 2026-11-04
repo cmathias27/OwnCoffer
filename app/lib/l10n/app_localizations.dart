@@ -3169,6 +3169,42 @@ abstract class AppLocalizations {
   /// **'Indiquez d\'abord le taux et la durée.'**
   String get loanDeduceNeedsTerms;
 
+  /// No description provided for @loanDeduceMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculer la durée à partir de ce prélèvement'**
+  String get loanDeduceMonths;
+
+  /// No description provided for @loanDeduceMonthsNeedsTerms.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez d\'abord le capital emprunté, le taux et la mensualité.'**
+  String get loanDeduceMonthsNeedsTerms;
+
+  /// No description provided for @loanDeducePayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remplir avec la mensualité calculée'**
+  String get loanDeducePayment;
+
+  /// No description provided for @loanFirstDueHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de la première échéance. Pour un crédit déjà en cours, vous pouvez indiquer la toute première échéance d\'origine (OwnCoffer calcule les échéances passées) ou la prochaine échéance avec le capital restant dû.'**
+  String get loanFirstDueHelp;
+
+  /// No description provided for @loanBreakdownDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'{credit} crédit + {insurance} assurance = {total} prélevés'**
+  String loanBreakdownDetail(String credit, String insurance, String total);
+
+  /// No description provided for @loanStatusTodayPreview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui ({count} échéances passées) : capital restant dû {remaining}, intérêts prochaine échéance {interest}.'**
+  String loanStatusTodayPreview(int count, String remaining, String interest);
+
   /// No description provided for @loanInstalmentMismatch.
   ///
   /// In fr, this message translates to:
