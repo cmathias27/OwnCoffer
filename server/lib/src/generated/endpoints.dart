@@ -1163,6 +1163,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int>(),
               nullable: false,
             ),
+            'pageImagesBase64': _is.ParameterDescription(
+              name: 'pageImagesBase64',
+              type: _is.getType<List<String>?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -1171,6 +1176,7 @@ class Endpoints extends _is.EndpointDispatch {
               ) async => (endpoints['ai'] as _igsjf4zh.AiEndpoint).readInvoice(
                 session,
                 params['invoiceId'],
+                pageImagesBase64: params['pageImagesBase64'],
               ),
         ),
         'readLoanDocument': _is.MethodConnector(
@@ -1181,6 +1187,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int>(),
               nullable: false,
             ),
+            'pageImagesBase64': _is.ParameterDescription(
+              name: 'pageImagesBase64',
+              type: _is.getType<List<String>?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -1190,6 +1201,7 @@ class Endpoints extends _is.EndpointDispatch {
                   (endpoints['ai'] as _igsjf4zh.AiEndpoint).readLoanDocument(
                     session,
                     params['documentId'],
+                    pageImagesBase64: params['pageImagesBase64'],
                   ),
         ),
         'memories': _is.MethodConnector(

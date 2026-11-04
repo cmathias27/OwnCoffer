@@ -1976,8 +1976,9 @@ class _AiEndpoint {
 
   _ida.Future<_iggzqc7o.AiReply> readInvoice(
     _ist.TestSessionBuilder sessionBuilder,
-    int invoiceId,
-  ) async {
+    int invoiceId, {
+    List<String>? pageImagesBase64,
+  }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
@@ -1989,7 +1990,10 @@ class _AiEndpoint {
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'ai',
           methodName: 'readInvoice',
-          parameters: _ist.testObjectToJson({'invoiceId': invoiceId}),
+          parameters: _ist.testObjectToJson({
+            'invoiceId': invoiceId,
+            'pageImagesBase64': pageImagesBase64,
+          }),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =
@@ -2007,8 +2011,9 @@ class _AiEndpoint {
 
   _ida.Future<_iggzqc7o.AiReply> readLoanDocument(
     _ist.TestSessionBuilder sessionBuilder,
-    int documentId,
-  ) async {
+    int documentId, {
+    List<String>? pageImagesBase64,
+  }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
@@ -2020,7 +2025,10 @@ class _AiEndpoint {
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'ai',
           methodName: 'readLoanDocument',
-          parameters: _ist.testObjectToJson({'documentId': documentId}),
+          parameters: _ist.testObjectToJson({
+            'documentId': documentId,
+            'pageImagesBase64': pageImagesBase64,
+          }),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =

@@ -65,7 +65,11 @@ abstract final class DocumentReader {
   /// A receipt or invoice: joined to an operation, its lines become a
   /// proposed split of the operation; waiting for its operation, its
   /// amount, date and merchant are proposed.
-  static Future<AiReply> readInvoice(Session session, int invoiceId) async {
+  static Future<AiReply> readInvoice(
+    Session session,
+    int invoiceId, {
+    List<String>? pageImagesBase64,
+  }) async {
     final invoice = await Invoice.db.findById(session, invoiceId);
     if (invoice == null) {
       throw AccessDeniedException(code: 'invoice_access_denied');
@@ -76,7 +80,7 @@ abstract final class DocumentReader {
         invoice.groupId,
         min: MemberRole.user,
       );
-      return _readHints(session, invoice);
+      return _readHints(session, invoice, pageImagesBase64: pageImagesBase64);
     }
     final t = await BankTransaction.db.findById(
       session,
@@ -90,14 +94,20 @@ abstract final class DocumentReader {
     } on AccessDeniedException {
       throw AccessDeniedException(code: 'invoice_access_denied');
     }
-    return _readReceipt(session, invoice, t);
+    return _readReceipt(
+      session,
+      invoice,
+      t,
+      pageImagesBase64: pageImagesBase64,
+    );
   }
 
   static Future<AiReply> _readReceipt(
     Session session,
     Invoice invoice,
-    BankTransaction t,
-  ) async {
+    BankTransaction t, {
+    List<String>? pageImagesBase64,
+  }) async {
     final groupId = invoice.groupId;
     final categories = await Category.db.find(
       session,
@@ -113,8 +123,11 @@ abstract final class DocumentReader {
     final read = await AiGateway.readDocument(
       session,
       groupId,
-      bytes: await _invoiceBytes(session, invoice.id!),
-      mimeType: invoice.mimeType,
+      bytes: pageImagesBase64 == null
+          ? await _invoiceBytes(session, invoice.id!)
+          : null,
+      mimeType: pageImagesBase64 == null ? invoice.mimeType : null,
+      pageImagesBase64: pageImagesBase64,
       instructions:
           'This is a receipt or an invoice. Report its merchant, date, total '
           'and each line with its amount (positive, in cents) and, if one '
@@ -263,12 +276,19 @@ abstract final class DocumentReader {
     return _reply(read.provider, read.model, [?p]);
   }
 
-  static Future<AiReply> _readHints(Session session, Invoice invoice) async {
+  static Future<AiReply> _readHints(
+    Session session,
+    Invoice invoice, {
+    List<String>? pageImagesBase64,
+  }) async {
     final read = await AiGateway.readDocument(
       session,
       invoice.groupId,
-      bytes: await _invoiceBytes(session, invoice.id!),
-      mimeType: invoice.mimeType,
+      bytes: pageImagesBase64 == null
+          ? await _invoiceBytes(session, invoice.id!)
+          : null,
+      mimeType: pageImagesBase64 == null ? invoice.mimeType : null,
+      pageImagesBase64: pageImagesBase64,
       instructions:
           'This is an invoice or a receipt. Report the total paid, the date '
           'of the purchase and the merchant.',
@@ -312,8 +332,9 @@ abstract final class DocumentReader {
   /// proposed for the loan, checked by the loan engine first.
   static Future<AiReply> readLoanDocument(
     Session session,
-    int documentId,
-  ) async {
+    int documentId, {
+    List<String>? pageImagesBase64,
+  }) async {
     final doc = await LoanDocument.db.findById(session, documentId);
     final loan = doc == null
         ? null
@@ -329,19 +350,24 @@ abstract final class DocumentReader {
     } on AccessDeniedException {
       throw AccessDeniedException(code: 'loan_access_denied');
     }
-    final blob = await LoanDocumentBlob.db.findFirstRow(
-      session,
-      where: (b) => b.documentId.equals(doc.id!),
-    );
-    if (blob == null) throw AccessDeniedException(code: 'loan_access_denied');
+    final blob = pageImagesBase64 == null
+        ? await LoanDocumentBlob.db.findFirstRow(
+            session,
+            where: (b) => b.documentId.equals(doc.id!),
+          )
+        : null;
+    if (pageImagesBase64 == null && blob == null) {
+      throw AccessDeniedException(code: 'loan_access_denied');
+    }
     final read = await AiGateway.readDocument(
       session,
       loan.groupId,
-      bytes: blob.content.buffer.asUint8List(
+      bytes: blob?.content.buffer.asUint8List(
         blob.content.offsetInBytes,
         blob.content.lengthInBytes,
       ),
-      mimeType: doc.mimeType,
+      mimeType: blob == null ? null : doc.mimeType,
+      pageImagesBase64: pageImagesBase64,
       instructions:
           'This is a document of a loan (amortisation table, loan offer, '
           'screenshot of the bank). Report the terms it states: capital '

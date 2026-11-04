@@ -279,20 +279,23 @@ abstract final class AiGateway {
   }
 
   static const _maxDocumentBytes = 8 * 1024 * 1024;
+  static const _maxPages = 5;
+  static const _maxTotalImagesBase64 = 16 * 1024 * 1024;
 
-  /// Reads one document (image, or PDF for Claude) with the user's own
-  /// provider and model: the model only reports what is written, through
-  /// the one function [tool] (OpenAI format); its arguments are returned
-  /// for the engine to check. Nothing else is sent: no account, no other
-  /// operation, only [context] (what the document is about) and the file.
+  /// Reads one document (image, or PDF for Claude, or rendered page images
+  /// for vision models) with the user's own provider and model: the model only
+  /// reports what is written, through the one function [tool] (OpenAI format);
+  /// its arguments are returned for the engine to check. Nothing else is sent:
+  /// no account, no other operation, only [instructions] and the file images.
   static Future<
     ({Map<String, Object?> fields, AiProvider provider, String model})
   >
   readDocument(
     Session session,
     int groupId, {
-    required List<int> bytes,
-    required String mimeType,
+    List<int>? bytes,
+    String? mimeType,
+    List<String>? pageImagesBase64,
     required String instructions,
     required Map<String, Object?> tool,
   }) async {
@@ -303,14 +306,54 @@ abstract final class AiGateway {
       throw InvalidInputException(code: 'ai_autonomy_documents_disabled');
     }
     if (!provider.vision) throw InvalidInputException(code: 'ai_no_vision');
-    final mime = mimeType.toLowerCase();
-    final image = mime.startsWith('image/');
-    final pdf = mime == 'application/pdf' && provider.kind == 'anthropic';
-    if (!image && !pdf) {
-      throw InvalidInputException(code: 'ai_document_not_image');
-    }
-    if (bytes.length > _maxDocumentBytes) {
-      throw InvalidInputException(code: 'ai_document_too_large');
+    final contentBlocks = <Map<String, Object?>>[
+      {'type': 'text', 'text': instructions},
+    ];
+    if (pageImagesBase64 != null && pageImagesBase64.isNotEmpty) {
+      if (pageImagesBase64.length > _maxPages) {
+        throw InvalidInputException(code: 'ai_document_too_many_pages');
+      }
+      var total = 0;
+      for (final b64 in pageImagesBase64) {
+        if (b64.isEmpty || b64.length > 4 * 1024 * 1024) {
+          throw InvalidInputException(code: 'ai_document_too_large');
+        }
+        try {
+          total += base64Decode(b64).length;
+        } on FormatException {
+          throw InvalidInputException(code: 'ai_document_invalid_image');
+        }
+      }
+      if (total > _maxTotalImagesBase64) {
+        throw InvalidInputException(code: 'ai_document_too_large');
+      }
+      for (final b64 in pageImagesBase64) {
+        contentBlocks.add({
+          'type': 'image_url',
+          'image_url': {
+            'url': 'data:image/jpeg;base64,$b64',
+          },
+        });
+      }
+    } else {
+      if (bytes == null || mimeType == null) {
+        throw InvalidInputException(code: 'ai_document_not_image');
+      }
+      final mime = mimeType.toLowerCase();
+      final image = mime.startsWith('image/');
+      final pdf = mime == 'application/pdf' && provider.kind == 'anthropic';
+      if (!image && !pdf) {
+        throw InvalidInputException(code: 'ai_document_not_image');
+      }
+      if (bytes.length > _maxDocumentBytes) {
+        throw InvalidInputException(code: 'ai_document_too_large');
+      }
+      contentBlocks.add({
+        'type': 'image_url',
+        'image_url': {
+          'url': 'data:$mime;base64,${base64Encode(bytes)}',
+        },
+      });
     }
     final user = Access.userId(session);
     await _count(session, user, provider.id!);
@@ -337,15 +380,7 @@ abstract final class AiGateway {
         },
         {
           'role': 'user',
-          'content': [
-            {'type': 'text', 'text': instructions},
-            {
-              'type': 'image_url',
-              'image_url': {
-                'url': 'data:$mime;base64,${base64Encode(bytes)}',
-              },
-            },
-          ],
+          'content': contentBlocks,
         },
       ],
       tools: [tool],

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -1011,6 +1012,24 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                                 context,
                                 mimeType: d.mimeType,
                                 read: () => client.ai.readLoanDocument(d.id!),
+                                loadPdf: d.mimeType == 'application/pdf'
+                                    ? () async {
+                                        final data = await client.loan
+                                            .downloadDocument(d.id!);
+                                        return data.buffer.asUint8List(
+                                          data.offsetInBytes,
+                                          data.lengthInBytes,
+                                        );
+                                      }
+                                    : null,
+                                readPdfPages: (pages) =>
+                                    client.ai.readLoanDocument(
+                                      d.id!,
+                                      pageImagesBase64: [
+                                        for (final page in pages)
+                                          base64Encode(page.bytes),
+                                      ],
+                                    ),
                               ),
                             ),
                             IconButton(

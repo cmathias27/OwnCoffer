@@ -205,13 +205,31 @@ class AiEndpoint extends Endpoint {
   /// Reads a receipt or invoice with the user's AI: a split (joined to an
   /// operation) or its amount, date and merchant (waiting) are proposed in
   /// "Mon conseiller". Nothing is changed here.
-  Future<AiReply> readInvoice(Session session, int invoiceId) =>
-      _reading(() => DocumentReader.readInvoice(session, invoiceId));
+  Future<AiReply> readInvoice(
+    Session session,
+    int invoiceId, {
+    List<String>? pageImagesBase64,
+  }) => _reading(
+    () => DocumentReader.readInvoice(
+      session,
+      invoiceId,
+      pageImagesBase64: pageImagesBase64,
+    ),
+  );
 
   /// Reads a loan document with the user's AI: the terms it states are
   /// proposed for the loan in "Mon conseiller".
-  Future<AiReply> readLoanDocument(Session session, int documentId) =>
-      _reading(() => DocumentReader.readLoanDocument(session, documentId));
+  Future<AiReply> readLoanDocument(
+    Session session,
+    int documentId, {
+    List<String>? pageImagesBase64,
+  }) => _reading(
+    () => DocumentReader.readLoanDocument(
+      session,
+      documentId,
+      pageImagesBase64: pageImagesBase64,
+    ),
+  );
 
   static Future<AiReply> _reading(Future<AiReply> Function() read) async {
     try {

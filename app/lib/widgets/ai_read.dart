@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../util/file_pick.dart';
+import '../util/pdf_to_images.dart';
 
 /// "Read with the AI" for a stored document (receipt, invoice, loan
 /// document): only with the user's own assistant on and a model that reads
@@ -13,6 +17,8 @@ Future<void> readWithAi(
   BuildContext context, {
   required String mimeType,
   required Future<AiReply> Function() read,
+  Future<Uint8List> Function()? loadPdf,
+  Future<AiReply> Function(List<PickedFile> pages)? readPdfPages,
 }) async {
   final l = AppLocalizations.of(context);
   final messenger = ScaffoldMessenger.of(context);
@@ -30,7 +36,9 @@ Future<void> readWithAi(
     messenger.showSnackBar(SnackBar(content: Text(l.aiReadNotReady)));
     return;
   }
-  if (mimeType == 'application/pdf' && provider.kind != 'anthropic') {
+  final renderPdf =
+      mimeType == 'application/pdf' && provider.kind != 'anthropic';
+  if (renderPdf && (loadPdf == null || readPdfPages == null)) {
     messenger.showSnackBar(SnackBar(content: Text(l.aiReadNoPdf)));
     return;
   }
@@ -40,7 +48,13 @@ Future<void> readWithAi(
     builder: (context) => AlertDialog(
       title: Text(l.aiReadTitle),
       content: Text(
-        provider.kind == 'ollama'
+        renderPdf
+            ? l.aiReadPdfRenderedConsent(
+                provider.kind == 'ollama'
+                    ? l.aiReadLocal(provider.name, status.model ?? '')
+                    : l.aiReadExternal(provider.name, status.model ?? ''),
+              )
+            : provider.kind == 'ollama'
             ? l.aiReadLocal(provider.name, status.model ?? '')
             : l.aiReadExternal(provider.name, status.model ?? ''),
       ),
@@ -59,7 +73,9 @@ Future<void> readWithAi(
   if (ok != true || !context.mounted) return;
   messenger.showSnackBar(SnackBar(content: Text(l.aiReadRunning)));
   try {
-    final reply = await read();
+    final reply = renderPdf
+        ? await readPdfPages!(await PdfToImages.convert(await loadPdf!()))
+        : await read();
     messenger
       ..hideCurrentSnackBar()
       ..showSnackBar(

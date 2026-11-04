@@ -52,6 +52,8 @@ dependencies:
   http: ^1.6.0
   flutter_secure_storage: ^10.0.0
   image_picker: ^1.2.4
+  # Locally render bounded PDF pages for vision providers; MIT licensed.
+  pdfx: ^2.11.0
   # Version of this app, compared with the server's (BSD-3-Clause).
   package_info_plus: ^10.2.2
 
