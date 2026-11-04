@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:serverpod/serverpod.dart';
 
@@ -282,6 +283,40 @@ abstract final class AiGateway {
   static const _maxPages = 5;
   static const _maxTotalImagesBase64 = 16 * 1024 * 1024;
 
+  static String _imageMimeType(List<int> bytes) {
+    if (bytes.length >= 8 &&
+        bytes[0] == 0x89 &&
+        bytes[1] == 0x50 &&
+        bytes[2] == 0x4E &&
+        bytes[3] == 0x47) {
+      return 'image/png';
+    }
+    if (bytes.length >= 3 &&
+        bytes[0] == 0xFF &&
+        bytes[1] == 0xD8 &&
+        bytes[2] == 0xFF) {
+      return 'image/jpeg';
+    }
+    if (bytes.length >= 12 &&
+        bytes[0] == 0x52 &&
+        bytes[1] == 0x49 &&
+        bytes[2] == 0x46 &&
+        bytes[3] == 0x46 &&
+        bytes[8] == 0x57 &&
+        bytes[9] == 0x45 &&
+        bytes[10] == 0x42 &&
+        bytes[11] == 0x50) {
+      return 'image/webp';
+    }
+    if (bytes.length >= 3 &&
+        bytes[0] == 0x47 &&
+        bytes[1] == 0x49 &&
+        bytes[2] == 0x46) {
+      return 'image/gif';
+    }
+    return 'image/jpeg';
+  }
+
   /// Reads one document (image, or PDF for Claude, or rendered page images
   /// for vision models) with the user's own provider and model: the model only
   /// reports what is written, through the one function [tool] (OpenAI format);
@@ -318,22 +353,23 @@ abstract final class AiGateway {
         if (b64.isEmpty || b64.length > 4 * 1024 * 1024) {
           throw InvalidInputException(code: 'ai_document_too_large');
         }
+        final Uint8List raw;
         try {
-          total += base64Decode(b64).length;
+          raw = base64Decode(b64);
         } on FormatException {
           throw InvalidInputException(code: 'ai_document_invalid_image');
         }
-      }
-      if (total > _maxTotalImagesBase64) {
-        throw InvalidInputException(code: 'ai_document_too_large');
-      }
-      for (final b64 in pageImagesBase64) {
+        total += raw.length;
+        final mime = _imageMimeType(raw);
         contentBlocks.add({
           'type': 'image_url',
           'image_url': {
-            'url': 'data:image/jpeg;base64,$b64',
+            'url': 'data:$mime;base64,$b64',
           },
         });
+      }
+      if (total > _maxTotalImagesBase64) {
+        throw InvalidInputException(code: 'ai_document_too_large');
       }
     } else {
       if (bytes == null || mimeType == null) {

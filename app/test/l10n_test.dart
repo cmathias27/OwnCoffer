@@ -75,6 +75,25 @@ void main() {
     }
   });
 
+  test('every PDF conversion exception code has a translation', () {
+    const codes = [
+      'empty',
+      'too_large',
+      'too_many_pages',
+      'render_failed',
+      'invalid_or_encrypted',
+    ];
+    for (final l in locales) {
+      for (final code in codes) {
+        expect(
+          pdfConversionErrorText(l, code),
+          isNot(l.error_generic),
+          reason: code,
+        );
+      }
+    }
+  });
+
   test('unknown codes fall back to the generic text', () {
     final fr = lookupAppLocalizations(const Locale('fr'));
     expect(serverErrorText(fr, 'nope'), fr.error_generic);

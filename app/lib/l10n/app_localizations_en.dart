@@ -4810,6 +4810,21 @@ class AppLocalizationsEn extends AppLocalizations {
       'This PDF exceeds the 5-page limit for AI reading.';
 
   @override
+  String get error_pdf_empty => 'The PDF file is empty.';
+
+  @override
+  String get error_pdf_too_large =>
+      'The PDF document or its images exceed the allowed size (8 MB at most).';
+
+  @override
+  String get error_pdf_render_failed =>
+      'Failed to convert the PDF pages to images.';
+
+  @override
+  String get error_pdf_invalid_or_encrypted =>
+      'The PDF is password-protected or unreadable.';
+
+  @override
   String get chatOpen => 'Chat with the assistant';
 
   @override
