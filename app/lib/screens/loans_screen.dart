@@ -1262,7 +1262,9 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                       info.paymentIsActual
                           ? l.loanPaymentActual
                           : l.loanPaymentComputed,
-                      context.money(info.paymentCents),
+                      context.money(
+                        info.paymentCents + loan.insuranceMonthlyCents,
+                      ),
                     ),
                     if (info.paymentIsActual &&
                         info.totalCount != loan.durationMonths)
@@ -1457,7 +1459,13 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                                 cells: [
                                   DataCell(Text('${i.number}')),
                                   DataCell(Text(context.day(i.date))),
-                                  DataCell(Text(context.money(i.paymentCents))),
+                                  DataCell(
+                                    Text(
+                                      context.money(
+                                        i.paymentCents + i.insuranceCents,
+                                      ),
+                                    ),
+                                  ),
                                   DataCell(
                                     Text(context.money(i.principalCents)),
                                   ),

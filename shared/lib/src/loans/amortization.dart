@@ -20,6 +20,15 @@ class LoanTerms {
   /// Borrower insurance per instalment, fixed.
   final int insuranceMonthlyCents;
 
+  /// Optional date when the loan was disbursed (funds released), before [firstDue].
+  /// When present and different from a standard month before [firstDue],
+  /// the first instalment's interest is computed on the actual days elapsed.
+  final LocalDate? disbursementDate;
+
+  /// Optional interest of the first instalment in cents, when determined
+  /// explicitly by the lender's contract (e.g. broken or intercalary period).
+  final int? firstInterestCents;
+
   /// The instalment actually debited (capital + interest, insurance
   /// excluded), when known: the only figure that is certain. The schedule
   /// then follows it until the capital is repaid, and the number of
@@ -33,6 +42,8 @@ class LoanTerms {
     required this.months,
     required this.firstDue,
     this.insuranceMonthlyCents = 0,
+    this.disbursementDate,
+    this.firstInterestCents,
     this.paymentCents,
   }) {
     if (principalCents <= 0 || principalCents > maxLoanPrincipalCents) {
@@ -280,8 +291,21 @@ List<Installment> amortize(
       if (pending.isEmpty) break;
       continue;
     }
-    final interest = _monthInterest(remaining, rate);
-    var capital = payment - interest;
+    final int interest;
+    if (k == 1 && t.firstInterestCents != null) {
+      interest = t.firstInterestCents!;
+    } else if (k == 1 &&
+        t.disbursementDate != null &&
+        t.disbursementDate! < t.firstDue) {
+      final days = t.disbursementDate!.daysUntil(t.firstDue);
+      interest = ((remaining * rate * days) / 36500000).round();
+    } else {
+      interest = _monthInterest(remaining, rate);
+    }
+    var capital =
+        (k == 1 && (t.firstInterestCents != null || t.disbursementDate != null))
+        ? payment - _monthInterest(remaining, rate)
+        : payment - interest;
     if (k == last || capital > remaining) capital = remaining;
     // An instalment below the interest would never repay: the loan is then
     // shown as paid off by its last allowed instalment.
