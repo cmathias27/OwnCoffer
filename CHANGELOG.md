@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.4.0 (novembre 2026)
+
+### Lecture des PDF avec les modèles de vision
+
+- **Conversion locale en images** : les justificatifs et factures au format PDF ainsi que les documents de prêt peuvent désormais être lus par n'importe quel fournisseur IA disposant de capacités de vision (OpenAI, Gemini, Ollama, Anthropic), grâce à un rendu local en images JPEG des pages (jusqu'à 5 pages, en mémoire).
+- **Consentement explicite et préservation des données** : une boîte de dialogue informe l'utilisateur avant tout transfert d'images vers le modèle configuré, tout en maintenant le fichier PDF original intact dans l'espace de stockage OwnCoffer.
+- **Validation serveur multi-images** : contrôle strict des permissions d'accès et d'isolation de groupe, bornage de la volumétrie (taille par page et totale) et transmission par blocs `image_url`.
+
 ## 1.3.0 (novembre 2026)
 
 ### Degrés d'autonomie et champ d'action de l'IA (décision 0017)
