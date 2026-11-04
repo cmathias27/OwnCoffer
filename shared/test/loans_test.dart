@@ -381,4 +381,46 @@ void main() {
       expect(c.breakEvenMonth, isNull);
     });
   });
+
+  group('intercalary first installment and user loan scenario', () {
+    test('15 000 € at 4.90% over 96 months with 49-day intercalary period', () {
+      final t = LoanTerms(
+        principalCents: 1500000,
+        annualRateMilli: 4900,
+        months: 96,
+        firstDue: LocalDate(2024, 12, 4),
+        insuranceMonthlyCents: 2400,
+        paymentCents: 18919,
+        firstInterestCents: 9633,
+      );
+      final schedule = amortize(t);
+      expect(schedule.length, 96);
+
+      // Échéance 1: intercalaire
+      expect(schedule[0].number, 1);
+      expect(schedule[0].date, LocalDate(2024, 12, 4));
+      expect(schedule[0].interestCents, 9633);
+      expect(schedule[0].principalCents, 12794);
+      expect(schedule[0].insuranceCents, 2400);
+      expect(schedule[0].totalCents, 24827); // 248.27 €
+      expect(schedule[0].remainingCents, 1487206); // 14 872.06 €
+
+      // Échéances 2 à 95: mensualité globale 213.19 € (crédit 189.19 + assurance 24.00)
+      for (var k = 1; k < 95; k++) {
+        expect(schedule[k].totalCents, 21319);
+        expect(schedule[k].insuranceCents, 2400);
+      }
+
+      // Échéance 24 (novembre 2026):
+      // Intérêts dégressifs (48.68 €), capital progressif (140.51 €), CRD 11 780.85 €
+      expect(schedule[23].number, 24);
+      expect(schedule[23].date, LocalDate(2026, 11, 4));
+      expect(schedule[23].interestCents, 4868);
+      expect(schedule[23].principalCents, 14051);
+      expect(schedule[23].remainingCents, 1178085);
+
+      // Dernière échéance: soldée
+      expect(schedule.last.remainingCents, 0);
+    });
+  });
 }
