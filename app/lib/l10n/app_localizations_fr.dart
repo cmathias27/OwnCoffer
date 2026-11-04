@@ -1916,6 +1916,30 @@ class AppLocalizationsFr extends AppLocalizations {
   String get loanDeduceNeedsTerms => 'Indiquez d\'abord le taux et la durée.';
 
   @override
+  String get loanDeduceMonths => 'Calculer la durée à partir de ce prélèvement';
+
+  @override
+  String get loanDeduceMonthsNeedsTerms =>
+      'Indiquez d\'abord le capital emprunté, le taux et la mensualité.';
+
+  @override
+  String get loanDeducePayment => 'Remplir avec la mensualité calculée';
+
+  @override
+  String get loanFirstDueHelp =>
+      'Date de la première échéance. Pour un crédit déjà en cours, vous pouvez indiquer la toute première échéance d\'origine (OwnCoffer calcule les échéances passées) ou la prochaine échéance avec le capital restant dû.';
+
+  @override
+  String loanBreakdownDetail(String credit, String insurance, String total) {
+    return '$credit crédit + $insurance assurance = $total prélevés';
+  }
+
+  @override
+  String loanStatusTodayPreview(int count, String remaining, String interest) {
+    return 'Aujourd\'hui ($count échéances passées) : capital restant dû $remaining, intérêts prochaine échéance $interest.';
+  }
+
+  @override
   String loanInstalmentMismatch(String amount) {
     return 'La mensualité calculée ($amount) s\'écarte de plus de 5 % du prélèvement : vérifiez le capital, le taux, la durée et l\'assurance.';
   }

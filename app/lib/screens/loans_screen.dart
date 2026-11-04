@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -1671,23 +1672,8 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
     final pay = _actualPayment;
     final p = parseUserAmount(_principal.text);
     final r = parseRateMilli(_rate.text);
-    final n = int.tryParse(_months.text.trim());
-    if (pay == null || p == null || r == null || n == null) return null;
-    try {
-      return core
-          .amortize(
-            core.LoanTerms(
-              principalCents: p,
-              annualRateMilli: r,
-              months: n,
-              firstDue: core.LocalDate(2000, 1, 1),
-              paymentCents: pay,
-            ),
-          )
-          .length;
-    } on ArgumentError {
-      return null;
-    }
+    if (pay == null || p == null || r == null) return null;
+    return core.loanMonthsForPaymentCents(p, r, pay);
   }
 
   /// Capital whose instalment, insurance added, is the debit entered.
@@ -1710,6 +1696,60 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
       return;
     }
     _principal.text = _money(p);
+  }
+
+  /// Duration whose instalment, insurance added, is the debit entered.
+  void _deduceMonths() {
+    final l = AppLocalizations.of(context);
+    final p = parseUserAmount(_principal.text);
+    final r = parseRateMilli(_rate.text);
+    final pay = _actualPayment;
+    final n = (p == null || r == null || pay == null)
+        ? null
+        : core.loanMonthsForPaymentCents(p, r, pay);
+    if (n == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l.loanDeduceMonthsNeedsTerms)));
+      return;
+    }
+    _months.text = '$n';
+  }
+
+  /// Pre-fill the debit with the computed instalment plus insurance.
+  void _deducePayment() {
+    final prev = _previewPayment;
+    if (prev == null) return;
+    final insurance = parseUserAmount(_insurance.text) ?? 0;
+    _actual.text = _money(prev + insurance);
+  }
+
+  /// Where the loan stands today if the first due date is in the past.
+  core.LoanStatus? get _statusToday {
+    final p = parseUserAmount(_principal.text);
+    final r = parseRateMilli(_rate.text);
+    final n = int.tryParse(_months.text.trim());
+    if (p == null || r == null || n == null) return null;
+    try {
+      final terms = core.LoanTerms(
+        principalCents: p,
+        annualRateMilli: r,
+        months: n,
+        firstDue: core.LocalDate(
+          _firstDue.year,
+          _firstDue.month,
+          _firstDue.day,
+        ),
+        insuranceMonthlyCents: parseUserAmount(_insurance.text) ?? 0,
+        paymentCents: _actualPayment,
+      );
+      final schedule = core.amortize(terms);
+      final now = DateTime.now();
+      final today = core.LocalDate(now.year, now.month, now.day);
+      return core.loanStatus(terms, schedule, today);
+    } on ArgumentError {
+      return null;
+    }
   }
 
   Future<void> _save() async {
@@ -1884,6 +1924,31 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                           ? l.loanRevolvingPaymentRequired
                           : optionalAmount(v),
                     ),
+                    if (observed != null && observed > 0 && insurance > 0)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          l.loanBreakdownDetail(
+                            context.money(math.max(0, observed - insurance)),
+                            context.money(insurance),
+                            context.money(observed),
+                          ),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    if (!_revolving &&
+                        _actualPayment == null &&
+                        _previewPayment != null)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          icon: const Icon(Icons.calculate_outlined),
+                          label: Text(l.loanDeducePayment),
+                          onPressed: _deducePayment,
+                        ),
+                      ),
                     gap,
                     TextFormField(
                       controller: _principal,
@@ -2011,6 +2076,17 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                               : null;
                         },
                       ),
+                    if (!_revolving &&
+                        (parseUserAmount(_actual.text) ?? 0) > 0 &&
+                        (parseUserAmount(_principal.text) ?? 0) > 0)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          icon: const Icon(Icons.calculate_outlined),
+                          label: Text(l.loanDeduceMonths),
+                          onPressed: _deduceMonths,
+                        ),
+                      ),
                     gap,
                     ListTile(
                       contentPadding: EdgeInsets.zero,
@@ -2018,11 +2094,11 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                       title: Text(l.loanFirstDue),
                       subtitle: Text(
                         op == null
-                            ? context.day(_firstDue)
+                            ? '${context.day(_firstDue)}\n${l.loanFirstDueHelp}'
                             : '${context.day(_firstDue)}\n'
                                   '${l.loanFirstDueFromOperationHelp}',
                       ),
-                      isThreeLine: op != null,
+                      isThreeLine: true,
                       onTap: () async {
                         final picked = await showDatePicker(
                           context: context,
@@ -2119,19 +2195,42 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                       color: theme.colorScheme.secondaryContainer,
                       child: Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Text(
-                          _actualMonths != null
-                              ? l.loanActualPreview(
-                                  context.money(_actualPayment! + insurance),
-                                  _actualMonths!,
-                                )
-                              : preview == null
-                              ? l.loanPreviewEmpty
-                              : l.loanPreview(
-                                  context.money(preview),
-                                  context.money(preview + insurance),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _actualMonths != null
+                                  ? l.loanActualPreview(
+                                      context.money(
+                                        _actualPayment! + insurance,
+                                      ),
+                                      _actualMonths!,
+                                    )
+                                  : preview == null
+                                  ? l.loanPreviewEmpty
+                                  : l.loanPreview(
+                                      context.money(preview),
+                                      context.money(preview + insurance),
+                                    ),
+                              style: theme.textTheme.bodyLarge,
+                            ),
+                            if (_statusToday != null &&
+                                _statusToday!.paidCount > 0) ...[
+                              const SizedBox(height: 8),
+                              Text(
+                                l.loanStatusTodayPreview(
+                                  _statusToday!.paidCount,
+                                  context.money(_statusToday!.remainingCents),
+                                  context.money(
+                                    _statusToday!.next?.interestCents ?? 0,
+                                  ),
                                 ),
-                          style: theme.textTheme.bodyLarge,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSecondaryContainer,
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
                       ),
                     ),

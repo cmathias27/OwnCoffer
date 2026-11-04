@@ -1256,6 +1256,38 @@
   },
   "loanDeducePrincipal": "Calculer le capital à partir de ce prélèvement",
   "loanDeduceNeedsTerms": "Indiquez d'abord le taux et la durée.",
+  "loanDeduceMonths": "Calculer la durée à partir de ce prélèvement",
+  "loanDeduceMonthsNeedsTerms": "Indiquez d'abord le capital emprunté, le taux et la mensualité.",
+  "loanDeducePayment": "Remplir avec la mensualité calculée",
+  "loanFirstDueHelp": "Date de la première échéance. Pour un crédit déjà en cours, vous pouvez indiquer la toute première échéance d'origine (OwnCoffer calcule les échéances passées) ou la prochaine échéance avec le capital restant dû.",
+  "loanBreakdownDetail": "{credit} crédit + {insurance} assurance = {total} prélevés",
+  "@loanBreakdownDetail": {
+    "placeholders": {
+      "credit": {
+        "type": "String"
+      },
+      "insurance": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "loanStatusTodayPreview": "Aujourd'hui ({count} échéances passées) : capital restant dû {remaining}, intérêts prochaine échéance {interest}.",
+  "@loanStatusTodayPreview": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "String"
+      },
+      "interest": {
+        "type": "String"
+      }
+    }
+  },
   "loanInstalmentMismatch": "La mensualité calculée ({amount}) s'écarte de plus de 5 % du prélèvement : vérifiez le capital, le taux, la durée et l'assurance.",
   "@loanInstalmentMismatch": {
     "placeholders": {
