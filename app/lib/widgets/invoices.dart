@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -221,6 +222,12 @@ Future<bool> deleteInvoice(BuildContext context, InvoiceInfo info) async {
   }
 }
 
+Future<AiReply> _readInvoicePdfPages(Invoice invoice, List<PickedFile> pages) =>
+    client.ai.readInvoice(
+      invoice.id!,
+      pageImagesBase64: [for (final page in pages) base64Encode(page.bytes)],
+    );
+
 /// Whether the warranty ends within a month (or is over).
 bool warrantyEndingSoon(DateTime until, DateTime today) =>
     !until.isAfter(today.add(const Duration(days: 30)));
@@ -315,6 +322,14 @@ class InvoiceTile extends StatelessWidget {
                 context,
                 mimeType: i.mimeType,
                 read: () => client.ai.readInvoice(i.id!),
+                loadPdf: () async {
+                  final data = await client.invoice.download(i.id!);
+                  return data.buffer.asUint8List(
+                    data.offsetInBytes,
+                    data.lengthInBytes,
+                  );
+                },
+                readPdfPages: (pages) => _readInvoicePdfPages(i, pages),
               );
             case 'send':
               await sendInvoice(context, info);

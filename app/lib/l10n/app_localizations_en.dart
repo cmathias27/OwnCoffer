@@ -4716,7 +4716,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiReadNoPdf =>
-      'This model only reads images: attach a photo or a screenshot of the document. (Claude also reads PDFs.)';
+      'This PDF cannot be sent to this provider. Attach a photo or screenshot instead.';
+
+  @override
+  String aiReadPdfRenderedConsent(String destination) {
+    return 'The PDF will be rendered on this device into at most 5 page images (up to 1600 px per side) before transfer. $destination The original PDF stays unchanged.';
+  }
 
   @override
   String advisorAiSplit(String label) {
@@ -4795,6 +4800,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_ai_document_too_large =>
       'Document too large to be read (8 MB at most).';
+
+  @override
+  String get error_ai_document_invalid_image =>
+      'The rendered PDF page images are invalid. Try again with the original document.';
+
+  @override
+  String get error_ai_document_too_many_pages =>
+      'This PDF exceeds the 5-page limit for AI reading.';
 
   @override
   String get chatOpen => 'Chat with the assistant';

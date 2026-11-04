@@ -25,7 +25,10 @@ void main() {
       late int groupId;
       late Account checking;
       late int categoryId;
-      final today = DateTime.utc(2026, 11, 2);
+      final now = DateTime.now().toUtc();
+      final today = DateTime.utc(now.year, now.month, now.day);
+      final todayIso =
+          '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
 
       TestSessionBuilder as(UuidValue u) => sessionBuilder.copyWith(
         authentication: AuthenticationOverride.authenticationInfo(
@@ -103,7 +106,7 @@ void main() {
         final daysBack = '(s.i * 2922 / $total)';
         final date = sqlite
             ? '(${today.millisecondsSinceEpoch} - $daysBack * 86400000)'
-            : "(TIMESTAMP '2026-11-02' - $daysBack * INTERVAL '1 day')";
+            : "(TIMESTAMP '$todayIso' - $daysBack * INTERVAL '1 day')";
         final category = [
           'CASE s.i % ${ids.length}',
           for (var k = 0; k < ids.length; k++) 'WHEN $k THEN ${ids[k]}',

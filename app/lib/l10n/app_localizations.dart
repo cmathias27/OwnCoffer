@@ -7689,8 +7689,14 @@ abstract class AppLocalizations {
   /// No description provided for @aiReadNoPdf.
   ///
   /// In fr, this message translates to:
-  /// **'Ce modèle ne lit que les images : joignez une photo ou une capture du document. (Claude lit aussi les PDF.)'**
+  /// **'Ce PDF ne peut pas être envoyé à ce fournisseur. Joignez plutôt une photo ou une capture d\'écran.'**
   String get aiReadNoPdf;
+
+  /// No description provided for @aiReadPdfRenderedConsent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le PDF sera converti sur cet appareil en 5 images de page au maximum (1600 px par côté). {destination} Le PDF original ne sera pas modifié.'**
+  String aiReadPdfRenderedConsent(String destination);
 
   /// No description provided for @advisorAiSplit.
   ///
@@ -7798,6 +7804,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Document trop lourd pour être lu (8 Mo au plus).'**
   String get error_ai_document_too_large;
+
+  /// No description provided for @error_ai_document_invalid_image.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les images de page du PDF sont invalides. Réessayez avec le document original.'**
+  String get error_ai_document_invalid_image;
+
+  /// No description provided for @error_ai_document_too_many_pages.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce PDF dépasse la limite de 5 pages pour la lecture par l\'IA.'**
+  String get error_ai_document_too_many_pages;
 
   /// No description provided for @chatOpen.
   ///

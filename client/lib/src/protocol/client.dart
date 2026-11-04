@@ -707,21 +707,31 @@ class EndpointAi extends _isc.EndpointRef {
   /// Reads a receipt or invoice with the user's AI: a split (joined to an
   /// operation) or its amount, date and merchant (waiting) are proposed in
   /// "Mon conseiller". Nothing is changed here.
-  _ida.Future<_i6gcixlb.AiReply> readInvoice(int invoiceId) =>
-      caller.callServerEndpoint<_i6gcixlb.AiReply>(
-        'ai',
-        'readInvoice',
-        {'invoiceId': invoiceId},
-      );
+  _ida.Future<_i6gcixlb.AiReply> readInvoice(
+    int invoiceId, {
+    List<String>? pageImagesBase64,
+  }) => caller.callServerEndpoint<_i6gcixlb.AiReply>(
+    'ai',
+    'readInvoice',
+    {
+      'invoiceId': invoiceId,
+      'pageImagesBase64': pageImagesBase64,
+    },
+  );
 
   /// Reads a loan document with the user's AI: the terms it states are
   /// proposed for the loan in "Mon conseiller".
-  _ida.Future<_i6gcixlb.AiReply> readLoanDocument(int documentId) =>
-      caller.callServerEndpoint<_i6gcixlb.AiReply>(
-        'ai',
-        'readLoanDocument',
-        {'documentId': documentId},
-      );
+  _ida.Future<_i6gcixlb.AiReply> readLoanDocument(
+    int documentId, {
+    List<String>? pageImagesBase64,
+  }) => caller.callServerEndpoint<_i6gcixlb.AiReply>(
+    'ai',
+    'readLoanDocument',
+    {
+      'documentId': documentId,
+      'pageImagesBase64': pageImagesBase64,
+    },
+  );
 
   /// What the user asked the assistant to keep in mind, oldest first.
   _ida.Future<List<_iofw4ha7.AiMemory>> memories(int groupId) =>

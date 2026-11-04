@@ -177,11 +177,34 @@ void main() {
       final reply = await endpoints.ai.readInvoice(
         as(bob),
         invoice.invoice.id!,
+        pageImagesBase64: [base64Encode(_png().buffer.asUint8List())],
       );
       expect(reply.isExternal, isTrue);
       final sent = model.received.single.toString();
-      expect(sent, contains('data:image/png;base64,'));
+      expect(sent, contains('data:image/jpeg;base64,'));
+      expect(sent, isNot(contains('data:image/png;base64,')));
       expect(sent, isNot(contains('Courant')), reason: 'only the document');
+      await expectLater(
+        endpoints.ai.readInvoice(
+          as(bob),
+          invoice.invoice.id!,
+          pageImagesBase64: ['not-base64!'],
+        ),
+        code('ai_document_invalid_image'),
+      );
+      await expectLater(
+        endpoints.ai.readInvoice(
+          as(bob),
+          invoice.invoice.id!,
+          pageImagesBase64: List.filled(6, base64Encode([1])),
+        ),
+        code('ai_document_too_many_pages'),
+      );
+      expect(
+        model.received,
+        hasLength(1),
+        reason: 'invalid images are not sent',
+      );
       final p = reply.proposals.single;
       expect(p.kind, 'set_split');
       final parts = (jsonDecode(p.proposedData!) as Map)['parts'] as List;

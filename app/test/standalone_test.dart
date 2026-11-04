@@ -30,6 +30,8 @@ void main() {
       await client.auth.updateSignedInUser(signIn);
       expect((await client.twoFactor.status()).fullAccess, isTrue);
       expect(await client.group.myGroups(), isEmpty);
+      final now = DateTime.now().toUtc();
+      final today = DateTime.utc(now.year, now.month, now.day);
       final group = (await client.group.create('Mes comptes')).group;
       final account = await client.account.create(
         group.id!,
@@ -38,7 +40,7 @@ void main() {
       );
       await client.transaction.create(
         account.id!,
-        DateTime.utc(2026, 11, 2),
+        today,
         -4250,
         'BOULANGERIE',
       );
@@ -54,7 +56,7 @@ void main() {
       expect(invoice.invoice.sizeBytes, big.length);
       final forecast = await client.scheduled.forecast(
         account.id!,
-        DateTime.utc(2026, 11, 2),
+        today,
       );
       expect(forecast.currentBalanceCents, -4250);
 
@@ -124,6 +126,8 @@ void main() {
       await client.auth.updateSignedInUser(
         AuthSuccess.fromJson(await server.signIn()),
       );
+      final now = DateTime.now().toUtc();
+      final today = DateTime.utc(now.year, now.month, now.day);
       final group = (await client.group.create('Mes comptes')).group;
       final account = await client.account.create(
         group.id!,
@@ -132,7 +136,7 @@ void main() {
       );
       await client.transaction.create(
         account.id!,
-        DateTime.utc(2026, 11, 2),
+        today,
         -990,
         'CAFE',
       );
