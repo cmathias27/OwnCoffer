@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.4.2 (novembre 2026)
+
+### Crédits et tableaux d'amortissement
+
+- **Déduction automatique de la durée** : ajout de la fonction de calcul inverse permettant de déduire la durée exacte du crédit en mois à partir du capital emprunté, du taux d'intérêt nominal et de la mensualité observée sur le compte.
+- **Décomposition en direct des mensualités** : affichage en temps réel de la répartition nette (`crédit + assurance = total prélevé`) sous le champ de prélèvement pour éviter les confusions entre mensualité hors assurance et montant global prélevé.
+- **Actions rapides dans le formulaire** : boutons permettant de calculer la durée depuis le prélèvement ou de pré-remplir le prélèvement total à partir de la durée et de l'assurance.
+- **Aperçu des crédits en cours** : affichage instantané de l'état actuel du crédit lorsque la date de première échéance est passée (nombre d'échéances déjà échues, capital restant dû exact à date, part d'intérêts de la prochaine échéance).
+
 ## 1.4.1 (novembre 2026)
 
 ### Correctifs
