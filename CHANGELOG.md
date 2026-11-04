@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.4.3 (novembre 2026)
+
+### Crédits et tableaux d'amortissement
+
+- **Échéance intercalaire et brisée** : prise en compte du décalage entre la mise à disposition des fonds et la première date d'échéance avec calcul prorata temporis des intérêts sur base réelle 365 jours.
+- **Affichage de la mensualité globale** : affichage du montant total prélevé par la banque (capital amorti + intérêts dégressifs + assurance fixe) dans le tableau d'amortissement et le résumé du crédit.
+- **Fidélité au tableau bancaire** : modélisation de la dégressivité des intérêts et de la progressivité du capital amorti garantissant l'alignement exact du capital restant dû à chaque échéance.
+
 ## 1.4.2 (novembre 2026)
 
 ### Crédits et tableaux d'amortissement
