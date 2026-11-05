@@ -23,4 +23,4 @@ Le serveur sauvegarde la base chaque nuit, **chiffrée**, et vérifie aussitôt 
 
 ## Logiciel libre
 
-OwnCoffer est libre (AGPL-3.0) et gratuit : son code est public et peut être vérifié.
+OwnCoffer est libre (AGPL-3.0, avec une exception pour Serverpod) et gratuit : son code est public et peut être vérifié.

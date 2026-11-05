@@ -234,6 +234,7 @@ jobs:
           New-Item -ItemType Directory -Force dist | Out-Null
           $release = "app/build/windows/x64/runner/Release"
           Copy-Item LICENSE "$release/LICENSE.txt"
+          Copy-Item LICENSE-EXCEPTION.md "$release/LICENSE-EXCEPTION.txt"
           # Visual C++ runtime, as Flutter recommends for computers without it.
           foreach ($dll in 'msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll') {
             Copy-Item "$env:SystemRoot/System32/$dll" $release

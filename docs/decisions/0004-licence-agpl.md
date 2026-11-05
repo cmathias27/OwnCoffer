@@ -8,7 +8,7 @@ OwnCoffer est un projet auto-hébergé destiné à être partagé. Options étud
 
 ## Décision
 
-- Code sous licence **GNU AGPL-3.0** (fichier `LICENSE`).
+- Code sous licence **GNU AGPL-3.0** (fichier `LICENSE`), avec une permission supplémentaire pour Serverpod depuis la décision [0024](0024-licence-exception-serverpod.md) (fichier `LICENSE-EXCEPTION.md`).
 - Application **gratuite**, sans publicité, sans abonnement ni fonction payante ; soutien par les **dons** (plateforme à choisir).
 - **Auto-hébergement uniquement** : aucune donnée chez le développeur, aucune télémétrie.
 

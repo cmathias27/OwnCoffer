@@ -156,7 +156,7 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 - [x] Catégorisation d'appoint par l'IA, avec la règle suggérée — *catégories proposées dans la 0.3.25 ; règle suggérée, vérifiée et comptée par le moteur, dans la 0.3.28*
 - [x] Lecture de documents : tickets (sans IA : saisie assistée ; avec IA : ventilation ligne par ligne), offres de prêt et tableaux d'amortissement (avec IA), factures — *0.3.31 : tickets, factures et documents de crédit gardés dans OwnCoffer lus par l'IA de l'utilisateur, propositions validées dans Mon conseiller ; sans IA, la ventilation à la main reste disponible*
 - [x] Assistant IA (en option) : interroge le moteur, explique, pose les scénarios en langage naturel ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable — *0.3.25 ; bulle de discussion (0.3.32) ; mémoire et historique des conversations (0.3.33) ; fonctions consultées affichées, propositions refusables*
-- [ ] Licence Serverpod clarifiée avant d'ouvrir la bêta à d'autres personnes (décision 0001)
+- [ ] Licence Serverpod clarifiée avant d'ouvrir la bêta à d'autres personnes (décision 0001) — *AGPL-3.0 + exception pour Serverpod (décision 0024) ; reste la confirmation écrite de l'équipe Serverpod*
 - [ ] Row Level Security PostgreSQL réévaluée avant d'ouvrir la bêta (décision 0016)
 
 **Validation** : un mois complet géré dans OwnCoffer par deux ou trois testeurs, dont au moins un **sans IA** ; les prévisions à 30 jours restent proches du solde réel.

@@ -17,7 +17,7 @@
 ## Principes
 
 - **Vos données restent chez vous** : serveur auto-hébergé avec Docker, aucune télémétrie, aucune connexion à votre banque.
-- **Libre et gratuit** : licence [AGPL-3.0](LICENSE), sans publicité ni abonnement, soutenu par les dons.
+- **Libre et gratuit** : licence [AGPL-3.0](LICENSE) avec une [exception pour Serverpod](LICENSE-EXCEPTION.md), sans publicité ni abonnement, soutenu par les dons.
 - **Sécurité d'abord** : HTTPS, double authentification, blocage automatique des tentatives d'intrusion, permissions vérifiées jusque dans la base de données.
 - **Français et anglais** dès la première version.
 
@@ -54,4 +54,4 @@ Les idées et retours sont bienvenus dès maintenant : ouvrez une [issue](../../
 
 ### English
 
-OwnCoffer is a free, open-source, self-hosted personal finance app: import bank statements (QIF, OFX, CSV), automatic categorisation with community rules, cash-flow forecasts, budget goals and alerts, loans tracking, and optional AI document reading with the provider of your choice. Server + web app at version 1.0, with first Windows and Android apps. Documentation is in French for now; the app is in French and English. Licensed under AGPL-3.0.
+OwnCoffer is a free, open-source, self-hosted personal finance app: import bank statements (QIF, OFX, CSV), automatic categorisation with community rules, cash-flow forecasts, budget goals and alerts, loans tracking, and optional AI document reading with the provider of your choice. Server + web app at version 1.0, with first Windows and Android apps. Documentation is in French for now; the app is in French and English. Licensed under AGPL-3.0 with an [additional permission for Serverpod](LICENSE-EXCEPTION.md).
