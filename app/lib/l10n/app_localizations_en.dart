@@ -5700,7 +5700,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Wrong passphrase, or a changed file.';
 
   @override
-  String get deviceBackupNotABackup => 'This file is not an OwnCoffer backup.';
+  String get deviceBackupNotABackup =>
+      'This file is not an OwnCoffer backup, or it is damaged.';
+
+  @override
+  String get deviceBackupTooNew =>
+      'This backup comes from a newer version of the app: update the app first, then restore. Your current data has not been changed.';
+
+  @override
+  String deviceBackupFailed(String when, String reason) {
+    return 'The automatic backup failed ($when): $reason. Next try within the hour; “Back up now” tries again at once.';
+  }
 
   @override
   String get deviceBackupReplace => 'Replace';

@@ -119,8 +119,9 @@ Future<void> _openStandalone() async {
   }
   await _step('mode', ServerAddress.saveMode('standalone'));
   runApp(const OwnCofferApp());
-  // The daily encrypted backup, once the app is shown.
-  unawaited(StandaloneBackups.runIfDue());
+  // The daily encrypted backup, once the app is shown, then checked every
+  // hour while it stays open.
+  StandaloneBackups.schedule();
 }
 
 /// One step of the standalone start, named in the error shown if it fails

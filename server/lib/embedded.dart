@@ -16,7 +16,7 @@ import 'src/standalone/sqlite_migrations.g.dart';
 import 'src/startup.dart';
 
 export 'src/standalone/device_backup.dart'
-    show BackupPassphraseException, DeviceBackup;
+    show BackupPassphraseException, BackupTooNewException, DeviceBackup;
 
 /// The OwnCoffer server running inside the Windows or Android app, on a
 /// SQLite file, for one person on one device (decision 0022). Same
@@ -63,12 +63,19 @@ class EmbeddedServer {
       await session.close();
     }
     try {
+      // A backup that could not be restored is worse than none: the copy
+      // is checked whole before it is sealed.
+      final copyPath = copy.path;
+      final schema = await Isolate.run(
+        () => DeviceBackup.schemaVersion(copyPath),
+      );
       final database = await copy.readAsBytes();
       final passwords = await File(
         '${dataDir.path}/config/passwords.yaml',
       ).readAsString();
       final meta = {
         'createdAt': DateTime.now().toUtc().toIso8601String(),
+        'schema': schema,
         ...metadata,
       };
       // The key derivation takes a second or two: off the app's thread.

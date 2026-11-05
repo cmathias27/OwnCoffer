@@ -5,6 +5,9 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:pointycastle/export.dart';
+import 'package:sqlite3/sqlite3.dart' as sqlite3;
+
+import 'sqlite_migrations.g.dart';
 
 /// Backups of the standalone app (decision 0022): the whole SQLite file and
 /// the server's secrets, encrypted with a passphrase chosen by the user, so
@@ -140,27 +143,143 @@ abstract final class DeviceBackup {
     );
   }
 
-  /// Writes a restored backup into [dataDir], replacing the database and
-  /// the secrets. The embedded server must be stopped.
+  /// The schema versions this build can open: a database made by a newer
+  /// app has one it does not know, and Serverpod would refuse to start on
+  /// it.
+  static Set<String> get knownVersions => {
+    for (final path in sqliteMigrations.keys)
+      if (path.contains('/')) path.split('/').first,
+  };
+
+  /// The schema version of a SQLite file, after checking it is whole
+  /// (`PRAGMA integrity_check`). Throws [FormatException] if it is not an
+  /// OwnCoffer database or is damaged.
+  static String schemaVersion(String path) {
+    final sqlite3.Database db;
+    try {
+      db = sqlite3.sqlite3.open(path, mode: sqlite3.OpenMode.readOnly);
+    } on Object {
+      throw const FormatException('Not an OwnCoffer database');
+    }
+    try {
+      final check = db.select('PRAGMA integrity_check');
+      if (check.length != 1 || check.first.values.first != 'ok') {
+        throw const FormatException('Damaged database');
+      }
+      final rows = db.select(
+        'SELECT version FROM serverpod_migrations WHERE module = ?',
+        ['owncoffer'],
+      );
+      if (rows.isEmpty) {
+        throw const FormatException('Not an OwnCoffer database');
+      }
+      return rows.first['version'] as String;
+    } on sqlite3.SqliteException {
+      throw const FormatException('Not an OwnCoffer database');
+    } finally {
+      db.close();
+    }
+  }
+
+  static const _db = 'owncoffer.db';
+  static const _incoming = 'restore-incoming';
+  static const _previous = 'before-restore';
+
+  /// First step of a restore, while the server still runs: decrypts
+  /// [file] and writes it beside the data, then checks the database is
+  /// whole and of a schema this build knows. Nothing of the current data
+  /// is touched; throws [BackupPassphraseException], [FormatException] or
+  /// [BackupTooNewException].
+  static Future<void> prepareRestore(
+    Directory dataDir,
+    Uint8List file,
+    String passphrase, {
+    Set<String>? versions,
+  }) async {
+    // The key derivation takes a second or two: off the app's thread.
+    final b = await Isolate.run(() => open(file, passphrase));
+    final dir = Directory('${dataDir.path}/$_incoming');
+    if (dir.existsSync()) await dir.delete(recursive: true);
+    await dir.create(recursive: true);
+    try {
+      await File('${dir.path}/$_db').writeAsBytes(b.database, flush: true);
+      await File(
+        '${dir.path}/passwords.yaml',
+      ).writeAsString(b.passwords, flush: true);
+      final path = '${dir.path}/$_db';
+      final version = await Isolate.run(() => schemaVersion(path));
+      if (!(versions ?? knownVersions).contains(version)) {
+        throw BackupTooNewException(version);
+      }
+    } on Object {
+      await dir.delete(recursive: true);
+      rethrow;
+    }
+  }
+
+  /// Second step, the embedded server stopped: puts the prepared backup in
+  /// place. The current data is moved aside first (kept in
+  /// `before-restore/` until the next restore) and put back if anything
+  /// fails, so a restore never leaves the device without data.
+  static Future<void> commitRestore(Directory dataDir) async {
+    final incoming = Directory('${dataDir.path}/$_incoming');
+    if (!File('${incoming.path}/$_db').existsSync()) {
+      throw StateError('no prepared restore');
+    }
+    final previous = Directory('${dataDir.path}/$_previous');
+    if (previous.existsSync()) await previous.delete(recursive: true);
+    await previous.create(recursive: true);
+    final config = Directory('${dataDir.path}/config');
+    await config.create(recursive: true);
+    // Current file → its place in before-restore/.
+    final current = <String, String>{
+      for (final suffix in ['', '-wal', '-shm', '-journal'])
+        '${dataDir.path}/$_db$suffix': '${previous.path}/$_db$suffix',
+      '${config.path}/passwords.yaml': '${previous.path}/passwords.yaml',
+    };
+    final moved = <String, String>{};
+    final placed = <String>[];
+    Future<void> place(String from, String to) async {
+      await File(from).rename(to);
+      placed.add(to);
+    }
+
+    try {
+      for (final e in current.entries) {
+        final f = File(e.key);
+        if (f.existsSync()) {
+          await f.rename(e.value);
+          moved[e.key] = e.value;
+        }
+      }
+      await place(
+        '${incoming.path}/passwords.yaml',
+        '${config.path}/passwords.yaml',
+      );
+      await place('${incoming.path}/$_db', '${dataDir.path}/$_db');
+    } on Object {
+      // Back to the data as it was.
+      for (final path in placed) {
+        await File(path).delete();
+      }
+      for (final e in moved.entries) {
+        await File(e.value).rename(e.key);
+      }
+      rethrow;
+    }
+    await incoming.delete(recursive: true);
+  }
+
+  /// [prepareRestore] then [commitRestore]; the embedded server must be
+  /// stopped.
   static Future<void> restoreInto(
     Directory dataDir,
     Uint8List file,
-    String passphrase,
-  ) async {
-    // The key derivation takes a second or two: off the app's thread.
-    final b = await Isolate.run(() => open(file, passphrase));
-    for (final suffix in ['', '-wal', '-shm', '-journal']) {
-      final f = File('${dataDir.path}/owncoffer.db$suffix');
-      if (f.existsSync()) await f.delete();
-    }
-    await File(
-      '${dataDir.path}/owncoffer.db',
-    ).writeAsBytes(b.database, flush: true);
-    final config = Directory('${dataDir.path}/config');
-    await config.create(recursive: true);
-    await File(
-      '${config.path}/passwords.yaml',
-    ).writeAsString(b.passwords, flush: true);
+    String passphrase, {
+    Set<String>? versions,
+  }) async {
+    await prepareRestore(dataDir, file, passphrase, versions: versions);
+    await commitRestore(dataDir);
   }
 
   static Uint8List _u32(int v) =>
@@ -177,4 +296,14 @@ abstract final class DeviceBackup {
 /// Wrong passphrase, or a changed file.
 class BackupPassphraseException implements Exception {
   const BackupPassphraseException();
+}
+
+/// The backup was made by a newer version of the app: its database has a
+/// schema this one does not know. Update the app, then restore.
+class BackupTooNewException implements Exception {
+  final String version;
+  const BackupTooNewException(this.version);
+
+  @override
+  String toString() => 'BackupTooNewException($version)';
 }

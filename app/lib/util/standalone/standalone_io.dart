@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:file_selector/file_selector.dart';
@@ -11,6 +10,8 @@ import 'package:path_provider/path_provider.dart';
 bool get standaloneAvailable => Platform.isAndroid || Platform.isWindows;
 
 EmbeddedServer? _server;
+
+bool get standaloneRunning => _server != null;
 
 Future<Directory> _dataDir() async => Directory(
   '${(await getApplicationSupportDirectory()).path}/standalone',
@@ -29,13 +30,16 @@ Future<Uint8List> standaloneBackup(
   Map<String, Object?> metadata,
 ) => _server!.backup(passphrase, metadata: metadata);
 
-/// Stops the server and replaces its data; the app then starts it again.
-/// Checks the passphrase before anything is replaced.
+/// Replaces this device's data by a backup. Everything is checked while
+/// the server still runs (passphrase, whole database, schema this app
+/// knows); only then is it stopped, the data swapped (the previous one put
+/// back on failure) and the server started again on what is in place.
 Future<void> standaloneRestore(Uint8List file, String passphrase) async {
-  await Isolate.run(() => DeviceBackup.open(file, passphrase));
+  final dir = await _dataDir();
+  await DeviceBackup.prepareRestore(dir, file, passphrase);
   await _server?.stop();
   _server = null;
-  await DeviceBackup.restoreInto(await _dataDir(), file, passphrase);
+  await DeviceBackup.commitRestore(dir);
 }
 
 /// Windows: Documents\OwnCoffer. Android: the app's folder on the shared
@@ -67,6 +71,12 @@ Future<String> writeBackup(
   final dir = Directory(folder);
   await dir.create(recursive: true);
   final file = File('${dir.path}${Platform.pathSeparator}$name');
+  // Left by a backup cut short (app closed, disk full).
+  for (final stale in dir.listSync().whereType<File>()) {
+    if (stale.path.endsWith('.${DeviceBackup.extension}.part')) {
+      await stale.delete();
+    }
+  }
   final part = File('${file.path}.part');
   await part.writeAsBytes(bytes, flush: true);
   await part.rename(file.path);
@@ -103,3 +113,5 @@ Future<({String name, Uint8List bytes})?> latestBackup(String folder) async {
 }
 
 bool isWrongPassphrase(Object e) => e is BackupPassphraseException;
+
+bool isBackupTooNew(Object e) => e is BackupTooNewException;

@@ -39,3 +39,10 @@ Future<({String name, Uint8List bytes})?> latestBackup(String folder) =>
 
 /// The passphrase did not open the backup (or the file was changed).
 bool isWrongPassphrase(Object e) => impl.isWrongPassphrase(e);
+
+/// The backup comes from a newer version of the app: update this one first.
+bool isBackupTooNew(Object e) => impl.isBackupTooNew(e);
+
+/// Whether the embedded server is running (false after a restore stopped
+/// it, even a failed one: the app must start it again).
+bool get standaloneRunning => impl.standaloneRunning;
