@@ -1584,6 +1584,10 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
         : _money(_op == null ? null : -_op.amountCents),
   );
   late var _firstDue = _l?.firstDueDate ?? _op?.date ?? todayUtcMidnight();
+  late DateTime? _disbursement = _l?.disbursementDate;
+  late final _firstInterest = TextEditingController(
+    text: _money(_l?.firstInterestCents),
+  );
   late int? _account = _l?.accountId ?? _op?.accountId;
   late int? _category = _l?.categoryId ?? _op?.categoryId;
   late List<Category> _categories = widget.categories ?? [];
@@ -1611,7 +1615,14 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
         if (mounted) setState(() => _categories = list);
       }, onError: (_) {});
     }
-    for (final c in [_principal, _rate, _months, _insurance, _actual]) {
+    for (final c in [
+      _principal,
+      _rate,
+      _months,
+      _insurance,
+      _actual,
+      _firstInterest,
+    ]) {
       c.addListener(() => setState(() {}));
     }
     for (final c in [_months, _actual]) {
@@ -1649,6 +1660,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
       _fees,
       _actual,
       _limit,
+      _firstInterest,
     ]) {
       c.dispose();
     }
@@ -1748,6 +1760,14 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
           _firstDue.month,
           _firstDue.day,
         ),
+        disbursementDate: _disbursement == null
+            ? null
+            : core.LocalDate(
+                _disbursement!.year,
+                _disbursement!.month,
+                _disbursement!.day,
+              ),
+        firstInterestCents: parseUserAmount(_firstInterest.text),
         insuranceMonthlyCents: parseUserAmount(_insurance.text) ?? 0,
         paymentCents: _actualPayment,
       );
@@ -1780,6 +1800,10 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
           : int.parse(_months.text.trim()),
       creditLimitCents: _revolving ? parseUserAmount(_limit.text) : null,
       firstDueDate: _firstDue,
+      disbursementDate: !_installments && !_revolving ? _disbursement : null,
+      firstInterestCents: !_installments && !_revolving
+          ? parseUserAmount(_firstInterest.text)
+          : null,
       insuranceMonthlyCents: parseUserAmount(_insurance.text) ?? 0,
       feesCents: parseUserAmount(_fees.text) ?? 0,
       paymentCents: _actualPayment,
@@ -2129,6 +2153,64 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         }
                       },
                     ),
+                    if (!_installments && !_revolving) ...[
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(Icons.outbox_outlined),
+                        title: Text(l.loanDisbursementDate),
+                        subtitle: Text(
+                          _disbursement == null
+                              ? l.loanDisbursementDateStandard
+                              : '${context.day(_disbursement!)}\n${l.loanDisbursementDateHelp}',
+                        ),
+                        isThreeLine: _disbursement != null,
+                        trailing: _disbursement == null
+                            ? null
+                            : IconButton(
+                                icon: const Icon(Icons.clear),
+                                tooltip: l.loanDisbursementDateClear,
+                                onPressed: () =>
+                                    setState(() => _disbursement = null),
+                              ),
+                        onTap: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate:
+                                _disbursement ??
+                                DateTime(
+                                  _firstDue.year,
+                                  _firstDue.month - 1,
+                                  _firstDue.day,
+                                ),
+                            firstDate: DateTime(1970),
+                            lastDate: _firstDue,
+                          );
+                          if (picked != null) {
+                            setState(
+                              () => _disbursement = DateTime.utc(
+                                picked.year,
+                                picked.month,
+                                picked.day,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      TextFormField(
+                        controller: _firstInterest,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        decoration: InputDecoration(
+                          labelText: l.loanFirstInterest,
+                          helperText: l.loanFirstInterestHelp,
+                          suffixText: '€',
+                        ),
+                        validator: optionalAmount,
+                        onChanged: (_) => setState(() {}),
+                      ),
+                      gap,
+                    ],
                     Row(
                       children: [
                         if (!_installments) ...[

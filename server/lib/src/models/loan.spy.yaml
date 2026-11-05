@@ -23,6 +23,13 @@ fields:
   ### figure): the schedule follows it, the rest is estimated.
   paymentCents: int?
   firstDueDate: DateTime
+  ### Day the money was paid out, when it is not one month before the
+  ### first instalment: that instalment's interest is counted in days
+  ### (intercalary interest).
+  disbursementDate: DateTime?
+  ### Interest of the first instalment as written in the contract, when
+  ### known: it prevails over the computed one.
+  firstInterestCents: int?
   insuranceMonthlyCents: int, default=0
   feesCents: int, default=0
   categoryId: int?, relation(parent=categories, onDelete=SetNull)

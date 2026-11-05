@@ -2,6 +2,18 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.4.7 (novembre 2026)
+
+### Crédits
+
+- **Saisie des intérêts intercalaires** dans la fiche du prêt :
+  - **Date de déblocage des fonds** (facultative) : si les fonds ont été versés avant le mois précédant la première échéance, OwnCoffer calcule les intérêts intercalaires et les applique à la première échéance ;
+  - **Intérêts de la 1ʳᵉ échéance** (facultatif) : permet de renseigner le montant exact indiqué par la banque sur le contrat ou l'échéancier si les règles de calcul diffèrent.
+- **Prélèvements prévisionnels et rapprochement exacts** :
+  - la première échéance intercalaire est projetée dans le solde prévisionnel avec son montant exact (mensualité + intérêts intercalaires + assurance) ;
+  - les échéances ajustées (dernière échéance avec arrondi, échéances consécutives à un changement de taux ou une renégociation) sont également prises en compte avec leur montant réel ;
+  - le calendrier des échéances affiche le montant exact propre à chaque échéance du prêt.
+
 ## 1.4.6 (novembre 2026)
 
 ### Crédits

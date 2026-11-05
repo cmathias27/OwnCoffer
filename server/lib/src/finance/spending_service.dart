@@ -5,6 +5,7 @@ import '../core/dates.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import 'forecast_service.dart';
+import 'loan_terms.dart';
 
 /// Data of the spending engine, read on the accounts the user may see.
 abstract final class SpendingService {
@@ -159,6 +160,9 @@ abstract final class SpendingService {
                 s.categoryId.notEquals(null) &
                 (s.amountCents < 0),
           );
+    final loanDebits = accountIds.isEmpty
+        ? const <int, Map<core.LocalDate, int>>{}
+        : await LoanTermsOf.debits(session, scheduled);
     final parents = {for (final c in categories) c.id: c.parentId};
     bool under(int? id, int goalCategory) {
       final seen = <int>{};
@@ -173,13 +177,15 @@ abstract final class SpendingService {
       final byDay = <core.LocalDate, int>{};
       for (final s in scheduled) {
         if (!under(s.categoryId, goalCategory)) continue;
-        for (final due in ForecastService.operationOf(
+        final op = ForecastService.operationOf(
           s,
-        ).pendingUntil(month.last)) {
+          amountsByDue: loanDebits[s.id] ?? const {},
+        );
+        for (final due in op.pendingUntil(month.last)) {
           if (due < month.start) continue;
           // As the forecast: too late, it is missed, no longer expected.
           if (due.daysUntil(today) > core.defaultLateGraceDays) continue;
-          byDay[due] = (byDay[due] ?? 0) - s.amountCents;
+          byDay[due] = (byDay[due] ?? 0) - op.amountAt(due);
         }
       }
       return byDay;

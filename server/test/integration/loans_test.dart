@@ -372,6 +372,70 @@ void main() {
       }
     });
 
+    test(
+      'intercalary instalment: disbursementDate and firstInterestCents are '
+      'stored, first instalment reflects it, invalid dates refused',
+      () async {
+        final disb = DateTime.utc(now.year, now.month + 1, 10);
+        final firstDue = DateTime.utc(now.year, now.month + 2, 5);
+        final loan = mortgage(accountId: shared.id).copyWith(
+          disbursementDate: disb,
+          firstInterestCents: 25000,
+          firstDueDate: firstDue,
+        );
+        final info = await endpoints.loan.create(as(bob), groupA, loan);
+        expect(info.loan.disbursementDate, disb);
+        expect(info.loan.firstInterestCents, 25000);
+
+        // Schedule first instalment has the custom interest
+        final sched = await endpoints.loan.schedule(as(bob), info.loan.id!);
+        expect(sched.first.interestCents, 25000);
+
+        // Calendar reflects the intercalary instalment
+        final cal = await endpoints.scheduled.calendar(
+          as(bob),
+          groupA,
+          firstDue,
+        );
+        final item = cal.items.firstWhere((i) => i.loanId == info.loan.id);
+        expect(
+          item.amountCents,
+          -(sched.first.paymentCents + info.loan.insuranceMonthlyCents),
+        );
+
+        // Invalid: disbursement date on or after first due date
+        await expectLater(
+          endpoints.loan.create(
+            as(bob),
+            groupA,
+            loan.copyWith(disbursementDate: firstDue),
+          ),
+          throwsA(isA<InvalidInputException>()),
+        );
+
+        // Revolving credit ignores/nulls intercalary fields
+        final revolving = await endpoints.loan.create(
+          as(bob),
+          groupA,
+          Loan(
+            groupId: 0,
+            accountId: shared.id,
+            kind: LoanKind.revolving,
+            lender: 'Cofidis',
+            principalCents: 100000,
+            annualRateMilli: 10000,
+            durationMonths: 1,
+            paymentCents: 5000,
+            firstDueDate: firstDue,
+            disbursementDate: disb,
+            firstInterestCents: 1200,
+          ),
+        );
+        expect(revolving.loan.disbursementDate, isNull);
+        expect(revolving.loan.firstInterestCents, isNull);
+      },
+    );
+
     group('isolation', () {
       test(
         'another group cannot see, simulate, change or delete a loan',

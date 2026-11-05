@@ -2899,6 +2899,42 @@ abstract class AppLocalizations {
   /// **'Date de la première échéance'**
   String get loanFirstDue;
 
+  /// No description provided for @loanDisbursementDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de déblocage des fonds'**
+  String get loanDisbursementDate;
+
+  /// No description provided for @loanDisbursementDateHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Optionnel : si les fonds ont été versés avant le mois précédant la première échéance, OwnCoffer calcule les intérêts intercalaires.'**
+  String get loanDisbursementDateHelp;
+
+  /// No description provided for @loanDisbursementDateStandard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un mois avant la 1ʳᵉ échéance (par défaut)'**
+  String get loanDisbursementDateStandard;
+
+  /// No description provided for @loanDisbursementDateClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer la date de déblocage'**
+  String get loanDisbursementDateClear;
+
+  /// No description provided for @loanFirstInterest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Intérêts de la 1ʳᵉ échéance'**
+  String get loanFirstInterest;
+
+  /// No description provided for @loanFirstInterestHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Optionnel : montant des intérêts indiqué sur l\'offre ou le tableau d\'amortissement de la banque s\'il diffère du calcul.'**
+  String get loanFirstInterestHelp;
+
   /// No description provided for @loanInsurance.
   ///
   /// In fr, this message translates to:

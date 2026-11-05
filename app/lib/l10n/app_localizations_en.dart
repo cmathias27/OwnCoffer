@@ -1748,6 +1748,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loanFirstDue => 'First instalment date';
 
   @override
+  String get loanDisbursementDate => 'Disbursement date';
+
+  @override
+  String get loanDisbursementDateHelp =>
+      'Optional: when funds were released before the month preceding the first instalment, OwnCoffer calculates intercalary interest.';
+
+  @override
+  String get loanDisbursementDateStandard =>
+      'One month before 1st instalment (default)';
+
+  @override
+  String get loanDisbursementDateClear => 'Clear disbursement date';
+
+  @override
+  String get loanFirstInterest => 'First instalment interest';
+
+  @override
+  String get loanFirstInterestHelp =>
+      'Optional: interest amount written in the bank contract if different from computed interest.';
+
+  @override
   String get loanInsurance => 'Insurance per month';
 
   @override
