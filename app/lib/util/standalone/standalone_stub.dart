@@ -34,3 +34,7 @@ Future<({String name, Uint8List bytes})?> latestBackup(String folder) async =>
     null;
 
 bool isWrongPassphrase(Object e) => false;
+
+bool isBackupTooNew(Object e) => false;
+
+bool get standaloneRunning => false;

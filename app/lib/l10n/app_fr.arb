@@ -3743,6 +3743,18 @@
   "deviceBackupRestoreConfirm": "Remplacer toutes les données de cet appareil par cette sauvegarde ? Les données actuelles seront perdues, sauf si elles sont dans une autre sauvegarde.",
   "deviceBackupRestorePassphrase": "Phrase de passe de cette sauvegarde",
   "deviceBackupWrongPassphrase": "Mauvaise phrase de passe, ou fichier modifié.",
-  "deviceBackupNotABackup": "Ce fichier n'est pas une sauvegarde OwnCoffer.",
+  "deviceBackupNotABackup": "Ce fichier n'est pas une sauvegarde OwnCoffer, ou il est abîmé.",
+  "deviceBackupTooNew": "Cette sauvegarde vient d'une version plus récente de l'application : mettez d'abord l'application à jour, puis restaurez. Vos données actuelles n'ont pas été modifiées.",
+  "deviceBackupFailed": "La sauvegarde automatique a échoué ({when}) : {reason}. Nouvel essai dans l'heure ; « Sauvegarder maintenant » pour réessayer tout de suite.",
+  "@deviceBackupFailed": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
   "deviceBackupReplace": "Remplacer"
 }

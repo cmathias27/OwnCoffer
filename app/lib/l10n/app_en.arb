@@ -1543,6 +1543,18 @@
   "deviceBackupRestoreConfirm": "Replace all the data on this device by this backup? The current data will be lost, unless it is in another backup.",
   "deviceBackupRestorePassphrase": "Passphrase of this backup",
   "deviceBackupWrongPassphrase": "Wrong passphrase, or a changed file.",
-  "deviceBackupNotABackup": "This file is not an OwnCoffer backup.",
+  "deviceBackupNotABackup": "This file is not an OwnCoffer backup, or it is damaged.",
+  "deviceBackupTooNew": "This backup comes from a newer version of the app: update the app first, then restore. Your current data has not been changed.",
+  "deviceBackupFailed": "The automatic backup failed ({when}): {reason}. Next try within the hour; “Back up now” tries again at once.",
+  "@deviceBackupFailed": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
   "deviceBackupReplace": "Replace"
 }

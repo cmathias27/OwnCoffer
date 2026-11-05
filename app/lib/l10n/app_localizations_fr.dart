@@ -5734,7 +5734,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deviceBackupNotABackup =>
-      'Ce fichier n\'est pas une sauvegarde OwnCoffer.';
+      'Ce fichier n\'est pas une sauvegarde OwnCoffer, ou il est abîmé.';
+
+  @override
+  String get deviceBackupTooNew =>
+      'Cette sauvegarde vient d\'une version plus récente de l\'application : mettez d\'abord l\'application à jour, puis restaurez. Vos données actuelles n\'ont pas été modifiées.';
+
+  @override
+  String deviceBackupFailed(String when, String reason) {
+    return 'La sauvegarde automatique a échoué ($when) : $reason. Nouvel essai dans l\'heure ; « Sauvegarder maintenant » pour réessayer tout de suite.';
+  }
 
   @override
   String get deviceBackupReplace => 'Remplacer';

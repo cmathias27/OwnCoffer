@@ -145,12 +145,20 @@ void main() {
         latin1.decode(backup, allowInvalid: true),
         isNot(contains('CAFE')),
       );
+      // The copy was checked whole; its schema is one this app knows.
+      final meta = DeviceBackup.open(backup, pass).metadata;
+      expect(DeviceBackup.knownVersions, contains(meta['schema']));
       client.close();
       await server.stop();
 
-      expect(
-        () => DeviceBackup.restoreInto(there, backup, 'pas la bonne phrase'),
+      await expectLater(
+        DeviceBackup.restoreInto(there, backup, 'pas la bonne phrase'),
         throwsA(isA<BackupPassphraseException>()),
+      );
+      // A backup of a newer app is refused before anything is replaced.
+      await expectLater(
+        DeviceBackup.restoreInto(there, backup, pass, versions: {'0'}),
+        throwsA(isA<BackupTooNewException>()),
       );
       await DeviceBackup.restoreInto(there, backup, pass);
       server = await EmbeddedServer.start(dataDir: there);

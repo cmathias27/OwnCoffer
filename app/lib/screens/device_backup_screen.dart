@@ -21,7 +21,7 @@ class DeviceBackupScreen extends StatefulWidget {
 class _DeviceBackupScreenState extends State<DeviceBackupScreen> {
   final _pass = TextEditingController();
   final _again = TextEditingController();
-  ({String? passphrase, String? folder, DateTime? last})? _settings;
+  BackupSettings? _settings;
   String? _folder;
   String? _error;
   String? _busy;
@@ -55,6 +55,8 @@ class _DeviceBackupScreenState extends State<DeviceBackupScreen> {
         setState(
           () => _error = isWrongPassphrase(e)
               ? l.deviceBackupWrongPassphrase
+              : isBackupTooNew(e)
+              ? l.deviceBackupTooNew
               : e is FormatException
               ? l.deviceBackupNotABackup
               : errorText(l, e),
@@ -143,8 +145,9 @@ class _DeviceBackupScreenState extends State<DeviceBackupScreen> {
       await standaloneRestore(file.bytes, passphrase);
       restored = true;
     });
-    // The app starts again on the restored data.
-    if (restored) await restartStandalone();
+    // The app starts again on the restored data, or on the previous one
+    // put back if the swap failed after the server was stopped.
+    if (restored || !standaloneRunning) await restartStandalone();
   }
 
   @override
@@ -233,6 +236,16 @@ class _DeviceBackupScreenState extends State<DeviceBackupScreen> {
                                 AdminBackupsView.when(context, s.last!),
                               ),
                       ),
+                      if (s.failed != null) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          l.deviceBackupFailed(
+                            AdminBackupsView.when(context, s.failed!),
+                            s.failure ?? '',
+                          ),
+                          style: TextStyle(color: theme.colorScheme.error),
+                        ),
+                      ],
                       const SizedBox(height: 12),
                       Wrap(
                         spacing: 8,

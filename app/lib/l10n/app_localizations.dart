@@ -9216,8 +9216,20 @@ abstract class AppLocalizations {
   /// No description provided for @deviceBackupNotABackup.
   ///
   /// In fr, this message translates to:
-  /// **'Ce fichier n\'est pas une sauvegarde OwnCoffer.'**
+  /// **'Ce fichier n\'est pas une sauvegarde OwnCoffer, ou il est abîmé.'**
   String get deviceBackupNotABackup;
+
+  /// No description provided for @deviceBackupTooNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette sauvegarde vient d\'une version plus récente de l\'application : mettez d\'abord l\'application à jour, puis restaurez. Vos données actuelles n\'ont pas été modifiées.'**
+  String get deviceBackupTooNew;
+
+  /// No description provided for @deviceBackupFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La sauvegarde automatique a échoué ({when}) : {reason}. Nouvel essai dans l\'heure ; « Sauvegarder maintenant » pour réessayer tout de suite.'**
+  String deviceBackupFailed(String when, String reason);
 
   /// No description provided for @deviceBackupReplace.
   ///
