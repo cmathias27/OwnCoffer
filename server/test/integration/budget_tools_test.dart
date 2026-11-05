@@ -324,6 +324,46 @@ void main() {
         expect(n.data, contains('"projectedCents":11000'));
       });
 
+      test('early alert: a planned operation too late to be expected is not '
+          'counted, as in the forecast', () async {
+        await endpoints.goal.set(
+          as(bob),
+          groupA,
+          cats['food.groceries']!,
+          10000,
+        );
+        await op(shared, month(0), -6000, category: 'food.groceries');
+        await endpoints.scheduled.create(
+          as(alice),
+          shared.id!,
+          -5000,
+          'PANIER BIO',
+          ScheduleFrequency.monthly,
+          DateTime.utc(now.year, now.month, 1),
+          categoryId: cats['food.groceries'],
+        );
+        Future<AppNotification?> forecastAlert(int day) async {
+          await AppNotification.db.deleteWhere(
+            db,
+            where: (n) => n.id.notEquals(null),
+          );
+          await GoalAlertService.checkGroup(
+            db,
+            groupA,
+            core.LocalDate(now.year, now.month, day),
+          );
+          return AppNotification.db.findFirstRow(
+            db,
+            where: (n) => n.type.equals(GoalAlertService.forecastType),
+          );
+        }
+
+        // 4 days late: still expected, counted today.
+        expect(await forecastAlert(5), isNotNull);
+        // 19 days late: missed (the forecast no longer counts it either).
+        expect(await forecastAlert(20), isNull);
+      });
+
       test(
         'the month report gives the projection of goal categories',
         () async {

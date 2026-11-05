@@ -39,12 +39,23 @@ List<PurchasePayment> purchasePayments(
   if (amountCents <= 0) throw ArgumentError.value(amountCents, 'amountCents');
   List<PurchasePayment> split(int n) {
     final each = loanPaymentCents(amountCents, 0, n);
+    // A few cents rounded up could leave nothing (or less) for the last
+    // one: then the cents are shared, one each from the first, and an
+    // instalment of nothing is no debit.
+    final rounded = each * (n - 1) < amountCents;
+    final amounts = [
+      for (var i = 0; i < n; i++)
+        rounded
+            ? (i < n - 1 ? each : amountCents - each * (n - 1))
+            : amountCents ~/ n + (i < amountCents % n ? 1 : 0),
+    ];
     return [
       for (var i = 0; i < n; i++)
-        PurchasePayment(
-          date.addMonths(i, preferredDay: date.day),
-          i < n - 1 ? each : amountCents - each * (n - 1),
-        ),
+        if (amounts[i] > 0)
+          PurchasePayment(
+            date.addMonths(i, preferredDay: date.day),
+            amounts[i],
+          ),
     ];
   }
 

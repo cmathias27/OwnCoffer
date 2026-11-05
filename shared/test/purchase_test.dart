@@ -30,6 +30,22 @@ void main() {
       );
     });
 
+    test('a few cents: never an instalment of nothing or less', () {
+      List<int> four(int cents) => [
+        for (final p in purchasePayments(PurchaseOption.fourTimes, cents, date))
+          p.amountCents,
+      ];
+      // Rounded up, 2 + 2 + 2 would leave -1 for the last one.
+      expect(four(5), [2, 1, 1, 1]);
+      expect(four(2), [1, 1]);
+      expect(four(7), [2, 2, 2, 1]);
+      for (var cents = 1; cents < 40; cents++) {
+        final p = four(cents);
+        expect(p.fold(0, (a, b) => a + b), cents);
+        expect(p.every((x) => x > 0), isTrue, reason: '$cents: $p');
+      }
+    });
+
     test('31st: instalments keep the end of the month', () {
       final p = purchasePayments(
         PurchaseOption.threeTimes,

@@ -167,6 +167,10 @@ class Forecast {
 /// - [variableSpending]: estimated variable spending by day (positive cents,
 ///   see `spreadVariableSpending`), taken off the balance after the events
 ///   of the day.
+/// How late a pending scheduled occurrence may be and still be expected
+/// (counted today); later, it is reported as missed.
+const defaultLateGraceDays = 10;
+
 Forecast computeForecast({
   required int currentBalanceCents,
   required LocalDate today,
@@ -174,7 +178,7 @@ Forecast computeForecast({
   List<RealOperation> futureOperations = const [],
   int horizonDays = 30,
   int alertThresholdCents = 0,
-  int lateGraceDays = 10,
+  int lateGraceDays = defaultLateGraceDays,
   Map<LocalDate, int> variableSpending = const {},
 }) {
   if (horizonDays < 0) throw ArgumentError('Negative horizon');
