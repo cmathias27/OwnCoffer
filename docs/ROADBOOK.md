@@ -188,8 +188,8 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] Installation automatique des mises à jour des applications
 - [ ] Version autonome sans serveur (décision 0022) :
   - [x] le serveur embarqué dans l'application, sur SQLite ; choix « seul sur cet appareil » ou « serveur » au premier lancement ; tous les tests du serveur aussi sur SQLite — *1.1.0*
-  - [x] « Migrer vers un serveur » (et retour par « Importer un export ») par l'export complet, factures comprises — *1.1.0*
-  - [x] Sauvegarde chiffrée automatique vers un dossier, restauration sur cet appareil ou un autre — *1.1.0*
+  - [x] « Migrer vers un serveur » (et retour par « Importer un export ») par l'export complet, factures comprises — *1.1.0* ; copie vérifiée (mêmes nombres, montants et soldes que la source), reprise sans renvoyer les groupes déjà envoyés — *1.4.4 (PR #147)*
+  - [x] Sauvegarde chiffrée automatique vers un dossier, restauration sur cet appareil ou un autre — *1.1.0* ; restauration en deux temps avec l'ancien état gardé, refus d'une sauvegarde plus récente que l'application, contrôle d'intégrité, échecs affichés — *1.4.4 (PR #146)*
   - [ ] Chiffrement du fichier SQLite
 - [ ] **Scan automatique des tickets à l'appareil photo** (demandé le 2 novembre 2026), en partant de la lecture de documents existante (0.3.31) :
   - [ ] recadrage automatique : bords du ticket détectés, perspective redressée, contraste amélioré, déclenchement quand l'image est nette (scanner de documents du système sur Android ; sur le web, quatre coins à placer ou traitement sur le serveur)

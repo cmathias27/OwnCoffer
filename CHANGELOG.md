@@ -2,6 +2,30 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.4.4 (novembre 2026)
+
+### Version autonome : sauvegardes
+
+- **Restauration sûre** : la sauvegarde est d'abord déchiffrée et contrôlée à côté, sans rien toucher ; l'ancienne base est ensuite gardée dans `before-restore/` et remise en place si l'échange échoue.
+- **Sauvegarde plus récente que l'application refusée** : une sauvegarde faite par une version plus récente (schéma inconnu) est refusée avec un message clair, au lieu d'empêcher le démarrage.
+- **Contrôle d'intégrité** : chaque sauvegarde et chaque restauration vérifient la base (`integrity_check`) ; une base abîmée est signalée.
+- **Sauvegarde quotidienne plus fiable** : vérification toutes les heures (et plus seulement au lancement), échec affiché sur la page Sauvegarde avec sa date et sa raison, fichiers partiels nettoyés.
+
+### Version autonome : migration vers un serveur
+
+- **Copie vérifiée** : après l'envoi, la copie sur le serveur est comparée à vos données (nombre d'éléments, montants, opérations et soldes de chaque compte) ; un écart est affiché et le passage au serveur n'est pas proposé.
+- **Reprise** : après un échec, un nouvel essai n'envoie que les groupes restants.
+
+### Moteur de calcul
+
+- **Date du jour** : crédits et analyses prennent la même date que le reste de l'application (UTC) ; dans l'application autonome, l'échéancier ne passe plus au lendemain entre minuit et 2 h.
+- **Objectifs** : une opération planifiée en retard de plus de 10 jours n'est plus comptée dans la projection, comme dans la prévision de solde ; fini la fausse alerte « dépassement prévu ».
+- **Achat en 3 ou 4 fois de quelques centimes** : plus d'échéance nulle ou négative.
+
+### Correction de la note 1.4.3
+
+- L'**échéance intercalaire** est calculée par le moteur, mais la date de mise à disposition des fonds ne se saisit pas encore sur un crédit : elle n'est donc pas appliquée pour l'instant.
+
 ## 1.4.3 (novembre 2026)
 
 ### Crédits et tableaux d'amortissement
