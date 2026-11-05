@@ -20,13 +20,16 @@ class LoanTerms {
   /// Borrower insurance per instalment, fixed.
   final int insuranceMonthlyCents;
 
-  /// Optional date when the loan was disbursed (funds released), before [firstDue].
-  /// When present and different from a standard month before [firstDue],
-  /// the first instalment's interest is computed on the actual days elapsed.
+  /// Optional date when the loan was disbursed (funds released), before
+  /// [firstDue]. When it is not exactly a month before [firstDue], the
+  /// first instalment's interest is computed on the days elapsed (actual
+  /// days / 365): a longer period adds intercalary interest, a shorter one
+  /// takes some off. The instalment's capital stays the regular one.
   final LocalDate? disbursementDate;
 
-  /// Optional interest of the first instalment in cents, when determined
-  /// explicitly by the lender's contract (e.g. broken or intercalary period).
+  /// Optional interest of the first instalment in cents, as written in the
+  /// lender's contract (intercalary or broken period); it prevails over
+  /// [disbursementDate].
   final int? firstInterestCents;
 
   /// The instalment actually debited (capital + interest, insurance
@@ -59,6 +62,15 @@ class LoanTerms {
         insuranceMonthlyCents > maxLoanPrincipalCents) {
       throw ArgumentError.value(insuranceMonthlyCents, 'insuranceMonthlyCents');
     }
+    final d = disbursementDate;
+    // Funds released before the first instalment, within a year.
+    if (d != null && (d >= firstDue || d.daysUntil(firstDue) > 366)) {
+      throw ArgumentError.value(d, 'disbursementDate');
+    }
+    final f = firstInterestCents;
+    if (f != null && (f < 0 || f > maxLoanPrincipalCents)) {
+      throw ArgumentError.value(f, 'firstInterestCents');
+    }
     final p = paymentCents;
     // The instalment must at least cover the first month's interest, or the
     // loan would never be repaid.
@@ -77,6 +89,26 @@ class LoanTerms {
   /// Last instalment number allowed: the contract's duration, or (with the
   /// actual instalment) as long as it takes, within the supported limit.
   int get _lastNumber => paymentCents == null ? months : maxLoanMonths;
+
+  /// Interest of the first instalment on [remainingCents] at [rate]: the
+  /// contract's figure (in proportion, if the capital owed then is not the
+  /// principal: money repaid or drawn before it), the days since the
+  /// disbursement, or a regular month.
+  int _firstInterest(int remainingCents, int rate) {
+    final f = firstInterestCents;
+    if (f != null) {
+      return remainingCents == principalCents
+          ? f
+          : (f * (remainingCents / principalCents)).round();
+    }
+    final d = disbursementDate;
+    if (d != null && d != firstDue.addMonths(-1)) {
+      // remainingCents × rate < 2^53; the days in floating point, as the
+      // web computes it.
+      return (remainingCents * rate * d.daysUntil(firstDue) / 36500000).round();
+    }
+    return _monthInterest(remainingCents, rate);
+  }
 }
 
 /// Something that changes a loan from a date on, applied before the first
@@ -138,6 +170,11 @@ class Installment {
   /// Capital still owed after this instalment.
   final int remainingCents;
 
+  /// Interest beyond a regular month (first instalment after an
+  /// intercalary period; negative for a shorter one): the regular
+  /// instalment is [paymentCents] minus it.
+  final int extraInterestCents;
+
   const Installment({
     required this.number,
     required this.date,
@@ -146,7 +183,11 @@ class Installment {
     required this.interestCents,
     required this.insuranceCents,
     required this.remainingCents,
+    this.extraInterestCents = 0,
   });
+
+  /// The instalment without the intercalary interest.
+  int get regularPaymentCents => paymentCents - extraInterestCents;
 
   /// What leaves the account.
   int get totalCents => paymentCents + insuranceCents;
@@ -291,39 +332,43 @@ List<Installment> amortize(
       if (pending.isEmpty) break;
       continue;
     }
-    final int interest;
-    if (k == 1 && t.firstInterestCents != null) {
-      interest = t.firstInterestCents!;
-    } else if (k == 1 &&
-        t.disbursementDate != null &&
-        t.disbursementDate! < t.firstDue) {
-      final days = t.disbursementDate!.daysUntil(t.firstDue);
-      interest = ((remaining * rate * days) / 36500000).round();
-    } else {
-      interest = _monthInterest(remaining, rate);
-    }
-    var capital =
-        (k == 1 && (t.firstInterestCents != null || t.disbursementDate != null))
-        ? payment - _monthInterest(remaining, rate)
-        : payment - interest;
-    if (k == last || capital > remaining) capital = remaining;
-    // An instalment below the interest would never repay: the loan is then
-    // shown as paid off by its last allowed instalment.
-    if (capital < 0) capital = 0;
-    remaining -= capital;
-    result.add(
-      Installment(
-        number: k,
-        date: date,
-        paymentCents: capital + interest,
-        principalCents: capital,
-        interestCents: interest,
-        insuranceCents: t.insuranceMonthlyCents,
-        remainingCents: remaining,
-      ),
-    );
+    final i = _instalment(t, k, date, remaining, rate, payment, last);
+    remaining = i.remainingCents;
+    result.add(i);
   }
   return result;
+}
+
+/// Instalment [k] on [remaining] owed: the interest of the month (of the
+/// intercalary period for the first one), the capital the rest of the
+/// regular instalment [payment]; the last one, or a larger capital,
+/// settles what is owed.
+Installment _instalment(
+  LoanTerms t,
+  int k,
+  LocalDate date,
+  int remaining,
+  int rate,
+  int payment,
+  int last,
+) {
+  final month = _monthInterest(remaining, rate);
+  final interest = k == 1 ? t._firstInterest(remaining, rate) : month;
+  var capital = payment - month;
+  if (k == last || capital > remaining) capital = remaining;
+  // An instalment below the interest would never repay: the loan is then
+  // shown as paid off by its last allowed instalment.
+  if (capital < 0) capital = 0;
+  return Installment(
+    number: k,
+    date: date,
+    paymentCents: capital + interest,
+    principalCents: capital,
+    interestCents: interest,
+    insuranceCents: t.insuranceMonthlyCents,
+    remainingCents: remaining - capital,
+    extraInterestCents: interest - month,
+  );
 }
 
 /// Where a loan stands on a given day: instalments due on or before it are
@@ -438,22 +483,18 @@ LoanStatus loanStatus(
   var interestTotal = 0;
   while (remaining > 0 && k < last) {
     k++;
-    final interest = _monthInterest(remaining, terms.annualRateMilli);
-    var capital = payment - interest;
-    if (capital > remaining || k == last) capital = remaining;
-    remaining -= capital;
-    interestTotal += interest;
-    result.add(
-      Installment(
-        number: k,
-        date: terms.firstDue.addMonths(k - 1),
-        paymentCents: capital + interest,
-        principalCents: capital,
-        interestCents: interest,
-        insuranceCents: terms.insuranceMonthlyCents,
-        remainingCents: remaining,
-      ),
+    final i = _instalment(
+      terms,
+      k,
+      terms.firstDue.addMonths(k - 1),
+      remaining,
+      terms.annualRateMilli,
+      payment,
+      last,
     );
+    remaining = i.remainingCents;
+    interestTotal += i.interestCents;
+    result.add(i);
   }
   return (
     schedule: result,
@@ -489,7 +530,9 @@ _earlyRepaymentWithChanges(
       LoanChange(
         date: next.date,
         drawCents: -amountCents,
-        paymentCents: next.paymentCents,
+        // The regular instalment: not the intercalary interest of a first
+        // one.
+        paymentCents: next.regularPaymentCents,
       ),
     ],
   );
