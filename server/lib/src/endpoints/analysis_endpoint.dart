@@ -257,7 +257,7 @@ class AnalysisEndpoint extends Endpoint {
   /// accounts the user may see (computed without AI).
   Future<Insights> insights(Session session, int groupId) async {
     await Access.requireMember(session, groupId);
-    final n = DateTime.now();
+    final n = DateTime.now().toUtc();
     return InsightsService.compute(
       session,
       groupId,

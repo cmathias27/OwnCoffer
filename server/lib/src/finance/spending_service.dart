@@ -177,6 +177,8 @@ abstract final class SpendingService {
           s,
         ).pendingUntil(month.last)) {
           if (due < month.start) continue;
+          // As the forecast: too late, it is missed, no longer expected.
+          if (due.daysUntil(today) > core.defaultLateGraceDays) continue;
           byDay[due] = (byDay[due] ?? 0) - s.amountCents;
         }
       }

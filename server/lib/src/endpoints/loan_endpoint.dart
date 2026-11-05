@@ -882,10 +882,10 @@ class LoanEndpoint extends Endpoint {
 
   // --- helpers --------------------------------------------------------------
 
-  static core.LocalDate _today() {
-    final n = DateTime.now();
-    return core.LocalDate(n.year, n.month, n.day);
-  }
+  // UTC, as every other endpoint: the standalone app runs this server in
+  // the device's time zone, where local midnight is not the server's day.
+  static core.LocalDate _today() =>
+      core.LocalDate.fromDateTime(DateTime.now().toUtc());
 
   static core.LoanTerms _terms(Loan l) => core.LoanTerms(
     principalCents: l.principalCents,
