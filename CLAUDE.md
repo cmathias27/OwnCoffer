@@ -2,7 +2,7 @@
 
 ## Le projet
 
-OwnCoffer est une application libre (AGPL-3.0) et auto-hébergée de gestion de comptes bancaires : import de relevés (QIF, OFX, CSV), classement par règles (personnelles et communautaires), prévisions de solde, objectifs et alertes, crédits, IA optionnelle au choix de l'utilisateur.
+OwnCoffer est une application libre (AGPL-3.0, avec une exception pour Serverpod — décision 0024) et auto-hébergée de gestion de comptes bancaires : import de relevés (QIF, OFX, CSV), classement par règles (personnelles et communautaires), prévisions de solde, objectifs et alertes, crédits, IA optionnelle au choix de l'utilisateur.
 
 - Ordre de réalisation et tâches : `docs/ROADBOOK.md` (phases 0 à 6, chacune avec un milestone GitHub).
 - Fonctionnalités détaillées : `docs/CAHIER_DES_CHARGES.md`.

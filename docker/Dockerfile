@@ -50,6 +50,7 @@ COPY --from=server /src/server/migrations/ migrations/
 COPY --from=server /src/server/web/ web/
 COPY --from=server /src/server/lib/src/generated/protocol.yaml lib/src/generated/protocol.yaml
 COPY --from=web /src/app/build/web/ web/app/
+COPY LICENSE LICENSE-EXCEPTION.md ./
 RUN rm -f config/passwords.yaml && chown -R owncoffer:owncoffer /app
 USER owncoffer
 

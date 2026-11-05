@@ -19,7 +19,7 @@ Ouvrez une issue avec le modèle adapté (« Bug » ou « Idée »). Une issue =
 
 ## Certificat d'origine (DCO)
 
-En signant un commit (`Signed-off-by: Votre Nom <email>`), vous certifiez avoir le droit de soumettre ce code sous la licence du projet (AGPL-3.0), selon le [Developer Certificate of Origin 1.1](https://developercertificate.org/).
+En signant un commit (`Signed-off-by: Votre Nom <email>`), vous certifiez avoir le droit de soumettre ce code sous la licence du projet (AGPL-3.0 avec l'exception pour Serverpod de `LICENSE-EXCEPTION.md`), selon le [Developer Certificate of Origin 1.1](https://developercertificate.org/).
 
 ## Conventions
 

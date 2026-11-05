@@ -23,4 +23,4 @@ The server backs up the database every night, **encrypted**, and checks right aw
 
 ## Free software
 
-OwnCoffer is free software (AGPL-3.0) and free of charge: its code is public and can be checked.
+OwnCoffer is free software (AGPL-3.0, with an exception for Serverpod) and free of charge: its code is public and can be checked.
