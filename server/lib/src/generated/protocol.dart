@@ -2522,6 +2522,18 @@ class Protocol extends _is.DatabaseSerializationManager {
           dartType: 'DateTime',
         ),
         _isp.ColumnDefinition(
+          name: 'disbursementDate',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'firstInterestCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
           name: 'insuranceMonthlyCents',
           columnType: _isp.ColumnType.bigint,
           isNullable: false,

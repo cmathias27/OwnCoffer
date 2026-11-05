@@ -34,6 +34,8 @@ abstract class Loan
     required this.durationMonths,
     this.paymentCents,
     required this.firstDueDate,
+    this.disbursementDate,
+    this.firstInterestCents,
     int? insuranceMonthlyCents,
     int? feesCents,
     this.categoryId,
@@ -61,6 +63,8 @@ abstract class Loan
     required int durationMonths,
     int? paymentCents,
     required DateTime firstDueDate,
+    DateTime? disbursementDate,
+    int? firstInterestCents,
     int? insuranceMonthlyCents,
     int? feesCents,
     int? categoryId,
@@ -89,6 +93,12 @@ abstract class Loan
       firstDueDate: _isc.DateTimeJsonExtension.fromJson(
         jsonSerialization['firstDueDate'],
       ),
+      disbursementDate: jsonSerialization['disbursementDate'] == null
+          ? null
+          : _isc.DateTimeJsonExtension.fromJson(
+              jsonSerialization['disbursementDate'],
+            ),
+      firstInterestCents: jsonSerialization['firstInterestCents'] as int?,
       insuranceMonthlyCents: jsonSerialization['insuranceMonthlyCents'] as int?,
       feesCents: jsonSerialization['feesCents'] as int?,
       categoryId: jsonSerialization['categoryId'] as int?,
@@ -144,6 +154,15 @@ abstract class Loan
 
   DateTime firstDueDate;
 
+  /// Day the money was paid out, when it is not one month before the
+  /// first instalment: that instalment's interest is counted in days
+  /// (intercalary interest).
+  DateTime? disbursementDate;
+
+  /// Interest of the first instalment as written in the contract, when
+  /// known: it prevails over the computed one.
+  int? firstInterestCents;
+
   int insuranceMonthlyCents;
 
   int feesCents;
@@ -188,6 +207,8 @@ abstract class Loan
     int? durationMonths,
     int? paymentCents,
     DateTime? firstDueDate,
+    DateTime? disbursementDate,
+    int? firstInterestCents,
     int? insuranceMonthlyCents,
     int? feesCents,
     int? categoryId,
@@ -215,6 +236,9 @@ abstract class Loan
       'durationMonths': durationMonths,
       if (paymentCents != null) 'paymentCents': paymentCents,
       'firstDueDate': firstDueDate.toJson(),
+      if (disbursementDate != null)
+        'disbursementDate': disbursementDate?.toJson(),
+      if (firstInterestCents != null) 'firstInterestCents': firstInterestCents,
       'insuranceMonthlyCents': insuranceMonthlyCents,
       'feesCents': feesCents,
       if (categoryId != null) 'categoryId': categoryId,
@@ -245,6 +269,9 @@ abstract class Loan
       'durationMonths': durationMonths,
       if (paymentCents != null) 'paymentCents': paymentCents,
       'firstDueDate': firstDueDate.toJson(),
+      if (disbursementDate != null)
+        'disbursementDate': disbursementDate?.toJson(),
+      if (firstInterestCents != null) 'firstInterestCents': firstInterestCents,
       'insuranceMonthlyCents': insuranceMonthlyCents,
       'feesCents': feesCents,
       if (categoryId != null) 'categoryId': categoryId,
@@ -281,6 +308,8 @@ class _LoanImpl extends Loan {
     required int durationMonths,
     int? paymentCents,
     required DateTime firstDueDate,
+    DateTime? disbursementDate,
+    int? firstInterestCents,
     int? insuranceMonthlyCents,
     int? feesCents,
     int? categoryId,
@@ -304,6 +333,8 @@ class _LoanImpl extends Loan {
          durationMonths: durationMonths,
          paymentCents: paymentCents,
          firstDueDate: firstDueDate,
+         disbursementDate: disbursementDate,
+         firstInterestCents: firstInterestCents,
          insuranceMonthlyCents: insuranceMonthlyCents,
          feesCents: feesCents,
          categoryId: categoryId,
@@ -333,6 +364,8 @@ class _LoanImpl extends Loan {
     int? durationMonths,
     Object? paymentCents = _Undefined,
     DateTime? firstDueDate,
+    Object? disbursementDate = _Undefined,
+    Object? firstInterestCents = _Undefined,
     int? insuranceMonthlyCents,
     int? feesCents,
     Object? categoryId = _Undefined,
@@ -357,6 +390,12 @@ class _LoanImpl extends Loan {
       durationMonths: durationMonths ?? this.durationMonths,
       paymentCents: paymentCents is int? ? paymentCents : this.paymentCents,
       firstDueDate: firstDueDate ?? this.firstDueDate,
+      disbursementDate: disbursementDate is DateTime?
+          ? disbursementDate
+          : this.disbursementDate,
+      firstInterestCents: firstInterestCents is int?
+          ? firstInterestCents
+          : this.firstInterestCents,
       insuranceMonthlyCents:
           insuranceMonthlyCents ?? this.insuranceMonthlyCents,
       feesCents: feesCents ?? this.feesCents,

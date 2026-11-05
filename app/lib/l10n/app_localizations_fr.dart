@@ -1757,6 +1757,27 @@ class AppLocalizationsFr extends AppLocalizations {
   String get loanFirstDue => 'Date de la première échéance';
 
   @override
+  String get loanDisbursementDate => 'Date de déblocage des fonds';
+
+  @override
+  String get loanDisbursementDateHelp =>
+      'Optionnel : si les fonds ont été versés avant le mois précédant la première échéance, OwnCoffer calcule les intérêts intercalaires.';
+
+  @override
+  String get loanDisbursementDateStandard =>
+      'Un mois avant la 1ʳᵉ échéance (par défaut)';
+
+  @override
+  String get loanDisbursementDateClear => 'Effacer la date de déblocage';
+
+  @override
+  String get loanFirstInterest => 'Intérêts de la 1ʳᵉ échéance';
+
+  @override
+  String get loanFirstInterestHelp =>
+      'Optionnel : montant des intérêts indiqué sur l\'offre ou le tableau d\'amortissement de la banque s\'il diffère du calcul.';
+
+  @override
   String get loanInsurance => 'Assurance par mois';
 
   @override

@@ -8,6 +8,7 @@ import '../core/documents.dart';
 import '../finance/alert_service.dart';
 import '../finance/classification_service.dart';
 import '../finance/forecast_service.dart';
+import '../finance/loan_terms.dart';
 import '../finance/spending_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
@@ -887,26 +888,10 @@ class LoanEndpoint extends Endpoint {
   static core.LocalDate _today() =>
       core.LocalDate.fromDateTime(DateTime.now().toUtc());
 
-  static core.LoanTerms _terms(Loan l) => core.LoanTerms(
-    principalCents: l.principalCents,
-    annualRateMilli: l.annualRateMilli,
-    months: l.durationMonths,
-    firstDue: l.firstDueDate.toLocalDate(),
-    insuranceMonthlyCents: l.insuranceMonthlyCents,
-    paymentCents: l.paymentCents,
-  );
+  static core.LoanTerms _terms(Loan l) => LoanTermsOf.terms(l);
 
   /// The loan's events for the engine (oldest first).
-  static List<core.LoanChange> _changes(Loan l) => [
-    for (final e in l.events ?? const <LoanEvent>[])
-      core.LoanChange(
-        date: e.date.toLocalDate(),
-        annualRateMilli: e.annualRateMilli,
-        paymentCents: e.paymentCents,
-        remainingMonths: e.remainingMonths,
-        drawCents: e.drawCents ?? 0,
-      ),
-  ];
+  static List<core.LoanChange> _changes(Loan l) => LoanTermsOf.changes(l);
 
   /// The instalment now: after events, the one of the next due date.
   static int _currentPayment(Loan l, core.LoanStatus s) =>
@@ -1028,6 +1013,9 @@ class LoanEndpoint extends Endpoint {
       throw InvalidInputException(code: 'loan_terms_invalid');
     }
     final u = loan.firstDueDate.toUtc();
+    final d = loan.disbursementDate?.toUtc();
+    // Intercalary interest: only loans repaid by a fixed instalment.
+    final intercalary = !revolving && loan.kind != LoanKind.installments;
     final clean = Loan(
       groupId: groupId,
       accountId: loan.accountId,
@@ -1039,6 +1027,10 @@ class LoanEndpoint extends Endpoint {
       aprMilli: apr,
       durationMonths: loan.durationMonths,
       firstDueDate: core.LocalDate(u.year, u.month, u.day).toDb(),
+      disbursementDate: intercalary && d != null
+          ? core.LocalDate(d.year, d.month, d.day).toDb()
+          : null,
+      firstInterestCents: intercalary ? loan.firstInterestCents : null,
       insuranceMonthlyCents: loan.insuranceMonthlyCents,
       feesCents: loan.feesCents,
       categoryId: loan.categoryId,

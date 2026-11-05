@@ -320,6 +320,9 @@ abstract final class ProposalService {
           throw InvalidInputException(code: 'proposal_unknown');
         }
         final label = (f['label'] as String?)?.trim();
+        final disb = f['disbursement_date'] == null
+            ? null
+            : DateTime.tryParse(f['disbursement_date'] as String);
         // The loan page's own checks apply (amounts, rate, duration).
         final info = await LoanEndpoint().create(
           session,
@@ -334,6 +337,10 @@ abstract final class ProposalService {
             durationMonths: n('duration_months') ?? 0,
             paymentCents: n('payment_cents'),
             firstDueDate: DateTime.utc(first.year, first.month, first.day),
+            disbursementDate: disb == null
+                ? null
+                : DateTime.utc(disb.year, disb.month, disb.day),
+            firstInterestCents: n('first_interest_cents'),
             insuranceMonthlyCents: n('insurance_monthly_cents') ?? 0,
           ),
         );
@@ -399,6 +406,8 @@ abstract final class ProposalService {
     'payment_cents': l.paymentCents,
     'insurance_monthly_cents': l.insuranceMonthlyCents,
     'first_due_date': l.firstDueDate.toIso8601String().substring(0, 10),
+    'disbursement_date': l.disbursementDate?.toIso8601String().substring(0, 10),
+    'first_interest_cents': l.firstInterestCents,
   };
 
   static Map<String, Object?> invoiceHints(Invoice i) => {
@@ -419,6 +428,9 @@ abstract final class ProposalService {
     }
     int? n(String k) => (f[k] as num?)?.toInt();
     final first = DateTime.tryParse(f['first_due_date'] as String? ?? '');
+    final disb = f['disbursement_date'] == null
+        ? null
+        : DateTime.tryParse(f['disbursement_date'] as String);
     await LoanEndpoint().update(
       session,
       l.copyWith(
@@ -433,6 +445,14 @@ abstract final class ProposalService {
         firstDueDate: first == null
             ? l.firstDueDate
             : DateTime.utc(first.year, first.month, first.day),
+        disbursementDate: f.containsKey('disbursement_date')
+            ? (disb == null
+                  ? null
+                  : DateTime.utc(disb.year, disb.month, disb.day))
+            : l.disbursementDate,
+        firstInterestCents: f.containsKey('first_interest_cents')
+            ? n('first_interest_cents')
+            : l.firstInterestCents,
       ),
     );
   }

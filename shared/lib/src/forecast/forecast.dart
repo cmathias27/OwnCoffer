@@ -27,6 +27,11 @@ class ScheduledOperation {
   /// Allowed amount difference for variable bills (electricity…), in percent.
   final int amountTolerancePercent;
 
+  /// Occurrences whose amount is known to differ from [amountCents] (a
+  /// loan's first instalment with intercalary interest, its last one, those
+  /// after a change of rate), by due date.
+  final Map<LocalDate, int> amountsByDue;
+
   ScheduledOperation({
     required this.id,
     required this.amountCents,
@@ -36,9 +41,13 @@ class ScheduledOperation {
     String matchPattern = '',
     this.dateToleranceDays = 5,
     this.amountTolerancePercent = 0,
+    this.amountsByDue = const {},
   }) : matchPattern = normalizeForMatch(matchPattern) {
     if (amountCents == 0) throw ArgumentError('Scheduled amount is zero');
   }
+
+  /// The amount expected on [due].
+  int amountAt(LocalDate due) => amountsByDue[due] ?? amountCents;
 
   LocalDate get _from => nextDue ?? recurrence.start;
 
@@ -192,7 +201,7 @@ Forecast computeForecast({
         events.add(
           ForecastEvent(
             date: due,
-            amountCents: s.amountCents,
+            amountCents: s.amountAt(due),
             label: s.label,
             scheduledId: s.id,
           ),
@@ -201,14 +210,14 @@ Forecast computeForecast({
         events.add(
           ForecastEvent(
             date: today,
-            amountCents: s.amountCents,
+            amountCents: s.amountAt(due),
             label: s.label,
             scheduledId: s.id,
             dueDate: due,
           ),
         );
       } else {
-        missed.add(MissedOccurrence(s.id, due, s.amountCents));
+        missed.add(MissedOccurrence(s.id, due, s.amountAt(due)));
       }
     }
   }
@@ -335,13 +344,14 @@ List<ReconciliationMatch> reconcile({
   for (final s in scheduled) {
     final horizon = today.addDays(s.dateToleranceDays);
     for (final due in s.pendingUntil(horizon)) {
+      final expected = s.amountAt(due);
       for (final op in unlinkedOperations) {
-        if (op.amountCents.sign != s.amountCents.sign) continue;
+        if (op.amountCents.sign != expected.sign) continue;
         final dayGap = (op.date.daysUntil(due)).abs();
         if (dayGap > s.dateToleranceDays) continue;
-        final diff = (op.amountCents - s.amountCents).abs();
+        final diff = (op.amountCents - expected).abs();
         // Integer comparison: diff / |amount| <= percent / 100.
-        if (diff * 100 > s.amountCents.abs() * s.amountTolerancePercent) {
+        if (diff * 100 > expected.abs() * s.amountTolerancePercent) {
           continue;
         }
         final labelOk =

@@ -329,5 +329,62 @@ void main() {
       );
       expect(m, isEmpty);
     });
+
+    test('intercalary or specific due amount matches via amountsByDue', () {
+      final loan = ScheduledOperation(
+        id: 'loan',
+        amountCents: -115000,
+        label: 'Prêt immobilier',
+        matchPattern: 'BANQUE',
+        recurrence: Recurrence(
+          frequency: Frequency.monthly,
+          start: d(2026, 11, 5),
+        ),
+        amountsByDue: {
+          d(2026, 11, 5): -132500, // First instalment with intercalary interest
+        },
+        nextDue: d(2026, 11, 5),
+      );
+      final m = reconcile(
+        scheduled: [loan],
+        unlinkedOperations: [
+          op(1, d(2026, 11, 5), -132500, 'PRLV BANQUE ECHEANCE 01'),
+        ],
+        today: today,
+      );
+      expect(m.single.operationId, 1);
+      expect(m.single.dueDate, d(2026, 11, 5));
+      expect(m.single.exact, isTrue);
+    });
+  });
+
+  group('Forecast with amountsByDue', () {
+    test('intercalary instalment projects its specific amount', () {
+      final loan = ScheduledOperation(
+        id: 'loan',
+        amountCents: -100000,
+        label: 'Prêt',
+        recurrence: Recurrence(
+          frequency: Frequency.monthly,
+          start: d(2026, 11, 5),
+        ),
+        amountsByDue: {
+          d(2026, 11, 5): -120000,
+        },
+        nextDue: d(2026, 11, 5),
+      );
+      final f = computeForecast(
+        currentBalanceCents: 500000,
+        today: d(2026, 11, 1),
+        horizonDays: 45,
+        scheduled: [loan],
+      );
+      final first = f.events.firstWhere((e) => e.date == d(2026, 11, 5));
+      final second = f.events.firstWhere((e) => e.date == d(2026, 12, 5));
+      expect(first.amountCents, -120000);
+      expect(second.amountCents, -100000);
+      expect(f.balanceOn(d(2026, 11, 5)), 380000);
+      expect(f.balanceOn(d(2026, 12, 5)), 280000);
+    });
   });
 }

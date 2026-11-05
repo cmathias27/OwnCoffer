@@ -4,6 +4,7 @@ import 'package:serverpod/serverpod.dart';
 import '../core/dates.dart';
 import '../core/portable_sql.dart';
 import '../generated/protocol.dart';
+import 'loan_terms.dart';
 import 'spending_service.dart';
 
 /// Balances, reconciliation and forecast of one account, computed by the
@@ -18,17 +19,22 @@ abstract final class ForecastService {
         count: s.occurrenceCount,
       );
 
-  static core.ScheduledOperation operationOf(ScheduledTransaction s) =>
-      core.ScheduledOperation(
-        id: s.id!,
-        amountCents: s.amountCents,
-        label: s.label,
-        recurrence: recurrenceOf(s),
-        nextDue: s.nextDue?.toLocalDate(),
-        matchPattern: s.matchPattern,
-        dateToleranceDays: s.dateToleranceDays,
-        amountTolerancePercent: s.amountTolerancePercent,
-      );
+  /// [amountsByDue]: occurrences whose amount differs from the planned one
+  /// (a loan's instalments, see [LoanTermsOf.debits]).
+  static core.ScheduledOperation operationOf(
+    ScheduledTransaction s, {
+    Map<core.LocalDate, int> amountsByDue = const {},
+  }) => core.ScheduledOperation(
+    id: s.id!,
+    amountsByDue: amountsByDue,
+    amountCents: s.amountCents,
+    label: s.label,
+    recurrence: recurrenceOf(s),
+    nextDue: s.nextDue?.toLocalDate(),
+    matchPattern: s.matchPattern,
+    dateToleranceDays: s.dateToleranceDays,
+    amountTolerancePercent: s.amountTolerancePercent,
+  );
 
   static core.RealOperation realOf(BankTransaction t) => core.RealOperation(
     id: t.id!,
@@ -98,6 +104,11 @@ abstract final class ForecastService {
 
       // 1. Reconcile first, so a realised occurrence is never counted twice.
       final byId = {for (final s in scheduledRows) s.id!: s};
+      final debits = await LoanTermsOf.debits(
+        session,
+        scheduledRows,
+        transaction: tx,
+      );
       final unlinked = [
         for (final t in ops)
           if (t.scheduledId == null &&
@@ -105,7 +116,10 @@ abstract final class ForecastService {
             t,
       ];
       final matches = core.reconcile(
-        scheduled: [for (final s in scheduledRows) operationOf(s)],
+        scheduled: [
+          for (final s in scheduledRows)
+            operationOf(s, amountsByDue: debits[s.id] ?? const {}),
+        ],
         unlinkedOperations: [for (final t in unlinked) realOf(t)],
         today: today,
       );
@@ -149,6 +163,7 @@ abstract final class ForecastService {
         byId.values,
         ops,
         estimate,
+        debits: debits,
       );
       final lowest = f.lowest;
       return ForecastResult(
@@ -270,6 +285,7 @@ abstract final class ForecastService {
     Iterable<ScheduledTransaction> scheduled,
     List<BankTransaction> ops,
     (core.VariableEstimate, core.Period)? estimate, {
+    Map<int, Map<core.LocalDate, int>> debits = const {},
     List<core.ScheduledOperation> extra = const [],
   }) => core.computeForecast(
     variableSpending: estimate == null
@@ -284,7 +300,11 @@ abstract final class ForecastService {
     today: today,
     horizonDays: horizonDays,
     alertThresholdCents: account.alertThresholdCents,
-    scheduled: [for (final s in scheduled) operationOf(s), ...extra],
+    scheduled: [
+      for (final s in scheduled)
+        operationOf(s, amountsByDue: debits[s.id] ?? const {}),
+      ...extra,
+    ],
     futureOperations: [
       for (final t in ops)
         if (t.date.toLocalDate() > today) realOf(t),
@@ -314,6 +334,7 @@ abstract final class ForecastService {
       session,
       where: (s) => s.accountId.equals(account.id!) & s.deletedAt.equals(null),
     );
+    final debits = await LoanTermsOf.debits(session, scheduled);
     final ops = await recentOperations(session, account, today);
     final balance = (await balancesOf(session, account, today)).currentCents;
     return core.simulatePurchase(
@@ -329,6 +350,7 @@ abstract final class ForecastService {
         scheduled,
         ops,
         estimate,
+        debits: debits,
         extra: extra,
       ),
     );

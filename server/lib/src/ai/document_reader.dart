@@ -384,6 +384,16 @@ abstract final class DocumentReader {
         'payment_cents': {'type': 'integer'},
         'insurance_monthly_cents': {'type': 'integer'},
         'first_due_date': {'type': 'string', 'description': 'YYYY-MM-DD.'},
+        'disbursement_date': {
+          'type': 'string',
+          'description':
+              'Disbursement day (YYYY-MM-DD) when not 1 month before first instalment.',
+        },
+        'first_interest_cents': {
+          'type': 'integer',
+          'description':
+              'Intercalary or initial interest of the first instalment.',
+        },
         'total_interest_cents': {'type': 'integer'},
         'schedule': {
           'type': 'array',
@@ -408,6 +418,7 @@ abstract final class DocumentReader {
 
     final before = ProposalService.loanFields(loan);
     final first = _day(f['first_due_date']);
+    final disb = _day(f['disbursement_date']);
     final readFields = <String, Object?>{
       'principal_cents': ?_cents(f['principal_cents']),
       'annual_rate_milli': ?n('annual_rate_milli', core.maxLoanRateMilli),
@@ -418,6 +429,8 @@ abstract final class DocumentReader {
         core.maxLoanPrincipalCents,
       ),
       if (first != null) 'first_due_date': _iso(first),
+      if (disb != null) 'disbursement_date': _iso(disb),
+      'first_interest_cents': ?_cents(f['first_interest_cents']),
     };
     final changed = {
       for (final e in readFields.entries)
@@ -439,6 +452,8 @@ abstract final class DocumentReader {
         firstDue: _day(merged['first_due_date'])!.toLocalDate(),
         insuranceMonthlyCents: merged['insurance_monthly_cents']! as int,
         paymentCents: merged['payment_cents'] as int?,
+        disbursementDate: _day(merged['disbursement_date'])?.toLocalDate(),
+        firstInterestCents: merged['first_interest_cents'] as int?,
       );
     } on ArgumentError {
       throw InvalidInputException(code: 'loan_terms_invalid');

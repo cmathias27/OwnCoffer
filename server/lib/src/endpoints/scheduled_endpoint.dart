@@ -4,6 +4,7 @@ import 'package:serverpod/serverpod.dart';
 import '../core/dates.dart';
 import '../finance/alert_service.dart';
 import '../finance/forecast_service.dart';
+import '../finance/loan_terms.dart';
 import '../finance/spending_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
@@ -313,6 +314,9 @@ class ScheduledEndpoint extends Endpoint {
         loans[l.scheduledId!] = l.id!;
       }
     }
+    final loanDebits = rows.isEmpty
+        ? const <int, Map<core.LocalDate, int>>{}
+        : await LoanTermsOf.debits(session, rows);
     final items = <CalendarItem>[];
     var debits = 0, credits = 0;
     for (final s in rows) {
@@ -330,12 +334,13 @@ class ScheduledEndpoint extends Endpoint {
               )
               .name,
         );
+        final amountCents = loanDebits[s.id]?[due] ?? s.amountCents;
         if (status == OccurrenceStatus.upcoming ||
             status == OccurrenceStatus.late) {
-          if (s.amountCents < 0) {
-            debits += s.amountCents;
+          if (amountCents < 0) {
+            debits += amountCents;
           } else {
-            credits += s.amountCents;
+            credits += amountCents;
           }
         }
         items.add(
@@ -344,7 +349,7 @@ class ScheduledEndpoint extends Endpoint {
             scheduledId: s.id!,
             accountId: s.accountId,
             label: s.label,
-            amountCents: s.amountCents,
+            amountCents: amountCents,
             categoryId: s.categoryId,
             subscription: s.subscription,
             loanId: loans[s.id],
