@@ -2,6 +2,21 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.4.6 (novembre 2026)
+
+### Crédits
+
+- **Première échéance avec intérêts intercalaires** calculée de la même façon partout (moteur de calcul) :
+  - un déblocage pile un mois avant la première échéance donne un mois d'intérêts normal ;
+  - une simulation de remboursement anticipé avant la première échéance garde les intérêts intercalaires, en proportion du capital restant ;
+  - sur un prêt avec changements (taux variable, renégociation), le remboursement anticipé repart de l'échéance normale ;
+  - une date de déblocage après la première échéance, ou plus d'un an avant, est refusée.
+  La saisie de la date de déblocage dans la fiche du crédit arrive dans une prochaine version.
+
+### Licence
+
+- OwnCoffer reste sous **AGPL-3.0**, avec une **exception pour Serverpod** (`LICENSE-EXCEPTION.md`, décision 0024) qui autorise à le distribuer avec le paquet `serverpod`, sous une autre licence. Rien ne change pour l'utilisation. Le fichier est joint à l'image Docker et à l'archive Windows.
+
 ## 1.4.5 (novembre 2026)
 
 ### Version autonome : sauvegardes
