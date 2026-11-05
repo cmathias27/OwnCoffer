@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:owncoffer_server/src/generated/protocol.dart';
 import 'package:owncoffer_server/src/security/scopes.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' show ExportSummary;
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 import 'package:test/test.dart';
@@ -167,6 +168,18 @@ void main() {
         pdf,
       );
 
+      // Planned operation and goal: the forecast and the goals follow.
+      await endpoints.scheduled.create(
+        as(alice),
+        courant.id!,
+        -80000,
+        'LOYER',
+        ScheduleFrequency.monthly,
+        DateTime.utc(2026, 10, 5),
+        categoryId: child.id,
+      );
+      await endpoints.goal.set(as(alice), groupA, child.id!, 30000);
+
       final json = await endpoints.export.groupJson(as(alice), groupA);
       final result = await send(alice, json);
       expect(result.groupName, 'Foyer');
@@ -209,6 +222,79 @@ void main() {
       expect(pair.accountId, isNot(newCourant.id));
       final loans = (await endpoints.loan.overview(as(alice), g)).loans;
       expect(loans.single.loan.accountId, newCourant.id);
+
+      // The engine gives the same figures on the copy (decision 0022):
+      // the export, then each account's forecast, the spending report and
+      // the loan's schedule, ids aside.
+      final copy = await endpoints.export.groupJson(as(alice), g);
+      expect(
+        ExportSummary.of(jsonDecode(json) as Map<String, dynamic>).differences(
+          ExportSummary.of(jsonDecode(copy) as Map<String, dynamic>),
+        ),
+        isEmpty,
+      );
+      final now = DateTime.now().toUtc();
+      final today = DateTime.utc(now.year, now.month, now.day);
+      final oldAccounts = await endpoints.account.list(as(alice), groupA);
+      for (final a in oldAccounts) {
+        final b = accounts.singleWhere((x) => x.name == a.name);
+        final before = await endpoints.scheduled.forecast(
+          as(alice),
+          a.id!,
+          today,
+          horizonDays: 60,
+        );
+        final after = await endpoints.scheduled.forecast(
+          as(alice),
+          b.id!,
+          today,
+          horizonDays: 60,
+        );
+        expect(after.currentBalanceCents, before.currentBalanceCents);
+        expect(after.lowestBalanceCents, before.lowestBalanceCents);
+        expect(after.lowestDate, before.lowestDate);
+        expect(
+          [for (final d in after.days) d.balanceCents],
+          [for (final d in before.days) d.balanceCents],
+        );
+        expect(
+          [for (final e in after.events) (e.date, e.amountCents, e.label)],
+          [for (final e in before.events) (e.date, e.amountCents, e.label)],
+        );
+      }
+      final reportBefore = await endpoints.analysis.report(
+        as(alice),
+        groupA,
+        BudgetPeriod.month,
+        today,
+      );
+      final reportAfter = await endpoints.analysis.report(
+        as(alice),
+        g,
+        BudgetPeriod.month,
+        today,
+      );
+      expect(reportAfter.incomeCents, reportBefore.incomeCents);
+      expect(reportAfter.expenseCents, reportBefore.expenseCents);
+      expect(reportAfter.netCents, reportBefore.netCents);
+      expect(reportAfter.unclassifiedCount, reportBefore.unclassifiedCount);
+      expect(
+        [for (final h in reportAfter.history) h.toJson()],
+        [for (final h in reportBefore.history) h.toJson()],
+      );
+      final oldLoan = (await endpoints.loan.overview(as(alice), groupA)).loans;
+      final scheduleBefore = await endpoints.loan.schedule(
+        as(alice),
+        oldLoan.single.loan.id!,
+      );
+      final scheduleAfter = await endpoints.loan.schedule(
+        as(alice),
+        loans.single.loan.id!,
+      );
+      expect(
+        [for (final i in scheduleAfter) i.toJson()],
+        [for (final i in scheduleBefore) i.toJson()],
+      );
 
       // The files, one by one, then no second time.
       for (final d in result.documents) {

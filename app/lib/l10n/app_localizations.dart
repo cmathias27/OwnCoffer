@@ -9015,6 +9015,18 @@ abstract class AppLocalizations {
   /// **'C\'est fait : {count} groupe(s) créé(s) sur le serveur, avec {operations} opérations.'**
   String migrateDone(int count, int operations);
 
+  /// No description provided for @migrateMismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'La copie du groupe « {group} » sur le serveur ne correspond pas à vos données, ne passez pas encore au serveur :\n{differences}\nLa copie reste sur le serveur pour vérification ; vous pouvez la supprimer et réessayer.'**
+  String migrateMismatch(String group, String differences);
+
+  /// No description provided for @migrateFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'envoi du groupe « {group} » a échoué : {reason}\nLes groupes déjà envoyés ne seront pas renvoyés : vous pouvez réessayer.'**
+  String migrateFailed(String group, String reason);
+
   /// No description provided for @migrateSwitch.
   ///
   /// In fr, this message translates to:

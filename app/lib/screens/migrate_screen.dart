@@ -37,6 +37,10 @@ class _MigrateScreenState extends State<MigrateScreen> {
   var _groups = 0;
   var _operations = 0;
 
+  /// Groups already sent and checked, by their id here: a retry after a
+  /// failure does not send them a second time.
+  final _sent = <int, int>{};
+
   @override
   void dispose() {
     for (final c in [_address, _email, _password, _code]) {
@@ -108,18 +112,37 @@ class _MigrateScreenState extends State<MigrateScreen> {
       for (final m in await client.group.myGroups())
         if (m.role == MemberRole.admin) m,
     ];
-    var operations = 0;
     for (var i = 0; i < groups.length; i++) {
-      final result = await GroupTransfer.send(
-        from: client,
-        to: _target!,
-        groupId: groups[i].group.id!,
-        progress: (p) {
-          if (mounted) setState(() => _progress = (i + p) / groups.length);
-        },
-      );
-      operations += result.transactions;
+      final id = groups[i].group.id!;
+      if (_sent.containsKey(id)) continue;
+      try {
+        final result = await GroupTransfer.send(
+          from: client,
+          to: _target!,
+          groupId: id,
+          progress: (p) {
+            if (mounted) setState(() => _progress = (i + p) / groups.length);
+          },
+        );
+        _sent[id] = result.transactions;
+      } on TransferMismatch catch (e) {
+        if (!mounted) rethrow;
+        // Back to the send button: a retry sends what is left.
+        setState(() => _step = _Step.ready);
+        final l = AppLocalizations.of(context);
+        throw _Message(
+          l.migrateMismatch(e.groupName, e.differences.take(8).join('\n')),
+        );
+      } on Object catch (e) {
+        if (!mounted) rethrow;
+        setState(() => _step = _Step.ready);
+        final l = AppLocalizations.of(context);
+        throw _Message(
+          l.migrateFailed(groups[i].group.name, errorText(l, e)),
+        );
+      }
     }
+    final operations = _sent.values.fold(0, (a, b) => a + b);
     setState(
       () => (
         _step = _Step.done,

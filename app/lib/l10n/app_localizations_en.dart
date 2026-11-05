@@ -5582,6 +5582,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String migrateMismatch(String group, String differences) {
+    return 'The copy of group \"$group\" on the server does not match your data, do not switch to the server yet:\n$differences\nThe copy stays on the server to check; you can delete it and try again.';
+  }
+
+  @override
+  String migrateFailed(String group, String reason) {
+    return 'Sending group \"$group\" failed: $reason\nGroups already sent will not be sent again: you can try again.';
+  }
+
+  @override
   String get migrateSwitch => 'Use the server now';
 
   @override
