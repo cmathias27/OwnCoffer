@@ -5640,7 +5640,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deviceBackupIntro =>
-      'Every day, a full encrypted backup of your data is written to a folder; the 10 newest are kept. Choose a synced folder (Nextcloud, OneDrive…) to have a copy away from the device.';
+      'Every day, a full encrypted backup of your data is written to a folder; the 10 newest are kept. Choose a synced folder (Nextcloud, OneDrive, Drive…) to have a copy away from the device.';
+
+  @override
+  String get deviceBackupEncrypted =>
+      'Encrypted with your passphrase (AES-256-GCM)';
+
+  @override
+  String get deviceBackupContents =>
+      'Everything is in it: accounts, transactions, rules, budgets, goals, loans and every attached document (invoices, receipts, loan offers and schedules). Without the passphrase, the file cannot be read.';
 
   @override
   String get deviceBackupPassphrase => 'Passphrase (at least 12 characters)';

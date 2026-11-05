@@ -5670,7 +5670,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deviceBackupIntro =>
-      'Chaque jour, une sauvegarde complète et chiffrée de vos données est écrite dans un dossier ; les 10 dernières sont gardées. Choisissez un dossier synchronisé (Nextcloud, OneDrive…) pour en avoir une copie hors de l\'appareil.';
+      'Chaque jour, une sauvegarde complète et chiffrée de vos données est écrite dans un dossier ; les 10 dernières sont gardées. Choisissez un dossier synchronisé (Nextcloud, OneDrive, Drive…) pour en avoir une copie hors de l\'appareil.';
+
+  @override
+  String get deviceBackupEncrypted =>
+      'Chiffrée avec votre phrase de passe (AES-256-GCM)';
+
+  @override
+  String get deviceBackupContents =>
+      'Tout y est : comptes, opérations, règles, budgets, objectifs, crédits et tous les documents joints (factures, tickets, offres et tableaux de prêt). Sans la phrase de passe, le fichier est illisible.';
 
   @override
   String get deviceBackupPassphrase =>

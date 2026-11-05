@@ -140,14 +140,23 @@ void main() {
         -990,
         'CAFE',
       );
-      final backup = await server.backup(pass, metadata: {'app': 'test'});
+      // Written to a file a chunk at a time, as the app does.
+      final file = File('${here.path}/written.ocbackup');
+      await server.backupTo(file, pass, metadata: {'app': 'test'});
+      final backup = file.readAsBytesSync();
+      expect(backup[4], 2, reason: 'format 2');
       expect(
         latin1.decode(backup, allowInvalid: true),
         isNot(contains('CAFE')),
       );
       // The copy was checked whole; its schema is one this app knows.
-      final meta = DeviceBackup.open(backup, pass).metadata;
+      final meta = DeviceBackup.openFile(
+        file.path,
+        pass,
+        databaseOut: '${here.path}/opened.db',
+      ).metadata;
       expect(DeviceBackup.knownVersions, contains(meta['schema']));
+      expect(meta['app'], 'test');
       client.close();
       await server.stop();
 

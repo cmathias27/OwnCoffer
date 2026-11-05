@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.4.5 (novembre 2026)
+
+### Version autonome : sauvegardes
+
+- **Dossier au choix sur Android** : le sélecteur du système permet de choisir n'importe quel dossier du téléphone, de la carte mémoire ou d'une application synchronisée (Nextcloud, Drive…) ; l'application garde le droit d'y écrire après un redémarrage. Sous Windows, le choix existait déjà.
+- **Chiffrement affiché** : la page Sauvegardes rappelle que chaque fichier est chiffré avec votre phrase de passe (AES-256-GCM) et illisible sans elle.
+- **Tous les documents inclus** : factures, tickets, offres et tableaux de prêt sont gardés dans la base, donc dans chaque sauvegarde ; la page le dit.
+- **Grosses sauvegardes** : nouveau format chiffré par blocs de 1 Mo, écrit et relu bloc par bloc — une sauvegarde de plusieurs Go (beaucoup de documents) ne passe plus par la mémoire du téléphone. Chaque bloc est authentifié avec sa place : un bloc modifié, déplacé, retiré ou un fichier coupé est refusé. Les anciennes sauvegardes restent lisibles.
+
 ## 1.4.4 (novembre 2026)
 
 ### Version autonome : sauvegardes

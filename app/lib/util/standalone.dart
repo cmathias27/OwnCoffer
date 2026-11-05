@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'standalone/standalone_stub.dart'
     if (dart.library.io) 'standalone/standalone_io.dart'
     as impl;
@@ -14,16 +12,27 @@ bool get standaloneAvailable => impl.standaloneAvailable;
 Future<({Uri api, Future<Map<String, dynamic>> Function() signIn})>
 startStandalone() => impl.startStandalone();
 
-/// An encrypted backup of everything on this device.
-Future<Uint8List> standaloneBackup(
+/// An encrypted backup of everything on this device, documents included,
+/// written as [name] in [folder] (a path, or a folder chosen on Android);
+/// the ten newest kept. Returns where it was written.
+Future<String> standaloneBackupTo(
+  String folder,
+  String name,
   String passphrase,
   Map<String, Object?> metadata,
-) => impl.standaloneBackup(passphrase, metadata);
+) => impl.standaloneBackupTo(folder, name, passphrase, metadata);
 
-/// Replaces this device's data by a backup (the server is stopped; start
-/// the standalone mode again afterwards).
-Future<void> standaloneRestore(Uint8List file, String passphrase) =>
-    impl.standaloneRestore(file, passphrase);
+/// Replaces this device's data by the backup at [path] (from
+/// [pickBackupFile]); the server is stopped: start the standalone mode
+/// again afterwards.
+Future<void> standaloneRestore(String path, String passphrase) =>
+    impl.standaloneRestore(path, passphrase);
+
+/// A backup file chosen by the user, or null.
+Future<String?> pickBackupFile() => impl.pickBackupFile();
+
+/// The restore was cancelled: the copy of [path] made on Android goes.
+Future<void> forgetPickedBackup(String path) => impl.forgetPickedBackup(path);
 
 Future<String> defaultBackupFolder() => impl.defaultBackupFolder();
 
@@ -31,11 +40,11 @@ Future<String?> chooseBackupFolder() => impl.chooseBackupFolder();
 
 bool get canChooseBackupFolder => impl.canChooseBackupFolder;
 
-Future<String> writeBackup(String folder, String name, Uint8List bytes) =>
-    impl.writeBackup(folder, name, bytes);
+/// [folder] as the user reads it.
+String folderLabel(String folder) => impl.folderLabel(folder);
 
-Future<({String name, Uint8List bytes})?> latestBackup(String folder) =>
-    impl.latestBackup(folder);
+/// Sends a copy of the newest backup of [folder]; false if there is none.
+Future<bool> shareLatestBackup(String folder) => impl.shareLatestBackup(folder);
 
 /// The passphrase did not open the backup (or the file was changed).
 bool isWrongPassphrase(Object e) => impl.isWrongPassphrase(e);
