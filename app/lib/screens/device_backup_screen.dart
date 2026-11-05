@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
-import '../util/file_pick.dart';
-import '../util/file_save.dart';
 import '../util/standalone.dart';
 import '../util/standalone_backups.dart';
 import '../widgets/admin_backups.dart';
@@ -94,15 +92,11 @@ class _DeviceBackupScreenState extends State<DeviceBackupScreen> {
     messenger.showSnackBar(SnackBar(content: Text(l.deviceBackupDone(path))));
   });
 
-  Future<void> _share() => _run('share', () async {
-    final latest = await latestBackup(_folder!);
-    if (latest == null) return;
-    await openOrSaveFile(latest.name, 'application/octet-stream', latest.bytes);
-  });
+  Future<void> _share() => _run('share', () => shareLatestBackup(_folder!));
 
   Future<void> _restore() async {
     final l = AppLocalizations.of(context);
-    final file = await pickFile(extensions: const ['.ocbackup']);
+    final file = await pickBackupFile();
     if (file == null || !mounted) return;
     final pass = TextEditingController();
     final ok = await showDialog<bool>(
@@ -139,10 +133,14 @@ class _DeviceBackupScreenState extends State<DeviceBackupScreen> {
     );
     final passphrase = pass.text;
     pass.dispose();
-    if (ok != true) return;
+    if (ok != true) {
+      // The copy made on Android is not kept.
+      await forgetPickedBackup(file);
+      return;
+    }
     var restored = false;
     await _run('restore', () async {
-      await standaloneRestore(file.bytes, passphrase);
+      await standaloneRestore(file, passphrase);
       restored = true;
     });
     // The app starts again on the restored data, or on the previous one
@@ -174,7 +172,14 @@ class _DeviceBackupScreenState extends State<DeviceBackupScreen> {
                   children: [
                     Text(l.deviceBackupIntro),
                     const SizedBox(height: 12),
-                    Text(l.deviceBackupFolder(_folder ?? '')),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.lock_outline),
+                      title: Text(l.deviceBackupEncrypted),
+                      subtitle: Text(l.deviceBackupContents),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(l.deviceBackupFolder(folderLabel(_folder ?? ''))),
                     if (canChooseBackupFolder)
                       Align(
                         alignment: AlignmentDirectional.centerStart,

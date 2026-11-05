@@ -1,5 +1,6 @@
 package org.owncoffer.app
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -14,9 +15,18 @@ import java.util.concurrent.Executors
 
 class MainActivity : FlutterActivity() {
     private val ocrExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+    private val backupFolder = BackupFolder(this)
+
+    @Deprecated("Flutter's activity still delivers picker results here")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (backupFolder.onActivityResult(requestCode, resultCode, data)) return
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, BackupFolder.CHANNEL)
+            .setMethodCallHandler(backupFolder)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, TEXT_READER_CHANNEL)
             .setMethodCallHandler { call, result ->
                 if (call.method != "read") {

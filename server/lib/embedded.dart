@@ -46,9 +46,11 @@ class EmbeddedServer {
   /// The app's private folder this server runs on.
   late final Directory dataDir;
 
-  /// An encrypted backup of everything (decision 0022): a consistent copy
-  /// of the database, made while the server runs, and its secrets.
-  Future<Uint8List> backup(
+  /// An encrypted backup of everything (decision 0022), documents
+  /// included, written to [out]: a consistent copy of the database, made
+  /// while the server runs, and its secrets, encrypted a chunk at a time.
+  Future<void> backupTo(
+    File out,
     String passphrase, {
     Map<String, Object?> metadata = const {},
   }) async {
@@ -69,7 +71,6 @@ class EmbeddedServer {
       final schema = await Isolate.run(
         () => DeviceBackup.schemaVersion(copyPath),
       );
-      final database = await copy.readAsBytes();
       final passwords = await File(
         '${dataDir.path}/config/passwords.yaml',
       ).readAsString();
@@ -78,17 +79,36 @@ class EmbeddedServer {
         'schema': schema,
         ...metadata,
       };
-      // The key derivation takes a second or two: off the app's thread.
-      return await Isolate.run(
-        () => DeviceBackup.seal(
+      final outPath = out.path;
+      // Key derivation and encryption: off the app's thread.
+      await Isolate.run(
+        () => DeviceBackup.sealFile(
           passphrase: passphrase,
-          database: database,
+          databasePath: copyPath,
           passwords: passwords,
           metadata: meta,
+          outPath: outPath,
         ),
       );
     } finally {
       if (copy.existsSync()) await copy.delete();
+    }
+  }
+
+  /// [backupTo], read in memory.
+  Future<Uint8List> backup(
+    String passphrase, {
+    Map<String, Object?> metadata = const {},
+  }) async {
+    final out = File(
+      '${dataDir.path}/backup-${DateTime.now().microsecondsSinceEpoch}'
+      '.${DeviceBackup.extension}',
+    );
+    try {
+      await backupTo(out, passphrase, metadata: metadata);
+      return await out.readAsBytes();
+    } finally {
+      if (out.existsSync()) await out.delete();
     }
   }
 

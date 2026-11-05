@@ -63,11 +63,10 @@ abstract final class StandaloneBackups {
     if (passphrase == null || folder == null) {
       throw StateError('backups not enabled');
     }
-    final bytes = await standaloneBackup(passphrase, {
+    final now = DateTime.now();
+    final path = await standaloneBackupTo(folder, fileName(now), passphrase, {
       'app': await AppVersions.app(),
     });
-    final now = DateTime.now();
-    final path = await writeBackup(folder, fileName(now), bytes);
     await _storage.write(key: _lastKey, value: now.toUtc().toIso8601String());
     await _clearFailure();
     return path;

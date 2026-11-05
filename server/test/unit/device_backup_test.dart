@@ -16,6 +16,103 @@ void main() {
     metadata: {'app': '1.1.0'},
   );
 
+  group('format 2, a chunk at a time', () {
+    late Directory tmp;
+    setUp(() => tmp = Directory.systemTemp.createTempSync('owncoffer-f2-'));
+    tearDown(() => tmp.deleteSync(recursive: true));
+    var n = 0;
+
+    Uint8List sealed(
+      Uint8List database, {
+      String passphrase = pass,
+      int chunk = 1024,
+    }) {
+      final source = File('${tmp.path}/db-${n++}')..writeAsBytesSync(database);
+      final out = '${tmp.path}/out-${n++}';
+      DeviceBackup.sealFile(
+        passphrase: passphrase,
+        databasePath: source.path,
+        passwords: "shared:\n  serviceSecret: 'x'\n",
+        metadata: {'app': '1.4.4'},
+        outPath: out,
+        chunk: chunk,
+      );
+      return File(out).readAsBytesSync();
+    }
+
+    ({Map<String, Object?> metadata, String passwords, Uint8List database})
+    opened(Uint8List file, [String passphrase = pass]) {
+      final path = '${tmp.path}/in-${n++}';
+      File(path).writeAsBytesSync(file);
+      final out = '${tmp.path}/db-${n++}';
+      final b = DeviceBackup.openFile(path, passphrase, databaseOut: out);
+      return (
+        metadata: b.metadata,
+        passwords: b.passwords,
+        database: File(out).readAsBytesSync(),
+      );
+    }
+
+    test('round trip on and around chunk boundaries', () {
+      // Metadata and secrets take 64 bytes: sizes cross the 1024 limit.
+      for (final size in [0, 1, 959, 960, 961, 1024, 2048 - 64, 5000]) {
+        final data = Uint8List.fromList(List.generate(size, (i) => i % 253));
+        final file = sealed(data);
+        expect(file[4], 2);
+        final b = opened(file);
+        expect(b.database, data, reason: '$size bytes');
+        expect(b.passwords, contains('serviceSecret'));
+        expect(b.metadata['app'], '1.4.4');
+      }
+      // The default size: one chunk per MB.
+      final big = Uint8List.fromList(
+        List.generate(3 * DeviceBackup.chunkSize + 7, (i) => i % 241),
+      );
+      expect(opened(sealed(big, chunk: DeviceBackup.chunkSize)).database, big);
+    });
+
+    test('nothing readable, wrong passphrase, every change refused', () {
+      final file = sealed(db);
+      expect(
+        latin1.decode(file, allowInvalid: true),
+        isNot(contains('serviceSecret')),
+      );
+      expect(
+        () => opened(file, 'une autre phrase longue'),
+        throwsA(isA<BackupPassphraseException>()),
+      );
+      final refused = throwsA(
+        anyOf(isA<BackupPassphraseException>(), isA<FormatException>()),
+      );
+      for (final at in [4, 6, 20, 30, 35, 40, 1100, 2200, file.length - 1]) {
+        final changed = Uint8List.fromList(file)..[at] ^= 1;
+        expect(() => opened(changed), refused, reason: 'byte $at');
+      }
+      const sealedChunk = 1024 + 16;
+      const head = 37;
+      // Cut after a whole chunk, or within one.
+      for (final end in [head + sealedChunk, head + 2 * sealedChunk, 3000]) {
+        expect(
+          () => opened(Uint8List.sublistView(file, 0, end)),
+          refused,
+          reason: 'cut at $end',
+        );
+      }
+      // Two chunks swapped.
+      final swapped = Uint8List.fromList(file)
+        ..setRange(head, head + sealedChunk, file, head + sealedChunk)
+        ..setRange(head + sealedChunk, head + 2 * sealedChunk, file, head);
+      expect(() => opened(swapped), refused);
+      expect(() => sealed(db, passphrase: 'court'), throwsArgumentError);
+    });
+
+    test('format 1 backups are still read', () {
+      final b = opened(seal());
+      expect(b.database, db);
+      expect(b.metadata['app'], '1.1.0');
+    });
+  });
+
   test('backup: sealed, opened with the passphrase only', () {
     final file = seal();
     expect(utf8.decode(file.sublist(0, 4)), 'OCBK');
@@ -83,12 +180,29 @@ void main() {
       return bytes;
     }
 
-    Uint8List backupOf(Uint8List database) => DeviceBackup.seal(
-      passphrase: pass,
-      database: database,
-      passwords: "shared:\n  serviceSecret: 'restored'\n",
-      metadata: const {},
-    );
+    Uint8List backupOf(Uint8List database, {bool format1 = false}) {
+      if (format1) {
+        return DeviceBackup.seal(
+          passphrase: pass,
+          database: database,
+          passwords: "shared:\n  serviceSecret: 'restored'\n",
+          metadata: const {},
+        );
+      }
+      final source = File('${dir.path}/source.db')..writeAsBytesSync(database);
+      final out = File('${dir.path}/sealed.ocbackup');
+      DeviceBackup.sealFile(
+        passphrase: pass,
+        databasePath: source.path,
+        passwords: "shared:\n  serviceSecret: 'restored'\n",
+        metadata: const {},
+        outPath: out.path,
+      );
+      final bytes = out.readAsBytesSync();
+      source.deleteSync();
+      out.deleteSync();
+      return bytes;
+    }
 
     void current() {
       File('${dir.path}/owncoffer.db').writeAsStringSync('current');
@@ -114,6 +228,22 @@ void main() {
       expect(text('before-restore/passwords.yaml'), contains("'current'"));
       expect(Directory('${dir.path}/restore-incoming').existsSync(), isFalse);
       expect(DeviceBackup.schemaVersion('${dir.path}/owncoffer.db'), version);
+    });
+
+    test('a format 1 backup, and one picked as a file', () async {
+      final version = DeviceBackup.knownVersions.first;
+      current();
+      final old = database(version, note: 'format 1');
+      await DeviceBackup.restoreInto(dir, backupOf(old, format1: true), pass);
+      expect(File('${dir.path}/owncoffer.db').readAsBytesSync(), old);
+      final now = database(version, note: 'from a file');
+      final picked = File('${Directory.systemTemp.path}/picked-${dir.hashCode}')
+        ..writeAsBytesSync(backupOf(now));
+      addTearDown(picked.deleteSync);
+      await DeviceBackup.prepareRestoreFile(dir, picked.path, pass);
+      await DeviceBackup.commitRestore(dir);
+      expect(File('${dir.path}/owncoffer.db').readAsBytesSync(), now);
+      expect(picked.existsSync(), isTrue, reason: 'the chosen file stays');
     });
 
     test('a newer schema is refused, nothing touched', () async {

@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 bool get standaloneAvailable => false;
 
 Never _unavailable() => throw UnsupportedError(
@@ -9,13 +7,19 @@ Never _unavailable() => throw UnsupportedError(
 Future<({Uri api, Future<Map<String, dynamic>> Function() signIn})>
 startStandalone() async => _unavailable();
 
-Future<Uint8List> standaloneBackup(
+Future<String> standaloneBackupTo(
+  String folder,
+  String name,
   String passphrase,
   Map<String, Object?> metadata,
 ) async => _unavailable();
 
-Future<void> standaloneRestore(Uint8List file, String passphrase) async =>
+Future<void> standaloneRestore(String path, String passphrase) async =>
     _unavailable();
+
+Future<String?> pickBackupFile() async => null;
+
+Future<void> forgetPickedBackup(String path) async {}
 
 Future<String> defaultBackupFolder() async => _unavailable();
 
@@ -23,15 +27,9 @@ Future<String?> chooseBackupFolder() async => null;
 
 bool get canChooseBackupFolder => false;
 
-Future<String> writeBackup(
-  String folder,
-  String name,
-  Uint8List bytes, {
-  int keep = 10,
-}) async => _unavailable();
+String folderLabel(String folder) => folder;
 
-Future<({String name, Uint8List bytes})?> latestBackup(String folder) async =>
-    null;
+Future<bool> shareLatestBackup(String folder) async => false;
 
 bool isWrongPassphrase(Object e) => false;
 

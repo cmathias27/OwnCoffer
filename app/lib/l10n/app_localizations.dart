@@ -9108,8 +9108,20 @@ abstract class AppLocalizations {
   /// No description provided for @deviceBackupIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Chaque jour, une sauvegarde complète et chiffrée de vos données est écrite dans un dossier ; les 10 dernières sont gardées. Choisissez un dossier synchronisé (Nextcloud, OneDrive…) pour en avoir une copie hors de l\'appareil.'**
+  /// **'Chaque jour, une sauvegarde complète et chiffrée de vos données est écrite dans un dossier ; les 10 dernières sont gardées. Choisissez un dossier synchronisé (Nextcloud, OneDrive, Drive…) pour en avoir une copie hors de l\'appareil.'**
   String get deviceBackupIntro;
+
+  /// No description provided for @deviceBackupEncrypted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffrée avec votre phrase de passe (AES-256-GCM)'**
+  String get deviceBackupEncrypted;
+
+  /// No description provided for @deviceBackupContents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout y est : comptes, opérations, règles, budgets, objectifs, crédits et tous les documents joints (factures, tickets, offres et tableaux de prêt). Sans la phrase de passe, le fichier est illisible.'**
+  String get deviceBackupContents;
 
   /// No description provided for @deviceBackupPassphrase.
   ///
