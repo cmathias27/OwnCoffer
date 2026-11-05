@@ -421,6 +421,109 @@ void main() {
 
       // Dernière échéance: soldée
       expect(schedule.last.remainingCents, 0);
+      expect(schedule[0].extraInterestCents, 9633 - 6125);
+      expect(schedule[0].regularPaymentCents, 18919);
+      expect(schedule[1].extraInterestCents, 0);
+    });
+
+    int total(List<Installment> s) => s.fold(0, (a, i) => a + i.principalCents);
+
+    LoanTerms intercalary({
+      LocalDate? disbursed,
+      int? firstInterest,
+      int? payment = 18919,
+    }) => LoanTerms(
+      principalCents: 1500000,
+      annualRateMilli: 4900,
+      months: 96,
+      firstDue: LocalDate(2024, 12, 4),
+      paymentCents: payment,
+      disbursementDate: disbursed,
+      firstInterestCents: firstInterest,
+    );
+
+    test('from the disbursement date: days elapsed, regular capital', () {
+      final plain = amortize(intercalary());
+      // Exactly a month before: a regular first instalment (not 31/365).
+      final month = amortize(intercalary(disbursed: LocalDate(2024, 11, 4)));
+      expect(month[0].interestCents, 6125);
+      expect(month[0].extraInterestCents, 0);
+      expect(
+        [for (final i in month) i.totalCents],
+        [for (final i in plain) i.totalCents],
+      );
+      // 49 days: 15 000 € × 4.90 % × 49 / 365 = 98.67 €.
+      final long = amortize(intercalary(disbursed: LocalDate(2024, 10, 16)));
+      expect(long[0].interestCents, 9867);
+      expect(long[0].principalCents, plain[0].principalCents);
+      expect(long[0].extraInterestCents, 9867 - 6125);
+      expect(long[1].paymentCents, 18919);
+      // 20 days: less interest, the capital still the regular one.
+      final short = amortize(intercalary(disbursed: LocalDate(2024, 11, 14)));
+      expect(short[0].interestCents, 4027);
+      expect(short[0].extraInterestCents, lessThan(0));
+      expect(short[0].principalCents, plain[0].principalCents);
+      // The contract's figure prevails.
+      final both = amortize(
+        intercalary(disbursed: LocalDate(2024, 10, 16), firstInterest: 9633),
+      );
+      expect(both[0].interestCents, 9633);
+      // Computed from the duration: the same rules.
+      final computed = amortize(
+        intercalary(disbursed: LocalDate(2024, 10, 16), payment: null),
+      );
+      expect(computed[0].interestCents, 9867);
+      expect(computed.length, 96);
+      expect(computed.last.remainingCents, 0);
+    });
+
+    test('early repayment before the first instalment: intercalary interest '
+        'on what is left, the regular instalment kept', () {
+      final t = intercalary(firstInterest: 9633);
+      final before = LocalDate(2024, 11, 20);
+      final whole = loanStatus(t, amortize(t), before);
+      final r = simulateEarlyRepayment(t, before, 500000);
+      // 96.33 € on 15 000 €: 64.22 € on the 10 000 € left.
+      expect(r.schedule[0].number, 1);
+      expect(r.schedule[0].interestCents, 6422);
+      expect(r.schedule[0].principalCents, 18919 - 4083);
+      expect(r.schedule[1].paymentCents, 18919);
+      expect(total(r.schedule), 1000000);
+      expect(
+        r.interestSavedCents,
+        whole.interestRemainingCents -
+            r.schedule.fold(0, (a, i) => a + i.interestCents),
+      );
+      // With changes: the same regular instalment kept, not the first one
+      // with its intercalary interest.
+      final c = simulateEarlyRepayment(
+        t,
+        before,
+        500000,
+        changes: [
+          LoanChange(date: LocalDate(2027, 1, 1), annualRateMilli: 4000),
+        ],
+      );
+      expect(c.schedule[0].interestCents, 6422);
+      expect(c.schedule[1].paymentCents, 18919);
+      expect(total(c.schedule), 1000000);
+      expect(
+        [for (final i in c.schedule.take(24)) i.totalCents],
+        [for (final i in r.schedule.take(24)) i.totalCents],
+      );
+    });
+
+    test('disbursement after the first instalment or over a year before, '
+        'negative interest: refused', () {
+      expect(
+        () => intercalary(disbursed: LocalDate(2024, 12, 4)),
+        throwsArgumentError,
+      );
+      expect(
+        () => intercalary(disbursed: LocalDate(2023, 12, 1)),
+        throwsArgumentError,
+      );
+      expect(() => intercalary(firstInterest: -1), throwsArgumentError);
     });
   });
 }
