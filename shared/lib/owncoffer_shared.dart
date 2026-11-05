@@ -29,6 +29,7 @@ export 'src/documents/invoice_name.dart';
 export 'src/documents/receipt_text.dart';
 export 'src/documents/scan.dart';
 export 'src/documents/zip.dart';
+export 'src/export_summary.dart';
 export 'src/forecast/forecast.dart';
 export 'src/forecast/purchase.dart';
 export 'src/forecast/recurrence.dart';
