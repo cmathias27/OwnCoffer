@@ -918,6 +918,27 @@ class EndpointAnalysis extends _isc.EndpointRef {
   );
 }
 
+/// The app's automatic lock (decision 0025): the session stays open on the
+/// device, the screen is unlocked again with the account's password.
+/// {@category Endpoint}
+class EndpointAppLock extends _isc.EndpointRef {
+  EndpointAppLock(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'appLock';
+
+  /// Whether [password] is the signed-in user's own password. No new
+  /// session is issued: the device keeps the one it has (with its
+  /// two-factor access). A wrong password counts, like a failed sign-in,
+  /// towards the account's attempt limit and the automatic IP ban.
+  _ida.Future<bool> verifyPassword(String password) =>
+      caller.callServerEndpoint<bool>(
+        'appLock',
+        'verifyPassword',
+        {'password': password},
+      );
+}
+
 /// Categories of a group, linked to the standard catalogue.
 /// {@category Endpoint}
 class EndpointCategory extends _isc.EndpointRef {
@@ -2547,6 +2568,7 @@ class Client extends _isc.ServerpodClientShared {
     advisor = EndpointAdvisor(this);
     ai = EndpointAi(this);
     analysis = EndpointAnalysis(this);
+    appLock = EndpointAppLock(this);
     category = EndpointCategory(this);
     export = EndpointExport(this);
     feedback = EndpointFeedback(this);
@@ -2580,6 +2602,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointAi ai;
 
   late final EndpointAnalysis analysis;
+
+  late final EndpointAppLock appLock;
 
   late final EndpointCategory category;
 
@@ -2626,6 +2650,7 @@ class Client extends _isc.ServerpodClientShared {
     'advisor': advisor,
     'ai': ai,
     'analysis': analysis,
+    'appLock': appLock,
     'category': category,
     'export': export,
     'feedback': feedback,

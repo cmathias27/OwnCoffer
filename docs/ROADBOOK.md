@@ -186,6 +186,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] Hors-ligne et synchronisation
 - [x] Page « Applications » (télécharger Windows et Android dans la version du serveur), versions comparées, bannière quand l'application est en retard — *1.0.4*
 - [ ] Installation automatique des mises à jour des applications
+- [x] **Verrouillage automatique** après une absence (demandé le 5 novembre 2026) : mot de passe, empreinte sur Android, Windows Hello sur Windows ; déconnexion après 5 échecs ou 8 h ; masquage de l'écran en option — *1.5.0 ([0025](decisions/0025-verrouillage-automatique.md))*
 - [ ] Version autonome sans serveur (décision 0022) :
   - [x] le serveur embarqué dans l'application, sur SQLite ; choix « seul sur cet appareil » ou « serveur » au premier lancement ; tous les tests du serveur aussi sur SQLite — *1.1.0*
   - [x] « Migrer vers un serveur » (et retour par « Importer un export ») par l'export complet, factures comprises — *1.1.0* ; copie vérifiée (mêmes nombres, montants et soldes que la source), reprise sans renvoyer les groupes déjà envoyés — *1.4.4 (PR #147)*

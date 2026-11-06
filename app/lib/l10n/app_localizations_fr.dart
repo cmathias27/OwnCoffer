@@ -5786,4 +5786,123 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deviceBackupReplace => 'Remplacer';
+
+  @override
+  String get lockTitle => 'OwnCoffer est verrouillé';
+
+  @override
+  String get lockIntroPassword =>
+      'Saisissez votre mot de passe pour reprendre où vous en étiez.';
+
+  @override
+  String get lockIntroDevice =>
+      'Déverrouillez avec votre appareil pour reprendre où vous en étiez.';
+
+  @override
+  String get lockUnlock => 'Déverrouiller';
+
+  @override
+  String lockUseDevice(String method) {
+    return 'Utiliser $method';
+  }
+
+  @override
+  String get lockMethodAndroid => 'l\'empreinte ou le code du téléphone';
+
+  @override
+  String get lockMethodWindows => 'Windows Hello';
+
+  @override
+  String get lockReason => 'Déverrouiller OwnCoffer';
+
+  @override
+  String lockWrongPassword(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Mot de passe incorrect. Encore $count essais avant la déconnexion.',
+      one: 'Mot de passe incorrect. Dernier essai avant la déconnexion.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lockDeviceFailed =>
+      'Déverrouillage par l\'appareil refusé ou annulé.';
+
+  @override
+  String get lockSignedOut =>
+      'Déconnecté par le verrouillage automatique. Reconnectez-vous.';
+
+  @override
+  String lockOfferTitle(String method) {
+    return 'La prochaine fois, déverrouiller avec $method ?';
+  }
+
+  @override
+  String get lockOfferBody =>
+      'Plus rapide que le mot de passe. Vous pourrez changer d\'avis dans Sécurité.';
+
+  @override
+  String get lockOfferYes => 'Oui';
+
+  @override
+  String get lockOfferNo => 'Non merci';
+
+  @override
+  String get lockSettingsTitle => 'Verrouillage automatique';
+
+  @override
+  String get lockSettingsIntro =>
+      'Après un temps sans utilisation, l\'application se verrouille : l\'écran est masqué, la session reste ouverte et ce qui était en cours continue.';
+
+  @override
+  String get lockSettingsPassword => 'Votre mot de passe la déverrouille.';
+
+  @override
+  String get lockSettingsDevice =>
+      'Le verrouillage de l\'appareil (empreinte, code ou Windows Hello) la déverrouille.';
+
+  @override
+  String get lockEnable => 'Verrouiller après une absence';
+
+  @override
+  String get lockNeedsDeviceLock =>
+      'Configurez d\'abord un verrouillage d\'écran (code, empreinte ou Windows Hello) sur cet appareil.';
+
+  @override
+  String get lockDelay => 'Délai sans utilisation';
+
+  @override
+  String lockMinutes(int count) {
+    return '$count min';
+  }
+
+  @override
+  String lockUseDeviceSetting(String method) {
+    return 'Déverrouiller avec $method';
+  }
+
+  @override
+  String get lockHideContent => 'Masquer l\'écran hors du premier plan';
+
+  @override
+  String get lockHideContentHelp =>
+      'Dans la liste des applications ouvertes, ou quand la fenêtre n\'est plus active.';
+
+  @override
+  String get lockHideContentAndroid =>
+      'Dans la liste des applications ouvertes ; bloque aussi les captures d\'écran.';
+
+  @override
+  String get lockSignOutRule =>
+      'Après 5 mots de passe erronés ou 8 heures de verrouillage, l\'application se déconnecte : il faut alors se reconnecter (mot de passe et double authentification).';
+
+  @override
+  String get lockNow => 'Verrouiller maintenant';
+
+  @override
+  String get error_unlock_too_many_attempts =>
+      'Trop de mots de passe erronés. Réessayez plus tard, ou déconnectez-vous.';
 }

@@ -73,4 +73,7 @@ dependencies {
     // Local receipt text recognition, no network (decision 0023):
     // Tesseract and Leptonica native libraries, Apache-2.0 and BSD-2-Clause.
     implementation("cz.adaptech.tesseract4android:tesseract4android:4.9.0")
+    // AppCompat themes, needed by the fingerprint prompt on Android 8 and
+    // below (local_auth, decision 0025). Apache-2.0.
+    implementation("androidx.appcompat:appcompat:1.7.1")
 }

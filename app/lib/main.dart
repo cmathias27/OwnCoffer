@@ -14,14 +14,18 @@ import 'screens/server_address_screen.dart';
 import 'screens/setup_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/two_factor_screen.dart';
+import 'state/app_lock.dart';
 import 'state/session.dart';
 import 'assistant/chat_bubble.dart';
 import 'util/server_address.dart';
 import 'util/standalone.dart';
 import 'util/standalone_backups.dart';
+import 'widgets/app_lock_layer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Before any page: a web page reloaded while locked stays locked.
+  await appLock.load();
   askServerAddress = () async => runApp(
     OwnCofferApp(
       home: FirstLaunchScreen(
@@ -264,12 +268,15 @@ class OwnCofferApp extends StatelessWidget {
       darkTheme: _buildTheme(Brightness.dark),
       themeMode: ThemeMode.system,
       navigatorKey: _navigator,
-      // The assistant's bubble stays above every page.
+      // The assistant's bubble stays above every page, the lock above all.
       builder: home != null
           ? null
-          : (context, child) => ChatLayer(
-              navigator: _navigator,
-              child: child ?? const SizedBox(),
+          : (context, child) => AppLockLayer(
+              lock: appLock,
+              child: ChatLayer(
+                navigator: _navigator,
+                child: child ?? const SizedBox(),
+              ),
             ),
       home: home ?? const _Root(),
     );
@@ -290,13 +297,28 @@ class _RootState extends State<_Root> {
   @override
   void initState() {
     super.initState();
+    _session.addListener(_followSession);
     _session.refresh();
   }
 
   @override
   void dispose() {
+    _session.removeListener(_followSession);
     _session.dispose();
     super.dispose();
+  }
+
+  /// The lock applies to a signed-in session. Only a sign-out ends it: an
+  /// error page (no network) under the lock must not lift it.
+  void _followSession() {
+    switch (_session.stage) {
+      case SessionStage.ready:
+        unawaited(appLock.attach(_session.signOut));
+      case SessionStage.signedOut || SessionStage.setup:
+        appLock.detach();
+      default:
+        break;
+    }
   }
 
   @override

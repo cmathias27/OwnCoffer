@@ -66,6 +66,8 @@ analysis:
   - leftToLive:
   - insights:
   - review:
+appLock:
+  - verifyPassword:
 category:
   - list:
   - create:

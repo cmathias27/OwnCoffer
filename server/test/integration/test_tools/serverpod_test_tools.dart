@@ -277,6 +277,8 @@ class TestEndpoints {
 
   late final _AnalysisEndpoint analysis;
 
+  late final _AppLockEndpoint appLock;
+
   late final _CategoryEndpoint category;
 
   late final _ExportEndpoint export;
@@ -344,6 +346,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     analysis = _AnalysisEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    appLock = _AppLockEndpoint(
       endpoints,
       serializationManager,
     );
@@ -2505,6 +2511,48 @@ class _AnalysisEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_ir8qupm5.MonthReview>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _AppLockEndpoint {
+  _AppLockEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<bool> verifyPassword(
+    _ist.TestSessionBuilder sessionBuilder,
+    String password,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'appLock',
+            method: 'verifyPassword',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'appLock',
+          methodName: 'verifyPassword',
+          parameters: _ist.testObjectToJson({'password': password}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<bool>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

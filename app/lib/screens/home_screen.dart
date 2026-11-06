@@ -25,6 +25,7 @@ import 'members_screen.dart';
 import 'notifications_screen.dart';
 import 'operations_screen.dart';
 import 'security_screen.dart';
+import '../state/app_lock.dart';
 import '../help/help.dart';
 import '../assistant/chat_controller.dart';
 import 'apps_screen.dart';
@@ -442,6 +443,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(l.helpTitle),
                   ),
                 ),
+                if (appLock.enabled)
+                  PopupMenuItem(
+                    value: appLock.lockNow,
+                    child: ListTile(
+                      leading: const Icon(Icons.lock_outline),
+                      title: Text(l.lockNow),
+                    ),
+                  ),
                 // Standalone: no password to sign in again; the data stays
                 // on the device when another mode is chosen.
                 PopupMenuItem(
@@ -516,6 +525,17 @@ class _HomeScreenState extends State<HomeScreen> {
               tooltip: l.feedbackTitle,
               icon: const Icon(Icons.feedback_outlined),
               onPressed: _feedback,
+            ),
+          if (wide)
+            ListenableBuilder(
+              listenable: appLock,
+              builder: (context, _) => appLock.enabled
+                  ? IconButton(
+                      tooltip: l.lockNow,
+                      icon: const Icon(Icons.lock_outline),
+                      onPressed: appLock.lockNow,
+                    )
+                  : const SizedBox.shrink(),
             ),
           if (wide)
             IconButton(

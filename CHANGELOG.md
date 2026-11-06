@@ -2,6 +2,19 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.5.0 (novembre 2026)
+
+### Sécurité
+
+- **Verrouillage automatique** (décision 0025), désactivé par défaut, à activer dans **Sécurité** :
+  - après 15 minutes sans utilisation (ou 5, 30, 60), l'écran est masqué ; la session reste ouverte et ce qui était en cours continue ;
+  - déverrouillage par le mot de passe du compte (vérifié par le serveur), ou par l'empreinte ou le code du téléphone sur Android, Windows Hello sur Windows ; proposé après le premier déverrouillage ;
+  - bouton **Verrouiller maintenant** dans le menu ;
+  - déconnexion complète après 5 mots de passe erronés ou 8 heures de verrouillage ; recharger la page ne lève pas le verrou ;
+  - version autonome : déverrouillage par l'appareil uniquement ;
+  - option **Masquer l'écran hors du premier plan** (bloque aussi les captures d'écran sur Android).
+- Un appareil inutilisé pendant **30 jours** doit se reconnecter (14 jours auparavant).
+
 ## 1.4.7 (novembre 2026)
 
 ### Crédits

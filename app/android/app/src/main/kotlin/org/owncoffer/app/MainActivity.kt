@@ -5,15 +5,17 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
+import android.view.WindowManager
 import com.googlecode.tesseract.android.TessBaseAPI
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.ByteArrayInputStream
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class MainActivity : FlutterActivity() {
+// A FragmentActivity: the fingerprint prompt (local_auth) needs one.
+class MainActivity : FlutterFragmentActivity() {
     private val ocrExecutor: ExecutorService = Executors.newSingleThreadExecutor()
     private val backupFolder = BackupFolder(this)
 
@@ -27,6 +29,21 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, BackupFolder.CHANNEL)
             .setMethodCallHandler(backupFolder)
+        // The automatic lock's option (decision 0025): out of screenshots
+        // and blank in the list of recent apps.
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, WINDOW_CHANNEL)
+            .setMethodCallHandler { call, result ->
+                if (call.method != "setSecure") {
+                    result.notImplemented()
+                    return@setMethodCallHandler
+                }
+                if (call.argument<Boolean>("secure") == true) {
+                    window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                } else {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
+                result.success(null)
+            }
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, TEXT_READER_CHANNEL)
             .setMethodCallHandler { call, result ->
                 if (call.method != "read") {
@@ -130,6 +147,7 @@ class MainActivity : FlutterActivity() {
 
     private companion object {
         const val TEXT_READER_CHANNEL = "org.owncoffer.app/text_reader"
+        const val WINDOW_CHANNEL = "org.owncoffer.app/window"
 
         /** Longest side kept for recognition, enough for a receipt photo. */
         const val MAX_SIDE = 4000
