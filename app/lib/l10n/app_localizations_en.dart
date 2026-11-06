@@ -5753,4 +5753,121 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deviceBackupReplace => 'Replace';
+
+  @override
+  String get lockTitle => 'OwnCoffer is locked';
+
+  @override
+  String get lockIntroPassword =>
+      'Enter your password to pick up where you left off.';
+
+  @override
+  String get lockIntroDevice =>
+      'Unlock with your device to pick up where you left off.';
+
+  @override
+  String get lockUnlock => 'Unlock';
+
+  @override
+  String lockUseDevice(String method) {
+    return 'Use $method';
+  }
+
+  @override
+  String get lockMethodAndroid => 'fingerprint or phone PIN';
+
+  @override
+  String get lockMethodWindows => 'Windows Hello';
+
+  @override
+  String get lockReason => 'Unlock OwnCoffer';
+
+  @override
+  String lockWrongPassword(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Wrong password. $count tries left before signing out.',
+      one: 'Wrong password. Last try before signing out.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lockDeviceFailed => 'Device unlock refused or cancelled.';
+
+  @override
+  String get lockSignedOut =>
+      'Signed out by the automatic lock. Please sign in again.';
+
+  @override
+  String lockOfferTitle(String method) {
+    return 'Next time, unlock with $method?';
+  }
+
+  @override
+  String get lockOfferBody =>
+      'Quicker than the password. You can change your mind in Security.';
+
+  @override
+  String get lockOfferYes => 'Yes';
+
+  @override
+  String get lockOfferNo => 'No thanks';
+
+  @override
+  String get lockSettingsTitle => 'Automatic lock';
+
+  @override
+  String get lockSettingsIntro =>
+      'After some time without use, the app locks: the screen is hidden, the session stays open and whatever was running goes on.';
+
+  @override
+  String get lockSettingsPassword => 'Your password unlocks it.';
+
+  @override
+  String get lockSettingsDevice =>
+      'The device\'s own lock (fingerprint, PIN or Windows Hello) unlocks it.';
+
+  @override
+  String get lockEnable => 'Lock after being away';
+
+  @override
+  String get lockNeedsDeviceLock =>
+      'First set up a screen lock (PIN, fingerprint or Windows Hello) on this device.';
+
+  @override
+  String get lockDelay => 'Time without use';
+
+  @override
+  String lockMinutes(int count) {
+    return '$count min';
+  }
+
+  @override
+  String lockUseDeviceSetting(String method) {
+    return 'Unlock with $method';
+  }
+
+  @override
+  String get lockHideContent => 'Hide the screen when in the background';
+
+  @override
+  String get lockHideContentHelp =>
+      'In the list of open apps, or when the window is no longer active.';
+
+  @override
+  String get lockHideContentAndroid =>
+      'In the list of open apps; also blocks screenshots.';
+
+  @override
+  String get lockSignOutRule =>
+      'After 5 wrong passwords or 8 hours locked, the app signs out: you then sign in again (password and two-factor code).';
+
+  @override
+  String get lockNow => 'Lock now';
+
+  @override
+  String get error_unlock_too_many_attempts =>
+      'Too many wrong passwords. Try again later, or sign out.';
 }

@@ -7,6 +7,8 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../help/help.dart';
+import '../state/app_lock.dart';
+import '../widgets/app_lock_settings.dart';
 
 /// Two-factor authentication: enable (QR code, first code, backup codes),
 /// renew backup codes, disable.
@@ -102,6 +104,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
                     style: TextStyle(color: theme.colorScheme.error),
                   ),
                 ),
+              const Divider(height: 48),
+              AppLockSettings(lock: appLock),
             ],
           );
     if (widget.embedded) return body;

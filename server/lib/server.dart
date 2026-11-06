@@ -22,8 +22,9 @@ void run(List<String> args) async {
   // and the identity providers will be the authentication options available for users.
   pod.initializeAuthServices(
     tokenManagerBuilders: [
-      // Use JWT for authentication keys towards the server.
-      JwtConfigFromPasswords(),
+      // Use JWT for authentication keys towards the server. A device that
+      // has not used the app for 30 days signs in again (decision 0025).
+      JwtConfigFromPasswords(refreshTokenLifetime: const Duration(days: 30)),
     ],
     identityProviderBuilders: [
       // Email/password; registration on invitation only (see Onboarding).

@@ -74,6 +74,7 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'proposal_access_denied' => l.error_proposal_access_denied,
   'proposal_unknown' => l.error_proposal_unknown,
   'too_many' => l.error_too_many,
+  'unlock_too_many_attempts' => l.error_unlock_too_many_attempts,
   'ai_off' => l.error_ai_off,
   'ai_provider_unavailable' => l.error_ai_provider_unavailable,
   'ai_cap_reached' => l.error_ai_cap_reached,

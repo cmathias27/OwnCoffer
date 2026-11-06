@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
+import '../state/app_lock.dart';
 import '../state/session.dart';
 import '../util/server_address.dart';
 import '../widgets/form_card.dart';
@@ -24,6 +25,9 @@ class _SignInScreenState extends State<SignInScreen> {
       ? AccountFlowMode.register
       : null;
   String? _info;
+
+  /// Signed out by the automatic lock: said once, above the form.
+  final _byLock = appLock.takeSignedOutByLock();
 
   @override
   void dispose() {
@@ -63,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
     }
     return FormCard(
       title: l.signInTitle,
-      intro: _info,
+      intro: _info ?? (_byLock ? l.lockSignedOut : null),
       children: [
         AutofillGroup(
           child: Column(

@@ -9296,6 +9296,186 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Remplacer'**
   String get deviceBackupReplace;
+
+  /// No description provided for @lockTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'OwnCoffer est verrouillé'**
+  String get lockTitle;
+
+  /// No description provided for @lockIntroPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez votre mot de passe pour reprendre où vous en étiez.'**
+  String get lockIntroPassword;
+
+  /// No description provided for @lockIntroDevice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouillez avec votre appareil pour reprendre où vous en étiez.'**
+  String get lockIntroDevice;
+
+  /// No description provided for @lockUnlock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouiller'**
+  String get lockUnlock;
+
+  /// No description provided for @lockUseDevice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utiliser {method}'**
+  String lockUseDevice(String method);
+
+  /// No description provided for @lockMethodAndroid.
+  ///
+  /// In fr, this message translates to:
+  /// **'l\'empreinte ou le code du téléphone'**
+  String get lockMethodAndroid;
+
+  /// No description provided for @lockMethodWindows.
+  ///
+  /// In fr, this message translates to:
+  /// **'Windows Hello'**
+  String get lockMethodWindows;
+
+  /// No description provided for @lockReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouiller OwnCoffer'**
+  String get lockReason;
+
+  /// No description provided for @lockWrongPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Mot de passe incorrect. Dernier essai avant la déconnexion.} other{Mot de passe incorrect. Encore {count} essais avant la déconnexion.}}'**
+  String lockWrongPassword(int count);
+
+  /// No description provided for @lockDeviceFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouillage par l\'appareil refusé ou annulé.'**
+  String get lockDeviceFailed;
+
+  /// No description provided for @lockSignedOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déconnecté par le verrouillage automatique. Reconnectez-vous.'**
+  String get lockSignedOut;
+
+  /// No description provided for @lockOfferTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'La prochaine fois, déverrouiller avec {method} ?'**
+  String lockOfferTitle(String method);
+
+  /// No description provided for @lockOfferBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus rapide que le mot de passe. Vous pourrez changer d\'avis dans Sécurité.'**
+  String get lockOfferBody;
+
+  /// No description provided for @lockOfferYes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui'**
+  String get lockOfferYes;
+
+  /// No description provided for @lockOfferNo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non merci'**
+  String get lockOfferNo;
+
+  /// No description provided for @lockSettingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verrouillage automatique'**
+  String get lockSettingsTitle;
+
+  /// No description provided for @lockSettingsIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Après un temps sans utilisation, l\'application se verrouille : l\'écran est masqué, la session reste ouverte et ce qui était en cours continue.'**
+  String get lockSettingsIntro;
+
+  /// No description provided for @lockSettingsPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre mot de passe la déverrouille.'**
+  String get lockSettingsPassword;
+
+  /// No description provided for @lockSettingsDevice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le verrouillage de l\'appareil (empreinte, code ou Windows Hello) la déverrouille.'**
+  String get lockSettingsDevice;
+
+  /// No description provided for @lockEnable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verrouiller après une absence'**
+  String get lockEnable;
+
+  /// No description provided for @lockNeedsDeviceLock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Configurez d\'abord un verrouillage d\'écran (code, empreinte ou Windows Hello) sur cet appareil.'**
+  String get lockNeedsDeviceLock;
+
+  /// No description provided for @lockDelay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Délai sans utilisation'**
+  String get lockDelay;
+
+  /// No description provided for @lockMinutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} min'**
+  String lockMinutes(int count);
+
+  /// No description provided for @lockUseDeviceSetting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouiller avec {method}'**
+  String lockUseDeviceSetting(String method);
+
+  /// No description provided for @lockHideContent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer l\'écran hors du premier plan'**
+  String get lockHideContent;
+
+  /// No description provided for @lockHideContentHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans la liste des applications ouvertes, ou quand la fenêtre n\'est plus active.'**
+  String get lockHideContentHelp;
+
+  /// No description provided for @lockHideContentAndroid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans la liste des applications ouvertes ; bloque aussi les captures d\'écran.'**
+  String get lockHideContentAndroid;
+
+  /// No description provided for @lockSignOutRule.
+  ///
+  /// In fr, this message translates to:
+  /// **'Après 5 mots de passe erronés ou 8 heures de verrouillage, l\'application se déconnecte : il faut alors se reconnecter (mot de passe et double authentification).'**
+  String get lockSignOutRule;
+
+  /// No description provided for @lockNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verrouiller maintenant'**
+  String get lockNow;
+
+  /// No description provided for @error_unlock_too_many_attempts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop de mots de passe erronés. Réessayez plus tard, ou déconnectez-vous.'**
+  String get error_unlock_too_many_attempts;
 }
 
 class _AppLocalizationsDelegate

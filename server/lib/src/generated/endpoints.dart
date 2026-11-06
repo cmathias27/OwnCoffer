@@ -45,6 +45,7 @@ import '../endpoints/admin_endpoint.dart' as _i5t1w2d2;
 import '../endpoints/advisor_endpoint.dart' as _ioe4fqri;
 import '../endpoints/ai_endpoint.dart' as _igsjf4zh;
 import '../endpoints/analysis_endpoint.dart' as _i0sl0qub;
+import '../endpoints/app_lock_endpoint.dart' as _i1w4s0rn;
 import '../endpoints/category_endpoint.dart' as _ioevag4g;
 import '../endpoints/export_endpoint.dart' as _i0kmk8zv;
 import '../endpoints/feedback_endpoint.dart' as _iebcplle;
@@ -107,6 +108,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'analysis',
+          null,
+        ),
+      'appLock': _i1w4s0rn.AppLockEndpoint()
+        ..initialize(
+          server,
+          'appLock',
           null,
         ),
       'category': _ioevag4g.CategoryEndpoint()
@@ -1565,6 +1572,31 @@ class Endpoints extends _is.EndpointDispatch {
                     params['groupId'],
                     params['date'],
                     accountId: params['accountId'],
+                  ),
+        ),
+      },
+    );
+    connectors['appLock'] = _is.EndpointConnector(
+      name: 'appLock',
+      endpoint: endpoints['appLock']!,
+      methodConnectors: {
+        'verifyPassword': _is.MethodConnector(
+          name: 'verifyPassword',
+          params: {
+            'password': _is.ParameterDescription(
+              name: 'password',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['appLock'] as _i1w4s0rn.AppLockEndpoint)
+                  .verifyPassword(
+                    session,
+                    params['password'],
                   ),
         ),
       },
