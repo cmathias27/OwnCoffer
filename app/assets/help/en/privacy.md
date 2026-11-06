@@ -6,6 +6,7 @@
 - It **never connects to your bank**: you give it the statements yourself.
 - **No telemetry**: OwnCoffer sends nothing to anyone unless you ask.
 - On a phone, the installed app does not keep your financial data in cache. Neither do the Windows and Android apps: they keep only your server's address and your session.
+- For **My sessions** (Security), the server notes the app, its version and the IP address of each signed-in device; it erases them 30 days after the session ends.
 
 ## When something leaves the server
 

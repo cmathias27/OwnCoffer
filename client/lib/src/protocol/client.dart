@@ -106,6 +106,7 @@ import 'package:owncoffer_client/src/protocol/rule_test_result.dart'
     as _ilhr3r4a;
 import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
     as _ibpr6881;
+import 'package:owncoffer_client/src/protocol/session_info.dart' as _ihsx4k2i;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
 import 'package:owncoffer_client/src/protocol/spending_report.dart'
     as _isyymxi6;
@@ -463,6 +464,30 @@ class EndpointAdmin extends _isc.EndpointRef {
     {
       'authUserId': authUserId,
       'blocked': blocked,
+    },
+  );
+
+  /// The open sessions of [authUserId] (decision 0027), IP masked.
+  _ida.Future<List<_ihsx4k2i.SessionInfo>> userSessions(
+    _isc.UuidValue authUserId,
+  ) => caller.callServerEndpoint<List<_ihsx4k2i.SessionInfo>>(
+    'admin',
+    'userSessions',
+    {'authUserId': authUserId},
+  );
+
+  /// Closes one session of [authUserId], or all of them when [sessionId] is
+  /// null (the administrator's own current session stays open). The person
+  /// is told by a notification. Returns how many were closed.
+  _ida.Future<int> closeUserSessions(
+    _isc.UuidValue authUserId,
+    String? sessionId,
+  ) => caller.callServerEndpoint<int>(
+    'admin',
+    'closeUserSessions',
+    {
+      'authUserId': authUserId,
+      'sessionId': sessionId,
     },
   );
 
@@ -1887,6 +1912,68 @@ class EndpointPepite extends _isc.EndpointRef {
       );
 }
 
+/// « Mes sessions » (decision 0027): the app says on what it runs; the
+/// person sees where and since when each of their sessions is open, and
+/// closes the ones they do not want. Only their own sessions.
+/// {@category Endpoint}
+class EndpointPresence extends _isc.EndpointRef {
+  EndpointPresence(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'presence';
+
+  /// At start and back in the foreground: [platform] (`web`, `android`,
+  /// `windows`…) and the app's version.
+  _ida.Future<void> ping(
+    String platform,
+    String? appVersion,
+  ) => caller.callServerEndpoint<void>(
+    'presence',
+    'ping',
+    {
+      'platform': platform,
+      'appVersion': appVersion,
+    },
+  );
+
+  /// The open sessions of the signed-in person, this one first, with their
+  /// whole IP.
+  _ida.Future<List<_ihsx4k2i.SessionInfo>> mySessions() =>
+      caller.callServerEndpoint<List<_ihsx4k2i.SessionInfo>>(
+        'presence',
+        'mySessions',
+        {},
+      );
+
+  /// Names one of their sessions (empty: no name).
+  _ida.Future<void> rename(
+    String sessionId,
+    String? label,
+  ) => caller.callServerEndpoint<void>(
+    'presence',
+    'rename',
+    {
+      'sessionId': sessionId,
+      'label': label,
+    },
+  );
+
+  /// Closes one of their sessions (another device); this one is closed by
+  /// signing out.
+  _ida.Future<void> close(String sessionId) => caller.callServerEndpoint<void>(
+    'presence',
+    'close',
+    {'sessionId': sessionId},
+  );
+
+  /// Closes all their sessions but this one; returns how many.
+  _ida.Future<int> closeOthers() => caller.callServerEndpoint<int>(
+    'presence',
+    'closeOthers',
+    {},
+  );
+}
+
 /// Classification rules of a group (cahier des charges, Classement).
 /// {@category Endpoint}
 class EndpointRule extends _isc.EndpointRef {
@@ -2624,6 +2711,7 @@ class Client extends _isc.ServerpodClientShared {
     mcp = EndpointMcp(this);
     notification = EndpointNotification(this);
     pepite = EndpointPepite(this);
+    presence = EndpointPresence(this);
     rule = EndpointRule(this);
     scheduled = EndpointScheduled(this);
     setup = EndpointSetup(this);
@@ -2673,6 +2761,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointPepite pepite;
 
+  late final EndpointPresence presence;
+
   late final EndpointRule rule;
 
   late final EndpointScheduled scheduled;
@@ -2709,6 +2799,7 @@ class Client extends _isc.ServerpodClientShared {
     'mcp': mcp,
     'notification': notification,
     'pepite': pepite,
+    'presence': presence,
     'rule': rule,
     'scheduled': scheduled,
     'setup': setup,

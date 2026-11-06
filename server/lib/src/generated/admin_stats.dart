@@ -29,6 +29,9 @@ abstract class AdminStats
     required this.classifiedAutomatically,
     required this.classifiedManually,
     required this.unclassified,
+    this.androidUsers,
+    this.windowsUsers,
+    this.webOnlyUsers,
   });
 
   factory AdminStats({
@@ -45,6 +48,9 @@ abstract class AdminStats
     required int classifiedAutomatically,
     required int classifiedManually,
     required int unclassified,
+    int? androidUsers,
+    int? windowsUsers,
+    int? webOnlyUsers,
   }) = _AdminStatsImpl;
 
   factory AdminStats.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -63,6 +69,9 @@ abstract class AdminStats
           jsonSerialization['classifiedAutomatically'] as int,
       classifiedManually: jsonSerialization['classifiedManually'] as int,
       unclassified: jsonSerialization['unclassified'] as int,
+      androidUsers: jsonSerialization['androidUsers'] as int?,
+      windowsUsers: jsonSerialization['windowsUsers'] as int?,
+      webOnlyUsers: jsonSerialization['webOnlyUsers'] as int?,
     );
   }
 
@@ -94,6 +103,14 @@ abstract class AdminStats
 
   int unclassified;
 
+  /// People with an open session in the Android or Windows app, and those
+  /// seen only in a browser (decision 0027). Null from older servers.
+  int? androidUsers;
+
+  int? windowsUsers;
+
+  int? webOnlyUsers;
+
   /// Returns a shallow copy of this [AdminStats]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -111,6 +128,9 @@ abstract class AdminStats
     int? classifiedAutomatically,
     int? classifiedManually,
     int? unclassified,
+    int? androidUsers,
+    int? windowsUsers,
+    int? webOnlyUsers,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -129,6 +149,9 @@ abstract class AdminStats
       'classifiedAutomatically': classifiedAutomatically,
       'classifiedManually': classifiedManually,
       'unclassified': unclassified,
+      if (androidUsers != null) 'androidUsers': androidUsers,
+      if (windowsUsers != null) 'windowsUsers': windowsUsers,
+      if (webOnlyUsers != null) 'webOnlyUsers': webOnlyUsers,
     };
   }
 
@@ -149,6 +172,9 @@ abstract class AdminStats
       'classifiedAutomatically': classifiedAutomatically,
       'classifiedManually': classifiedManually,
       'unclassified': unclassified,
+      if (androidUsers != null) 'androidUsers': androidUsers,
+      if (windowsUsers != null) 'windowsUsers': windowsUsers,
+      if (webOnlyUsers != null) 'webOnlyUsers': webOnlyUsers,
     };
   }
 
@@ -157,6 +183,8 @@ abstract class AdminStats
     return _is.SerializationManager.encode(this);
   }
 }
+
+class _Undefined {}
 
 class _AdminStatsImpl extends AdminStats {
   _AdminStatsImpl({
@@ -173,6 +201,9 @@ class _AdminStatsImpl extends AdminStats {
     required int classifiedAutomatically,
     required int classifiedManually,
     required int unclassified,
+    int? androidUsers,
+    int? windowsUsers,
+    int? webOnlyUsers,
   }) : super._(
          users: users,
          blockedUsers: blockedUsers,
@@ -187,6 +218,9 @@ class _AdminStatsImpl extends AdminStats {
          classifiedAutomatically: classifiedAutomatically,
          classifiedManually: classifiedManually,
          unclassified: unclassified,
+         androidUsers: androidUsers,
+         windowsUsers: windowsUsers,
+         webOnlyUsers: webOnlyUsers,
        );
 
   /// Returns a shallow copy of this [AdminStats]
@@ -207,6 +241,9 @@ class _AdminStatsImpl extends AdminStats {
     int? classifiedAutomatically,
     int? classifiedManually,
     int? unclassified,
+    Object? androidUsers = _Undefined,
+    Object? windowsUsers = _Undefined,
+    Object? webOnlyUsers = _Undefined,
   }) {
     return AdminStats(
       users: users ?? this.users,
@@ -223,6 +260,9 @@ class _AdminStatsImpl extends AdminStats {
           classifiedAutomatically ?? this.classifiedAutomatically,
       classifiedManually: classifiedManually ?? this.classifiedManually,
       unclassified: unclassified ?? this.unclassified,
+      androidUsers: androidUsers is int? ? androidUsers : this.androidUsers,
+      windowsUsers: windowsUsers is int? ? windowsUsers : this.windowsUsers,
+      webOnlyUsers: webOnlyUsers is int? ? webOnlyUsers : this.webOnlyUsers,
     );
   }
 }

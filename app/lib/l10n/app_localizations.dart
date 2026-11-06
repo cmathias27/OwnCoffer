@@ -9824,6 +9824,204 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Rappel de Pépite'**
   String get pepiteNotificationChannel;
+
+  /// No description provided for @sessionsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes sessions'**
+  String get sessionsTitle;
+
+  /// No description provided for @sessionsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque appareil ou navigateur où vous êtes connecté, avec le lieu et la date. Fermez ceux que vous ne reconnaissez pas, puis changez votre mot de passe.'**
+  String get sessionsHelp;
+
+  /// No description provided for @sessionsCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet appareil'**
+  String get sessionsCurrent;
+
+  /// No description provided for @sessionsSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'connecté depuis le {date}'**
+  String sessionsSince(String date);
+
+  /// No description provided for @sessionsLastActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'actif le {date}'**
+  String sessionsLastActive(String date);
+
+  /// No description provided for @sessionsPlaceUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'lieu inconnu'**
+  String get sessionsPlaceUnknown;
+
+  /// No description provided for @sessionsVersion.
+  ///
+  /// In fr, this message translates to:
+  /// **'version {version}'**
+  String sessionsVersion(String version);
+
+  /// No description provided for @sessionsClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get sessionsClose;
+
+  /// No description provided for @sessionsCloseTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer cette session ?'**
+  String get sessionsCloseTitle;
+
+  /// No description provided for @sessionsCloseHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'appareil sera déconnecté dans les 30 secondes et devra se reconnecter avec le mot de passe.'**
+  String get sessionsCloseHelp;
+
+  /// No description provided for @sessionsCloseOthers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer toutes les autres'**
+  String get sessionsCloseOthers;
+
+  /// No description provided for @sessionsCloseOthersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer toutes les autres sessions ?'**
+  String get sessionsCloseOthersTitle;
+
+  /// No description provided for @sessionsClosedCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune session fermée} =1{1 session fermée} other{{count} sessions fermées}}'**
+  String sessionsClosedCount(int count);
+
+  /// No description provided for @sessionsRename.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renommer'**
+  String get sessionsRename;
+
+  /// No description provided for @sessionsRenameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de l\'appareil'**
+  String get sessionsRenameLabel;
+
+  /// No description provided for @sessionsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune session ouverte.'**
+  String get sessionsEmpty;
+
+  /// No description provided for @sessionsPlatformWeb.
+  ///
+  /// In fr, this message translates to:
+  /// **'Navigateur'**
+  String get sessionsPlatformWeb;
+
+  /// No description provided for @sessionsPlatformAndroid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Application Android'**
+  String get sessionsPlatformAndroid;
+
+  /// No description provided for @sessionsPlatformWindows.
+  ///
+  /// In fr, this message translates to:
+  /// **'Application Windows'**
+  String get sessionsPlatformWindows;
+
+  /// No description provided for @sessionsPlatformIos.
+  ///
+  /// In fr, this message translates to:
+  /// **'iPhone ou iPad'**
+  String get sessionsPlatformIos;
+
+  /// No description provided for @sessionsPlatformMacos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mac'**
+  String get sessionsPlatformMacos;
+
+  /// No description provided for @sessionsPlatformLinux.
+  ///
+  /// In fr, this message translates to:
+  /// **'Linux'**
+  String get sessionsPlatformLinux;
+
+  /// No description provided for @sessionsPlatformUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appareil non identifié'**
+  String get sessionsPlatformUnknown;
+
+  /// No description provided for @adminUserSessions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sessions'**
+  String get adminUserSessions;
+
+  /// No description provided for @adminUserSessionsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sessions de {email}'**
+  String adminUserSessionsTitle(String email);
+
+  /// No description provided for @adminUserSessionsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les adresses IP sont masquées. La personne est prévenue par une notification quand vous fermez une de ses sessions.'**
+  String get adminUserSessionsHelp;
+
+  /// No description provided for @adminCloseAllSessions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout fermer'**
+  String get adminCloseAllSessions;
+
+  /// No description provided for @adminStatApps.
+  ///
+  /// In fr, this message translates to:
+  /// **'Applications (30 jours)'**
+  String get adminStatApps;
+
+  /// No description provided for @adminStatAppsValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Android : {android} · Windows : {windows} · navigateur seul : {web}'**
+  String adminStatAppsValue(int android, int windows, int web);
+
+  /// No description provided for @notifSessionClosedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Un administrateur a fermé une de vos sessions} other{Un administrateur a fermé {count} de vos sessions}}'**
+  String notifSessionClosedTitle(int count);
+
+  /// No description provided for @notifSessionClosedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Si vous ne vous y attendiez pas, changez votre mot de passe.'**
+  String get notifSessionClosedBody;
+
+  /// No description provided for @error_session_not_found.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette session n\'existe plus.'**
+  String get error_session_not_found;
+
+  /// No description provided for @error_session_is_current.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour fermer la session de cet appareil, déconnectez-vous.'**
+  String get error_session_is_current;
 }
 
 class _AppLocalizationsDelegate

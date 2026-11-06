@@ -6099,4 +6099,135 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pepiteNotificationChannel => 'Pépite\'s reminder';
+
+  @override
+  String get sessionsTitle => 'My sessions';
+
+  @override
+  String get sessionsHelp =>
+      'Every device or browser where you are signed in, with where and when. Close the ones you do not recognise, then change your password.';
+
+  @override
+  String get sessionsCurrent => 'This device';
+
+  @override
+  String sessionsSince(String date) {
+    return 'signed in since $date';
+  }
+
+  @override
+  String sessionsLastActive(String date) {
+    return 'active on $date';
+  }
+
+  @override
+  String get sessionsPlaceUnknown => 'place unknown';
+
+  @override
+  String sessionsVersion(String version) {
+    return 'version $version';
+  }
+
+  @override
+  String get sessionsClose => 'Close';
+
+  @override
+  String get sessionsCloseTitle => 'Close this session?';
+
+  @override
+  String get sessionsCloseHelp =>
+      'The device is signed out within 30 seconds and must sign in again with the password.';
+
+  @override
+  String get sessionsCloseOthers => 'Close all the others';
+
+  @override
+  String get sessionsCloseOthersTitle => 'Close all the other sessions?';
+
+  @override
+  String sessionsClosedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sessions closed',
+      one: '1 session closed',
+      zero: 'No session closed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get sessionsRename => 'Rename';
+
+  @override
+  String get sessionsRenameLabel => 'Device name';
+
+  @override
+  String get sessionsEmpty => 'No open session.';
+
+  @override
+  String get sessionsPlatformWeb => 'Browser';
+
+  @override
+  String get sessionsPlatformAndroid => 'Android app';
+
+  @override
+  String get sessionsPlatformWindows => 'Windows app';
+
+  @override
+  String get sessionsPlatformIos => 'iPhone or iPad';
+
+  @override
+  String get sessionsPlatformMacos => 'Mac';
+
+  @override
+  String get sessionsPlatformLinux => 'Linux';
+
+  @override
+  String get sessionsPlatformUnknown => 'Unidentified device';
+
+  @override
+  String get adminUserSessions => 'Sessions';
+
+  @override
+  String adminUserSessionsTitle(String email) {
+    return 'Sessions of $email';
+  }
+
+  @override
+  String get adminUserSessionsHelp =>
+      'IP addresses are masked. The person is told by a notification when you close one of their sessions.';
+
+  @override
+  String get adminCloseAllSessions => 'Close all';
+
+  @override
+  String get adminStatApps => 'Apps (30 days)';
+
+  @override
+  String adminStatAppsValue(int android, int windows, int web) {
+    return 'Android: $android · Windows: $windows · browser only: $web';
+  }
+
+  @override
+  String notifSessionClosedTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'An administrator closed $count of your sessions',
+      one: 'An administrator closed one of your sessions',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifSessionClosedBody =>
+      'If you did not expect it, change your password.';
+
+  @override
+  String get error_session_not_found => 'This session no longer exists.';
+
+  @override
+  String get error_session_is_current =>
+      'To close this device\'s session, sign out.';
 }

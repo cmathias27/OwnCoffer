@@ -5,7 +5,7 @@ Cette page n'est visible que par l'**administrateur du serveur**. Elle ne montre
 ## Les onglets
 
 - **Santé et chiffres** : version, durée de fonctionnement, base de données, espace disque, envoi des courriels (avec un courriel de test), chiffres du serveur et taux de classement automatique.
-- **Utilisateurs** : comptes, foyers et rôles. On peut **bloquer** un compte, qui est déconnecté et ne peut plus se connecter, sans rien supprimer.
+- **Utilisateurs** : comptes, foyers et rôles. On peut **bloquer** un compte, qui est déconnecté et ne peut plus se connecter, sans rien supprimer. Le bouton **Sessions** montre où chaque compte est connecté (IP masquée) et permet de fermer une session ou toutes ; la personne est prévenue.
 - **Invitations** : toutes les invitations en attente, à révoquer ; inviter dans n'importe quel foyer.
 - **IP bloquées** après trop d'échecs de connexion, à débloquer.
 - **Journal** des dernières actions sensibles : qui, quoi, quand.

@@ -1,0 +1,28 @@
+### Where and on what a session is used (decision 0027): one row per session
+### (JWT refresh token), told by the app at start and when it comes back to
+### the foreground. Kept 30 days after the session ends, then deleted.
+class: SessionDevice
+table: session_device
+serverOnly: true
+fields:
+  ### The refresh token id (the `authId` of every access token).
+  sessionId: String
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  ### `web`, `android`, `windows`, `ios`, `macos`, `linux` or `other`.
+  platform: String
+  appVersion: String?
+  ### Name given by the person (« Téléphone de Camille »).
+  deviceLabel: String?
+  ip: String?
+  city: String?
+  country: String?
+  firstSeenAt: DateTime
+  lastSeenAt: DateTime
+  ### When the session was seen gone (signed out, closed, expired).
+  endedAt: DateTime?
+indexes:
+  session_device_session_idx:
+    fields: sessionId
+    unique: true
+  session_device_user_idx:
+    fields: authUserId

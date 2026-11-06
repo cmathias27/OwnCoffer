@@ -9,6 +9,7 @@ import '../widgets/admin_backups.dart';
 import '../widgets/admin_invitations.dart';
 import '../widgets/admin_ai.dart';
 import '../widgets/admin_updates.dart';
+import '../widgets/sessions_list.dart';
 import 'update_progress_screen.dart';
 import 'members_screen.dart';
 import 'security_screen.dart';
@@ -431,6 +432,16 @@ class AdminHealthView extends StatelessWidget {
             l.adminStatUsers,
             l.adminStatUsersValue(s.users, s.twoFactorUsers, s.blockedUsers),
           ),
+          if (s.androidUsers != null)
+            row(
+              Icons.install_mobile_outlined,
+              l.adminStatApps,
+              l.adminStatAppsValue(
+                s.androidUsers!,
+                s.windowsUsers ?? 0,
+                s.webOnlyUsers ?? 0,
+              ),
+            ),
           row(Icons.groups_outlined, l.adminStatGroups, '${s.groups}'),
           row(
             Icons.account_balance_outlined,
@@ -521,9 +532,22 @@ class _UsersView extends StatelessWidget {
                   if (u.blocked) l.adminBlocked,
                 ].join(' · '),
               ),
-              trailing: u.serverAdmin && !u.blocked
-                  ? null
-                  : TextButton(
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (!isStandalone)
+                    IconButton(
+                      icon: const Icon(Icons.devices_outlined),
+                      tooltip: l.adminUserSessions,
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (_) => AdminUserSessionsScreen(user: u),
+                        ),
+                      ),
+                    ),
+                  if (!u.serverAdmin || u.blocked)
+                    TextButton(
                       onPressed: () async {
                         if (!u.blocked) {
                           final ok = await showDialog<bool>(
@@ -549,9 +573,44 @@ class _UsersView extends StatelessWidget {
                       },
                       child: Text(u.blocked ? l.adminUnblock : l.adminBlock),
                     ),
+                ],
+              ),
             ),
           ),
       ],
+    );
+  }
+}
+
+/// The open sessions of a member, for the server administrator (decision
+/// 0027): IP masked by the server; closing one tells the person.
+class AdminUserSessionsScreen extends StatelessWidget {
+  final AdminUserInfo user;
+  const AdminUserSessionsScreen({super.key, required this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    return Scaffold(
+      appBar: AppBar(title: Text(l.adminUserSessionsTitle(user.email ?? '?'))),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Text(
+            l.adminUserSessionsHelp,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 8),
+          SessionsList(
+            load: () => client.admin.userSessions(user.authUserId),
+            onClose: (s) =>
+                client.admin.closeUserSessions(user.authUserId, s.id),
+            onCloseOthers: () =>
+                client.admin.closeUserSessions(user.authUserId, null),
+            closeOthersLabel: l.adminCloseAllSessions,
+          ),
+        ],
+      ),
     );
   }
 }

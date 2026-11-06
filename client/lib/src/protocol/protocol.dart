@@ -50,6 +50,7 @@ import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
 import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
     as _ibpr6881;
+import 'package:owncoffer_client/src/protocol/session_info.dart' as _ihsx4k2i;
 import 'package:owncoffer_client/src/protocol/statement_import.dart'
     as _i5x9swls;
 import 'package:owncoffer_client/src/protocol/transaction_split.dart'
@@ -156,6 +157,7 @@ import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
 import 'rule_test_result.dart' as _ipgrn6yw;
 import 'scheduled_transaction.dart' as _ifol8nrg;
+import 'session_info.dart' as _ifkdo6on;
 import 'setup_status.dart' as _iw7q1xsb;
 import 'spending_report.dart' as _ixcwyj5v;
 import 'statement_import.dart' as _ia7wudj2;
@@ -267,6 +269,7 @@ export 'rule_direction.dart';
 export 'rule_match_type.dart';
 export 'rule_test_result.dart';
 export 'scheduled_transaction.dart';
+export 'session_info.dart';
 export 'setup_status.dart';
 export 'spending_report.dart';
 export 'statement_import.dart';
@@ -605,6 +608,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ifol8nrg.ScheduledTransaction) {
       return _ifol8nrg.ScheduledTransaction.fromJson(data) as T;
+    }
+    if (t == _ifkdo6on.SessionInfo) {
+      return _ifkdo6on.SessionInfo.fromJson(data) as T;
     }
     if (t == _iw7q1xsb.SetupStatus) {
       return _iw7q1xsb.SetupStatus.fromJson(data) as T;
@@ -1010,6 +1016,9 @@ class Protocol extends _isc.SerializationManager {
               : null)
           as T;
     }
+    if (t == _isc.getType<_ifkdo6on.SessionInfo?>()) {
+      return (data != null ? _ifkdo6on.SessionInfo.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_iw7q1xsb.SetupStatus?>()) {
       return (data != null ? _iw7q1xsb.SetupStatus.fromJson(data) : null) as T;
     }
@@ -1273,6 +1282,12 @@ class Protocol extends _isc.SerializationManager {
     if (t == List<_i4kcqb5h.AdminUserInfo>) {
       return (data as List)
               .map((e) => deserialize<_i4kcqb5h.AdminUserInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ihsx4k2i.SessionInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_ihsx4k2i.SessionInfo>(e))
               .toList()
           as T;
     }
@@ -1553,6 +1568,7 @@ class Protocol extends _isc.SerializationManager {
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
       _ipgrn6yw.RuleTestResult => 'RuleTestResult',
       _ifol8nrg.ScheduledTransaction => 'ScheduledTransaction',
+      _ifkdo6on.SessionInfo => 'SessionInfo',
       _iw7q1xsb.SetupStatus => 'SetupStatus',
       _ixcwyj5v.SpendingReport => 'SpendingReport',
       _ia7wudj2.StatementImport => 'StatementImport',
@@ -1774,6 +1790,8 @@ class Protocol extends _isc.SerializationManager {
         return 'RuleTestResult';
       case _ifol8nrg.ScheduledTransaction():
         return 'ScheduledTransaction';
+      case _ifkdo6on.SessionInfo():
+        return 'SessionInfo';
       case _iw7q1xsb.SetupStatus():
         return 'SetupStatus';
       case _ixcwyj5v.SpendingReport():
@@ -2113,6 +2131,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'ScheduledTransaction') {
       return deserialize<_ifol8nrg.ScheduledTransaction>(data['data']);
+    }
+    if (dataClassName == 'SessionInfo') {
+      return deserialize<_ifkdo6on.SessionInfo>(data['data']);
     }
     if (dataClassName == 'SetupStatus') {
       return deserialize<_iw7q1xsb.SetupStatus>(data['data']);

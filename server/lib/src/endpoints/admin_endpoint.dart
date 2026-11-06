@@ -13,6 +13,7 @@ import '../onboarding/onboarding.dart';
 import '../security/access.dart';
 import '../security/ip_guard.dart';
 import '../security/scopes.dart';
+import '../security/session_devices.dart';
 import '../core/portable_sql.dart';
 
 /// Server administration (server administrator only): accounts, health,
@@ -124,10 +125,8 @@ class AdminEndpoint extends Endpoint {
     // out when its access token expires (minutes), and a refresh is refused
     // for a blocked account anyway.
     if (blocked) {
-      await RefreshToken.db.deleteWhere(
-        session,
-        where: (t) => t.authUserId.equals(authUserId),
-      );
+      await SessionDevices.close(session, authUserId);
+      await SessionDevices.endedAll(session, authUserId);
     }
     await _audit(
       session,
@@ -135,6 +134,64 @@ class AdminEndpoint extends Endpoint {
       'auth_user',
       '$authUserId',
     );
+  }
+
+  /// The open sessions of [authUserId] (decision 0027), IP masked.
+  Future<List<SessionInfo>> userSessions(
+    Session session,
+    UuidValue authUserId,
+  ) async {
+    await _requireServerAdmin(session);
+    return SessionDevices.list(
+      session,
+      authUserId,
+      current: session.authenticated?.authId,
+      masked: true,
+    );
+  }
+
+  /// Closes one session of [authUserId], or all of them when [sessionId] is
+  /// null (the administrator's own current session stays open). The person
+  /// is told by a notification. Returns how many were closed.
+  Future<int> closeUserSessions(
+    Session session,
+    UuidValue authUserId,
+    String? sessionId,
+  ) async {
+    await _requireServerAdmin(session);
+    final current = session.authenticated?.authId;
+    if (sessionId != null && sessionId == current) {
+      throw InvalidInputException(code: 'session_is_current');
+    }
+    String? platform;
+    if (sessionId != null) {
+      platform = (await SessionDevice.db.findFirstRow(
+        session,
+        where: (d) => d.sessionId.equals(sessionId),
+      ))?.platform;
+    }
+    final closed = await SessionDevices.close(
+      session,
+      authUserId,
+      only: sessionId,
+      keep: authUserId == Access.userId(session) ? current : null,
+    );
+    if (closed.isEmpty) return 0;
+    if (authUserId != Access.userId(session)) {
+      await SessionDevices.notifyClosed(
+        session,
+        authUserId,
+        ids: closed,
+        platform: platform,
+      );
+    }
+    await _audit(
+      session,
+      sessionId == null ? 'close_user_sessions' : 'close_user_session',
+      'session',
+      sessionId ?? '$authUserId',
+    );
+    return closed.length;
   }
 
   Future<AdminHealth> health(Session session) async {
@@ -194,7 +251,11 @@ class AdminEndpoint extends Endpoint {
               w(t),
         );
     final users = await AuthUser.db.find(session);
+    final apps = await SessionDevices.adoption(session, now: now);
     return AdminStats(
+      androidUsers: apps.android,
+      windowsUsers: apps.windows,
+      webOnlyUsers: apps.webOnly,
       users: users.length,
       blockedUsers: users.where((u) => u.blocked).length,
       twoFactorUsers: await TotpSecret.db.count(

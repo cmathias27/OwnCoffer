@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.7.0 (novembre 2026)
+### Sécurité : mes sessions
+- **Mes sessions** dans **Sécurité** (décision 0027) : chaque appareil ou navigateur où vous êtes connecté, avec l'application (Android, Windows, navigateur), sa version, l'adresse IP, depuis quand et la dernière activité ;
+  - **fermer** une session ou **toutes les autres** ; **renommer** un appareil pour le reconnaître ;
+  - une session fermée (ou un compte bloqué) est refusée **dans les 30 secondes**, sans attendre la fin de son jeton ;
+  - l'administrateur du serveur voit les sessions de chaque compte avec l'**IP masquée** (bouton **Sessions** de l'onglet Utilisateurs) et peut les fermer ; la personne est prévenue par une notification ;
+  - les chiffres de l'administration comptent les personnes qui utilisent les applications Android et Windows ;
+  - ces informations font partie de l'export et sont effacées 30 jours après la fin de la session ; rien de tout cela dans la version autonome.
 ## 1.6.0 (novembre 2026)
 ### Pépite, la mascotte
 - **Pépite**, un hamster, vous accompagne pour faire vos comptes **chaque semaine** (décision 0026) :

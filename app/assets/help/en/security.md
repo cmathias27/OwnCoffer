@@ -20,6 +20,14 @@ Off at first: turn it on in **Security**. After some time without use (15 minute
 
 The settings apply to this device only. After 30 days without use, a device has to sign in again.
 
+## My sessions
+Every device or browser where you are signed in: Android app, Windows app or browser, its version, the IP address, since when and the last activity.
+- **Close** a session you do not recognise: the device is signed out within 30 seconds. Then change your password.
+- **Close all the others**: only this device stays signed in.
+- **Rename** a device ("Lea's phone") to recognise it.
+- These details are kept 30 days after the session ends, then erased; they are part of your export. The server administrator sees your sessions with the IP address masked and can close them; you are told by a notification.
+- Standalone version: one device only, nothing is shown.
+
 ## What OwnCoffer does for you
 
 - An IP address that fails to sign in too often is **blocked automatically**.

@@ -16,3 +16,8 @@ fields:
   classifiedAutomatically: int
   classifiedManually: int
   unclassified: int
+  ### People with an open session in the Android or Windows app, and those
+  ### seen only in a browser (decision 0027). Null from older servers.
+  androidUsers: int?
+  windowsUsers: int?
+  webOnlyUsers: int?

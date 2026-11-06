@@ -60,11 +60,11 @@ Rôles dans un groupe : **lecteur** (voit), **utilisateur** (importe, classe, co
   "accounts": [], "categories": [], "rules": [], "goals": [],
   "scheduledTransactions": [], "transactions": [], "transactionSplits": [],
   "balanceChecks": [], "imports": [], "loans": [], "loanDocuments": [],
-  "invoices": [], "aiMemories": [], "aiConversations": []
+  "invoices": [], "aiMemories": [], "aiConversations": [], "sessions": []
 }
 ```
 
-Les opérations (`transactions`) vont de la plus ancienne à la plus récente ; celles de la corbeille ont un `deletedAt`. Les identifiants (`id`, `accountId`, `categoryId`…) relient les éléments entre eux. Les factures et documents de crédit sont décrits (nom, type, taille, date) sans leur contenu. `formatVersion` augmentera à chaque changement incompatible.
+Les opérations (`transactions`) vont de la plus ancienne à la plus récente ; celles de la corbeille ont un `deletedAt`. Les identifiants (`id`, `accountId`, `categoryId`…) relient les éléments entre eux. Les factures et documents de crédit sont décrits (nom, type, taille, date) sans leur contenu. `sessions` liste vos appareils connectés des 30 derniers jours (plateforme, version, IP, ville, dates). `formatVersion` augmentera à chaque changement incompatible.
 
 ## Accessibilité
 

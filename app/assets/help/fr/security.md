@@ -20,6 +20,14 @@ Désactivé au départ : activez-le dans **Sécurité**. Après un temps sans ut
 
 Les réglages valent pour cet appareil seulement. Sans utilisation pendant 30 jours, un appareil doit se reconnecter.
 
+## Mes sessions
+Chaque appareil ou navigateur où vous êtes connecté : application Android, Windows ou navigateur, sa version, l'adresse IP, depuis quand et la dernière activité.
+- **Fermer** une session que vous ne reconnaissez pas : l'appareil est déconnecté dans les 30 secondes. Changez ensuite votre mot de passe.
+- **Fermer toutes les autres** : seul cet appareil reste connecté.
+- **Renommer** un appareil (« Téléphone de Léa ») pour le reconnaître.
+- Ces informations sont gardées 30 jours après la fin de la session, puis effacées ; elles font partie de votre export. L'administrateur du serveur voit vos sessions avec l'adresse IP masquée et peut les fermer ; vous en êtes prévenu par une notification.
+- Version autonome : un seul appareil, rien n'est affiché.
+
 ## Ce que fait OwnCoffer pour vous
 
 - Une adresse IP qui échoue trop souvent à se connecter est **bloquée automatiquement**.

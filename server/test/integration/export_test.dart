@@ -126,6 +126,7 @@ void main() {
         'invoices',
         'aiMemories',
         'aiConversations',
+        'sessions',
         'members',
       ]) {
         expect(doc[key], isA<List>(), reason: key);

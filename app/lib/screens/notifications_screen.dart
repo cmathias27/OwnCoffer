@@ -222,6 +222,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         return (l.notifUnknown, null);
       }
     }
+    if (n.type == 'session_closed_by_admin') {
+      try {
+        final d = jsonDecode(n.data) as Map<String, dynamic>;
+        return (
+          l.notifSessionClosedTitle(d['count'] as int),
+          l.notifSessionClosedBody,
+        );
+      } on Object {
+        return (l.notifUnknown, null);
+      }
+    }
     if (n.type != 'overdraft_forecast') return (l.notifUnknown, null);
     try {
       final d = jsonDecode(n.data) as Map<String, dynamic>;

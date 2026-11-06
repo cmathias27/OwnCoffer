@@ -50,6 +50,7 @@ import 'package:owncoffer_server/src/generated/notification.dart' as _ieap9unx;
 import 'package:owncoffer_server/src/generated/rule.dart' as _inhqt802;
 import 'package:owncoffer_server/src/generated/scheduled_transaction.dart'
     as _inu9ydal;
+import 'package:owncoffer_server/src/generated/session_info.dart' as _iwauzimk;
 import 'package:owncoffer_server/src/generated/statement_import.dart'
     as _igipv995;
 import 'package:owncoffer_server/src/generated/transaction_split.dart'
@@ -163,6 +164,8 @@ import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
 import 'rule_test_result.dart' as _ipgrn6yw;
 import 'scheduled_transaction.dart' as _ifol8nrg;
+import 'session_device.dart' as _i0nxlf3w;
+import 'session_info.dart' as _ifkdo6on;
 import 'setup_status.dart' as _iw7q1xsb;
 import 'spending_report.dart' as _ixcwyj5v;
 import 'statement_import.dart' as _ia7wudj2;
@@ -281,6 +284,8 @@ export 'rule_direction.dart';
 export 'rule_match_type.dart';
 export 'rule_test_result.dart';
 export 'scheduled_transaction.dart';
+export 'session_device.dart';
+export 'session_info.dart';
 export 'setup_status.dart';
 export 'spending_report.dart';
 export 'statement_import.dart';
@@ -3434,6 +3439,128 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'session_device',
+      dartName: 'SessionDevice',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'sessionId',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'platform',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'appVersion',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'deviceLabel',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'ip',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'city',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'country',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'firstSeenAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'lastSeenAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'endedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'session_device_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'session_device_session_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'sessionId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'session_device_user_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'totp_backup_codes',
       dartName: 'BackupCode',
       schema: 'public',
@@ -4357,6 +4484,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ifol8nrg.ScheduledTransaction) {
       return _ifol8nrg.ScheduledTransaction.fromJson(data) as T;
     }
+    if (t == _i0nxlf3w.SessionDevice) {
+      return _i0nxlf3w.SessionDevice.fromJson(data) as T;
+    }
+    if (t == _ifkdo6on.SessionInfo) {
+      return _ifkdo6on.SessionInfo.fromJson(data) as T;
+    }
     if (t == _iw7q1xsb.SetupStatus) {
       return _iw7q1xsb.SetupStatus.fromJson(data) as T;
     }
@@ -4783,6 +4916,13 @@ class Protocol extends _is.DatabaseSerializationManager {
               : null)
           as T;
     }
+    if (t == _is.getType<_i0nxlf3w.SessionDevice?>()) {
+      return (data != null ? _i0nxlf3w.SessionDevice.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ifkdo6on.SessionInfo?>()) {
+      return (data != null ? _ifkdo6on.SessionInfo.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_iw7q1xsb.SetupStatus?>()) {
       return (data != null ? _iw7q1xsb.SetupStatus.fromJson(data) : null) as T;
     }
@@ -5049,6 +5189,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_i3ew1lpl.AdminUserInfo>) {
       return (data as List)
               .map((e) => deserialize<_i3ew1lpl.AdminUserInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iwauzimk.SessionInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iwauzimk.SessionInfo>(e))
               .toList()
           as T;
     }
@@ -5338,6 +5484,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
       _ipgrn6yw.RuleTestResult => 'RuleTestResult',
       _ifol8nrg.ScheduledTransaction => 'ScheduledTransaction',
+      _i0nxlf3w.SessionDevice => 'SessionDevice',
+      _ifkdo6on.SessionInfo => 'SessionInfo',
       _iw7q1xsb.SetupStatus => 'SetupStatus',
       _ixcwyj5v.SpendingReport => 'SpendingReport',
       _ia7wudj2.StatementImport => 'StatementImport',
@@ -5572,6 +5720,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'RuleTestResult';
       case _ifol8nrg.ScheduledTransaction():
         return 'ScheduledTransaction';
+      case _i0nxlf3w.SessionDevice():
+        return 'SessionDevice';
+      case _ifkdo6on.SessionInfo():
+        return 'SessionInfo';
       case _iw7q1xsb.SetupStatus():
         return 'SetupStatus';
       case _ixcwyj5v.SpendingReport():
@@ -5936,6 +6088,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'ScheduledTransaction') {
       return deserialize<_ifol8nrg.ScheduledTransaction>(data['data']);
     }
+    if (dataClassName == 'SessionDevice') {
+      return deserialize<_i0nxlf3w.SessionDevice>(data['data']);
+    }
+    if (dataClassName == 'SessionInfo') {
+      return deserialize<_ifkdo6on.SessionInfo>(data['data']);
+    }
     if (dataClassName == 'SetupStatus') {
       return deserialize<_iw7q1xsb.SetupStatus>(data['data']);
     }
@@ -6089,6 +6247,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _ivw87pdb.Rule.t;
       case _ifol8nrg.ScheduledTransaction:
         return _ifol8nrg.ScheduledTransaction.t;
+      case _i0nxlf3w.SessionDevice:
+        return _i0nxlf3w.SessionDevice.t;
       case _ia7wudj2.StatementImport:
         return _ia7wudj2.StatementImport.t;
       case _iac9sbwj.TotpSecret:
