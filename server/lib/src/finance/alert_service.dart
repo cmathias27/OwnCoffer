@@ -212,8 +212,19 @@ abstract final class AlertService {
       }
     }
 
-    _timer?.cancel();
-    Timer(const Duration(minutes: 1), run);
+    stop();
+    _first = Timer(const Duration(minutes: 1), run);
     _timer = Timer.periodic(const Duration(hours: 1), (_) => run());
+  }
+
+  static Timer? _first;
+
+  /// Stops the hourly check, so it never runs on a server that has shut
+  /// down (the embedded one stops while the app keeps running).
+  static void stop() {
+    _first?.cancel();
+    _timer?.cancel();
+    _first = null;
+    _timer = null;
   }
 }
