@@ -17,3 +17,12 @@ Each card leads to its page: tap it to see the details.
 
 - Planned amounts only count what is declared (planned operations, subscriptions, loans). A forecast balance remains an estimate.
 - The link to **My advisor** leads to OwnCoffer's proposals (goals to set or adjust).
+
+## Pépite, the accounts hamster
+
+**Pépite** helps you do your accounts **once a week**, in about ten minutes, in four steps: import the latest statements, check the operations, look at the forecast, then **celebrate**. "Open" leads to the page of the step; tick the box if the step has nothing to do this week.
+
+- Each week done gives **10 seeds**, each badge **5 seeds**. Weeks count, not days in a row: a missed week erases nothing and the reserve never empties.
+- **Later** hides the reminder until the next day.
+- In the account menu, **Pépite and my reserve** shows the seeds and badges, and sets Pépite up on this device: shown or not, and a **reminder by notification** (Android and Windows, off by default) on the day and at the time you choose.
+- What Pépite says is chosen from your accounts, never by an AI. In the standalone version, the reserve stays on the device and follows the move to a server.

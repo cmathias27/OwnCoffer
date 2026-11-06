@@ -9,7 +9,10 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../state/app_lock.dart';
+import '../state/pepite.dart';
+import '../state/pepite_messages.dart';
 import '../util/device_auth.dart';
+import 'pepite.dart';
 
 /// The device's unlock, as named on buttons.
 String deviceMethodName(AppLocalizations l, DeviceAuthKind kind) =>
@@ -264,7 +267,16 @@ class _LockScreenState extends State<LockScreen> with WidgetsBindingObserver {
       ];
     } else {
       children = [
-        Icon(Icons.lock_outline, size: 48, color: theme.colorScheme.primary),
+        // Pépite naps behind the lock (decision 0026), unless hidden.
+        if (pepite.enabled) ...[
+          const PepiteImage(PepitePose.sleep, size: 110),
+          Text(
+            l.pepiteSleeping,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall,
+          ),
+        ] else
+          Icon(Icons.lock_outline, size: 48, color: theme.colorScheme.primary),
         const SizedBox(height: 16),
         Text(
           l.lockTitle,

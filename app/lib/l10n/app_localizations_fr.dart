@@ -5905,4 +5905,235 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_unlock_too_many_attempts =>
       'Trop de mots de passe erronés. Réessayez plus tard, ou déconnectez-vous.';
+
+  @override
+  String get pepiteWelcome =>
+      'Coucou, moi c\'est Pépite ! Chaque semaine, on fait tes comptes ensemble : une dizaine de minutes, et je mets des graines de côté pour toi.';
+
+  @override
+  String get pepiteRemind0 =>
+      'C\'est le moment de notre petit tour des comptes. On s\'y met ensemble ?';
+
+  @override
+  String get pepiteRemind1 =>
+      'Tes comptes t\'attendent, et moi aussi ! Dix minutes et c\'est fait.';
+
+  @override
+  String get pepiteRemind2 =>
+      'Une petite séance cette semaine ? Je garde déjà des graines au chaud pour toi.';
+
+  @override
+  String get pepiteWelcomeBack =>
+      'Content de te revoir ! Rien n\'est perdu : ta réserve t\'attend. On reprend tranquillement ?';
+
+  @override
+  String get pepiteDone0 =>
+      'Bravo, tes comptes sont à jour ! On se retrouve la semaine prochaine.';
+
+  @override
+  String get pepiteDone1 =>
+      'Super travail ! Tu sais où tu en es, et ça vaut de l\'or.';
+
+  @override
+  String get pepiteDone2 => 'Tout est à jour cette semaine. Chapeau !';
+
+  @override
+  String get pepiteSober =>
+      'Un de tes comptes passe sous zéro. On regarde ensemble ce qui arrive, calmement, étape par étape.';
+
+  @override
+  String pepiteWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count semaines ensemble',
+      one: '1 semaine ensemble',
+      zero: 'Aucune semaine pour l\'instant',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteSeeds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count graines',
+      one: '1 graine',
+      zero: 'Aucune graine',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pepiteStart => 'Faire mes comptes (≈ 10 min)';
+
+  @override
+  String pepiteContinue(int done) {
+    return 'Continuer ($done/3)';
+  }
+
+  @override
+  String get pepiteLater => 'Plus tard';
+
+  @override
+  String get pepiteLaterReply => 'Pas de souci, je te le rappelle demain.';
+
+  @override
+  String get pepiteReserve => 'Ma réserve';
+
+  @override
+  String get pepiteRitualTitle => 'Les comptes de la semaine';
+
+  @override
+  String get pepiteRitualIntro =>
+      'Quatre étapes, une dizaine de minutes en tout. Fais-les dans l\'ordre que tu veux : je coche au fur et à mesure.';
+
+  @override
+  String get pepiteStepImport => 'Importer les derniers relevés';
+
+  @override
+  String get pepiteStepImportHelp =>
+      'Environ 3 min. Pas de nouveau relevé ? Coche simplement.';
+
+  @override
+  String get pepiteStepCheck => 'Vérifier les opérations';
+
+  @override
+  String get pepiteStepCheckHelp =>
+      'Environ 4 min : les catégories et les opérations à classer.';
+
+  @override
+  String get pepiteStepForecast => 'Regarder la prévision';
+
+  @override
+  String get pepiteStepForecastHelp =>
+      'Environ 2 min : le solde des 30 prochains jours.';
+
+  @override
+  String get pepiteStepCelebrate => 'Fêter ça !';
+
+  @override
+  String get pepiteStepCelebrateHelp =>
+      'Une minute pour souffler : tes graines t\'attendent.';
+
+  @override
+  String get pepiteOpen => 'Ouvrir';
+
+  @override
+  String get pepiteCelebrate => 'Fêter ça';
+
+  @override
+  String get pepiteCelebrateTitle => 'Bravo !';
+
+  @override
+  String pepiteEarned(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+$count graines dans ta réserve !',
+      one: '+1 graine dans ta réserve !',
+      zero:
+          'Cette semaine était déjà comptée : tes graines sont bien au chaud.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteNewBadge(String name) {
+    return 'Nouveau badge : $name';
+  }
+
+  @override
+  String get pepiteThanks => 'Merci Pépite';
+
+  @override
+  String get pepiteBadgesTitle => 'Badges';
+
+  @override
+  String get pepiteBadgeLocked => 'À gagner';
+
+  @override
+  String get pepiteBadgeFirstImport => 'Premier relevé';
+
+  @override
+  String get pepiteBadgeFirstImportHelp => 'Importer un premier relevé';
+
+  @override
+  String get pepiteBadgeFirstRitual => 'Première semaine';
+
+  @override
+  String get pepiteBadgeFirstRitualHelp =>
+      'Faire ses comptes une première fois';
+
+  @override
+  String pepiteBadgeWeeks(int count) {
+    return '$count semaines';
+  }
+
+  @override
+  String pepiteBadgeWeeksHelp(int count) {
+    return 'Faire ses comptes $count semaines, pas forcément de suite';
+  }
+
+  @override
+  String get pepiteBadgeYear => 'Un an ensemble';
+
+  @override
+  String get pepiteBadgeYearHelp => 'Un an depuis la première semaine';
+
+  @override
+  String get pepiteHowTitle => 'Comment ça marche';
+
+  @override
+  String pepiteHow(int ritual, int badge) {
+    return 'Chaque semaine où tu fais tes comptes, tu gagnes $ritual graines, et chaque badge en donne $badge. Ce sont les semaines qui comptent, pas les jours d\'affilée : une semaine manquée n\'efface rien, et la réserve ne se vide jamais.';
+  }
+
+  @override
+  String get pepiteSettingsTitle => 'Pépite';
+
+  @override
+  String get pepiteEnable => 'Afficher Pépite';
+
+  @override
+  String get pepiteEnableHelp =>
+      'Pépite, le hamster d\'OwnCoffer, t\'accompagne pour faire tes comptes chaque semaine. Ta réserve est gardée même si tu le caches.';
+
+  @override
+  String get pepiteReminder => 'Me le rappeler par une notification';
+
+  @override
+  String get pepiteReminderHelp =>
+      'Une notification de cet appareil, une fois par semaine. Rien n\'est envoyé ailleurs.';
+
+  @override
+  String get pepiteReminderWeb =>
+      'Dans le navigateur, Pépite te le rappelle sur la page d\'accueil.';
+
+  @override
+  String get pepiteReminderDay => 'Jour';
+
+  @override
+  String get pepiteReminderHour => 'Heure';
+
+  @override
+  String get pepiteReminderDenied =>
+      'Les notifications d\'OwnCoffer sont refusées dans les réglages de l\'appareil.';
+
+  @override
+  String get pepiteNotifTitle => 'Pépite t\'attend';
+
+  @override
+  String get pepiteNotifBody =>
+      'C\'est l\'heure des comptes de la semaine. Dix minutes, et ta réserve grossit !';
+
+  @override
+  String get pepiteMenu => 'Pépite et ma réserve';
+
+  @override
+  String get pepiteSleeping => 'Pépite fait la sieste en attendant ton retour.';
+
+  @override
+  String get pepiteNotificationChannel => 'Rappel de Pépite';
 }

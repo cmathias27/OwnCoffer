@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
@@ -5,11 +7,20 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import '../state/pepite.dart';
+import '../widgets/pepite.dart';
 import '../widgets/soft.dart';
 import 'budget_screen.dart';
 
 /// Where to go from the home page.
-enum DashboardTarget { accounts, operations, budget, forecast, notifications }
+enum DashboardTarget {
+  accounts,
+  operations,
+  budget,
+  forecast,
+  notifications,
+  imports,
+}
 
 /// The home page: where the money stands today and what comes next, on
 /// the accounts the user may see. Every figure comes from the deterministic
@@ -59,6 +70,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> reload() async {
     final today = todayUtcMidnight();
+    // A new import may have earned Pépite's first badge.
+    unawaited(pepite.refresh());
     try {
       final accounts = await client.account.list(_groupId);
       final results = await Future.wait<Object?>([
@@ -116,6 +129,25 @@ class DashboardScreenState extends State<DashboardScreen> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 32),
         children: [
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: PepiteCard(
+                overdrawn: accounts.any(
+                  (e) =>
+                      e.$2 != null &&
+                      (e.$2!.currentBalanceCents < 0 ||
+                          e.$2!.lowestBalanceCents < 0),
+                ),
+                onStep: (step) => widget.onOpen(switch (step) {
+                  PepiteStep.statements => DashboardTarget.imports,
+                  PepiteStep.check => DashboardTarget.operations,
+                  PepiteStep.forecast ||
+                  PepiteStep.celebrate => DashboardTarget.forecast,
+                }),
+              ),
+            ),
+          ),
           Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 1000),

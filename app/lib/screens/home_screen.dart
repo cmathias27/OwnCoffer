@@ -22,6 +22,7 @@ import 'import_screen.dart';
 import 'invoices_screen.dart';
 import 'loans_screen.dart';
 import 'members_screen.dart';
+import 'pepite_screen.dart';
 import 'notifications_screen.dart';
 import 'operations_screen.dart';
 import 'security_screen.dart';
@@ -297,6 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   DashboardTarget.forecast => _selectTab(2),
                   DashboardTarget.budget => _selectTab(5),
                   DashboardTarget.notifications => _openNotifications(),
+                  DashboardTarget.imports => _selectTab(3),
                 },
               ),
             ],
@@ -397,6 +399,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text(l.menuSecurity),
                     ),
                   ),
+                PopupMenuItem(
+                  value: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const PepiteScreen(),
+                    ),
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.pets_outlined),
+                    title: Text(l.pepiteMenu),
+                  ),
+                ),
                 if (current != null)
                   PopupMenuItem(
                     value: () => Navigator.of(context).push(

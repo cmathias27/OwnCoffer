@@ -22,6 +22,8 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // Needed by flutter_local_notifications (Pépite's reminder).
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -76,4 +78,8 @@ dependencies {
     // AppCompat themes, needed by the fingerprint prompt on Android 8 and
     // below (local_auth, decision 0025). Apache-2.0.
     implementation("androidx.appcompat:appcompat:1.7.1")
+    // Java time APIs on older Android, for the weekly reminder of Pépite
+    // (flutter_local_notifications, decision 0026). GPL-2.0 with the
+    // Classpath exception, like the JDK.
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

@@ -1,0 +1,13 @@
+### What the app shows of Pépite (decision 0026).
+class: PepiteStatus
+fields:
+  seeds: int
+  weeks: int
+  doneThisWeek: bool
+  firstRitualAt: DateTime?
+  lastRitualAt: DateTime?
+  ### Codes of the badges earned, oldest first.
+  badges: List<String>
+  ### Just now: seeds added and badges earned by this call (to celebrate).
+  earnedSeeds: int
+  newBadges: List<String>

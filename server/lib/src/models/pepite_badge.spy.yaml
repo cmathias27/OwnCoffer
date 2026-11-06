@@ -1,0 +1,12 @@
+### A badge earned with Pépite (decision 0026), once per user.
+class: PepiteBadge
+table: pepite_badges
+serverOnly: true
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  code: String
+  earnedAt: DateTime
+indexes:
+  pepite_badges_user_code_idx:
+    fields: authUserId, code
+    unique: true

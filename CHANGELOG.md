@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.6.0 (novembre 2026)
+### Pépite, la mascotte
+- **Pépite**, un hamster, vous accompagne pour faire vos comptes **chaque semaine** (décision 0026) :
+  - sur la page d'accueil, un rituel en 4 étapes d'une dizaine de minutes : importer les relevés, vérifier les opérations, regarder la prévision, fêter ça ;
+  - une **réserve de graines** (10 par semaine faite, 5 par badge) et des **badges** (premier relevé, 4, 12, 26 et 52 semaines, un an ensemble), gardés par le serveur, sur l'appareil dans la version autonome et emportés par la migration vers un serveur ;
+  - des semaines, pas une série de jours : une semaine manquée n'efface rien, la réserve ne se vide jamais ;
+  - **Plus tard** reporte le rappel au lendemain ; **rappel par notification** en option sur Android et Windows (jour et heure au choix) ;
+  - des messages toujours bienveillants, sobres quand un compte passe sous zéro, jamais écrits par une IA ;
+  - Pépite fait la sieste sur l'écran de verrouillage ; on peut le masquer dans **Pépite et ma réserve** (menu du compte).
 ## 1.5.0 (novembre 2026)
 
 ### Sécurité

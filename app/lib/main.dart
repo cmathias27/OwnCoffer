@@ -15,6 +15,7 @@ import 'screens/setup_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/two_factor_screen.dart';
 import 'state/app_lock.dart';
+import 'state/pepite.dart';
 import 'state/session.dart';
 import 'assistant/chat_bubble.dart';
 import 'util/server_address.dart';
@@ -310,16 +311,24 @@ class _RootState extends State<_Root> {
 
   /// The lock applies to a signed-in session. Only a sign-out ends it: an
   /// error page (no network) under the lock must not lift it.
+  /// Pépite too: where the user stands, and the reminder of this device.
   void _followSession() {
-    switch (_session.stage) {
+    final stage = _session.stage;
+    final changed = stage != _followed;
+    _followed = stage;
+    switch (stage) {
       case SessionStage.ready:
         unawaited(appLock.attach(_session.signOut));
+        if (changed) unawaited(pepite.signedIn());
       case SessionStage.signedOut || SessionStage.setup:
         appLock.detach();
+        if (changed) unawaited(pepite.signedOut());
       default:
         break;
     }
   }
+
+  SessionStage? _followed;
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
