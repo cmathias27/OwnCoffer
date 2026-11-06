@@ -264,6 +264,7 @@ jobs:
         id: tags
         run: |
           image=ghcr.io/cmathias27/owncoffer
+          echo "month=$(date -u +%Y-%m)" >> "$GITHUB_OUTPUT"
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
             version="${GITHUB_REF_NAME#v}"
             if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -299,6 +300,9 @@ jobs:
           sbom: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          # A new month fetches a fresh GeoIP database (decision 0027).
+          build-args: |
+            GEOIP_MONTH=${{ steps.tags.outputs.month }}
       - uses: sigstore/cosign-installer@v3
         if: steps.tags.outputs.push == 'true'
       - name: Signature de l'image (cosign, sans clé)

@@ -2,6 +2,16 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.8.0 (novembre 2026)
+### Sécurité : lieux et alertes de connexion
+- **Mes sessions** montre la **ville et le pays approximatifs** de chaque session (décision 0027), trouvés dans une base installée avec le serveur (DB-IP Lite City, licence CC BY 4.0) : aucun service extérieur n'est interrogé ; sans base, le lieu reste « inconnu ».
+- **Alertes de connexion** sur vos autres appareils :
+  - **nouvel appareil** : une application ou un navigateur jamais vus pour vous dans cette ville ;
+  - **pays inhabituel**, mis en évidence, aussi quand une session ouverte y change d'adresse ;
+  - « **C'est vous ?** » : **Oui**, ou **Non, déconnecter**, qui ferme la session et propose de changer le mot de passe ; une adresse IP déjà bloquée est signalée.
+- **À propos et licences** en bas de la page d'aide.
+- L'image Docker grossit d'environ 130 Mo (la base des lieux) ; `OWNCOFFER_GEOIP_DB=` (vide) désactive la recherche des lieux.
+
 ## 1.7.0 (novembre 2026)
 ### Sécurité : mes sessions
 - **Mes sessions** dans **Sécurité** (décision 0027) : chaque appareil ou navigateur où vous êtes connecté, avec l'application (Android, Windows, navigateur), sa version, l'adresse IP, depuis quand et la dernière activité ;

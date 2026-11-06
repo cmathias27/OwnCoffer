@@ -46,6 +46,12 @@ String sessionPlatformName(AppLocalizations l, String? platform) =>
       _ => l.sessionsPlatformUnknown,
     };
 
+/// `environ Rouen, FR`: the place of an IP is only indicative.
+String _place(AppLocalizations l, SessionInfo s) {
+  final place = [?s.city, ?s.country].join(', ');
+  return place.isEmpty ? l.sessionsPlaceUnknown : l.sessionsPlaceAbout(place);
+}
+
 IconData _icon(String? platform) => switch (platform) {
   'web' => Icons.language,
   'android' || 'ios' => Icons.smartphone,
@@ -177,10 +183,7 @@ class _SessionsListState extends State<SessionsList> {
                     if (s.appVersion != null) l.sessionsVersion(s.appVersion!),
                   ].join(' · '),
                   [
-                    [
-                      ?s.city,
-                      ?s.country,
-                    ].join(', ').ifEmpty(l.sessionsPlaceUnknown),
+                    _place(l, s),
                     ?s.ip,
                   ].join(' · '),
                   l.sessionsSince(_when(context, s.connectedSince)),
@@ -215,6 +218,11 @@ class _SessionsListState extends State<SessionsList> {
                       ],
                     ),
             ),
+          ),
+        if (sessions.any((s) => s.city != null || s.country != null))
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+            child: Text(l.geoipCredit, style: theme.textTheme.bodySmall),
           ),
         if (others > 0)
           Padding(
@@ -279,8 +287,4 @@ class _RenameDialogState extends State<_RenameDialog> {
       ],
     );
   }
-}
-
-extension on String {
-  String ifEmpty(String other) => isEmpty ? other : this;
 }

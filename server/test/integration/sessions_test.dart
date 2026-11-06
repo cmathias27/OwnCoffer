@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:owncoffer_server/src/generated/protocol.dart';
+import 'package:owncoffer_server/src/security/geoip.dart';
 import 'package:owncoffer_server/src/security/scopes.dart';
 import 'package:owncoffer_server/src/security/session_devices.dart';
 import 'package:owncoffer_server/src/security/session_guard.dart';
@@ -8,6 +10,7 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 import 'package:test/test.dart';
 
+import '../mmdb_writer.dart';
 import 'test_tools/serverpod_test_tools.dart';
 
 /// Decision 0027: each person sees and closes only their own sessions; only
@@ -61,6 +64,7 @@ void main() {
     setUp(() async {
       db = sessionBuilder.build();
       SessionGuard.instance = SessionGuard();
+      GeoIp.instance = GeoIp(null);
       admin = await user({'owncoffer.serverAdmin'});
       alice = await user({});
       bob = await user({});
@@ -427,6 +431,176 @@ void main() {
       expect(stats.androidUsers, 2);
       expect(stats.windowsUsers, 1);
       expect(stats.webOnlyUsers, 1);
+    });
+
+    final geo = GeoIp(MmdbReader.bytes(placesFixture()));
+
+    Future<SessionDevice> row(String id) async => (await SessionDevice.db
+        .findFirstRow(db, where: (d) => d.sessionId.equals(id)))!;
+
+    Future<List<Map<String, dynamic>>> alerts(UuidValue u) async => [
+      for (final n in await AppNotification.db.find(
+        db,
+        where: (n) =>
+            n.authUserId.equals(u) & n.type.equals(SessionDevices.alert),
+        orderBy: (n) => n.id,
+      ))
+        jsonDecode(n.data) as Map<String, dynamic>,
+    ];
+
+    test(
+      'the place comes from the local database, again for a new IP',
+      () async {
+        final a = await token(alice);
+        await SessionDevices.seen(
+          db,
+          user: alice,
+          sessionId: a,
+          platform: 'web',
+          ip: '82.64.10.20',
+          geo: geo,
+        );
+        var d = await row(a);
+        expect((d.city, d.country), ('Rouen', 'FR'));
+        await SessionDevices.seen(
+          db,
+          user: alice,
+          sessionId: a,
+          platform: 'web',
+          ip: '81.241.0.1',
+          geo: geo,
+        );
+        d = await row(a);
+        expect((d.city, d.country), (null, 'BE'));
+        // Without a database: unknown, nothing else changes.
+        await SessionDevices.seen(
+          db,
+          user: alice,
+          sessionId: a,
+          platform: 'web',
+          ip: '90.1.2.3',
+        );
+        d = await row(a);
+        expect((d.ip, d.city, d.country), ('90.1.2.3', null, null));
+      },
+    );
+
+    test('alerts: new device, unusual country, banned IP', () async {
+      Future<String> seen(String platform, String ip, {String? id}) async {
+        final s = id ?? await token(alice);
+        await SessionDevices.seen(
+          db,
+          user: alice,
+          sessionId: s,
+          platform: platform,
+          ip: ip,
+          geo: geo,
+        );
+        return s;
+      }
+
+      // The first session has nothing to be compared with.
+      final phone = await seen('android', '82.64.10.20');
+      expect(await alerts(alice), isEmpty);
+      // A platform never seen.
+      final laptop = await seen('windows', '82.64.1.1');
+      // Same platform, same city: nothing.
+      final tablet = await seen('android', '82.64.2.2');
+      expect(await alerts(alice), [
+        {
+          'session': laptop,
+          'platform': 'windows',
+          'city': 'Rouen',
+          'country': 'FR',
+          'ip': '82.64.1.1',
+          'newDevice': true,
+          'unusualCountry': false,
+          'banned': false,
+        },
+      ]);
+
+      // A country never seen, from an IP banned once.
+      await IpBan.db.insertRow(
+        db,
+        IpBan(
+          ip: '90.1.2.3',
+          windowStart: DateTime.now().toUtc(),
+          lastFailureAt: DateTime.now().toUtc(),
+          lastFailureKind: 'password',
+          banCount: 1,
+        ),
+      );
+      final away = await seen('web', '90.1.2.3');
+      expect((await alerts(alice)).last, {
+        'session': away,
+        'platform': 'web',
+        'city': 'Séville',
+        'country': 'ES',
+        'ip': '90.1.2.3',
+        'newDevice': true,
+        'unusualCountry': true,
+        'banned': true,
+      });
+
+      // An open session moving to a new country; moving within it again
+      // or back to a known country says nothing more.
+      await seen('android', '81.241.0.1', id: phone);
+      await seen('android', '81.242.0.1', id: phone);
+      await seen('android', '82.64.10.20', id: phone);
+      await seen('android', '81.241.0.1', id: phone);
+      final all = await alerts(alice);
+      expect(all, hasLength(3));
+      expect(all.last['session'], phone);
+      expect(all.last['country'], 'BE');
+      expect(all.last['newDevice'], isFalse);
+      expect(all.last['unusualCountry'], isTrue);
+      expect(await alerts(bob), isEmpty);
+
+      // Meant for the other sessions: the one in Séville is not told about
+      // itself.
+      final there = await endpoints.notification.list(as(alice, away));
+      expect(there, hasLength(2));
+      expect(
+        await endpoints.notification.unreadCount(as(alice, away)),
+        2,
+      );
+      expect(
+        await endpoints.notification.list(as(alice, laptop)),
+        hasLength(2),
+      );
+      expect(
+        await endpoints.notification.list(as(alice, tablet)),
+        hasLength(3),
+      );
+      expect(
+        await endpoints.notification.unreadCount(as(alice, tablet)),
+        3,
+      );
+      expect(
+        await endpoints.notification.list(as(bob, await token(bob))),
+        isEmpty,
+      );
+    });
+
+    test('places unknown before the database match anything', () async {
+      for (final ip in ['82.64.1.1', '90.1.2.3']) {
+        await SessionDevices.seen(
+          db,
+          user: alice,
+          sessionId: await token(alice),
+          platform: 'web',
+          ip: ip,
+        );
+      }
+      await SessionDevices.seen(
+        db,
+        user: alice,
+        sessionId: await token(alice),
+        platform: 'web',
+        ip: '82.64.10.20',
+        geo: geo,
+      );
+      expect(await alerts(alice), isEmpty);
     });
 
     test('masked IPs', () {

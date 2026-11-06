@@ -38,6 +38,33 @@ RUN dart build cli --target bin/main.dart --output build \
  && mv build/bundle/bin/main build/bundle/bin/server \
  && mkdir -p config web migrations
 
+# --- GeoIP database (decision 0027) -----------------------------------------
+# DB-IP Lite City (CC BY 4.0, IP Geolocation by DB-IP, https://db-ip.com),
+# fetched while the image is built: the server finds the city of a session
+# in this file, never online. The month of the CI build refreshes it at each
+# version; the month before is tried when the new one is not out yet.
+# GEOIP_MONTH=none builds without it (every place unknown).
+FROM alpine:3.24 AS geoip
+ARG GEOIP_MONTH=
+WORKDIR /geoip
+RUN set -eu; \
+    [ "$GEOIP_MONTH" = none ] && exit 0; \
+    month="${GEOIP_MONTH:-$(date -u +%Y-%m)}"; \
+    before="$(date -u -d "@$(( $(date -u -d "${month}-01" +%s) - 86400 ))" +%Y-%m)"; \
+    for m in "$month" "$before"; do \
+      if wget -q -O city.mmdb.gz "https://download.db-ip.com/free/dbip-city-lite-${m}.mmdb.gz"; then \
+        break; \
+      fi; \
+      rm -f city.mmdb.gz; \
+    done; \
+    [ -s city.mmdb.gz ] || { echo "DB-IP Lite City introuvable" >&2; exit 1; }; \
+    gunzip -c city.mmdb.gz > dbip-city-lite.mmdb; rm city.mmdb.gz; \
+    tail -c 131072 dbip-city-lite.mmdb | tr -c 'A-Za-z.' '\n' | grep -qx 'MaxMind.com' \
+      || { echo "Base GeoIP illisible" >&2; exit 1; }; \
+    printf '%s\n' "IP Geolocation by DB-IP (https://db-ip.com), ${m}." \
+      'Licence : Creative Commons Attribution 4.0 International.' \
+      'https://creativecommons.org/licenses/by/4.0/' > LISEZMOI.txt
+
 # --- Runtime ------------------------------------------------------------------
 FROM alpine:3.24
 # Fixed ids: the host gives this user the shared docker/state folder.
@@ -50,6 +77,7 @@ COPY --from=server /src/server/migrations/ migrations/
 COPY --from=server /src/server/web/ web/
 COPY --from=server /src/server/lib/src/generated/protocol.yaml lib/src/generated/protocol.yaml
 COPY --from=web /src/app/build/web/ web/app/
+COPY --from=geoip /geoip/ geoip/
 COPY LICENSE LICENSE-EXCEPTION.md ./
 RUN rm -f config/passwords.yaml && chown -R owncoffer:owncoffer /app
 USER owncoffer

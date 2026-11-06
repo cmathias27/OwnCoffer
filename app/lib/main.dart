@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:ui' show PlatformDispatcher;
 
+import 'package:flutter/foundation.dart'
+    show LicenseEntry, LicenseEntryWithLineBreaks, LicenseRegistry;
 import 'package:flutter/material.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -26,6 +28,7 @@ import 'widgets/app_lock_layer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  LicenseRegistry.addLicense(_dbIpLicense);
   // Before any page: a web page reloaded while locked stays locked.
   await appLock.load();
   askServerAddress = () async => runApp(
@@ -367,5 +370,18 @@ class _RootState extends State<_Root> {
         ),
       ),
     },
+  );
+}
+
+/// The places of the sessions come from DB-IP Lite City, shipped with the
+/// server image (decision 0027); its licence asks to credit it.
+Stream<LicenseEntry> _dbIpLicense() async* {
+  yield const LicenseEntryWithLineBreaks(
+    ['DB-IP Lite City'],
+    'IP Geolocation by DB-IP (https://db-ip.com).\n\n'
+    'The server of OwnCoffer finds the approximate city and country of a '
+    'session in this database, without any outside service.\n\n'
+    'Licensed under the Creative Commons Attribution 4.0 International '
+    'License: https://creativecommons.org/licenses/by/4.0/',
   );
 }

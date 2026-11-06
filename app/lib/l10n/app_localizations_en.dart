@@ -6230,4 +6230,64 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_session_is_current =>
       'To close this device\'s session, sign out.';
+
+  @override
+  String sessionsPlaceAbout(String place) {
+    return 'around $place';
+  }
+
+  @override
+  String get geoipCredit =>
+      'Approximate places, from the IP address: IP Geolocation by DB-IP (CC BY 4.0).';
+
+  @override
+  String notifSessionDeviceTitle(String device) {
+    return 'New device signed in: $device';
+  }
+
+  @override
+  String notifSessionCountryTitle(String country) {
+    return 'Sign-in from an unusual country: $country';
+  }
+
+  @override
+  String notifSessionAlertBody(String device, String place, String ip) {
+    return '$device, $place ($ip). Is it you?';
+  }
+
+  @override
+  String get notifSessionBanned =>
+      'This IP address was already blocked after failed password attempts.';
+
+  @override
+  String get sessionAlertTitle => 'Is it you?';
+
+  @override
+  String get sessionAlertYes => 'Yes, it\'s me';
+
+  @override
+  String get sessionAlertNo => 'No, sign it out';
+
+  @override
+  String get sessionAlertClosed => 'Session closed';
+
+  @override
+  String get sessionAlertGone => 'This session is already closed';
+
+  @override
+  String get sessionAlertPasswordHelp =>
+      'Change your password now: a code will be sent to you by email. All your sessions will then be closed, this one too.';
+
+  @override
+  String get sessionAlertChangePassword => 'Change the password';
+
+  @override
+  String get sessionAlertLater => 'Later';
+
+  @override
+  String get aboutTitle => 'About and licences';
+
+  @override
+  String get aboutLegalese =>
+      'Free software under the AGPL-3.0 licence (with an exception for Serverpod). Places of the sessions: IP Geolocation by DB-IP (https://db-ip.com), under the Creative Commons Attribution 4.0 licence.';
 }

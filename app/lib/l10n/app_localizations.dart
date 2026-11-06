@@ -10022,6 +10022,102 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Pour fermer la session de cet appareil, déconnectez-vous.'**
   String get error_session_is_current;
+
+  /// No description provided for @sessionsPlaceAbout.
+  ///
+  /// In fr, this message translates to:
+  /// **'environ {place}'**
+  String sessionsPlaceAbout(String place);
+
+  /// No description provided for @geoipCredit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lieux approximatifs, d\'après l\'adresse IP : IP Geolocation by DB-IP (CC BY 4.0).'**
+  String get geoipCredit;
+
+  /// No description provided for @notifSessionDeviceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel appareil connecté : {device}'**
+  String notifSessionDeviceTitle(String device);
+
+  /// No description provided for @notifSessionCountryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion depuis un pays inhabituel : {country}'**
+  String notifSessionCountryTitle(String country);
+
+  /// No description provided for @notifSessionAlertBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{device}, {place} ({ip}). C\'est vous ?'**
+  String notifSessionAlertBody(String device, String place, String ip);
+
+  /// No description provided for @notifSessionBanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette adresse IP a déjà été bloquée après des essais de mot de passe ratés.'**
+  String get notifSessionBanned;
+
+  /// No description provided for @sessionAlertTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est vous ?'**
+  String get sessionAlertTitle;
+
+  /// No description provided for @sessionAlertYes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui, c\'est moi'**
+  String get sessionAlertYes;
+
+  /// No description provided for @sessionAlertNo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non, déconnecter'**
+  String get sessionAlertNo;
+
+  /// No description provided for @sessionAlertClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Session fermée'**
+  String get sessionAlertClosed;
+
+  /// No description provided for @sessionAlertGone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette session est déjà fermée'**
+  String get sessionAlertGone;
+
+  /// No description provided for @sessionAlertPasswordHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changez maintenant votre mot de passe : un code vous sera envoyé par email. Toutes vos sessions seront alors fermées, celle-ci aussi.'**
+  String get sessionAlertPasswordHelp;
+
+  /// No description provided for @sessionAlertChangePassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer le mot de passe'**
+  String get sessionAlertChangePassword;
+
+  /// No description provided for @sessionAlertLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get sessionAlertLater;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos et licences'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutLegalese.
+  ///
+  /// In fr, this message translates to:
+  /// **'Logiciel libre sous licence AGPL-3.0 (avec une exception pour Serverpod). Lieux des sessions : IP Geolocation by DB-IP (https://db-ip.com), sous licence Creative Commons Attribution 4.0.'**
+  String get aboutLegalese;
 }
 
 class _AppLocalizationsDelegate

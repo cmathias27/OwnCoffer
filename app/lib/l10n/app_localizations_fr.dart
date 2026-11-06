@@ -6267,4 +6267,64 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_session_is_current =>
       'Pour fermer la session de cet appareil, déconnectez-vous.';
+
+  @override
+  String sessionsPlaceAbout(String place) {
+    return 'environ $place';
+  }
+
+  @override
+  String get geoipCredit =>
+      'Lieux approximatifs, d\'après l\'adresse IP : IP Geolocation by DB-IP (CC BY 4.0).';
+
+  @override
+  String notifSessionDeviceTitle(String device) {
+    return 'Nouvel appareil connecté : $device';
+  }
+
+  @override
+  String notifSessionCountryTitle(String country) {
+    return 'Connexion depuis un pays inhabituel : $country';
+  }
+
+  @override
+  String notifSessionAlertBody(String device, String place, String ip) {
+    return '$device, $place ($ip). C\'est vous ?';
+  }
+
+  @override
+  String get notifSessionBanned =>
+      'Cette adresse IP a déjà été bloquée après des essais de mot de passe ratés.';
+
+  @override
+  String get sessionAlertTitle => 'C\'est vous ?';
+
+  @override
+  String get sessionAlertYes => 'Oui, c\'est moi';
+
+  @override
+  String get sessionAlertNo => 'Non, déconnecter';
+
+  @override
+  String get sessionAlertClosed => 'Session fermée';
+
+  @override
+  String get sessionAlertGone => 'Cette session est déjà fermée';
+
+  @override
+  String get sessionAlertPasswordHelp =>
+      'Changez maintenant votre mot de passe : un code vous sera envoyé par email. Toutes vos sessions seront alors fermées, celle-ci aussi.';
+
+  @override
+  String get sessionAlertChangePassword => 'Changer le mot de passe';
+
+  @override
+  String get sessionAlertLater => 'Plus tard';
+
+  @override
+  String get aboutTitle => 'À propos et licences';
+
+  @override
+  String get aboutLegalese =>
+      'Logiciel libre sous licence AGPL-3.0 (avec une exception pour Serverpod). Lieux des sessions : IP Geolocation by DB-IP (https://db-ip.com), sous licence Creative Commons Attribution 4.0.';
 }

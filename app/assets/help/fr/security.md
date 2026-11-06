@@ -21,12 +21,21 @@ Désactivé au départ : activez-le dans **Sécurité**. Après un temps sans ut
 Les réglages valent pour cet appareil seulement. Sans utilisation pendant 30 jours, un appareil doit se reconnecter.
 
 ## Mes sessions
-Chaque appareil ou navigateur où vous êtes connecté : application Android, Windows ou navigateur, sa version, l'adresse IP, depuis quand et la dernière activité.
+Chaque appareil ou navigateur où vous êtes connecté : application Android, Windows ou navigateur, sa version, l'adresse IP, la ville et le pays approximatifs, depuis quand et la dernière activité.
 - **Fermer** une session que vous ne reconnaissez pas : l'appareil est déconnecté dans les 30 secondes. Changez ensuite votre mot de passe.
 - **Fermer toutes les autres** : seul cet appareil reste connecté.
 - **Renommer** un appareil (« Téléphone de Léa ») pour le reconnaître.
 - Ces informations sont gardées 30 jours après la fin de la session, puis effacées ; elles font partie de votre export. L'administrateur du serveur voit vos sessions avec l'adresse IP masquée et peut les fermer ; vous en êtes prévenu par une notification.
+- Le lieu vient d'une base installée sur le serveur (IP Geolocation by DB-IP) : aucun service extérieur n'est interrogé. Il est indicatif — derrière un opérateur mobile ou un VPN, la ville est souvent fausse.
 - Version autonome : un seul appareil, rien n'est affiché.
+
+### Alertes de connexion
+
+Vos autres appareils reçoivent une notification quand une session s'ouvre :
+- sur un **nouvel appareil** : une plateforme (application Android, Windows, navigateur) jamais vue pour vous dans cette ville ;
+- depuis un **pays inhabituel** : un pays jamais vu pour vous, alerte mise en évidence (aussi quand une session déjà ouverte y change d'adresse).
+
+La notification demande « C'est vous ? ». **Oui** ne fait rien de plus. **Non, déconnecter** ferme cette session, puis propose de changer votre mot de passe (toutes vos sessions sont alors fermées). Elle signale aussi une adresse IP déjà bloquée pour des essais de mot de passe ratés.
 
 ## Ce que fait OwnCoffer pour vous
 
