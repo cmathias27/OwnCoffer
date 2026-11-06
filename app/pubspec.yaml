@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.5.0+58
+version: 1.6.0+59
 
 environment:
   sdk: '^3.12.2'
@@ -57,6 +57,12 @@ dependencies:
   # Version of this app, compared with the server's (BSD-3-Clause).
   package_info_plus: ^10.2.2
   local_auth: ^3.0.2
+  # Pépite, the mascot (decision 0026): drawings (flutter_svg, MIT) and
+  # the weekly reminder on Android and Windows, local notifications only
+  # (flutter_local_notifications, BSD-3-Clause; timezone, BSD-2-Clause).
+  flutter_svg: ^2.3.2
+  flutter_local_notifications: ^22.3.3
+  timezone: ^0.11.2
 
 dev_dependencies:
   # Used for agents to drive the app through the Dart MCP
@@ -112,6 +118,7 @@ flutter:
     # assets/tessdata/LICENSE), bundled so that nothing is downloaded.
     - assets/tessdata/fra.traineddata
     - assets/tessdata/eng.traineddata
+    - assets/pepite/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

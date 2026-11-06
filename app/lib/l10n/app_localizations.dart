@@ -9476,6 +9476,354 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Trop de mots de passe erronés. Réessayez plus tard, ou déconnectez-vous.'**
   String get error_unlock_too_many_attempts;
+
+  /// No description provided for @pepiteWelcome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coucou, moi c\'est Pépite ! Chaque semaine, on fait tes comptes ensemble : une dizaine de minutes, et je mets des graines de côté pour toi.'**
+  String get pepiteWelcome;
+
+  /// No description provided for @pepiteRemind0.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est le moment de notre petit tour des comptes. On s\'y met ensemble ?'**
+  String get pepiteRemind0;
+
+  /// No description provided for @pepiteRemind1.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes comptes t\'attendent, et moi aussi ! Dix minutes et c\'est fait.'**
+  String get pepiteRemind1;
+
+  /// No description provided for @pepiteRemind2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une petite séance cette semaine ? Je garde déjà des graines au chaud pour toi.'**
+  String get pepiteRemind2;
+
+  /// No description provided for @pepiteWelcomeBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Content de te revoir ! Rien n\'est perdu : ta réserve t\'attend. On reprend tranquillement ?'**
+  String get pepiteWelcomeBack;
+
+  /// No description provided for @pepiteDone0.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bravo, tes comptes sont à jour ! On se retrouve la semaine prochaine.'**
+  String get pepiteDone0;
+
+  /// No description provided for @pepiteDone1.
+  ///
+  /// In fr, this message translates to:
+  /// **'Super travail ! Tu sais où tu en es, et ça vaut de l\'or.'**
+  String get pepiteDone1;
+
+  /// No description provided for @pepiteDone2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout est à jour cette semaine. Chapeau !'**
+  String get pepiteDone2;
+
+  /// No description provided for @pepiteSober.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un de tes comptes passe sous zéro. On regarde ensemble ce qui arrive, calmement, étape par étape.'**
+  String get pepiteSober;
+
+  /// No description provided for @pepiteWeeks.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune semaine pour l\'instant} =1{1 semaine ensemble} other{{count} semaines ensemble}}'**
+  String pepiteWeeks(int count);
+
+  /// No description provided for @pepiteSeeds.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune graine} =1{1 graine} other{{count} graines}}'**
+  String pepiteSeeds(int count);
+
+  /// No description provided for @pepiteStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faire mes comptes (≈ 10 min)'**
+  String get pepiteStart;
+
+  /// No description provided for @pepiteContinue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer ({done}/3)'**
+  String pepiteContinue(int done);
+
+  /// No description provided for @pepiteLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get pepiteLater;
+
+  /// No description provided for @pepiteLaterReply.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de souci, je te le rappelle demain.'**
+  String get pepiteLaterReply;
+
+  /// No description provided for @pepiteReserve.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ma réserve'**
+  String get pepiteReserve;
+
+  /// No description provided for @pepiteRitualTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les comptes de la semaine'**
+  String get pepiteRitualTitle;
+
+  /// No description provided for @pepiteRitualIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quatre étapes, une dizaine de minutes en tout. Fais-les dans l\'ordre que tu veux : je coche au fur et à mesure.'**
+  String get pepiteRitualIntro;
+
+  /// No description provided for @pepiteStepImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer les derniers relevés'**
+  String get pepiteStepImport;
+
+  /// No description provided for @pepiteStepImportHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Environ 3 min. Pas de nouveau relevé ? Coche simplement.'**
+  String get pepiteStepImportHelp;
+
+  /// No description provided for @pepiteStepCheck.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier les opérations'**
+  String get pepiteStepCheck;
+
+  /// No description provided for @pepiteStepCheckHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Environ 4 min : les catégories et les opérations à classer.'**
+  String get pepiteStepCheckHelp;
+
+  /// No description provided for @pepiteStepForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Regarder la prévision'**
+  String get pepiteStepForecast;
+
+  /// No description provided for @pepiteStepForecastHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Environ 2 min : le solde des 30 prochains jours.'**
+  String get pepiteStepForecastHelp;
+
+  /// No description provided for @pepiteStepCelebrate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fêter ça !'**
+  String get pepiteStepCelebrate;
+
+  /// No description provided for @pepiteStepCelebrateHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une minute pour souffler : tes graines t\'attendent.'**
+  String get pepiteStepCelebrateHelp;
+
+  /// No description provided for @pepiteOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir'**
+  String get pepiteOpen;
+
+  /// No description provided for @pepiteCelebrate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fêter ça'**
+  String get pepiteCelebrate;
+
+  /// No description provided for @pepiteCelebrateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bravo !'**
+  String get pepiteCelebrateTitle;
+
+  /// No description provided for @pepiteEarned.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Cette semaine était déjà comptée : tes graines sont bien au chaud.} =1{+1 graine dans ta réserve !} other{+{count} graines dans ta réserve !}}'**
+  String pepiteEarned(int count);
+
+  /// No description provided for @pepiteNewBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau badge : {name}'**
+  String pepiteNewBadge(String name);
+
+  /// No description provided for @pepiteThanks.
+  ///
+  /// In fr, this message translates to:
+  /// **'Merci Pépite'**
+  String get pepiteThanks;
+
+  /// No description provided for @pepiteBadgesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Badges'**
+  String get pepiteBadgesTitle;
+
+  /// No description provided for @pepiteBadgeLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'À gagner'**
+  String get pepiteBadgeLocked;
+
+  /// No description provided for @pepiteBadgeFirstImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Premier relevé'**
+  String get pepiteBadgeFirstImport;
+
+  /// No description provided for @pepiteBadgeFirstImportHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un premier relevé'**
+  String get pepiteBadgeFirstImportHelp;
+
+  /// No description provided for @pepiteBadgeFirstRitual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Première semaine'**
+  String get pepiteBadgeFirstRitual;
+
+  /// No description provided for @pepiteBadgeFirstRitualHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faire ses comptes une première fois'**
+  String get pepiteBadgeFirstRitualHelp;
+
+  /// No description provided for @pepiteBadgeWeeks.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} semaines'**
+  String pepiteBadgeWeeks(int count);
+
+  /// No description provided for @pepiteBadgeWeeksHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faire ses comptes {count} semaines, pas forcément de suite'**
+  String pepiteBadgeWeeksHelp(int count);
+
+  /// No description provided for @pepiteBadgeYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un an ensemble'**
+  String get pepiteBadgeYear;
+
+  /// No description provided for @pepiteBadgeYearHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un an depuis la première semaine'**
+  String get pepiteBadgeYearHelp;
+
+  /// No description provided for @pepiteHowTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment ça marche'**
+  String get pepiteHowTitle;
+
+  /// No description provided for @pepiteHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque semaine où tu fais tes comptes, tu gagnes {ritual} graines, et chaque badge en donne {badge}. Ce sont les semaines qui comptent, pas les jours d\'affilée : une semaine manquée n\'efface rien, et la réserve ne se vide jamais.'**
+  String pepiteHow(int ritual, int badge);
+
+  /// No description provided for @pepiteSettingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pépite'**
+  String get pepiteSettingsTitle;
+
+  /// No description provided for @pepiteEnable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher Pépite'**
+  String get pepiteEnable;
+
+  /// No description provided for @pepiteEnableHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pépite, le hamster d\'OwnCoffer, t\'accompagne pour faire tes comptes chaque semaine. Ta réserve est gardée même si tu le caches.'**
+  String get pepiteEnableHelp;
+
+  /// No description provided for @pepiteReminder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Me le rappeler par une notification'**
+  String get pepiteReminder;
+
+  /// No description provided for @pepiteReminderHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une notification de cet appareil, une fois par semaine. Rien n\'est envoyé ailleurs.'**
+  String get pepiteReminderHelp;
+
+  /// No description provided for @pepiteReminderWeb.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans le navigateur, Pépite te le rappelle sur la page d\'accueil.'**
+  String get pepiteReminderWeb;
+
+  /// No description provided for @pepiteReminderDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jour'**
+  String get pepiteReminderDay;
+
+  /// No description provided for @pepiteReminderHour.
+  ///
+  /// In fr, this message translates to:
+  /// **'Heure'**
+  String get pepiteReminderHour;
+
+  /// No description provided for @pepiteReminderDenied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les notifications d\'OwnCoffer sont refusées dans les réglages de l\'appareil.'**
+  String get pepiteReminderDenied;
+
+  /// No description provided for @pepiteNotifTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pépite t\'attend'**
+  String get pepiteNotifTitle;
+
+  /// No description provided for @pepiteNotifBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est l\'heure des comptes de la semaine. Dix minutes, et ta réserve grossit !'**
+  String get pepiteNotifBody;
+
+  /// No description provided for @pepiteMenu.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pépite et ma réserve'**
+  String get pepiteMenu;
+
+  /// No description provided for @pepiteSleeping.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pépite fait la sieste en attendant ton retour.'**
+  String get pepiteSleeping;
+
+  /// No description provided for @pepiteNotificationChannel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel de Pépite'**
+  String get pepiteNotificationChannel;
 }
 
 class _AppLocalizationsDelegate

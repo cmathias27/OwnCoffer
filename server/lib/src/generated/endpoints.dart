@@ -27,6 +27,7 @@ import 'package:owncoffer_server/src/generated/loan_event.dart' as _ifjfj2mv;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/notification_settings.dart'
     as _id4w1v6o;
+import 'package:owncoffer_server/src/generated/pepite_status.dart' as _iqopjt2h;
 import 'package:owncoffer_server/src/generated/rule_direction.dart'
     as _ini8nmtb;
 import 'package:owncoffer_server/src/generated/rule_match_type.dart'
@@ -57,6 +58,7 @@ import '../endpoints/invoice_endpoint.dart' as _ito116jz;
 import '../endpoints/loan_endpoint.dart' as _imitaxsf;
 import '../endpoints/mcp_endpoint.dart' as _i7ut3egp;
 import '../endpoints/notification_endpoint.dart' as _ihb11yhk;
+import '../endpoints/pepite_endpoint.dart' as _iagql2g7;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
@@ -180,6 +182,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'notification',
+          null,
+        ),
+      'pepite': _iagql2g7.PepiteEndpoint()
+        ..initialize(
+          server,
+          'pepite',
           null,
         ),
       'rule': _i1yhvvjn.RuleEndpoint()
@@ -3292,6 +3300,69 @@ class Endpoints extends _is.EndpointDispatch {
                         session,
                         params['settings'],
                       ),
+        ),
+      },
+    );
+    connectors['pepite'] = _is.EndpointConnector(
+      name: 'pepite',
+      endpoint: endpoints['pepite']!,
+      methodConnectors: {
+        'status': _is.MethodConnector(
+          name: 'status',
+          params: {
+            'today': _is.ParameterDescription(
+              name: 'today',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['pepite'] as _iagql2g7.PepiteEndpoint).status(
+                    session,
+                    params['today'],
+                  ),
+        ),
+        'completeRitual': _is.MethodConnector(
+          name: 'completeRitual',
+          params: {
+            'today': _is.ParameterDescription(
+              name: 'today',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['pepite'] as _iagql2g7.PepiteEndpoint)
+                  .completeRitual(
+                    session,
+                    params['today'],
+                  ),
+        ),
+        'adopt': _is.MethodConnector(
+          name: 'adopt',
+          params: {
+            'from': _is.ParameterDescription(
+              name: 'from',
+              type: _is.getType<_iqopjt2h.PepiteStatus>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['pepite'] as _iagql2g7.PepiteEndpoint).adopt(
+                    session,
+                    params['from'],
+                  ),
         ),
       },
     );

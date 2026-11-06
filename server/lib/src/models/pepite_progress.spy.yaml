@@ -1,0 +1,18 @@
+### Pépite, the mascot (decision 0026): a user's seed reserve and weekly
+### accounts rituals. The reserve only grows; a missed week resets nothing.
+class: PepiteProgress
+table: pepite_progress
+serverOnly: true
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  seeds: int
+  ### Weeks with a ritual done, in all (not in a row).
+  weeks: int
+  ### Monday of the last week with a ritual (a date, no time zone).
+  lastWeek: DateTime?
+  firstRitualAt: DateTime?
+  lastRitualAt: DateTime?
+indexes:
+  pepite_progress_user_idx:
+    fields: authUserId
+    unique: true

@@ -142,6 +142,12 @@ class _MigrateScreenState extends State<MigrateScreen> {
         );
       }
     }
+    // Pépite's reserve and badges come along (decision 0026), only into an
+    // account that has none; never a reason to fail the move.
+    try {
+      final today = DateTime.now();
+      await _target!.pepite.adopt(await client.pepite.status(today));
+    } catch (_) {}
     final operations = _sent.values.fold(0, (a, b) => a + b);
     setState(
       () => (

@@ -91,6 +91,7 @@ import 'package:owncoffer_client/src/protocol/month_review.dart' as _ilg6npsn;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
 import 'package:owncoffer_client/src/protocol/notification_settings.dart'
     as _inuj1ggb;
+import 'package:owncoffer_client/src/protocol/pepite_status.dart' as _igi0vxn8;
 import 'package:owncoffer_client/src/protocol/provider_history.dart'
     as _i26z4phw;
 import 'package:owncoffer_client/src/protocol/purchase_simulation.dart'
@@ -1844,6 +1845,48 @@ class EndpointNotification extends _isc.EndpointRef {
   );
 }
 
+/// Pépite, the mascot (decision 0026): the weekly accounts ritual, the seed
+/// reserve and the badges of the signed-in user. Only their own; nothing
+/// here reads a group's accounts.
+///
+/// In the standalone version this runs in the embedded server, so all of it
+/// stays on the device; [adopt] carries it over to a server.
+/// {@category Endpoint}
+class EndpointPepite extends _isc.EndpointRef {
+  EndpointPepite(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'pepite';
+
+  /// [today]: the device's date, so that the week starts on the user's
+  /// Monday; a date far from the server's is ignored.
+  _ida.Future<_igi0vxn8.PepiteStatus> status(DateTime today) =>
+      caller.callServerEndpoint<_igi0vxn8.PepiteStatus>(
+        'pepite',
+        'status',
+        {'today': today},
+      );
+
+  /// The ritual of this week is done: [ritualSeeds] seeds the first time in
+  /// the week, and the badges it earns. Again in the same week: nothing more.
+  _ida.Future<_igi0vxn8.PepiteStatus> completeRitual(DateTime today) =>
+      caller.callServerEndpoint<_igi0vxn8.PepiteStatus>(
+        'pepite',
+        'completeRitual',
+        {'today': today},
+      );
+
+  /// Standalone version moved to a server: its reserve and badges come
+  /// along, only into an account that has none yet (nothing is added to an
+  /// existing reserve). Returns whether they were taken.
+  _ida.Future<bool> adopt(_igi0vxn8.PepiteStatus from) =>
+      caller.callServerEndpoint<bool>(
+        'pepite',
+        'adopt',
+        {'from': from},
+      );
+}
+
 /// Classification rules of a group (cahier des charges, Classement).
 /// {@category Endpoint}
 class EndpointRule extends _isc.EndpointRef {
@@ -2580,6 +2623,7 @@ class Client extends _isc.ServerpodClientShared {
     loan = EndpointLoan(this);
     mcp = EndpointMcp(this);
     notification = EndpointNotification(this);
+    pepite = EndpointPepite(this);
     rule = EndpointRule(this);
     scheduled = EndpointScheduled(this);
     setup = EndpointSetup(this);
@@ -2627,6 +2671,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointNotification notification;
 
+  late final EndpointPepite pepite;
+
   late final EndpointRule rule;
 
   late final EndpointScheduled scheduled;
@@ -2662,6 +2708,7 @@ class Client extends _isc.ServerpodClientShared {
     'loan': loan,
     'mcp': mcp,
     'notification': notification,
+    'pepite': pepite,
     'rule': rule,
     'scheduled': scheduled,
     'setup': setup,

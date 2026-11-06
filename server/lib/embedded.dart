@@ -9,6 +9,7 @@ import 'package:sqlite3/sqlite3.dart' as sqlite3;
 import 'package:sqlite_async/sqlite_async.dart';
 
 import 'src/auth/email_config.dart';
+import 'src/finance/alert_service.dart';
 import 'src/generated/serverpod.dart';
 import 'src/standalone/device_backup.dart';
 import 'src/standalone/local_owner.dart';
@@ -41,7 +42,10 @@ class EmbeddedServer {
     }
   }
 
-  Future<void> stop() => pod.shutdown(exitProcess: false);
+  Future<void> stop() {
+    AlertService.stop();
+    return pod.shutdown(exitProcess: false);
+  }
 
   /// The app's private folder this server runs on.
   late final Directory dataDir;

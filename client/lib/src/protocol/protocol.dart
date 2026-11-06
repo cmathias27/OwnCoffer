@@ -140,6 +140,7 @@ import 'month_review.dart' as _i5m4pdin;
 import 'notification.dart' as _irt10kca;
 import 'notification_settings.dart' as _iwwkm5c2;
 import 'occurrence_status.dart' as _it10dx4m;
+import 'pepite_status.dart' as _iltzik8s;
 import 'period_totals.dart' as _imctw77w;
 import 'provider_history.dart' as _irsxtgs7;
 import 'purchase_option.dart' as _i46nnn14;
@@ -250,6 +251,7 @@ export 'month_review.dart';
 export 'notification.dart';
 export 'notification_settings.dart';
 export 'occurrence_status.dart';
+export 'pepite_status.dart';
 export 'period_totals.dart';
 export 'provider_history.dart';
 export 'purchase_option.dart';
@@ -555,6 +557,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _it10dx4m.OccurrenceStatus) {
       return _it10dx4m.OccurrenceStatus.fromJson(data) as T;
+    }
+    if (t == _iltzik8s.PepiteStatus) {
+      return _iltzik8s.PepiteStatus.fromJson(data) as T;
     }
     if (t == _imctw77w.PeriodTotals) {
       return _imctw77w.PeriodTotals.fromJson(data) as T;
@@ -936,6 +941,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_it10dx4m.OccurrenceStatus?>()) {
       return (data != null ? _it10dx4m.OccurrenceStatus.fromJson(data) : null)
           as T;
+    }
+    if (t == _isc.getType<_iltzik8s.PepiteStatus?>()) {
+      return (data != null ? _iltzik8s.PepiteStatus.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_imctw77w.PeriodTotals?>()) {
       return (data != null ? _imctw77w.PeriodTotals.fromJson(data) : null) as T;
@@ -1529,6 +1537,7 @@ class Protocol extends _isc.SerializationManager {
       _irt10kca.AppNotification => 'AppNotification',
       _iwwkm5c2.NotificationSettings => 'NotificationSettings',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
+      _iltzik8s.PepiteStatus => 'PepiteStatus',
       _imctw77w.PeriodTotals => 'PeriodTotals',
       _irsxtgs7.ProviderHistory => 'ProviderHistory',
       _i46nnn14.PurchaseOption => 'PurchaseOption',
@@ -1733,6 +1742,8 @@ class Protocol extends _isc.SerializationManager {
         return 'NotificationSettings';
       case _it10dx4m.OccurrenceStatus():
         return 'OccurrenceStatus';
+      case _iltzik8s.PepiteStatus():
+        return 'PepiteStatus';
       case _imctw77w.PeriodTotals():
         return 'PeriodTotals';
       case _irsxtgs7.ProviderHistory():
@@ -2054,6 +2065,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'OccurrenceStatus') {
       return deserialize<_it10dx4m.OccurrenceStatus>(data['data']);
+    }
+    if (dataClassName == 'PepiteStatus') {
+      return deserialize<_iltzik8s.PepiteStatus>(data['data']);
     }
     if (dataClassName == 'PeriodTotals') {
       return deserialize<_imctw77w.PeriodTotals>(data['data']);

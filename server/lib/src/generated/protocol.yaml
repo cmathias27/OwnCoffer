@@ -148,6 +148,10 @@ notification:
   - markAllRead:
   - settings:
   - saveSettings:
+pepite:
+  - status:
+  - completeRitual:
+  - adopt:
 rule:
   - list:
   - create:
