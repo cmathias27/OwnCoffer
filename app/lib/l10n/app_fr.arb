@@ -3887,5 +3887,93 @@
   "pepiteNotifBody": "C'est l'heure des comptes de la semaine. Dix minutes, et ta réserve grossit !",
   "pepiteMenu": "Pépite et ma réserve",
   "pepiteSleeping": "Pépite fait la sieste en attendant ton retour.",
-  "pepiteNotificationChannel": "Rappel de Pépite"
+  "pepiteNotificationChannel": "Rappel de Pépite",
+  "sessionsTitle": "Mes sessions",
+  "sessionsHelp": "Chaque appareil ou navigateur où vous êtes connecté, avec le lieu et la date. Fermez ceux que vous ne reconnaissez pas, puis changez votre mot de passe.",
+  "sessionsCurrent": "Cet appareil",
+  "sessionsSince": "connecté depuis le {date}",
+  "@sessionsSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionsLastActive": "actif le {date}",
+  "@sessionsLastActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionsPlaceUnknown": "lieu inconnu",
+  "sessionsVersion": "version {version}",
+  "@sessionsVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionsClose": "Fermer",
+  "sessionsCloseTitle": "Fermer cette session ?",
+  "sessionsCloseHelp": "L'appareil sera déconnecté dans les 30 secondes et devra se reconnecter avec le mot de passe.",
+  "sessionsCloseOthers": "Fermer toutes les autres",
+  "sessionsCloseOthersTitle": "Fermer toutes les autres sessions ?",
+  "sessionsClosedCount": "{count, plural, =0{Aucune session fermée} =1{1 session fermée} other{{count} sessions fermées}}",
+  "@sessionsClosedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sessionsRename": "Renommer",
+  "sessionsRenameLabel": "Nom de l'appareil",
+  "sessionsEmpty": "Aucune session ouverte.",
+  "sessionsPlatformWeb": "Navigateur",
+  "sessionsPlatformAndroid": "Application Android",
+  "sessionsPlatformWindows": "Application Windows",
+  "sessionsPlatformIos": "iPhone ou iPad",
+  "sessionsPlatformMacos": "Mac",
+  "sessionsPlatformLinux": "Linux",
+  "sessionsPlatformUnknown": "Appareil non identifié",
+  "adminUserSessions": "Sessions",
+  "adminUserSessionsTitle": "Sessions de {email}",
+  "@adminUserSessionsTitle": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "adminUserSessionsHelp": "Les adresses IP sont masquées. La personne est prévenue par une notification quand vous fermez une de ses sessions.",
+  "adminCloseAllSessions": "Tout fermer",
+  "adminStatApps": "Applications (30 jours)",
+  "adminStatAppsValue": "Android : {android} · Windows : {windows} · navigateur seul : {web}",
+  "@adminStatAppsValue": {
+    "placeholders": {
+      "android": {
+        "type": "int"
+      },
+      "windows": {
+        "type": "int"
+      },
+      "web": {
+        "type": "int"
+      }
+    }
+  },
+  "notifSessionClosedTitle": "{count, plural, =1{Un administrateur a fermé une de vos sessions} other{Un administrateur a fermé {count} de vos sessions}}",
+  "@notifSessionClosedTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifSessionClosedBody": "Si vous ne vous y attendiez pas, changez votre mot de passe.",
+  "error_session_not_found": "Cette session n'existe plus.",
+  "error_session_is_current": "Pour fermer la session de cet appareil, déconnectez-vous."
 }

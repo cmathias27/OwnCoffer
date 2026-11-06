@@ -171,6 +171,15 @@ abstract final class ExportService {
           orderBy: (c) => c.id,
         ),
       ),
+      // Where and on what the member's sessions were used (decision 0027).
+      'sessions': [
+        for (final d in await SessionDevice.db.find(
+          session,
+          where: (d) => d.authUserId.equals(user),
+          orderBy: (d) => d.firstSeenAt,
+        ))
+          d.toJson()..remove('sessionId'),
+      ],
     };
     return jsonEncode(doc);
   }

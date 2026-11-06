@@ -59,6 +59,7 @@ import '../endpoints/loan_endpoint.dart' as _imitaxsf;
 import '../endpoints/mcp_endpoint.dart' as _i7ut3egp;
 import '../endpoints/notification_endpoint.dart' as _ihb11yhk;
 import '../endpoints/pepite_endpoint.dart' as _iagql2g7;
+import '../endpoints/presence_endpoint.dart' as _iol1r7pe;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
@@ -188,6 +189,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'pepite',
+          null,
+        ),
+      'presence': _iol1r7pe.PresenceEndpoint()
+        ..initialize(
+          server,
+          'presence',
           null,
         ),
       'rule': _i1yhvvjn.RuleEndpoint()
@@ -757,6 +764,50 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['authUserId'],
                     params['blocked'],
+                  ),
+        ),
+        'userSessions': _is.MethodConnector(
+          name: 'userSessions',
+          params: {
+            'authUserId': _is.ParameterDescription(
+              name: 'authUserId',
+              type: _is.getType<_is.UuidValue>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['admin'] as _i5t1w2d2.AdminEndpoint).userSessions(
+                    session,
+                    params['authUserId'],
+                  ),
+        ),
+        'closeUserSessions': _is.MethodConnector(
+          name: 'closeUserSessions',
+          params: {
+            'authUserId': _is.ParameterDescription(
+              name: 'authUserId',
+              type: _is.getType<_is.UuidValue>(),
+              nullable: false,
+            ),
+            'sessionId': _is.ParameterDescription(
+              name: 'sessionId',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['admin'] as _i5t1w2d2.AdminEndpoint)
+                  .closeUserSessions(
+                    session,
+                    params['authUserId'],
+                    params['sessionId'],
                   ),
         ),
         'health': _is.MethodConnector(
@@ -3363,6 +3414,101 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['from'],
                   ),
+        ),
+      },
+    );
+    connectors['presence'] = _is.EndpointConnector(
+      name: 'presence',
+      endpoint: endpoints['presence']!,
+      methodConnectors: {
+        'ping': _is.MethodConnector(
+          name: 'ping',
+          params: {
+            'platform': _is.ParameterDescription(
+              name: 'platform',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'appVersion': _is.ParameterDescription(
+              name: 'appVersion',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['presence'] as _iol1r7pe.PresenceEndpoint).ping(
+                    session,
+                    params['platform'],
+                    params['appVersion'],
+                  ),
+        ),
+        'mySessions': _is.MethodConnector(
+          name: 'mySessions',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['presence'] as _iol1r7pe.PresenceEndpoint)
+                  .mySessions(session),
+        ),
+        'rename': _is.MethodConnector(
+          name: 'rename',
+          params: {
+            'sessionId': _is.ParameterDescription(
+              name: 'sessionId',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'label': _is.ParameterDescription(
+              name: 'label',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['presence'] as _iol1r7pe.PresenceEndpoint).rename(
+                    session,
+                    params['sessionId'],
+                    params['label'],
+                  ),
+        ),
+        'close': _is.MethodConnector(
+          name: 'close',
+          params: {
+            'sessionId': _is.ParameterDescription(
+              name: 'sessionId',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['presence'] as _iol1r7pe.PresenceEndpoint).close(
+                    session,
+                    params['sessionId'],
+                  ),
+        ),
+        'closeOthers': _is.MethodConnector(
+          name: 'closeOthers',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['presence'] as _iol1r7pe.PresenceEndpoint)
+                  .closeOthers(session),
         ),
       },
     );

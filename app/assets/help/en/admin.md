@@ -5,7 +5,7 @@ This page is only visible to the **server administrator**. It never shows a hous
 ## The tabs
 
 - **Health and figures**: version, uptime, database, disk space, email sending (with a test email), server figures and automatic classification rate.
-- **Users**: accounts, households and roles. An account can be **blocked**: it is signed out and can no longer sign in, nothing is deleted.
+- **Users**: accounts, households and roles. An account can be **blocked**: it is signed out and can no longer sign in, nothing is deleted. The **Sessions** button shows where each account is signed in (IP masked) and closes one session or all of them; the person is told.
 - **Invitations**: all pending invitations, to revoke; invite into any household.
 - **Blocked IPs** after too many failed sign-ins, to unblock.
 - **Log** of the latest sensitive actions: who, what, when.

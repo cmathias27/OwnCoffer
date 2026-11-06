@@ -6,6 +6,7 @@
 - Il **ne se connecte jamais à votre banque** : vous lui donnez vous-même les relevés.
 - **Aucune télémétrie** : OwnCoffer n'envoie rien à personne sans que vous le demandiez.
 - Sur téléphone, l'application installée ne garde pas vos données financières en cache. Les applications Windows et Android non plus : elles ne gardent que l'adresse de votre serveur et votre session.
+- Pour **Mes sessions** (Sécurité), le serveur note l'application, sa version et l'adresse IP de chaque appareil connecté ; il les efface 30 jours après la fin de la session.
 
 ## Quand quelque chose sort du serveur
 

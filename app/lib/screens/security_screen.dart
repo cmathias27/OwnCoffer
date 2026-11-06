@@ -9,9 +9,11 @@ import '../l10n/error_messages.dart';
 import '../help/help.dart';
 import '../state/app_lock.dart';
 import '../widgets/app_lock_settings.dart';
+import '../widgets/sessions_list.dart';
 
 /// Two-factor authentication: enable (QR code, first code, backup codes),
-/// renew backup codes, disable.
+/// renew backup codes, disable. Then the lock of the app and the open
+/// sessions (« Mes sessions »).
 class SecurityScreen extends StatefulWidget {
   /// Inside another page (an administration tab): no own app bar.
   final bool embedded;
@@ -106,6 +108,23 @@ class _SecurityScreenState extends State<SecurityScreen> {
                 ),
               const Divider(height: 48),
               AppLockSettings(lock: appLock),
+              // Standalone mode: one device, no session list (decision 0027).
+              if (!isStandalone) ...[
+                const Divider(height: 48),
+                Text(l.sessionsTitle, style: theme.textTheme.titleLarge),
+                const SizedBox(height: 8),
+                Text(l.sessionsHelp, style: theme.textTheme.bodySmall),
+                const SizedBox(height: 8),
+                SessionsList(
+                  load: client.presence.mySessions,
+                  onClose: (s) => client.presence.close(s.id),
+                  onCloseOthers: client.presence.closeOthers,
+                  onRename: (s, label) => client.presence.rename(
+                    s.id,
+                    label.isEmpty ? null : label,
+                  ),
+                ),
+              ],
             ],
           );
     if (widget.embedded) return body;

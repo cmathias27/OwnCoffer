@@ -1,0 +1,18 @@
+### An open session, as shown in « Mes sessions » or to the server
+### administrator (decision 0027).
+class: SessionInfo
+fields:
+  id: String
+  ### Null when the app never said (older app, or not yet).
+  platform: String?
+  appVersion: String?
+  deviceLabel: String?
+  ### Whole for the person, masked (`82.64.x.x`) for the administrator.
+  ip: String?
+  city: String?
+  country: String?
+  ### When the session was opened (sign-in).
+  connectedSince: DateTime
+  lastActiveAt: DateTime
+  ### The session this list is shown in.
+  current: bool

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:serverpod_auth_idp_server/core.dart';
@@ -7,6 +8,8 @@ import 'src/cache_busting.dart';
 import 'src/generated/serverpod.dart';
 import 'src/security/ip_guard.dart';
 import 'src/security/ip_middleware.dart';
+import 'src/security/session_devices.dart';
+import 'src/security/session_guard.dart';
 import 'src/startup.dart';
 import 'src/web/routes/app_config_route.dart';
 import 'src/web/routes/mcp_route.dart';
@@ -30,6 +33,11 @@ void run(List<String> args) async {
       // Email/password; registration on invitation only (see Onboarding).
       buildEmailIdpConfig(),
     ],
+  );
+  // A closed session is refused at its next call, not only once its access
+  // token expires (decision 0027).
+  pod.authenticationHandler = SessionGuard.instance.wrap(
+    pod.authenticationHandler!,
   );
 
   // Serve all files in the web/static relative directory under /web.
@@ -111,4 +119,16 @@ void run(List<String> args) async {
 
   await pod.start();
   await afterStart(pod, announceSetup: true);
+
+  // Device rows of sessions gone for 30 days are deleted (decision 0027).
+  Timer.periodic(const Duration(hours: 1), (_) async {
+    final session = await pod.createSession(enableLogging: false);
+    try {
+      await SessionDevices.cleanUp(session);
+    } on Object catch (e) {
+      session.log('[sessions] clean-up failed: $e', level: LogLevel.warning);
+    } finally {
+      await session.close();
+    }
+  });
 }

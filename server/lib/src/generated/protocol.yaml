@@ -23,6 +23,8 @@ admin:
   - unbanIp:
   - users:
   - setBlocked:
+  - userSessions:
+  - closeUserSessions:
   - health:
   - stats:
   - audit:
@@ -152,6 +154,12 @@ pepite:
   - status:
   - completeRitual:
   - adopt:
+presence:
+  - ping:
+  - mySessions:
+  - rename:
+  - close:
+  - closeOthers:
 rule:
   - list:
   - create:
