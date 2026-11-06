@@ -31,5 +31,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0025](0025-verrouillage-automatique.md) | Verrouillage automatique, déverrouillage par mot de passe ou par l'appareil | Décidé |
 | [0026](0026-mascotte-pepite.md) | Pépite, la mascotte des comptes de la semaine : rituel, graines, badges, rappel | Décidé |
 | [0027](0027-sessions-et-appareils.md) | Sessions et appareils : lieu, durée, révocation, alertes, incitation aux applications | Décidé |
+| [0028](0028-pepite-badges-graines-defis.md) | Pépite : conseils sur l'application, nouveaux badges, graines à dépenser, année et défi du mois | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.
