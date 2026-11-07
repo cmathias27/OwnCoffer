@@ -6783,7 +6783,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Assistant'**
+  /// **'Pépite'**
   String get assistantTitle;
 
   /// No description provided for @assistantNotSetUp.
@@ -6873,7 +6873,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantThinking.
   ///
   /// In fr, this message translates to:
-  /// **'Réflexion…'**
+  /// **'Pépite réfléchit…'**
   String get assistantThinking;
 
   /// No description provided for @assistantNoAnswer.
@@ -6915,7 +6915,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantHint.
   ///
   /// In fr, this message translates to:
-  /// **'Posez une question, ou « classe mes opérations »…'**
+  /// **'Pose une question à Pépite, ou « classe mes opérations »…'**
   String get assistantHint;
 
   /// No description provided for @assistantClassifyChip.
@@ -7916,7 +7916,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatOpen.
   ///
   /// In fr, this message translates to:
-  /// **'Discuter avec l\'assistant'**
+  /// **'Discuter avec Pépite'**
   String get chatOpen;
 
   /// No description provided for @chatClose.
@@ -7940,8 +7940,38 @@ abstract class AppLocalizations {
   /// No description provided for @chatIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Posez une question sur vos comptes, ou demandez-lui de classer vos opérations. Il lit vos chiffres par les fonctions d\'OwnCoffer et ne modifie rien : ses propositions arrivent dans Mon conseiller. La conversation reste ouverte quand vous changez de page.'**
+  /// **'Pose-moi une question sur tes comptes ou demande-moi de classer tes opérations ! Je lis tes chiffres en toute sécurité sans jamais rien modifier : mes propositions arrivent dans Mon conseiller. La conversation reste ouverte quand tu changes de page.'**
   String get chatIntro;
+
+  /// No description provided for @pepiteOfflineSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide & astuces'**
+  String get pepiteOfflineSubtitle;
+
+  /// No description provided for @pepiteOfflineHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'intelligence artificielle n\'est pas activée sur ce serveur, mais je suis là pour t\'aider avec le fonctionnement d\'OwnCoffer et te donner des astuces !'**
+  String get pepiteOfflineHelp;
+
+  /// No description provided for @pepiteOpenHelpTopic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir l\'aide de cette page'**
+  String get pepiteOpenHelpTopic;
+
+  /// No description provided for @pepiteBrowseHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Parcourir toute l\'aide'**
+  String get pepiteBrowseHelp;
+
+  /// No description provided for @pepiteConfigureAi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Configurer l\'IA'**
+  String get pepiteConfigureAi;
 
   /// No description provided for @assistantSettingsTitle.
   ///

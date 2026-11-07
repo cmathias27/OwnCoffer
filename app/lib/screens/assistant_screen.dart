@@ -89,7 +89,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
                         _settings(context, l, s),
                         ListenableBuilder(
                           listenable: chat,
-                          builder: (context, _) => chat.available
+                          builder: (context, _) => chat.hasAi
                               ? Padding(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 8,

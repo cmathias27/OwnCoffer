@@ -30,12 +30,12 @@ class ChatController extends ChangeNotifier {
     return s?.providers.where((p) => p.id == s.providerId).firstOrNull;
   }
 
-  /// Whether the bubble is shown: a household, the assistant on, a model.
-  bool get available =>
-      _membership != null &&
-      (_status?.enabled ?? false) &&
-      provider != null &&
-      _status?.model != null;
+  /// Whether an AI model is configured and enabled for chat.
+  bool get hasAi =>
+      (_status?.enabled ?? false) && provider != null && _status?.model != null;
+
+  /// Whether the assistant / mascot is available: a household is open.
+  bool get available => _membership != null;
 
   /// The household shown by the app; a different one starts afresh.
   void attach(GroupMembership? m) {

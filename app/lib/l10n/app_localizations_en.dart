@@ -4185,7 +4185,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminAiEnabled => 'Offered to the users';
 
   @override
-  String get assistantTitle => 'Assistant';
+  String get assistantTitle => 'Pépite';
 
   @override
   String get assistantNotSetUp => 'AI is not set up';
@@ -4239,7 +4239,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get assistantImageSent => 'Image attached';
 
   @override
-  String get assistantThinking => 'Thinking…';
+  String get assistantThinking => 'Pépite is thinking…';
 
   @override
   String get assistantNoAnswer => 'No answer from the model.';
@@ -4275,7 +4275,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get assistantHint => 'Ask a question, or \"classify my operations\"…';
+  String get assistantHint =>
+      'Ask Pépite a question, or \"classify my operations\"…';
 
   @override
   String get assistantClassifyChip => 'Classify the operations to classify';
@@ -4870,7 +4871,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'The PDF is password-protected or unreadable.';
 
   @override
-  String get chatOpen => 'Chat with the assistant';
+  String get chatOpen => 'Chat with Pépite';
 
   @override
   String get chatClose => 'Minimise';
@@ -4883,7 +4884,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatIntro =>
-      'Ask a question about your accounts, or ask it to classify your operations. It reads your figures through OwnCoffer\'s functions and changes nothing: its proposals go to My advisor. The conversation stays open when you change page.';
+      'Ask me a question about your accounts, or ask me to classify your operations! I read your figures securely and never change anything: my proposals go to My advisor. The conversation stays open when you change page.';
+
+  @override
+  String get pepiteOfflineSubtitle => 'Help & tips';
+
+  @override
+  String get pepiteOfflineHelp =>
+      'Artificial intelligence is not enabled on this server, but I am here to help you use OwnCoffer and share tips!';
+
+  @override
+  String get pepiteOpenHelpTopic => 'Open help for this page';
+
+  @override
+  String get pepiteBrowseHelp => 'Browse all help';
+
+  @override
+  String get pepiteConfigureAi => 'Configure AI';
 
   @override
   String get assistantSettingsTitle => 'Assistant: settings';

@@ -4210,7 +4210,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get adminAiEnabled => 'Proposé aux utilisateurs';
 
   @override
-  String get assistantTitle => 'Assistant';
+  String get assistantTitle => 'Pépite';
 
   @override
   String get assistantNotSetUp => 'L\'IA n\'est pas configurée';
@@ -4264,7 +4264,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get assistantImageSent => 'Image jointe';
 
   @override
-  String get assistantThinking => 'Réflexion…';
+  String get assistantThinking => 'Pépite réfléchit…';
 
   @override
   String get assistantNoAnswer => 'Pas de réponse du modèle.';
@@ -4301,7 +4301,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get assistantHint =>
-      'Posez une question, ou « classe mes opérations »…';
+      'Pose une question à Pépite, ou « classe mes opérations »…';
 
   @override
   String get assistantClassifyChip => 'Classer les opérations à classer';
@@ -4898,7 +4898,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le PDF est protégé par mot de passe ou illisible.';
 
   @override
-  String get chatOpen => 'Discuter avec l\'assistant';
+  String get chatOpen => 'Discuter avec Pépite';
 
   @override
   String get chatClose => 'Réduire';
@@ -4911,7 +4911,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get chatIntro =>
-      'Posez une question sur vos comptes, ou demandez-lui de classer vos opérations. Il lit vos chiffres par les fonctions d\'OwnCoffer et ne modifie rien : ses propositions arrivent dans Mon conseiller. La conversation reste ouverte quand vous changez de page.';
+      'Pose-moi une question sur tes comptes ou demande-moi de classer tes opérations ! Je lis tes chiffres en toute sécurité sans jamais rien modifier : mes propositions arrivent dans Mon conseiller. La conversation reste ouverte quand tu changes de page.';
+
+  @override
+  String get pepiteOfflineSubtitle => 'Aide & astuces';
+
+  @override
+  String get pepiteOfflineHelp =>
+      'L\'intelligence artificielle n\'est pas activée sur ce serveur, mais je suis là pour t\'aider avec le fonctionnement d\'OwnCoffer et te donner des astuces !';
+
+  @override
+  String get pepiteOpenHelpTopic => 'Ouvrir l\'aide de cette page';
+
+  @override
+  String get pepiteBrowseHelp => 'Parcourir toute l\'aide';
+
+  @override
+  String get pepiteConfigureAi => 'Configurer l\'IA';
 
   @override
   String get assistantSettingsTitle => 'Assistant : réglages';
