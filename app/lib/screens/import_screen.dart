@@ -24,11 +24,17 @@ class ImportScreen extends StatefulWidget {
   /// Called after an import or a cancellation, to refresh the other tabs.
   final VoidCallback onImported;
 
+  /// A statement file passed directly (e.g. from an Android "Open with" / share intent).
+  final PickedFile? initialFile;
+  final VoidCallback? onFileHandled;
+
   const ImportScreen({
     super.key,
     required this.membership,
     required this.accounts,
     required this.onImported,
+    this.initialFile,
+    this.onFileHandled,
   });
 
   @override
@@ -53,14 +59,32 @@ class _ImportScreenState extends State<ImportScreen> {
     super.initState();
     _loadCategories();
     _loadHistory();
+    if (widget.initialFile != null) {
+      _file = widget.initialFile;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onFileHandled?.call();
+        _runPreview();
+      });
+    }
   }
 
   @override
   void didUpdateWidget(ImportScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.initialFile != null &&
+        widget.initialFile != oldWidget.initialFile) {
+      _reset();
+      _file = widget.initialFile;
+      widget.onFileHandled?.call();
+      _runPreview();
+    }
     if (_account == null || !widget.accounts.any((a) => a.id == _account!.id)) {
       _account = widget.accounts.firstOrNull;
-      _reset();
+      if (_file != null && _preview == null) {
+        _runPreview();
+      } else {
+        _reset();
+      }
       _loadHistory();
     }
   }

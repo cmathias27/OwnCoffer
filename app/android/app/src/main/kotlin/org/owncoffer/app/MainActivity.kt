@@ -1,10 +1,15 @@
 package org.owncoffer.app
 
+import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.WindowManager
 import com.googlecode.tesseract.android.TessBaseAPI
 import io.flutter.embedding.android.FlutterFragmentActivity
@@ -18,6 +23,19 @@ import java.util.concurrent.Executors
 class MainActivity : FlutterFragmentActivity() {
     private val ocrExecutor: ExecutorService = Executors.newSingleThreadExecutor()
     private val backupFolder = BackupFolder(this)
+    private var pendingIncomingFile: Map<String, Any>? = null
+    private var incomingFileChannel: MethodChannel? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        handleIncomingIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIncomingIntent(intent)
+    }
 
     @Deprecated("Flutter's activity still delivers picker results here")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -68,6 +86,19 @@ class MainActivity : FlutterFragmentActivity() {
                     runOnUiThread { result.success(lines) }
                 }
             }
+        val fileChannel =
+            MethodChannel(flutterEngine.dartExecutor.binaryMessenger, INCOMING_FILE_CHANNEL)
+        incomingFileChannel = fileChannel
+        fileChannel.setMethodCallHandler { call, result ->
+            when (call.method) {
+                "getInitialFile" -> {
+                    val file = pendingIncomingFile
+                    pendingIncomingFile = null
+                    result.success(file)
+                }
+                else -> result.notImplemented()
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -145,9 +176,84 @@ class MainActivity : FlutterFragmentActivity() {
         return rotated
     }
 
+    private fun handleIncomingIntent(intent: Intent?) {
+        if (intent == null) return
+        val action = intent.action
+        if (action != Intent.ACTION_VIEW && action != Intent.ACTION_SEND) return
+
+        val uri: Uri? =
+            when (action) {
+                Intent.ACTION_VIEW -> intent.data ?: intent.clipData?.getItemAt(0)?.uri
+                Intent.ACTION_SEND -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        intent.getParcelableExtra(Intent.EXTRA_STREAM)
+                    } ?: intent.clipData?.getItemAt(0)?.uri
+                }
+                else -> null
+            }
+
+        if (uri == null) return
+
+        try {
+            val name = queryFileName(uri) ?: "statement.ofx"
+            val lower = name.lowercase()
+            if (!lower.endsWith(".qif") &&
+                !lower.endsWith(".ofx") &&
+                !lower.endsWith(".csv") &&
+                !lower.endsWith(".txt")
+            ) {
+                return
+            }
+
+            val bytes = contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: return
+            if (bytes.size > 10 * 1024 * 1024) return
+
+            val fileMap = mapOf<String, Any>(
+                "name" to name,
+                "bytes" to bytes
+            )
+
+            val channel = incomingFileChannel
+            if (channel != null) {
+                channel.invokeMethod("onFileReceived", fileMap)
+            } else {
+                pendingIncomingFile = fileMap
+            }
+        } catch (_: Exception) {
+            // Unreadable content or expired URI permission
+        }
+    }
+
+    private fun queryFileName(uri: Uri): String? {
+        if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
+            try {
+                contentResolver.query(
+                    uri,
+                    arrayOf(OpenableColumns.DISPLAY_NAME),
+                    null,
+                    null,
+                    null
+                )?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                        if (index >= 0) {
+                            val name = cursor.getString(index)
+                            if (!name.isNullOrBlank()) return name
+                        }
+                    }
+                }
+            } catch (_: Exception) {}
+        }
+        return uri.lastPathSegment?.substringAfterLast('/')
+    }
+
     private companion object {
         const val TEXT_READER_CHANNEL = "org.owncoffer.app/text_reader"
         const val WINDOW_CHANNEL = "org.owncoffer.app/window"
+        const val INCOMING_FILE_CHANNEL = "org.owncoffer.app/incoming_file"
 
         /** Longest side kept for recognition, enough for a receipt photo. */
         const val MAX_SIDE = 4000

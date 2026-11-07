@@ -33,6 +33,8 @@ import 'apps_screen.dart';
 import '../state/pepite.dart';
 import '../state/pepite_advice.dart';
 import '../state/pepite_messages.dart';
+import '../util/file_pick.dart';
+import '../util/incoming_file.dart';
 import '../widgets/pepite.dart';
 import '../widgets/pepite_advice.dart';
 import '../widgets/pepite_apps.dart';
@@ -56,6 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
   var _showTip = false;
   List<Account> _accounts = [];
   Account? _openAccount;
+  PickedFile? _pendingImportFile;
+  StreamSubscription<PickedFile>? _incomingFileSub;
   var _imports = 0;
   var _unread = 0;
   Timer? _unreadTimer;
@@ -87,6 +91,15 @@ class _HomeScreenState extends State<HomeScreen> {
       const Duration(minutes: 2),
       (_) => _loadUnread(),
     );
+    IncomingFileHandler.init();
+    _incomingFileSub = IncomingFileHandler.files.listen((file) {
+      if (mounted) {
+        setState(() {
+          _tab = 3;
+          _pendingImportFile = file;
+        });
+      }
+    });
     final joined = widget.session.joinedGroupName;
     if (joined != null) {
       widget.session.joinedGroupName = null;
@@ -106,6 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _unreadTimer?.cancel();
+    _incomingFileSub?.cancel();
     // Signed out: the conversation is forgotten.
     chat.detach();
     super.dispose();
@@ -290,6 +304,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 key: ValueKey('import-${current.group.id}'),
                 membership: current,
                 accounts: _accounts,
+                initialFile: _pendingImportFile,
+                onFileHandled: () => setState(() => _pendingImportFile = null),
                 onImported: () {
                   setState(() => _imports++);
                   _forecastKey.currentState?.reload();

@@ -12,10 +12,21 @@ import '../file_pick.dart';
 /// dialog.
 bool get canUseCamera => Platform.isAndroid || Platform.isIOS;
 
-XTypeGroup _group(List<String> extensions) => XTypeGroup(
-  label: 'OwnCoffer',
-  extensions: [for (final e in extensions) e.replaceFirst('.', '')],
-);
+XTypeGroup _group(List<String> extensions) {
+  if (Platform.isAndroid &&
+      extensions.any((e) => e.contains('qif') || e.contains('ofx'))) {
+    // Android's Storage Access Framework filters ONLY by MIME type, not by
+    // extension. Android's MimeTypeMap has no mapping for .qif or .ofx, so
+    // filtering by extensions on Android causes the system file picker to gray
+    // out .qif and .ofx files. On Android, allow all files when statement
+    // formats (.qif, .ofx) are present so the user can pick them.
+    return const XTypeGroup(label: 'OwnCoffer');
+  }
+  return XTypeGroup(
+    label: 'OwnCoffer',
+    extensions: [for (final e in extensions) e.replaceFirst('.', '')],
+  );
+}
 
 Future<PickedFile?> pickFile(
   List<String> extensions, {
