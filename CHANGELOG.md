@@ -2,6 +2,19 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.11.0 (novembre 2026)
+
+### Nouveaux badges de Pépite : silhouettes et indices
+- **16 nouveaux badges** (décision 0028, point 1), 5 graines chacun :
+  - **Découverte** : *Bien rangé* (10 règles de classement créées), *Voyant* (première opération prévue saisie), *Archiviste* (10 factures rattachées à une opération), *Maître des prêts* (un prêt avec son tableau d'amortissement), *Chasseur d'abonnements* (3 abonnements réguliers déclarés) ;
+  - **Sécurité** : *Coffre-fort* (double authentification activée), *Pattes de velours* (déverrouillage par empreinte ou Windows Hello sur l'appareil), *Prévoyant* (première sauvegarde chiffrée réussie), *Vigilant* (alerte de connexion consultée) ;
+  - **Rapprochement** : *Au centime près* (solde rapproché sans écart avec la banque), *Bilan du mois* (revue de fin de mois consultée 3 mois) ;
+  - **Objectifs** : *Premier cap* (premier objectif de dépenses fixé), *À mi-chemin* (mi-mois passé en tenant son cap), *Objectif tenu* (mois complet sans dépasser son objectif), *Coup de ciseaux* (un abonnement résilié ou terminé) ;
+  - **Foyer** : *En équipe* (un proche invité dans son groupe).
+- **Aucun badge ne dépend d'un montant** : les objectifs sont mesurés en pourcentage du cap fixé.
+- **Silhouettes et indices** (décision 0028, point 3) dans **Pépite et ma réserve** : chaque badge à gagner affiche une silhouette avec son icône caractéristique et un indice pour faire découvrir les fonctions de l'application ; le badge obtenu affiche le trophée doré.
+- Nouvelle table `pepite_marks` gardant les actions sans autre trace (revues du mois, alertes de connexion ouvertes, faits validés par l'appareil) ; migrations PostgreSQL et SQLite.
+
 ## 1.10.0 (novembre 2026)
 
 ### Pépite conseille sur l'application

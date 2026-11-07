@@ -1,7 +1,9 @@
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 
 import '../generated/protocol.dart';
+import '../pepite/pepite_badges.dart';
 import '../security/access.dart';
 import '../security/scopes.dart';
 import '../security/session_devices.dart';
@@ -23,38 +25,51 @@ class PepiteEndpoint extends Endpoint {
   static const ritualSeeds = 10;
   static const badgeSeeds = 5;
 
-  /// Every badge, in the order they are usually earned.
+  /// Every badge: those of the ritual (decision 0026), then the families
+  /// of decision 0028.
   static const badgeCodes = [
     'first_import',
     'first_ritual',
-    'nomad',
     'weeks_4',
     'weeks_12',
     'weeks_26',
     'weeks_52',
     'year_together',
+    'nomad',
+    ...PepiteBadges.codes,
   ];
 
   /// [today]: the device's date, so that the week starts on the user's
-  /// Monday; a date far from the server's is ignored.
-  Future<PepiteStatus> status(Session session, DateTime today) async {
+  /// Monday; a date far from the server's is ignored. [device]: what this
+  /// device vouches for (`PepiteBadges.deviceMarks`, others ignored).
+  Future<PepiteStatus> status(
+    Session session,
+    DateTime today, {
+    List<String>? device,
+  }) async {
     final user = Access.userId(session);
-    return session.db.transaction(
-      (t) async => _status(
+    return session.db.transaction((t) async {
+      for (final code in {
+        ...?device,
+      }.where(PepiteBadges.deviceMarks.contains)) {
+        await PepiteBadges.mark(session, user, code, '', transaction: t);
+      }
+      return _status(
         session,
         t,
         user,
         await _progress(session, t, user),
-        _monday(today),
-      ),
-    );
+        _day(today),
+      );
+    });
   }
 
   /// The ritual of this week is done: [ritualSeeds] seeds the first time in
   /// the week, and the badges it earns. Again in the same week: nothing more.
   Future<PepiteStatus> completeRitual(Session session, DateTime today) async {
     final user = Access.userId(session);
-    final week = _monday(today);
+    final day = _day(today);
+    final week = _mondayOf(day);
     return session.db.transaction((t) async {
       var p = await _progress(session, t, user);
       var earned = 0;
@@ -73,7 +88,7 @@ class PepiteEndpoint extends Endpoint {
         );
         earned = ritualSeeds;
       }
-      return _status(session, t, user, p, week, earned: earned);
+      return _status(session, t, user, p, day, earned: earned, ritual: true);
     });
   }
 
@@ -147,14 +162,18 @@ class PepiteEndpoint extends Endpoint {
       );
 
   /// Gives the badges now deserved, then says where the user stands.
+  /// [ritual]: also the badges that read a month of operations.
   Future<PepiteStatus> _status(
     Session session,
     Transaction t,
     UuidValue user,
     PepiteProgress p,
-    DateTime week, {
+    DateTime today, {
     int earned = 0,
+    bool ritual = false,
   }) async {
+    final week = _mondayOf(today);
+    final day = core.LocalDate(today.year, today.month, today.day);
     final have = await PepiteBadge.db.find(
       session,
       where: (b) => b.authUserId.equals(user),
@@ -180,7 +199,16 @@ class PepiteEndpoint extends Endpoint {
             switch (code) {
               'first_import' => await _hasImported(session, t, user),
               'nomad' => await usedAnApp(session, user, transaction: t),
-              _ => deserved(code),
+              _ =>
+                await PepiteBadges.deserved(
+                      session,
+                      t,
+                      user,
+                      code,
+                      today: day,
+                      ritual: ritual,
+                    ) ??
+                    deserved(code),
             })
           code,
     ];
@@ -248,14 +276,14 @@ class PepiteEndpoint extends Endpoint {
         0;
   }
 
-  /// Monday of the week of [today], the device's date, unless it is more
-  /// than a day away from the server's (a wrong clock, or a forged date).
-  static DateTime _monday(DateTime today) {
+  /// [today], the device's date, unless it is more than a day away from
+  /// the server's (a wrong clock, or a forged date).
+  static DateTime _day(DateTime today) {
     final utc = DateTime.now().toUtc();
     final server = DateTime.utc(utc.year, utc.month, utc.day);
     final given = DateTime.utc(today.year, today.month, today.day);
     final close = given.difference(server).inHours.abs() <= 36;
-    return _mondayOf(close ? given : server);
+    return close ? given : server;
   }
 
   static DateTime _mondayOf(DateTime d) {

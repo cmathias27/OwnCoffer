@@ -1923,13 +1923,19 @@ class EndpointPepite extends _isc.EndpointRef {
   String get name => 'pepite';
 
   /// [today]: the device's date, so that the week starts on the user's
-  /// Monday; a date far from the server's is ignored.
-  _ida.Future<_igi0vxn8.PepiteStatus> status(DateTime today) =>
-      caller.callServerEndpoint<_igi0vxn8.PepiteStatus>(
-        'pepite',
-        'status',
-        {'today': today},
-      );
+  /// Monday; a date far from the server's is ignored. [device]: what this
+  /// device vouches for (`PepiteBadges.deviceMarks`, others ignored).
+  _ida.Future<_igi0vxn8.PepiteStatus> status(
+    DateTime today, {
+    List<String>? device,
+  }) => caller.callServerEndpoint<_igi0vxn8.PepiteStatus>(
+    'pepite',
+    'status',
+    {
+      'today': today,
+      'device': device,
+    },
+  );
 
   /// The ritual of this week is done: [ritualSeeds] seeds the first time in
   /// the week, and the badges it earns. Again in the same week: nothing more.

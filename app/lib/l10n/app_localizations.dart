@@ -10442,6 +10442,294 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cette astuce est inconnue.'**
   String get error_invalid_tip;
+
+  /// No description provided for @pepiteBadgeTidy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bien rangé'**
+  String get pepiteBadgeTidy;
+
+  /// No description provided for @pepiteBadgeTidyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer 10 règles de classement'**
+  String get pepiteBadgeTidyHelp;
+
+  /// No description provided for @pepiteBadgeTidyHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crée des règles de classement pour trier tes opérations'**
+  String get pepiteBadgeTidyHint;
+
+  /// No description provided for @pepiteBadgeSeer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voyant'**
+  String get pepiteBadgeSeer;
+
+  /// No description provided for @pepiteBadgeSeerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisir une première opération prévue'**
+  String get pepiteBadgeSeerHelp;
+
+  /// No description provided for @pepiteBadgeSeerHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévois une rentrée ou une dépense récurrente'**
+  String get pepiteBadgeSeerHint;
+
+  /// No description provided for @pepiteBadgeArchivist.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archiviste'**
+  String get pepiteBadgeArchivist;
+
+  /// No description provided for @pepiteBadgeArchivistHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rattacher 10 factures à une opération'**
+  String get pepiteBadgeArchivistHelp;
+
+  /// No description provided for @pepiteBadgeArchivistHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rattache des justificatifs ou factures à tes opérations'**
+  String get pepiteBadgeArchivistHint;
+
+  /// No description provided for @pepiteBadgeLoanMaster.
+  ///
+  /// In fr, this message translates to:
+  /// **'Maître des prêts'**
+  String get pepiteBadgeLoanMaster;
+
+  /// No description provided for @pepiteBadgeLoanMasterHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un crédit avec son tableau d\'amortissement'**
+  String get pepiteBadgeLoanMasterHelp;
+
+  /// No description provided for @pepiteBadgeLoanMasterHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoute un prêt et suis son remboursement'**
+  String get pepiteBadgeLoanMasterHint;
+
+  /// No description provided for @pepiteBadgeSubscriptionHunter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chasseur d\'abonnements'**
+  String get pepiteBadgeSubscriptionHunter;
+
+  /// No description provided for @pepiteBadgeSubscriptionHunterHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déclarer 3 abonnements réguliers'**
+  String get pepiteBadgeSubscriptionHunterHelp;
+
+  /// No description provided for @pepiteBadgeSubscriptionHunterHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indique tes abonnements dans les opérations prévues'**
+  String get pepiteBadgeSubscriptionHunterHint;
+
+  /// No description provided for @pepiteBadgeVault.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coffre-fort'**
+  String get pepiteBadgeVault;
+
+  /// No description provided for @pepiteBadgeVaultHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer la double authentification sur le serveur'**
+  String get pepiteBadgeVaultHelp;
+
+  /// No description provided for @pepiteBadgeVaultHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Protège ton compte avec une application d\'authentification'**
+  String get pepiteBadgeVaultHint;
+
+  /// No description provided for @pepiteBadgeVelvet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pattes de velours'**
+  String get pepiteBadgeVelvet;
+
+  /// No description provided for @pepiteBadgeVelvetHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouiller l\'application par empreinte ou Windows Hello'**
+  String get pepiteBadgeVelvetHelp;
+
+  /// No description provided for @pepiteBadgeVelvetHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Active le déverrouillage biométrique sur cet appareil'**
+  String get pepiteBadgeVelvetHint;
+
+  /// No description provided for @pepiteBadgeProvident.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévoyant'**
+  String get pepiteBadgeProvident;
+
+  /// No description provided for @pepiteBadgeProvidentHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réaliser une première sauvegarde chiffrée'**
+  String get pepiteBadgeProvidentHelp;
+
+  /// No description provided for @pepiteBadgeProvidentHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde tes données de façon chiffrée'**
+  String get pepiteBadgeProvidentHint;
+
+  /// No description provided for @pepiteBadgeVigilant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vigilant'**
+  String get pepiteBadgeVigilant;
+
+  /// No description provided for @pepiteBadgeVigilantHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier une alerte de connexion sur un nouvel appareil'**
+  String get pepiteBadgeVigilantHelp;
+
+  /// No description provided for @pepiteBadgeVigilantHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consulte les alertes de sécurité dans les notifications'**
+  String get pepiteBadgeVigilantHint;
+
+  /// No description provided for @pepiteBadgeToTheCent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au centime près'**
+  String get pepiteBadgeToTheCent;
+
+  /// No description provided for @pepiteBadgeToTheCentHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pointer un solde sans aucun écart avec la banque'**
+  String get pepiteBadgeToTheCentHelp;
+
+  /// No description provided for @pepiteBadgeToTheCentHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pointe un solde de compte pour vérifier l\'exactitude'**
+  String get pepiteBadgeToTheCentHint;
+
+  /// No description provided for @pepiteBadgeMonthReviews.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan du mois'**
+  String get pepiteBadgeMonthReviews;
+
+  /// No description provided for @pepiteBadgeMonthReviewsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consulter la revue de fin de mois 3 fois'**
+  String get pepiteBadgeMonthReviewsHelp;
+
+  /// No description provided for @pepiteBadgeMonthReviewsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consulte le bilan du mois dans l\'onglet Analyses'**
+  String get pepiteBadgeMonthReviewsHint;
+
+  /// No description provided for @pepiteBadgeFirstGoal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Premier cap'**
+  String get pepiteBadgeFirstGoal;
+
+  /// No description provided for @pepiteBadgeFirstGoalHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fixer un premier objectif de dépenses'**
+  String get pepiteBadgeFirstGoalHelp;
+
+  /// No description provided for @pepiteBadgeFirstGoalHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fixe un plafond de dépenses sur une catégorie'**
+  String get pepiteBadgeFirstGoalHint;
+
+  /// No description provided for @pepiteBadgeGoalHalf.
+  ///
+  /// In fr, this message translates to:
+  /// **'À mi-chemin'**
+  String get pepiteBadgeGoalHalf;
+
+  /// No description provided for @pepiteBadgeGoalHalfHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mi-mois passé en tenant un objectif de dépenses'**
+  String get pepiteBadgeGoalHalfHelp;
+
+  /// No description provided for @pepiteBadgeGoalHalfHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garde tes dépenses sous la moitié de ton cap en milieu de mois'**
+  String get pepiteBadgeGoalHalfHint;
+
+  /// No description provided for @pepiteBadgeGoalKept.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif tenu'**
+  String get pepiteBadgeGoalKept;
+
+  /// No description provided for @pepiteBadgeGoalKeptHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer un mois complet en respectant un objectif'**
+  String get pepiteBadgeGoalKeptHelp;
+
+  /// No description provided for @pepiteBadgeGoalKeptHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Termine un mois sans dépasser ton objectif'**
+  String get pepiteBadgeGoalKeptHint;
+
+  /// No description provided for @pepiteBadgeScissors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coup de ciseaux'**
+  String get pepiteBadgeScissors;
+
+  /// No description provided for @pepiteBadgeScissorsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résilier ou terminer un abonnement'**
+  String get pepiteBadgeScissorsHelp;
+
+  /// No description provided for @pepiteBadgeScissorsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprime un abonnement ou indique sa date de fin'**
+  String get pepiteBadgeScissorsHint;
+
+  /// No description provided for @pepiteBadgeTeam.
+  ///
+  /// In fr, this message translates to:
+  /// **'En équipe'**
+  String get pepiteBadgeTeam;
+
+  /// No description provided for @pepiteBadgeTeamHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter un proche qui a rejoint le groupe'**
+  String get pepiteBadgeTeamHelp;
+
+  /// No description provided for @pepiteBadgeTeamHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invite un membre du foyer à partager le budget'**
+  String get pepiteBadgeTeamHint;
 }
 
 class _AppLocalizationsDelegate

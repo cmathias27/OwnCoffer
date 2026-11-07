@@ -5,6 +5,9 @@ import 'package:owncoffer_app/l10n/app_localizations.dart';
 import 'package:owncoffer_app/state/app_lock.dart';
 import 'package:owncoffer_app/state/pepite.dart';
 import 'package:owncoffer_app/state/pepite_messages.dart';
+import 'package:owncoffer_app/state/getting_started.dart';
+import 'package:owncoffer_app/state/start_device.dart';
+import 'package:owncoffer_app/screens/pepite_screen.dart';
 import 'package:owncoffer_app/widgets/pepite.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
@@ -173,14 +176,55 @@ void main() {
       expect(on(DateTime(2026, 11, 9)), isNot(week.single));
     });
 
-    test('every badge has a name in both languages', () {
+    test('every badge has a name in both languages and a silhouette icon', () {
       for (final l in [fr, en]) {
         for (final code in pepiteBadges) {
           final (name, help) = pepiteBadgeText(l, code);
           expect(name, isNot(code));
           expect(help, isNotEmpty);
+          expect(pepiteBadgeIcon(code), isNotNull);
         }
       }
+      expect(pepiteBadges, hasLength(24));
+    });
+
+    test('decision 0028 badges have hints in both languages', () {
+      const hintCodes = [
+        'tidy',
+        'seer',
+        'archivist',
+        'loan_master',
+        'subscription_hunter',
+        'vault',
+        'velvet',
+        'provident',
+        'vigilant',
+        'to_the_cent',
+        'month_reviews',
+        'first_goal',
+        'goal_half',
+        'goal_kept',
+        'scissors',
+        'team',
+      ];
+      for (final l in [fr, en]) {
+        for (final code in hintCodes) {
+          final hint = pepiteBadgeHint(l, code);
+          expect(hint, isNotNull);
+          expect(hint, isNotEmpty);
+        }
+      }
+    });
+
+    test('deviceMarks turns device facts into server marks', () {
+      expect(
+        deviceMarks(const StartDevice(deviceUnlock: true, backup: true)),
+        ['device_unlock', 'backup'],
+      );
+      expect(
+        deviceMarks(const StartDevice(deviceUnlock: false, backup: null)),
+        isEmpty,
+      );
     });
   });
 
@@ -347,5 +391,31 @@ void main() {
       );
       expect(find.byType(Card), findsNothing);
     });
+
+    testWidgets(
+      'PepiteScreen shows locked silhouettes with hints and earned trophies',
+      (tester) async {
+        tester.view.physicalSize = const Size(900, 2400);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
+        server = _status(
+          seeds: 25,
+          weeks: 2,
+          badges: ['first_import', 'tidy'],
+        );
+        final p = make();
+        await tester.runAsync(p.signedIn);
+        await tester.pumpWidget(app(PepiteScreen(controller: p)));
+        await tester.pumpAndSettle();
+        expect(find.text(fr.pepiteBadgeTidy), findsOneWidget);
+        expect(find.byIcon(Icons.emoji_events), findsNWidgets(2));
+        expect(find.text(fr.pepiteBadgeSeer), findsOneWidget);
+        expect(find.text(fr.pepiteBadgeSeerHint), findsOneWidget);
+        expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
+      },
+    );
   });
 }

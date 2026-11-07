@@ -2,6 +2,7 @@ import 'package:serverpod/serverpod.dart';
 
 import '../finance/notification_settings_service.dart';
 import '../generated/protocol.dart';
+import '../pepite/pepite_badges.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
 import '../security/scopes.dart';
@@ -59,6 +60,15 @@ class NotificationEndpoint extends Endpoint {
       await AppNotification.db.updateRow(
         session,
         n.copyWith(readAt: DateTime.now().toUtc()),
+      );
+    }
+    // « Vigilant » (decision 0028): a sign-in alert opened, so answered.
+    if (n.type == SessionDevices.alert) {
+      await PepiteBadges.mark(
+        session,
+        n.authUserId,
+        PepiteBadges.sessionAlert,
+        '',
       );
     }
   }

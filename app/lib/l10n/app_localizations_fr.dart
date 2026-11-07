@@ -6540,4 +6540,176 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get error_invalid_tip => 'Cette astuce est inconnue.';
+
+  @override
+  String get pepiteBadgeTidy => 'Bien rangé';
+
+  @override
+  String get pepiteBadgeTidyHelp => 'Créer 10 règles de classement';
+
+  @override
+  String get pepiteBadgeTidyHint =>
+      'Crée des règles de classement pour trier tes opérations';
+
+  @override
+  String get pepiteBadgeSeer => 'Voyant';
+
+  @override
+  String get pepiteBadgeSeerHelp => 'Saisir une première opération prévue';
+
+  @override
+  String get pepiteBadgeSeerHint =>
+      'Prévois une rentrée ou une dépense récurrente';
+
+  @override
+  String get pepiteBadgeArchivist => 'Archiviste';
+
+  @override
+  String get pepiteBadgeArchivistHelp =>
+      'Rattacher 10 factures à une opération';
+
+  @override
+  String get pepiteBadgeArchivistHint =>
+      'Rattache des justificatifs ou factures à tes opérations';
+
+  @override
+  String get pepiteBadgeLoanMaster => 'Maître des prêts';
+
+  @override
+  String get pepiteBadgeLoanMasterHelp =>
+      'Ajouter un crédit avec son tableau d\'amortissement';
+
+  @override
+  String get pepiteBadgeLoanMasterHint =>
+      'Ajoute un prêt et suis son remboursement';
+
+  @override
+  String get pepiteBadgeSubscriptionHunter => 'Chasseur d\'abonnements';
+
+  @override
+  String get pepiteBadgeSubscriptionHunterHelp =>
+      'Déclarer 3 abonnements réguliers';
+
+  @override
+  String get pepiteBadgeSubscriptionHunterHint =>
+      'Indique tes abonnements dans les opérations prévues';
+
+  @override
+  String get pepiteBadgeVault => 'Coffre-fort';
+
+  @override
+  String get pepiteBadgeVaultHelp =>
+      'Activer la double authentification sur le serveur';
+
+  @override
+  String get pepiteBadgeVaultHint =>
+      'Protège ton compte avec une application d\'authentification';
+
+  @override
+  String get pepiteBadgeVelvet => 'Pattes de velours';
+
+  @override
+  String get pepiteBadgeVelvetHelp =>
+      'Déverrouiller l\'application par empreinte ou Windows Hello';
+
+  @override
+  String get pepiteBadgeVelvetHint =>
+      'Active le déverrouillage biométrique sur cet appareil';
+
+  @override
+  String get pepiteBadgeProvident => 'Prévoyant';
+
+  @override
+  String get pepiteBadgeProvidentHelp =>
+      'Réaliser une première sauvegarde chiffrée';
+
+  @override
+  String get pepiteBadgeProvidentHint =>
+      'Sauvegarde tes données de façon chiffrée';
+
+  @override
+  String get pepiteBadgeVigilant => 'Vigilant';
+
+  @override
+  String get pepiteBadgeVigilantHelp =>
+      'Vérifier une alerte de connexion sur un nouvel appareil';
+
+  @override
+  String get pepiteBadgeVigilantHint =>
+      'Consulte les alertes de sécurité dans les notifications';
+
+  @override
+  String get pepiteBadgeToTheCent => 'Au centime près';
+
+  @override
+  String get pepiteBadgeToTheCentHelp =>
+      'Pointer un solde sans aucun écart avec la banque';
+
+  @override
+  String get pepiteBadgeToTheCentHint =>
+      'Pointe un solde de compte pour vérifier l\'exactitude';
+
+  @override
+  String get pepiteBadgeMonthReviews => 'Bilan du mois';
+
+  @override
+  String get pepiteBadgeMonthReviewsHelp =>
+      'Consulter la revue de fin de mois 3 fois';
+
+  @override
+  String get pepiteBadgeMonthReviewsHint =>
+      'Consulte le bilan du mois dans l\'onglet Analyses';
+
+  @override
+  String get pepiteBadgeFirstGoal => 'Premier cap';
+
+  @override
+  String get pepiteBadgeFirstGoalHelp =>
+      'Fixer un premier objectif de dépenses';
+
+  @override
+  String get pepiteBadgeFirstGoalHint =>
+      'Fixe un plafond de dépenses sur une catégorie';
+
+  @override
+  String get pepiteBadgeGoalHalf => 'À mi-chemin';
+
+  @override
+  String get pepiteBadgeGoalHalfHelp =>
+      'Mi-mois passé en tenant un objectif de dépenses';
+
+  @override
+  String get pepiteBadgeGoalHalfHint =>
+      'Garde tes dépenses sous la moitié de ton cap en milieu de mois';
+
+  @override
+  String get pepiteBadgeGoalKept => 'Objectif tenu';
+
+  @override
+  String get pepiteBadgeGoalKeptHelp =>
+      'Terminer un mois complet en respectant un objectif';
+
+  @override
+  String get pepiteBadgeGoalKeptHint =>
+      'Termine un mois sans dépasser ton objectif';
+
+  @override
+  String get pepiteBadgeScissors => 'Coup de ciseaux';
+
+  @override
+  String get pepiteBadgeScissorsHelp => 'Résilier ou terminer un abonnement';
+
+  @override
+  String get pepiteBadgeScissorsHint =>
+      'Supprime un abonnement ou indique sa date de fin';
+
+  @override
+  String get pepiteBadgeTeam => 'En équipe';
+
+  @override
+  String get pepiteBadgeTeamHelp => 'Inviter un proche qui a rejoint le groupe';
+
+  @override
+  String get pepiteBadgeTeamHint =>
+      'Invite un membre du foyer à partager le budget';
 }

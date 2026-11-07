@@ -23,6 +23,7 @@ Each card leads to its page: tap it to see the details.
 **Pépite** helps you do your accounts **once a week**, in about ten minutes, in four steps: import the latest statements, check the operations, look at the forecast, then **celebrate**. "Open" leads to the page of the step; tick the box if the step has nothing to do this week.
 
 - Each week done gives **10 seeds**, each badge **5 seeds**. Weeks count, not days in a row: a missed week erases nothing and the reserve never empties.
+- **Badges to earn**: shown as silhouettes in **Pépite and my reserve**, with a hint to discover OwnCoffer's features (sorting rules, scheduled operations, invoices, loans, subscriptions, security, reconciliation, goals in %, invited members). No badge depends on an amount.
 - **Later** hides the reminder until the next day.
 - In the account menu, **Pépite and my reserve** shows the seeds and badges, and sets Pépite up on this device: shown or not, and a **reminder by notification** (Android and Windows, off by default) on the day and at the time you choose.
 - In a browser, as long as you have never had a session in the Android or Windows app, Pépite suggests them: a card on the home page (one day a week at most), a word at the end of the ritual, a banner on an Android phone (recognised by the browser itself, nothing is sent). **Later** forgets it for a week, **Don't suggest again** for good; nothing while an account is overdrawn. The first session in an app earns the **Pépite on the go** badge.
