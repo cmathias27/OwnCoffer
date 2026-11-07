@@ -179,8 +179,10 @@ class PepiteCard extends StatelessWidget {
   }
 }
 
-/// The fourth step: the server counts the week, then Pépite cheers.
-Future<void> celebrateWithPepite(BuildContext context) async {
+/// The fourth step: the server counts the week, then Pépite cheers; in a
+/// browser, she ends with a word about the apps (decision 0027, point 8).
+/// True when the user then asked to see them.
+Future<bool> celebrateWithPepite(BuildContext context) async {
   final l = AppLocalizations.of(context);
   final messenger = ScaffoldMessenger.of(context);
   final PepiteStatus s;
@@ -188,10 +190,11 @@ Future<void> celebrateWithPepite(BuildContext context) async {
     s = await pepite.celebrate();
   } catch (e) {
     messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
-    return;
+    return false;
   }
-  if (!context.mounted) return;
-  await showDialog<void>(
+  if (!context.mounted) return false;
+  final apps = pepite.invitesApps;
+  final see = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
       icon: const PepiteImage(PepitePose.cheer, size: 120),
@@ -210,14 +213,24 @@ Future<void> celebrateWithPepite(BuildContext context) async {
           ],
           const SizedBox(height: 12),
           PepiteSeeds(s.seeds),
+          if (apps) ...[
+            const SizedBox(height: 12),
+            Text(l.pepiteAppsRitualEnd, textAlign: TextAlign.center),
+          ],
         ],
       ),
       actions: [
+        if (apps)
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l.pepiteAppsSee),
+          ),
         FilledButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(false),
           child: Text(l.pepiteThanks),
         ),
       ],
     ),
   );
+  return see ?? false;
 }

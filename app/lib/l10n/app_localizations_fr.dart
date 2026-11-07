@@ -6327,4 +6327,69 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get aboutLegalese =>
       'Logiciel libre sous licence AGPL-3.0 (avec une exception pour Serverpod). Lieux des sessions : IP Geolocation by DB-IP (https://db-ip.com), sous licence Creative Commons Attribution 4.0.';
+
+  @override
+  String get pepiteBadgeNomad => 'Pépite nomade';
+
+  @override
+  String get pepiteBadgeNomadHelp =>
+      'Se connecter une première fois depuis l\'application Android ou Windows';
+
+  @override
+  String get pepiteAppsCard =>
+      'Et si je venais avec toi ? Avec l\'application Android ou Windows, je te rappelle le rituel chaque semaine et tu ouvres tes comptes d\'un geste. À ta première connexion, tu gagnes le badge « Pépite nomade ».';
+
+  @override
+  String get pepiteAppsBanner =>
+      'Sur ton téléphone, je suis plus à l\'aise dans l\'application Android : rappel du rituel, empreinte, et un badge à gagner.';
+
+  @override
+  String get pepiteAppsSee => 'Voir les applications';
+
+  @override
+  String get pepiteAppsNever => 'Ne plus proposer';
+
+  @override
+  String get pepiteAppsLaterReply =>
+      'D\'accord, je t\'en reparle dans une semaine.';
+
+  @override
+  String get pepiteAppsNeverReply =>
+      'C\'est noté, je n\'en parlerai plus. Les applications restent dans le menu, à « Applications ».';
+
+  @override
+  String get pepiteAppsRitualEnd =>
+      'Psst : avec l\'application Android ou Windows, je peux te rappeler le rituel de la semaine prochaine.';
+
+  @override
+  String get appsWhyPepite => 'Avec l\'application, je t\'accompagne partout !';
+
+  @override
+  String get appsWhyTitle => 'Ce que les applications ajoutent';
+
+  @override
+  String get appsWhyReminder => 'Rappel du rituel';
+
+  @override
+  String get appsWhyReminderHelp =>
+      'Une notification chaque semaine, au jour et à l\'heure de votre choix, pour faire vos comptes avec Pépite.';
+
+  @override
+  String get appsWhyUnlock => 'Empreinte ou Windows Hello';
+
+  @override
+  String get appsWhyUnlockHelp =>
+      'Verrouillez OwnCoffer et rouvrez-le d\'un geste : empreinte, visage ou Windows Hello.';
+
+  @override
+  String get appsWhyStandalone => 'Mode autonome';
+
+  @override
+  String get appsWhyStandaloneHelp =>
+      'Sans serveur si vous le souhaitez : vos comptes restent sur l\'appareil, et peuvent passer sur un serveur plus tard.';
+
+  @override
+  String appsWhyBadgeHelp(int seeds) {
+    return '$seeds graines pour Pépite à votre première connexion depuis une application.';
+  }
 }

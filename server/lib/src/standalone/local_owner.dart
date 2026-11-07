@@ -11,6 +11,9 @@ abstract final class LocalOwner {
   /// Never a real address (.invalid is reserved): nothing is ever sent.
   static const email = 'moi@appareil.invalid';
 
+  /// Sign-in method of the sessions of the standalone app.
+  static const method = 'standalone';
+
   /// The owner's account, created on the first start.
   static Future<UuidValue> ensure(Session session) async {
     final existing = await AuthUser.db.findFirstRow(session);
@@ -36,7 +39,7 @@ abstract final class LocalOwner {
     return AuthServices.instance.tokenManager.issueToken(
       session,
       authUserId: user,
-      method: 'standalone',
+      method: method,
       scopes: {Scope(serverAdminScope), accessScope},
     );
   }

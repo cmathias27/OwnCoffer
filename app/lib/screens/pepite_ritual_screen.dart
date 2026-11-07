@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../state/pepite.dart';
 import '../state/pepite_messages.dart';
+import '../util/app_versions.dart';
 import '../widgets/pepite.dart';
+import 'apps_screen.dart';
 
 /// The weekly ritual with Pépite, four steps: import, check, forecast,
 /// celebrate. "Ouvrir" ticks the step and goes back to the page of the
@@ -86,8 +88,18 @@ class PepiteRitualScreen extends StatelessWidget {
                   label: Text(l.pepiteCelebrate),
                   onPressed: ready && !pepite.doneThisWeek
                       ? () async {
-                          await celebrateWithPepite(context);
-                          if (context.mounted) Navigator.of(context).pop();
+                          final apps = await celebrateWithPepite(context);
+                          if (!context.mounted) return;
+                          final navigator = Navigator.of(context)..pop();
+                          if (apps) {
+                            await navigator.push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => AppsScreen(
+                                  serverVersion: AppVersions.server,
+                                ),
+                              ),
+                            );
+                          }
                         }
                       : null,
                 ),

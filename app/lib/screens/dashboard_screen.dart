@@ -9,6 +9,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../state/pepite.dart';
 import '../widgets/pepite.dart';
+import '../widgets/pepite_apps.dart';
 import '../widgets/soft.dart';
 import 'budget_screen.dart';
 
@@ -91,6 +92,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       ]);
       if (!mounted) return;
       final forecasts = results[0] as List<ForecastResult?>;
+      pepite.overdrawn = forecasts.any(_overdrawn);
       setState(() {
         _accounts = [
           for (var i = 0; i < accounts.length; i++) (accounts[i], forecasts[i]),
@@ -133,12 +135,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 1000),
               child: PepiteCard(
-                overdrawn: accounts.any(
-                  (e) =>
-                      e.$2 != null &&
-                      (e.$2!.currentBalanceCents < 0 ||
-                          e.$2!.lowestBalanceCents < 0),
-                ),
+                overdrawn: accounts.any((e) => _overdrawn(e.$2)),
                 onStep: (step) => widget.onOpen(switch (step) {
                   PepiteStep.statements => DashboardTarget.imports,
                   PepiteStep.check => DashboardTarget.operations,
@@ -146,6 +143,12 @@ class DashboardScreenState extends State<DashboardScreen> {
                   PepiteStep.celebrate => DashboardTarget.forecast,
                 }),
               ),
+            ),
+          ),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: const PepiteAppsCard(),
             ),
           ),
           Center(
@@ -231,6 +234,10 @@ class DashboardScreenState extends State<DashboardScreen> {
   );
 
   /// All the money today, and its lowest point over the next 30 days.
+  /// Below zero now or in the forecast: Pépite stays sober.
+  static bool _overdrawn(ForecastResult? f) =>
+      f != null && (f.currentBalanceCents < 0 || f.lowestBalanceCents < 0);
+
   Widget _balance(
     BuildContext context,
     AppLocalizations l,

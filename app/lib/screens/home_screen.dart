@@ -30,6 +30,7 @@ import '../state/app_lock.dart';
 import '../help/help.dart';
 import '../assistant/chat_controller.dart';
 import 'apps_screen.dart';
+import '../widgets/pepite_apps.dart';
 import 'export_screen.dart';
 import 'feedback_screen.dart';
 
@@ -562,6 +563,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           if (s.demo) const _DemoBanner(),
           AppUpdateBanner(serverVersion: s.serverVersion),
+          const PepiteAppsBanner(),
           Expanded(
             child: wide && current != null
                 ? Row(

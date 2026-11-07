@@ -4025,5 +4025,30 @@
   "sessionAlertChangePassword": "Changer le mot de passe",
   "sessionAlertLater": "Plus tard",
   "aboutTitle": "À propos et licences",
-  "aboutLegalese": "Logiciel libre sous licence AGPL-3.0 (avec une exception pour Serverpod). Lieux des sessions : IP Geolocation by DB-IP (https://db-ip.com), sous licence Creative Commons Attribution 4.0."
+  "aboutLegalese": "Logiciel libre sous licence AGPL-3.0 (avec une exception pour Serverpod). Lieux des sessions : IP Geolocation by DB-IP (https://db-ip.com), sous licence Creative Commons Attribution 4.0.",
+  "pepiteBadgeNomad": "Pépite nomade",
+  "pepiteBadgeNomadHelp": "Se connecter une première fois depuis l'application Android ou Windows",
+  "pepiteAppsCard": "Et si je venais avec toi ? Avec l'application Android ou Windows, je te rappelle le rituel chaque semaine et tu ouvres tes comptes d'un geste. À ta première connexion, tu gagnes le badge « Pépite nomade ».",
+  "pepiteAppsBanner": "Sur ton téléphone, je suis plus à l'aise dans l'application Android : rappel du rituel, empreinte, et un badge à gagner.",
+  "pepiteAppsSee": "Voir les applications",
+  "pepiteAppsNever": "Ne plus proposer",
+  "pepiteAppsLaterReply": "D'accord, je t'en reparle dans une semaine.",
+  "pepiteAppsNeverReply": "C'est noté, je n'en parlerai plus. Les applications restent dans le menu, à « Applications ».",
+  "pepiteAppsRitualEnd": "Psst : avec l'application Android ou Windows, je peux te rappeler le rituel de la semaine prochaine.",
+  "appsWhyPepite": "Avec l'application, je t'accompagne partout !",
+  "appsWhyTitle": "Ce que les applications ajoutent",
+  "appsWhyReminder": "Rappel du rituel",
+  "appsWhyReminderHelp": "Une notification chaque semaine, au jour et à l'heure de votre choix, pour faire vos comptes avec Pépite.",
+  "appsWhyUnlock": "Empreinte ou Windows Hello",
+  "appsWhyUnlockHelp": "Verrouillez OwnCoffer et rouvrez-le d'un geste : empreinte, visage ou Windows Hello.",
+  "appsWhyStandalone": "Mode autonome",
+  "appsWhyStandaloneHelp": "Sans serveur si vous le souhaitez : vos comptes restent sur l'appareil, et peuvent passer sur un serveur plus tard.",
+  "appsWhyBadgeHelp": "{seeds} graines pour Pépite à votre première connexion depuis une application.",
+  "@appsWhyBadgeHelp": {
+    "placeholders": {
+      "seeds": {
+        "type": "int"
+      }
+    }
+  }
 }

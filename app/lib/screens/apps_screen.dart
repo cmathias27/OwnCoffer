@@ -3,8 +3,18 @@ import 'package:flutter/material.dart';
 
 import '../client.dart' show isStandalone;
 import '../l10n/app_localizations.dart';
+import '../state/pepite.dart';
+import '../state/pepite_messages.dart';
 import '../util/app_versions.dart';
 import '../util/web_search.dart';
+import '../widgets/pepite.dart';
+
+/// Opens [AppsScreen] from anywhere (Pépite's invitations).
+Future<void> openApps(BuildContext context) => Navigator.of(context).push(
+  MaterialPageRoute<void>(
+    builder: (_) => AppsScreen(serverVersion: AppVersions.server),
+  ),
+);
 
 /// The Windows and Android apps: this app's version against the server's,
 /// and their downloads in the version the server runs.
@@ -14,7 +24,19 @@ class AppsScreen extends StatefulWidget {
   /// For tests: where links go.
   final void Function(Uri uri)? open;
 
-  const AppsScreen({super.key, required this.serverVersion, this.open});
+  /// What the apps add, said in a browser (tests say it elsewhere too).
+  final bool? why;
+
+  /// Tests give their own; the app's otherwise.
+  final Pepite? pepiteController;
+
+  const AppsScreen({
+    super.key,
+    required this.serverVersion,
+    this.open,
+    this.why,
+    this.pepiteController,
+  });
 
   @override
   State<AppsScreen> createState() => _AppsScreenState();
@@ -86,6 +108,10 @@ class _AppsScreenState extends State<AppsScreen> {
             children: [
               Text(l.appsIntro),
               const SizedBox(height: 12),
+              if (widget.why ?? kIsWeb) ...[
+                _why(context, l),
+                const SizedBox(height: 12),
+              ],
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -142,6 +168,61 @@ class _AppsScreenState extends State<AppsScreen> {
               ],
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// What the apps add (decision 0027, point 8), with Pépite unless she is
+  /// hidden.
+  Widget _why(BuildContext context, AppLocalizations l) {
+    final theme = Theme.of(context);
+    final mascot = (widget.pepiteController ?? pepite).enabled;
+    Widget item(IconData icon, String title, String help) => ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(icon, color: theme.colorScheme.primary),
+      title: Text(title),
+      subtitle: Text(help),
+    );
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (mascot)
+              Row(
+                children: [
+                  const PepiteImage(PepitePose.wave, size: 72),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      l.appsWhyPepite,
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                  ),
+                ],
+              ),
+            const SizedBox(height: 8),
+            Text(l.appsWhyTitle, style: theme.textTheme.titleMedium),
+            item(
+              Icons.notifications_active_outlined,
+              l.appsWhyReminder,
+              l.appsWhyReminderHelp,
+            ),
+            item(Icons.fingerprint, l.appsWhyUnlock, l.appsWhyUnlockHelp),
+            item(
+              Icons.phonelink_lock_outlined,
+              l.appsWhyStandalone,
+              l.appsWhyStandaloneHelp,
+            ),
+            if (mascot)
+              item(
+                Icons.emoji_events_outlined,
+                l.pepiteBadgeNomad,
+                l.appsWhyBadgeHelp(pepiteBadgeSeeds),
+              ),
+          ],
         ),
       ),
     );

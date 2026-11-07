@@ -3,6 +3,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 import '../client.dart';
+import '../util/app_versions.dart';
 
 enum SessionStage { loading, setup, signedOut, needsTwoFactor, ready, error }
 
@@ -42,7 +43,7 @@ class SessionController extends ChangeNotifier {
     try {
       final setup = await client.setup.status();
       demo = setup.demo ?? false;
-      serverVersion = setup.serverVersion;
+      serverVersion = AppVersions.server = setup.serverVersion;
       if (setup.needsSetup) {
         _set(SessionStage.setup);
         return;

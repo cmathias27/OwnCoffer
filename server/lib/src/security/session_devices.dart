@@ -30,6 +30,9 @@ abstract final class SessionDevices {
     'linux',
   };
 
+  /// The installed apps (decision 0020), as opposed to the browser.
+  static const appPlatforms = {'android', 'windows'};
+
   /// Notification types sent to a person whose sessions an administrator
   /// closed.
   static const closedByAdmin = 'session_closed_by_admin';

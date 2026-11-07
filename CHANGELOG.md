@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.9.0 (novembre 2026)
+
+### Pépite part en voyage
+- Dans un navigateur, **Pépite propose d'installer l'application** Android ou Windows à qui n'en a jamais utilisé (décision 0027) : une carte sur l'accueil, un jour par semaine au plus ; un mot à la fin du rituel ; un **bandeau** sur un téléphone Android, reconnu par le navigateur lui-même (rien n'est envoyé). **Plus tard** l'oublie une semaine, **Ne plus proposer** pour de bon, sur cet appareil ; rien quand un compte est à découvert, ni quand Pépite est masquée.
+- La page **Applications** montre, dans un navigateur, ce qu'elles ajoutent : rappel du rituel, empreinte ou Windows Hello, mode autonome.
+- Nouveau badge **Pépite nomade** (5 graines) : la première session dans l'application Android ou Windows, ou dans la version autonome.
+
 ## 1.8.0 (novembre 2026)
 ### Sécurité : lieux et alertes de connexion
 - **Mes sessions** montre la **ville et le pays approximatifs** de chaque session (décision 0027), trouvés dans une base installée avec le serveur (DB-IP Lite City, licence CC BY 4.0) : aucun service extérieur n'est interrogé ; sans base, le lieu reste « inconnu ».

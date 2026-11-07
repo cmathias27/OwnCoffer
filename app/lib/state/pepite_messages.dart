@@ -65,6 +65,7 @@ int _weekNumber(DateTime today) =>
         l.pepiteBadgeFirstRitual,
         l.pepiteBadgeFirstRitualHelp,
       ),
+      'nomad' => (l.pepiteBadgeNomad, l.pepiteBadgeNomadHelp),
       'weeks_4' => (l.pepiteBadgeWeeks(4), l.pepiteBadgeWeeksHelp(4)),
       'weeks_12' => (l.pepiteBadgeWeeks(12), l.pepiteBadgeWeeksHelp(12)),
       'weeks_26' => (l.pepiteBadgeWeeks(26), l.pepiteBadgeWeeksHelp(26)),
@@ -77,6 +78,7 @@ int _weekNumber(DateTime today) =>
 const pepiteBadges = [
   'first_import',
   'first_ritual',
+  'nomad',
   'weeks_4',
   'weeks_12',
   'weeks_26',
