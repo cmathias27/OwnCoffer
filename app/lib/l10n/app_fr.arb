@@ -3975,5 +3975,55 @@
   },
   "notifSessionClosedBody": "Si vous ne vous y attendiez pas, changez votre mot de passe.",
   "error_session_not_found": "Cette session n'existe plus.",
-  "error_session_is_current": "Pour fermer la session de cet appareil, déconnectez-vous."
+  "error_session_is_current": "Pour fermer la session de cet appareil, déconnectez-vous.",
+  "sessionsPlaceAbout": "environ {place}",
+  "@sessionsPlaceAbout": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "geoipCredit": "Lieux approximatifs, d'après l'adresse IP : IP Geolocation by DB-IP (CC BY 4.0).",
+  "notifSessionDeviceTitle": "Nouvel appareil connecté : {device}",
+  "@notifSessionDeviceTitle": {
+    "placeholders": {
+      "device": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSessionCountryTitle": "Connexion depuis un pays inhabituel : {country}",
+  "@notifSessionCountryTitle": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSessionAlertBody": "{device}, {place} ({ip}). C'est vous ?",
+  "@notifSessionAlertBody": {
+    "placeholders": {
+      "device": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      },
+      "ip": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSessionBanned": "Cette adresse IP a déjà été bloquée après des essais de mot de passe ratés.",
+  "sessionAlertTitle": "C'est vous ?",
+  "sessionAlertYes": "Oui, c'est moi",
+  "sessionAlertNo": "Non, déconnecter",
+  "sessionAlertClosed": "Session fermée",
+  "sessionAlertGone": "Cette session est déjà fermée",
+  "sessionAlertPasswordHelp": "Changez maintenant votre mot de passe : un code vous sera envoyé par email. Toutes vos sessions seront alors fermées, celle-ci aussi.",
+  "sessionAlertChangePassword": "Changer le mot de passe",
+  "sessionAlertLater": "Plus tard",
+  "aboutTitle": "À propos et licences",
+  "aboutLegalese": "Logiciel libre sous licence AGPL-3.0 (avec une exception pour Serverpod). Lieux des sessions : IP Geolocation by DB-IP (https://db-ip.com), sous licence Creative Commons Attribution 4.0."
 }

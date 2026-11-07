@@ -190,8 +190,8 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] **Pépite, la mascotte** (demandée le 5 novembre 2026) : un hamster qui motive à faire ses comptes chaque semaine, rituel en 4 étapes, réserve de graines et badges gardés par le serveur (sur l'appareil en version autonome), rappel par notification en option sur Android et Windows — *1.6.0 ([0026](decisions/0026-mascotte-pepite.md))*
 - [ ] **Sessions et appareils** (demandé le 6 novembre 2026, décision [0027](decisions/0027-sessions-et-appareils.md)) :
   - [x] « Mes sessions » : plateforme, version, IP, depuis quand, dernière activité ; renommer, fermer une session ou toutes les autres ; session fermée refusée dès son appel suivant ; vue de l'administrateur du serveur (IP masquée, fermeture avec notification) ; adoption des applications dans les chiffres ; export et effacement après 30 jours
-  - [ ] ville et pays par une base GeoIP locale (DB-IP Lite)
-  - [ ] alertes « nouvel appareil » et « pays inhabituel »
+  - [x] ville et pays par une base GeoIP locale (DB-IP Lite), lecteur MMDB écrit dans le dépôt — *1.8.0*
+  - [x] alertes « nouvel appareil » et « pays inhabituel », « C'est vous ? » — *1.8.0*
   - [ ] Pépite : incitation à installer les applications et badge « Pépite nomade »
 - [ ] Version autonome sans serveur (décision 0022) :
   - [x] le serveur embarqué dans l'application, sur SQLite ; choix « seul sur cet appareil » ou « serveur » au premier lancement ; tous les tests du serveur aussi sur SQLite — *1.1.0*

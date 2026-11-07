@@ -10,6 +10,7 @@ import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../help/help.dart';
 import '../widgets/notification_settings.dart';
+import '../widgets/session_alert.dart';
 
 /// The user's notifications. Texts are built here from the type and the
 /// figures stored by the server, so they follow the user's language.
@@ -63,7 +64,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }
     if (!mounted) return;
     final accountId = n.accountId;
-    if (n.type == 'overdraft_forecast' && accountId != null) {
+    final alert = SessionAlert.of(n);
+    if (alert != null) {
+      await showSessionAlert(context, alert, close: client.presence.close);
+      await _reload();
+    } else if (n.type == 'overdraft_forecast' && accountId != null) {
       Navigator.pop(context);
       widget.onOpenForecast(accountId);
     } else {
@@ -134,6 +139,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       'warranty_ending' => const Icon(
                         Icons.verified_user_outlined,
                         color: ChartColors.warning,
+                      ),
+                      SessionAlert.type => Icon(
+                        SessionAlert.of(n)?.unusualCountry ?? false
+                            ? Icons.gpp_maybe
+                            : Icons.devices_other,
+                        color: SessionAlert.of(n)?.unusualCountry ?? false
+                            ? theme.colorScheme.error
+                            : ChartColors.warning,
                       ),
                       _ => const Icon(Icons.notifications_none),
                     },
@@ -222,6 +235,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         return (l.notifUnknown, null);
       }
     }
+    final alert = SessionAlert.of(n);
+    if (alert != null) return (alert.title(l), alert.body(l));
     if (n.type == 'session_closed_by_admin') {
       try {
         final d = jsonDecode(n.data) as Map<String, dynamic>;

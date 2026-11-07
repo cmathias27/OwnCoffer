@@ -21,12 +21,21 @@ Off at first: turn it on in **Security**. After some time without use (15 minute
 The settings apply to this device only. After 30 days without use, a device has to sign in again.
 
 ## My sessions
-Every device or browser where you are signed in: Android app, Windows app or browser, its version, the IP address, since when and the last activity.
+Every device or browser where you are signed in: Android app, Windows app or browser, its version, the IP address, the approximate city and country, since when and the last activity.
 - **Close** a session you do not recognise: the device is signed out within 30 seconds. Then change your password.
 - **Close all the others**: only this device stays signed in.
 - **Rename** a device ("Lea's phone") to recognise it.
 - These details are kept 30 days after the session ends, then erased; they are part of your export. The server administrator sees your sessions with the IP address masked and can close them; you are told by a notification.
+- The place comes from a database installed on the server (IP Geolocation by DB-IP): no outside service is asked. It is only indicative — behind a mobile operator or a VPN, the city is often wrong.
 - Standalone version: one device only, nothing is shown.
+
+### Sign-in alerts
+
+Your other devices get a notification when a session opens:
+- on a **new device**: a platform (Android app, Windows app, browser) never seen for you in that city;
+- from an **unusual country**: a country never seen for you, highlighted (also when an open session moves there).
+
+The notification asks "Is it you?". **Yes** does nothing more. **No, sign it out** closes that session, then offers to change your password (all your sessions are then closed). It also points out an IP address already blocked for failed password attempts.
 
 ## What OwnCoffer does for you
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../l10n/app_localizations.dart';
+import '../util/app_versions.dart';
 
 /// The pages of the in-app help, one per screen. Their text is in
 /// `assets/help/<language>/<name>.md` (French and English), readable on
@@ -307,6 +308,22 @@ class _HelpScreenState extends State<HelpScreen> {
                             ),
                           ),
                         ),
+                      const Divider(),
+                      ListTile(
+                        leading: const Icon(Icons.info_outline),
+                        title: Text(l.aboutTitle),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () async {
+                          final version = await AppVersions.app();
+                          if (!context.mounted) return;
+                          showLicensePage(
+                            context: context,
+                            applicationName: 'OwnCoffer',
+                            applicationVersion: version,
+                            applicationLegalese: l.aboutLegalese,
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

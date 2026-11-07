@@ -1720,5 +1720,21 @@
   "notifSessionClosedTitle": "{count, plural, =1{An administrator closed one of your sessions} other{An administrator closed {count} of your sessions}}",
   "notifSessionClosedBody": "If you did not expect it, change your password.",
   "error_session_not_found": "This session no longer exists.",
-  "error_session_is_current": "To close this device's session, sign out."
+  "error_session_is_current": "To close this device's session, sign out.",
+  "sessionsPlaceAbout": "around {place}",
+  "geoipCredit": "Approximate places, from the IP address: IP Geolocation by DB-IP (CC BY 4.0).",
+  "notifSessionDeviceTitle": "New device signed in: {device}",
+  "notifSessionCountryTitle": "Sign-in from an unusual country: {country}",
+  "notifSessionAlertBody": "{device}, {place} ({ip}). Is it you?",
+  "notifSessionBanned": "This IP address was already blocked after failed password attempts.",
+  "sessionAlertTitle": "Is it you?",
+  "sessionAlertYes": "Yes, it's me",
+  "sessionAlertNo": "No, sign it out",
+  "sessionAlertClosed": "Session closed",
+  "sessionAlertGone": "This session is already closed",
+  "sessionAlertPasswordHelp": "Change your password now: a code will be sent to you by email. All your sessions will then be closed, this one too.",
+  "sessionAlertChangePassword": "Change the password",
+  "sessionAlertLater": "Later",
+  "aboutTitle": "About and licences",
+  "aboutLegalese": "Free software under the AGPL-3.0 licence (with an exception for Serverpod). Places of the sessions: IP Geolocation by DB-IP (https://db-ip.com), under the Creative Commons Attribution 4.0 licence."
 }

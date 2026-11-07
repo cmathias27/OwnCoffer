@@ -5,6 +5,7 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 
 import '../generated/protocol.dart';
+import 'geoip.dart';
 import 'scopes.dart';
 import 'session_guard.dart';
 
@@ -32,6 +33,10 @@ abstract final class SessionDevices {
   /// Notification types sent to a person whose sessions an administrator
   /// closed.
   static const closedByAdmin = 'session_closed_by_admin';
+
+  /// Notification type of « nouvel appareil » and « pays inhabituel »
+  /// (decision 0027, point 7).
+  static const alert = 'session_alert';
 
   static UuidValue? _uuid(String? id) {
     if (id == null) return null;
@@ -76,9 +81,12 @@ abstract final class SessionDevices {
     required String platform,
     String? appVersion,
     String? ip,
+    GeoIp? geo,
     DateTime? now,
   }) async {
     final t = now ?? DateTime.now().toUtc();
+    ({String? city, String? country})? place() =>
+        (geo ?? GeoIp.instance).lookup(ip);
     final p = platformOf(platform);
     final v = _version(appVersion);
     final row = await SessionDevice.db.findFirstRow(
@@ -86,8 +94,10 @@ abstract final class SessionDevices {
       where: (d) => d.sessionId.equals(sessionId),
     );
     if (row == null) {
+      final where = place();
+      final SessionDevice device;
       try {
-        await SessionDevice.db.insertRow(
+        device = await SessionDevice.db.insertRow(
           session,
           SessionDevice(
             sessionId: sessionId,
@@ -95,13 +105,17 @@ abstract final class SessionDevices {
             platform: p,
             appVersion: v,
             ip: ip,
+            city: where?.city,
+            country: where?.country,
             firstSeenAt: t,
             lastSeenAt: t,
           ),
         );
       } on DatabaseException {
         // The same session told twice at once: the other call wrote it.
+        return;
       }
+      await _alert(session, device, isNew: true);
       return;
     }
     // A session id is never someone else's; ignore rather than overwrite.
@@ -113,19 +127,99 @@ abstract final class SessionDevices {
         newIp ||
         row.endedAt != null;
     if (!changed && t.difference(row.lastSeenAt) < refreshEvery) return;
-    await SessionDevice.db.updateRow(
+    // The place goes with the IP.
+    final where = newIp ? place() : null;
+    final updated = await SessionDevice.db.updateRow(
       session,
       row.copyWith(
         platform: p,
         appVersion: v,
         ip: ip ?? row.ip,
-        // The place goes with the IP.
-        city: newIp ? null : row.city,
-        country: newIp ? null : row.country,
+        city: newIp ? where?.city : row.city,
+        country: newIp ? where?.country : row.country,
         lastSeenAt: t,
         endedAt: null,
       ),
     );
+    if (newIp && updated.country != row.country) {
+      await _alert(session, updated, isNew: false, before: row.country);
+    }
+  }
+
+  /// Tells [device]'s person, in the app, about a session on a platform
+  /// and in a city never seen for them (a new session only), or in a
+  /// country never seen (also when an open session moves there). Nothing
+  /// for a first session, nothing to compare it with. Places unknown
+  /// before this check (older rows, no database) match anything, so that
+  /// installing the database raises no alert. Whether the IP was ever
+  /// banned (`ip_guard`) goes with the alert.
+  static Future<void> _alert(
+    Session session,
+    SessionDevice device, {
+    required bool isNew,
+    String? before,
+  }) async {
+    final others = await SessionDevice.db.find(
+      session,
+      where: (d) =>
+          d.authUserId.equals(device.authUserId) &
+          d.sessionId.notEquals(device.sessionId),
+    );
+    final city = device.city;
+    final country = device.country;
+    final newDevice =
+        isNew &&
+        others.isNotEmpty &&
+        !others.any(
+          (o) =>
+              o.platform == device.platform &&
+              (city == null || o.city == null || o.city == city),
+        );
+    final countries = {for (final o in others) ?o.country, ?before};
+    final unusualCountry =
+        country != null && countries.isNotEmpty && !countries.contains(country);
+    if (!newDevice && !unusualCountry) return;
+    final ip = device.ip;
+    final ban = ip == null
+        ? null
+        : await IpBan.db.findFirstRow(session, where: (b) => b.ip.equals(ip));
+    final banned =
+        ban != null &&
+        (ban.banCount > 0 ||
+            (ban.bannedUntil?.isAfter(DateTime.now().toUtc()) ?? false));
+    try {
+      await AppNotification.db.insertRow(
+        session,
+        AppNotification(
+          authUserId: device.authUserId,
+          type: alert,
+          data: jsonEncode({
+            'session': device.sessionId,
+            'platform': device.platform,
+            'city': ?city,
+            'country': ?country,
+            'ip': ?ip,
+            'newDevice': newDevice,
+            'unusualCountry': unusualCountry,
+            'banned': banned,
+          }),
+          dedupKey: 'session_alert:${device.sessionId}:${country ?? ''}',
+        ),
+      );
+    } on DatabaseException {
+      // Already told for this session and country.
+    }
+  }
+
+  /// Hides the alerts about [current] from that very session: they are
+  /// meant for the person's other devices.
+  static bool aboutOther(AppNotification n, String? current) {
+    if (n.type != alert || current == null) return true;
+    try {
+      return (jsonDecode(n.data) as Map)['session'] != current;
+    } on Object {
+      return true;
+    }
   }
 
   /// Open sessions of [user], the [current] one first, then the most

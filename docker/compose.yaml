@@ -50,6 +50,8 @@ services:
       OWNCOFFER_BAN_MAX_FAILURES: ${OWNCOFFER_BAN_MAX_FAILURES:-5}
       OWNCOFFER_BAN_WINDOW_MINUTES: ${OWNCOFFER_BAN_WINDOW_MINUTES:-15}
       OWNCOFFER_BAN_MINUTES: ${OWNCOFFER_BAN_MINUTES:-60}
+      # Unset: the database of the image; empty: no place lookup.
+      OWNCOFFER_GEOIP_DB: ${OWNCOFFER_GEOIP_DB-/app/geoip/dbip-city-lite.mmdb}
       OWNCOFFER_RATE_LIMIT_PER_MINUTE: ${OWNCOFFER_RATE_LIMIT_PER_MINUTE:-600}
       OWNCOFFER_STATE_DIR: /app/state
       # Demonstration instance only (docs/DEMO.md): fictitious data.

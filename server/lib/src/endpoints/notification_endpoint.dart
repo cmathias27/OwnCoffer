@@ -5,6 +5,7 @@ import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
 import '../security/scopes.dart';
+import '../security/session_devices.dart';
 
 /// The current user's notifications.
 class NotificationEndpoint extends Endpoint {
@@ -19,21 +20,35 @@ class NotificationEndpoint extends Endpoint {
     bool? unreadOnly,
   }) async {
     final user = Access.userId(session);
-    return AppNotification.db.find(
-      session,
-      where: (n) => unreadOnly == true
-          ? n.authUserId.equals(user) & n.readAt.equals(null)
-          : n.authUserId.equals(user),
-      orderByList: (n) => [n.createdAt.desc()],
-      limit: 100,
-    );
+    final current = session.authenticated?.authId;
+    return [
+      for (final n in await AppNotification.db.find(
+        session,
+        where: (n) => unreadOnly == true
+            ? n.authUserId.equals(user) & n.readAt.equals(null)
+            : n.authUserId.equals(user),
+        orderByList: (n) => [n.createdAt.desc()],
+        limit: 100,
+      ))
+        if (SessionDevices.aboutOther(n, current)) n,
+    ];
   }
 
-  Future<int> unreadCount(Session session) => AppNotification.db.count(
-    session,
-    where: (n) =>
-        n.authUserId.equals(Access.userId(session)) & n.readAt.equals(null),
-  );
+  Future<int> unreadCount(Session session) async {
+    final where =
+        AppNotification.t.authUserId.equals(Access.userId(session)) &
+        AppNotification.t.readAt.equals(null);
+    final all = await AppNotification.db.count(session, where: (_) => where);
+    final current = session.authenticated?.authId;
+    if (all == 0 || current == null) return all;
+    // Alerts about this very session are not shown here (decision 0027).
+    final alerts = await AppNotification.db.find(
+      session,
+      where: (n) => where & n.type.equals(SessionDevices.alert),
+    );
+    return all -
+        alerts.where((n) => !SessionDevices.aboutOther(n, current)).length;
+  }
 
   Future<void> markRead(Session session, int notificationId) async {
     final n = await AppNotification.db.findById(session, notificationId);
