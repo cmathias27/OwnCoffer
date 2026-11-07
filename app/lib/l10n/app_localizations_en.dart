@@ -6360,6 +6360,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pepiteTipTitle => 'Did you know?';
 
   @override
+  String get pepiteTipButton => 'Pépite\'s advice';
+
+  @override
   String get pepiteTipGotIt => 'Got it';
 
   @override

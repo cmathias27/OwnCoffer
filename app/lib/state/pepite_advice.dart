@@ -154,10 +154,21 @@ class PepiteAdvice extends ChangeNotifier {
 
   /// The tip of the screen of [topic], if one is due: tips shown, the
   /// catalogue and the tips seen known, none seen nor shown elsewhere today.
-  PepiteTip? tipFor(HelpTopic topic) {
+  /// When [force] is true (asked on demand), returns the topic's tip even if
+  /// already seen or shown today.
+  PepiteTip? tipFor(HelpTopic topic, {bool force = false}) {
     final seen = _seenCodes;
     final tips = _tips;
-    if (!tipsOn || seen == null || tips == null) return null;
+    if (!tipsOn || tips == null) return null;
+    if (force) {
+      return tips
+              .where(
+                (t) => t.topic == topic && !(seen?.contains(t.code) ?? false),
+              )
+              .firstOrNull ??
+          tips.where((t) => t.topic == topic).firstOrNull;
+    }
+    if (seen == null) return null;
     final shown = _shown?.split('|');
     if (shown != null && shown.length == 2 && shown[0] == _today) {
       final tip = tips.where((t) => t.code == shown[1]).firstOrNull;

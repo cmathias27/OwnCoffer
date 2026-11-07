@@ -9,8 +9,6 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../state/pepite.dart';
 import '../widgets/pepite.dart';
-import '../widgets/pepite_advice.dart';
-import '../widgets/pepite_apps.dart';
 import '../widgets/soft.dart';
 import 'budget_screen.dart';
 
@@ -143,6 +141,8 @@ class DashboardScreenState extends State<DashboardScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 1000),
               child: PepiteCard(
+                key: ValueKey('pepite-${widget.membership.group.id}-$_reloads'),
+                membership: widget.membership,
                 overdrawn: accounts.any((e) => _overdrawn(e.$2)),
                 onStep: (step) => widget.onOpen(switch (step) {
                   PepiteStep.statements => DashboardTarget.imports,
@@ -150,23 +150,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                   PepiteStep.forecast ||
                   PepiteStep.celebrate => DashboardTarget.forecast,
                 }),
-              ),
-            ),
-          ),
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1000),
-              child: const PepiteAppsCard(),
-            ),
-          ),
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1000),
-              child: PepiteStartCard(
-                key: ValueKey('start-${widget.membership.group.id}-$_reloads'),
-                membership: widget.membership,
-                overdrawn: accounts.any((e) => _overdrawn(e.$2)),
-                onOpen: () => widget.onOpen(DashboardTarget.start),
+                onOpenStart: () => widget.onOpen(DashboardTarget.start),
               ),
             ),
           ),
