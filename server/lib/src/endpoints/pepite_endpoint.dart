@@ -1,8 +1,11 @@
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_idp_server/core.dart';
 
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/scopes.dart';
+import '../security/session_devices.dart';
+import '../standalone/local_owner.dart';
 
 /// Pépite, the mascot (decision 0026): the weekly accounts ritual, the seed
 /// reserve and the badges of the signed-in user. Only their own; nothing
@@ -24,6 +27,7 @@ class PepiteEndpoint extends Endpoint {
   static const badgeCodes = [
     'first_import',
     'first_ritual',
+    'nomad',
     'weeks_4',
     'weeks_12',
     'weeks_26',
@@ -173,9 +177,11 @@ class PepiteEndpoint extends Endpoint {
     final fresh = [
       for (final code in badgeCodes)
         if (!codes.contains(code) &&
-            (code == 'first_import'
-                ? await _hasImported(session, t, user)
-                : deserved(code)))
+            switch (code) {
+              'first_import' => await _hasImported(session, t, user),
+              'nomad' => await _usedAnApp(session, t, user),
+              _ => deserved(code),
+            })
           code,
     ];
     if (fresh.isNotEmpty) {
@@ -214,6 +220,32 @@ class PepiteEndpoint extends Endpoint {
         transaction: t,
       ) >
       0;
+
+  /// « Pépite nomade » (decision 0027, point 8): a session seen on the
+  /// Android or Windows app, or the standalone app (which has no ping, but
+  /// only runs as an app).
+  Future<bool> _usedAnApp(
+    Session session,
+    Transaction t,
+    UuidValue user,
+  ) async {
+    final Set<String> apps = SessionDevices.appPlatforms;
+    if (await SessionDevice.db.count(
+          session,
+          where: (d) => d.authUserId.equals(user) & d.platform.inSet(apps),
+          transaction: t,
+        ) >
+        0) {
+      return true;
+    }
+    return await RefreshToken.db.count(
+          session,
+          where: (r) =>
+              r.authUserId.equals(user) & r.method.equals(LocalOwner.method),
+          transaction: t,
+        ) >
+        0;
+  }
 
   /// Monday of the week of [today], the device's date, unless it is more
   /// than a day away from the server's (a wrong clock, or a forged date).

@@ -10118,6 +10118,114 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Logiciel libre sous licence AGPL-3.0 (avec une exception pour Serverpod). Lieux des sessions : IP Geolocation by DB-IP (https://db-ip.com), sous licence Creative Commons Attribution 4.0.'**
   String get aboutLegalese;
+
+  /// No description provided for @pepiteBadgeNomad.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pépite nomade'**
+  String get pepiteBadgeNomad;
+
+  /// No description provided for @pepiteBadgeNomadHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter une première fois depuis l\'application Android ou Windows'**
+  String get pepiteBadgeNomadHelp;
+
+  /// No description provided for @pepiteAppsCard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Et si je venais avec toi ? Avec l\'application Android ou Windows, je te rappelle le rituel chaque semaine et tu ouvres tes comptes d\'un geste. À ta première connexion, tu gagnes le badge « Pépite nomade ».'**
+  String get pepiteAppsCard;
+
+  /// No description provided for @pepiteAppsBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur ton téléphone, je suis plus à l\'aise dans l\'application Android : rappel du rituel, empreinte, et un badge à gagner.'**
+  String get pepiteAppsBanner;
+
+  /// No description provided for @pepiteAppsSee.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les applications'**
+  String get pepiteAppsSee;
+
+  /// No description provided for @pepiteAppsNever.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ne plus proposer'**
+  String get pepiteAppsNever;
+
+  /// No description provided for @pepiteAppsLaterReply.
+  ///
+  /// In fr, this message translates to:
+  /// **'D\'accord, je t\'en reparle dans une semaine.'**
+  String get pepiteAppsLaterReply;
+
+  /// No description provided for @pepiteAppsNeverReply.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est noté, je n\'en parlerai plus. Les applications restent dans le menu, à « Applications ».'**
+  String get pepiteAppsNeverReply;
+
+  /// No description provided for @pepiteAppsRitualEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Psst : avec l\'application Android ou Windows, je peux te rappeler le rituel de la semaine prochaine.'**
+  String get pepiteAppsRitualEnd;
+
+  /// No description provided for @appsWhyPepite.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avec l\'application, je t\'accompagne partout !'**
+  String get appsWhyPepite;
+
+  /// No description provided for @appsWhyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que les applications ajoutent'**
+  String get appsWhyTitle;
+
+  /// No description provided for @appsWhyReminder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel du rituel'**
+  String get appsWhyReminder;
+
+  /// No description provided for @appsWhyReminderHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une notification chaque semaine, au jour et à l\'heure de votre choix, pour faire vos comptes avec Pépite.'**
+  String get appsWhyReminderHelp;
+
+  /// No description provided for @appsWhyUnlock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Empreinte ou Windows Hello'**
+  String get appsWhyUnlock;
+
+  /// No description provided for @appsWhyUnlockHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verrouillez OwnCoffer et rouvrez-le d\'un geste : empreinte, visage ou Windows Hello.'**
+  String get appsWhyUnlockHelp;
+
+  /// No description provided for @appsWhyStandalone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode autonome'**
+  String get appsWhyStandalone;
+
+  /// No description provided for @appsWhyStandaloneHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans serveur si vous le souhaitez : vos comptes restent sur l\'appareil, et peuvent passer sur un serveur plus tard.'**
+  String get appsWhyStandaloneHelp;
+
+  /// No description provided for @appsWhyBadgeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'{seeds} graines pour Pépite à votre première connexion depuis une application.'**
+  String appsWhyBadgeHelp(int seeds);
 }
 
 class _AppLocalizationsDelegate

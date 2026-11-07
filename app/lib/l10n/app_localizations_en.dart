@@ -6290,4 +6290,69 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutLegalese =>
       'Free software under the AGPL-3.0 licence (with an exception for Serverpod). Places of the sessions: IP Geolocation by DB-IP (https://db-ip.com), under the Creative Commons Attribution 4.0 licence.';
+
+  @override
+  String get pepiteBadgeNomad => 'Pépite on the go';
+
+  @override
+  String get pepiteBadgeNomadHelp =>
+      'Sign in once from the Android or Windows app';
+
+  @override
+  String get pepiteAppsCard =>
+      'How about taking me along? With the Android or Windows app, I remind you of the ritual every week and you open your accounts in one gesture. Your first sign-in earns the “Pépite on the go” badge.';
+
+  @override
+  String get pepiteAppsBanner =>
+      'On your phone, I feel more at home in the Android app: ritual reminder, fingerprint, and a badge to earn.';
+
+  @override
+  String get pepiteAppsSee => 'See the apps';
+
+  @override
+  String get pepiteAppsNever => 'Don\'t suggest again';
+
+  @override
+  String get pepiteAppsLaterReply =>
+      'All right, I\'ll mention it again in a week.';
+
+  @override
+  String get pepiteAppsNeverReply =>
+      'Noted, I won\'t mention it again. The apps stay in the menu, under “Applications”.';
+
+  @override
+  String get pepiteAppsRitualEnd =>
+      'Psst: with the Android or Windows app, I can remind you of next week\'s ritual.';
+
+  @override
+  String get appsWhyPepite => 'With the app, I come along everywhere!';
+
+  @override
+  String get appsWhyTitle => 'What the apps add';
+
+  @override
+  String get appsWhyReminder => 'Ritual reminder';
+
+  @override
+  String get appsWhyReminderHelp =>
+      'A notification every week, on the day and at the time you choose, to go through your accounts with Pépite.';
+
+  @override
+  String get appsWhyUnlock => 'Fingerprint or Windows Hello';
+
+  @override
+  String get appsWhyUnlockHelp =>
+      'Lock OwnCoffer and open it again in one gesture: fingerprint, face or Windows Hello.';
+
+  @override
+  String get appsWhyStandalone => 'Standalone mode';
+
+  @override
+  String get appsWhyStandaloneHelp =>
+      'No server if you wish: your accounts stay on the device, and can move to a server later.';
+
+  @override
+  String appsWhyBadgeHelp(int seeds) {
+    return '$seeds seeds for Pépite at your first sign-in from an app.';
+  }
 }

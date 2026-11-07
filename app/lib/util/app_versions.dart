@@ -9,6 +9,9 @@ abstract final class AppVersions {
 
   static String? _app;
 
+  /// The server's version, once it said it (SessionController).
+  static String? server;
+
   /// This app's version (1.0.3), from its build.
   static Future<String> app() async =>
       _app ??= (await PackageInfo.fromPlatform()).version;

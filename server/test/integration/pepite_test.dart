@@ -1,6 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:owncoffer_server/src/endpoints/pepite_endpoint.dart';
 import 'package:owncoffer_server/src/generated/protocol.dart';
 import 'package:owncoffer_server/src/security/scopes.dart';
+import 'package:owncoffer_server/src/security/session_devices.dart';
+import 'package:owncoffer_server/src/standalone/local_owner.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_idp_server/core.dart';
 import 'package:test/test.dart';
@@ -148,6 +152,64 @@ void main() {
       // Alice's import is not Mallory's.
       final other = await endpoints.pepite.status(as(mallory), today);
       expect(other.badges, isEmpty);
+    });
+
+    test('a first session on an app earns « Pépite nomade »', () async {
+      Future<void> seen(UuidValue u, String platform) async =>
+          SessionDevices.seen(
+            db,
+            user: u,
+            sessionId: (await RefreshToken.db.insertRow(
+              db,
+              RefreshToken(
+                authUserId: u,
+                scopeNames: {accessScope.name!},
+                method: 'email',
+                fixedSecret: ByteData(16),
+                rotatingSecretHash: 'x',
+              ),
+            )).id.toString(),
+            platform: platform,
+          );
+
+      // The browser is not an app.
+      await seen(alice, 'web');
+      expect((await endpoints.pepite.status(as(alice), today)).badges, isEmpty);
+      await seen(alice, 'android');
+      final s = await endpoints.pepite.status(as(alice), today);
+      expect(s.newBadges, ['nomad']);
+      expect(s.earnedSeeds, PepiteEndpoint.badgeSeeds);
+      expect(s.seeds, PepiteEndpoint.badgeSeeds);
+      // Not twice, even with another app.
+      await seen(alice, 'windows');
+      final again = await endpoints.pepite.status(as(alice), today);
+      expect(again.newBadges, isEmpty);
+      expect(again.seeds, PepiteEndpoint.badgeSeeds);
+      // Alice's app is not Mallory's.
+      expect(
+        (await endpoints.pepite.status(as(mallory), today)).badges,
+        isEmpty,
+      );
+      await seen(mallory, 'windows');
+      expect(
+        (await endpoints.pepite.status(as(mallory), today)).newBadges,
+        ['nomad'],
+      );
+    });
+
+    test('the standalone app earns « Pépite nomade » too', () async {
+      await RefreshToken.db.insertRow(
+        db,
+        RefreshToken(
+          authUserId: alice,
+          scopeNames: {accessScope.name!},
+          method: LocalOwner.method,
+          fixedSecret: ByteData(16),
+          rotatingSecretHash: 'x',
+        ),
+      );
+      final s = await endpoints.pepite.status(as(alice), today);
+      expect(s.newBadges, ['nomad']);
     });
 
     test("another user's reserve stays theirs", () async {

@@ -55,14 +55,19 @@ class Pepite extends ChangeNotifier {
   final Future<PepiteStatus> Function(DateTime today) _complete;
   final DateTime Function() _now;
 
+  /// The web app, where Pépite invites to install the apps.
+  final bool browser;
+
   Pepite({
     required this._store,
     required this.reminders,
     required Future<PepiteStatus> Function(DateTime today) status,
     required this._complete,
     DateTime Function()? now,
+    bool? browser,
   }) : _fetch = status,
-       _now = now ?? DateTime.now;
+       _now = now ?? DateTime.now,
+       browser = browser ?? kIsWeb;
 
   // Settings of this device.
   var enabled = true;
@@ -77,6 +82,12 @@ class Pepite extends ChangeNotifier {
   String? _stepsWeek;
   var _steps = <PepiteStep>{};
 
+  // The invitation to install the apps (decision 0027, point 8).
+  DateTime? _appsShownOn;
+  DateTime? _appsLaterUntil;
+  var _appsNever = false;
+  bool? _overdrawn;
+
   Future<void>? _loading;
 
   Future<void> load() => _loading ??= _load();
@@ -89,6 +100,11 @@ class Pepite extends ChangeNotifier {
       reminderHour = _int(await _store.read('hour'), defaultHour, 0, 23);
       _snoozedUntil = DateTime.tryParse(await _store.read('snoozed') ?? '');
       _stepsWeek = await _store.read('stepsWeek');
+      _appsShownOn = DateTime.tryParse(await _store.read('appsShown') ?? '');
+      _appsLaterUntil = DateTime.tryParse(
+        await _store.read('appsLater') ?? '',
+      );
+      _appsNever = await _store.read('appsNever') == 'true';
       _steps = {
         for (final name in (await _store.read('steps') ?? '').split(','))
           ...PepiteStep.values.where((s) => s.name == name),
@@ -126,6 +142,74 @@ class Pepite extends ChangeNotifier {
     final until = _snoozedUntil;
     return until != null && _now().isBefore(until);
   }
+
+  /// Today, as a date (UTC midnight, so that days are 24 hours apart).
+  DateTime get _today {
+    final now = _now();
+    return DateTime.utc(now.year, now.month, now.day);
+  }
+
+  /// An account is below zero, now or in the forecast (said by the home
+  /// page): no invitation then. Unknown until it says so.
+  set overdrawn(bool value) {
+    if (_overdrawn == value) return;
+    _overdrawn = value;
+    notifyListeners();
+  }
+
+  /// Pépite invites to install the Android or Windows app: in a browser,
+  /// for someone with no app session (no « Pépite nomade » badge), unless
+  /// an account is overdrawn, after « Plus tard » for a week, or ever
+  /// after « Ne plus proposer ».
+  bool get invitesApps {
+    final s = status;
+    final later = _appsLaterUntil;
+    return enabled &&
+        browser &&
+        s != null &&
+        !s.badges.contains(nomadBadge) &&
+        _overdrawn == false &&
+        !_appsNever &&
+        (later == null || !_today.isBefore(later));
+  }
+
+  /// The card of the home page (or the banner of a phone's browser): on
+  /// one day of the week at most.
+  bool get appsCardDue {
+    if (!invitesApps) return false;
+    final shown = _appsShownOn;
+    final today = _today;
+    return shown == null ||
+        shown == today ||
+        today.difference(shown).inDays >= 7;
+  }
+
+  /// The card was shown today.
+  Future<void> appsCardShown() async {
+    final today = _today;
+    if (_appsShownOn == today) return;
+    _appsShownOn = today;
+    await _quietly(() => _store.write('appsShown', today.toIso8601String()));
+  }
+
+  /// « Plus tard »: not a word about the apps for a week.
+  Future<void> appsLater() async {
+    _appsLaterUntil = _today.add(const Duration(days: 7));
+    notifyListeners();
+    await _quietly(
+      () => _store.write('appsLater', _appsLaterUntil!.toIso8601String()),
+    );
+  }
+
+  /// « Ne plus proposer »: never again on this device.
+  Future<void> appsNever() async {
+    _appsNever = true;
+    notifyListeners();
+    await _quietly(() => _store.write('appsNever', 'true'));
+  }
+
+  /// The badge of a first session on an app (PepiteEndpoint).
+  static const nomadBadge = 'nomad';
 
   /// A signed-in session is on screen.
   Future<void> signedIn() async {
