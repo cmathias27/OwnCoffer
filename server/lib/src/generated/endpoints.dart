@@ -3430,6 +3430,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<DateTime>(),
               nullable: false,
             ),
+            'device': _is.ParameterDescription(
+              name: 'device',
+              type: _is.getType<List<String>?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -3439,6 +3444,7 @@ class Endpoints extends _is.EndpointDispatch {
                   (endpoints['pepite'] as _iagql2g7.PepiteEndpoint).status(
                     session,
                     params['today'],
+                    device: params['device'],
                   ),
         ),
         'completeRitual': _is.MethodConnector(

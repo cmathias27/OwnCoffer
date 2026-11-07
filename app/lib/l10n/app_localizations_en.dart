@@ -6499,4 +6499,167 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_invalid_tip => 'This tip is unknown.';
+
+  @override
+  String get pepiteBadgeTidy => 'Neat and tidy';
+
+  @override
+  String get pepiteBadgeTidyHelp => 'Create 10 classification rules';
+
+  @override
+  String get pepiteBadgeTidyHint =>
+      'Create classification rules to sort your operations';
+
+  @override
+  String get pepiteBadgeSeer => 'Farsighted';
+
+  @override
+  String get pepiteBadgeSeerHelp => 'Enter a first planned operation';
+
+  @override
+  String get pepiteBadgeSeerHint => 'Plan an income or recurring expense';
+
+  @override
+  String get pepiteBadgeArchivist => 'Archivist';
+
+  @override
+  String get pepiteBadgeArchivistHelp => 'Attach 10 invoices to an operation';
+
+  @override
+  String get pepiteBadgeArchivistHint =>
+      'Attach receipts or invoices to your operations';
+
+  @override
+  String get pepiteBadgeLoanMaster => 'Loan master';
+
+  @override
+  String get pepiteBadgeLoanMasterHelp =>
+      'Add a loan with its amortization schedule';
+
+  @override
+  String get pepiteBadgeLoanMasterHint => 'Add a loan and track its repayment';
+
+  @override
+  String get pepiteBadgeSubscriptionHunter => 'Subscription hunter';
+
+  @override
+  String get pepiteBadgeSubscriptionHunterHelp =>
+      'Declare 3 regular subscriptions';
+
+  @override
+  String get pepiteBadgeSubscriptionHunterHint =>
+      'Mark your subscriptions in planned operations';
+
+  @override
+  String get pepiteBadgeVault => 'Strongroom';
+
+  @override
+  String get pepiteBadgeVaultHelp =>
+      'Turn on two-factor authentication on the server';
+
+  @override
+  String get pepiteBadgeVaultHint =>
+      'Protect your account with an authenticator app';
+
+  @override
+  String get pepiteBadgeVelvet => 'Velvet paws';
+
+  @override
+  String get pepiteBadgeVelvetHelp =>
+      'Unlock the app with fingerprint or Windows Hello';
+
+  @override
+  String get pepiteBadgeVelvetHint => 'Turn on biometric unlock on this device';
+
+  @override
+  String get pepiteBadgeProvident => 'Farsighted';
+
+  @override
+  String get pepiteBadgeProvidentHelp => 'Make a first encrypted backup';
+
+  @override
+  String get pepiteBadgeProvidentHint => 'Back up your data with encryption';
+
+  @override
+  String get pepiteBadgeVigilant => 'Vigilant';
+
+  @override
+  String get pepiteBadgeVigilantHelp => 'Check a sign-in alert on a new device';
+
+  @override
+  String get pepiteBadgeVigilantHint =>
+      'Check security alerts in notifications';
+
+  @override
+  String get pepiteBadgeToTheCent => 'To the penny';
+
+  @override
+  String get pepiteBadgeToTheCentHelp =>
+      'Reconcile a balance with no difference to the bank';
+
+  @override
+  String get pepiteBadgeToTheCentHint =>
+      'Reconcile an account balance to check its accuracy';
+
+  @override
+  String get pepiteBadgeMonthReviews => 'Monthly review';
+
+  @override
+  String get pepiteBadgeMonthReviewsHelp =>
+      'Check the month-end review 3 times';
+
+  @override
+  String get pepiteBadgeMonthReviewsHint =>
+      'Read the monthly review in the Analysis tab';
+
+  @override
+  String get pepiteBadgeFirstGoal => 'First goal';
+
+  @override
+  String get pepiteBadgeFirstGoalHelp => 'Set a first spending goal';
+
+  @override
+  String get pepiteBadgeFirstGoalHint => 'Set a spending ceiling on a category';
+
+  @override
+  String get pepiteBadgeGoalHalf => 'Halfway there';
+
+  @override
+  String get pepiteBadgeGoalHalfHelp =>
+      'Half of the month gone while staying within a spending goal';
+
+  @override
+  String get pepiteBadgeGoalHalfHint =>
+      'Keep your spending under half your goal by mid-month';
+
+  @override
+  String get pepiteBadgeGoalKept => 'Goal achieved';
+
+  @override
+  String get pepiteBadgeGoalKeptHelp =>
+      'Complete a full month within a spending goal';
+
+  @override
+  String get pepiteBadgeGoalKeptHint =>
+      'Finish a month without exceeding your goal';
+
+  @override
+  String get pepiteBadgeScissors => 'Snip snip';
+
+  @override
+  String get pepiteBadgeScissorsHelp => 'Cancel or end a subscription';
+
+  @override
+  String get pepiteBadgeScissorsHint =>
+      'Delete a subscription or set its end date';
+
+  @override
+  String get pepiteBadgeTeam => 'Teamwork';
+
+  @override
+  String get pepiteBadgeTeamHelp => 'Invite someone who joined the group';
+
+  @override
+  String get pepiteBadgeTeamHint =>
+      'Invite a household member to share the budget';
 }

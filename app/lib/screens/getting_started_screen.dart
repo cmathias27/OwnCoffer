@@ -4,12 +4,10 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../help/help.dart';
 import '../l10n/app_localizations.dart';
-import '../state/app_lock.dart';
 import '../state/getting_started.dart';
-import '../state/pepite.dart';
+import '../state/start_device.dart';
+export '../state/start_device.dart' show startDevice;
 import '../util/app_versions.dart';
-import '../util/device_auth.dart';
-import '../util/standalone_backups.dart';
 import 'admin_screen.dart';
 import 'apps_screen.dart';
 import 'device_backup_screen.dart';
@@ -20,20 +18,6 @@ import 'security_screen.dart';
 /// The steps that lead to a tab of the home page; the others open their
 /// own page on top of this one.
 const startTabSteps = {'account', 'rules', 'scheduled', 'goal'};
-
-/// What only this device knows, for « Bien démarrer ».
-Future<StartDevice> startDevice() async {
-  final kind = await appLock.deviceKind();
-  return StartDevice(
-    deviceUnlock: kind == DeviceAuthKind.none
-        ? null
-        : appLock.enabled && (appLock.deviceUnlock || isStandalone),
-    backup: isStandalone ? await StandaloneBackups.enabled : null,
-    reminder: pepite.reminders.supported
-        ? pepite.enabled && pepite.reminderOn
-        : null,
-  );
-}
 
 /// The label of a step.
 String startStepLabel(AppLocalizations l, String code) => switch (code) {

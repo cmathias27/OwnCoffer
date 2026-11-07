@@ -13,7 +13,9 @@ class PepiteScreen extends StatefulWidget {
   /// Opens « Bien démarrer » (with a group open).
   final VoidCallback? onStart;
 
-  const PepiteScreen({super.key, this.onStart});
+  final Pepite? controller;
+
+  const PepiteScreen({super.key, this.onStart, this.controller});
 
   @override
   State<PepiteScreen> createState() => _PepiteScreenState();
@@ -22,10 +24,12 @@ class PepiteScreen extends StatefulWidget {
 class _PepiteScreenState extends State<PepiteScreen> {
   String? _message;
 
+  Pepite get _pepite => widget.controller ?? pepite;
+
   @override
   void initState() {
     super.initState();
-    pepite.refresh();
+    _pepite.refresh();
   }
 
   @override
@@ -34,7 +38,7 @@ class _PepiteScreenState extends State<PepiteScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l.pepiteMenu)),
       body: ListenableBuilder(
-        listenable: Listenable.merge([pepite, pepiteAdvice]),
+        listenable: Listenable.merge([_pepite, pepiteAdvice]),
         builder: (context, _) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -61,7 +65,7 @@ class _PepiteScreenState extends State<PepiteScreen> {
 
   List<Widget> _reserve(BuildContext context, AppLocalizations l) {
     final theme = Theme.of(context);
-    final s = pepite.status;
+    final s = _pepite.status;
     if (s == null) return const [];
     final earned = {...s.badges};
     return [
@@ -101,29 +105,48 @@ class _PepiteScreenState extends State<PepiteScreen> {
   ) {
     final scheme = Theme.of(context).colorScheme;
     final (name, help) = pepiteBadgeText(l, code);
+    final hint = pepiteBadgeHint(l, code);
+    final icon = pepiteBadgeIcon(code);
     return Tooltip(
-      message: help,
+      message: earned ? help : (hint != null ? '$help\n\n💡 $hint' : help),
       child: SizedBox(
-        width: 150,
+        width: 156,
         child: Card(
           color: earned
               ? const Color(0xFFE9A04B).withValues(alpha: 0.18)
-              : scheme.surfaceContainerHighest,
+              : scheme.surfaceContainerHighest.withValues(alpha: 0.5),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 Icon(
-                  earned ? Icons.emoji_events : Icons.lock_outline,
-                  color: earned ? const Color(0xFFC97F2E) : scheme.outline,
+                  earned ? Icons.emoji_events : icon,
+                  color: earned
+                      ? const Color(0xFFC97F2E)
+                      : scheme.outline.withValues(alpha: 0.5),
                 ),
                 const SizedBox(height: 4),
-                Text(name, textAlign: TextAlign.center),
-                if (!earned)
-                  Text(
-                    l.pepiteBadgeLocked,
-                    style: Theme.of(context).textTheme.bodySmall,
+                Text(
+                  name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: earned ? FontWeight.w600 : FontWeight.normal,
+                    color: earned ? null : scheme.onSurfaceVariant,
                   ),
+                ),
+                if (!earned) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    hint ?? l.pepiteBadgeLocked,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: 11,
+                      color: scheme.outline,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -145,8 +168,8 @@ class _PepiteScreenState extends State<PepiteScreen> {
         contentPadding: EdgeInsets.zero,
         title: Text(l.pepiteEnable),
         subtitle: Text(l.pepiteEnableHelp),
-        value: pepite.enabled,
-        onChanged: pepite.setEnabled,
+        value: _pepite.enabled,
+        onChanged: _pepite.setEnabled,
       ),
       SwitchListTile(
         contentPadding: EdgeInsets.zero,
@@ -155,7 +178,7 @@ class _PepiteScreenState extends State<PepiteScreen> {
         value: pepiteAdvice.tipsOn,
         onChanged: pepiteAdvice.setTipsOn,
       ),
-      if (!pepite.reminders.supported)
+      if (!_pepite.reminders.supported)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(l.pepiteReminderWeb),
@@ -165,10 +188,10 @@ class _PepiteScreenState extends State<PepiteScreen> {
           contentPadding: EdgeInsets.zero,
           title: Text(l.pepiteReminder),
           subtitle: Text(l.pepiteReminderHelp),
-          value: pepite.reminderOn,
-          onChanged: pepite.enabled
+          value: _pepite.reminderOn,
+          onChanged: _pepite.enabled
               ? (v) async {
-                  final ok = await pepite.setReminder(v);
+                  final ok = await _pepite.setReminder(v);
                   if (!mounted) return;
                   setState(() => _message = ok ? null : l.pepiteReminderDenied);
                 }
@@ -176,7 +199,7 @@ class _PepiteScreenState extends State<PepiteScreen> {
         ),
         if (_message != null)
           Text(_message!, style: TextStyle(color: theme.colorScheme.error)),
-        if (pepite.reminderOn)
+        if (_pepite.reminderOn)
           Wrap(
             spacing: 16,
             runSpacing: 8,
@@ -184,16 +207,16 @@ class _PepiteScreenState extends State<PepiteScreen> {
             children: [
               Text(l.pepiteReminderDay),
               DropdownButton<int>(
-                value: pepite.reminderDay,
+                value: _pepite.reminderDay,
                 items: [
                   for (var d = 1; d <= 7; d++)
                     DropdownMenuItem(value: d, child: Text(dayName(d))),
                 ],
-                onChanged: (d) => pepite.setReminderTime(day: d),
+                onChanged: (d) => _pepite.setReminderTime(day: d),
               ),
               Text(l.pepiteReminderHour),
               DropdownButton<int>(
-                value: pepite.reminderHour,
+                value: _pepite.reminderHour,
                 items: [
                   for (var h = 0; h < 24; h++)
                     DropdownMenuItem(
@@ -206,7 +229,7 @@ class _PepiteScreenState extends State<PepiteScreen> {
                       ),
                     ),
                 ],
-                onChanged: (h) => pepite.setReminderTime(hour: h),
+                onChanged: (h) => _pepite.setReminderTime(hour: h),
               ),
             ],
           ),

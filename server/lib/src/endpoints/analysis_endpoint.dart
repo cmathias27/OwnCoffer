@@ -8,6 +8,7 @@ import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/scopes.dart';
 import '../finance/insights_service.dart';
+import '../pepite/pepite_badges.dart';
 
 /// Income and expenses by category over a week, a month, a quarter or a
 /// year, computed
@@ -283,6 +284,10 @@ class AnalysisEndpoint extends Endpoint {
       core.PeriodKind.month,
       _local(date),
     );
+    // « Bilan du mois » (decision 0028): a review of a month begun.
+    if (!month.start.isAfter(_local(DateTime.now().toUtc()))) {
+      await PepiteBadges.reviewed(session, Access.userId(session), month.start);
+    }
     final first = month.shift(-3);
     final categories = await SpendingService.categories(session, groupId);
     final ops = await SpendingService.operations(

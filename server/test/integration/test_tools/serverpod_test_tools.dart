@@ -5207,8 +5207,9 @@ class _PepiteEndpoint {
 
   _ida.Future<_iqopjt2h.PepiteStatus> status(
     _ist.TestSessionBuilder sessionBuilder,
-    DateTime today,
-  ) async {
+    DateTime today, {
+    List<String>? device,
+  }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
@@ -5220,7 +5221,10 @@ class _PepiteEndpoint {
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'pepite',
           methodName: 'status',
-          parameters: _ist.testObjectToJson({'today': today}),
+          parameters: _ist.testObjectToJson({
+            'today': today,
+            'device': device,
+          }),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =

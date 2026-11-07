@@ -10,12 +10,17 @@ import 'package:timezone/timezone.dart' as tz;
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import 'app_lock.dart';
+import 'start_device.dart';
 
 /// Pépite, the hamster of OwnCoffer (decision 0026).
 final pepite = Pepite(
   store: SecurePepiteStore(),
   reminders: PepiteReminders.platform(),
-  status: (today) => client.pepite.status(today),
+  status: (today) async {
+    final dev = await startDevice();
+    final marks = deviceMarks(dev);
+    return client.pepite.status(today, device: marks.isEmpty ? null : marks);
+  },
   complete: (today) => client.pepite.completeRitual(today),
 );
 
