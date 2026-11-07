@@ -2,6 +2,19 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.12.0 (novembre 2026)
+
+### Pépite, interface universelle de l'IA et des conseils d'application
+- **Mascotte Pépite comme interface unique** : remplacement du bouton de discussion flottant en bas à droite par l'avatar animé de Pépite sur toutes les pages.
+- **Poses dynamiques de Pépite** : *coucou* au repos, *encouragement* lorsqu'elle réfléchit ou interroge le moteur financier, *joyeuse* en cas de réponse non lue ou d'astuce contextuelle disponible.
+- **Regroupement visuel des conseils** : suppression de l'encart supérieur d'astuce et du bouton d'en-tête sur l'accueil ; le rituel hebdomadaire reste sur le tableau de bord, et les astuces contextuelles « Le savais-tu ? » s'ouvrent à la demande directement dans le panneau de Pépite avec accès direct à l'aide.
+- **Mode hors-ligne / sans IA** : même lorsqu'aucun fournisseur IA n'est configuré, Pépite reste accessible pour expliquer l'application, guider avec les astuces de la page en cours et naviguer dans l'aide.
+- **Personnalité de Pépite** : consigne système mise à jour pour donner à l'assistant IA la voix chaleureuse et bienveillante de la mascotte, tutoyant l'utilisateur et sobre en cas de découvert.
+
+### Android : import direct de fichiers de relevés
+- **Ouverture directe** depuis les téléchargements ou une autre application via le menu Partager / Ouvrir avec (intents `ACTION_VIEW` et `ACTION_SEND` pour les fichiers `.qif`, `.ofx` et `.csv`), basculant automatiquement vers l'onglet d'import avec prévisualisation.
+- **Sélecteur de fichiers Android** : contournement des restrictions de types MIME sur Android pour sélectionner sans blocage les fichiers `.qif` et `.ofx`.
+
 ## 1.11.0 (novembre 2026)
 
 ### Nouveaux badges de Pépite : silhouettes et indices
