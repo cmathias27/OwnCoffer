@@ -35,6 +35,51 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- Open bank statements (.qif, .ofx, .csv) directly in OwnCoffer -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="content"/>
+                <data android:scheme="file"/>
+                <data android:mimeType="*/*"/>
+                <data android:pathPattern=".*\\.qif"/>
+                <data android:pathPattern=".*\\.ofx"/>
+                <data android:pathPattern=".*\\.csv"/>
+                <data android:pathPattern=".*\\..*\\.qif"/>
+                <data android:pathPattern=".*\\..*\\.ofx"/>
+                <data android:pathPattern=".*\\..*\\.csv"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="content"/>
+                <data android:scheme="file"/>
+                <data android:mimeType="application/x-qif"/>
+                <data android:mimeType="application/qif"/>
+                <data android:mimeType="text/qif"/>
+                <data android:mimeType="application/x-ofx"/>
+                <data android:mimeType="application/ofx"/>
+                <data android:mimeType="text/ofx"/>
+                <data android:mimeType="text/csv"/>
+                <data android:mimeType="text/comma-separated-values"/>
+            </intent-filter>
+            <!-- Share bank statement files to OwnCoffer -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/x-qif"/>
+                <data android:mimeType="application/qif"/>
+                <data android:mimeType="text/qif"/>
+                <data android:mimeType="application/x-ofx"/>
+                <data android:mimeType="application/ofx"/>
+                <data android:mimeType="text/ofx"/>
+                <data android:mimeType="text/csv"/>
+                <data android:mimeType="text/comma-separated-values"/>
+                <data android:mimeType="text/plain"/>
+                <data android:mimeType="application/octet-stream"/>
+            </intent-filter>
         </activity>
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
