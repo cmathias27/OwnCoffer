@@ -402,6 +402,8 @@ void main() {
           badges: ['tidy', 'vault', 'made_up'],
           earnedSeeds: 0,
           newBadges: [],
+          items: const [],
+          equipped: const [],
         ),
       );
       expect(ok, isTrue);

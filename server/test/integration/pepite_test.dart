@@ -56,6 +56,8 @@ void main() {
       badges: badges,
       earnedSeeds: 0,
       newBadges: const [],
+      items: const [],
+      equipped: const [],
     );
 
     test('a new user starts with an empty reserve', () async {
@@ -294,6 +296,127 @@ void main() {
       expect(m.weeks, 0);
     });
 
+    /// Gives [u] a reserve of [seeds] seeds earned.
+    Future<void> earn(UuidValue u, int seeds) async {
+      await endpoints.pepite.status(as(u), today);
+      final p = (await PepiteProgress.db.findFirstRow(
+        db,
+        where: (p) => p.authUserId.equals(u),
+      ))!;
+      await PepiteProgress.db.updateRow(db, p.copyWith(seeds: seeds));
+    }
+
+    Matcher refused(String code) => throwsA(
+      isA<InvalidInputException>().having((e) => e.code, 'code', code),
+    );
+
+    test('the shop: buying spends seeds, the total earned stays', () async {
+      await earn(alice, 40);
+      final s = await endpoints.pepite.buy(as(alice), 'scarf', today);
+      expect(s.items, ['scarf']);
+      expect(s.seeds, 40, reason: 'the total earned never goes down');
+      expect(s.spentSeeds, 15);
+      expect(s.equipped, isEmpty);
+    });
+
+    test(
+      'the shop refuses an unknown item, a second one, too few seeds',
+      () async {
+        await earn(alice, 30);
+        await expectLater(
+          endpoints.pepite.buy(as(alice), 'made_up', today),
+          refused('pepite_item_unknown'),
+        );
+        await endpoints.pepite.buy(as(alice), 'scarf', today);
+        await expectLater(
+          endpoints.pepite.buy(as(alice), 'scarf', today),
+          refused('pepite_item_owned'),
+        );
+        // 15 left, the wheel costs 30.
+        await expectLater(
+          endpoints.pepite.buy(as(alice), 'wheel', today),
+          refused('pepite_not_enough_seeds'),
+        );
+        final s = await endpoints.pepite.status(as(alice), today);
+        expect(s.items, ['scarf']);
+        expect(s.spentSeeds, 15);
+      },
+    );
+
+    test('an item of the apps needs a session in an app', () async {
+      await earn(alice, 50);
+      await expectLater(
+        endpoints.pepite.buy(as(alice), 'backpack', today),
+        refused('pepite_item_apps_only'),
+      );
+      await RefreshToken.db.insertRow(
+        db,
+        RefreshToken(
+          authUserId: alice,
+          scopeNames: {accessScope.name!},
+          method: LocalOwner.method,
+          fixedSecret: ByteData(16),
+          rotatingSecretHash: 'x',
+        ),
+      );
+      final s = await endpoints.pepite.buy(as(alice), 'backpack', today);
+      expect(s.items, contains('backpack'));
+    });
+
+    test(
+      'one accessory worn at a time, burrow items each on its own',
+      () async {
+        await earn(alice, 200);
+        for (final code in ['scarf', 'glasses', 'wheel', 'sunflower']) {
+          await endpoints.pepite.buy(as(alice), code, today);
+        }
+        await endpoints.pepite.equip(as(alice), 'scarf', true, today);
+        var s = await endpoints.pepite.equip(as(alice), 'glasses', true, today);
+        expect(s.equipped, ['glasses']);
+        await endpoints.pepite.equip(as(alice), 'wheel', true, today);
+        s = await endpoints.pepite.equip(as(alice), 'sunflower', true, today);
+        expect(s.equipped, unorderedEquals(['glasses', 'wheel', 'sunflower']));
+        s = await endpoints.pepite.equip(as(alice), 'glasses', false, today);
+        expect(s.equipped, unorderedEquals(['wheel', 'sunflower']));
+        await expectLater(
+          endpoints.pepite.equip(as(alice), 'hut', true, today),
+          refused('pepite_item_not_owned'),
+        );
+      },
+    );
+
+    test("another user's items stay theirs", () async {
+      await earn(alice, 30);
+      await endpoints.pepite.buy(as(alice), 'scarf', today);
+      final m = await endpoints.pepite.status(as(mallory), today);
+      expect(m.items, isEmpty);
+      expect(m.spentSeeds, 0);
+      await expectLater(
+        endpoints.pepite.equip(as(mallory), 'scarf', true, today),
+        refused('pepite_item_not_owned'),
+      );
+      final a = await endpoints.pepite.status(as(alice), today);
+      expect(a.items, ['scarf']);
+      expect(a.equipped, isEmpty);
+    });
+
+    test('adopt brings the items, paid by the seeds earned', () async {
+      final ok = await endpoints.pepite.adopt(
+        as(alice),
+        empty(seeds: 30, weeks: 3).copyWith(
+          spentSeeds: 0,
+          items: ['scarf', 'wheel', 'made_up', 'flower'],
+          equipped: ['scarf', 'flower'],
+        ),
+      );
+      expect(ok, isTrue);
+      final s = await endpoints.pepite.status(as(alice), today);
+      // scarf (15) then flower (10): the wheel (30) would go past 30 seeds.
+      expect(s.items, unorderedEquals(['scarf', 'flower']));
+      expect(s.spentSeeds, 25, reason: 'at least the price of the items');
+      expect(s.equipped, hasLength(1), reason: 'one accessory at a time');
+    });
+
     test('needs a signed-in user', () async {
       await expectLater(
         endpoints.pepite.status(sessionBuilder, today),
@@ -305,6 +428,14 @@ void main() {
       );
       await expectLater(
         endpoints.pepite.adopt(sessionBuilder, empty(seeds: 10, weeks: 1)),
+        throwsA(isA<ServerpodUnauthenticatedException>()),
+      );
+      await expectLater(
+        endpoints.pepite.buy(sessionBuilder, 'scarf', today),
+        throwsA(isA<ServerpodUnauthenticatedException>()),
+      );
+      await expectLater(
+        endpoints.pepite.equip(sessionBuilder, 'scarf', true, today),
         throwsA(isA<ServerpodUnauthenticatedException>()),
       );
     });

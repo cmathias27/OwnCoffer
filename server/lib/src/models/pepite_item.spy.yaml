@@ -1,0 +1,13 @@
+### An item acquired in Pépite's shop (decision 0028, points 4-5).
+class: PepiteItem
+table: pepite_items
+serverOnly: true
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  code: String
+  acquiredAt: DateTime, default=now
+  equipped: bool, default=false
+indexes:
+  pepite_items_user_code_idx:
+    fields: authUserId, code
+    unique: true

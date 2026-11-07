@@ -65,6 +65,8 @@ PepiteStatus _status({
   badges: badges,
   earnedSeeds: earned,
   newBadges: fresh,
+  items: const [],
+  equipped: const [],
 );
 
 void main() {

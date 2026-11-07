@@ -18,20 +18,118 @@ import '../state/pepite_messages.dart';
 import '../state/start_device.dart';
 import 'pepite_apps.dart';
 
-/// A drawing of Pépite.
+/// A drawing of Pépite, wearing the accessory bought in the shop
+/// (decision 0028, point 4): [wear], or else the one put on.
 class PepiteImage extends StatelessWidget {
   final PepitePose pose;
   final double size;
 
-  const PepiteImage(this.pose, {super.key, this.size = 96});
+  /// An accessory to show instead of the one worn (the shop's preview).
+  final String? wear;
+
+  /// Tests give their own; the app's otherwise.
+  final Pepite? controller;
+
+  const PepiteImage(
+    this.pose, {
+    super.key,
+    this.size = 96,
+    this.wear,
+    this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = controller ?? pepite;
+    return ListenableBuilder(
+      listenable: p,
+      builder: (context, _) {
+        final accessory = wear ?? p.accessory;
+        final body = SvgPicture.asset(
+          'assets/pepite/pepite_${pose.name}.svg',
+          width: size,
+          height: size,
+          excludeFromSemantics: true,
+        );
+        if (accessory == null) return body;
+        return SizedBox(
+          width: size,
+          height: size,
+          child: Stack(
+            children: [
+              body,
+              SvgPicture.asset(
+                'assets/pepite/pepite_wear_$accessory.svg',
+                width: size,
+                height: size,
+                excludeFromSemantics: true,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// A burrow item of the shop (decision 0028, point 4).
+class PepiteItemImage extends StatelessWidget {
+  final String code;
+  final double size;
+
+  const PepiteItemImage(this.code, {super.key, this.size = 64});
 
   @override
   Widget build(BuildContext context) => SvgPicture.asset(
-    'assets/pepite/pepite_${pose.name}.svg',
+    'assets/pepite/pepite_item_$code.svg',
     width: size,
     height: size,
     excludeFromSemantics: true,
   );
+}
+
+/// Pépite at home: the burrow items on show around it.
+class PepiteBurrow extends StatelessWidget {
+  final PepitePose pose;
+  final double size;
+
+  /// An accessory tried on in the shop, instead of the one worn.
+  final String? wear;
+  final Pepite? controller;
+
+  const PepiteBurrow(
+    this.pose, {
+    super.key,
+    this.size = 140,
+    this.wear,
+    this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = controller ?? pepite;
+    return ListenableBuilder(
+      listenable: p,
+      builder: (context, _) {
+        final items = p.burrow;
+        final image = PepiteImage(pose, size: size, wear: wear, controller: p);
+        if (items.isEmpty) return image;
+        final small = size * 0.45;
+        return Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.end,
+          spacing: 4,
+          children: [
+            for (final code in items.take((items.length / 2).ceil()))
+              PepiteItemImage(code, size: small),
+            image,
+            for (final code in items.skip((items.length / 2).ceil()))
+              PepiteItemImage(code, size: small),
+          ],
+        );
+      },
+    );
+  }
 }
 
 /// The seeds of the reserve, as a small chip.
@@ -54,7 +152,9 @@ class PepiteSeeds extends StatelessWidget {
         children: [
           Icon(Icons.grain, size: 16, color: scheme.onSurface),
           const SizedBox(width: 4),
-          Text(AppLocalizations.of(context).pepiteSeeds(seeds)),
+          Flexible(
+            child: Text(AppLocalizations.of(context).pepiteSeeds(seeds)),
+          ),
         ],
       ),
     );

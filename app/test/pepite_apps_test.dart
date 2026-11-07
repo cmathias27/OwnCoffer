@@ -27,6 +27,8 @@ PepiteStatus _status({List<String> badges = const []}) => PepiteStatus(
   badges: badges,
   earnedSeeds: 0,
   newBadges: const [],
+  items: const [],
+  equipped: const [],
 );
 
 /// Pépite's invitation to install the apps (decision 0027, point 8).

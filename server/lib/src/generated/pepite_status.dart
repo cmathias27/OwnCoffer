@@ -13,11 +13,12 @@
 import 'package:owncoffer_server/src/generated/protocol.dart' as _itdod8fx;
 import 'package:serverpod/serverpod.dart' as _is;
 
-/// What the app shows of Pépite (decision 0026).
+/// What the app shows of Pépite (decision 0026, 0028).
 abstract class PepiteStatus
     implements _is.SerializableModel, _is.ProtocolSerialization {
   PepiteStatus._({
     required this.seeds,
+    int? spentSeeds,
     required this.weeks,
     required this.doneThisWeek,
     this.firstRitualAt,
@@ -25,10 +26,13 @@ abstract class PepiteStatus
     required this.badges,
     required this.earnedSeeds,
     required this.newBadges,
-  });
+    required this.items,
+    required this.equipped,
+  }) : spentSeeds = spentSeeds ?? 0;
 
   factory PepiteStatus({
     required int seeds,
+    int? spentSeeds,
     required int weeks,
     required bool doneThisWeek,
     DateTime? firstRitualAt,
@@ -36,11 +40,14 @@ abstract class PepiteStatus
     required List<String> badges,
     required int earnedSeeds,
     required List<String> newBadges,
+    required List<String> items,
+    required List<String> equipped,
   }) = _PepiteStatusImpl;
 
   factory PepiteStatus.fromJson(Map<String, dynamic> jsonSerialization) {
     return PepiteStatus(
       seeds: jsonSerialization['seeds'] as int,
+      spentSeeds: jsonSerialization['spentSeeds'] as int?,
       weeks: jsonSerialization['weeks'] as int,
       doneThisWeek: _is.BoolJsonExtension.fromJson(
         jsonSerialization['doneThisWeek'],
@@ -62,10 +69,19 @@ abstract class PepiteStatus
       newBadges: _itdod8fx.Protocol().deserialize<List<String>>(
         jsonSerialization['newBadges'],
       ),
+      items: _itdod8fx.Protocol().deserialize<List<String>>(
+        jsonSerialization['items'],
+      ),
+      equipped: _itdod8fx.Protocol().deserialize<List<String>>(
+        jsonSerialization['equipped'],
+      ),
     );
   }
 
   int seeds;
+
+  /// Seeds spent in the shop; available seeds = seeds - spentSeeds.
+  int spentSeeds;
 
   int weeks;
 
@@ -83,11 +99,18 @@ abstract class PepiteStatus
 
   List<String> newBadges;
 
+  /// Codes of acquired items in Pépite's shop.
+  List<String> items;
+
+  /// Codes of currently equipped items (accessory and/or burrow).
+  List<String> equipped;
+
   /// Returns a shallow copy of this [PepiteStatus]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
   PepiteStatus copyWith({
     int? seeds,
+    int? spentSeeds,
     int? weeks,
     bool? doneThisWeek,
     DateTime? firstRitualAt,
@@ -95,12 +118,15 @@ abstract class PepiteStatus
     List<String>? badges,
     int? earnedSeeds,
     List<String>? newBadges,
+    List<String>? items,
+    List<String>? equipped,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       '__className__': 'PepiteStatus',
       'seeds': seeds,
+      'spentSeeds': spentSeeds,
       'weeks': weeks,
       'doneThisWeek': doneThisWeek,
       if (firstRitualAt != null) 'firstRitualAt': firstRitualAt?.toJson(),
@@ -108,6 +134,8 @@ abstract class PepiteStatus
       'badges': badges.toJson(),
       'earnedSeeds': earnedSeeds,
       'newBadges': newBadges.toJson(),
+      'items': items.toJson(),
+      'equipped': equipped.toJson(),
     };
   }
 
@@ -116,6 +144,7 @@ abstract class PepiteStatus
     return {
       '__className__': 'PepiteStatus',
       'seeds': seeds,
+      'spentSeeds': spentSeeds,
       'weeks': weeks,
       'doneThisWeek': doneThisWeek,
       if (firstRitualAt != null) 'firstRitualAt': firstRitualAt?.toJson(),
@@ -123,6 +152,8 @@ abstract class PepiteStatus
       'badges': badges.toJson(),
       'earnedSeeds': earnedSeeds,
       'newBadges': newBadges.toJson(),
+      'items': items.toJson(),
+      'equipped': equipped.toJson(),
     };
   }
 
@@ -137,6 +168,7 @@ class _Undefined {}
 class _PepiteStatusImpl extends PepiteStatus {
   _PepiteStatusImpl({
     required int seeds,
+    int? spentSeeds,
     required int weeks,
     required bool doneThisWeek,
     DateTime? firstRitualAt,
@@ -144,8 +176,11 @@ class _PepiteStatusImpl extends PepiteStatus {
     required List<String> badges,
     required int earnedSeeds,
     required List<String> newBadges,
+    required List<String> items,
+    required List<String> equipped,
   }) : super._(
          seeds: seeds,
+         spentSeeds: spentSeeds,
          weeks: weeks,
          doneThisWeek: doneThisWeek,
          firstRitualAt: firstRitualAt,
@@ -153,6 +188,8 @@ class _PepiteStatusImpl extends PepiteStatus {
          badges: badges,
          earnedSeeds: earnedSeeds,
          newBadges: newBadges,
+         items: items,
+         equipped: equipped,
        );
 
   /// Returns a shallow copy of this [PepiteStatus]
@@ -161,6 +198,7 @@ class _PepiteStatusImpl extends PepiteStatus {
   @override
   PepiteStatus copyWith({
     int? seeds,
+    int? spentSeeds,
     int? weeks,
     bool? doneThisWeek,
     Object? firstRitualAt = _Undefined,
@@ -168,9 +206,12 @@ class _PepiteStatusImpl extends PepiteStatus {
     List<String>? badges,
     int? earnedSeeds,
     List<String>? newBadges,
+    List<String>? items,
+    List<String>? equipped,
   }) {
     return PepiteStatus(
       seeds: seeds ?? this.seeds,
+      spentSeeds: spentSeeds ?? this.spentSeeds,
       weeks: weeks ?? this.weeks,
       doneThisWeek: doneThisWeek ?? this.doneThisWeek,
       firstRitualAt: firstRitualAt is DateTime?
@@ -182,6 +223,8 @@ class _PepiteStatusImpl extends PepiteStatus {
       badges: badges ?? this.badges.map((e0) => e0).toList(),
       earnedSeeds: earnedSeeds ?? this.earnedSeeds,
       newBadges: newBadges ?? this.newBadges.map((e0) => e0).toList(),
+      items: items ?? this.items.map((e0) => e0).toList(),
+      equipped: equipped ?? this.equipped.map((e0) => e0).toList(),
     );
   }
 }

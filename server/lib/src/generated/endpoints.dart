@@ -3466,6 +3466,61 @@ class Endpoints extends _is.EndpointDispatch {
                     params['today'],
                   ),
         ),
+        'buy': _is.MethodConnector(
+          name: 'buy',
+          params: {
+            'code': _is.ParameterDescription(
+              name: 'code',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'today': _is.ParameterDescription(
+              name: 'today',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['pepite'] as _iagql2g7.PepiteEndpoint).buy(
+                session,
+                params['code'],
+                params['today'],
+              ),
+        ),
+        'equip': _is.MethodConnector(
+          name: 'equip',
+          params: {
+            'code': _is.ParameterDescription(
+              name: 'code',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'on': _is.ParameterDescription(
+              name: 'on',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+            'today': _is.ParameterDescription(
+              name: 'today',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['pepite'] as _iagql2g7.PepiteEndpoint).equip(
+                    session,
+                    params['code'],
+                    params['on'],
+                    params['today'],
+                  ),
+        ),
         'adopt': _is.MethodConnector(
           name: 'adopt',
           params: {

@@ -2,6 +2,16 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.13.0 (novembre 2026)
+
+### La boutique de Pépite
+- **Les graines se dépensent** (décision 0028, points 4 et 5) : depuis **Pépite et ma réserve**, une boutique propose 7 **accessoires** (écharpe, lunettes, bonnet, casquette, nœud papillon, fleur, sac à dos), portés un à la fois, et 6 objets pour le **terrier** (coussin, tournesol, roue, cabane, lanterne, tapis), installés autour de Pépite autant qu'on veut.
+- **Le total gagné ne baisse jamais** : la réserve garde le total des graines gagnées et compte à part celles dépensées ; la boutique affiche les graines à dépenser.
+- **Essayer avant d'acheter** : toucher un accessoire le montre sur Pépite ; l'achat demande confirmation. Pépite porte son accessoire partout où elle apparaît (accueil, rituel, panneau de discussion).
+- **Vérifié par le serveur** : objet du catalogue, pas déjà acheté, assez de graines. Le **sac à dos** ne s'achète que dans l'application Android ou Windows (ou la version autonome), puis se voit partout.
+- **Version autonome** : la migration vers un serveur emporte les objets et les graines dépensées, dans la limite des graines gagnées.
+- Nouvelle table `pepite_items` et colonne `spentSeeds` ; migrations PostgreSQL et SQLite.
+
 ## 1.12.0 (novembre 2026)
 
 ### Pépite, interface universelle de l'IA et des conseils d'application
