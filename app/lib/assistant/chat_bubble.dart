@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
+import '../help/help.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../screens/advisor_screen.dart';
 import '../screens/assistant_screen.dart';
+import '../state/pepite.dart';
+import '../state/pepite_advice.dart';
+import '../state/pepite_messages.dart';
 import '../util/file_pick.dart';
+import '../widgets/pepite.dart';
 import 'chat_controller.dart';
 import 'chat_markdown.dart';
 
@@ -44,9 +49,10 @@ class _Floating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
-    listenable: chat,
+    listenable: Listenable.merge([chat, pepite, pepiteAdvice]),
     builder: (context, _) {
       if (!chat.available) return const SizedBox.shrink();
+      if (!pepite.enabled && !chat.hasAi) return const SizedBox.shrink();
       final size = MediaQuery.sizeOf(context);
       final padding = MediaQuery.paddingOf(context);
       final phone = size.width < 600;
@@ -81,10 +87,33 @@ class _Bubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final scheme = Theme.of(context).colorScheme;
+    final hasTip =
+        pepiteAdvice.tipsOn &&
+        pepiteAdvice.tipFor(pepiteAdvice.currentTopic) != null;
+    final hasBadge = chat.unread || chat.sending || hasTip;
+
+    final Widget content;
+    final Color background;
+    if (pepite.enabled) {
+      final pose = chat.sending
+          ? PepitePose.cheer
+          : (chat.unread || hasTip)
+          ? PepitePose.happy
+          : PepitePose.wave;
+      content = PepiteImage(pose, size: 44);
+      background = scheme.surfaceContainerHighest;
+    } else {
+      content = Icon(
+        chat.sending ? Icons.more_horiz : Icons.chat_bubble_outline,
+        color: scheme.onPrimary,
+      );
+      background = scheme.primary;
+    }
+
     return Tooltip(
       message: l.chatOpen,
       child: Material(
-        color: scheme.primary,
+        color: background,
         shape: const CircleBorder(),
         elevation: 6,
         child: InkWell(
@@ -92,13 +121,25 @@ class _Bubble extends StatelessWidget {
           onTap: () => chat.setOpen(true),
           child: SizedBox.square(
             dimension: 56,
-            child: Badge(
-              isLabelVisible: chat.unread || chat.sending,
-              smallSize: 12,
-              child: Icon(
-                chat.sending ? Icons.more_horiz : Icons.chat_bubble_outline,
-                color: scheme.onPrimary,
-              ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                content,
+                if (hasBadge)
+                  Positioned(
+                    top: 6,
+                    right: 6,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: scheme.error,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: scheme.surface, width: 1.5),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
@@ -201,7 +242,16 @@ class _ChatPanelState extends State<ChatPanel> {
                 padding: const EdgeInsets.fromLTRB(16, 8, 4, 8),
                 child: Row(
                   children: [
-                    Icon(Icons.auto_awesome, color: scheme.onPrimaryContainer),
+                    if (pepite.enabled)
+                      PepiteImage(
+                        chat.sending ? PepitePose.cheer : PepitePose.wave,
+                        size: 34,
+                      )
+                    else
+                      Icon(
+                        Icons.auto_awesome,
+                        color: scheme.onPrimaryContainer,
+                      ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(
@@ -211,26 +261,36 @@ class _ChatPanelState extends State<ChatPanel> {
                             l.assistantTitle,
                             style: theme.textTheme.titleMedium,
                           ),
-                          if (provider != null) _modelMenu(l, theme),
+                          if (chat.hasAi && provider != null)
+                            _modelMenu(l, theme)
+                          else if (!chat.hasAi)
+                            Text(
+                              l.pepiteOfflineSubtitle,
+                              style: theme.textTheme.bodySmall,
+                            ),
                         ],
                       ),
                     ),
-                    IconButton(
-                      tooltip: l.chatHistory,
-                      icon: Icon(
-                        _history == null ? Icons.history : Icons.chat_outlined,
+                    if (chat.hasAi) ...[
+                      IconButton(
+                        tooltip: l.chatHistory,
+                        icon: Icon(
+                          _history == null
+                              ? Icons.history
+                              : Icons.chat_outlined,
+                        ),
+                        onPressed: () => _history == null
+                            ? _showHistory()
+                            : setState(() => _history = null),
                       ),
-                      onPressed: () => _history == null
-                          ? _showHistory()
-                          : setState(() => _history = null),
-                    ),
-                    IconButton(
-                      tooltip: l.chatNew,
-                      icon: const Icon(Icons.add_comment_outlined),
-                      onPressed: chat.talk.isEmpty || chat.sending
-                          ? null
-                          : chat.clear,
-                    ),
+                      IconButton(
+                        tooltip: l.chatNew,
+                        icon: const Icon(Icons.add_comment_outlined),
+                        onPressed: chat.talk.isEmpty || chat.sending
+                            ? null
+                            : chat.clear,
+                      ),
+                    ],
                     IconButton(
                       tooltip: l.chatSettings,
                       icon: const Icon(Icons.tune),
@@ -248,6 +308,8 @@ class _ChatPanelState extends State<ChatPanel> {
             ),
             if (_history != null)
               Expanded(child: _historyList(l))
+            else if (!chat.hasAi)
+              Expanded(child: _offlineBody(l, theme, scheme))
             else
               Expanded(
                 child: ListView(
@@ -263,6 +325,71 @@ class _ChatPanelState extends State<ChatPanel> {
                             l.assistantExternalWarning(provider.name),
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: scheme.tertiary,
+                            ),
+                          ),
+                        ),
+                      if ((pepiteAdvice.tipsOn
+                              ? pepiteAdvice.tipFor(pepiteAdvice.currentTopic)
+                              : null)
+                          case final tip?)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Card(
+                            margin: EdgeInsets.zero,
+                            color: scheme.secondaryContainer,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const PepiteImage(
+                                        PepitePose.happy,
+                                        size: 28,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          l.pepiteTipTitle,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: scheme.onSecondaryContainer,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    tip.text,
+                                    style: TextStyle(
+                                      color: scheme.onSecondaryContainer,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Align(
+                                    alignment: AlignmentDirectional.centerEnd,
+                                    child: Wrap(
+                                      spacing: 8,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () {
+                                            pepiteAdvice.seen(tip);
+                                            _push(HelpPage(topic: tip.topic));
+                                          },
+                                          child: Text(l.pepiteTipMore),
+                                        ),
+                                        FilledButton.tonal(
+                                          onPressed: () =>
+                                              pepiteAdvice.seen(tip),
+                                          child: Text(l.pepiteTipGotIt),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -322,7 +449,7 @@ class _ChatPanelState extends State<ChatPanel> {
                   style: TextStyle(color: scheme.error),
                 ),
               ),
-            _composer(l, provider?.vision ?? false),
+            if (chat.hasAi) _composer(l, provider?.vision ?? false),
           ],
         ),
       ),
@@ -390,6 +517,116 @@ class _ChatPanelState extends State<ChatPanel> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _offlineBody(
+    AppLocalizations l,
+    ThemeData theme,
+    ColorScheme scheme,
+  ) {
+    final tip = pepiteAdvice.tipFor(pepiteAdvice.currentTopic, force: true);
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (pepite.enabled) ...[
+              const PepiteImage(PepitePose.happy, size: 52),
+              const SizedBox(width: 12),
+            ],
+            Expanded(
+              child: Text(
+                l.pepiteOfflineHelp,
+                style: theme.textTheme.bodyMedium,
+              ),
+            ),
+          ],
+        ),
+        if (tip != null) ...[
+          const SizedBox(height: 16),
+          Card(
+            margin: EdgeInsets.zero,
+            color: scheme.secondaryContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.lightbulb_outline,
+                        size: 20,
+                        color: scheme.onSecondaryContainer,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        l.pepiteTipTitle,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: scheme.onSecondaryContainer,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    tip.text,
+                    style: TextStyle(color: scheme.onSecondaryContainer),
+                  ),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: Wrap(
+                      spacing: 8,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            pepiteAdvice.seen(tip);
+                            _push(HelpPage(topic: tip.topic));
+                          },
+                          child: Text(l.pepiteTipMore),
+                        ),
+                        FilledButton.tonal(
+                          onPressed: () => pepiteAdvice.seen(tip),
+                          child: Text(l.pepiteTipGotIt),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+        const SizedBox(height: 20),
+        ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          leading: const Icon(Icons.help_outline),
+          title: Text(l.pepiteOpenHelpTopic),
+          onTap: () => _push(HelpPage(topic: pepiteAdvice.currentTopic)),
+        ),
+        ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          leading: const Icon(Icons.menu_book_outlined),
+          title: Text(l.pepiteBrowseHelp),
+          onTap: () => _push(const HelpScreen()),
+        ),
+        ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          leading: const Icon(Icons.auto_awesome_outlined),
+          title: Text(l.pepiteConfigureAi),
+          onTap: () => _push(AssistantScreen(membership: chat.membership!)),
+        ),
+      ],
     );
   }
 
@@ -487,6 +724,10 @@ class _ChatPanelState extends State<ChatPanel> {
             ? Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (pepite.enabled) ...[
+                    const PepiteImage(PepitePose.cheer, size: 24),
+                    const SizedBox(width: 8),
+                  ],
                   const SizedBox.square(
                     dimension: 14,
                     child: CircularProgressIndicator(strokeWidth: 2),
@@ -495,38 +736,51 @@ class _ChatPanelState extends State<ChatPanel> {
                   Text(l.assistantThinking),
                 ],
               )
-            : Column(
+            : Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  r.text.isEmpty
-                      ? SelectableText(l.assistantNoAnswer)
-                      : ChatMarkdown(r.text),
-                  if (r.tools.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: Text(
-                        l.assistantUsedTools(r.tools.toSet().join(', ')),
-                        style: theme.textTheme.bodySmall,
-                      ),
+                  if (pepite.enabled) ...[
+                    const PepiteImage(PepitePose.happy, size: 28),
+                    const SizedBox(width: 8),
+                  ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        r.text.isEmpty
+                            ? SelectableText(l.assistantNoAnswer)
+                            : ChatMarkdown(r.text),
+                        if (r.tools.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                              l.assistantUsedTools(r.tools.toSet().join(', ')),
+                              style: theme.textTheme.bodySmall,
+                            ),
+                          ),
+                        if (r.isExternal)
+                          Text(
+                            l.assistantSentTo(r.provider, r.model),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: scheme.tertiary,
+                            ),
+                          ),
+                        if (r.proposals.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: FilledButton.tonalIcon(
+                              icon: const Icon(Icons.lightbulb_outline),
+                              label: Text(
+                                l.assistantProposals(r.proposals.length),
+                              ),
+                              onPressed: () => _push(
+                                AdvisorScreen(membership: chat.membership!),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
-                  if (r.isExternal)
-                    Text(
-                      l.assistantSentTo(r.provider, r.model),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: scheme.tertiary,
-                      ),
-                    ),
-                  if (r.proposals.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: FilledButton.tonalIcon(
-                        icon: const Icon(Icons.lightbulb_outline),
-                        label: Text(l.assistantProposals(r.proposals.length)),
-                        onPressed: () => _push(
-                          AdvisorScreen(membership: chat.membership!),
-                        ),
-                      ),
-                    ),
+                  ),
                 ],
               ),
         mine: false,

@@ -91,6 +91,14 @@ class PepiteAdvice extends ChangeNotifier {
 
   var tipsOn = true;
   var startHidden = false;
+  var currentTopic = HelpTopic.home;
+
+  void setTopic(HelpTopic topic) {
+    if (currentTopic != topic) {
+      currentTopic = topic;
+      notifyListeners();
+    }
+  }
 
   /// Codes seen, null until known (or without the server: no tip then).
   Set<String>? _seenCodes;
