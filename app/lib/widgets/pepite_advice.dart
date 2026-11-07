@@ -15,6 +15,8 @@ import 'pepite.dart';
 /// on top of it, until « Compris » or « En savoir plus » (its help page).
 class PepiteTipBanner extends StatelessWidget {
   final HelpTopic topic;
+  final bool force;
+  final VoidCallback? onClose;
 
   /// Tests give their own; the app's otherwise.
   final PepiteAdvice? controller;
@@ -26,6 +28,8 @@ class PepiteTipBanner extends StatelessWidget {
   const PepiteTipBanner({
     super.key,
     required this.topic,
+    this.force = false,
+    this.onClose,
     this.controller,
     this.pepiteController,
     this.openHelp,
@@ -39,7 +43,8 @@ class PepiteTipBanner extends StatelessWidget {
     return ListenableBuilder(
       listenable: Listenable.merge([advice, mascot]),
       builder: (context, _) {
-        final tip = advice.tipFor(topic);
+        if (!mascot.enabled) return const SizedBox.shrink();
+        final tip = advice.tipFor(topic, force: force);
         if (tip == null) return const SizedBox.shrink();
         final l = AppLocalizations.of(context);
         final scheme = Theme.of(context).colorScheme;
@@ -54,13 +59,8 @@ class PepiteTipBanner extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (mascot.enabled) ...[
-                      const PepiteImage(PepitePose.happy, size: 40),
-                      const SizedBox(width: 8),
-                    ] else ...[
-                      Icon(Icons.lightbulb_outline, color: color),
-                      const SizedBox(width: 8),
-                    ],
+                    const PepiteImage(PepitePose.happy, size: 40),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text.rich(
                         TextSpan(
@@ -77,6 +77,12 @@ class PepiteTipBanner extends StatelessWidget {
                         style: TextStyle(color: color),
                       ),
                     ),
+                    if (onClose != null)
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 20),
+                        tooltip: l.close,
+                        onPressed: onClose,
+                      ),
                   ],
                 ),
                 Align(
@@ -87,12 +93,16 @@ class PepiteTipBanner extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           advice.seen(tip);
+                          onClose?.call();
                           (openHelp ?? _help)(context, tip.topic);
                         },
                         child: Text(l.pepiteTipMore),
                       ),
                       FilledButton.tonal(
-                        onPressed: () => advice.seen(tip),
+                        onPressed: () {
+                          advice.seen(tip);
+                          onClose?.call();
+                        },
                         child: Text(l.pepiteTipGotIt),
                       ),
                     ],

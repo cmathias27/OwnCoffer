@@ -10233,6 +10233,12 @@ abstract class AppLocalizations {
   /// **'Le savais-tu ?'**
   String get pepiteTipTitle;
 
+  /// No description provided for @pepiteTipButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conseil de Pépite'**
+  String get pepiteTipButton;
+
   /// No description provided for @pepiteTipGotIt.
   ///
   /// In fr, this message translates to:

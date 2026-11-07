@@ -10,6 +10,7 @@ import 'package:owncoffer_app/state/app_lock.dart';
 import 'package:owncoffer_app/state/getting_started.dart';
 import 'package:owncoffer_app/state/pepite.dart';
 import 'package:owncoffer_app/state/pepite_advice.dart';
+import 'package:owncoffer_app/widgets/pepite.dart';
 import 'package:owncoffer_app/widgets/pepite_advice.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
@@ -198,6 +199,17 @@ Ignoré aussi.
       await a.seen(tip);
       expect(a.tipFor(HelpTopic.home), isNull);
     });
+
+    test(
+      'on demand (force: true): tip returned even when seen today',
+      () async {
+        final a = await ready();
+        final tip = a.tipFor(HelpTopic.home)!;
+        await a.seen(tip);
+        expect(a.tipFor(HelpTopic.home), isNull);
+        expect(a.tipFor(HelpTopic.home, force: true)?.topic, HelpTopic.home);
+      },
+    );
   });
 
   group('« Bien démarrer » steps', () {
@@ -394,5 +406,122 @@ Ignoré aussi.
       expect(tabs, ['rules']);
       expect(find.text(fr.startTitle), findsNothing);
     });
+
+    testWidgets('the tip banner: onClose dismisses it', (tester) async {
+      final a = await tester.runAsync(ready);
+      var closed = false;
+      await tester.pumpWidget(
+        app(
+          PepiteTipBanner(
+            topic: HelpTopic.home,
+            controller: a,
+            pepiteController: mascot,
+            onClose: () => closed = true,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byIcon(Icons.close), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.close));
+      expect(closed, isTrue);
+    });
+
+    testWidgets('the tip banner: force shows advice on demand', (
+      tester,
+    ) async {
+      final a = (await tester.runAsync(ready))!;
+      final tip = a.tipFor(HelpTopic.home)!;
+      await a.seen(tip);
+      expect(a.tipFor(HelpTopic.home), isNull);
+
+      await tester.pumpWidget(
+        app(
+          PepiteTipBanner(
+            topic: HelpTopic.home,
+            controller: a,
+            pepiteController: mascot,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.textContaining(_catalogue.first.text), findsNothing);
+
+      await tester.pumpWidget(
+        app(
+          PepiteTipBanner(
+            topic: HelpTopic.home,
+            force: true,
+            controller: a,
+            pepiteController: mascot,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.textContaining(_catalogue[1].text), findsOneWidget);
+    });
+
+    testWidgets(
+      'the unified PepiteCard gathers ritual, advice and start into one visual card',
+      (tester) async {
+        final a = await tester.runAsync(ready);
+        final p = Pepite(
+          store: _MemoryStore(),
+          reminders: const NoReminders(),
+          status: (_) async => PepiteStatus(
+            seeds: 15,
+            weeks: 1,
+            doneThisWeek: false,
+            firstRitualAt: now,
+            lastRitualAt: now,
+            badges: const ['first_ritual'],
+            earnedSeeds: 15,
+            newBadges: const [],
+          ),
+          complete: (_) async => throw Exception('unused'),
+          now: () => now,
+        );
+        await tester.runAsync(p.signedIn);
+
+        var started = 0;
+        await tester.pumpWidget(
+          app(
+            PepiteCard(
+              membership: _membership,
+              overdrawn: false,
+              onStep: (_) {},
+              onOpenStart: () => started++,
+              controller: p,
+              adviceController: a,
+              loadStart: (_) async => _start(done: ['account']),
+              device: () async => const StartDevice(),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Exactly ONE visual card and ONE mascot image!
+        expect(find.byType(Card), findsOneWidget);
+        expect(find.byType(PepiteImage), findsOneWidget);
+
+        // Ritual is present
+        expect(find.text(fr.pepiteStart), findsOneWidget);
+
+        // Tip is present in the card
+        expect(find.textContaining(_catalogue.first.text), findsOneWidget);
+
+        // Start steps are present in the card
+        expect(find.text(fr.startCard(1, 5)), findsOneWidget);
+
+        // Acknowledging the tip keeps the card and ritual intact
+        await tester.tap(find.text(fr.pepiteTipGotIt));
+        await tester.pumpAndSettle();
+
+        expect(find.textContaining(_catalogue.first.text), findsNothing);
+        expect(find.byType(Card), findsOneWidget);
+        expect(find.byType(PepiteImage), findsOneWidget);
+        expect(find.text(fr.pepiteStart), findsOneWidget);
+        expect(find.text(fr.startCard(1, 5)), findsOneWidget);
+      },
+    );
   });
 }

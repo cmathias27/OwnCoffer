@@ -30,6 +30,10 @@ import '../state/app_lock.dart';
 import '../help/help.dart';
 import '../assistant/chat_controller.dart';
 import 'apps_screen.dart';
+import '../state/pepite.dart';
+import '../state/pepite_advice.dart';
+import '../state/pepite_messages.dart';
+import '../widgets/pepite.dart';
 import '../widgets/pepite_advice.dart';
 import '../widgets/pepite_apps.dart';
 import 'getting_started_screen.dart';
@@ -49,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Shows the server administration button.
   var _isServerAdmin = false;
   var _tab = 8;
+  var _showTip = false;
   List<Account> _accounts = [];
   Account? _openAccount;
   var _imports = 0;
@@ -137,7 +142,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _selectTab(int i) {
-    setState(() => _tab = i);
+    setState(() {
+      _tab = i;
+      _showTip = false;
+    });
     if (i == 0) _accountsKey.currentState?.reload();
     if (i == 2) _forecastKey.currentState?.reload();
     if (i == 4) _categoriesKey.currentState?.reload();
@@ -368,6 +376,25 @@ class _HomeScreenState extends State<HomeScreen> {
           // Wide screens: the help of the open tab; phones find it in the
           // account menu, so that the title keeps its room.
           if (wide) HelpButton(_helpTopic),
+          // Decision 0028: on every other page, Pépite appears on demand.
+          if (current != null && _tab != 8)
+            ListenableBuilder(
+              listenable: Listenable.merge([pepite, pepiteAdvice]),
+              builder: (context, _) {
+                if (!pepite.enabled || !pepiteAdvice.tipsOn) {
+                  return const SizedBox.shrink();
+                }
+                final hasUnseen = pepiteAdvice.tipFor(_helpTopic) != null;
+                return IconButton(
+                  tooltip: l.pepiteTipButton,
+                  icon: Badge(
+                    isLabelVisible: hasUnseen,
+                    child: const PepiteImage(PepitePose.happy, size: 26),
+                  ),
+                  onPressed: () => setState(() => _showTip = !_showTip),
+                );
+              },
+            ),
           IconButton(
             tooltip: l.notificationsUnread(_unread),
             onPressed: _openNotifications,
@@ -438,6 +465,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(l.pepiteMenu),
                   ),
                 ),
+                if (current != null &&
+                    _tab != 8 &&
+                    pepite.enabled &&
+                    pepiteAdvice.tipsOn)
+                  PopupMenuItem(
+                    value: () => setState(() => _showTip = !_showTip),
+                    child: ListTile(
+                      leading: const PepiteImage(PepitePose.happy, size: 24),
+                      title: Text(l.pepiteTipButton),
+                    ),
+                  ),
                 if (current != null)
                   PopupMenuItem(
                     value: () => Navigator.of(context).push(
@@ -591,7 +629,12 @@ class _HomeScreenState extends State<HomeScreen> {
           if (s.demo) const _DemoBanner(),
           AppUpdateBanner(serverVersion: s.serverVersion),
           const PepiteAppsBanner(),
-          if (current != null) PepiteTipBanner(topic: _helpTopic),
+          if (current != null && _showTip && _tab != 8)
+            PepiteTipBanner(
+              topic: _helpTopic,
+              force: true,
+              onClose: () => setState(() => _showTip = false),
+            ),
           Expanded(
             child: wide && current != null
                 ? Row(

@@ -6397,6 +6397,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get pepiteTipTitle => 'Le savais-tu ?';
 
   @override
+  String get pepiteTipButton => 'Conseil de Pépite';
+
+  @override
   String get pepiteTipGotIt => 'Compris';
 
   @override

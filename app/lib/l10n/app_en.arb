@@ -1756,6 +1756,7 @@
   "appsWhyStandaloneHelp": "No server if you wish: your accounts stay on the device, and can move to a server later.",
   "appsWhyBadgeHelp": "{seeds} seeds for Pépite at your first sign-in from an app.",
   "pepiteTipTitle": "Did you know?",
+  "pepiteTipButton": "Pépite's advice",
   "pepiteTipGotIt": "Got it",
   "pepiteTipMore": "Learn more",
   "pepiteTipsSetting": "Show the tips",
