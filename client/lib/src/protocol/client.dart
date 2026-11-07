@@ -1946,6 +1946,40 @@ class EndpointPepite extends _isc.EndpointRef {
         {'today': today},
       );
 
+  /// Buys [code] in Pépite's shop (decision 0028, point 4): the item must
+  /// exist, not be owned yet, and cost no more than the seeds left to
+  /// spend. An item of the apps (point 5) needs a session seen in the
+  /// Android or Windows app, or the standalone app. The total earned never
+  /// goes down; only the seeds spent grow.
+  _ida.Future<_igi0vxn8.PepiteStatus> buy(
+    String code,
+    DateTime today,
+  ) => caller.callServerEndpoint<_igi0vxn8.PepiteStatus>(
+    'pepite',
+    'buy',
+    {
+      'code': code,
+      'today': today,
+    },
+  );
+
+  /// Puts on or takes off an owned item. Pépite wears one accessory at a
+  /// time: putting one on takes the others off. Burrow items are shown or
+  /// hidden each on its own.
+  _ida.Future<_igi0vxn8.PepiteStatus> equip(
+    String code,
+    bool on,
+    DateTime today,
+  ) => caller.callServerEndpoint<_igi0vxn8.PepiteStatus>(
+    'pepite',
+    'equip',
+    {
+      'code': code,
+      'on': on,
+      'today': today,
+    },
+  );
+
   /// Standalone version moved to a server: its reserve and badges come
   /// along, only into an account that has none yet (nothing is added to an
   /// existing reserve). Returns whether they were taken.

@@ -476,6 +476,8 @@ Ignoré aussi.
             badges: const ['first_ritual'],
             earnedSeeds: 15,
             newBadges: const [],
+            items: const [],
+            equipped: const [],
           ),
           complete: (_) async => throw Exception('unused'),
           now: () => now,

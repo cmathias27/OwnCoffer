@@ -20,16 +20,18 @@ abstract class PepiteProgress
     this.id,
     required this.authUserId,
     required this.seeds,
+    int? spentSeeds,
     required this.weeks,
     this.lastWeek,
     this.firstRitualAt,
     this.lastRitualAt,
-  });
+  }) : spentSeeds = spentSeeds ?? 0;
 
   factory PepiteProgress({
     int? id,
     required _is.UuidValue authUserId,
     required int seeds,
+    int? spentSeeds,
     required int weeks,
     DateTime? lastWeek,
     DateTime? firstRitualAt,
@@ -43,6 +45,7 @@ abstract class PepiteProgress
         jsonSerialization['authUserId'],
       ),
       seeds: jsonSerialization['seeds'] as int,
+      spentSeeds: jsonSerialization['spentSeeds'] as int?,
       weeks: jsonSerialization['weeks'] as int,
       lastWeek: jsonSerialization['lastWeek'] == null
           ? null
@@ -71,6 +74,9 @@ abstract class PepiteProgress
 
   int seeds;
 
+  /// Seeds spent in the shop; available seeds = seeds - spentSeeds.
+  int spentSeeds;
+
   /// Weeks with a ritual done, in all (not in a row).
   int weeks;
 
@@ -91,6 +97,7 @@ abstract class PepiteProgress
     int? id,
     _is.UuidValue? authUserId,
     int? seeds,
+    int? spentSeeds,
     int? weeks,
     DateTime? lastWeek,
     DateTime? firstRitualAt,
@@ -103,6 +110,7 @@ abstract class PepiteProgress
       if (id != null) 'id': id,
       'authUserId': authUserId.toJson(),
       'seeds': seeds,
+      'spentSeeds': spentSeeds,
       'weeks': weeks,
       if (lastWeek != null) 'lastWeek': lastWeek?.toJson(),
       if (firstRitualAt != null) 'firstRitualAt': firstRitualAt?.toJson(),
@@ -150,6 +158,7 @@ class _PepiteProgressImpl extends PepiteProgress {
     int? id,
     required _is.UuidValue authUserId,
     required int seeds,
+    int? spentSeeds,
     required int weeks,
     DateTime? lastWeek,
     DateTime? firstRitualAt,
@@ -158,6 +167,7 @@ class _PepiteProgressImpl extends PepiteProgress {
          id: id,
          authUserId: authUserId,
          seeds: seeds,
+         spentSeeds: spentSeeds,
          weeks: weeks,
          lastWeek: lastWeek,
          firstRitualAt: firstRitualAt,
@@ -172,6 +182,7 @@ class _PepiteProgressImpl extends PepiteProgress {
     Object? id = _Undefined,
     _is.UuidValue? authUserId,
     int? seeds,
+    int? spentSeeds,
     int? weeks,
     Object? lastWeek = _Undefined,
     Object? firstRitualAt = _Undefined,
@@ -181,6 +192,7 @@ class _PepiteProgressImpl extends PepiteProgress {
       id: id is int? ? id : this.id,
       authUserId: authUserId ?? this.authUserId,
       seeds: seeds ?? this.seeds,
+      spentSeeds: spentSeeds ?? this.spentSeeds,
       weeks: weeks ?? this.weeks,
       lastWeek: lastWeek is DateTime? ? lastWeek : this.lastWeek,
       firstRitualAt: firstRitualAt is DateTime?
@@ -205,6 +217,11 @@ class PepiteProgressUpdateTable extends _is.UpdateTable<PepiteProgressTable> {
 
   _is.ColumnValue<int, int> seeds(int value) => _is.ColumnValue(
     table.seeds,
+    value,
+  );
+
+  _is.ColumnValue<int, int> spentSeeds(int value) => _is.ColumnValue(
+    table.spentSeeds,
     value,
   );
 
@@ -244,6 +261,11 @@ class PepiteProgressTable extends _is.Table<int?> {
       'seeds',
       this,
     );
+    spentSeeds = _is.ColumnInt(
+      'spentSeeds',
+      this,
+      hasDefault: true,
+    );
     weeks = _is.ColumnInt(
       'weeks',
       this,
@@ -268,6 +290,9 @@ class PepiteProgressTable extends _is.Table<int?> {
 
   late final _is.ColumnInt seeds;
 
+  /// Seeds spent in the shop; available seeds = seeds - spentSeeds.
+  late final _is.ColumnInt spentSeeds;
+
   /// Weeks with a ritual done, in all (not in a row).
   late final _is.ColumnInt weeks;
 
@@ -283,6 +308,7 @@ class PepiteProgressTable extends _is.Table<int?> {
     id,
     authUserId,
     seeds,
+    spentSeeds,
     weeks,
     lastWeek,
     firstRitualAt,

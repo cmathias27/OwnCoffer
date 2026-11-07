@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../client.dart';
@@ -58,6 +59,9 @@ class Pepite extends ChangeNotifier {
   final PepiteReminders reminders;
   final Future<PepiteStatus> Function(DateTime today) _fetch;
   final Future<PepiteStatus> Function(DateTime today) _complete;
+  final Future<PepiteStatus> Function(String code, DateTime today) _buy;
+  final Future<PepiteStatus> Function(String code, bool on, DateTime today)
+  _equip;
   final DateTime Function() _now;
 
   /// The web app, where Pépite invites to install the apps.
@@ -68,9 +72,14 @@ class Pepite extends ChangeNotifier {
     required this.reminders,
     required Future<PepiteStatus> Function(DateTime today) status,
     required this._complete,
+    Future<PepiteStatus> Function(String code, DateTime today)? buy,
+    Future<PepiteStatus> Function(String code, bool on, DateTime today)? equip,
     DateTime Function()? now,
     bool? browser,
   }) : _fetch = status,
+       _buy = buy ?? ((code, today) => client.pepite.buy(code, today)),
+       _equip =
+           equip ?? ((code, on, today) => client.pepite.equip(code, on, today)),
        _now = now ?? DateTime.now,
        browser = browser ?? kIsWeb;
 
@@ -211,6 +220,49 @@ class Pepite extends ChangeNotifier {
     _appsNever = true;
     notifyListeners();
     await _quietly(() => _store.write('appsNever', 'true'));
+  }
+
+  /// Seeds left to spend in the shop (decision 0028, point 4); the total
+  /// earned, [PepiteStatus.seeds], never goes down.
+  int get seedsToSpend {
+    final s = status;
+    return s == null ? 0 : (s.seeds - s.spentSeeds).clamp(0, s.seeds);
+  }
+
+  bool owns(String code) => status?.items.contains(code) ?? false;
+
+  bool wears(String code) => status?.equipped.contains(code) ?? false;
+
+  /// The accessory Pépite wears, if any (one at a time).
+  String? get accessory {
+    for (final code in status?.equipped ?? const <String>[]) {
+      if (core.pepiteItemByCode(code)?.category ==
+          core.PepiteItemCategory.accessory) {
+        return code;
+      }
+    }
+    return null;
+  }
+
+  /// The burrow items on show, in the order they were acquired.
+  List<String> get burrow => [
+    for (final code in status?.equipped ?? const <String>[])
+      if (core.pepiteItemByCode(code)?.category ==
+          core.PepiteItemCategory.burrow)
+        code,
+  ];
+
+  /// Buys [code]; the server checks the seeds and the item. Throws the
+  /// server's refusal.
+  Future<void> buyItem(String code) async {
+    status = await _buy(code, _now());
+    notifyListeners();
+  }
+
+  /// Puts on (or shows) [code], or takes it off.
+  Future<void> equipItem(String code, bool on) async {
+    status = await _equip(code, on, _now());
+    notifyListeners();
   }
 
   /// The badge of a first session on an app (PepiteEndpoint).

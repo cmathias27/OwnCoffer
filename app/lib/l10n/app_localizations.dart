@@ -9768,7 +9768,7 @@ abstract class AppLocalizations {
   /// No description provided for @pepiteHow.
   ///
   /// In fr, this message translates to:
-  /// **'Chaque semaine où tu fais tes comptes, tu gagnes {ritual} graines, et chaque badge en donne {badge}. Ce sont les semaines qui comptent, pas les jours d\'affilée : une semaine manquée n\'efface rien, et la réserve ne se vide jamais.'**
+  /// **'Chaque semaine où tu fais tes comptes, tu gagnes {ritual} graines, et chaque badge en donne {badge}. Ce sont les semaines qui comptent, pas les jours d\'affilée : une semaine manquée n\'efface rien, et ton total gagné ne baisse jamais, même quand tu dépenses des graines dans la boutique.'**
   String pepiteHow(int ritual, int badge);
 
   /// No description provided for @pepiteSettingsTitle.
@@ -10766,6 +10766,306 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Invite un membre du foyer à partager le budget'**
   String get pepiteBadgeTeamHint;
+
+  /// No description provided for @pepiteShopTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'La boutique de Pépite'**
+  String get pepiteShopTitle;
+
+  /// No description provided for @pepiteShopMenuHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Habiller Pépite et décorer son terrier avec tes graines'**
+  String get pepiteShopMenuHelp;
+
+  /// No description provided for @pepiteShopIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépense tes graines pour habiller Pépite et décorer son terrier. Les graines ne valent rien d’autre et ne s’échangent contre rien : ton total gagné ne baisse jamais.'**
+  String get pepiteShopIntro;
+
+  /// No description provided for @pepiteShopToSpend.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune graine à dépenser} =1{1 graine à dépenser} other{{count} graines à dépenser}}'**
+  String pepiteShopToSpend(int count);
+
+  /// No description provided for @pepiteShopEarned.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{aucune gagnée pour l’instant} =1{1 gagnée en tout} other{{count} gagnées en tout}}'**
+  String pepiteShopEarned(int count);
+
+  /// No description provided for @pepiteShopAccessories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accessoires'**
+  String get pepiteShopAccessories;
+
+  /// No description provided for @pepiteShopAccessoriesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pépite en porte un à la fois.'**
+  String get pepiteShopAccessoriesHelp;
+
+  /// No description provided for @pepiteShopBurrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le terrier'**
+  String get pepiteShopBurrow;
+
+  /// No description provided for @pepiteShopBurrowHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Installe autant d’objets que tu veux autour de Pépite.'**
+  String get pepiteShopBurrowHelp;
+
+  /// No description provided for @pepiteShopBuy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Acheter'**
+  String get pepiteShopBuy;
+
+  /// No description provided for @pepiteShopBuyConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Acheter « {item} » pour {price} graines ? Il te restera {left} graines à dépenser.'**
+  String pepiteShopBuyConfirm(String item, int price, int left);
+
+  /// No description provided for @pepiteShopBought.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {item} » est à toi !'**
+  String pepiteShopBought(String item);
+
+  /// No description provided for @pepiteShopWear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Porter'**
+  String get pepiteShopWear;
+
+  /// No description provided for @pepiteShopTakeOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer'**
+  String get pepiteShopTakeOff;
+
+  /// No description provided for @pepiteShopPlace.
+  ///
+  /// In fr, this message translates to:
+  /// **'Installer'**
+  String get pepiteShopPlace;
+
+  /// No description provided for @pepiteShopStore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ranger'**
+  String get pepiteShopStore;
+
+  /// No description provided for @pepiteShopOwned.
+  ///
+  /// In fr, this message translates to:
+  /// **'À toi'**
+  String get pepiteShopOwned;
+
+  /// No description provided for @pepiteShopMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Encore 1 graine} other{Encore {count} graines}}'**
+  String pepiteShopMissing(int count);
+
+  /// No description provided for @pepiteShopAppsOnly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seulement dans l’application Android ou Windows : une fois acquis, il se voit partout.'**
+  String get pepiteShopAppsOnly;
+
+  /// No description provided for @error_pepite_item_unknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet objet n’existe pas dans la boutique.'**
+  String get error_pepite_item_unknown;
+
+  /// No description provided for @error_pepite_item_owned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu as déjà cet objet.'**
+  String get error_pepite_item_owned;
+
+  /// No description provided for @error_pepite_not_enough_seeds.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas assez de graines pour cet objet.'**
+  String get error_pepite_not_enough_seeds;
+
+  /// No description provided for @error_pepite_item_apps_only.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet objet s’achète dans l’application Android ou Windows.'**
+  String get error_pepite_item_apps_only;
+
+  /// No description provided for @error_pepite_item_not_owned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu n’as pas encore cet objet.'**
+  String get error_pepite_item_not_owned;
+
+  /// No description provided for @pepiteItemScarf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écharpe'**
+  String get pepiteItemScarf;
+
+  /// No description provided for @pepiteItemScarfHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une écharpe rouge pour les jours frais'**
+  String get pepiteItemScarfHelp;
+
+  /// No description provided for @pepiteItemGlasses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lunettes'**
+  String get pepiteItemGlasses;
+
+  /// No description provided for @pepiteItemGlassesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour lire les relevés de près'**
+  String get pepiteItemGlassesHelp;
+
+  /// No description provided for @pepiteItemBeanie.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonnet'**
+  String get pepiteItemBeanie;
+
+  /// No description provided for @pepiteItemBeanieHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un bonnet à pompon, bien chaud'**
+  String get pepiteItemBeanieHelp;
+
+  /// No description provided for @pepiteItemCap.
+  ///
+  /// In fr, this message translates to:
+  /// **'Casquette'**
+  String get pepiteItemCap;
+
+  /// No description provided for @pepiteItemCapHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour les beaux jours'**
+  String get pepiteItemCapHelp;
+
+  /// No description provided for @pepiteItemBowtie.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nœud papillon'**
+  String get pepiteItemBowtie;
+
+  /// No description provided for @pepiteItemBowtieHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour les grandes occasions'**
+  String get pepiteItemBowtieHelp;
+
+  /// No description provided for @pepiteItemFlower.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fleur'**
+  String get pepiteItemFlower;
+
+  /// No description provided for @pepiteItemFlowerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une petite fleur à l’oreille'**
+  String get pepiteItemFlowerHelp;
+
+  /// No description provided for @pepiteItemBackpack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sac à dos'**
+  String get pepiteItemBackpack;
+
+  /// No description provided for @pepiteItemBackpackHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pépite part en voyage avec toi'**
+  String get pepiteItemBackpackHelp;
+
+  /// No description provided for @pepiteItemCushion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coussin'**
+  String get pepiteItemCushion;
+
+  /// No description provided for @pepiteItemCushionHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour une sieste bien méritée'**
+  String get pepiteItemCushionHelp;
+
+  /// No description provided for @pepiteItemSunflower.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tournesol'**
+  String get pepiteItemSunflower;
+
+  /// No description provided for @pepiteItemSunflowerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plein de graines… pour faire joli'**
+  String get pepiteItemSunflowerHelp;
+
+  /// No description provided for @pepiteItemWheel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Roue'**
+  String get pepiteItemWheel;
+
+  /// No description provided for @pepiteItemWheelHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La roue du hamster, évidemment'**
+  String get pepiteItemWheelHelp;
+
+  /// No description provided for @pepiteItemHut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cabane'**
+  String get pepiteItemHut;
+
+  /// No description provided for @pepiteItemHutHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une cabane en bois pour le terrier'**
+  String get pepiteItemHutHelp;
+
+  /// No description provided for @pepiteItemLantern.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lanterne'**
+  String get pepiteItemLantern;
+
+  /// No description provided for @pepiteItemLanternHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une douce lumière le soir'**
+  String get pepiteItemLanternHelp;
+
+  /// No description provided for @pepiteItemMat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tapis'**
+  String get pepiteItemMat;
+
+  /// No description provided for @pepiteItemMatHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un tapis tout doux'**
+  String get pepiteItemMatHelp;
 }
 
 class _AppLocalizationsDelegate

@@ -1,7 +1,9 @@
-### What the app shows of Pépite (decision 0026).
+### What the app shows of Pépite (decision 0026, 0028).
 class: PepiteStatus
 fields:
   seeds: int
+  ### Seeds spent in the shop; available seeds = seeds - spentSeeds.
+  spentSeeds: int, default=0
   weeks: int
   doneThisWeek: bool
   firstRitualAt: DateTime?
@@ -11,3 +13,7 @@ fields:
   ### Just now: seeds added and badges earned by this call (to celebrate).
   earnedSeeds: int
   newBadges: List<String>
+  ### Codes of acquired items in Pépite's shop.
+  items: List<String>
+  ### Codes of currently equipped items (accessory and/or burrow).
+  equipped: List<String>

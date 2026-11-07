@@ -6067,7 +6067,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String pepiteHow(int ritual, int badge) {
-    return 'Each week you do your accounts earns $ritual seeds, and each badge gives $badge. Weeks count, not days in a row: a missed week erases nothing, and the reserve never empties.';
+    return 'Each week you do your accounts earns $ritual seeds, and each badge gives $badge. Weeks count, not days in a row: a missed week erases nothing, and your total earned never goes down, even when you spend seeds in the shop.';
   }
 
   @override
@@ -6682,4 +6682,190 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pepiteBadgeTeamHint =>
       'Invite a household member to share the budget';
+
+  @override
+  String get pepiteShopTitle => 'Pépite’s shop';
+
+  @override
+  String get pepiteShopMenuHelp =>
+      'Dress Pépite up and decorate its burrow with your seeds';
+
+  @override
+  String get pepiteShopIntro =>
+      'Spend your seeds to dress Pépite up and decorate its burrow. Seeds are worth nothing else and can be exchanged for nothing: your total earned never goes down.';
+
+  @override
+  String pepiteShopToSpend(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count seeds to spend',
+      one: '1 seed to spend',
+      zero: 'No seeds to spend',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteShopEarned(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count earned in all',
+      one: '1 earned in all',
+      zero: 'none earned yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pepiteShopAccessories => 'Accessories';
+
+  @override
+  String get pepiteShopAccessoriesHelp => 'Pépite wears one at a time.';
+
+  @override
+  String get pepiteShopBurrow => 'The burrow';
+
+  @override
+  String get pepiteShopBurrowHelp =>
+      'Place as many items as you like around Pépite.';
+
+  @override
+  String get pepiteShopBuy => 'Buy';
+
+  @override
+  String pepiteShopBuyConfirm(String item, int price, int left) {
+    return 'Buy “$item” for $price seeds? You will have $left seeds left to spend.';
+  }
+
+  @override
+  String pepiteShopBought(String item) {
+    return '“$item” is yours!';
+  }
+
+  @override
+  String get pepiteShopWear => 'Wear';
+
+  @override
+  String get pepiteShopTakeOff => 'Take off';
+
+  @override
+  String get pepiteShopPlace => 'Place';
+
+  @override
+  String get pepiteShopStore => 'Put away';
+
+  @override
+  String get pepiteShopOwned => 'Yours';
+
+  @override
+  String pepiteShopMissing(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more seeds',
+      one: '1 more seed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pepiteShopAppsOnly =>
+      'Only in the Android or Windows app: once acquired, it shows everywhere.';
+
+  @override
+  String get error_pepite_item_unknown =>
+      'This item does not exist in the shop.';
+
+  @override
+  String get error_pepite_item_owned => 'You already have this item.';
+
+  @override
+  String get error_pepite_not_enough_seeds => 'Not enough seeds for this item.';
+
+  @override
+  String get error_pepite_item_apps_only =>
+      'This item is bought in the Android or Windows app.';
+
+  @override
+  String get error_pepite_item_not_owned => 'You do not have this item yet.';
+
+  @override
+  String get pepiteItemScarf => 'Scarf';
+
+  @override
+  String get pepiteItemScarfHelp => 'A red scarf for chilly days';
+
+  @override
+  String get pepiteItemGlasses => 'Glasses';
+
+  @override
+  String get pepiteItemGlassesHelp => 'To read the statements up close';
+
+  @override
+  String get pepiteItemBeanie => 'Beanie';
+
+  @override
+  String get pepiteItemBeanieHelp => 'A warm bobble hat';
+
+  @override
+  String get pepiteItemCap => 'Cap';
+
+  @override
+  String get pepiteItemCapHelp => 'For sunny days';
+
+  @override
+  String get pepiteItemBowtie => 'Bow tie';
+
+  @override
+  String get pepiteItemBowtieHelp => 'For special occasions';
+
+  @override
+  String get pepiteItemFlower => 'Flower';
+
+  @override
+  String get pepiteItemFlowerHelp => 'A little flower by the ear';
+
+  @override
+  String get pepiteItemBackpack => 'Backpack';
+
+  @override
+  String get pepiteItemBackpackHelp => 'Pépite travels with you';
+
+  @override
+  String get pepiteItemCushion => 'Cushion';
+
+  @override
+  String get pepiteItemCushionHelp => 'For a well-earned nap';
+
+  @override
+  String get pepiteItemSunflower => 'Sunflower';
+
+  @override
+  String get pepiteItemSunflowerHelp => 'Full of seeds… just for show';
+
+  @override
+  String get pepiteItemWheel => 'Wheel';
+
+  @override
+  String get pepiteItemWheelHelp => 'The hamster wheel, of course';
+
+  @override
+  String get pepiteItemHut => 'Hut';
+
+  @override
+  String get pepiteItemHutHelp => 'A wooden hut for the burrow';
+
+  @override
+  String get pepiteItemLantern => 'Lantern';
+
+  @override
+  String get pepiteItemLanternHelp => 'A soft light in the evening';
+
+  @override
+  String get pepiteItemMat => 'Rug';
+
+  @override
+  String get pepiteItemMatHelp => 'A soft rug';
 }

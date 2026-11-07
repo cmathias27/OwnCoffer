@@ -157,6 +157,8 @@ pepiteAdvice:
 pepite:
   - status:
   - completeRitual:
+  - buy:
+  - equip:
   - adopt:
 presence:
   - ping:

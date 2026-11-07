@@ -92,6 +92,109 @@ class PepiteEndpoint extends Endpoint {
     });
   }
 
+  /// Buys [code] in Pépite's shop (decision 0028, point 4): the item must
+  /// exist, not be owned yet, and cost no more than the seeds left to
+  /// spend. An item of the apps (point 5) needs a session seen in the
+  /// Android or Windows app, or the standalone app. The total earned never
+  /// goes down; only the seeds spent grow.
+  Future<PepiteStatus> buy(Session session, String code, DateTime today) async {
+    final user = Access.userId(session);
+    final item = core.pepiteItemByCode(code);
+    if (item == null) throw InvalidInputException(code: 'pepite_item_unknown');
+    return session.db.transaction((t) async {
+      var p = await _progress(session, t, user);
+      final owned = await PepiteItem.db.count(
+        session,
+        where: (i) => i.authUserId.equals(user) & i.code.equals(code),
+        transaction: t,
+      );
+      if (owned > 0) {
+        throw InvalidInputException(code: 'pepite_item_owned');
+      }
+      if (p.seeds - p.spentSeeds < item.price) {
+        throw InvalidInputException(code: 'pepite_not_enough_seeds');
+      }
+      if (item.requiresApp && !await usedAnApp(session, user, transaction: t)) {
+        throw InvalidInputException(code: 'pepite_item_apps_only');
+      }
+      await PepiteItem.db.insertRow(
+        session,
+        PepiteItem(
+          authUserId: user,
+          code: code,
+          acquiredAt: DateTime.now().toUtc(),
+          equipped: false,
+        ),
+        transaction: t,
+      );
+      p = await PepiteProgress.db.updateRow(
+        session,
+        p.copyWith(spentSeeds: p.spentSeeds + item.price),
+        transaction: t,
+      );
+      return _status(session, t, user, p, _day(today));
+    });
+  }
+
+  /// Puts on or takes off an owned item. Pépite wears one accessory at a
+  /// time: putting one on takes the others off. Burrow items are shown or
+  /// hidden each on its own.
+  Future<PepiteStatus> equip(
+    Session session,
+    String code,
+    bool on,
+    DateTime today,
+  ) async {
+    final user = Access.userId(session);
+    final item = core.pepiteItemByCode(code);
+    if (item == null) throw InvalidInputException(code: 'pepite_item_unknown');
+    return session.db.transaction((t) async {
+      final row = await PepiteItem.db.findFirstRow(
+        session,
+        where: (i) => i.authUserId.equals(user) & i.code.equals(code),
+        transaction: t,
+      );
+      if (row == null) {
+        throw InvalidInputException(code: 'pepite_item_not_owned');
+      }
+      if (on && item.category == core.PepiteItemCategory.accessory) {
+        final Set<String> accessories = {
+          for (final a in core.pepiteItemsByCategory(
+            core.PepiteItemCategory.accessory,
+          ))
+            a.code,
+        };
+        final worn = await PepiteItem.db.find(
+          session,
+          where: (i) =>
+              i.authUserId.equals(user) &
+              i.equipped.equals(true) &
+              i.code.inSet(accessories),
+          transaction: t,
+        );
+        for (final w in worn) {
+          await PepiteItem.db.updateRow(
+            session,
+            w.copyWith(equipped: false),
+            transaction: t,
+          );
+        }
+      }
+      await PepiteItem.db.updateRow(
+        session,
+        row.copyWith(equipped: on),
+        transaction: t,
+      );
+      return _status(
+        session,
+        t,
+        user,
+        await _progress(session, t, user),
+        _day(today),
+      );
+    });
+  }
+
   /// Standalone version moved to a server: its reserve and badges come
   /// along, only into an account that has none yet (nothing is added to an
   /// existing reserve). Returns whether they were taken.
@@ -113,13 +216,26 @@ class PepiteEndpoint extends Endpoint {
         return false;
       }
       final weeks = from.weeks.clamp(0, 5000);
+      // No more than the rituals and badges could have given.
+      final seeds = from.seeds.clamp(
+        0,
+        weeks * ritualSeeds + badgeCodes.length * badgeSeeds,
+      );
+      // The items come along while the seeds earned pay for them; the seeds
+      // spent are at least their price, at most the seeds earned.
+      final items = <core.PepiteShopItem>[];
+      var paid = 0;
+      for (final code in {...from.items}) {
+        final item = core.pepiteItemByCode(code);
+        if (item == null || paid + item.price > seeds) continue;
+        items.add(item);
+        paid += item.price;
+      }
+      final spent = from.spentSeeds.clamp(paid, seeds);
       final progress = PepiteProgress(
         authUserId: user,
-        // No more than the rituals and badges could have given.
-        seeds: from.seeds.clamp(
-          0,
-          weeks * ritualSeeds + badgeCodes.length * badgeSeeds,
-        ),
+        seeds: seeds,
+        spentSeeds: spent,
         weeks: weeks,
         lastWeek: from.lastRitualAt == null
             ? null
@@ -141,6 +257,26 @@ class PepiteEndpoint extends Endpoint {
         for (final code in {...from.badges}.where(badgeCodes.contains))
           PepiteBadge(authUserId: user, code: code, earnedAt: now),
       ], transaction: t);
+      // Worn as on the device, one accessory at most.
+      final wanted = {...from.equipped};
+      var accessoryWorn = false;
+      final rows = <PepiteItem>[];
+      for (final item in items) {
+        var on = wanted.contains(item.code);
+        if (on && item.category == core.PepiteItemCategory.accessory) {
+          on = !accessoryWorn;
+          accessoryWorn = true;
+        }
+        rows.add(
+          PepiteItem(
+            authUserId: user,
+            code: item.code,
+            acquiredAt: now,
+            equipped: on,
+          ),
+        );
+      }
+      await PepiteItem.db.insert(session, rows, transaction: t);
       return true;
     });
   }
@@ -225,8 +361,20 @@ class PepiteEndpoint extends Endpoint {
       earned += fresh.length * badgeSeeds;
     }
     final last = p.lastWeek;
+    final items = await PepiteItem.db.find(
+      session,
+      where: (i) => i.authUserId.equals(user),
+      orderBy: (i) => i.acquiredAt,
+      transaction: t,
+    );
     return PepiteStatus(
       seeds: p.seeds,
+      spentSeeds: p.spentSeeds,
+      items: [for (final i in items) i.code],
+      equipped: [
+        for (final i in items)
+          if (i.equipped) i.code,
+      ],
       weeks: p.weeks,
       doneThisWeek: last != null && !last.isBefore(week),
       firstRitualAt: p.firstRitualAt,

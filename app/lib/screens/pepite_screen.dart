@@ -6,6 +6,7 @@ import '../state/pepite.dart';
 import '../state/pepite_advice.dart';
 import '../state/pepite_messages.dart';
 import '../widgets/pepite.dart';
+import 'pepite_shop_screen.dart';
 
 /// Pépite's page: the reserve, the badges, how it works, and the settings
 /// of this device (shown or hidden, the weekly reminder).
@@ -70,16 +71,31 @@ class _PepiteScreenState extends State<PepiteScreen> {
     final earned = {...s.badges};
     return [
       Center(
-        child: PepiteImage(
+        child: PepiteBurrow(
           s.doneThisWeek ? PepitePose.cheer : PepitePose.happy,
-          size: 140,
+          controller: _pepite,
         ),
       ),
       const SizedBox(height: 8),
       Center(child: PepiteSeeds(s.seeds)),
       const SizedBox(height: 4),
       Center(child: Text(l.pepiteWeeks(s.weeks))),
-      const SizedBox(height: 24),
+      const SizedBox(height: 8),
+      ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: const Icon(Icons.storefront),
+        title: Text(l.pepiteShopTitle),
+        subtitle: Text(
+          '${l.pepiteShopMenuHelp} · ${l.pepiteShopToSpend(_pepite.seedsToSpend)}',
+        ),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => PepiteShopScreen(controller: _pepite),
+          ),
+        ),
+      ),
+      const SizedBox(height: 16),
       Text(l.pepiteBadgesTitle, style: theme.textTheme.titleMedium),
       const SizedBox(height: 8),
       Wrap(
