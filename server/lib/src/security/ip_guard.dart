@@ -63,6 +63,17 @@ class IpGuard {
     );
   }
 
+  /// Whether the call came through the OwnCoffer proxy with the client's
+  /// real IP (« Bien démarrer » of the administrator, decision 0028).
+  bool viaProxy(Session session) {
+    final request = session.request;
+    if (request == null) return false;
+    return resolver.forwardedBy(
+      request.connectionInfo.remote.address.toString(),
+      request.headers[clientIpHeader]?.firstOrNull,
+    );
+  }
+
   bool _allowed(String ip) {
     final address = InternetAddress.tryParse(ip);
     return address != null && inRanges(allowlist, address);

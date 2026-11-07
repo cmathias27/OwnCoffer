@@ -6392,4 +6392,152 @@ class AppLocalizationsFr extends AppLocalizations {
   String appsWhyBadgeHelp(int seeds) {
     return '$seeds graines pour Pépite à votre première connexion depuis une application.';
   }
+
+  @override
+  String get pepiteTipTitle => 'Le savais-tu ?';
+
+  @override
+  String get pepiteTipGotIt => 'Compris';
+
+  @override
+  String get pepiteTipMore => 'En savoir plus';
+
+  @override
+  String get pepiteTipsSetting => 'Afficher les astuces';
+
+  @override
+  String get pepiteTipsSettingHelp =>
+      '« Le savais-tu ? » à la première visite d\'une page, au plus une par jour, et la carte « Bien démarrer », sur cet appareil.';
+
+  @override
+  String get startTitle => 'Bien démarrer';
+
+  @override
+  String get startIntro =>
+      'Les réglages qui font tout le confort d\'OwnCoffer. Chaque étape se coche toute seule une fois faite.';
+
+  @override
+  String startProgress(int done, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      done,
+      locale: localeName,
+      other: '$done étapes sur $total',
+      one: '1 étape sur $total',
+      zero: 'Aucune étape sur $total',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String startCard(int done, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      done,
+      locale: localeName,
+      other: '$done étapes faites',
+      one: '1 étape faite',
+      zero: 'aucune étape faite',
+    );
+    return 'Bien démarrer : $_temp0 sur $total. Je te montre ce qui reste ?';
+  }
+
+  @override
+  String startCardSober(int done, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      done,
+      locale: localeName,
+      other: '$done étapes faites',
+      one: '1 étape faite',
+      zero: 'aucune étape faite',
+    );
+    return 'Bien démarrer : $_temp0 sur $total.';
+  }
+
+  @override
+  String get startSee => 'Voir la liste';
+
+  @override
+  String get startNotNow => 'Pas maintenant';
+
+  @override
+  String get startNotNowReply =>
+      'D\'accord. La liste reste dans la page de Pépite.';
+
+  @override
+  String get startOpen => 'Ouvrir';
+
+  @override
+  String get startAllDone => 'Tout est prêt. Bravo !';
+
+  @override
+  String get startAdminTitle => 'Pour l\'administrateur du serveur';
+
+  @override
+  String get startStepAccount =>
+      'Créer un compte et importer un premier relevé';
+
+  @override
+  String get startStepRules => 'Créer une règle de classement';
+
+  @override
+  String get startStepRulesHelp =>
+      'Le plus simple : « Toujours classer ainsi » dans la fiche d\'une opération.';
+
+  @override
+  String get startStepScheduled =>
+      'Ajouter une opération prévue (salaire, loyer, abonnement)';
+
+  @override
+  String get startStepGoal => 'Fixer un objectif de dépenses';
+
+  @override
+  String get startStepTwoFactor => 'Activer la double authentification';
+
+  @override
+  String get startStepDeviceUnlock =>
+      'Déverrouiller par empreinte ou Windows Hello';
+
+  @override
+  String get startStepBackup => 'Activer la sauvegarde chiffrée de l\'appareil';
+
+  @override
+  String get startStepApp =>
+      'Se connecter depuis l\'application Android ou Windows';
+
+  @override
+  String get startStepReminder => 'Activer le rappel du rituel';
+
+  @override
+  String get startStepMembers => 'Inviter les membres du foyer';
+
+  @override
+  String get startAdminBackups =>
+      'Sauvegardes du serveur réussies (moins de 2 jours)';
+
+  @override
+  String get startAdminRestoreTest =>
+      'Tester la restauration d\'une sauvegarde';
+
+  @override
+  String get startAdminAutoUpdate => 'Activer les mises à jour automatiques';
+
+  @override
+  String get startAdminInvitations =>
+      'Inviter une première personne sur le serveur';
+
+  @override
+  String get startAdminAi => 'Configurer une IA';
+
+  @override
+  String get startAdminAiHelp =>
+      'Facultatif : OwnCoffer marche entièrement sans IA.';
+
+  @override
+  String get startAdminProxy => 'Passer par le proxy, avec la vraie adresse IP';
+
+  @override
+  String get startAdminProxyHelp =>
+      'Vérifié sur cette connexion : le proxy d\'OwnCoffer transmet l\'adresse IP réelle, utile au blocage des adresses.';
+
+  @override
+  String get error_invalid_tip => 'Cette astuce est inconnue.';
 }

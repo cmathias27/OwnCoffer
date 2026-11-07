@@ -1,0 +1,14 @@
+### A « Le savais-tu ? » tip the user has seen (decision 0028, point 12),
+### kept on the server so that another device does not show it again.
+class: PepiteTipSeen
+table: pepite_tips_seen
+serverOnly: true
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  ### Code of the tip, from the app's catalogue (assets/tips/).
+  code: String
+  seenAt: DateTime
+indexes:
+  pepite_tips_seen_user_code_idx:
+    fields: authUserId, code
+    unique: true

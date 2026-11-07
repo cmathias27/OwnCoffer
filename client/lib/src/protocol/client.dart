@@ -91,7 +91,9 @@ import 'package:owncoffer_client/src/protocol/month_review.dart' as _ilg6npsn;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
 import 'package:owncoffer_client/src/protocol/notification_settings.dart'
     as _inuj1ggb;
+import 'package:owncoffer_client/src/protocol/pepite_start.dart' as _irc9osb1;
 import 'package:owncoffer_client/src/protocol/pepite_status.dart' as _igi0vxn8;
+import 'package:owncoffer_client/src/protocol/pepite_tips.dart' as _i6216eaq;
 import 'package:owncoffer_client/src/protocol/provider_history.dart'
     as _i26z4phw;
 import 'package:owncoffer_client/src/protocol/purchase_simulation.dart'
@@ -1870,6 +1872,43 @@ class EndpointNotification extends _isc.EndpointRef {
   );
 }
 
+/// Pépite's advice on the app (decision 0028, point 12): « Bien démarrer »
+/// and the « Le savais-tu ? » tips already seen. About the setup of the app,
+/// never about money; everything is a count, never a list of operations.
+/// {@category Endpoint}
+class EndpointPepiteAdvice extends _isc.EndpointRef {
+  EndpointPepiteAdvice(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'pepiteAdvice';
+
+  /// The setup steps of [groupId] and of the user, and those of the server
+  /// for its administrator. Only counts, on the accounts the user may see.
+  _ida.Future<_irc9osb1.PepiteStart> start(int groupId) =>
+      caller.callServerEndpoint<_irc9osb1.PepiteStart>(
+        'pepiteAdvice',
+        'start',
+        {'groupId': groupId},
+      );
+
+  /// The tips the user has seen, on any device.
+  _ida.Future<_i6216eaq.PepiteTips> tips() =>
+      caller.callServerEndpoint<_i6216eaq.PepiteTips>(
+        'pepiteAdvice',
+        'tips',
+        {},
+      );
+
+  /// « Compris » or « En savoir plus »: [code] is not shown again. Seen
+  /// twice: nothing more.
+  _ida.Future<_i6216eaq.PepiteTips> tipSeen(String code) =>
+      caller.callServerEndpoint<_i6216eaq.PepiteTips>(
+        'pepiteAdvice',
+        'tipSeen',
+        {'code': code},
+      );
+}
+
 /// Pépite, the mascot (decision 0026): the weekly accounts ritual, the seed
 /// reserve and the badges of the signed-in user. Only their own; nothing
 /// here reads a group's accounts.
@@ -2710,6 +2749,7 @@ class Client extends _isc.ServerpodClientShared {
     loan = EndpointLoan(this);
     mcp = EndpointMcp(this);
     notification = EndpointNotification(this);
+    pepiteAdvice = EndpointPepiteAdvice(this);
     pepite = EndpointPepite(this);
     presence = EndpointPresence(this);
     rule = EndpointRule(this);
@@ -2759,6 +2799,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointNotification notification;
 
+  late final EndpointPepiteAdvice pepiteAdvice;
+
   late final EndpointPepite pepite;
 
   late final EndpointPresence presence;
@@ -2798,6 +2840,7 @@ class Client extends _isc.ServerpodClientShared {
     'loan': loan,
     'mcp': mcp,
     'notification': notification,
+    'pepiteAdvice': pepiteAdvice,
     'pepite': pepite,
     'presence': presence,
     'rule': rule,

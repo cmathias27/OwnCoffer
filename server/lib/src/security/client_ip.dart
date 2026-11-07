@@ -83,6 +83,16 @@ class ClientIpResolver {
     return _canonical(peerAddress);
   }
 
+  /// Whether the call came through a trusted proxy that passed on the
+  /// client's real IP (the setup is right).
+  bool forwardedBy(String? peer, String? forwarded) {
+    final peerAddress = peer == null ? null : _parse(peer);
+    return peerAddress != null &&
+        forwarded != null &&
+        inRanges(trustedProxies, peerAddress) &&
+        _parse(forwarded.split(',').first.trim()) != null;
+  }
+
   static InternetAddress? _parse(String text) {
     var t = text.trim();
     if (t.startsWith('[') && t.contains(']')) {

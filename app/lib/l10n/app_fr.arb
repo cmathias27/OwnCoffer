@@ -4050,5 +4050,71 @@
         "type": "int"
       }
     }
-  }
+  },
+  "pepiteTipTitle": "Le savais-tu ?",
+  "pepiteTipGotIt": "Compris",
+  "pepiteTipMore": "En savoir plus",
+  "pepiteTipsSetting": "Afficher les astuces",
+  "pepiteTipsSettingHelp": "« Le savais-tu ? » à la première visite d'une page, au plus une par jour, et la carte « Bien démarrer », sur cet appareil.",
+  "startTitle": "Bien démarrer",
+  "startIntro": "Les réglages qui font tout le confort d'OwnCoffer. Chaque étape se coche toute seule une fois faite.",
+  "startProgress": "{done, plural, =0{Aucune étape sur {total}} =1{1 étape sur {total}} other{{done} étapes sur {total}}}",
+  "@startProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "startCard": "Bien démarrer : {done, plural, =0{aucune étape faite} =1{1 étape faite} other{{done} étapes faites}} sur {total}. Je te montre ce qui reste ?",
+  "@startCard": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "startCardSober": "Bien démarrer : {done, plural, =0{aucune étape faite} =1{1 étape faite} other{{done} étapes faites}} sur {total}.",
+  "@startCardSober": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "startSee": "Voir la liste",
+  "startNotNow": "Pas maintenant",
+  "startNotNowReply": "D'accord. La liste reste dans la page de Pépite.",
+  "startOpen": "Ouvrir",
+  "startAllDone": "Tout est prêt. Bravo !",
+  "startAdminTitle": "Pour l'administrateur du serveur",
+  "startStepAccount": "Créer un compte et importer un premier relevé",
+  "startStepRules": "Créer une règle de classement",
+  "startStepRulesHelp": "Le plus simple : « Toujours classer ainsi » dans la fiche d'une opération.",
+  "startStepScheduled": "Ajouter une opération prévue (salaire, loyer, abonnement)",
+  "startStepGoal": "Fixer un objectif de dépenses",
+  "startStepTwoFactor": "Activer la double authentification",
+  "startStepDeviceUnlock": "Déverrouiller par empreinte ou Windows Hello",
+  "startStepBackup": "Activer la sauvegarde chiffrée de l'appareil",
+  "startStepApp": "Se connecter depuis l'application Android ou Windows",
+  "startStepReminder": "Activer le rappel du rituel",
+  "startStepMembers": "Inviter les membres du foyer",
+  "startAdminBackups": "Sauvegardes du serveur réussies (moins de 2 jours)",
+  "startAdminRestoreTest": "Tester la restauration d'une sauvegarde",
+  "startAdminAutoUpdate": "Activer les mises à jour automatiques",
+  "startAdminInvitations": "Inviter une première personne sur le serveur",
+  "startAdminAi": "Configurer une IA",
+  "startAdminAiHelp": "Facultatif : OwnCoffer marche entièrement sans IA.",
+  "startAdminProxy": "Passer par le proxy, avec la vraie adresse IP",
+  "startAdminProxyHelp": "Vérifié sur cette connexion : le proxy d'OwnCoffer transmet l'adresse IP réelle, utile au blocage des adresses.",
+  "error_invalid_tip": "Cette astuce est inconnue."
 }

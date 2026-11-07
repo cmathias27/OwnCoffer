@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.10.0 (novembre 2026)
+
+### Pépite conseille sur l'application
+- **« Bien démarrer »** (décision 0028) : la liste de ce qui rend l'application utile, chaque étape cochée d'après vos données : un premier relevé importé, une règle, une opération prévue, un objectif, la double authentification, le déverrouillage par empreinte ou Windows Hello, la sauvegarde chiffrée (version autonome), une application installée, le rappel du rituel, les membres du foyer. **« Ouvrir »** mène à la page de chaque étape. Une carte sur l'accueil la propose tant qu'il reste des étapes ; **« Pas maintenant »** la retire pour de bon, la liste reste dans **Pépite et ma réserve**.
+- L'administrateur du serveur a sa propre liste : sauvegardes récentes, test de restauration, mises à jour automatiques, invitations, assistant IA, proxy.
+- **« Le savais-tu ? »** : à la première visite d'une page, Pépite y donne une astuce (vingt pour commencer), **une par jour au plus** ; **« Compris »** ou **« En savoir plus »** (sa page d'aide), et elle ne revient plus, sur aucun appareil. **« Afficher les astuces »** les coupe sur cet appareil, à part de **« Afficher Pépite »**.
+- Des conseils sur l'application, jamais sur l'argent (qui reste à Mon conseiller), choisis d'après vos données, jamais par une IA ; une phrase sobre quand un compte est à découvert.
+
 ## 1.9.0 (novembre 2026)
 
 ### Pépite part en voyage

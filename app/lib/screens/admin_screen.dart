@@ -20,10 +20,16 @@ import 'feedback_screen.dart';
 /// accounts, banned IPs and the audit log. Never a group's financial data.
 /// Also the members of the current group and the administrator's own
 /// security (two-factor authentication), which are only here for them.
+/// The first tabs of [AdminScreen], in order.
+enum AdminTab { health, updates, backups, ai, users, invitations }
+
 class AdminScreen extends StatefulWidget {
   /// The group open in the app: its members tab (none without a group).
   final GroupMembership? membership;
-  const AdminScreen({super.key, this.membership});
+
+  /// The tab opened first (« Bien démarrer » leads to its step).
+  final AdminTab tab;
+  const AdminScreen({super.key, this.membership, this.tab = AdminTab.health});
 
   @override
   State<AdminScreen> createState() => _AdminScreenState();
@@ -121,6 +127,7 @@ class _AdminScreenState extends State<AdminScreen> {
     final membership = widget.membership;
     return DefaultTabController(
       length: membership == null ? 10 : 11,
+      initialIndex: widget.tab.index,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l.adminTitle),

@@ -18,6 +18,7 @@ import 'screens/sign_in_screen.dart';
 import 'screens/two_factor_screen.dart';
 import 'state/app_lock.dart';
 import 'state/pepite.dart';
+import 'state/pepite_advice.dart';
 import 'state/presence.dart';
 import 'state/session.dart';
 import 'assistant/chat_bubble.dart';
@@ -324,11 +325,13 @@ class _RootState extends State<_Root> {
       case SessionStage.ready:
         unawaited(appLock.attach(_session.signOut));
         if (changed) unawaited(pepite.signedIn());
+        if (changed) unawaited(pepiteAdvice.signedIn());
         if (changed) unawaited(presence.attach());
       case SessionStage.signedOut || SessionStage.setup:
         appLock.detach();
         presence.detach();
         if (changed) unawaited(pepite.signedOut());
+        if (changed) pepiteAdvice.signedOut();
       default:
         break;
     }
