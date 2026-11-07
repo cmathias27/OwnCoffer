@@ -58,6 +58,7 @@ import '../endpoints/invoice_endpoint.dart' as _ito116jz;
 import '../endpoints/loan_endpoint.dart' as _imitaxsf;
 import '../endpoints/mcp_endpoint.dart' as _i7ut3egp;
 import '../endpoints/notification_endpoint.dart' as _ihb11yhk;
+import '../endpoints/pepite_advice_endpoint.dart' as _i2lab1lj;
 import '../endpoints/pepite_endpoint.dart' as _iagql2g7;
 import '../endpoints/presence_endpoint.dart' as _iol1r7pe;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
@@ -183,6 +184,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'notification',
+          null,
+        ),
+      'pepiteAdvice': _i2lab1lj.PepiteAdviceEndpoint()
+        ..initialize(
+          server,
+          'pepiteAdvice',
           null,
         ),
       'pepite': _iagql2g7.PepiteEndpoint()
@@ -3350,6 +3357,63 @@ class Endpoints extends _is.EndpointDispatch {
                       .saveSettings(
                         session,
                         params['settings'],
+                      ),
+        ),
+      },
+    );
+    connectors['pepiteAdvice'] = _is.EndpointConnector(
+      name: 'pepiteAdvice',
+      endpoint: endpoints['pepiteAdvice']!,
+      methodConnectors: {
+        'start': _is.MethodConnector(
+          name: 'start',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['pepiteAdvice'] as _i2lab1lj.PepiteAdviceEndpoint)
+                      .start(
+                        session,
+                        params['groupId'],
+                      ),
+        ),
+        'tips': _is.MethodConnector(
+          name: 'tips',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['pepiteAdvice'] as _i2lab1lj.PepiteAdviceEndpoint)
+                      .tips(session),
+        ),
+        'tipSeen': _is.MethodConnector(
+          name: 'tipSeen',
+          params: {
+            'code': _is.ParameterDescription(
+              name: 'code',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['pepiteAdvice'] as _i2lab1lj.PepiteAdviceEndpoint)
+                      .tipSeen(
+                        session,
+                        params['code'],
                       ),
         ),
       },

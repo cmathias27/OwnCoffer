@@ -30,7 +30,9 @@ import '../state/app_lock.dart';
 import '../help/help.dart';
 import '../assistant/chat_controller.dart';
 import 'apps_screen.dart';
+import '../widgets/pepite_advice.dart';
 import '../widgets/pepite_apps.dart';
+import 'getting_started_screen.dart';
 import 'export_screen.dart';
 import 'feedback_screen.dart';
 
@@ -144,6 +146,28 @@ class _HomeScreenState extends State<HomeScreen> {
     if (i == 8) _dashboardKey.currentState?.reload();
     _loadAccounts();
     _loadUnread();
+  }
+
+  /// « Bien démarrer » (decision 0028): its steps lead to a tab, or to
+  /// their page on top of the list.
+  Future<void> _openStart() async {
+    final current = widget.session.currentGroup;
+    if (current == null) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => GettingStartedScreen(
+          membership: current,
+          onTab: (code) => _selectTab(switch (code) {
+            'account' => _accounts.isEmpty ? 0 : 3,
+            'rules' => 4,
+            'scheduled' => 2,
+            'goal' => 5,
+            _ => 8,
+          }),
+        ),
+      ),
+    );
+    _dashboardKey.currentState?.reload();
   }
 
   /// The help page of the open tab (indexes of the stack).
@@ -300,6 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   DashboardTarget.budget => _selectTab(5),
                   DashboardTarget.notifications => _openNotifications(),
                   DashboardTarget.imports => _selectTab(3),
+                  DashboardTarget.start => _openStart(),
                 },
               ),
             ],
@@ -403,7 +428,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 PopupMenuItem(
                   value: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder: (_) => const PepiteScreen(),
+                      builder: (_) => PepiteScreen(
+                        onStart: current == null ? null : _openStart,
+                      ),
                     ),
                   ),
                   child: ListTile(
@@ -564,6 +591,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (s.demo) const _DemoBanner(),
           AppUpdateBanner(serverVersion: s.serverVersion),
           const PepiteAppsBanner(),
+          if (current != null) PepiteTipBanner(topic: _helpTopic),
           Expanded(
             child: wide && current != null
                 ? Row(

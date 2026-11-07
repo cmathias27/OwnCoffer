@@ -25,6 +25,7 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'invitation_not_pending' => l.error_invitation_not_pending,
   'invalid_version' => l.error_invalid_version,
   'invalid_name' => l.error_invalid_name,
+  'invalid_tip' => l.error_invalid_tip,
   'invalid_email' => l.error_invalid_email,
   'amount_out_of_range' => l.error_amount_out_of_range,
   'last_admin' => l.error_last_admin,

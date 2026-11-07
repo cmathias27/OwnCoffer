@@ -93,7 +93,9 @@ import 'package:owncoffer_server/src/generated/month_review.dart' as _ir8qupm5;
 import 'package:owncoffer_server/src/generated/notification.dart' as _ieap9unx;
 import 'package:owncoffer_server/src/generated/notification_settings.dart'
     as _id4w1v6o;
+import 'package:owncoffer_server/src/generated/pepite_start.dart' as _i0lfydk1;
 import 'package:owncoffer_server/src/generated/pepite_status.dart' as _iqopjt2h;
+import 'package:owncoffer_server/src/generated/pepite_tips.dart' as _if02v5mp;
 import 'package:owncoffer_server/src/generated/provider_history.dart'
     as _iujedgl9;
 import 'package:owncoffer_server/src/generated/purchase_simulation.dart'
@@ -303,6 +305,8 @@ class TestEndpoints {
 
   late final _NotificationEndpoint notification;
 
+  late final _PepiteAdviceEndpoint pepiteAdvice;
+
   late final _PepiteEndpoint pepite;
 
   late final _PresenceEndpoint presence;
@@ -400,6 +404,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     notification = _NotificationEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    pepiteAdvice = _PepiteAdviceEndpoint(
       endpoints,
       serializationManager,
     );
@@ -5076,6 +5084,109 @@ class _NotificationEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_id4w1v6o.NotificationSettings>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _PepiteAdviceEndpoint {
+  _PepiteAdviceEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<_i0lfydk1.PepiteStart> start(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'pepiteAdvice',
+            method: 'start',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'pepiteAdvice',
+          methodName: 'start',
+          parameters: _ist.testObjectToJson({'groupId': groupId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_i0lfydk1.PepiteStart>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_if02v5mp.PepiteTips> tips(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'pepiteAdvice',
+            method: 'tips',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'pepiteAdvice',
+          methodName: 'tips',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_if02v5mp.PepiteTips>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_if02v5mp.PepiteTips> tipSeen(
+    _ist.TestSessionBuilder sessionBuilder,
+    String code,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'pepiteAdvice',
+            method: 'tipSeen',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'pepiteAdvice',
+          methodName: 'tipSeen',
+          parameters: _ist.testObjectToJson({'code': code}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_if02v5mp.PepiteTips>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

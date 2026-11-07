@@ -10226,6 +10226,222 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{seeds} graines pour Pépite à votre première connexion depuis une application.'**
   String appsWhyBadgeHelp(int seeds);
+
+  /// No description provided for @pepiteTipTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le savais-tu ?'**
+  String get pepiteTipTitle;
+
+  /// No description provided for @pepiteTipGotIt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compris'**
+  String get pepiteTipGotIt;
+
+  /// No description provided for @pepiteTipMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'En savoir plus'**
+  String get pepiteTipMore;
+
+  /// No description provided for @pepiteTipsSetting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher les astuces'**
+  String get pepiteTipsSetting;
+
+  /// No description provided for @pepiteTipsSettingHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'« Le savais-tu ? » à la première visite d\'une page, au plus une par jour, et la carte « Bien démarrer », sur cet appareil.'**
+  String get pepiteTipsSettingHelp;
+
+  /// No description provided for @startTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bien démarrer'**
+  String get startTitle;
+
+  /// No description provided for @startIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les réglages qui font tout le confort d\'OwnCoffer. Chaque étape se coche toute seule une fois faite.'**
+  String get startIntro;
+
+  /// No description provided for @startProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done, plural, =0{Aucune étape sur {total}} =1{1 étape sur {total}} other{{done} étapes sur {total}}}'**
+  String startProgress(int done, int total);
+
+  /// No description provided for @startCard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bien démarrer : {done, plural, =0{aucune étape faite} =1{1 étape faite} other{{done} étapes faites}} sur {total}. Je te montre ce qui reste ?'**
+  String startCard(int done, int total);
+
+  /// No description provided for @startCardSober.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bien démarrer : {done, plural, =0{aucune étape faite} =1{1 étape faite} other{{done} étapes faites}} sur {total}.'**
+  String startCardSober(int done, int total);
+
+  /// No description provided for @startSee.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la liste'**
+  String get startSee;
+
+  /// No description provided for @startNotNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas maintenant'**
+  String get startNotNow;
+
+  /// No description provided for @startNotNowReply.
+  ///
+  /// In fr, this message translates to:
+  /// **'D\'accord. La liste reste dans la page de Pépite.'**
+  String get startNotNowReply;
+
+  /// No description provided for @startOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir'**
+  String get startOpen;
+
+  /// No description provided for @startAllDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout est prêt. Bravo !'**
+  String get startAllDone;
+
+  /// No description provided for @startAdminTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour l\'administrateur du serveur'**
+  String get startAdminTitle;
+
+  /// No description provided for @startStepAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un compte et importer un premier relevé'**
+  String get startStepAccount;
+
+  /// No description provided for @startStepRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer une règle de classement'**
+  String get startStepRules;
+
+  /// No description provided for @startStepRulesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le plus simple : « Toujours classer ainsi » dans la fiche d\'une opération.'**
+  String get startStepRulesHelp;
+
+  /// No description provided for @startStepScheduled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une opération prévue (salaire, loyer, abonnement)'**
+  String get startStepScheduled;
+
+  /// No description provided for @startStepGoal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fixer un objectif de dépenses'**
+  String get startStepGoal;
+
+  /// No description provided for @startStepTwoFactor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer la double authentification'**
+  String get startStepTwoFactor;
+
+  /// No description provided for @startStepDeviceUnlock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouiller par empreinte ou Windows Hello'**
+  String get startStepDeviceUnlock;
+
+  /// No description provided for @startStepBackup.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer la sauvegarde chiffrée de l\'appareil'**
+  String get startStepBackup;
+
+  /// No description provided for @startStepApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter depuis l\'application Android ou Windows'**
+  String get startStepApp;
+
+  /// No description provided for @startStepReminder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer le rappel du rituel'**
+  String get startStepReminder;
+
+  /// No description provided for @startStepMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter les membres du foyer'**
+  String get startStepMembers;
+
+  /// No description provided for @startAdminBackups.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegardes du serveur réussies (moins de 2 jours)'**
+  String get startAdminBackups;
+
+  /// No description provided for @startAdminRestoreTest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tester la restauration d\'une sauvegarde'**
+  String get startAdminRestoreTest;
+
+  /// No description provided for @startAdminAutoUpdate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer les mises à jour automatiques'**
+  String get startAdminAutoUpdate;
+
+  /// No description provided for @startAdminInvitations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter une première personne sur le serveur'**
+  String get startAdminInvitations;
+
+  /// No description provided for @startAdminAi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Configurer une IA'**
+  String get startAdminAi;
+
+  /// No description provided for @startAdminAiHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultatif : OwnCoffer marche entièrement sans IA.'**
+  String get startAdminAiHelp;
+
+  /// No description provided for @startAdminProxy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passer par le proxy, avec la vraie adresse IP'**
+  String get startAdminProxy;
+
+  /// No description provided for @startAdminProxyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifié sur cette connexion : le proxy d\'OwnCoffer transmet l\'adresse IP réelle, utile au blocage des adresses.'**
+  String get startAdminProxyHelp;
+
+  /// No description provided for @error_invalid_tip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette astuce est inconnue.'**
+  String get error_invalid_tip;
 }
 
 class _AppLocalizationsDelegate

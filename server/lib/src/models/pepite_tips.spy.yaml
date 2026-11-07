@@ -1,0 +1,5 @@
+### The tips seen by the user, and when the last one was (at most one a day).
+class: PepiteTips
+fields:
+  seen: List<String>
+  lastSeenAt: DateTime?

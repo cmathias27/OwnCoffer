@@ -3,13 +3,17 @@ import 'package:intl/intl.dart';
 
 import '../l10n/app_localizations.dart';
 import '../state/pepite.dart';
+import '../state/pepite_advice.dart';
 import '../state/pepite_messages.dart';
 import '../widgets/pepite.dart';
 
 /// Pépite's page: the reserve, the badges, how it works, and the settings
 /// of this device (shown or hidden, the weekly reminder).
 class PepiteScreen extends StatefulWidget {
-  const PepiteScreen({super.key});
+  /// Opens « Bien démarrer » (with a group open).
+  final VoidCallback? onStart;
+
+  const PepiteScreen({super.key, this.onStart});
 
   @override
   State<PepiteScreen> createState() => _PepiteScreenState();
@@ -30,11 +34,23 @@ class _PepiteScreenState extends State<PepiteScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l.pepiteMenu)),
       body: ListenableBuilder(
-        listenable: pepite,
+        listenable: Listenable.merge([pepite, pepiteAdvice]),
         builder: (context, _) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
             ..._reserve(context, l),
+            if (widget.onStart != null)
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.checklist),
+                title: Text(l.startTitle),
+                subtitle: Text(l.startIntro),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  widget.onStart!();
+                },
+              ),
             const Divider(height: 40),
             ..._settings(context, l),
           ],
@@ -131,6 +147,13 @@ class _PepiteScreenState extends State<PepiteScreen> {
         subtitle: Text(l.pepiteEnableHelp),
         value: pepite.enabled,
         onChanged: pepite.setEnabled,
+      ),
+      SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        title: Text(l.pepiteTipsSetting),
+        subtitle: Text(l.pepiteTipsSettingHelp),
+        value: pepiteAdvice.tipsOn,
+        onChanged: pepiteAdvice.setTipsOn,
       ),
       if (!pepite.reminders.supported)
         Padding(

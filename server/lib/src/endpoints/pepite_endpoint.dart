@@ -179,7 +179,7 @@ class PepiteEndpoint extends Endpoint {
         if (!codes.contains(code) &&
             switch (code) {
               'first_import' => await _hasImported(session, t, user),
-              'nomad' => await _usedAnApp(session, t, user),
+              'nomad' => await usedAnApp(session, user, transaction: t),
               _ => deserved(code),
             })
           code,
@@ -224,11 +224,12 @@ class PepiteEndpoint extends Endpoint {
   /// « Pépite nomade » (decision 0027, point 8): a session seen on the
   /// Android or Windows app, or the standalone app (which has no ping, but
   /// only runs as an app).
-  Future<bool> _usedAnApp(
+  static Future<bool> usedAnApp(
     Session session,
-    Transaction t,
-    UuidValue user,
-  ) async {
+    UuidValue user, {
+    Transaction? transaction,
+  }) async {
+    final t = transaction;
     final Set<String> apps = SessionDevices.appPlatforms;
     if (await SessionDevice.db.count(
           session,

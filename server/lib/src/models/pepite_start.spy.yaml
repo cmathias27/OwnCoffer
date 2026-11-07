@@ -1,0 +1,13 @@
+### « Bien démarrer » (decision 0028, point 12): the setup steps that apply
+### and those done, checked from the data. The steps only the device knows
+### (fingerprint or Windows Hello, the ritual reminder, the device's backup)
+### are added by the app.
+class: PepiteStart
+fields:
+  ### In order: account, rules, scheduled, goal, two_factor, app, members.
+  steps: List<String>
+  done: List<String>
+  ### For the server's administrator only (empty otherwise): backups,
+  ### restore_test, auto_update, invitations, ai, proxy.
+  adminSteps: List<String>
+  adminDone: List<String>

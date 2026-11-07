@@ -9,6 +9,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../state/pepite.dart';
 import '../widgets/pepite.dart';
+import '../widgets/pepite_advice.dart';
 import '../widgets/pepite_apps.dart';
 import '../widgets/soft.dart';
 import 'budget_screen.dart';
@@ -21,6 +22,9 @@ enum DashboardTarget {
   forecast,
   notifications,
   imports,
+
+  /// « Bien démarrer » (decision 0028).
+  start,
 }
 
 /// The home page: where the money stands today and what comes next, on
@@ -54,6 +58,9 @@ class DashboardScreenState extends State<DashboardScreen> {
   SpendingReport? _month;
   DueCalendar? _calendar;
   String? _error;
+
+  /// Refreshes « Bien démarrer » with the rest of the page.
+  var _reloads = 0;
 
   int get _groupId => widget.membership.group.id!;
 
@@ -101,6 +108,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         _month = results[2] as SpendingReport?;
         _calendar = results[3] as DueCalendar?;
         _error = null;
+        _reloads++;
       });
     } on Object catch (e) {
       if (mounted) {
@@ -149,6 +157,17 @@ class DashboardScreenState extends State<DashboardScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 1000),
               child: const PepiteAppsCard(),
+            ),
+          ),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: PepiteStartCard(
+                key: ValueKey('start-${widget.membership.group.id}-$_reloads'),
+                membership: widget.membership,
+                overdrawn: accounts.any((e) => _overdrawn(e.$2)),
+                onOpen: () => widget.onOpen(DashboardTarget.start),
+              ),
             ),
           ),
           Center(

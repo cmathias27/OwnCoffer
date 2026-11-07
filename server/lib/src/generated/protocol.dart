@@ -148,7 +148,10 @@ import 'notification_settings.dart' as _iwwkm5c2;
 import 'occurrence_status.dart' as _it10dx4m;
 import 'pepite_badge.dart' as _i76ytswg;
 import 'pepite_progress.dart' as _iw5d0qdy;
+import 'pepite_start.dart' as _iyfl3qkr;
 import 'pepite_status.dart' as _iltzik8s;
+import 'pepite_tip_seen.dart' as _inog9jm1;
+import 'pepite_tips.dart' as _i3b60tzc;
 import 'period_totals.dart' as _imctw77w;
 import 'provider_history.dart' as _irsxtgs7;
 import 'purchase_option.dart' as _i46nnn14;
@@ -268,7 +271,10 @@ export 'notification_settings.dart';
 export 'occurrence_status.dart';
 export 'pepite_badge.dart';
 export 'pepite_progress.dart';
+export 'pepite_start.dart';
 export 'pepite_status.dart';
+export 'pepite_tip_seen.dart';
+export 'pepite_tips.dart';
 export 'period_totals.dart';
 export 'provider_history.dart';
 export 'purchase_option.dart';
@@ -3161,6 +3167,71 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'pepite_tips_seen',
+      dartName: 'PepiteTipSeen',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'code',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'seenAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'pepite_tips_seen_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'pepite_tips_seen_user_code_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'code',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'rules',
       dartName: 'Rule',
       schema: 'public',
@@ -4436,8 +4507,17 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _iw5d0qdy.PepiteProgress) {
       return _iw5d0qdy.PepiteProgress.fromJson(data) as T;
     }
+    if (t == _iyfl3qkr.PepiteStart) {
+      return _iyfl3qkr.PepiteStart.fromJson(data) as T;
+    }
     if (t == _iltzik8s.PepiteStatus) {
       return _iltzik8s.PepiteStatus.fromJson(data) as T;
+    }
+    if (t == _inog9jm1.PepiteTipSeen) {
+      return _inog9jm1.PepiteTipSeen.fromJson(data) as T;
+    }
+    if (t == _i3b60tzc.PepiteTips) {
+      return _i3b60tzc.PepiteTips.fromJson(data) as T;
     }
     if (t == _imctw77w.PeriodTotals) {
       return _imctw77w.PeriodTotals.fromJson(data) as T;
@@ -4848,8 +4928,18 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _iw5d0qdy.PepiteProgress.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_iyfl3qkr.PepiteStart?>()) {
+      return (data != null ? _iyfl3qkr.PepiteStart.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_iltzik8s.PepiteStatus?>()) {
       return (data != null ? _iltzik8s.PepiteStatus.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_inog9jm1.PepiteTipSeen?>()) {
+      return (data != null ? _inog9jm1.PepiteTipSeen.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_i3b60tzc.PepiteTips?>()) {
+      return (data != null ? _i3b60tzc.PepiteTips.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_imctw77w.PeriodTotals?>()) {
       return (data != null ? _imctw77w.PeriodTotals.fromJson(data) : null) as T;
@@ -5468,7 +5558,10 @@ class Protocol extends _is.DatabaseSerializationManager {
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
       _i76ytswg.PepiteBadge => 'PepiteBadge',
       _iw5d0qdy.PepiteProgress => 'PepiteProgress',
+      _iyfl3qkr.PepiteStart => 'PepiteStart',
       _iltzik8s.PepiteStatus => 'PepiteStatus',
+      _inog9jm1.PepiteTipSeen => 'PepiteTipSeen',
+      _i3b60tzc.PepiteTips => 'PepiteTips',
       _imctw77w.PeriodTotals => 'PeriodTotals',
       _irsxtgs7.ProviderHistory => 'ProviderHistory',
       _i46nnn14.PurchaseOption => 'PurchaseOption',
@@ -5688,8 +5781,14 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'PepiteBadge';
       case _iw5d0qdy.PepiteProgress():
         return 'PepiteProgress';
+      case _iyfl3qkr.PepiteStart():
+        return 'PepiteStart';
       case _iltzik8s.PepiteStatus():
         return 'PepiteStatus';
+      case _inog9jm1.PepiteTipSeen():
+        return 'PepiteTipSeen';
+      case _i3b60tzc.PepiteTips():
+        return 'PepiteTips';
       case _imctw77w.PeriodTotals():
         return 'PeriodTotals';
       case _irsxtgs7.ProviderHistory():
@@ -6040,8 +6139,17 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'PepiteProgress') {
       return deserialize<_iw5d0qdy.PepiteProgress>(data['data']);
     }
+    if (dataClassName == 'PepiteStart') {
+      return deserialize<_iyfl3qkr.PepiteStart>(data['data']);
+    }
     if (dataClassName == 'PepiteStatus') {
       return deserialize<_iltzik8s.PepiteStatus>(data['data']);
+    }
+    if (dataClassName == 'PepiteTipSeen') {
+      return deserialize<_inog9jm1.PepiteTipSeen>(data['data']);
+    }
+    if (dataClassName == 'PepiteTips') {
+      return deserialize<_i3b60tzc.PepiteTips>(data['data']);
     }
     if (dataClassName == 'PeriodTotals') {
       return deserialize<_imctw77w.PeriodTotals>(data['data']);
@@ -6243,6 +6351,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _i76ytswg.PepiteBadge.t;
       case _iw5d0qdy.PepiteProgress:
         return _iw5d0qdy.PepiteProgress.t;
+      case _inog9jm1.PepiteTipSeen:
+        return _inog9jm1.PepiteTipSeen.t;
       case _ivw87pdb.Rule:
         return _ivw87pdb.Rule.t;
       case _ifol8nrg.ScheduledTransaction:

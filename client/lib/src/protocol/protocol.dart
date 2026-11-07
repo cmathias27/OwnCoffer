@@ -141,7 +141,9 @@ import 'month_review.dart' as _i5m4pdin;
 import 'notification.dart' as _irt10kca;
 import 'notification_settings.dart' as _iwwkm5c2;
 import 'occurrence_status.dart' as _it10dx4m;
+import 'pepite_start.dart' as _iyfl3qkr;
 import 'pepite_status.dart' as _iltzik8s;
+import 'pepite_tips.dart' as _i3b60tzc;
 import 'period_totals.dart' as _imctw77w;
 import 'provider_history.dart' as _irsxtgs7;
 import 'purchase_option.dart' as _i46nnn14;
@@ -253,7 +255,9 @@ export 'month_review.dart';
 export 'notification.dart';
 export 'notification_settings.dart';
 export 'occurrence_status.dart';
+export 'pepite_start.dart';
 export 'pepite_status.dart';
+export 'pepite_tips.dart';
 export 'period_totals.dart';
 export 'provider_history.dart';
 export 'purchase_option.dart';
@@ -561,8 +565,14 @@ class Protocol extends _isc.SerializationManager {
     if (t == _it10dx4m.OccurrenceStatus) {
       return _it10dx4m.OccurrenceStatus.fromJson(data) as T;
     }
+    if (t == _iyfl3qkr.PepiteStart) {
+      return _iyfl3qkr.PepiteStart.fromJson(data) as T;
+    }
     if (t == _iltzik8s.PepiteStatus) {
       return _iltzik8s.PepiteStatus.fromJson(data) as T;
+    }
+    if (t == _i3b60tzc.PepiteTips) {
+      return _i3b60tzc.PepiteTips.fromJson(data) as T;
     }
     if (t == _imctw77w.PeriodTotals) {
       return _imctw77w.PeriodTotals.fromJson(data) as T;
@@ -948,8 +958,14 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _it10dx4m.OccurrenceStatus.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_iyfl3qkr.PepiteStart?>()) {
+      return (data != null ? _iyfl3qkr.PepiteStart.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_iltzik8s.PepiteStatus?>()) {
       return (data != null ? _iltzik8s.PepiteStatus.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i3b60tzc.PepiteTips?>()) {
+      return (data != null ? _i3b60tzc.PepiteTips.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_imctw77w.PeriodTotals?>()) {
       return (data != null ? _imctw77w.PeriodTotals.fromJson(data) : null) as T;
@@ -1552,7 +1568,9 @@ class Protocol extends _isc.SerializationManager {
       _irt10kca.AppNotification => 'AppNotification',
       _iwwkm5c2.NotificationSettings => 'NotificationSettings',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
+      _iyfl3qkr.PepiteStart => 'PepiteStart',
       _iltzik8s.PepiteStatus => 'PepiteStatus',
+      _i3b60tzc.PepiteTips => 'PepiteTips',
       _imctw77w.PeriodTotals => 'PeriodTotals',
       _irsxtgs7.ProviderHistory => 'ProviderHistory',
       _i46nnn14.PurchaseOption => 'PurchaseOption',
@@ -1758,8 +1776,12 @@ class Protocol extends _isc.SerializationManager {
         return 'NotificationSettings';
       case _it10dx4m.OccurrenceStatus():
         return 'OccurrenceStatus';
+      case _iyfl3qkr.PepiteStart():
+        return 'PepiteStart';
       case _iltzik8s.PepiteStatus():
         return 'PepiteStatus';
+      case _i3b60tzc.PepiteTips():
+        return 'PepiteTips';
       case _imctw77w.PeriodTotals():
         return 'PeriodTotals';
       case _irsxtgs7.ProviderHistory():
@@ -2084,8 +2106,14 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'OccurrenceStatus') {
       return deserialize<_it10dx4m.OccurrenceStatus>(data['data']);
     }
+    if (dataClassName == 'PepiteStart') {
+      return deserialize<_iyfl3qkr.PepiteStart>(data['data']);
+    }
     if (dataClassName == 'PepiteStatus') {
       return deserialize<_iltzik8s.PepiteStatus>(data['data']);
+    }
+    if (dataClassName == 'PepiteTips') {
+      return deserialize<_i3b60tzc.PepiteTips>(data['data']);
     }
     if (dataClassName == 'PeriodTotals') {
       return deserialize<_imctw77w.PeriodTotals>(data['data']);

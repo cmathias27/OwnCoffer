@@ -150,6 +150,10 @@ notification:
   - markAllRead:
   - settings:
   - saveSettings:
+pepiteAdvice:
+  - start:
+  - tips:
+  - tipSeen:
 pepite:
   - status:
   - completeRitual:

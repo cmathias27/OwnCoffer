@@ -6355,4 +6355,148 @@ class AppLocalizationsEn extends AppLocalizations {
   String appsWhyBadgeHelp(int seeds) {
     return '$seeds seeds for Pépite at your first sign-in from an app.';
   }
+
+  @override
+  String get pepiteTipTitle => 'Did you know?';
+
+  @override
+  String get pepiteTipGotIt => 'Got it';
+
+  @override
+  String get pepiteTipMore => 'Learn more';
+
+  @override
+  String get pepiteTipsSetting => 'Show the tips';
+
+  @override
+  String get pepiteTipsSettingHelp =>
+      '“Did you know?” on the first visit of a page, at most one a day, and the “Getting started” card, on this device.';
+
+  @override
+  String get startTitle => 'Getting started';
+
+  @override
+  String get startIntro =>
+      'The settings that make OwnCoffer comfortable. Each step ticks itself once done.';
+
+  @override
+  String startProgress(int done, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      done,
+      locale: localeName,
+      other: '$done steps of $total',
+      one: '1 step of $total',
+      zero: 'No step of $total',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String startCard(int done, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      done,
+      locale: localeName,
+      other: '$done steps done',
+      one: '1 step done',
+      zero: 'no step done',
+    );
+    return 'Getting started: $_temp0 of $total. Shall I show you what is left?';
+  }
+
+  @override
+  String startCardSober(int done, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      done,
+      locale: localeName,
+      other: '$done steps done',
+      one: '1 step done',
+      zero: 'no step done',
+    );
+    return 'Getting started: $_temp0 of $total.';
+  }
+
+  @override
+  String get startSee => 'See the list';
+
+  @override
+  String get startNotNow => 'Not now';
+
+  @override
+  String get startNotNowReply => 'All right. The list stays on Pépite\'s page.';
+
+  @override
+  String get startOpen => 'Open';
+
+  @override
+  String get startAllDone => 'All set. Well done!';
+
+  @override
+  String get startAdminTitle => 'For the server\'s administrator';
+
+  @override
+  String get startStepAccount =>
+      'Create an account and import a first statement';
+
+  @override
+  String get startStepRules => 'Create a classification rule';
+
+  @override
+  String get startStepRulesHelp =>
+      'The simplest: “Always classify like this” in an operation\'s details.';
+
+  @override
+  String get startStepScheduled =>
+      'Add a planned operation (salary, rent, subscription)';
+
+  @override
+  String get startStepGoal => 'Set a spending goal';
+
+  @override
+  String get startStepTwoFactor => 'Turn on two-factor authentication';
+
+  @override
+  String get startStepDeviceUnlock =>
+      'Unlock with fingerprint or Windows Hello';
+
+  @override
+  String get startStepBackup => 'Turn on the device\'s encrypted backup';
+
+  @override
+  String get startStepApp => 'Sign in from the Android or Windows app';
+
+  @override
+  String get startStepReminder => 'Turn on the ritual reminder';
+
+  @override
+  String get startStepMembers => 'Invite the members of the household';
+
+  @override
+  String get startAdminBackups =>
+      'Server backups succeeding (less than 2 days old)';
+
+  @override
+  String get startAdminRestoreTest => 'Test restoring a backup';
+
+  @override
+  String get startAdminAutoUpdate => 'Turn on automatic updates';
+
+  @override
+  String get startAdminInvitations => 'Invite a first person to the server';
+
+  @override
+  String get startAdminAi => 'Set up an AI';
+
+  @override
+  String get startAdminAiHelp => 'Optional: OwnCoffer works fully without AI.';
+
+  @override
+  String get startAdminProxy =>
+      'Go through the proxy, with the real IP address';
+
+  @override
+  String get startAdminProxyHelp =>
+      'Checked on this connection: OwnCoffer\'s proxy passes on the real IP address, which IP blocking needs.';
+
+  @override
+  String get error_invalid_tip => 'This tip is unknown.';
 }
