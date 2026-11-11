@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:http/http.dart' as http;
 import 'package:owncoffer_client/owncoffer_client.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
+import 'util/offline.dart';
 import 'util/server_address.dart';
 
 // When you are running the app on a physical device, you need to set the
@@ -48,11 +50,34 @@ bool isStandalone = false;
 
 /// [url]: the embedded server of the standalone mode; otherwise the server
 /// found as above.
+///
+/// The Windows and Android apps connected to a server keep a copy of what
+/// they read, shown when the server cannot be reached (decision 0037).
 Future<void> initializeClient({String? url}) async {
-  client = Client(url ?? await _resolveServerUrl())
-    ..connectivityMonitor = FlutterConnectivityMonitor()
-    ..authSessionManager = FlutterAuthSessionManager();
+  final store = url == null && ServerAddress.needed
+      ? await _offlineStore()
+      : null;
+  offlineSince.value = null;
+  client =
+      Client(
+          url ?? await _resolveServerUrl(),
+          httpClientOverride: store == null
+              ? null
+              : OfflineHttpClient(http.Client(), store),
+        )
+        ..connectivityMonitor = FlutterConnectivityMonitor()
+        ..authSessionManager = FlutterAuthSessionManager();
   unawaited(client.auth.initialize());
+}
+
+/// A store that cannot open (no secret store yet…) leaves the app online
+/// only, as before.
+Future<OfflineStore?> _offlineStore() async {
+  try {
+    return await openOfflineStore();
+  } on Object {
+    return null;
+  }
 }
 
 /// Set by main(): leaves the standalone mode for the server at [api],
@@ -77,5 +102,6 @@ Future<void> changeServer() async {
     }
   }
   await ServerAddress.forget();
+  await clearOfflineStore();
   await askServerAddress();
 }

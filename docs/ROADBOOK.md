@@ -184,6 +184,8 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] Compilées par la CI, jointes à chaque version : Windows (zip, non signé) et Android (APK hors Play Store) — [APPLICATIONS.md](APPLICATIONS.md)
 - [ ] Clé Android stable (secrets GitHub) et certificat de signature Windows
 - [ ] Hors-ligne et synchronisation
+  - [x] consultation sans réseau : dernières données lues gardées chiffrées sur l'appareil, bandeau « lecture seule », effacées à la déconnexion — décision 0037, *1.22.0*
+  - [ ] saisie sans réseau : créations mises en file et envoyées au retour de la connexion, refus visibles, sans conflit possible
 - [x] Page « Applications » (télécharger Windows et Android dans la version du serveur), versions comparées, bannière quand l'application est en retard — *1.0.4*
 - [x] Installation des mises à jour des applications depuis l'application : téléchargée, vérifiée (empreintes, clé de signature sur Android), installée en un geste ; Windows se relance tout seul — *1.17.0 ([0032](decisions/0032-mises-a-jour-des-applications.md))*
 - [x] **Verrouillage automatique** après une absence (demandé le 5 novembre 2026) : mot de passe, empreinte sur Android, Windows Hello sur Windows ; déconnexion après 5 échecs ou 8 h ; masquage de l'écran en option — *1.5.0 ([0025](decisions/0025-verrouillage-automatique.md))*

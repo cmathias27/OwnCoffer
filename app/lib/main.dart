@@ -22,9 +22,11 @@ import 'state/pepite_advice.dart';
 import 'state/presence.dart';
 import 'state/session.dart';
 import 'assistant/chat_bubble.dart';
+import 'util/offline.dart';
 import 'util/server_address.dart';
 import 'util/standalone.dart';
 import 'util/standalone_backups.dart';
+import 'widgets/offline_banner.dart';
 import 'widgets/app_lock_layer.dart';
 import 'widgets/app_update_flow.dart';
 
@@ -291,9 +293,11 @@ class OwnCofferApp extends StatelessWidget {
           ? null
           : (context, child) => AppLockLayer(
               lock: appLock,
-              child: ChatLayer(
-                navigator: _navigator,
-                child: child ?? const SizedBox(),
+              child: OfflineBanner(
+                child: ChatLayer(
+                  navigator: _navigator,
+                  child: child ?? const SizedBox(),
+                ),
               ),
             ),
       home: home ?? const _Root(),
@@ -342,6 +346,8 @@ class _RootState extends State<_Root> {
       case SessionStage.signedOut || SessionStage.setup:
         appLock.detach();
         presence.detach();
+        // Signed out: nothing read under this account stays on the device.
+        if (changed) unawaited(clearOfflineStore());
         if (changed) unawaited(pepite.signedOut());
         if (changed) pepiteAdvice.signedOut();
       default:

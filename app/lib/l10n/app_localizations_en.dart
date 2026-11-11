@@ -7403,4 +7403,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_invoice_already_attached =>
       'This receipt is already attached to an operation.';
+
+  @override
+  String offlineBanner(String when) {
+    return 'Server unreachable: data from $when, read-only';
+  }
 }

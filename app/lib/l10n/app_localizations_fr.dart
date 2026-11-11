@@ -7455,4 +7455,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get error_invoice_already_attached =>
       'Ce justificatif est déjà joint à une opération.';
+
+  @override
+  String offlineBanner(String when) {
+    return 'Serveur injoignable : données du $when, en lecture seule';
+  }
 }
