@@ -10,6 +10,7 @@ import '../state/pepite_advice.dart';
 import '../state/pepite_messages.dart';
 import '../widgets/pepite.dart';
 import 'pepite_shop_screen.dart';
+import 'pepite_year_screen.dart';
 
 /// Pépite's page: the reserve, the badges, how it works, and the settings
 /// of this device (shown or hidden, the weekly reminder).
@@ -186,6 +187,19 @@ class _PepiteScreenState extends State<PepiteScreen> {
           ),
         ),
       ),
+      for (final year in _pepite.years)
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.auto_stories_outlined),
+          title: Text(l.pepiteYearMenu(year)),
+          subtitle: Text(l.pepiteYearMenuHelp),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => PepiteYearScreen(year: year),
+            ),
+          ),
+        ),
       if (_pepite.challengesOn) ..._challenge(context, l, s),
       const SizedBox(height: 16),
       Text(l.pepiteBadgesTitle, style: theme.textTheme.titleMedium),

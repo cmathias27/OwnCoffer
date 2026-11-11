@@ -11,6 +11,7 @@ import '../l10n/error_messages.dart';
 import '../screens/apps_screen.dart';
 import '../screens/pepite_ritual_screen.dart';
 import '../screens/pepite_screen.dart';
+import '../screens/pepite_year_screen.dart';
 import '../state/getting_started.dart';
 import '../state/pepite.dart';
 import '../state/pepite_advice.dart';
@@ -376,6 +377,17 @@ class _PepiteCardState extends State<PepiteCard> {
                           TextButton(
                             onPressed: () => _later(context),
                             child: Text(l.pepiteLater),
+                          ),
+                        if (_p.yearReady case final year?)
+                          OutlinedButton.icon(
+                            key: const Key('pepite-year-ready'),
+                            icon: const Icon(Icons.auto_stories_outlined),
+                            label: Text(l.pepiteYearReady(year)),
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => PepiteYearScreen(year: year),
+                              ),
+                            ),
                           ),
                         if (!line.remind)
                           OutlinedButton(

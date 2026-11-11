@@ -94,6 +94,7 @@ import 'package:owncoffer_client/src/protocol/notification_settings.dart'
 import 'package:owncoffer_client/src/protocol/pepite_start.dart' as _irc9osb1;
 import 'package:owncoffer_client/src/protocol/pepite_status.dart' as _igi0vxn8;
 import 'package:owncoffer_client/src/protocol/pepite_tips.dart' as _i6216eaq;
+import 'package:owncoffer_client/src/protocol/pepite_year.dart' as _ira80t5l;
 import 'package:owncoffer_client/src/protocol/provider_history.dart'
     as _i26z4phw;
 import 'package:owncoffer_client/src/protocol/purchase_simulation.dart'
@@ -2002,6 +2003,20 @@ class EndpointPepite extends _isc.EndpointRef {
         'dropChallenge',
         {'today': today},
       );
+
+  /// « Ton année avec Pépite » (decision 0031): a year already over, or
+  /// the current one from December.
+  _ida.Future<_ira80t5l.PepiteYear> year(
+    int year,
+    DateTime today,
+  ) => caller.callServerEndpoint<_ira80t5l.PepiteYear>(
+    'pepite',
+    'year',
+    {
+      'year': year,
+      'today': today,
+    },
+  );
 
   /// Standalone version moved to a server: its reserve and badges come
   /// along, only into an account that has none yet (nothing is added to an

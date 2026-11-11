@@ -3565,6 +3565,30 @@ class Endpoints extends _is.EndpointDispatch {
                     params['today'],
                   ),
         ),
+        'year': _is.MethodConnector(
+          name: 'year',
+          params: {
+            'year': _is.ParameterDescription(
+              name: 'year',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'today': _is.ParameterDescription(
+              name: 'today',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['pepite'] as _iagql2g7.PepiteEndpoint).year(
+                session,
+                params['year'],
+                params['today'],
+              ),
+        ),
         'adopt': _is.MethodConnector(
           name: 'adopt',
           params: {
