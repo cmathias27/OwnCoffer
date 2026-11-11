@@ -32,6 +32,8 @@ abstract class ScheduledTransaction
     int? dateToleranceDays,
     int? amountTolerancePercent,
     bool? subscription,
+    this.priceRiseDate,
+    this.priceRiseAmountCents,
     DateTime? createdAt,
     this.deletedAt,
   }) : interval = interval ?? 1,
@@ -57,6 +59,8 @@ abstract class ScheduledTransaction
     int? dateToleranceDays,
     int? amountTolerancePercent,
     bool? subscription,
+    DateTime? priceRiseDate,
+    int? priceRiseAmountCents,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _ScheduledTransactionImpl;
@@ -91,6 +95,12 @@ abstract class ScheduledTransaction
       subscription: jsonSerialization['subscription'] == null
           ? null
           : _isc.BoolJsonExtension.fromJson(jsonSerialization['subscription']),
+      priceRiseDate: jsonSerialization['priceRiseDate'] == null
+          ? null
+          : _isc.DateTimeJsonExtension.fromJson(
+              jsonSerialization['priceRiseDate'],
+            ),
+      priceRiseAmountCents: jsonSerialization['priceRiseAmountCents'] as int?,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -135,6 +145,11 @@ abstract class ScheduledTransaction
   /// Shown in the subscriptions list (streaming, phone, gym…).
   bool subscription;
 
+  /// An upcoming price rise: date and next amount (e.g. promo ending).
+  DateTime? priceRiseDate;
+
+  int? priceRiseAmountCents;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -158,6 +173,8 @@ abstract class ScheduledTransaction
     int? dateToleranceDays,
     int? amountTolerancePercent,
     bool? subscription,
+    DateTime? priceRiseDate,
+    int? priceRiseAmountCents,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -180,6 +197,9 @@ abstract class ScheduledTransaction
       'dateToleranceDays': dateToleranceDays,
       'amountTolerancePercent': amountTolerancePercent,
       'subscription': subscription,
+      if (priceRiseDate != null) 'priceRiseDate': priceRiseDate?.toJson(),
+      if (priceRiseAmountCents != null)
+        'priceRiseAmountCents': priceRiseAmountCents,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -204,6 +224,9 @@ abstract class ScheduledTransaction
       'dateToleranceDays': dateToleranceDays,
       'amountTolerancePercent': amountTolerancePercent,
       'subscription': subscription,
+      if (priceRiseDate != null) 'priceRiseDate': priceRiseDate?.toJson(),
+      if (priceRiseAmountCents != null)
+        'priceRiseAmountCents': priceRiseAmountCents,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -234,6 +257,8 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
     int? dateToleranceDays,
     int? amountTolerancePercent,
     bool? subscription,
+    DateTime? priceRiseDate,
+    int? priceRiseAmountCents,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -252,6 +277,8 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
          dateToleranceDays: dateToleranceDays,
          amountTolerancePercent: amountTolerancePercent,
          subscription: subscription,
+         priceRiseDate: priceRiseDate,
+         priceRiseAmountCents: priceRiseAmountCents,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -276,6 +303,8 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
     int? dateToleranceDays,
     int? amountTolerancePercent,
     bool? subscription,
+    Object? priceRiseDate = _Undefined,
+    Object? priceRiseAmountCents = _Undefined,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -298,6 +327,12 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
       amountTolerancePercent:
           amountTolerancePercent ?? this.amountTolerancePercent,
       subscription: subscription ?? this.subscription,
+      priceRiseDate: priceRiseDate is DateTime?
+          ? priceRiseDate
+          : this.priceRiseDate,
+      priceRiseAmountCents: priceRiseAmountCents is int?
+          ? priceRiseAmountCents
+          : this.priceRiseAmountCents,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );

@@ -455,6 +455,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Invalid amount: it must be positive and reasonable.';
 
   @override
+  String get error_no_price_rise_scheduled =>
+      'No price rise is scheduled for this subscription.';
+
+  @override
   String get error_import_file_too_large => 'File too large (4 MB maximum).';
 
   @override
@@ -1635,6 +1639,86 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String subscriptionCreated(String label, String date) {
     return 'Subscription “$label” added, next debit on $date.';
+  }
+
+  @override
+  String subscriptionPriceRiseBadge(String diff) {
+    return 'Rise +$diff';
+  }
+
+  @override
+  String subscriptionMonthlyTotal(String amount) {
+    return 'Subscriptions: $amount / month';
+  }
+
+  @override
+  String subscriptionMonthlyCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count active subscriptions',
+      one: '1 active subscription',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String subscriptionPriceRiseAlert(
+    String actual,
+    String planned,
+    String diff,
+  ) {
+    return 'Price rise noticed: $actual instead of $planned (+$diff)';
+  }
+
+  @override
+  String subscriptionUpdateAmountAction(String amount) {
+    return 'Update subscription to $amount';
+  }
+
+  @override
+  String subscriptionAmountUpdated(String amount) {
+    return 'Subscription updated to $amount.';
+  }
+
+  @override
+  String subscriptionUpcomingRiseAlert(
+    String date,
+    String label,
+    String amount,
+    String diff,
+  ) {
+    return 'Price rise on $date for “$label”: will rise to $amount (+$diff)';
+  }
+
+  @override
+  String get subscriptionApplyRiseAction => 'Apply price rise';
+
+  @override
+  String get subscriptionScheduleRiseAction => 'Price rise reminder';
+
+  @override
+  String get subscriptionPriceRiseDialogTitle => 'Price rise reminder';
+
+  @override
+  String get subscriptionPriceRiseDialogHelp =>
+      'For a promotional offer ending or a price increase announced by the service. A reminder will appear in your operations.';
+
+  @override
+  String get subscriptionPriceRiseDate => 'Date of price rise';
+
+  @override
+  String get subscriptionPriceRiseNewAmount => 'New planned amount';
+
+  @override
+  String get subscriptionPriceRiseSave => 'Save reminder';
+
+  @override
+  String get subscriptionPriceRiseClear => 'Remove reminder';
+
+  @override
+  String subscriptionPriceRiseScheduled(String date, String amount) {
+    return 'Price rise on $date: will rise to $amount';
   }
 
   @override

@@ -4109,6 +4109,56 @@ class Endpoints extends _is.EndpointDispatch {
                     subscription: params['subscription'],
                   ),
         ),
+        'setPriceRise': _is.MethodConnector(
+          name: 'setPriceRise',
+          params: {
+            'scheduledId': _is.ParameterDescription(
+              name: 'scheduledId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .setPriceRise(
+                    session,
+                    params['scheduledId'],
+                    date: params['date'],
+                    amountCents: params['amountCents'],
+                  ),
+        ),
+        'applyPriceRise': _is.MethodConnector(
+          name: 'applyPriceRise',
+          params: {
+            'scheduledId': _is.ParameterDescription(
+              name: 'scheduledId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .applyPriceRise(
+                    session,
+                    params['scheduledId'],
+                  ),
+        ),
         'delete': _is.MethodConnector(
           name: 'delete',
           params: {

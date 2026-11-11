@@ -218,7 +218,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] **Crédit rapproché des prélèvements réels** : mensualité manquante, en double ou d'un autre montant signalée par le moteur, sans IA
 - [ ] Tableau d'amortissement lu en entier (changement de taux ou pause d'échéances en cours de crédit)
 - [ ] Remboursement anticipé simulé avec l'indemnité lue dans l'offre de prêt (calcul du moteur)
-- [ ] **Abonnements mis en évidence** dans Opérations : total mensuel, rappel avant une hausse de prix
+- [x] **Abonnements mis en évidence** dans Opérations : total mensuel, hausse constatée signalée, rappel avant une hausse de prix — décision 0034, *1.19.0*
 - [ ] Récapitulatif mensuel : prévision à 30 jours, alertes et propositions en attente sur une page (calculé par le moteur, explication facultative par l'IA)
 - [ ] Coût et volume de l'IA par fonction (lecture de documents, classement, discussion), en plus du plafond mensuel
 - [x] Tests du serveur lancés aussi dans un fuseau horaire autre que l'UTC (un bug de date a échappé à la CI ; corrigé en 1.2.0) — *1.2.0*

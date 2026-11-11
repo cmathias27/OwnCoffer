@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
@@ -245,6 +246,11 @@ class _OperationsScreenState extends State<OperationsScreen> {
       onHasInvoices: (has) => setState(
         () => has ? _withInvoices.add(t.id!) : _withInvoices.remove(t.id!),
       ),
+      onSubscriptionChanged: (s) {
+        if (mounted && _subscriptions.containsKey(s.id)) {
+          setState(() => _subscriptions[s.id!] = s);
+        }
+      },
       onSameProvider: () {
         setState(() => _provider = t.cleanLabel);
         _reload();
@@ -452,6 +458,8 @@ class _OperationsScreenState extends State<OperationsScreen> {
                 ),
               ),
             ),
+          if (_subscriptionsOnly)
+            _subscriptionsSummaryCard(context, l, theme, account),
           Expanded(
             child: _error != null
                 ? Center(child: Text(_error!))
@@ -477,31 +485,201 @@ class _OperationsScreenState extends State<OperationsScreen> {
                               )
                             : const SizedBox.shrink();
                       }
+                      final op = _items[i];
+                      final sub = _subscriptions[op.scheduledId];
+                      final isRise =
+                          sub != null &&
+                          op.amountCents.abs() > sub.amountCents.abs();
+                      final diff = isRise
+                          ? (op.amountCents.abs() - sub.amountCents.abs())
+                          : null;
                       return OperationTile(
                         selected: _selected.isEmpty
                             ? null
-                            : _selected.contains(_items[i].id),
-                        onLongPress: _canWrite
-                            ? () => _select(_items[i])
-                            : null,
+                            : _selected.contains(op.id),
+                        onLongPress: _canWrite ? () => _select(op) : null,
                         onToggleCleared: _canWrite
-                            ? () => _toggleCleared(_items[i])
+                            ? () => _toggleCleared(op)
                             : null,
-                        operation: _items[i],
-                        category: _categories[_items[i].categoryId],
-                        subscription: _subscriptions.containsKey(
-                          _items[i].scheduledId,
-                        ),
-                        hasInvoice: _withInvoices.contains(_items[i].id),
+                        operation: op,
+                        category: _categories[op.categoryId],
+                        subscription: sub != null,
+                        priceRiseDiffCents: diff,
+                        hasInvoice: _withInvoices.contains(op.id),
                         currency: account?.currency ?? 'EUR',
-                        onTap: () => _selected.isEmpty
-                            ? _open(_items[i])
-                            : _select(_items[i]),
+                        onTap: () =>
+                            _selected.isEmpty ? _open(op) : _select(op),
                       );
                     },
                   ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _subscriptionsSummaryCard(
+    BuildContext context,
+    AppLocalizations l,
+    ThemeData theme,
+    Account? account,
+  ) {
+    final now = DateTime.now();
+    final today = DateTime.utc(now.year, now.month, now.day);
+    final active = _subscriptions.values
+        .where(
+          (s) =>
+              s.subscription &&
+              (s.endDate == null || !s.endDate!.isBefore(today)),
+        )
+        .toList();
+    final monthlyTotal = active.fold<int>(
+      0,
+      (sum, s) =>
+          sum +
+          core.monthlyEquivalentCents(
+            s.amountCents,
+            core.Frequency.values.byName(s.frequency.name),
+            s.interval,
+          ),
+    );
+    final upcomingRises =
+        active
+            .where(
+              (s) =>
+                  s.priceRiseDate != null &&
+                  s.priceRiseAmountCents != null &&
+                  !s.priceRiseDate!.isBefore(
+                    today.subtract(const Duration(days: 7)),
+                  ),
+            )
+            .toList()
+          ..sort((a, b) => a.priceRiseDate!.compareTo(b.priceRiseDate!));
+
+    final curr = account?.currency ?? 'EUR';
+    return Card(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      color: theme.colorScheme.surfaceContainerHighest,
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.autorenew,
+                  size: 20,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l.subscriptionMonthlyTotal(
+                          context.money(monthlyTotal.abs(), currency: curr),
+                        ),
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        l.subscriptionMonthlyCount(active.length),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: _openSubscriptions,
+                  child: Text(l.subscriptionsOpen),
+                ),
+              ],
+            ),
+            if (upcomingRises.isNotEmpty) ...[
+              const Divider(height: 16),
+              for (final rise in upcomingRises) ...[
+                Container(
+                  margin: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.errorContainer.withValues(
+                      alpha: 0.5,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.campaign_outlined,
+                        size: 20,
+                        color: theme.colorScheme.error,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          l.subscriptionUpcomingRiseAlert(
+                            context.shortDay(rise.priceRiseDate!),
+                            rise.label,
+                            context.money(
+                              rise.priceRiseAmountCents!.abs(),
+                              currency: curr,
+                            ),
+                            context.money(
+                              (rise.priceRiseAmountCents!.abs() -
+                                      rise.amountCents.abs())
+                                  .abs(),
+                              currency: curr,
+                            ),
+                          ),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onErrorContainer,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      if (_canWrite && !rise.priceRiseDate!.isAfter(today))
+                        TextButton(
+                          onPressed: () async {
+                            try {
+                              await client.scheduled.applyPriceRise(rise.id!);
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      l.subscriptionAmountUpdated(
+                                        context.money(
+                                          rise.priceRiseAmountCents!.abs(),
+                                          currency: curr,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                                _reload();
+                              }
+                            } on Object catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(errorText(l, e))),
+                                );
+                              }
+                            }
+                          },
+                          child: Text(l.subscriptionApplyRiseAction),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ],
+        ),
       ),
     );
   }

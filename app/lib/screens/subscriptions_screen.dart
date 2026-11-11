@@ -7,6 +7,7 @@ import '../widgets/soft.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/contract_simulation.dart';
+import '../widgets/price_rise_dialog.dart';
 
 /// Subscriptions of the group (planned operations marked as such), with
 /// what they cost per month and per year.
@@ -72,6 +73,28 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
               ),
             ),
             ListTile(
+              leading: const Icon(Icons.campaign_outlined),
+              title: Text(l.subscriptionScheduleRiseAction),
+              subtitle:
+                  s.priceRiseDate != null && s.priceRiseAmountCents != null
+                  ? Text(
+                      l.subscriptionPriceRiseScheduled(
+                        context.shortDay(s.priceRiseDate!),
+                        context.money(s.priceRiseAmountCents!.abs()),
+                      ),
+                    )
+                  : null,
+              onTap: () => Navigator.of(context).pop(3),
+            ),
+            if (s.priceRiseDate != null &&
+                s.priceRiseAmountCents != null &&
+                !s.priceRiseDate!.isAfter(DateTime.now()))
+              ListTile(
+                leading: const Icon(Icons.trending_up),
+                title: Text(l.subscriptionApplyRiseAction),
+                onTap: () => Navigator.of(context).pop(4),
+              ),
+            ListTile(
               leading: const Icon(Icons.swap_horiz),
               title: Text(l.subscriptionChange),
               subtitle: Text(l.subscriptionChangeHelp),
@@ -95,9 +118,31 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
     );
     if (action == null) return;
     if (action == 2) return _change(s);
+    if (action == 3) {
+      if (!mounted) return;
+      final updated = await showPriceRiseDialog(
+        context: context,
+        subscription: s,
+      );
+      if (updated != null) await _load();
+      return;
+    }
     try {
       if (action == 0) {
         await client.scheduled.update(s.id!, subscription: false);
+      } else if (action == 4) {
+        await client.scheduled.applyPriceRise(s.id!);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                l.subscriptionAmountUpdated(
+                  context.money(s.priceRiseAmountCents!.abs()),
+                ),
+              ),
+            ),
+          );
+        }
       } else {
         await client.scheduled.delete(s.id!);
       }
@@ -223,6 +268,36 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                               accounts[s.accountId]!.name,
                           ].join(' · '),
                         ),
+                        if (s.priceRiseDate != null &&
+                            s.priceRiseAmountCents != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.campaign_outlined,
+                                  size: 14,
+                                  color: theme.colorScheme.error,
+                                ),
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    l.subscriptionPriceRiseScheduled(
+                                      context.shortDay(s.priceRiseDate!),
+                                      context.money(
+                                        s.priceRiseAmountCents!.abs(),
+                                      ),
+                                    ),
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: theme.colorScheme.error,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         if (_canWrite)
                           Align(
                             alignment: Alignment.centerLeft,
