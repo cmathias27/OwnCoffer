@@ -35,6 +35,10 @@ bool isWrongPassphrase(Object e) => false;
 
 bool isBackupTooNew(Object e) => false;
 
+bool isDatabaseKeyLost(Object e) => false;
+
+Future<void> setAsideLockedDatabase() async => _unavailable();
+
 bool get standaloneRunning => false;
 
 Future<void> stopStandalone() async {}

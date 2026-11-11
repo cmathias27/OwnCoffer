@@ -9141,6 +9141,18 @@ abstract class AppLocalizations {
   /// **'Réessayez. Si cela recommence, copiez le détail ci-dessous et envoyez-le (il ne contient aucune donnée bancaire). « Retour » permet aussi de se connecter à un serveur.'**
   String get standaloneStartFailedHelp;
 
+  /// No description provided for @standaloneKeyLost.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les données de cet appareil sont chiffrées, et la clé que Windows gardait pour elles est introuvable (compte Windows réinitialisé, ou dossier copié depuis un autre ordinateur). Le fichier est intact, mais illisible sans elle. « Repartir de zéro » le met de côté sans l\'effacer ; restaurez ensuite votre dernière sauvegarde (Exporter mes données → Sauvegardes de l\'appareil).'**
+  String get standaloneKeyLost;
+
+  /// No description provided for @standaloneSetAside.
+  ///
+  /// In fr, this message translates to:
+  /// **'Repartir de zéro'**
+  String get standaloneSetAside;
+
   /// No description provided for @standaloneChangeMode.
   ///
   /// In fr, this message translates to:

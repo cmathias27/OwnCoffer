@@ -31,6 +31,7 @@ import 'widgets/app_update_flow.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LicenseRegistry.addLicense(_dbIpLicense);
+  LicenseRegistry.addLicense(_sqlite3mcLicense);
   // Decision 0032: the update just installed is running; forget the
   // download and the previous folder.
   unawaited(appUpdater.cleanup());
@@ -97,12 +98,19 @@ Future<void> _startStandalone() async {
     await _openStandalone();
   } on Object catch (e, stack) {
     debugPrint('Standalone start failed: $e\n$stack');
+    final keyLost = e is StandaloneStartError && isDatabaseKeyLost(e.cause);
     runApp(
       OwnCofferApp(
         home: StartingScreen(
           error: '$e',
           onRetry: _startStandalone,
           onBack: askServerAddress,
+          onSetAside: keyLost
+              ? () async {
+                  await setAsideLockedDatabase();
+                  await _startStandalone();
+                }
+              : null,
         ),
       ),
     );
@@ -390,5 +398,31 @@ Stream<LicenseEntry> _dbIpLicense() async* {
     'session in this database, without any outside service.\n\n'
     'Licensed under the Creative Commons Attribution 4.0 International '
     'License: https://creativecommons.org/licenses/by/4.0/',
+  );
+}
+
+/// The Windows and Android apps carry SQLite3 Multiple Ciphers, which
+/// encrypts the standalone database (decision 0033); MIT licence.
+Stream<LicenseEntry> _sqlite3mcLicense() async* {
+  yield const LicenseEntryWithLineBreaks(
+    ['SQLite3 Multiple Ciphers'],
+    'MIT License\n\n'
+    'Copyright (c) 2019-2026 Ulrich Telle\n\n'
+    'Permission is hereby granted, free of charge, to any person obtaining '
+    'a copy of this software and associated documentation files (the '
+    '"Software"), to deal in the Software without restriction, including '
+    'without limitation the rights to use, copy, modify, merge, publish, '
+    'distribute, sublicense, and/or sell copies of the Software, and to '
+    'permit persons to whom the Software is furnished to do so, subject to '
+    'the following conditions:\n\n'
+    'The above copyright notice and this permission notice shall be '
+    'included in all copies or substantial portions of the Software.\n\n'
+    'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, '
+    'EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF '
+    'MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. '
+    'IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY '
+    'CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, '
+    'TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE '
+    'SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.',
   );
 }

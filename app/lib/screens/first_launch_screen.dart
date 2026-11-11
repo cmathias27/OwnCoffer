@@ -100,7 +100,17 @@ class StartingScreen extends StatelessWidget {
   final Future<void> Function()? onRetry;
   final Future<void> Function()? onBack;
 
-  const StartingScreen({super.key, this.error, this.onRetry, this.onBack});
+  /// The database's key is gone (decision 0033): start again empty, the
+  /// file kept aside, then restore a backup.
+  final Future<void> Function()? onSetAside;
+
+  const StartingScreen({
+    super.key,
+    this.error,
+    this.onRetry,
+    this.onBack,
+    this.onSetAside,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -120,9 +130,12 @@ class StartingScreen extends StatelessWidget {
         ),
       );
     }
+    final onSetAside = this.onSetAside;
     return FormCard(
       title: l.standaloneStartFailed,
-      intro: l.standaloneStartFailedHelp,
+      intro: onSetAside == null
+          ? l.standaloneStartFailedHelp
+          : l.standaloneKeyLost,
       children: [
         SelectableText(
           error,
@@ -149,6 +162,17 @@ class StartingScreen extends StatelessWidget {
               FilledButton(onPressed: onRetry, child: Text(l.retry)),
           ],
         ),
+        if (onSetAside != null) ...[
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.centerRight,
+            child: OutlinedButton(
+              key: const Key('standalone-set-aside'),
+              onPressed: onSetAside,
+              child: Text(l.standaloneSetAside),
+            ),
+          ),
+        ],
       ],
     );
   }

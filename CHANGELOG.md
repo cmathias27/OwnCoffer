@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.18.0 (novembre 2026)
+
+### Chiffrement de la base en mode autonome (décision 0033)
+- **Base chiffrée sur le disque** : le fichier SQLite du mode autonome est chiffré avec SQLite3 Multiple Ciphers (AES-256).
+- **Clé sécurisée sous Windows** : générée au premier lancement et conservée dans le gestionnaire d'identifiants Windows (Credential Manager), jamais écrite en clair à côté de la base. Android protège quant à lui le dossier privé avec le chiffrement de l'appareil.
+- **Migration automatique** : une base créée avec une version précédente est chiffrée sur place au premier démarrage sans perte de données.
+- **Sauvegardes portables** : les sauvegardes locales ou vers un dossier restent scellées par votre phrase secrète et restaurables sur n'importe quel appareil.
+- **En cas de clé perdue** : si le fichier chiffré ne peut plus être ouvert (ex. réinitialisation des identifiants Windows), « Repartir de zéro » archive le fichier sans rien effacer pour permettre une restauration propre.
+
 ## 1.17.0 (novembre 2026)
 
 ### Mises à jour des applications depuis l'application (décision 0032)

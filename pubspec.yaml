@@ -9,3 +9,11 @@ workspace:
   - client
   - server
   - app
+
+# Decision 0033: SQLite3 Multiple Ciphers (MIT licence) in place of plain
+# SQLite, to encrypt the database file of the standalone app. Same prebuilt
+# binaries of package:sqlite3, checked against their published sums.
+hooks:
+  user_defines:
+    sqlite3:
+      source: sqlite3mc

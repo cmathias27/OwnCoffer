@@ -199,11 +199,11 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
   - [x] Pépite remarque toute seule les étapes de la semaine, la compte et annonce les badges — *1.14.0 ([0029](decisions/0029-pepite-autonome.md))*
   - [x] Pépite : défi du mois, mesuré tout seul — *1.15.0 ([0030](decisions/0030-pepite-defi-du-mois.md))*
   - [x] Pépite : « Ton année » — *1.16.0 ([0031](decisions/0031-pepite-ton-annee.md))*
-- [ ] Version autonome sans serveur (décision 0022) :
+- [x] Version autonome sans serveur (décision 0022) :
   - [x] le serveur embarqué dans l'application, sur SQLite ; choix « seul sur cet appareil » ou « serveur » au premier lancement ; tous les tests du serveur aussi sur SQLite — *1.1.0*
   - [x] « Migrer vers un serveur » (et retour par « Importer un export ») par l'export complet, factures comprises — *1.1.0* ; copie vérifiée (mêmes nombres, montants et soldes que la source), reprise sans renvoyer les groupes déjà envoyés — *1.4.4 (PR #147)*
   - [x] Sauvegarde chiffrée automatique vers un dossier, restauration sur cet appareil ou un autre — *1.1.0* ; restauration en deux temps avec l'ancien état gardé, refus d'une sauvegarde plus récente que l'application, contrôle d'intégrité, échecs affichés — *1.4.4 (PR #146)* ; dossier au choix sur Android, chiffrement par blocs pour les grosses sauvegardes (documents compris) — *1.4.5*
-  - [ ] Chiffrement du fichier SQLite
+  - [x] Chiffrement du fichier SQLite (SQLite3 Multiple Ciphers, clé dans le magasin de secrets de l'appareil, migration automatique au premier démarrage) — *1.18.0 ([0033](decisions/0033-chiffrement-base-autonome.md))*
 - [ ] **Scan automatique des tickets à l'appareil photo** (demandé le 2 novembre 2026), en partant de la lecture de documents existante (0.3.31) :
   - [ ] recadrage automatique : bords du ticket détectés, perspective redressée, contraste amélioré, déclenchement quand l'image est nette (scanner de documents du système sur Android ; sur le web, quatre coins à placer ou traitement sur le serveur)
   - [x] lecture du texte sur l'appareil, sans IA et hors ligne (utilisable en version autonome) ; avec l'IA de l'utilisateur quand elle est configurée, lecture structurée plus fiable (montant, date, commerçant, TVA, lignes) — *1.3.0 (décision 0023, PR #129, #130, #133)*

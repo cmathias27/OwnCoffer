@@ -5689,6 +5689,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Réessayez. Si cela recommence, copiez le détail ci-dessous et envoyez-le (il ne contient aucune donnée bancaire). « Retour » permet aussi de se connecter à un serveur.';
 
   @override
+  String get standaloneKeyLost =>
+      'Les données de cet appareil sont chiffrées, et la clé que Windows gardait pour elles est introuvable (compte Windows réinitialisé, ou dossier copié depuis un autre ordinateur). Le fichier est intact, mais illisible sans elle. « Repartir de zéro » le met de côté sans l\'effacer ; restaurez ensuite votre dernière sauvegarde (Exporter mes données → Sauvegardes de l\'appareil).';
+
+  @override
+  String get standaloneSetAside => 'Repartir de zéro';
+
+  @override
   String get standaloneChangeMode => 'Changer de mode';
 
   @override

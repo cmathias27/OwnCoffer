@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_selector/file_selector.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:owncoffer_server/embedded.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,10 +31,57 @@ Future<Directory> _dataDir() async => Directory(
 
 Future<({Uri api, Future<Map<String, dynamic>> Function() signIn})>
 startStandalone() async {
-  final server = _server ??= await EmbeddedServer.start(
-    dataDir: await _dataDir(),
-  );
+  var server = _server;
+  if (server == null) {
+    final dir = await _dataDir();
+    server = await EmbeddedServer.start(
+      dataDir: dir,
+      databaseKey: await _databaseKey(dir),
+    );
+    _server = server;
+  }
   return (api: server.api, signIn: server.signIn);
+}
+
+/// Decision 0033: on Windows, the database file is encrypted with a key
+/// kept by the system for this Windows account (Credential Manager), never
+/// beside the file. Android's private folder is already encrypted by the
+/// phone and closed to other apps: no key there, none to lose.
+const _keyName = 'standalone.databaseKey';
+
+Future<String?> _databaseKey(Directory dataDir) async {
+  if (!Platform.isWindows) return null;
+  const storage = FlutterSecureStorage();
+  // A store that cannot be read fails the start (retried): a key is never
+  // replaced by a new one while an old one may still exist.
+  final saved = await storage.read(key: _keyName);
+  if (saved != null && DatabaseKey.valid(saved)) return saved;
+  if (EmbeddedServer.databaseState(dataDir) == DatabaseFileState.encrypted) {
+    throw const DatabaseKeyLostException();
+  }
+  final key = DatabaseKey.generate();
+  await storage.write(key: _keyName, value: key);
+  if (await storage.read(key: _keyName) != key) {
+    throw StateError('The system did not keep the database key');
+  }
+  return key;
+}
+
+bool isDatabaseKeyLost(Object e) => e is DatabaseKeyLostException;
+
+Future<void> setAsideLockedDatabase() async {
+  final dir = await _dataDir();
+  final db = EmbeddedServer.databasePath(dir);
+  final stamp = DateTime.now().toIso8601String().replaceAll(
+    RegExp('[^0-9]'),
+    '',
+  );
+  for (final suffix in ['', '-wal', '-shm']) {
+    final f = File('$db$suffix');
+    if (f.existsSync()) {
+      await f.rename('${dir.path}/owncoffer-locked-$stamp.db$suffix');
+    }
+  }
 }
 
 /// The Android folder picker and the files in the chosen folder

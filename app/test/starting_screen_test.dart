@@ -39,6 +39,30 @@ void main() {
     expect((retried, back), (1, 1));
   });
 
+  testWidgets('standalone start: the key of the database is gone', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(800, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    var asideCalls = 0;
+    await tester.pumpWidget(
+      _app(
+        StartingScreen(
+          error: '[start] DatabaseKeyLostException',
+          onRetry: () async {},
+          onBack: () async {},
+          onSetAside: () async => asideCalls++,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.textContaining('clé que Windows gardait'), findsOneWidget);
+    expect(find.textContaining('Réessayez. Si cela'), findsNothing);
+    await tester.tap(find.byKey(const Key('standalone-set-aside')));
+    expect(asideCalls, 1);
+  });
+
   testWidgets('standalone start: waiting without error', (tester) async {
     await tester.pumpWidget(_app(const StartingScreen()));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
