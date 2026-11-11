@@ -7418,4 +7418,41 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get summaryAiQuestion =>
       'Explique-moi simplement les 30 prochains jours : le solde prévu de mes comptes courants, le point bas, les alertes et les propositions en attente. Utilise les prévisions et les conseils calculés par OwnCoffer, sans refaire les calculs.';
+
+  @override
+  String get receiptReading => 'Lecture du ticket sur l\'appareil…';
+
+  @override
+  String get receiptOperationCreateFrom => 'Créer l\'opération';
+
+  @override
+  String get receiptOperationTitle => 'Opération du ticket';
+
+  @override
+  String get receiptOperationHelp =>
+      'Pour un achat qui n\'arrivera pas par un relevé importé (espèces, compte non importé). L\'opération est créée avec ce qui a été lu ou saisi sur le ticket, et le ticket y est joint comme justificatif.';
+
+  @override
+  String get receiptOperationAmount => 'Montant payé';
+
+  @override
+  String get receiptOperationByRules => 'Selon vos règles de classement';
+
+  @override
+  String get receiptOperationNoAccount => 'Aucun compte où créer l\'opération.';
+
+  @override
+  String get receiptOperationLabelMissing => 'Indiquez un libellé.';
+
+  @override
+  String get receiptOperationCreate => 'Créer';
+
+  @override
+  String receiptOperationCreated(String name) {
+    return 'Opération créée, ticket joint : $name';
+  }
+
+  @override
+  String get error_invoice_already_attached =>
+      'Ce justificatif est déjà joint à une opération.';
 }

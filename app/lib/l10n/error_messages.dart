@@ -77,6 +77,7 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'pepite_year_invalid' => l.error_pepite_year_invalid,
   'pepite_item_not_owned' => l.error_pepite_item_not_owned,
   'invoice_access_denied' => l.error_invoice_access_denied,
+  'invoice_already_attached' => l.error_invoice_already_attached,
   'mail_not_configured' => l.error_mail_not_configured,
   'send_limit' => l.error_send_limit,
   'demo_only' => l.error_demo_only,

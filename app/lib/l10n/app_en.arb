@@ -2026,5 +2026,16 @@
   "summaryPriceRisesTitle": "Announced subscription rises",
   "summaryPriceRise": "{label}: {amount} from {date}",
   "summaryAskAi": "Ask the AI to explain",
-  "summaryAiQuestion": "Explain the next 30 days simply: the expected balance of my checking accounts, the lowest point, the alerts and the proposals waiting. Use the forecasts and advice computed by OwnCoffer, without redoing the calculations."
+  "summaryAiQuestion": "Explain the next 30 days simply: the expected balance of my checking accounts, the lowest point, the alerts and the proposals waiting. Use the forecasts and advice computed by OwnCoffer, without redoing the calculations.",
+  "receiptReading": "Reading the receipt on the device…",
+  "receiptOperationCreateFrom": "Create the operation",
+  "receiptOperationTitle": "Operation of the receipt",
+  "receiptOperationHelp": "For a purchase that will not come from an imported statement (cash, an account not imported). The operation is created from what was read or typed on the receipt, and the receipt is attached to it as proof.",
+  "receiptOperationAmount": "Amount paid",
+  "receiptOperationByRules": "Following your classification rules",
+  "receiptOperationNoAccount": "No account to create the operation in.",
+  "receiptOperationLabelMissing": "Enter a label.",
+  "receiptOperationCreate": "Create",
+  "receiptOperationCreated": "Operation created, receipt attached: {name}",
+  "error_invoice_already_attached": "This receipt is already attached to an operation."
 }

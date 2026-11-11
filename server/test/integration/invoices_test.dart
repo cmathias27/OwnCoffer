@@ -542,5 +542,174 @@ void main() {
         [mine.invoice.id],
       );
     });
+
+    test('a receipt creates its operation, attached (decision 0036)', () async {
+      final waiting = await endpoints.invoice.uploadUnattached(
+        as(bob),
+        groupA,
+        'ticket.jpg',
+        jpg,
+        amountCents: 1250,
+        date: DateTime.utc(2026, 11, 2),
+        merchant: 'BOULANGERIE',
+      );
+      final id = waiting.invoice.id!;
+
+      // Checks before anything is written.
+      await expectLater(
+        endpoints.invoice.createOperation(
+          as(bob),
+          id,
+          shared.id!,
+          DateTime.utc(2026, 11, 2),
+          0,
+          'BOULANGERIE',
+        ),
+        invalid,
+      );
+      await expectLater(
+        endpoints.invoice.createOperation(
+          as(bob),
+          id,
+          shared.id!,
+          DateTime.utc(2026, 11, 2),
+          -1250,
+          'BOULANGERIE',
+        ),
+        invalid,
+        reason: 'the total paid is positive',
+      );
+      await expectLater(
+        endpoints.invoice.createOperation(
+          as(reader),
+          id,
+          shared.id!,
+          DateTime.utc(2026, 11, 2),
+          1250,
+          'BOULANGERIE',
+        ),
+        denied,
+      );
+      await expectLater(
+        endpoints.invoice.createOperation(
+          as(bob),
+          id,
+          restricted.id!,
+          DateTime.utc(2026, 11, 2),
+          1250,
+          'BOULANGERIE',
+        ),
+        denied,
+        reason: 'restricted account not visible to bob',
+      );
+      expect(
+        await BankTransaction.db.count(db),
+        2,
+        reason: 'nothing created by refused calls',
+      );
+
+      final food = (await endpoints.category.list(
+        as(bob),
+        groupA,
+      )).firstWhere((c) => c.kind == CategoryKind.expense);
+      final info = await endpoints.invoice.createOperation(
+        as(bob),
+        id,
+        shared.id!,
+        DateTime.utc(2026, 11, 2, 18),
+        1250,
+        ' BOULANGERIE ',
+        categoryId: food.id,
+      );
+      final t = (await BankTransaction.db.findById(
+        db,
+        info.invoice.transactionId!,
+      ))!;
+      expect(t.accountId, shared.id);
+      expect(t.amountCents, -1250);
+      expect(t.date, DateTime.utc(2026, 11, 2));
+      expect(t.rawLabel, 'BOULANGERIE');
+      expect(t.categoryId, food.id);
+      expect(t.createdBy, bob);
+      expect(info.invoice.id, id);
+
+      // Once attached, it cannot create a second operation.
+      await expectLater(
+        endpoints.invoice.createOperation(
+          as(alice),
+          id,
+          shared.id!,
+          DateTime.utc(2026, 11, 2),
+          1250,
+          'BOULANGERIE',
+        ),
+        invalid,
+      );
+    });
+
+    test('creating the operation of a receipt: isolation', () async {
+      final waiting = await endpoints.invoice.uploadUnattached(
+        as(bob),
+        groupA,
+        'ticket.jpg',
+        jpg,
+      );
+      final id = waiting.invoice.id!;
+      final groupB = (await endpoints.group.myGroups(
+        as(mallory),
+      )).firstWhere((m) => m.group.name == 'B').group.id!;
+      final theirs = await endpoints.account.create(
+        as(mallory),
+        groupB,
+        'Leur compte',
+        AccountKind.checking,
+      );
+      final theirCategory = (await endpoints.category.list(
+        as(mallory),
+        groupB,
+      )).firstWhere((c) => c.kind == CategoryKind.expense);
+
+      await expectLater(
+        endpoints.invoice.createOperation(
+          as(mallory),
+          id,
+          theirs.id!,
+          DateTime.utc(2026, 11, 2),
+          500,
+          'X',
+        ),
+        denied,
+        reason: 'invoice of another group',
+      );
+      await expectLater(
+        endpoints.invoice.createOperation(
+          as(alice),
+          id,
+          theirs.id!,
+          DateTime.utc(2026, 11, 2),
+          500,
+          'X',
+        ),
+        denied,
+        reason: 'account of another group',
+      );
+      await expectLater(
+        endpoints.invoice.createOperation(
+          as(alice),
+          id,
+          shared.id!,
+          DateTime.utc(2026, 11, 2),
+          500,
+          'X',
+          categoryId: theirCategory.id,
+        ),
+        denied,
+        reason: 'category of another group',
+      );
+      expect(await BankTransaction.db.count(db), 2);
+      final kept = (await Invoice.db.findById(db, id))!;
+      expect(kept.transactionId, isNull);
+      expect(kept.groupId, groupA);
+    });
   });
 }

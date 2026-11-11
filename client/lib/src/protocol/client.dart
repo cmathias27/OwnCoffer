@@ -1524,6 +1524,31 @@ class EndpointInvoice extends _isc.EndpointRef {
     },
   );
 
+  /// Creates the operation of a waiting receipt that is not on a statement
+  /// yet (cash, a card payment not imported) from what the user checked,
+  /// and attaches the receipt to it (decision 0036). [amountCents] is the
+  /// total paid, positive: the operation is a debit. Classified by the
+  /// group's rules unless [categoryId] is given.
+  _ida.Future<_iej1c1us.InvoiceInfo> createOperation(
+    int invoiceId,
+    int accountId,
+    DateTime date,
+    int amountCents,
+    String label, {
+    int? categoryId,
+  }) => caller.callServerEndpoint<_iej1c1us.InvoiceInfo>(
+    'invoice',
+    'createOperation',
+    {
+      'invoiceId': invoiceId,
+      'accountId': accountId,
+      'date': date,
+      'amountCents': amountCents,
+      'label': label,
+      'categoryId': categoryId,
+    },
+  );
+
   /// The content, for the user to open or save it.
   _ida.Future<_idt.ByteData> download(int invoiceId) =>
       caller.callServerEndpoint<_idt.ByteData>(

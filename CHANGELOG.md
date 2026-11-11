@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.21.0 (novembre 2026)
+
+### Scan des tickets : pré-remplissage et opération créée depuis le ticket (décision 0036)
+- **Ticket lu à l'envoi** : sur Android, une photo de ticket ajoutée aux factures à rattacher est lue sur le téléphone (sans IA, sans réseau) ; montant, date et commerçant arrivent pré-remplis dans la fenêtre de vérification. Ailleurs, ou si rien n'est lu, la saisie à la main reste proposée.
+- **Rapprochement** : ces indices servent à proposer l'opération bancaire correspondante, le ticket joint comme justificatif.
+- **Créer l'opération depuis le ticket** : pour un achat en espèces ou sur un compte non importé, un bouton crée la dépense pré-remplie (compte, date, montant, libellé, catégorie ou règles du groupe) et y joint le ticket.
+
 ## 1.20.0 (novembre 2026)
 
 ### Récapitulatif mensuel (décision 0035)
