@@ -157,4 +157,95 @@ void main() {
     await tester.tap(find.byType(Checkbox));
     expect(events.last, 'tap', reason: 'the box toggles the selection');
   });
+
+  Widget app(Widget home) => MaterialApp(
+    locale: const Locale('fr'),
+    localizationsDelegates: const [
+      AppLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: Scaffold(body: home),
+  );
+
+  testWidgets('a row: a subscription debited more shows the rise', (
+    tester,
+  ) async {
+    Widget row(int? diff) => app(
+      OperationTile(
+        operation: op,
+        category: null,
+        subscription: true,
+        priceRiseDiffCents: diff,
+        hasInvoice: false,
+        currency: 'EUR',
+        onTap: () {},
+      ),
+    );
+    await tester.pumpWidget(row(null));
+    expect(find.byIcon(Icons.trending_up), findsNothing);
+    expect(find.textContaining('Abonnement'), findsOneWidget);
+
+    await tester.pumpWidget(row(2000));
+    expect(find.byIcon(Icons.trending_up), findsOneWidget);
+    expect(find.textContaining('Hausse +20,00'), findsOneWidget);
+  });
+
+  testWidgets('the sheet offers to update a subscription debited more', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(400, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      app(
+        Builder(
+          builder: (context) => TextButton(
+            onPressed: () => showOperationSheet(
+              context,
+              membership: membership,
+              operation: op,
+              accounts: [
+                Account(
+                  id: 3,
+                  groupId: 1,
+                  name: 'Courant',
+                  kind: AccountKind.checking,
+                ),
+              ],
+              categories: {},
+              subscription: ScheduledTransaction(
+                id: 9,
+                accountId: 3,
+                amountCents: -6000,
+                label: 'Courses',
+                frequency: ScheduleFrequency.monthly,
+                startDate: DateTime.utc(2026, 1, 2),
+                subscription: true,
+              ),
+              onUndone: () {},
+              onChanged: (_) {},
+            ),
+            child: const Text('open'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(
+      find.textContaining('Hausse de prix constatée', skipOffstage: false),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining(
+        'Mettre à jour l\'abonnement à 80,00',
+        skipOffstage: false,
+      ),
+      findsOneWidget,
+    );
+  });
 }

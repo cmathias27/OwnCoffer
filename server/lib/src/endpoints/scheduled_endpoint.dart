@@ -129,6 +129,76 @@ class ScheduledEndpoint extends Endpoint {
     return saved;
   }
 
+  /// Sets or clears an upcoming price rise (promo ending, announced change)
+  /// for a subscription. Passing null for [date] or [amountCents] clears the
+  /// reminder.
+  Future<ScheduledTransaction> setPriceRise(
+    Session session,
+    int scheduledId, {
+    DateTime? date,
+    int? amountCents,
+  }) async {
+    final (current, account) = await _find(session, scheduledId);
+    int? signedAmount;
+    if (amountCents != null && amountCents != 0) {
+      signedAmount = current.amountCents < 0
+          ? -amountCents.abs()
+          : amountCents.abs();
+    }
+    final next = _validated(
+      current.copyWith(
+        priceRiseDate:
+            (date == null || signedAmount == null) ? null : _day(date),
+        priceRiseAmountCents:
+            (date == null || signedAmount == null) ? null : signedAmount,
+      ),
+    );
+    final saved = await ScheduledTransaction.db.updateRow(session, next);
+    await AlertService.checkAfterChange(session, account);
+    await Audit.log(
+      session,
+      groupId: account.groupId,
+      action: 'update',
+      entity: 'scheduled',
+      rowId: scheduledId,
+      before: current,
+      after: saved,
+    );
+    return saved;
+  }
+
+  /// Applies the scheduled price rise: replaces [amountCents] by
+  /// [priceRiseAmountCents] and clears the upcoming rise fields.
+  Future<ScheduledTransaction> applyPriceRise(
+    Session session,
+    int scheduledId,
+  ) async {
+    final (current, account) = await _find(session, scheduledId);
+    final newAmount = current.priceRiseAmountCents;
+    if (newAmount == null) {
+      throw InvalidInputException(code: 'no_price_rise_scheduled');
+    }
+    final next = _validated(
+      current.copyWith(
+        amountCents: newAmount,
+        priceRiseDate: null,
+        priceRiseAmountCents: null,
+      ),
+    );
+    final saved = await ScheduledTransaction.db.updateRow(session, next);
+    await AlertService.checkAfterChange(session, account);
+    await Audit.log(
+      session,
+      groupId: account.groupId,
+      action: 'update',
+      entity: 'scheduled',
+      rowId: scheduledId,
+      before: current,
+      after: saved,
+    );
+    return saved;
+  }
+
   Future<void> delete(Session session, int scheduledId) async {
     final (current, account) = await _find(session, scheduledId);
     await session.db.transaction((tx) async {
@@ -571,6 +641,11 @@ class ScheduledEndpoint extends Endpoint {
       throw InvalidInputException(code: 'invalid_name', field: 'label');
     }
     if (s.amountCents == 0 || s.amountCents.abs() > 100000000000000) {
+      throw InvalidInputException(code: 'amount_out_of_range');
+    }
+    if (s.priceRiseAmountCents != null &&
+        (s.priceRiseAmountCents == 0 ||
+            s.priceRiseAmountCents!.abs() > 100000000000000)) {
       throw InvalidInputException(code: 'amount_out_of_range');
     }
     if (s.interval < 1 || s.interval > 120) {

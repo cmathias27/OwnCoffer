@@ -180,6 +180,8 @@ scheduled:
   - list:
   - create:
   - update:
+  - setPriceRise:
+  - applyPriceRise:
   - delete:
   - subscriptions:
   - subscribeFrom:

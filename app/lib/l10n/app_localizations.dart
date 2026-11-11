@@ -860,6 +860,12 @@ abstract class AppLocalizations {
   /// **'Montant invalide : il doit être positif et raisonnable.'**
   String get error_invalid_amount;
 
+  /// No description provided for @error_no_price_rise_scheduled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune hausse de prix n\'est prévue pour cet abonnement.'**
+  String get error_no_price_rise_scheduled;
+
   /// No description provided for @error_import_file_too_large.
   ///
   /// In fr, this message translates to:
@@ -2694,6 +2700,107 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Abonnement « {label} » ajouté, prochain prélèvement le {date}.'**
   String subscriptionCreated(String label, String date);
+
+  /// No description provided for @subscriptionPriceRiseBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hausse +{diff}'**
+  String subscriptionPriceRiseBadge(String diff);
+
+  /// No description provided for @subscriptionMonthlyTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnements : {amount} / mois'**
+  String subscriptionMonthlyTotal(String amount);
+
+  /// No description provided for @subscriptionMonthlyCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 abonnement actif} other{{count} abonnements actifs}}'**
+  String subscriptionMonthlyCount(int count);
+
+  /// No description provided for @subscriptionPriceRiseAlert.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hausse de prix constatée : {actual} au lieu de {planned} (+{diff})'**
+  String subscriptionPriceRiseAlert(String actual, String planned, String diff);
+
+  /// No description provided for @subscriptionUpdateAmountAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre à jour l\'abonnement à {amount}'**
+  String subscriptionUpdateAmountAction(String amount);
+
+  /// No description provided for @subscriptionAmountUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement mis à jour à {amount}.'**
+  String subscriptionAmountUpdated(String amount);
+
+  /// No description provided for @subscriptionUpcomingRiseAlert.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hausse prévue le {date} pour « {label} » : passera à {amount} (+{diff})'**
+  String subscriptionUpcomingRiseAlert(
+    String date,
+    String label,
+    String amount,
+    String diff,
+  );
+
+  /// No description provided for @subscriptionApplyRiseAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appliquer la hausse'**
+  String get subscriptionApplyRiseAction;
+
+  /// No description provided for @subscriptionScheduleRiseAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel de hausse de prix'**
+  String get subscriptionScheduleRiseAction;
+
+  /// No description provided for @subscriptionPriceRiseDialogTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel de hausse de prix'**
+  String get subscriptionPriceRiseDialogTitle;
+
+  /// No description provided for @subscriptionPriceRiseDialogHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour une offre promotionnelle qui se termine ou une augmentation annoncée par le service. Un rappel apparaîtra dans vos opérations.'**
+  String get subscriptionPriceRiseDialogHelp;
+
+  /// No description provided for @subscriptionPriceRiseDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de la hausse'**
+  String get subscriptionPriceRiseDate;
+
+  /// No description provided for @subscriptionPriceRiseNewAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau montant prévu'**
+  String get subscriptionPriceRiseNewAmount;
+
+  /// No description provided for @subscriptionPriceRiseSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer le rappel'**
+  String get subscriptionPriceRiseSave;
+
+  /// No description provided for @subscriptionPriceRiseClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le rappel'**
+  String get subscriptionPriceRiseClear;
+
+  /// No description provided for @subscriptionPriceRiseScheduled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hausse programmée le {date} : passera à {amount}'**
+  String subscriptionPriceRiseScheduled(String date, String amount);
 
   /// No description provided for @loansRemaining.
   ///

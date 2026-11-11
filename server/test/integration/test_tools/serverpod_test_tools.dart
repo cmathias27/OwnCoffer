@@ -6033,6 +6033,74 @@ class _ScheduledEndpoint {
     });
   }
 
+  _ida.Future<_inu9ydal.ScheduledTransaction> setPriceRise(
+    _ist.TestSessionBuilder sessionBuilder,
+    int scheduledId, {
+    DateTime? date,
+    int? amountCents,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'setPriceRise',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'setPriceRise',
+          parameters: _ist.testObjectToJson({
+            'scheduledId': scheduledId,
+            'date': date,
+            'amountCents': amountCents,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_inu9ydal.ScheduledTransaction>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_inu9ydal.ScheduledTransaction> applyPriceRise(
+    _ist.TestSessionBuilder sessionBuilder,
+    int scheduledId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'applyPriceRise',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'applyPriceRise',
+          parameters: _ist.testObjectToJson({'scheduledId': scheduledId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_inu9ydal.ScheduledTransaction>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<void> delete(
     _ist.TestSessionBuilder sessionBuilder,
     int scheduledId,

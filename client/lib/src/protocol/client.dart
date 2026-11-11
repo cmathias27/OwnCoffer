@@ -2264,6 +2264,32 @@ class EndpointScheduled extends _isc.EndpointRef {
     },
   );
 
+  /// Sets or clears an upcoming price rise (promo ending, announced change)
+  /// for a subscription. Passing null for [date] or [amountCents] clears the
+  /// reminder.
+  _ida.Future<_ibpr6881.ScheduledTransaction> setPriceRise(
+    int scheduledId, {
+    DateTime? date,
+    int? amountCents,
+  }) => caller.callServerEndpoint<_ibpr6881.ScheduledTransaction>(
+    'scheduled',
+    'setPriceRise',
+    {
+      'scheduledId': scheduledId,
+      'date': date,
+      'amountCents': amountCents,
+    },
+  );
+
+  /// Applies the scheduled price rise: replaces [amountCents] by
+  /// [priceRiseAmountCents] and clears the upcoming rise fields.
+  _ida.Future<_ibpr6881.ScheduledTransaction> applyPriceRise(int scheduledId) =>
+      caller.callServerEndpoint<_ibpr6881.ScheduledTransaction>(
+        'scheduled',
+        'applyPriceRise',
+        {'scheduledId': scheduledId},
+      );
+
   _ida.Future<void> delete(int scheduledId) => caller.callServerEndpoint<void>(
     'scheduled',
     'delete',

@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.19.0 (novembre 2026)
+
+### Abonnements mis en évidence et hausses de prix (décision 0034)
+- **Filtre « Abonnements » dans Opérations** : total mensuel des abonnements actifs et leur nombre en tête de liste, avec un lien vers la page Abonnements.
+- **Hausse constatée** : une opération d'abonnement plus chère que prévu porte un badge « Hausse +X » ; sa fiche propose de mettre l'abonnement au nouveau montant en un geste.
+- **Hausse annoncée** : sur un abonnement, « Prévoir une hausse de prix » enregistre une date et un nouveau montant (fin de promotion, tarif annoncé). Le rappel s'affiche dans Opérations, la page Abonnements et la fiche ; « Appliquer » le reporte sur l'abonnement le jour venu.
+
 ## 1.18.0 (novembre 2026)
 
 ### Chiffrement de la base en mode autonome (décision 0033)

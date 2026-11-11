@@ -460,6 +460,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Montant invalide : il doit être positif et raisonnable.';
 
   @override
+  String get error_no_price_rise_scheduled =>
+      'Aucune hausse de prix n\'est prévue pour cet abonnement.';
+
+  @override
   String get error_import_file_too_large =>
       'Fichier trop volumineux (4 Mo au maximum).';
 
@@ -1643,6 +1647,86 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String subscriptionCreated(String label, String date) {
     return 'Abonnement « $label » ajouté, prochain prélèvement le $date.';
+  }
+
+  @override
+  String subscriptionPriceRiseBadge(String diff) {
+    return 'Hausse +$diff';
+  }
+
+  @override
+  String subscriptionMonthlyTotal(String amount) {
+    return 'Abonnements : $amount / mois';
+  }
+
+  @override
+  String subscriptionMonthlyCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count abonnements actifs',
+      one: '1 abonnement actif',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String subscriptionPriceRiseAlert(
+    String actual,
+    String planned,
+    String diff,
+  ) {
+    return 'Hausse de prix constatée : $actual au lieu de $planned (+$diff)';
+  }
+
+  @override
+  String subscriptionUpdateAmountAction(String amount) {
+    return 'Mettre à jour l\'abonnement à $amount';
+  }
+
+  @override
+  String subscriptionAmountUpdated(String amount) {
+    return 'Abonnement mis à jour à $amount.';
+  }
+
+  @override
+  String subscriptionUpcomingRiseAlert(
+    String date,
+    String label,
+    String amount,
+    String diff,
+  ) {
+    return 'Hausse prévue le $date pour « $label » : passera à $amount (+$diff)';
+  }
+
+  @override
+  String get subscriptionApplyRiseAction => 'Appliquer la hausse';
+
+  @override
+  String get subscriptionScheduleRiseAction => 'Rappel de hausse de prix';
+
+  @override
+  String get subscriptionPriceRiseDialogTitle => 'Rappel de hausse de prix';
+
+  @override
+  String get subscriptionPriceRiseDialogHelp =>
+      'Pour une offre promotionnelle qui se termine ou une augmentation annoncée par le service. Un rappel apparaîtra dans vos opérations.';
+
+  @override
+  String get subscriptionPriceRiseDate => 'Date de la hausse';
+
+  @override
+  String get subscriptionPriceRiseNewAmount => 'Nouveau montant prévu';
+
+  @override
+  String get subscriptionPriceRiseSave => 'Enregistrer le rappel';
+
+  @override
+  String get subscriptionPriceRiseClear => 'Supprimer le rappel';
+
+  @override
+  String subscriptionPriceRiseScheduled(String date, String amount) {
+    return 'Hausse programmée le $date : passera à $amount';
   }
 
   @override

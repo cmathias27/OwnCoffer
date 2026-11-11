@@ -46,6 +46,7 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'invalid_pattern' => l.error_invalid_pattern,
   'invalid_amount_range' => l.error_invalid_amount_range,
   'invalid_amount' => l.error_invalid_amount,
+  'no_price_rise_scheduled' => l.error_no_price_rise_scheduled,
   'import_file_too_large' => l.error_import_file_too_large,
   'import_nothing_readable' => l.error_import_nothing_readable,
   'import_access_denied' => l.error_import_access_denied,

@@ -32,6 +32,10 @@ class OperationTile extends StatelessWidget {
   /// While selecting: whether this one is selected (null: not selecting).
   final bool? selected;
 
+  /// Difference in cents when an operation cost more than the planned
+  /// subscription amount (highlighted price rise).
+  final int? priceRiseDiffCents;
+
   const OperationTile({
     super.key,
     required this.operation,
@@ -40,6 +44,7 @@ class OperationTile extends StatelessWidget {
     required this.hasInvoice,
     required this.currency,
     required this.onTap,
+    this.priceRiseDiffCents,
     this.accountName,
     this.onToggleCleared,
     this.onLongPress,
@@ -87,6 +92,34 @@ class OperationTile extends StatelessWidget {
               semanticLabel: l.subscriptionBadge,
             ),
           ],
+          if (priceRiseDiffCents != null && priceRiseDiffCents! > 0) ...[
+            const SizedBox(width: 6),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.errorContainer,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.trending_up,
+                    size: 13,
+                    color: theme.colorScheme.onErrorContainer,
+                  ),
+                  const SizedBox(width: 2),
+                  Text(
+                    '+${context.money(priceRiseDiffCents!, currency: currency)}',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onErrorContainer,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           if (hasInvoice) ...[
             const SizedBox(width: 6),
             Icon(
@@ -109,7 +142,16 @@ class OperationTile extends StatelessWidget {
                   ? TextStyle(color: theme.colorScheme.tertiary)
                   : null,
             ),
-            if (subscription)
+            if (priceRiseDiffCents != null && priceRiseDiffCents! > 0)
+              TextSpan(
+                text:
+                    ' · ${l.subscriptionPriceRiseBadge(context.money(priceRiseDiffCents!, currency: currency))}',
+                style: TextStyle(
+                  color: theme.colorScheme.error,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            else if (subscription)
               TextSpan(
                 text: ' · ${l.subscriptionBadge}',
                 style: TextStyle(color: theme.colorScheme.primary),

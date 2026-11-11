@@ -9,6 +9,7 @@ import '../util/format.dart';
 import '../util/web_search.dart';
 import 'category_field.dart';
 import 'invoices.dart';
+import 'price_rise_dialog.dart';
 import 'soft.dart';
 import 'split_dialog.dart';
 import 'undo.dart';
@@ -30,6 +31,7 @@ Future<bool> showOperationSheet(
   ScheduledTransaction? subscription,
   VoidCallback? onOpenSubscriptions,
   ValueChanged<bool>? onHasInvoices,
+  ValueChanged<ScheduledTransaction>? onSubscriptionChanged,
   VoidCallback? onSameProvider,
 }) async {
   final messenger = ScaffoldMessenger.of(context);
@@ -89,6 +91,7 @@ Future<bool> showOperationSheet(
                 canWrite: membership.role != MemberRole.reader,
                 onChanged: onChanged,
                 onHasInvoices: onHasInvoices,
+                onSubscriptionChanged: onSubscriptionChanged,
                 onSameProvider: closing(onSameProvider),
                 scrollController: scroll,
               ),
@@ -129,6 +132,9 @@ class OperationSheet extends StatefulWidget {
   /// Whether the operation has invoices, after one is added or deleted.
   final ValueChanged<bool>? onHasInvoices;
 
+  /// The subscription was edited here (amount, upcoming price rise).
+  final ValueChanged<ScheduledTransaction>? onSubscriptionChanged;
+
   /// Lists the operations with the same cleaned label (closes the sheet);
   /// hidden when null.
   final VoidCallback? onSameProvider;
@@ -148,6 +154,7 @@ class OperationSheet extends StatefulWidget {
     required this.canWrite,
     required this.onChanged,
     this.onHasInvoices,
+    this.onSubscriptionChanged,
     this.onSameProvider,
     required this.scrollController,
   });
@@ -296,11 +303,12 @@ class _OperationSheetState extends State<OperationSheet> {
           amount: context.money(t.amountCents, currency: widget.currency),
           credit: t.amountCents > 0,
         ),
-        if (_subscription != null)
+        if (_subscription != null) ...[
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Wrap(
               spacing: 8,
+              runSpacing: 4,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 Chip(
@@ -313,6 +321,21 @@ class _OperationSheetState extends State<OperationSheet> {
                     l.subscriptionOfOperation(_subscription!.label),
                   ),
                 ),
+                if (widget.canWrite)
+                  ActionChip(
+                    avatar: const Icon(Icons.campaign_outlined, size: 16),
+                    label: Text(l.subscriptionScheduleRiseAction),
+                    onPressed: () async {
+                      final updated = await showPriceRiseDialog(
+                        context: context,
+                        subscription: _subscription!,
+                      );
+                      if (updated != null && mounted) {
+                        setState(() => _subscription = updated);
+                        widget.onSubscriptionChanged?.call(updated);
+                      }
+                    },
+                  ),
                 if (widget.onOpenSubscriptions != null)
                   TextButton(
                     onPressed: widget.onOpenSubscriptions,
@@ -321,6 +344,133 @@ class _OperationSheetState extends State<OperationSheet> {
               ],
             ),
           ),
+          if (t.amountCents.abs() > _subscription!.amountCents.abs())
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Card(
+                color: theme.colorScheme.errorContainer.withValues(alpha: 0.7),
+                elevation: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.trending_up,
+                            color: theme.colorScheme.error,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              l.subscriptionPriceRiseAlert(
+                                context.money(
+                                  t.amountCents.abs(),
+                                  currency: widget.currency,
+                                ),
+                                context.money(
+                                  _subscription!.amountCents.abs(),
+                                  currency: widget.currency,
+                                ),
+                                context.money(
+                                  t.amountCents.abs() -
+                                      _subscription!.amountCents.abs(),
+                                  currency: widget.currency,
+                                ),
+                              ),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onErrorContainer,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (widget.canWrite) ...[
+                        const SizedBox(height: 8),
+                        FilledButton.tonal(
+                          onPressed: () async {
+                            final messenger = ScaffoldMessenger.of(context);
+                            final amount = context.money(
+                              t.amountCents.abs(),
+                              currency: widget.currency,
+                            );
+                            try {
+                              final updated = await client.scheduled.update(
+                                _subscription!.id!,
+                                amountCents: t.amountCents,
+                              );
+                              if (mounted) {
+                                setState(() => _subscription = updated);
+                              }
+                              widget.onSubscriptionChanged?.call(updated);
+                              messenger.showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    l.subscriptionAmountUpdated(amount),
+                                  ),
+                                ),
+                              );
+                            } on Object catch (e) {
+                              messenger.showSnackBar(
+                                SnackBar(content: Text(errorText(l, e))),
+                              );
+                            }
+                          },
+                          child: Text(
+                            l.subscriptionUpdateAmountAction(
+                              context.money(
+                                t.amountCents.abs(),
+                                currency: widget.currency,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          if (_subscription!.priceRiseDate != null &&
+              _subscription!.priceRiseAmountCents != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.campaign_outlined,
+                      size: 18,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l.subscriptionPriceRiseScheduled(
+                          context.day(_subscription!.priceRiseDate!),
+                          context.money(
+                            _subscription!.priceRiseAmountCents!.abs(),
+                            currency: widget.currency,
+                          ),
+                        ),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
         SoftSection(
           icon: Icons.storefront_outlined,
           title: l.sectionProvider,

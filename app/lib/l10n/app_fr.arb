@@ -232,6 +232,7 @@
   "error_invalid_pattern": "Le motif doit contenir entre 1 et 100 caractères (lettres ou chiffres).",
   "error_invalid_amount_range": "Le montant minimum dépasse le montant maximum.",
   "error_invalid_amount": "Montant invalide : il doit être positif et raisonnable.",
+  "error_no_price_rise_scheduled": "Aucune hausse de prix n'est prévue pour cet abonnement.",
   "error_import_file_too_large": "Fichier trop volumineux (4 Mo au maximum).",
   "error_import_nothing_readable": "Aucune opération lisible dans ce fichier.",
   "error_import_access_denied": "Cet import n'existe pas ou vous n'y avez pas accès.",
@@ -1088,6 +1089,96 @@
         "type": "String"
       },
       "date": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionPriceRiseBadge": "Hausse +{diff}",
+  "@subscriptionPriceRiseBadge": {
+    "placeholders": {
+      "diff": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionMonthlyTotal": "Abonnements : {amount} / mois",
+  "@subscriptionMonthlyTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionMonthlyCount": "{count, plural, =1{1 abonnement actif} other{{count} abonnements actifs}}",
+  "@subscriptionMonthlyCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "subscriptionPriceRiseAlert": "Hausse de prix constatée : {actual} au lieu de {planned} (+{diff})",
+  "@subscriptionPriceRiseAlert": {
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "planned": {
+        "type": "String"
+      },
+      "diff": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionUpdateAmountAction": "Mettre à jour l'abonnement à {amount}",
+  "@subscriptionUpdateAmountAction": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionAmountUpdated": "Abonnement mis à jour à {amount}.",
+  "@subscriptionAmountUpdated": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionUpcomingRiseAlert": "Hausse prévue le {date} pour « {label} » : passera à {amount} (+{diff})",
+  "@subscriptionUpcomingRiseAlert": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "diff": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionApplyRiseAction": "Appliquer la hausse",
+  "subscriptionScheduleRiseAction": "Rappel de hausse de prix",
+  "subscriptionPriceRiseDialogTitle": "Rappel de hausse de prix",
+  "subscriptionPriceRiseDialogHelp": "Pour une offre promotionnelle qui se termine ou une augmentation annoncée par le service. Un rappel apparaîtra dans vos opérations.",
+  "subscriptionPriceRiseDate": "Date de la hausse",
+  "subscriptionPriceRiseNewAmount": "Nouveau montant prévu",
+  "subscriptionPriceRiseSave": "Enregistrer le rappel",
+  "subscriptionPriceRiseClear": "Supprimer le rappel",
+  "subscriptionPriceRiseScheduled": "Hausse programmée le {date} : passera à {amount}",
+  "@subscriptionPriceRiseScheduled": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
         "type": "String"
       }
     }

@@ -350,6 +350,27 @@ void main() {
       expect(o.items, hasLength(2));
       expect(o.monthlyTotalCents, -1399 - 1000);
       expect(o.yearlyTotalCents, (-1399 - 1000) * 12);
+
+      // Price rise scheduled, then applied.
+      final riseDate = DateTime.utc(now.year, now.month + 1, 1);
+      final withRise = await endpoints.scheduled.setPriceRise(
+        as(alice),
+        s.id!,
+        date: riseDate,
+        amountCents: 1599,
+      );
+      expect(withRise.priceRiseDate, riseDate);
+      expect(withRise.priceRiseAmountCents, -1599);
+      expect(withRise.amountCents, -1399);
+
+      final applied = await endpoints.scheduled.applyPriceRise(
+        as(alice),
+        s.id!,
+      );
+      expect(applied.amountCents, -1599);
+      expect(applied.priceRiseDate, isNull);
+      expect(applied.priceRiseAmountCents, isNull);
+
       await endpoints.scheduled.update(as(alice), s.id!, subscription: false);
       expect(
         (await endpoints.scheduled.subscriptions(as(alice), groupA)).items,
@@ -492,6 +513,41 @@ void main() {
           );
           await expectLater(
             endpoints.scheduled.subscribeFrom(as(reader), o.id!),
+            denied,
+          );
+          final sched = await endpoints.scheduled.create(
+            as(alice),
+            shared.id!,
+            -1000,
+            'ISO',
+            ScheduleFrequency.monthly,
+            DateTime.utc(2026, 10, 1),
+            subscription: true,
+          );
+          await expectLater(
+            endpoints.scheduled.setPriceRise(
+              as(mallory),
+              sched.id!,
+              date: DateTime.utc(2026, 12, 1),
+              amountCents: 1599,
+            ),
+            denied,
+          );
+          await expectLater(
+            endpoints.scheduled.setPriceRise(
+              as(reader),
+              sched.id!,
+              date: DateTime.utc(2026, 12, 1),
+              amountCents: 1599,
+            ),
+            denied,
+          );
+          await expectLater(
+            endpoints.scheduled.applyPriceRise(as(mallory), sched.id!),
+            denied,
+          );
+          await expectLater(
+            endpoints.scheduled.applyPriceRise(as(reader), sched.id!),
             denied,
           );
           await expectLater(

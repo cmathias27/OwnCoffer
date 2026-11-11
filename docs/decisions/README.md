@@ -37,5 +37,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0031](0031-pepite-ton-annee.md) | Pépite : « Ton année » | Décidé |
 | [0032](0032-mises-a-jour-des-applications.md) | Mises à jour des applications installées depuis l'application | Décidé |
 | [0033](0033-chiffrement-base-autonome.md) | Chiffrement du fichier de base de données en mode autonome | Décidé |
+| [0034](0034-abonnements-operations-hausses-de-prix.md) | Abonnements mis en évidence dans Opérations et hausses de prix | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.
