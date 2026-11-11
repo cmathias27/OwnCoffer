@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
@@ -11,8 +13,11 @@ import '../screens/invoice_scan_screen.dart';
 import '../util/file_pick.dart';
 import '../util/file_save.dart';
 import '../util/format.dart';
+import '../util/text_reader.dart';
 import 'admin_backups.dart';
 import 'ai_read.dart';
+import 'receipt_check_dialog.dart';
+import 'receipt_operation_dialog.dart';
 
 /// Files accepted as invoices (checked again by the server).
 const invoiceExtensions = ['.pdf', '.png', '.jpg', '.jpeg', '.webp'];
@@ -56,10 +61,7 @@ Future<InvoiceInfo?> addUnattachedInvoice(
   try {
     final f = await _pick(context, camera);
     if (f == null || !context.mounted) return null;
-    final hints = await showDialog<InvoiceHints>(
-      context: context,
-      builder: (_) => const _HintsDialog(),
-    );
+    final hints = await askReceiptHints(context, f);
     if (hints == null) return null;
     var info = await client.invoice.uploadUnattached(
       groupId,
@@ -82,6 +84,79 @@ Future<InvoiceInfo?> addUnattachedInvoice(
 
 /// What is known of a waiting invoice: total paid, date, merchant.
 typedef InvoiceHints = ({int? amountCents, DateTime? date, String? merchant});
+
+/// What is known of a new waiting receipt (decision 0036): a photo is first
+/// read on the device when this build can (Android, no AI, no network) and
+/// the user checks what was found, uncertain fields flagged; otherwise, or
+/// when nothing could be read, the user types it. Null if cancelled.
+Future<InvoiceHints?> askReceiptHints(
+  BuildContext context,
+  PickedFile file, {
+  TextReader? reader,
+}) async {
+  final reading = await _readOnDevice(
+    context,
+    file,
+    reader ?? TextReader.local(),
+  );
+  if (!context.mounted) return null;
+  if (reading == null) {
+    return showDialog<InvoiceHints>(
+      context: context,
+      builder: (_) => const _HintsDialog(),
+    );
+  }
+  final checked = await showReceiptCheckDialog(context, reading);
+  if (checked == null) return null;
+  return (
+    amountCents: checked.amountCents,
+    date: checked.date,
+    merchant: checked.merchant,
+  );
+}
+
+/// The receipt's fields read from a photo, or null (no engine here, not a
+/// photo, nothing recognised). The image never leaves the device.
+Future<core.ReceiptReading?> _readOnDevice(
+  BuildContext context,
+  PickedFile file,
+  TextReader reader,
+) async {
+  if (!reader.isAvailable || !isScannable(file.name)) return null;
+  final navigator = Navigator.of(context);
+  final l = AppLocalizations.of(context);
+  unawaited(
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          content: Row(
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(width: 16),
+              Expanded(child: Text(l.receiptReading)),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+  try {
+    final text = await reader.read(file.bytes);
+    if (text == null) return null;
+    final now = DateTime.now();
+    final reading = core.readReceiptText([
+      for (final line in text.lines) line.text,
+    ], today: core.LocalDate(now.year, now.month, now.day));
+    return reading.isEmpty ? null : reading;
+  } on Object {
+    return null;
+  } finally {
+    navigator.pop();
+  }
+}
 
 /// Changes the hints of a waiting invoice; returns it, or null if
 /// cancelled.
@@ -932,6 +1007,19 @@ class _ProposalsDialogState extends State<_ProposalsDialog> {
     }
   }
 
+  Future<void> _createOperation() async {
+    final info = await showReceiptOperationDialog(context, widget.info);
+    if (info == null || !mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.of(context).receiptOperationCreated(info.name),
+        ),
+      ),
+    );
+    Navigator.pop(context, info);
+  }
+
   Future<void> _attach(InvoiceMatch m) async {
     setState(() => _busy = true);
     final info = await attachWaitingInvoice(
@@ -1012,6 +1100,12 @@ class _ProposalsDialogState extends State<_ProposalsDialog> {
             widget.afterAdding ? l.invoiceAttachLater : l.cancel,
           ),
         ),
+        if (widget.info.invoice.transactionId == null)
+          TextButton.icon(
+            icon: const Icon(Icons.add_card_outlined),
+            onPressed: _busy ? null : _createOperation,
+            label: Text(l.receiptOperationCreateFrom),
+          ),
       ],
     );
   }

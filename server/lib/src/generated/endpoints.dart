@@ -2695,6 +2695,55 @@ class Endpoints extends _is.EndpointDispatch {
                     params['transactionId'],
                   ),
         ),
+        'createOperation': _is.MethodConnector(
+          name: 'createOperation',
+          params: {
+            'invoiceId': _is.ParameterDescription(
+              name: 'invoiceId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'date': _is.ParameterDescription(
+              name: 'date',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'label': _is.ParameterDescription(
+              name: 'label',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['invoice'] as _ito116jz.InvoiceEndpoint)
+                  .createOperation(
+                    session,
+                    params['invoiceId'],
+                    params['accountId'],
+                    params['date'],
+                    params['amountCents'],
+                    params['label'],
+                    categoryId: params['categoryId'],
+                  ),
+        ),
         'download': _is.MethodConnector(
           name: 'download',
           params: {

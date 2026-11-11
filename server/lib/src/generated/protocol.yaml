@@ -116,6 +116,7 @@ invoice:
   - proposals:
   - candidatesFor:
   - attach:
+  - createOperation:
   - download:
   - update:
   - delete:

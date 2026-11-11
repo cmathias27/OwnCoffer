@@ -13,6 +13,7 @@ import '../onboarding/onboarding.dart';
 import '../security/access.dart';
 import '../security/audit.dart';
 import '../security/scopes.dart';
+import 'transaction_endpoint.dart';
 
 /// Invoices and receipts (PDF or photo) attached to operations: kept,
 /// listed under a name built from their operation, opened, emailed, with
@@ -360,6 +361,45 @@ class InvoiceEndpoint extends Endpoint {
     );
     await _audit(session, 'attach_invoice', saved, before: before);
     return (await _infos(session, [saved], {account.id!: account})).single;
+  }
+
+  /// Creates the operation of a waiting receipt that is not on a statement
+  /// yet (cash, a card payment not imported) from what the user checked,
+  /// and attaches the receipt to it (decision 0036). [amountCents] is the
+  /// total paid, positive: the operation is a debit. Classified by the
+  /// group's rules unless [categoryId] is given.
+  Future<InvoiceInfo> createOperation(
+    Session session,
+    int invoiceId,
+    int accountId,
+    DateTime date,
+    int amountCents,
+    String label, {
+    int? categoryId,
+  }) async {
+    final invoice = await _find(session, invoiceId, write: true);
+    if (invoice.transactionId != null) {
+      throw InvalidInputException(code: 'invoice_already_attached');
+    }
+    final Account account;
+    try {
+      account = await Access.requireAccount(session, accountId, write: true);
+    } on AccessDeniedException {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    if (account.groupId != invoice.groupId) {
+      throw AccessDeniedException(code: 'transaction_access_denied');
+    }
+    final checked = _hints(amountCents, date, null);
+    final created = await TransactionEndpoint().create(
+      session,
+      accountId,
+      checked.date!,
+      -amountCents,
+      label,
+      categoryId: categoryId,
+    );
+    return attach(session, invoiceId, created.id!);
   }
 
   /// The content, for the user to open or save it.

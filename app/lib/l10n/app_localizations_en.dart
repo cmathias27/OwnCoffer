@@ -7365,4 +7365,42 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get summaryAiQuestion =>
       'Explain the next 30 days simply: the expected balance of my checking accounts, the lowest point, the alerts and the proposals waiting. Use the forecasts and advice computed by OwnCoffer, without redoing the calculations.';
+
+  @override
+  String get receiptReading => 'Reading the receipt on the device…';
+
+  @override
+  String get receiptOperationCreateFrom => 'Create the operation';
+
+  @override
+  String get receiptOperationTitle => 'Operation of the receipt';
+
+  @override
+  String get receiptOperationHelp =>
+      'For a purchase that will not come from an imported statement (cash, an account not imported). The operation is created from what was read or typed on the receipt, and the receipt is attached to it as proof.';
+
+  @override
+  String get receiptOperationAmount => 'Amount paid';
+
+  @override
+  String get receiptOperationByRules => 'Following your classification rules';
+
+  @override
+  String get receiptOperationNoAccount =>
+      'No account to create the operation in.';
+
+  @override
+  String get receiptOperationLabelMissing => 'Enter a label.';
+
+  @override
+  String get receiptOperationCreate => 'Create';
+
+  @override
+  String receiptOperationCreated(String name) {
+    return 'Operation created, receipt attached: $name';
+  }
+
+  @override
+  String get error_invoice_already_attached =>
+      'This receipt is already attached to an operation.';
 }

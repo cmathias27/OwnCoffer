@@ -11695,6 +11695,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Explique-moi simplement les 30 prochains jours : le solde prévu de mes comptes courants, le point bas, les alertes et les propositions en attente. Utilise les prévisions et les conseils calculés par OwnCoffer, sans refaire les calculs.'**
   String get summaryAiQuestion;
+
+  /// No description provided for @receiptReading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture du ticket sur l\'appareil…'**
+  String get receiptReading;
+
+  /// No description provided for @receiptOperationCreateFrom.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer l\'opération'**
+  String get receiptOperationCreateFrom;
+
+  /// No description provided for @receiptOperationTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération du ticket'**
+  String get receiptOperationTitle;
+
+  /// No description provided for @receiptOperationHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour un achat qui n\'arrivera pas par un relevé importé (espèces, compte non importé). L\'opération est créée avec ce qui a été lu ou saisi sur le ticket, et le ticket y est joint comme justificatif.'**
+  String get receiptOperationHelp;
+
+  /// No description provided for @receiptOperationAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant payé'**
+  String get receiptOperationAmount;
+
+  /// No description provided for @receiptOperationByRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'Selon vos règles de classement'**
+  String get receiptOperationByRules;
+
+  /// No description provided for @receiptOperationNoAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun compte où créer l\'opération.'**
+  String get receiptOperationNoAccount;
+
+  /// No description provided for @receiptOperationLabelMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez un libellé.'**
+  String get receiptOperationLabelMissing;
+
+  /// No description provided for @receiptOperationCreate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer'**
+  String get receiptOperationCreate;
+
+  /// No description provided for @receiptOperationCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération créée, ticket joint : {name}'**
+  String receiptOperationCreated(String name);
+
+  /// No description provided for @error_invoice_already_attached.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce justificatif est déjà joint à une opération.'**
+  String get error_invoice_already_attached;
 }
 
 class _AppLocalizationsDelegate

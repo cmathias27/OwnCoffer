@@ -4535,5 +4535,23 @@
     }
   },
   "summaryAskAi": "Demander une explication à l'IA",
-  "summaryAiQuestion": "Explique-moi simplement les 30 prochains jours : le solde prévu de mes comptes courants, le point bas, les alertes et les propositions en attente. Utilise les prévisions et les conseils calculés par OwnCoffer, sans refaire les calculs."
+  "summaryAiQuestion": "Explique-moi simplement les 30 prochains jours : le solde prévu de mes comptes courants, le point bas, les alertes et les propositions en attente. Utilise les prévisions et les conseils calculés par OwnCoffer, sans refaire les calculs.",
+  "receiptReading": "Lecture du ticket sur l'appareil…",
+  "receiptOperationCreateFrom": "Créer l'opération",
+  "receiptOperationTitle": "Opération du ticket",
+  "receiptOperationHelp": "Pour un achat qui n'arrivera pas par un relevé importé (espèces, compte non importé). L'opération est créée avec ce qui a été lu ou saisi sur le ticket, et le ticket y est joint comme justificatif.",
+  "receiptOperationAmount": "Montant payé",
+  "receiptOperationByRules": "Selon vos règles de classement",
+  "receiptOperationNoAccount": "Aucun compte où créer l'opération.",
+  "receiptOperationLabelMissing": "Indiquez un libellé.",
+  "receiptOperationCreate": "Créer",
+  "receiptOperationCreated": "Opération créée, ticket joint : {name}",
+  "@receiptOperationCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "error_invoice_already_attached": "Ce justificatif est déjà joint à une opération."
 }

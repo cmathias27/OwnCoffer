@@ -207,7 +207,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] **Scan automatique des tickets à l'appareil photo** (demandé le 2 novembre 2026), en partant de la lecture de documents existante (0.3.31) :
   - [ ] recadrage automatique : bords du ticket détectés, perspective redressée, contraste amélioré, déclenchement quand l'image est nette (scanner de documents du système sur Android ; sur le web, quatre coins à placer ou traitement sur le serveur)
   - [x] lecture du texte sur l'appareil, sans IA et hors ligne (utilisable en version autonome) ; avec l'IA de l'utilisateur quand elle est configurée, lecture structurée plus fiable (montant, date, commerçant, TVA, lignes) — *1.3.0 (décision 0023, PR #129, #130, #133)*
-  - [ ] pré-remplissage de l'opération (montant, date, libellé, catégorie) et rapprochement avec l'opération bancaire correspondante, le ticket joint comme justificatif
+  - [x] pré-remplissage de l'opération (montant, date, libellé, catégorie) et rapprochement avec l'opération bancaire correspondante, le ticket joint comme justificatif — décision 0036, *1.21.0*
   - [x] écran de vérification : champs incertains signalés, rien n'est enregistré sans validation — *1.3.0 (PR #131)*
 
 **Améliorations proposées** (2 novembre 2026), à planifier selon l'usage réel — l'IA lit et explique, le moteur calcule, l'utilisateur valide :
