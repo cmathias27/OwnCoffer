@@ -118,6 +118,20 @@ class _ImportScreenState extends State<ImportScreen> {
   void _fail(Object e) =>
       setState(() => _error = errorText(AppLocalizations.of(context), e));
 
+  /// Another account: the chosen (or shared) file is kept and previewed
+  /// again against it, since duplicates depend on the account.
+  void _selectAccount(int id) {
+    setState(() {
+      _account = widget.accounts.firstWhere((a) => a.id == id);
+      _preview = null;
+      _accepted.clear();
+      _error = null;
+      _history = [];
+    });
+    _loadHistory();
+    if (_file != null) _runPreview();
+  }
+
   Future<void> _pick() async {
     final l = AppLocalizations.of(context);
     final file = await pickFile(extensions: ['.qif', '.ofx', '.csv', '.txt']);
@@ -350,18 +364,7 @@ class _ImportScreenState extends State<ImportScreen> {
                         for (final a in widget.accounts)
                           DropdownMenuItem(value: a.id, child: Text(a.name)),
                       ],
-                      onChanged: _busy
-                          ? null
-                          : (id) {
-                              setState(() {
-                                _account = widget.accounts.firstWhere(
-                                  (a) => a.id == id,
-                                );
-                                _reset();
-                                _history = [];
-                              });
-                              _loadHistory();
-                            },
+                      onChanged: _busy ? null : (id) => _selectAccount(id!),
                     ),
                   if (_canWrite)
                     FilledButton.tonalIcon(
