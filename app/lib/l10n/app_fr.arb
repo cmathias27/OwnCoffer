@@ -3621,7 +3621,7 @@
   },
   "appsUnknown": "inconnue",
   "appsUpToDate": "L'application est à jour.",
-  "appsUpdate": "Une nouvelle version de l'application est disponible : {version}. Téléchargez-la ci-dessous et installez-la par-dessus celle-ci.",
+  "appsUpdate": "Une nouvelle version de l'application est disponible : {version}.",
   "@appsUpdate": {
     "placeholders": {
       "version": {
@@ -3636,6 +3636,63 @@
   "appsWindows": "Windows",
   "appsWindowsHelp": "Dossier zip, Windows 10 ou 11 (64 bits). Décompressez-le et lancez owncoffer.exe ; si Windows avertit, « Informations complémentaires » puis « Exécuter quand même ».",
   "appsDownload": "Télécharger",
+  "appsInstall": "Installer la version {version}",
+  "@appsInstall": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appsInstallShort": "Installer",
+  "appsInstallTitle": "Mise à jour vers la version {version}",
+  "@appsInstallTitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appsInstallDownloading": "Téléchargement depuis GitHub…",
+  "appsInstallProgress": "Téléchargement depuis GitHub… {percent} %",
+  "@appsInstallProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "appsInstallAndroid": "Android vous demande de confirmer l'installation. Vos données et votre session sont gardées.",
+  "appsInstallWindows": "Le fichier est vérifié. OwnCoffer va se fermer, remplacer son dossier par la version {version} et se relancer. Vos données et votre session sont gardées.",
+  "@appsInstallWindows": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appsInstallRestart": "Fermer et mettre à jour",
+  "appsInstallFailed": "Mise à jour impossible",
+  "appsInstallManual": "Télécharger à la main",
+  "appsInstallHelp": "Téléchargé depuis GitHub, vérifié avec les empreintes publiées, puis installé : seulement quand vous le demandez.",
+  "appsCheckLatest": "Rechercher une nouvelle version",
+  "appsLatestNone": "Vous avez la dernière version publiée.",
+  "appsLatest": "Nouvelle version publiée : {version}",
+  "@appsLatest": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appsInstallErrorNetwork": "GitHub ne répond pas ou le fichier est introuvable. Vérifiez la connexion et réessayez.",
+  "appsInstallErrorChecksum": "Le fichier téléchargé ne correspond pas à l'empreinte publiée : il a été effacé, rien n'est installé.",
+  "appsInstallErrorTooLarge": "Le fichier est bien plus gros qu'attendu : téléchargement arrêté, rien n'est installé.",
+  "appsInstallErrorPermission": "Autorisez OwnCoffer à installer des applications dans la page des réglages qui vient de s'ouvrir, puis réessayez.",
+  "appsInstallErrorSignature": "Cette version n'est pas signée avec la même clé que l'application installée : installation refusée. Si vous lui faites confiance, désinstallez puis installez-la à la main.",
+  "appsInstallErrorVersion": "Le fichier téléchargé n'est pas la version attendue d'OwnCoffer : rien n'est installé.",
+  "appsInstallErrorFolder": "Impossible de préparer la nouvelle version à côté du dossier de l'application (dossier protégé ?). Remplacez le dossier à la main.",
+  "appsInstallError": "L'installation n'a pas pu se faire.",
   "appsAllFiles": "Toutes les versions, empreintes et signatures",
   "appsNote": "Les fichiers viennent de la page des versions du projet sur GitHub : le téléchargement se fait depuis GitHub, seulement quand vous le demandez. Les applications ne sont pas encore signées par un éditeur.",
   "appsWebHint": "Sur téléphone, vous pouvez aussi installer cette page web : menu du navigateur, « Ajouter à l'écran d'accueil ».",
@@ -3660,7 +3717,7 @@
   "standaloneStartFailedHelp": "Réessayez. Si cela recommence, copiez le détail ci-dessous et envoyez-le (il ne contient aucune donnée bancaire). « Retour » permet aussi de se connecter à un serveur.",
   "standaloneChangeMode": "Changer de mode",
   "standaloneModeNote": "Mode autonome : vos données sont sur cet appareil.",
-  "appsStandaloneHint": "Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées.",
+  "appsStandaloneHint": "Mode autonome : pas de serveur pour annoncer les nouvelles versions. Recherchez-en une ci-dessous ; vos données sont gardées.",
   "migrateTitle": "Migrer vers un serveur",
   "migrateIntro": "Envoie toutes vos données sur un serveur OwnCoffer : comptes, opérations, catégories, règles, objectifs, crédits, factures et documents. Elles restent aussi sur cet appareil.",
   "migrateAdminNote": "Il faut un compte d'administrateur de ce serveur : seul lui peut créer un groupe. Vous en devenez l'administrateur.",

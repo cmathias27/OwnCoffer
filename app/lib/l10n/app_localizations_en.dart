@@ -5492,7 +5492,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String appsUpdate(String version) {
-    return 'A new version of the app is available: $version. Download it below and install it over this one.';
+    return 'A new version of the app is available: $version.';
   }
 
   @override
@@ -5519,6 +5519,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appsDownload => 'Download';
+
+  @override
+  String appsInstall(String version) {
+    return 'Install version $version';
+  }
+
+  @override
+  String get appsInstallShort => 'Install';
+
+  @override
+  String appsInstallTitle(String version) {
+    return 'Update to version $version';
+  }
+
+  @override
+  String get appsInstallDownloading => 'Downloading from GitHub…';
+
+  @override
+  String appsInstallProgress(int percent) {
+    return 'Downloading from GitHub… $percent%';
+  }
+
+  @override
+  String get appsInstallAndroid =>
+      'Android asks you to confirm the install. Your data and your session are kept.';
+
+  @override
+  String appsInstallWindows(String version) {
+    return 'The file is checked. OwnCoffer will close, replace its folder with version $version and start again. Your data and your session are kept.';
+  }
+
+  @override
+  String get appsInstallRestart => 'Close and update';
+
+  @override
+  String get appsInstallFailed => 'Update not possible';
+
+  @override
+  String get appsInstallManual => 'Download by hand';
+
+  @override
+  String get appsInstallHelp =>
+      'Downloaded from GitHub, checked against the published checksums, then installed: only when you ask.';
+
+  @override
+  String get appsCheckLatest => 'Look for a new version';
+
+  @override
+  String get appsLatestNone => 'You have the latest published version.';
+
+  @override
+  String appsLatest(String version) {
+    return 'New version published: $version';
+  }
+
+  @override
+  String get appsInstallErrorNetwork =>
+      'GitHub does not answer or the file cannot be found. Check the connection and try again.';
+
+  @override
+  String get appsInstallErrorChecksum =>
+      'The downloaded file does not match the published checksum: it was deleted, nothing is installed.';
+
+  @override
+  String get appsInstallErrorTooLarge =>
+      'The file is much bigger than expected: download stopped, nothing is installed.';
+
+  @override
+  String get appsInstallErrorPermission =>
+      'Allow OwnCoffer to install apps in the settings page just opened, then try again.';
+
+  @override
+  String get appsInstallErrorSignature =>
+      'This version is not signed with the same key as the installed app: install refused. If you trust it, uninstall and install it by hand.';
+
+  @override
+  String get appsInstallErrorVersion =>
+      'The downloaded file is not the expected version of OwnCoffer: nothing is installed.';
+
+  @override
+  String get appsInstallErrorFolder =>
+      'The new version cannot be prepared next to the app\'s folder (protected folder?). Replace the folder by hand.';
+
+  @override
+  String get appsInstallError => 'The install could not be done.';
 
   @override
   String get appsAllFiles => 'All versions, checksums and signatures';
@@ -5583,7 +5668,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appsStandaloneHint =>
-      'Standalone mode: new versions are on the project\'s releases page (link below). Install it over this one: your data is kept.';
+      'Standalone mode: no server to announce new versions. Look for one below; your data is kept.';
 
   @override
   String get migrateTitle => 'Move to a server';

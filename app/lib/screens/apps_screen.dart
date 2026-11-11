@@ -5,8 +5,10 @@ import '../client.dart' show isStandalone;
 import '../l10n/app_localizations.dart';
 import '../state/pepite.dart';
 import '../state/pepite_messages.dart';
+import '../util/app_update.dart';
 import '../util/app_versions.dart';
 import '../util/web_search.dart';
+import '../widgets/app_update_flow.dart';
 import '../widgets/pepite.dart';
 
 /// Opens [AppsScreen] from anywhere (Pépite's invitations).
@@ -30,12 +32,20 @@ class AppsScreen extends StatefulWidget {
   /// Tests give their own; the app's otherwise.
   final Pepite? pepiteController;
 
+  /// Tests give their own; the device's otherwise (decision 0032).
+  final AppUpdater? updater;
+
+  /// Standalone or not; the app's mode otherwise.
+  final bool? standalone;
+
   const AppsScreen({
     super.key,
     required this.serverVersion,
     this.open,
     this.why,
     this.pepiteController,
+    this.updater,
+    this.standalone,
   });
 
   @override
@@ -44,6 +54,49 @@ class AppsScreen extends StatefulWidget {
 
 class _AppsScreenState extends State<AppsScreen> {
   String? _app;
+
+  /// Standalone: the latest published version, once asked (decision 0032).
+  String? _latest;
+  bool _checked = false;
+  bool _checking = false;
+
+  AppUpdater get _updater => widget.updater ?? appUpdater;
+  bool get _standalone => widget.standalone ?? isStandalone;
+
+  Future<void> _checkLatest() async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() => _checking = true);
+    try {
+      final latest = await _updater.latest();
+      if (!mounted) return;
+      setState(() {
+        _latest = latest;
+        _checked = true;
+      });
+    } on AppUpdateException catch (e) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(appUpdateErrorText(l, e.code))),
+      );
+    } finally {
+      if (mounted) setState(() => _checking = false);
+    }
+  }
+
+  Widget _install(AppLocalizations l, String version) => Padding(
+    padding: const EdgeInsets.only(top: 8),
+    child: FilledButton.icon(
+      key: const Key('apps-install'),
+      icon: const Icon(Icons.system_update),
+      label: Text(l.appsInstall(version)),
+      onPressed: () => installAppUpdate(
+        context,
+        version,
+        updater: _updater,
+        open: widget.open,
+      ),
+    ),
+  );
 
   @override
   void initState() {
@@ -61,7 +114,9 @@ class _AppsScreenState extends State<AppsScreen> {
     final theme = Theme.of(context);
     final server = widget.serverVersion;
     final published = AppVersions.parse(server) != null;
-    final order = isStandalone ? null : AppVersions.compare(_app, server);
+    final order = _standalone ? null : AppVersions.compare(_app, server);
+    final latest = _latest;
+    final newer = latest != null && AppVersions.compare(_app, latest) == -1;
 
     Widget platform(String id, IconData icon, String title, String help) {
       final uri = AppVersions.download(server, id);
@@ -123,19 +178,45 @@ class _AppsScreenState extends State<AppsScreen> {
                       if (!isStandalone)
                         Text(l.appsServer(server ?? l.appsUnknown)),
                       const SizedBox(height: 8),
-                      if (!kIsWeb && order == -1)
+                      if (!kIsWeb && order == -1) ...[
                         Text(
                           l.appsUpdate(server!),
                           style: TextStyle(color: theme.colorScheme.primary),
-                        )
-                      else if (!kIsWeb && order == 1)
+                        ),
+                        if (_updater.supported) _install(l, server),
+                      ] else if (!kIsWeb && order == 1)
                         Text(l.appsNewerThanServer)
                       else if (!kIsWeb && order == 0)
                         Text(l.appsUpToDate),
-                      if (isStandalone)
+                      if (_standalone)
                         Text(l.appsStandaloneHint)
                       else if (!published)
                         Text(l.appsDevServer),
+                      if (_standalone && _updater.supported) ...[
+                        const SizedBox(height: 8),
+                        if (_checked && newer) ...[
+                          Text(
+                            l.appsLatest(latest),
+                            style: TextStyle(color: theme.colorScheme.primary),
+                          ),
+                          _install(l, latest),
+                        ] else if (_checked)
+                          Text(l.appsLatestNone),
+                        if (!newer)
+                          OutlinedButton.icon(
+                            key: const Key('apps-check-latest'),
+                            icon: const Icon(Icons.refresh),
+                            label: Text(l.appsCheckLatest),
+                            onPressed: _checking ? null : _checkLatest,
+                          ),
+                      ],
+                      if (_updater.supported) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          l.appsInstallHelp,
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ],
                     ],
                   ),
                 ),

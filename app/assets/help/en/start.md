@@ -26,6 +26,6 @@ After most actions, an **"Undo"** button shows at the bottom for a few seconds: 
 
 ## On Windows or Android
 
-Account menu → **"Apps"**: the Windows and Android apps to download, in your server's version. When the server is updated, a banner says so in the app.
+Account menu → **"Apps"**: the Windows and Android apps to download, in your server's version. When the server is updated, a banner says so in the app, and **"Install"** downloads the new version from GitHub, checks it against the published checksums and installs it (Android asks to confirm; Windows closes and starts again). In standalone mode, "Look for a new version" on that page. Nothing is downloaded unless you ask.
 
 On Windows and Android, OwnCoffer can also be used **alone on the device**, without a server: that is the first launch choice. "Change mode" (account menu) goes back to it.

@@ -36,3 +36,5 @@ bool isWrongPassphrase(Object e) => false;
 bool isBackupTooNew(Object e) => false;
 
 bool get standaloneRunning => false;
+
+Future<void> stopStandalone() async {}

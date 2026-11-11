@@ -5,6 +5,9 @@
          0026): local notifications, kept after a restart of the phone. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- Updates installed from the app, only when the user asks; Android
+         still asks to confirm each install (decision 0032). -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <!-- No Android cloud backup of the sign-in tokens; HTTPS only. -->
     <application
         android:label="OwnCoffer"
@@ -88,6 +91,17 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
             </intent-filter>
         </receiver>
+        <!-- The downloaded update, handed to Android's installer (decision
+             0032): cache/updates/ only, read once, never exported. -->
+        <provider
+            android:name=".UpdateFileProvider"
+            android:authorities="${applicationId}.updates"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/update_paths" />
+        </provider>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

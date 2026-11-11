@@ -55,3 +55,7 @@ bool isBackupTooNew(Object e) => impl.isBackupTooNew(e);
 /// Whether the embedded server is running (false after a restore stopped
 /// it, even a failed one: the app must start it again).
 bool get standaloneRunning => impl.standaloneRunning;
+
+/// Stops the embedded server, its database closed (before the app quits to
+/// update itself, decision 0032). Does nothing when it does not run.
+Future<void> stopStandalone() => impl.stopStandalone();

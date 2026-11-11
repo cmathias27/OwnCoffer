@@ -5521,7 +5521,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String appsUpdate(String version) {
-    return 'Une nouvelle version de l\'application est disponible : $version. Téléchargez-la ci-dessous et installez-la par-dessus celle-ci.';
+    return 'Une nouvelle version de l\'application est disponible : $version.';
   }
 
   @override
@@ -5548,6 +5548,91 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appsDownload => 'Télécharger';
+
+  @override
+  String appsInstall(String version) {
+    return 'Installer la version $version';
+  }
+
+  @override
+  String get appsInstallShort => 'Installer';
+
+  @override
+  String appsInstallTitle(String version) {
+    return 'Mise à jour vers la version $version';
+  }
+
+  @override
+  String get appsInstallDownloading => 'Téléchargement depuis GitHub…';
+
+  @override
+  String appsInstallProgress(int percent) {
+    return 'Téléchargement depuis GitHub… $percent %';
+  }
+
+  @override
+  String get appsInstallAndroid =>
+      'Android vous demande de confirmer l\'installation. Vos données et votre session sont gardées.';
+
+  @override
+  String appsInstallWindows(String version) {
+    return 'Le fichier est vérifié. OwnCoffer va se fermer, remplacer son dossier par la version $version et se relancer. Vos données et votre session sont gardées.';
+  }
+
+  @override
+  String get appsInstallRestart => 'Fermer et mettre à jour';
+
+  @override
+  String get appsInstallFailed => 'Mise à jour impossible';
+
+  @override
+  String get appsInstallManual => 'Télécharger à la main';
+
+  @override
+  String get appsInstallHelp =>
+      'Téléchargé depuis GitHub, vérifié avec les empreintes publiées, puis installé : seulement quand vous le demandez.';
+
+  @override
+  String get appsCheckLatest => 'Rechercher une nouvelle version';
+
+  @override
+  String get appsLatestNone => 'Vous avez la dernière version publiée.';
+
+  @override
+  String appsLatest(String version) {
+    return 'Nouvelle version publiée : $version';
+  }
+
+  @override
+  String get appsInstallErrorNetwork =>
+      'GitHub ne répond pas ou le fichier est introuvable. Vérifiez la connexion et réessayez.';
+
+  @override
+  String get appsInstallErrorChecksum =>
+      'Le fichier téléchargé ne correspond pas à l\'empreinte publiée : il a été effacé, rien n\'est installé.';
+
+  @override
+  String get appsInstallErrorTooLarge =>
+      'Le fichier est bien plus gros qu\'attendu : téléchargement arrêté, rien n\'est installé.';
+
+  @override
+  String get appsInstallErrorPermission =>
+      'Autorisez OwnCoffer à installer des applications dans la page des réglages qui vient de s\'ouvrir, puis réessayez.';
+
+  @override
+  String get appsInstallErrorSignature =>
+      'Cette version n\'est pas signée avec la même clé que l\'application installée : installation refusée. Si vous lui faites confiance, désinstallez puis installez-la à la main.';
+
+  @override
+  String get appsInstallErrorVersion =>
+      'Le fichier téléchargé n\'est pas la version attendue d\'OwnCoffer : rien n\'est installé.';
+
+  @override
+  String get appsInstallErrorFolder =>
+      'Impossible de préparer la nouvelle version à côté du dossier de l\'application (dossier protégé ?). Remplacez le dossier à la main.';
+
+  @override
+  String get appsInstallError => 'L\'installation n\'a pas pu se faire.';
 
   @override
   String get appsAllFiles => 'Toutes les versions, empreintes et signatures';
@@ -5612,7 +5697,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appsStandaloneHint =>
-      'Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées.';
+      'Mode autonome : pas de serveur pour annoncer les nouvelles versions. Recherchez-en une ci-dessous ; vos données sont gardées.';
 
   @override
   String get migrateTitle => 'Migrer vers un serveur';
