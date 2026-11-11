@@ -6003,28 +6003,28 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pepiteRitualIntro =>
-      'Quatre étapes, une dizaine de minutes en tout. Fais-les dans l\'ordre que tu veux : je coche au fur et à mesure.';
+      'Quatre étapes, une dizaine de minutes en tout, dans l\'ordre que tu veux. Je coche toute seule ce que je vois : un relevé importé, une opération vérifiée, la prévision regardée. Dès que les trois sont faites, je fête ta semaine.';
 
   @override
   String get pepiteStepImport => 'Importer les derniers relevés';
 
   @override
   String get pepiteStepImportHelp =>
-      'Environ 3 min. Pas de nouveau relevé ? Coche simplement.';
+      'Environ 3 min. Je le vois dès que tu importes. Pas de nouveau relevé ? Coche simplement.';
 
   @override
   String get pepiteStepCheck => 'Vérifier les opérations';
 
   @override
   String get pepiteStepCheckHelp =>
-      'Environ 4 min : les catégories et les opérations à classer.';
+      'Environ 4 min : les catégories et les opérations à classer. Je le vois dès que tu ouvres ou modifies tes opérations.';
 
   @override
   String get pepiteStepForecast => 'Regarder la prévision';
 
   @override
   String get pepiteStepForecastHelp =>
-      'Environ 2 min : le solde des 30 prochains jours.';
+      'Environ 2 min : le solde des 30 prochains jours. Je le vois dès que tu ouvres la prévision.';
 
   @override
   String get pepiteStepCelebrate => 'Fêter ça !';
@@ -6041,6 +6041,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pepiteCelebrateTitle => 'Bravo !';
+
+  @override
+  String get pepiteNoticedWeek =>
+      'J\'ai vu tes comptes de la semaine : relevé, opérations et prévision. Je la compte pour toi !';
 
   @override
   String pepiteEarned(int count) {

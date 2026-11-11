@@ -40,6 +40,24 @@ class SecurePepiteStore implements LockStore {
 /// The steps of the weekly ritual; [celebrate] completes it.
 enum PepiteStep { statements, check, forecast, celebrate }
 
+/// What Pépite cheers about without being asked (decision 0029).
+class PepiteCheer {
+  /// The status after it.
+  final PepiteStatus status;
+
+  /// The week was completed (otherwise only badges).
+  final bool week;
+  final int seeds;
+  final List<String> badges;
+
+  const PepiteCheer({
+    required this.status,
+    required this.week,
+    required this.seeds,
+    required this.badges,
+  });
+}
+
 /// The mascot: the weekly accounts ritual, its seeds and badges (kept by
 /// the server, or by the embedded server in the standalone version), and
 /// its settings, which belong to the device: shown or hidden, the weekly
@@ -145,9 +163,80 @@ class Pepite extends ChangeNotifier {
     return '${monday.year}-${monday.month}-${monday.day}';
   }
 
-  /// Steps already done this week (forgotten once the week is over).
-  Set<PepiteStep> get steps =>
-      _stepsWeek == _week ? Set.unmodifiable(_steps) : const {};
+  /// Steps already done this week (forgotten once the week is over):
+  /// ticked or seen on this device, or seen by the server in the data, a
+  /// statement imported or an operation changed (decision 0029).
+  Set<PepiteStep> get steps => Set.unmodifiable({
+    if (_stepsWeek == _week) ..._steps,
+    for (final name in status?.weekSteps ?? const <String>[])
+      ...PepiteStep.values.where((s) => s.name == name),
+  });
+
+  /// The three steps before celebrating.
+  static const ritualSteps = [
+    PepiteStep.statements,
+    PepiteStep.check,
+    PepiteStep.forecast,
+  ];
+
+  bool get ritualReady => ritualSteps.every(steps.contains);
+
+  /// What Pépite noticed by herself (decision 0029): the week completed as
+  /// soon as its three steps are seen, or badges earned along the way.
+  /// Shown once by the home page ([takeCheer]).
+  PepiteCheer? _cheer;
+
+  bool get hasCheer => _cheer != null;
+
+  PepiteCheer? takeCheer() {
+    final c = _cheer;
+    _cheer = null;
+    return c;
+  }
+
+  void _addCheer(PepiteStatus s, {bool week = false}) {
+    if (!enabled || (!week && s.newBadges.isEmpty)) return;
+    final before = _cheer;
+    _cheer = PepiteCheer(
+      status: s,
+      week: week || (before?.week ?? false),
+      seeds: s.earnedSeeds + (before?.seeds ?? 0),
+      badges: [...?before?.badges, ...s.newBadges],
+    );
+  }
+
+  Future<void>? _completing;
+  DateTime? _fetchedAt;
+
+  /// Pépite looks by herself again (a change of page, an import): at most
+  /// every [noticeEvery], unless [force].
+  static const noticeEvery = Duration(seconds: 20);
+
+  Future<void> notice({bool force = false}) async {
+    final last = _fetchedAt;
+    if (!force && last != null && _now().difference(last) < noticeEvery) {
+      return;
+    }
+    await refresh();
+  }
+
+  /// The three steps are seen and the week not counted yet: the server
+  /// counts it, without waiting for "Fêter ça".
+  Future<void> _completeIfReady() async {
+    final s = status;
+    if (!enabled || s == null || s.doneThisWeek || !ritualReady) return;
+    if (_completing != null) return _completing;
+    _completing = () async {
+      try {
+        await celebrate(cheer: true);
+      } catch (_) {
+        // The server will be asked again at the next look.
+      } finally {
+        _completing = null;
+      }
+    }();
+    return _completing;
+  }
 
   bool get doneThisWeek => status?.doneThisWeek ?? false;
 
@@ -277,18 +366,24 @@ class Pepite extends ChangeNotifier {
   /// Back to the sign-in page: nothing to remind until the next session.
   Future<void> signedOut() async {
     status = null;
+    _cheer = null;
+    _fetchedAt = null;
     notifyListeners();
     await _quietly(reminders.cancel);
   }
 
   Future<void> refresh() async {
     try {
-      status = await _fetch(_now());
+      final s = await _fetch(_now());
+      status = s;
+      _fetchedAt = _now();
+      _addCheer(s);
     } catch (_) {
       // No server: Pépite says nothing rather than something wrong.
       status = null;
     }
     notifyListeners();
+    await _completeIfReady();
     await plan();
   }
 
@@ -308,13 +403,16 @@ class Pepite extends ChangeNotifier {
     notifyListeners();
     await _store.write('stepsWeek', _stepsWeek);
     await _store.write('steps', _steps.map((s) => s.name).join(','));
+    await _completeIfReady();
   }
 
   /// The fourth step: the server counts the week (once) and gives the
   /// seeds and badges.
-  Future<PepiteStatus> celebrate() async {
+  /// [cheer]: completed by Pépite herself, the home page cheers.
+  Future<PepiteStatus> celebrate({bool cheer = false}) async {
     final s = await _complete(_now());
     status = s;
+    if (cheer) _addCheer(s, week: true);
     await markStep(PepiteStep.celebrate);
     notifyListeners();
     await plan();

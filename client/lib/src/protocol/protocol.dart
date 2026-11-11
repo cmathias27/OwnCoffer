@@ -1241,6 +1241,12 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == _isc.getType<List<String>?>()) {
+      return (data != null
+              ? (data as List).map((e) => deserialize<String>(e)).toList()
+              : null)
+          as T;
+    }
     if (t == List<_i60c7zzl.PurchasePaymentInfo>) {
       return (data as List)
               .map((e) => deserialize<_i60c7zzl.PurchasePaymentInfo>(e))

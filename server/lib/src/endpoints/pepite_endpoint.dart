@@ -380,10 +380,43 @@ class PepiteEndpoint extends Endpoint {
       firstRitualAt: p.firstRitualAt,
       lastRitualAt: p.lastRitualAt,
       badges: [...have.map((b) => b.code), ...fresh],
+      weekSteps: await _weekSteps(session, t, user, week),
       earnedSeeds: earned,
       newBadges: fresh,
     );
   }
+
+  /// The steps of this week's ritual that the data shows (decision 0029),
+  /// from the user's own doings only: a statement they imported (not
+  /// cancelled), an operation they changed (classified, ticked, edited…).
+  /// The forecast leaves no trace: the app sees it on screen.
+  static Future<List<String>> _weekSteps(
+    Session session,
+    Transaction t,
+    UuidValue user,
+    DateTime week,
+  ) async => [
+    if (await StatementImport.db.count(
+          session,
+          where: (i) =>
+              i.authorId.equals(user) &
+              (i.createdAt >= week) &
+              i.cancelledAt.equals(null),
+          transaction: t,
+        ) >
+        0)
+      'statements',
+    if (await AuditEntry.db.count(
+          session,
+          where: (a) =>
+              a.authUserId.equals(user) &
+              a.entity.equals('transaction') &
+              (a.createdAt >= week),
+          transaction: t,
+        ) >
+        0)
+      'check',
+  ];
 
   Future<bool> _hasImported(
     Session session,

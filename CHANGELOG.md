@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.14.0 (novembre 2026)
+
+### Pépite remarque toute seule ce que tu fais (décision 0029)
+- **Étapes cochées automatiquement** : un relevé importé, une opération vérifiée ou modifiée, la prévision ouverte — sur n'importe quel appareil pour les deux premières.
+- **Semaine comptée toute seule** dès que les trois étapes sont vues : Pépite fête ça sans attendre « Fêter ça » (10 graines, une fois par semaine).
+- **Badges annoncés en chemin**, dès qu'ils sont gagnés.
+
 ## 1.13.1 (novembre 2026)
 
 ### Android : import de relevés

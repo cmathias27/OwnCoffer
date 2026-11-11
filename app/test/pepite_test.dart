@@ -56,6 +56,7 @@ PepiteStatus _status({
   List<String> badges = const [],
   int earned = 0,
   List<String> fresh = const [],
+  List<String>? weekSteps,
 }) => PepiteStatus(
   seeds: seeds,
   weeks: weeks,
@@ -67,6 +68,7 @@ PepiteStatus _status({
   newBadges: fresh,
   items: const [],
   equipped: const [],
+  weekSteps: weekSteps,
 );
 
 void main() {
@@ -235,12 +237,16 @@ void main() {
     late _FakeReminders reminders;
     late DateTime now;
     late List<DateTime> completed;
+    var fetches = 0;
     var server = _status();
 
     Pepite make() => Pepite(
       store: store,
       reminders: reminders,
-      status: (_) async => server,
+      status: (_) async {
+        fetches++;
+        return server;
+      },
       complete: (today) async {
         completed.add(today);
         return server = _status(
@@ -261,7 +267,78 @@ void main() {
       reminders = _FakeReminders();
       now = DateTime(2026, 11, 4, 10);
       completed = [];
+      fetches = 0;
       server = _status();
+    });
+    test('the steps seen by the server count (decision 0029)', () async {
+      server = _status(weekSteps: ['statements', 'check']);
+      final p = make();
+      await p.signedIn();
+      expect(p.steps, {PepiteStep.statements, PepiteStep.check});
+      expect(p.ritualReady, isFalse);
+      expect(completed, isEmpty);
+      expect(p.hasCheer, isFalse);
+    });
+    test(
+      'the week is counted by herself once the three steps are seen',
+      () async {
+        server = _status(weekSteps: ['statements']);
+        final p = make();
+        await p.signedIn();
+        await p.markStep(PepiteStep.check);
+        expect(completed, isEmpty);
+        await p.markStep(PepiteStep.forecast);
+        expect(completed, [now]);
+        expect(p.doneThisWeek, isTrue);
+        final cheer = p.takeCheer()!;
+        expect(cheer.week, isTrue);
+        expect(cheer.seeds, 15);
+        expect(cheer.badges, ['first_ritual']);
+        expect(p.takeCheer(), isNull);
+        // Once a week: looking again counts nothing more.
+        await p.notice(force: true);
+        await p.markStep(PepiteStep.forecast);
+        expect(completed, hasLength(1));
+      },
+    );
+    test('badges earned along the way are cheered once', () async {
+      server = _status(
+        seeds: 5,
+        badges: ['nomad'],
+        earned: 5,
+        fresh: ['nomad'],
+      );
+      final p = make();
+      await p.signedIn();
+      final cheer = p.takeCheer()!;
+      expect(cheer.week, isFalse);
+      expect(cheer.badges, ['nomad']);
+      expect(cheer.seeds, 5);
+      server = _status(seeds: 5, badges: ['nomad']);
+      // She looks again at most every 20 s, unless asked.
+      expect(fetches, 1);
+      await p.notice();
+      expect(fetches, 1);
+      now = now.add(const Duration(seconds: 21));
+      await p.notice();
+      expect(fetches, 2);
+      await p.notice(force: true);
+      expect(fetches, 3);
+      expect(p.hasCheer, isFalse);
+    });
+    test('a hidden Pépite counts nothing by herself', () async {
+      server = _status(
+        weekSteps: ['statements', 'check'],
+        fresh: ['nomad'],
+        earned: 5,
+      );
+      final p = make();
+      await p.load();
+      await p.setEnabled(false);
+      await p.refresh();
+      await p.markStep(PepiteStep.forecast);
+      expect(completed, isEmpty);
+      expect(p.hasCheer, isFalse);
     });
 
     test('shown by default, no notification until asked', () async {
