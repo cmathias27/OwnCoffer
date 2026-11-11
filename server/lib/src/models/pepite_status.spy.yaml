@@ -21,3 +21,7 @@ fields:
   ### `statements` (a statement imported by the user), `check` (an
   ### operation they changed). Null from an older server.
   weekSteps: List<String>?
+  ### The challenge chosen for this month, if any (decision 0030).
+  challenge: PepiteChallengeState?
+  ### Challenges done so far, all months (for `adopt`).
+  challengesDone: int?

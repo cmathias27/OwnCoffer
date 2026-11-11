@@ -1,0 +1,12 @@
+### The challenge of this month, as the app shows it (decision 0030).
+class: PepiteChallengeState
+fields:
+  ### `2026-11`.
+  month: String
+  code: String
+  target: int
+  ### How many times so far, since it was chosen (at most [target]).
+  progress: int
+  done: bool
+  ### Done by this very call (to celebrate).
+  justDone: bool

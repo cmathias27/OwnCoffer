@@ -10905,6 +10905,138 @@ abstract class AppLocalizations {
   /// **'Pas assez de graines pour cet objet.'**
   String get error_pepite_not_enough_seeds;
 
+  /// No description provided for @error_pepite_challenge_unknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce défi n’existe pas.'**
+  String get error_pepite_challenge_unknown;
+
+  /// No description provided for @error_pepite_challenge_done.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton défi du mois est déjà réussi : rendez-vous le mois prochain pour un nouveau.'**
+  String get error_pepite_challenge_done;
+
+  /// No description provided for @pepiteChallengeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Défi du mois'**
+  String get pepiteChallengeTitle;
+
+  /// No description provided for @pepiteChallengeIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'{seeds, plural, =1{Choisis un petit défi pour ce mois si tu en as envie. Je vois seule quand tu avances ; réussi, il te rapporte 1 graine. Abandonné ou pas fini : rien n’est perdu.} other{Choisis un petit défi pour ce mois si tu en as envie. Je vois seule quand tu avances ; réussi, il te rapporte {seeds} graines. Abandonné ou pas fini : rien n’est perdu.}}'**
+  String pepiteChallengeIntro(int seeds);
+
+  /// No description provided for @pepiteChallengeChoose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir'**
+  String get pepiteChallengeChoose;
+
+  /// No description provided for @pepiteChallengeDrop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abandonner'**
+  String get pepiteChallengeDrop;
+
+  /// No description provided for @pepiteChallengeOthers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ou change de défi (le compte repart de zéro) :'**
+  String get pepiteChallengeOthers;
+
+  /// No description provided for @pepiteChallengeProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{progress} sur {target}'**
+  String pepiteChallengeProgress(int progress, int target);
+
+  /// No description provided for @pepiteChallengeWon.
+  ///
+  /// In fr, this message translates to:
+  /// **'{seeds, plural, =1{Défi réussi : +1 graine ! Un nouveau t’attend le mois prochain.} other{Défi réussi : +{seeds} graines ! Un nouveau t’attend le mois prochain.}}'**
+  String pepiteChallengeWon(int seeds);
+
+  /// No description provided for @pepiteChallengeDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Défi du mois réussi : {name}'**
+  String pepiteChallengeDone(String name);
+
+  /// No description provided for @pepiteChallengeClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ranger {count} opérations'**
+  String pepiteChallengeClassify(int count);
+
+  /// No description provided for @pepiteChallengeClassifyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donne une catégorie à des opérations, à la main, dans Opérations.'**
+  String get pepiteChallengeClassifyHelp;
+
+  /// No description provided for @pepiteChallengeInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rattacher {count} factures'**
+  String pepiteChallengeInvoices(int count);
+
+  /// No description provided for @pepiteChallengeInvoicesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Joins une facture ou un ticket à son opération.'**
+  String get pepiteChallengeInvoicesHelp;
+
+  /// No description provided for @pepiteChallengeRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer {count} règles de classement'**
+  String pepiteChallengeRules(int count);
+
+  /// No description provided for @pepiteChallengeRulesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une règle range seule les prochaines opérations du même libellé.'**
+  String get pepiteChallengeRulesHelp;
+
+  /// No description provided for @pepiteChallengeSubscriptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déclarer {count} abonnements'**
+  String pepiteChallengeSubscriptions(int count);
+
+  /// No description provided for @pepiteChallengeSubscriptionsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans la fiche d’une opération qui revient, « C’est un abonnement ».'**
+  String get pepiteChallengeSubscriptionsHelp;
+
+  /// No description provided for @pepiteChallengeGoal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se fixer un objectif'**
+  String get pepiteChallengeGoal;
+
+  /// No description provided for @pepiteChallengeGoalHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un plafond de dépenses ou une somme à mettre de côté, dans Budget.'**
+  String get pepiteChallengeGoalHelp;
+
+  /// No description provided for @pepiteChallengesSetting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposer un défi chaque mois'**
+  String get pepiteChallengesSetting;
+
+  /// No description provided for @pepiteChallengesSettingHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La carte « Défi du mois » sur cette page, et son annonce quand il est réussi, sur cet appareil.'**
+  String get pepiteChallengesSettingHelp;
+
   /// No description provided for @error_pepite_item_apps_only.
   ///
   /// In fr, this message translates to:

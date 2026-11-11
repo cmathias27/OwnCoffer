@@ -46,4 +46,5 @@ export 'src/loans/instalment_plans.dart';
 export 'src/local_date.dart';
 export 'src/money.dart';
 export 'src/pepite/pepite_shop.dart';
+export 'src/pepite/pepite_challenges.dart';
 export 'src/text.dart';

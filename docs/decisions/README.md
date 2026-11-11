@@ -33,5 +33,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0027](0027-sessions-et-appareils.md) | Sessions et appareils : lieu, durée, révocation, alertes, incitation aux applications | Décidé |
 | [0028](0028-pepite-badges-graines-defis.md) | Pépite : conseils sur l'application, nouveaux badges, graines à dépenser, année et défi du mois | Décidé |
 | [0029](0029-pepite-autonome.md) | Pépite remarque toute seule les étapes de la semaine et annonce les badges | Décidé |
+| [0030](0030-pepite-defi-du-mois.md) | Pépite : le défi du mois, mesuré tout seul | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.

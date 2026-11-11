@@ -50,11 +50,15 @@ class PepiteCheer {
   final int seeds;
   final List<String> badges;
 
+  /// The challenge of the month just done (decision 0030), by its code.
+  final String? challenge;
+
   const PepiteCheer({
     required this.status,
     required this.week,
     required this.seeds,
     required this.badges,
+    this.challenge,
   });
 }
 
@@ -80,6 +84,8 @@ class Pepite extends ChangeNotifier {
   final Future<PepiteStatus> Function(String code, DateTime today) _buy;
   final Future<PepiteStatus> Function(String code, bool on, DateTime today)
   _equip;
+  final Future<PepiteStatus> Function(String code, DateTime today) _choose;
+  final Future<PepiteStatus> Function(DateTime today) _drop;
   final DateTime Function() _now;
 
   /// The web app, where Pépite invites to install the apps.
@@ -92,12 +98,18 @@ class Pepite extends ChangeNotifier {
     required this._complete,
     Future<PepiteStatus> Function(String code, DateTime today)? buy,
     Future<PepiteStatus> Function(String code, bool on, DateTime today)? equip,
+    Future<PepiteStatus> Function(String code, DateTime today)? choose,
+    Future<PepiteStatus> Function(DateTime today)? drop,
     DateTime Function()? now,
     bool? browser,
   }) : _fetch = status,
        _buy = buy ?? ((code, today) => client.pepite.buy(code, today)),
        _equip =
            equip ?? ((code, on, today) => client.pepite.equip(code, on, today)),
+       _choose =
+           choose ??
+           ((code, today) => client.pepite.chooseChallenge(code, today)),
+       _drop = drop ?? ((today) => client.pepite.dropChallenge(today)),
        _now = now ?? DateTime.now,
        browser = browser ?? kIsWeb;
 
@@ -106,6 +118,9 @@ class Pepite extends ChangeNotifier {
   var reminderOn = false;
   var reminderDay = defaultDay;
   var reminderHour = defaultHour;
+
+  /// The challenges of the month are offered (decision 0028, point 10).
+  var challengesOn = true;
 
   /// Where the user stands; null until known (or when the server cannot
   /// be reached: Pépite then stays quiet).
@@ -128,6 +143,7 @@ class Pepite extends ChangeNotifier {
     try {
       enabled = await _store.read('enabled') != 'false';
       reminderOn = await _store.read('reminder') == 'true';
+      challengesOn = await _store.read('challenges') != 'false';
       reminderDay = _int(await _store.read('day'), defaultDay, 1, 7);
       reminderHour = _int(await _store.read('hour'), defaultHour, 0, 23);
       _snoozedUntil = DateTime.tryParse(await _store.read('snoozed') ?? '');
@@ -195,13 +211,19 @@ class Pepite extends ChangeNotifier {
   }
 
   void _addCheer(PepiteStatus s, {bool week = false}) {
-    if (!enabled || (!week && s.newBadges.isEmpty)) return;
+    final challenge = challengesOn && (s.challenge?.justDone ?? false)
+        ? s.challenge!.code
+        : null;
+    if (!enabled || (!week && s.newBadges.isEmpty && challenge == null)) {
+      return;
+    }
     final before = _cheer;
     _cheer = PepiteCheer(
       status: s,
       week: week || (before?.week ?? false),
       seeds: s.earnedSeeds + (before?.seeds ?? 0),
       badges: [...?before?.badges, ...s.newBadges],
+      challenge: challenge ?? before?.challenge,
     );
   }
 
@@ -352,6 +374,24 @@ class Pepite extends ChangeNotifier {
   Future<void> equipItem(String code, bool on) async {
     status = await _equip(code, on, _now());
     notifyListeners();
+  }
+
+  /// Chooses the challenge of this month (decision 0030), counted from now.
+  Future<void> chooseChallenge(String code) async {
+    status = await _choose(code, _now());
+    notifyListeners();
+  }
+
+  /// Drops this month's challenge: nothing is lost.
+  Future<void> dropChallenge() async {
+    status = await _drop(_now());
+    notifyListeners();
+  }
+
+  Future<void> setChallengesOn(bool value) async {
+    challengesOn = value;
+    notifyListeners();
+    await _quietly(() => _store.write('challenges', '$value'));
   }
 
   /// The badge of a first session on an app (PepiteEndpoint).

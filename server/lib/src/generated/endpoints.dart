@@ -3521,6 +3521,50 @@ class Endpoints extends _is.EndpointDispatch {
                     params['today'],
                   ),
         ),
+        'chooseChallenge': _is.MethodConnector(
+          name: 'chooseChallenge',
+          params: {
+            'code': _is.ParameterDescription(
+              name: 'code',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'today': _is.ParameterDescription(
+              name: 'today',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['pepite'] as _iagql2g7.PepiteEndpoint)
+                  .chooseChallenge(
+                    session,
+                    params['code'],
+                    params['today'],
+                  ),
+        ),
+        'dropChallenge': _is.MethodConnector(
+          name: 'dropChallenge',
+          params: {
+            'today': _is.ParameterDescription(
+              name: 'today',
+              type: _is.getType<DateTime>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['pepite'] as _iagql2g7.PepiteEndpoint)
+                  .dropChallenge(
+                    session,
+                    params['today'],
+                  ),
+        ),
         'adopt': _is.MethodConnector(
           name: 'adopt',
           params: {

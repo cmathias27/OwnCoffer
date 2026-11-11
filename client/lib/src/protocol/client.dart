@@ -1980,6 +1980,29 @@ class EndpointPepite extends _isc.EndpointRef {
     },
   );
 
+  /// Chooses [code] as the challenge of this month (decision 0030), in
+  /// place of one not done yet; counted from now. A challenge already done
+  /// this month cannot be changed.
+  _ida.Future<_igi0vxn8.PepiteStatus> chooseChallenge(
+    String code,
+    DateTime today,
+  ) => caller.callServerEndpoint<_igi0vxn8.PepiteStatus>(
+    'pepite',
+    'chooseChallenge',
+    {
+      'code': code,
+      'today': today,
+    },
+  );
+
+  /// Drops this month's challenge if it is not done: nothing is lost.
+  _ida.Future<_igi0vxn8.PepiteStatus> dropChallenge(DateTime today) =>
+      caller.callServerEndpoint<_igi0vxn8.PepiteStatus>(
+        'pepite',
+        'dropChallenge',
+        {'today': today},
+      );
+
   /// Standalone version moved to a server: its reserve and badges come
   /// along, only into an account that has none yet (nothing is added to an
   /// existing reserve). Returns whether they were taken.

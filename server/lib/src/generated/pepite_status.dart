@@ -12,6 +12,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:owncoffer_server/src/generated/protocol.dart' as _itdod8fx;
 import 'package:serverpod/serverpod.dart' as _is;
+import 'pepite_challenge_state.dart' as _ipoc75em;
 
 /// What the app shows of Pépite (decision 0026, 0028).
 abstract class PepiteStatus
@@ -29,6 +30,8 @@ abstract class PepiteStatus
     required this.items,
     required this.equipped,
     this.weekSteps,
+    this.challenge,
+    this.challengesDone,
   }) : spentSeeds = spentSeeds ?? 0;
 
   factory PepiteStatus({
@@ -44,6 +47,8 @@ abstract class PepiteStatus
     required List<String> items,
     required List<String> equipped,
     List<String>? weekSteps,
+    _ipoc75em.PepiteChallengeState? challenge,
+    int? challengesDone,
   }) = _PepiteStatusImpl;
 
   factory PepiteStatus.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -82,6 +87,12 @@ abstract class PepiteStatus
           : _itdod8fx.Protocol().deserialize<List<String>>(
               jsonSerialization['weekSteps'],
             ),
+      challenge: jsonSerialization['challenge'] == null
+          ? null
+          : _itdod8fx.Protocol().deserialize<_ipoc75em.PepiteChallengeState>(
+              jsonSerialization['challenge'],
+            ),
+      challengesDone: jsonSerialization['challengesDone'] as int?,
     );
   }
 
@@ -117,6 +128,12 @@ abstract class PepiteStatus
   /// operation they changed). Null from an older server.
   List<String>? weekSteps;
 
+  /// The challenge chosen for this month, if any (decision 0030).
+  _ipoc75em.PepiteChallengeState? challenge;
+
+  /// Challenges done so far, all months (for `adopt`).
+  int? challengesDone;
+
   /// Returns a shallow copy of this [PepiteStatus]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -133,6 +150,8 @@ abstract class PepiteStatus
     List<String>? items,
     List<String>? equipped,
     List<String>? weekSteps,
+    _ipoc75em.PepiteChallengeState? challenge,
+    int? challengesDone,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -150,6 +169,8 @@ abstract class PepiteStatus
       'items': items.toJson(),
       'equipped': equipped.toJson(),
       if (weekSteps != null) 'weekSteps': weekSteps?.toJson(),
+      if (challenge != null) 'challenge': challenge?.toJson(),
+      if (challengesDone != null) 'challengesDone': challengesDone,
     };
   }
 
@@ -169,6 +190,8 @@ abstract class PepiteStatus
       'items': items.toJson(),
       'equipped': equipped.toJson(),
       if (weekSteps != null) 'weekSteps': weekSteps?.toJson(),
+      if (challenge != null) 'challenge': challenge?.toJsonForProtocol(),
+      if (challengesDone != null) 'challengesDone': challengesDone,
     };
   }
 
@@ -194,6 +217,8 @@ class _PepiteStatusImpl extends PepiteStatus {
     required List<String> items,
     required List<String> equipped,
     List<String>? weekSteps,
+    _ipoc75em.PepiteChallengeState? challenge,
+    int? challengesDone,
   }) : super._(
          seeds: seeds,
          spentSeeds: spentSeeds,
@@ -207,6 +232,8 @@ class _PepiteStatusImpl extends PepiteStatus {
          items: items,
          equipped: equipped,
          weekSteps: weekSteps,
+         challenge: challenge,
+         challengesDone: challengesDone,
        );
 
   /// Returns a shallow copy of this [PepiteStatus]
@@ -226,6 +253,8 @@ class _PepiteStatusImpl extends PepiteStatus {
     List<String>? items,
     List<String>? equipped,
     Object? weekSteps = _Undefined,
+    Object? challenge = _Undefined,
+    Object? challengesDone = _Undefined,
   }) {
     return PepiteStatus(
       seeds: seeds ?? this.seeds,
@@ -246,6 +275,12 @@ class _PepiteStatusImpl extends PepiteStatus {
       weekSteps: weekSteps is List<String>?
           ? weekSteps
           : this.weekSteps?.map((e0) => e0).toList(),
+      challenge: challenge is _ipoc75em.PepiteChallengeState?
+          ? challenge
+          : this.challenge?.copyWith(),
+      challengesDone: challengesDone is int?
+          ? challengesDone
+          : this.challengesDone,
     );
   }
 }

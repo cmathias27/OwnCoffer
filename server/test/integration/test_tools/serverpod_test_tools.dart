@@ -5343,6 +5343,72 @@ class _PepiteEndpoint {
     });
   }
 
+  _ida.Future<_iqopjt2h.PepiteStatus> chooseChallenge(
+    _ist.TestSessionBuilder sessionBuilder,
+    String code,
+    DateTime today,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'pepite',
+            method: 'chooseChallenge',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'pepite',
+          methodName: 'chooseChallenge',
+          parameters: _ist.testObjectToJson({
+            'code': code,
+            'today': today,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iqopjt2h.PepiteStatus>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iqopjt2h.PepiteStatus> dropChallenge(
+    _ist.TestSessionBuilder sessionBuilder,
+    DateTime today,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'pepite',
+            method: 'dropChallenge',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'pepite',
+          methodName: 'dropChallenge',
+          parameters: _ist.testObjectToJson({'today': today}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iqopjt2h.PepiteStatus>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<bool> adopt(
     _ist.TestSessionBuilder sessionBuilder,
     _iqopjt2h.PepiteStatus from,

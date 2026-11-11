@@ -6839,6 +6839,111 @@ class AppLocalizationsFr extends AppLocalizations {
       'Pas assez de graines pour cet objet.';
 
   @override
+  String get error_pepite_challenge_unknown => 'Ce défi n’existe pas.';
+
+  @override
+  String get error_pepite_challenge_done =>
+      'Ton défi du mois est déjà réussi : rendez-vous le mois prochain pour un nouveau.';
+
+  @override
+  String get pepiteChallengeTitle => 'Défi du mois';
+
+  @override
+  String pepiteChallengeIntro(int seeds) {
+    String _temp0 = intl.Intl.pluralLogic(
+      seeds,
+      locale: localeName,
+      other:
+          'Choisis un petit défi pour ce mois si tu en as envie. Je vois seule quand tu avances ; réussi, il te rapporte $seeds graines. Abandonné ou pas fini : rien n’est perdu.',
+      one:
+          'Choisis un petit défi pour ce mois si tu en as envie. Je vois seule quand tu avances ; réussi, il te rapporte 1 graine. Abandonné ou pas fini : rien n’est perdu.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pepiteChallengeChoose => 'Choisir';
+
+  @override
+  String get pepiteChallengeDrop => 'Abandonner';
+
+  @override
+  String get pepiteChallengeOthers =>
+      'Ou change de défi (le compte repart de zéro) :';
+
+  @override
+  String pepiteChallengeProgress(int progress, int target) {
+    return '$progress sur $target';
+  }
+
+  @override
+  String pepiteChallengeWon(int seeds) {
+    String _temp0 = intl.Intl.pluralLogic(
+      seeds,
+      locale: localeName,
+      other:
+          'Défi réussi : +$seeds graines ! Un nouveau t’attend le mois prochain.',
+      one: 'Défi réussi : +1 graine ! Un nouveau t’attend le mois prochain.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteChallengeDone(String name) {
+    return 'Défi du mois réussi : $name';
+  }
+
+  @override
+  String pepiteChallengeClassify(int count) {
+    return 'Ranger $count opérations';
+  }
+
+  @override
+  String get pepiteChallengeClassifyHelp =>
+      'Donne une catégorie à des opérations, à la main, dans Opérations.';
+
+  @override
+  String pepiteChallengeInvoices(int count) {
+    return 'Rattacher $count factures';
+  }
+
+  @override
+  String get pepiteChallengeInvoicesHelp =>
+      'Joins une facture ou un ticket à son opération.';
+
+  @override
+  String pepiteChallengeRules(int count) {
+    return 'Créer $count règles de classement';
+  }
+
+  @override
+  String get pepiteChallengeRulesHelp =>
+      'Une règle range seule les prochaines opérations du même libellé.';
+
+  @override
+  String pepiteChallengeSubscriptions(int count) {
+    return 'Déclarer $count abonnements';
+  }
+
+  @override
+  String get pepiteChallengeSubscriptionsHelp =>
+      'Dans la fiche d’une opération qui revient, « C’est un abonnement ».';
+
+  @override
+  String get pepiteChallengeGoal => 'Se fixer un objectif';
+
+  @override
+  String get pepiteChallengeGoalHelp =>
+      'Un plafond de dépenses ou une somme à mettre de côté, dans Budget.';
+
+  @override
+  String get pepiteChallengesSetting => 'Proposer un défi chaque mois';
+
+  @override
+  String get pepiteChallengesSettingHelp =>
+      'La carte « Défi du mois » sur cette page, et son annonce quand il est réussi, sur cet appareil.';
+
+  @override
   String get error_pepite_item_apps_only =>
       'Cet objet s’achète dans l’application Android ou Windows.';
 

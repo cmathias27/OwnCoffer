@@ -141,6 +141,7 @@ import 'month_review.dart' as _i5m4pdin;
 import 'notification.dart' as _irt10kca;
 import 'notification_settings.dart' as _iwwkm5c2;
 import 'occurrence_status.dart' as _it10dx4m;
+import 'pepite_challenge_state.dart' as _ipoc75em;
 import 'pepite_start.dart' as _iyfl3qkr;
 import 'pepite_status.dart' as _iltzik8s;
 import 'pepite_tips.dart' as _i3b60tzc;
@@ -255,6 +256,7 @@ export 'month_review.dart';
 export 'notification.dart';
 export 'notification_settings.dart';
 export 'occurrence_status.dart';
+export 'pepite_challenge_state.dart';
 export 'pepite_start.dart';
 export 'pepite_status.dart';
 export 'pepite_tips.dart';
@@ -564,6 +566,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _it10dx4m.OccurrenceStatus) {
       return _it10dx4m.OccurrenceStatus.fromJson(data) as T;
+    }
+    if (t == _ipoc75em.PepiteChallengeState) {
+      return _ipoc75em.PepiteChallengeState.fromJson(data) as T;
     }
     if (t == _iyfl3qkr.PepiteStart) {
       return _iyfl3qkr.PepiteStart.fromJson(data) as T;
@@ -956,6 +961,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_it10dx4m.OccurrenceStatus?>()) {
       return (data != null ? _it10dx4m.OccurrenceStatus.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ipoc75em.PepiteChallengeState?>()) {
+      return (data != null
+              ? _ipoc75em.PepiteChallengeState.fromJson(data)
+              : null)
           as T;
     }
     if (t == _isc.getType<_iyfl3qkr.PepiteStart?>()) {
@@ -1574,6 +1585,7 @@ class Protocol extends _isc.SerializationManager {
       _irt10kca.AppNotification => 'AppNotification',
       _iwwkm5c2.NotificationSettings => 'NotificationSettings',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
+      _ipoc75em.PepiteChallengeState => 'PepiteChallengeState',
       _iyfl3qkr.PepiteStart => 'PepiteStart',
       _iltzik8s.PepiteStatus => 'PepiteStatus',
       _i3b60tzc.PepiteTips => 'PepiteTips',
@@ -1782,6 +1794,8 @@ class Protocol extends _isc.SerializationManager {
         return 'NotificationSettings';
       case _it10dx4m.OccurrenceStatus():
         return 'OccurrenceStatus';
+      case _ipoc75em.PepiteChallengeState():
+        return 'PepiteChallengeState';
       case _iyfl3qkr.PepiteStart():
         return 'PepiteStart';
       case _iltzik8s.PepiteStatus():
@@ -2111,6 +2125,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'OccurrenceStatus') {
       return deserialize<_it10dx4m.OccurrenceStatus>(data['data']);
+    }
+    if (dataClassName == 'PepiteChallengeState') {
+      return deserialize<_ipoc75em.PepiteChallengeState>(data['data']);
     }
     if (dataClassName == 'PepiteStart') {
       return deserialize<_iyfl3qkr.PepiteStart>(data['data']);

@@ -159,6 +159,8 @@ pepite:
   - completeRitual:
   - buy:
   - equip:
+  - chooseChallenge:
+  - dropChallenge:
   - adopt:
 presence:
   - ping:
