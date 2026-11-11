@@ -5,6 +5,7 @@ import 'package:serverpod_auth_idp_server/core.dart';
 import '../generated/protocol.dart';
 import '../pepite/pepite_badges.dart';
 import '../pepite/pepite_challenges.dart';
+import '../pepite/pepite_year.dart';
 import '../security/access.dart';
 import '../security/scopes.dart';
 import '../security/session_devices.dart';
@@ -87,6 +88,7 @@ class PepiteEndpoint extends Endpoint {
           ),
           transaction: t,
         );
+        await PepiteYears.markWeek(session, user, week, transaction: t);
         earned = ritualSeeds;
       }
       return _status(session, t, user, p, day, earned: earned, ritual: true);
@@ -255,6 +257,24 @@ class PepiteEndpoint extends Endpoint {
       );
       return _status(session, t, user, await _progress(session, t, user), day);
     });
+  }
+
+  /// « Ton année avec Pépite » (decision 0031): a year already over, or
+  /// the current one from December.
+  Future<PepiteYear> year(Session session, int year, DateTime today) async {
+    final user = Access.userId(session);
+    final day = _day(today);
+    if (year < 2000 ||
+        year > day.year ||
+        (year == day.year && day.month < DateTime.december)) {
+      throw InvalidInputException(code: 'pepite_year_invalid');
+    }
+    return PepiteYears.of(
+      session,
+      user,
+      year,
+      core.LocalDate(day.year, day.month, day.day),
+    );
   }
 
   /// Standalone version moved to a server: its reserve and badges come

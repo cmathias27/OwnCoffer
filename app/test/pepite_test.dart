@@ -536,6 +536,21 @@ void main() {
       expect(find.text(fr.pepiteReserve), findsOneWidget);
       expect(find.text(fr.pepiteStart), findsNothing);
       expect(find.text(fr.pepiteSeeds(40)), findsOneWidget);
+      expect(find.byKey(const Key('pepite-year-ready')), findsNothing);
+    });
+
+    testWidgets('in January, the year just over is offered', (tester) async {
+      now = DateTime(2027, 1, 6, 10);
+      server = _status(seeds: 40, weeks: 3, done: true, last: now);
+      final p = make();
+      await tester.runAsync(p.signedIn);
+      expect(p.years, [2026]);
+      await tester.pumpWidget(
+        app(PepiteCard(overdrawn: false, onStep: (_) {}, controller: p)),
+      );
+      expect(find.text(fr.pepiteYearReady(2026)), findsOneWidget);
+      await tester.runAsync(() => p.setEnabled(false));
+      expect(p.yearReady, isNull);
     });
 
     testWidgets('hidden when turned off', (tester) async {

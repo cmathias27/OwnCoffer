@@ -145,6 +145,7 @@ import 'pepite_challenge_state.dart' as _ipoc75em;
 import 'pepite_start.dart' as _iyfl3qkr;
 import 'pepite_status.dart' as _iltzik8s;
 import 'pepite_tips.dart' as _i3b60tzc;
+import 'pepite_year.dart' as _ieheie2d;
 import 'period_totals.dart' as _imctw77w;
 import 'provider_history.dart' as _irsxtgs7;
 import 'purchase_option.dart' as _i46nnn14;
@@ -260,6 +261,7 @@ export 'pepite_challenge_state.dart';
 export 'pepite_start.dart';
 export 'pepite_status.dart';
 export 'pepite_tips.dart';
+export 'pepite_year.dart';
 export 'period_totals.dart';
 export 'provider_history.dart';
 export 'purchase_option.dart';
@@ -578,6 +580,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _i3b60tzc.PepiteTips) {
       return _i3b60tzc.PepiteTips.fromJson(data) as T;
+    }
+    if (t == _ieheie2d.PepiteYear) {
+      return _ieheie2d.PepiteYear.fromJson(data) as T;
     }
     if (t == _imctw77w.PeriodTotals) {
       return _imctw77w.PeriodTotals.fromJson(data) as T;
@@ -977,6 +982,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_i3b60tzc.PepiteTips?>()) {
       return (data != null ? _i3b60tzc.PepiteTips.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ieheie2d.PepiteYear?>()) {
+      return (data != null ? _ieheie2d.PepiteYear.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_imctw77w.PeriodTotals?>()) {
       return (data != null ? _imctw77w.PeriodTotals.fromJson(data) : null) as T;
@@ -1589,6 +1597,7 @@ class Protocol extends _isc.SerializationManager {
       _iyfl3qkr.PepiteStart => 'PepiteStart',
       _iltzik8s.PepiteStatus => 'PepiteStatus',
       _i3b60tzc.PepiteTips => 'PepiteTips',
+      _ieheie2d.PepiteYear => 'PepiteYear',
       _imctw77w.PeriodTotals => 'PeriodTotals',
       _irsxtgs7.ProviderHistory => 'ProviderHistory',
       _i46nnn14.PurchaseOption => 'PurchaseOption',
@@ -1802,6 +1811,8 @@ class Protocol extends _isc.SerializationManager {
         return 'PepiteStatus';
       case _i3b60tzc.PepiteTips():
         return 'PepiteTips';
+      case _ieheie2d.PepiteYear():
+        return 'PepiteYear';
       case _imctw77w.PeriodTotals():
         return 'PeriodTotals';
       case _irsxtgs7.ProviderHistory():
@@ -2137,6 +2148,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'PepiteTips') {
       return deserialize<_i3b60tzc.PepiteTips>(data['data']);
+    }
+    if (dataClassName == 'PepiteYear') {
+      return deserialize<_ieheie2d.PepiteYear>(data['data']);
     }
     if (dataClassName == 'PeriodTotals') {
       return deserialize<_imctw77w.PeriodTotals>(data['data']);

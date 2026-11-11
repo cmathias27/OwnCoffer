@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.16.0 (novembre 2026)
+
+### « Ton année avec Pépite » (décision 0031)
+- **Le bilan de ton année**, raconté par Pépite : semaines de comptes, graines gagnées, nouveaux badges, défis du mois réussis, objectifs tenus (en % des mois suivis), catégorie la mieux tenue, abonnements arrêtés et ce qu'ils coûtaient par mois et sur un an.
+- **Quand** : l'année en cours dès le 1er décembre, l'année passée tout le mois de janvier sur l'accueil, puis chaque année reste dans **Pépite et ma réserve**.
+- Calculé par OwnCoffer d'après tes propres actions et les comptes que tu vois, jamais par une IA ; aucune comparaison avec personne.
+
 ## 1.15.0 (novembre 2026)
 
 ### Le défi du mois de Pépite (décision 0030)

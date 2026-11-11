@@ -96,6 +96,7 @@ import 'package:owncoffer_server/src/generated/notification_settings.dart'
 import 'package:owncoffer_server/src/generated/pepite_start.dart' as _i0lfydk1;
 import 'package:owncoffer_server/src/generated/pepite_status.dart' as _iqopjt2h;
 import 'package:owncoffer_server/src/generated/pepite_tips.dart' as _if02v5mp;
+import 'package:owncoffer_server/src/generated/pepite_year.dart' as _ikwazag7;
 import 'package:owncoffer_server/src/generated/provider_history.dart'
     as _iujedgl9;
 import 'package:owncoffer_server/src/generated/purchase_simulation.dart'
@@ -5402,6 +5403,41 @@ class _PepiteEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_iqopjt2h.PepiteStatus>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ikwazag7.PepiteYear> year(
+    _ist.TestSessionBuilder sessionBuilder,
+    int year,
+    DateTime today,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'pepite',
+            method: 'year',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'pepite',
+          methodName: 'year',
+          parameters: _ist.testObjectToJson({
+            'year': year,
+            'today': today,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ikwazag7.PepiteYear>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

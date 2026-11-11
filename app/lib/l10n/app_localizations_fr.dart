@@ -6944,6 +6944,132 @@ class AppLocalizationsFr extends AppLocalizations {
       'La carte « Défi du mois » sur cette page, et son annonce quand il est réussi, sur cet appareil.';
 
   @override
+  String get error_pepite_year_invalid =>
+      'Cette année n’est pas encore passée.';
+
+  @override
+  String pepiteYearTitle(int year) {
+    return 'Ton année $year avec Pépite';
+  }
+
+  @override
+  String pepiteYearMenu(int year) {
+    return 'Ton année $year';
+  }
+
+  @override
+  String get pepiteYearMenuHelp =>
+      'Ce que tu as fait cette année-là, raconté par Pépite.';
+
+  @override
+  String pepiteYearReady(int year) {
+    return 'Ton année $year est prête !';
+  }
+
+  @override
+  String pepiteYearIntro(int year) {
+    return 'Voici ce que tu as fait en $year. Rien n’est comparé à personne : c’est ton année à toi.';
+  }
+
+  @override
+  String pepiteYearEmpty(int year) {
+    return 'Je n’ai rien vu passer en $year. Ce n’est pas grave : la prochaine année commence quand tu veux.';
+  }
+
+  @override
+  String pepiteYearWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count semaines de comptes',
+      one: '1 semaine de comptes',
+      zero: 'Aucune semaine de comptes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteYearSeeds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count graines gagnées',
+      one: '1 graine gagnée',
+      zero: 'Aucune graine gagnée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteYearBadges(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nouveaux badges',
+      one: '1 nouveau badge',
+      zero: 'Aucun nouveau badge',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteYearChallenges(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count défis du mois réussis',
+      one: '1 défi du mois réussi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteYearGoals(int percent) {
+    return 'Objectifs tenus $percent % du temps';
+  }
+
+  @override
+  String pepiteYearGoalsDetail(int kept, int tracked) {
+    return '$kept mois tenus sur $tracked mois suivis, tous objectifs confondus.';
+  }
+
+  @override
+  String pepiteYearBestCategory(String name) {
+    return 'Catégorie la mieux tenue : $name';
+  }
+
+  @override
+  String pepiteYearBestCategoryDetail(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Dans son objectif $count mois.',
+      one: 'Dans son objectif 1 mois.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteYearSubscriptions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count abonnements arrêtés',
+      one: '1 abonnement arrêté',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pepiteYearSubscriptionsSaved(String monthly, String yearly) {
+    return '$monthly par mois de moins, soit $yearly sur un an.';
+  }
+
+  @override
+  String get pepiteYearHow =>
+      'Calculé par OwnCoffer d’après tes propres actions et les comptes que tu vois, jamais par une IA. Les objectifs : mois de budget terminés dans l’objectif, pour les objectifs posés avant le début du mois. Les semaines comptées avant la version 1.16 sont rangées dans l’année de ta première semaine.';
+
+  @override
   String get error_pepite_item_apps_only =>
       'Cet objet s’achète dans l’application Android ou Windows.';
 

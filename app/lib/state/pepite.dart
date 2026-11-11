@@ -37,6 +37,20 @@ class SecurePepiteStore implements LockStore {
       : _storage.write(key: 'pepite.$key', value: value);
 }
 
+/// Pépite was born in 2026 (decision 0026).
+const pepiteFirstYear = 2026;
+
+/// The years whose « Ton année » can be seen on [today] (decision 0031):
+/// each year over since Pépite exists, and the current one from December.
+List<int> pepiteYears(DateTime today) => [
+  for (
+    var y = today.month == DateTime.december ? today.year : today.year - 1;
+    y >= pepiteFirstYear;
+    y--
+  )
+    y,
+];
+
 /// The steps of the weekly ritual; [celebrate] completes it.
 enum PepiteStep { statements, check, forecast, celebrate }
 
@@ -374,6 +388,18 @@ class Pepite extends ChangeNotifier {
   Future<void> equipItem(String code, bool on) async {
     status = await _equip(code, on, _now());
     notifyListeners();
+  }
+
+  /// The years whose « Ton année » can be seen (decision 0031).
+  List<int> get years => pepiteYears(_now());
+
+  /// In January, the year just over, offered on the home page.
+  int? get yearReady {
+    final now = _now();
+    final year = now.year - 1;
+    return enabled && now.month == DateTime.january && year >= pepiteFirstYear
+        ? year
+        : null;
   }
 
   /// Chooses the challenge of this month (decision 0030), counted from now.

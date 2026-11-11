@@ -1,0 +1,25 @@
+### « Ton année avec Pépite » (decision 0031): what the user did in [year],
+### from their own doings and the accounts they may see. Never compared to
+### anyone; amounts only for the subscriptions they stopped.
+class: PepiteYear
+fields:
+  year: int
+  ### Weeks of the ritual counted in the year.
+  weeks: int
+  ### Badges earned in the year.
+  badges: List<String>
+  ### Challenges of the month done in the year.
+  challenges: int
+  ### Seeds earned in the year (weeks, badges, challenges).
+  seeds: int
+  ### Budget months of the year ended within a goal, over the months that
+  ### had one (summed over the goals); 0 of 0 without goals.
+  goalMonthsKept: int
+  goalMonthsTracked: int
+  ### The category whose goal was kept the most months, and how many.
+  bestCategory: Category?
+  bestCategoryMonths: int?
+  ### Subscriptions the user stopped (deleted or given an end) in the year,
+  ### and what they cost a month together.
+  subscriptionsStopped: int
+  subscriptionsMonthlyCents: int

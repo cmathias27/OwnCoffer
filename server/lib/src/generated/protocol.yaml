@@ -161,6 +161,7 @@ pepite:
   - equip:
   - chooseChallenge:
   - dropChallenge:
+  - year:
   - adopt:
 presence:
   - ping:

@@ -11037,6 +11037,114 @@ abstract class AppLocalizations {
   /// **'La carte « Défi du mois » sur cette page, et son annonce quand il est réussi, sur cet appareil.'**
   String get pepiteChallengesSettingHelp;
 
+  /// No description provided for @error_pepite_year_invalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette année n’est pas encore passée.'**
+  String get error_pepite_year_invalid;
+
+  /// No description provided for @pepiteYearTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton année {year} avec Pépite'**
+  String pepiteYearTitle(int year);
+
+  /// No description provided for @pepiteYearMenu.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton année {year}'**
+  String pepiteYearMenu(int year);
+
+  /// No description provided for @pepiteYearMenuHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que tu as fait cette année-là, raconté par Pépite.'**
+  String get pepiteYearMenuHelp;
+
+  /// No description provided for @pepiteYearReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton année {year} est prête !'**
+  String pepiteYearReady(int year);
+
+  /// No description provided for @pepiteYearIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voici ce que tu as fait en {year}. Rien n’est comparé à personne : c’est ton année à toi.'**
+  String pepiteYearIntro(int year);
+
+  /// No description provided for @pepiteYearEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Je n’ai rien vu passer en {year}. Ce n’est pas grave : la prochaine année commence quand tu veux.'**
+  String pepiteYearEmpty(int year);
+
+  /// No description provided for @pepiteYearWeeks.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune semaine de comptes} =1{1 semaine de comptes} other{{count} semaines de comptes}}'**
+  String pepiteYearWeeks(int count);
+
+  /// No description provided for @pepiteYearSeeds.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune graine gagnée} =1{1 graine gagnée} other{{count} graines gagnées}}'**
+  String pepiteYearSeeds(int count);
+
+  /// No description provided for @pepiteYearBadges.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun nouveau badge} =1{1 nouveau badge} other{{count} nouveaux badges}}'**
+  String pepiteYearBadges(int count);
+
+  /// No description provided for @pepiteYearChallenges.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 défi du mois réussi} other{{count} défis du mois réussis}}'**
+  String pepiteYearChallenges(int count);
+
+  /// No description provided for @pepiteYearGoals.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectifs tenus {percent} % du temps'**
+  String pepiteYearGoals(int percent);
+
+  /// No description provided for @pepiteYearGoalsDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'{kept} mois tenus sur {tracked} mois suivis, tous objectifs confondus.'**
+  String pepiteYearGoalsDetail(int kept, int tracked);
+
+  /// No description provided for @pepiteYearBestCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie la mieux tenue : {name}'**
+  String pepiteYearBestCategory(String name);
+
+  /// No description provided for @pepiteYearBestCategoryDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Dans son objectif 1 mois.} other{Dans son objectif {count} mois.}}'**
+  String pepiteYearBestCategoryDetail(int count);
+
+  /// No description provided for @pepiteYearSubscriptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 abonnement arrêté} other{{count} abonnements arrêtés}}'**
+  String pepiteYearSubscriptions(int count);
+
+  /// No description provided for @pepiteYearSubscriptionsSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'{monthly} par mois de moins, soit {yearly} sur un an.'**
+  String pepiteYearSubscriptionsSaved(String monthly, String yearly);
+
+  /// No description provided for @pepiteYearHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calculé par OwnCoffer d’après tes propres actions et les comptes que tu vois, jamais par une IA. Les objectifs : mois de budget terminés dans l’objectif, pour les objectifs posés avant le début du mois. Les semaines comptées avant la version 1.16 sont rangées dans l’année de ta première semaine.'**
+  String get pepiteYearHow;
+
   /// No description provided for @error_pepite_item_apps_only.
   ///
   /// In fr, this message translates to:
