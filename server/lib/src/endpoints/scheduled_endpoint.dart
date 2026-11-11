@@ -147,10 +147,12 @@ class ScheduledEndpoint extends Endpoint {
     }
     final next = _validated(
       current.copyWith(
-        priceRiseDate:
-            (date == null || signedAmount == null) ? null : _day(date),
-        priceRiseAmountCents:
-            (date == null || signedAmount == null) ? null : signedAmount,
+        priceRiseDate: (date == null || signedAmount == null)
+            ? null
+            : _day(date),
+        priceRiseAmountCents: (date == null || signedAmount == null)
+            ? null
+            : signedAmount,
       ),
     );
     final saved = await ScheduledTransaction.db.updateRow(session, next);
