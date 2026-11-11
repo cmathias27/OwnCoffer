@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:owncoffer_client/owncoffer_client.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../l10n/app_localizations.dart';
+import '../l10n/error_messages.dart';
 import '../state/pepite.dart';
 import '../state/pepite_advice.dart';
 import '../state/pepite_messages.dart';
@@ -64,6 +67,94 @@ class _PepiteScreenState extends State<PepiteScreen> {
     );
   }
 
+  /// The challenge of the month (decision 0030): the one chosen and how far
+  /// along, or the list to choose from.
+  List<Widget> _challenge(
+    BuildContext context,
+    AppLocalizations l,
+    PepiteStatus s,
+  ) {
+    final theme = Theme.of(context);
+    final current = s.challenge;
+    Future<void> run(Future<void> Function() action) async {
+      final messenger = ScaffoldMessenger.of(context);
+      try {
+        await action();
+      } catch (e) {
+        messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+      }
+    }
+
+    return [
+      const SizedBox(height: 16),
+      Text(l.pepiteChallengeTitle, style: theme.textTheme.titleMedium),
+      const SizedBox(height: 8),
+      if (current == null)
+        Text(l.pepiteChallengeIntro(core.pepiteChallengeSeeds))
+      else ...[
+        Card(
+          key: const Key('pepite-challenge'),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  pepiteChallengeText(l, current.code).$1,
+                  style: theme.textTheme.titleSmall,
+                ),
+                const SizedBox(height: 4),
+                Text(pepiteChallengeText(l, current.code).$2),
+                const SizedBox(height: 8),
+                LinearProgressIndicator(
+                  value: current.target == 0
+                      ? 0
+                      : current.progress / current.target,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  current.done
+                      ? l.pepiteChallengeWon(core.pepiteChallengeSeeds)
+                      : l.pepiteChallengeProgress(
+                          current.progress,
+                          current.target,
+                        ),
+                ),
+                if (!current.done)
+                  Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: TextButton(
+                      onPressed: () => run(_pepite.dropChallenge),
+                      child: Text(l.pepiteChallengeDrop),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ],
+      if (current == null || !current.done) ...[
+        if (current != null) ...[
+          const SizedBox(height: 8),
+          Text(l.pepiteChallengeOthers),
+        ],
+        for (final c in core.pepiteChallenges)
+          if (c.code != current?.code)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.flag_outlined),
+              title: Text(pepiteChallengeText(l, c.code).$1),
+              subtitle: Text(pepiteChallengeText(l, c.code).$2),
+              trailing: TextButton(
+                key: Key('pepite-challenge-${c.code}'),
+                onPressed: () => run(() => _pepite.chooseChallenge(c.code)),
+                child: Text(l.pepiteChallengeChoose),
+              ),
+            ),
+      ],
+    ];
+  }
+
   List<Widget> _reserve(BuildContext context, AppLocalizations l) {
     final theme = Theme.of(context);
     final s = _pepite.status;
@@ -95,6 +186,7 @@ class _PepiteScreenState extends State<PepiteScreen> {
           ),
         ),
       ),
+      if (_pepite.challengesOn) ..._challenge(context, l, s),
       const SizedBox(height: 16),
       Text(l.pepiteBadgesTitle, style: theme.textTheme.titleMedium),
       const SizedBox(height: 8),
@@ -193,6 +285,13 @@ class _PepiteScreenState extends State<PepiteScreen> {
         subtitle: Text(l.pepiteTipsSettingHelp),
         value: pepiteAdvice.tipsOn,
         onChanged: pepiteAdvice.setTipsOn,
+      ),
+      SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        title: Text(l.pepiteChallengesSetting),
+        subtitle: Text(l.pepiteChallengesSettingHelp),
+        value: _pepite.challengesOn,
+        onChanged: _pepite.setChallengesOn,
       ),
       if (!_pepite.reminders.supported)
         Padding(

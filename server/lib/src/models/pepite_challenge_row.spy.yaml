@@ -1,0 +1,17 @@
+### The challenge of the month chosen by a user (decision 0028, point 8;
+### decision 0030). One per month; dropped = row deleted (unless done).
+class: PepiteChallengeRow
+table: pepite_challenges
+serverOnly: true
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  ### `2026-11`.
+  month: String
+  ### A code of `pepiteChallenges` (shared).
+  code: String
+  chosenAt: DateTime
+  doneAt: DateTime?
+indexes:
+  pepite_challenges_user_month_idx:
+    fields: authUserId, month
+    unique: true

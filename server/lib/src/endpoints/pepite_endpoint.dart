@@ -4,6 +4,7 @@ import 'package:serverpod_auth_idp_server/core.dart';
 
 import '../generated/protocol.dart';
 import '../pepite/pepite_badges.dart';
+import '../pepite/pepite_challenges.dart';
 import '../security/access.dart';
 import '../security/scopes.dart';
 import '../security/session_devices.dart';
@@ -195,6 +196,67 @@ class PepiteEndpoint extends Endpoint {
     });
   }
 
+  /// Chooses [code] as the challenge of this month (decision 0030), in
+  /// place of one not done yet; counted from now. A challenge already done
+  /// this month cannot be changed.
+  Future<PepiteStatus> chooseChallenge(
+    Session session,
+    String code,
+    DateTime today,
+  ) async {
+    final user = Access.userId(session);
+    if (core.pepiteChallengeByCode(code) == null) {
+      throw InvalidInputException(code: 'pepite_challenge_unknown');
+    }
+    final day = _day(today);
+    final month = core.pepiteChallengeMonth(day);
+    return session.db.transaction((t) async {
+      final row = await PepiteChallengeRow.db.findFirstRow(
+        session,
+        where: (c) => c.authUserId.equals(user) & c.month.equals(month),
+        transaction: t,
+      );
+      if (row?.doneAt != null) {
+        throw InvalidInputException(code: 'pepite_challenge_done');
+      }
+      if (row == null || row.code != code) {
+        final now = DateTime.now().toUtc();
+        if (row != null) {
+          await PepiteChallengeRow.db.deleteRow(session, row, transaction: t);
+        }
+        await PepiteChallengeRow.db.insertRow(
+          session,
+          PepiteChallengeRow(
+            authUserId: user,
+            month: month,
+            code: code,
+            chosenAt: now,
+          ),
+          transaction: t,
+        );
+      }
+      return _status(session, t, user, await _progress(session, t, user), day);
+    });
+  }
+
+  /// Drops this month's challenge if it is not done: nothing is lost.
+  Future<PepiteStatus> dropChallenge(Session session, DateTime today) async {
+    final user = Access.userId(session);
+    final day = _day(today);
+    final month = core.pepiteChallengeMonth(day);
+    return session.db.transaction((t) async {
+      await PepiteChallengeRow.db.deleteWhere(
+        session,
+        where: (c) =>
+            c.authUserId.equals(user) &
+            c.month.equals(month) &
+            c.doneAt.equals(null),
+        transaction: t,
+      );
+      return _status(session, t, user, await _progress(session, t, user), day);
+    });
+  }
+
   /// Standalone version moved to a server: its reserve and badges come
   /// along, only into an account that has none yet (nothing is added to an
   /// existing reserve). Returns whether they were taken.
@@ -219,7 +281,10 @@ class PepiteEndpoint extends Endpoint {
       // No more than the rituals and badges could have given.
       final seeds = from.seeds.clamp(
         0,
-        weeks * ritualSeeds + badgeCodes.length * badgeSeeds,
+        weeks * ritualSeeds +
+            badgeCodes.length * badgeSeeds +
+            (from.challengesDone ?? 0).clamp(0, 1200) *
+                core.pepiteChallengeSeeds,
       );
       // The items come along while the seeds earned pay for them; the seeds
       // spent are at least their price, at most the seeds earned.
@@ -360,6 +425,54 @@ class PepiteEndpoint extends Endpoint {
       );
       earned += fresh.length * badgeSeeds;
     }
+    // The challenge of the month, done as soon as its count is reached.
+    final month = core.pepiteChallengeMonth(today);
+    var row = await PepiteChallengeRow.db.findFirstRow(
+      session,
+      where: (c) => c.authUserId.equals(user) & c.month.equals(month),
+      transaction: t,
+    );
+    PepiteChallengeState? challenge;
+    final def = row == null ? null : core.pepiteChallengeByCode(row.code);
+    if (row != null && def != null) {
+      var justDone = false;
+      final progress = row.doneAt != null
+          ? def.target
+          : await PepiteChallenges.progress(
+              session,
+              t,
+              user,
+              row.code,
+              row.chosenAt,
+            );
+      if (row.doneAt == null && progress >= def.target) {
+        row = await PepiteChallengeRow.db.updateRow(
+          session,
+          row.copyWith(doneAt: now),
+          transaction: t,
+        );
+        p = await PepiteProgress.db.updateRow(
+          session,
+          p.copyWith(seeds: p.seeds + core.pepiteChallengeSeeds),
+          transaction: t,
+        );
+        earned += core.pepiteChallengeSeeds;
+        justDone = true;
+      }
+      challenge = PepiteChallengeState(
+        month: month,
+        code: row.code,
+        target: def.target,
+        progress: progress,
+        done: row.doneAt != null,
+        justDone: justDone,
+      );
+    }
+    final challengesDone = await PepiteChallengeRow.db.count(
+      session,
+      where: (c) => c.authUserId.equals(user) & c.doneAt.notEquals(null),
+      transaction: t,
+    );
     final last = p.lastWeek;
     final items = await PepiteItem.db.find(
       session,
@@ -381,6 +494,8 @@ class PepiteEndpoint extends Endpoint {
       lastRitualAt: p.lastRitualAt,
       badges: [...have.map((b) => b.code), ...fresh],
       weekSteps: await _weekSteps(session, t, user, week),
+      challenge: challenge,
+      challengesDone: challengesDone,
       earnedSeeds: earned,
       newBadges: fresh,
     );

@@ -197,7 +197,8 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
   - [x] Pépite : nouveaux badges (silhouettes et indices) — *1.11.0 ([0028](decisions/0028-pepite-badges-graines-defis.md))*
   - [x] Pépite : boutique de graines (accessoires, terrier) — *1.13.0 ([0028](decisions/0028-pepite-badges-graines-defis.md))*
   - [x] Pépite remarque toute seule les étapes de la semaine, la compte et annonce les badges — *1.14.0 ([0029](decisions/0029-pepite-autonome.md))*
-  - [ ] Pépite : « Ton année » et défi du mois (décision 0028)
+  - [x] Pépite : défi du mois, mesuré tout seul — *1.15.0 ([0030](decisions/0030-pepite-defi-du-mois.md))*
+  - [ ] Pépite : « Ton année » (décision 0028)
 - [ ] Version autonome sans serveur (décision 0022) :
   - [x] le serveur embarqué dans l'application, sur SQLite ; choix « seul sur cet appareil » ou « serveur » au premier lancement ; tous les tests du serveur aussi sur SQLite — *1.1.0*
   - [x] « Migrer vers un serveur » (et retour par « Importer un export ») par l'export complet, factures comprises — *1.1.0* ; copie vérifiée (mêmes nombres, montants et soldes que la source), reprise sans renvoyer les groupes déjà envoyés — *1.4.4 (PR #147)*

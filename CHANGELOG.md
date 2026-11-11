@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.15.0 (novembre 2026)
+
+### Le défi du mois de Pépite (décision 0030)
+- **Un petit défi par mois, si tu veux** : dans **Pépite et ma réserve**, choisis parmi ranger 20 opérations, rattacher 5 factures, créer 3 règles de classement, déclarer 2 abonnements ou te fixer un objectif.
+- **Pépite le suit toute seule** : la barre avance avec ce que tu fais, sur n'importe quel appareil, à partir du moment où tu l'as choisi.
+- **Réussi : 10 graines**, une fois par mois, annoncées par Pépite. Abandonné ou pas fini : rien n'est perdu. Aucun défi ne porte sur un montant.
+- **Désactivable** sur chaque appareil : « Proposer un défi chaque mois ».
+
 ## 1.14.0 (novembre 2026)
 
 ### Pépite remarque toute seule ce que tu fais (décision 0029)

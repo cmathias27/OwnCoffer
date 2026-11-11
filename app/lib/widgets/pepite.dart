@@ -620,6 +620,7 @@ Future<bool> celebrateWithPepite(BuildContext context) async {
 /// message. True when the user then asked to see the apps.
 Future<bool> showPepiteCheer(BuildContext context, PepiteCheer cheer) async {
   final l = AppLocalizations.of(context);
+  final challenge = cheer.challenge;
   if (!cheer.week) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -630,6 +631,8 @@ Future<bool> showPepiteCheer(BuildContext context, PepiteCheer cheer) async {
             Expanded(
               child: Text(
                 [
+                  if (challenge != null)
+                    l.pepiteChallengeDone(pepiteChallengeText(l, challenge).$1),
                   for (final code in cheer.badges)
                     l.pepiteNewBadge(pepiteBadgeText(l, code).$1),
                   l.pepiteEarned(cheer.seeds),
@@ -648,6 +651,7 @@ Future<bool> showPepiteCheer(BuildContext context, PepiteCheer cheer) async {
     badges: cheer.badges,
     reserve: cheer.status.seeds,
     noticed: true,
+    challenge: challenge,
   );
 }
 
@@ -657,6 +661,7 @@ Future<bool> _cheerDialog(
   required List<String> badges,
   required int reserve,
   bool noticed = false,
+  String? challenge,
 }) async {
   final l = AppLocalizations.of(context);
   final apps = pepite.invitesApps;
@@ -673,6 +678,14 @@ Future<bool> _cheerDialog(
             const SizedBox(height: 8),
           ],
           Text(l.pepiteEarned(seeds), textAlign: TextAlign.center),
+          if (challenge != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              l.pepiteChallengeDone(pepiteChallengeText(l, challenge).$1),
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
           for (final code in badges) ...[
             const SizedBox(height: 8),
             Text(

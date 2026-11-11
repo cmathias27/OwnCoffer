@@ -98,6 +98,26 @@ int _weekNumber(DateTime today) =>
       _ => (code, ''),
     };
 
+/// Name and how to do each challenge of the month (decision 0030).
+(String, String) pepiteChallengeText(AppLocalizations l, String code) =>
+    switch (code) {
+      'classify_20' => (
+        l.pepiteChallengeClassify(20),
+        l.pepiteChallengeClassifyHelp,
+      ),
+      'invoices_5' => (
+        l.pepiteChallengeInvoices(5),
+        l.pepiteChallengeInvoicesHelp,
+      ),
+      'rules_3' => (l.pepiteChallengeRules(3), l.pepiteChallengeRulesHelp),
+      'subscriptions_2' => (
+        l.pepiteChallengeSubscriptions(2),
+        l.pepiteChallengeSubscriptionsHelp,
+      ),
+      'goal_1' => (l.pepiteChallengeGoal, l.pepiteChallengeGoalHelp),
+      _ => (code, ''),
+    };
+
 /// The hint displayed on a locked badge silhouette (decision 0028, point 3).
 String? pepiteBadgeHint(AppLocalizations l, String code) => switch (code) {
   'tidy' => l.pepiteBadgeTidyHint,

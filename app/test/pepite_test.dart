@@ -10,6 +10,7 @@ import 'package:owncoffer_app/state/start_device.dart';
 import 'package:owncoffer_app/screens/pepite_screen.dart';
 import 'package:owncoffer_app/widgets/pepite.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 class _MemoryStore implements LockStore {
   final values = <String, String>{};
@@ -57,6 +58,7 @@ PepiteStatus _status({
   int earned = 0,
   List<String> fresh = const [],
   List<String>? weekSteps,
+  PepiteChallengeState? challenge,
 }) => PepiteStatus(
   seeds: seeds,
   weeks: weeks,
@@ -69,6 +71,21 @@ PepiteStatus _status({
   items: const [],
   equipped: const [],
   weekSteps: weekSteps,
+  challenge: challenge,
+);
+
+PepiteChallengeState _challenge(
+  String code, {
+  int progress = 0,
+  bool done = false,
+  bool justDone = false,
+}) => PepiteChallengeState(
+  month: '2026-11',
+  code: code,
+  target: core.pepiteChallengeByCode(code)!.target,
+  progress: progress,
+  done: done,
+  justDone: justDone,
 );
 
 void main() {
@@ -237,6 +254,7 @@ void main() {
     late _FakeReminders reminders;
     late DateTime now;
     late List<DateTime> completed;
+    late List<String> chosen;
     var fetches = 0;
     var server = _status();
 
@@ -259,6 +277,14 @@ void main() {
           fresh: ['first_ritual'],
         );
       },
+      choose: (code, _) async {
+        chosen.add(code);
+        return server = _status(challenge: _challenge(code));
+      },
+      drop: (_) async {
+        chosen.add('');
+        return server = _status();
+      },
       now: () => now,
     );
 
@@ -267,6 +293,7 @@ void main() {
       reminders = _FakeReminders();
       now = DateTime(2026, 11, 4, 10);
       completed = [];
+      chosen = [];
       fetches = 0;
       server = _status();
     });
@@ -325,6 +352,56 @@ void main() {
       await p.notice(force: true);
       expect(fetches, 3);
       expect(p.hasCheer, isFalse);
+    });
+    test('a challenge chosen, dropped, and cheered once done', () async {
+      final p = make();
+      await p.load();
+      await p.chooseChallenge('rules_3');
+      expect(p.status!.challenge!.code, 'rules_3');
+      await p.dropChallenge();
+      expect(p.status!.challenge, isNull);
+      expect(chosen, ['rules_3', '']);
+      server = _status(
+        earned: core.pepiteChallengeSeeds,
+        challenge: _challenge(
+          'rules_3',
+          progress: 3,
+          done: true,
+          justDone: true,
+        ),
+      );
+      await p.refresh();
+      final cheer = p.takeCheer()!;
+      expect(cheer.challenge, 'rules_3');
+      expect(cheer.week, isFalse);
+      expect(cheer.seeds, core.pepiteChallengeSeeds);
+    });
+    test('challenges turned off: no cheer, kept on this device', () async {
+      final p = make();
+      await p.load();
+      await p.setChallengesOn(false);
+      server = _status(
+        challenge: _challenge(
+          'goal_1',
+          progress: 1,
+          done: true,
+          justDone: true,
+        ),
+      );
+      await p.refresh();
+      expect(p.hasCheer, isFalse);
+      final again = make();
+      await again.load();
+      expect(again.challengesOn, isFalse);
+    });
+    test('every challenge has a name and a help in both languages', () {
+      for (final l in [fr, en]) {
+        for (final c in core.pepiteChallenges) {
+          final (name, help) = pepiteChallengeText(l, c.code);
+          expect(name, isNot(c.code));
+          expect(help, isNotEmpty);
+        }
+      }
     });
     test('a hidden Pépite counts nothing by herself', () async {
       server = _status(
@@ -471,6 +548,52 @@ void main() {
       expect(find.byType(Card), findsNothing);
     });
 
+    testWidgets('PepiteScreen: choose a challenge, see it move', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(900, 3000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+      final p = make();
+      await tester.runAsync(p.signedIn);
+      await tester.pumpWidget(app(PepiteScreen(controller: p)));
+      await tester.pumpAndSettle();
+      expect(find.text(fr.pepiteChallengeIntro(10)), findsOneWidget);
+      await tester.tap(find.byKey(const Key('pepite-challenge-goal_1')));
+      await tester.pumpAndSettle();
+      expect(chosen, ['goal_1']);
+      expect(find.byKey(const Key('pepite-challenge')), findsOneWidget);
+      expect(find.text(fr.pepiteChallengeProgress(0, 1)), findsOneWidget);
+      expect(find.byKey(const Key('pepite-challenge-goal_1')), findsNothing);
+      await tester.tap(find.text(fr.pepiteChallengeDrop));
+      await tester.pumpAndSettle();
+      expect(chosen, ['goal_1', '']);
+      expect(find.byKey(const Key('pepite-challenge')), findsNothing);
+    });
+    testWidgets('PepiteScreen: a challenge done cannot be changed', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(900, 3000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+      server = _status(
+        seeds: 10,
+        challenge: _challenge('rules_3', progress: 3, done: true),
+      );
+      final p = make();
+      await tester.runAsync(p.signedIn);
+      await tester.pumpWidget(app(PepiteScreen(controller: p)));
+      await tester.pumpAndSettle();
+      expect(find.text(fr.pepiteChallengeWon(10)), findsOneWidget);
+      expect(find.text(fr.pepiteChallengeDrop), findsNothing);
+      expect(find.text(fr.pepiteChallengeChoose), findsNothing);
+    });
     testWidgets(
       'PepiteScreen shows locked silhouettes with hints and earned trophies',
       (tester) async {
