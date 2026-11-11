@@ -154,57 +154,8 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
     return d is Map<String, Object?> ? d : const {};
   }
 
-  String _title(AppLocalizations l, ActionProposal p) {
-    final name = _category(p.targetId);
-    final to = context.money(p.proposedValue ?? 0);
-    final d = _data(p);
-    return switch (p.reason) {
-      'ai_category' => l.advisorAiCategory(
-        '${d['label'] ?? ''}',
-        _category(p.proposedValue ?? 0),
-      ),
-      'ai_rule' => l.advisorAiRule(
-        d['match_type'] == 'contains' ? l.matchContains : l.matchStartsWith,
-        '${d['pattern'] ?? ''}',
-        _category(p.proposedValue ?? 0),
-      ),
-      'anticipate_overdraft' => l.noticeOverdraft(
-        '${d['account'] ?? ''}',
-        context.day(DateTime.tryParse('${d['date']}') ?? DateTime(2000)),
-      ),
-      'watch_amount' => l.noticeUnusual(
-        '${d['label'] ?? ''}',
-        context.money((d['amount_cents'] as num?)?.toInt() ?? 0),
-      ),
-      'watch_duplicate' => l.noticeDuplicate(
-        '${d['label'] ?? ''}',
-        context.money((d['amount_cents'] as num?)?.toInt() ?? 0),
-      ),
-      'advise_fees' => l.noticeFees(
-        context.money((d['total_cents'] as num?)?.toInt() ?? 0),
-      ),
-      'ai_receipt_split' => l.advisorAiSplit('${d['label'] ?? ''}'),
-      'ai_invoice_hints' => l.advisorAiInvoiceHints('${d['document'] ?? ''}'),
-      'ai_loan_terms' => l.advisorAiLoanTerms('${d['lender'] ?? ''}'),
-      'ai_loan' => l.advisorAiLoan(
-        '${d['lender'] ?? ''}',
-        context.money((d['principal_cents'] as num?)?.toInt() ?? 0),
-        (d['duration_months'] as num?)?.toInt() ?? 0,
-      ),
-      'suggest_goal' => l.advisorSuggestGoal(name, to),
-      'raise_goal' => l.advisorRaiseGoal(
-        name,
-        context.money(p.currentValue ?? 0),
-        to,
-      ),
-      'lower_goal' => l.advisorLowerGoal(
-        name,
-        context.money(p.currentValue ?? 0),
-        to,
-      ),
-      _ => l.advisorOther,
-    };
-  }
+  String _title(AppLocalizations l, ActionProposal p) =>
+      proposalTitle(context, p, _category);
 
   Widget _card(BuildContext context, AppLocalizations l, ActionProposal p) {
     final theme = Theme.of(context);
@@ -510,6 +461,68 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
           : null,
     );
   }
+}
+
+/// Title of a proposal in the user's language (Mon conseiller, monthly
+/// summary); [category] names a category from its id.
+String proposalTitle(
+  BuildContext context,
+  ActionProposal p,
+  String Function(int id) category,
+) {
+  final l = AppLocalizations.of(context);
+  final name = category(p.targetId);
+  final to = context.money(p.proposedValue ?? 0);
+  final d = switch (jsonDecode(p.data)) {
+    final Map<String, Object?> m => m,
+    _ => const <String, Object?>{},
+  };
+  return switch (p.reason) {
+    'ai_category' => l.advisorAiCategory(
+      '${d['label'] ?? ''}',
+      category(p.proposedValue ?? 0),
+    ),
+    'ai_rule' => l.advisorAiRule(
+      d['match_type'] == 'contains' ? l.matchContains : l.matchStartsWith,
+      '${d['pattern'] ?? ''}',
+      category(p.proposedValue ?? 0),
+    ),
+    'anticipate_overdraft' => l.noticeOverdraft(
+      '${d['account'] ?? ''}',
+      context.day(DateTime.tryParse('${d['date']}') ?? DateTime(2000)),
+    ),
+    'watch_amount' => l.noticeUnusual(
+      '${d['label'] ?? ''}',
+      context.money((d['amount_cents'] as num?)?.toInt() ?? 0),
+    ),
+    'watch_duplicate' => l.noticeDuplicate(
+      '${d['label'] ?? ''}',
+      context.money((d['amount_cents'] as num?)?.toInt() ?? 0),
+    ),
+    'advise_fees' => l.noticeFees(
+      context.money((d['total_cents'] as num?)?.toInt() ?? 0),
+    ),
+    'ai_receipt_split' => l.advisorAiSplit('${d['label'] ?? ''}'),
+    'ai_invoice_hints' => l.advisorAiInvoiceHints('${d['document'] ?? ''}'),
+    'ai_loan_terms' => l.advisorAiLoanTerms('${d['lender'] ?? ''}'),
+    'ai_loan' => l.advisorAiLoan(
+      '${d['lender'] ?? ''}',
+      context.money((d['principal_cents'] as num?)?.toInt() ?? 0),
+      (d['duration_months'] as num?)?.toInt() ?? 0,
+    ),
+    'suggest_goal' => l.advisorSuggestGoal(name, to),
+    'raise_goal' => l.advisorRaiseGoal(
+      name,
+      context.money(p.currentValue ?? 0),
+      to,
+    ),
+    'lower_goal' => l.advisorLowerGoal(
+      name,
+      context.money(p.currentValue ?? 0),
+      to,
+    ),
+    _ => l.advisorOther,
+  };
 }
 
 /// "3,45 %" from thousandths of a percent.

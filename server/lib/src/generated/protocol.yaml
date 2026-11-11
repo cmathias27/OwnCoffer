@@ -66,6 +66,7 @@ analysis:
   - report:
   - operations:
   - leftToLive:
+  - summary:
   - insights:
   - review:
 appLock:

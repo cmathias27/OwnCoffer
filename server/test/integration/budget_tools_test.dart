@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:owncoffer_server/src/core/dates.dart';
 import 'package:owncoffer_server/src/finance/goal_alert_service.dart';
+import 'package:owncoffer_server/src/finance/proposal_service.dart';
 import 'package:owncoffer_server/src/generated/protocol.dart';
 import 'package:owncoffer_server/src/security/scopes.dart';
 import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
@@ -441,6 +444,159 @@ void main() {
           );
         },
       );
+    });
+
+    group('monthly summary', () {
+      test('30-day forecast of the visible checking accounts, unread alerts '
+          'and pending proposals of the user, price rises', () async {
+        final savings = await endpoints.account.create(
+          as(alice),
+          groupA,
+          'Livret',
+          AccountKind.savings,
+        );
+        await op(savings, month(0), 500000);
+        await op(shared, today.toDb(), 100000);
+        await op(restricted, today.toDb(), 70000);
+        await endpoints.scheduled.create(
+          as(bob),
+          shared.id!,
+          -30000,
+          'LOYER',
+          ScheduleFrequency.once,
+          today.addDays(10).toDb(),
+        );
+        final box = await endpoints.scheduled.create(
+          as(bob),
+          shared.id!,
+          -2999,
+          'BOX',
+          ScheduleFrequency.monthly,
+          today.addDays(3).toDb(),
+          subscription: true,
+        );
+        await endpoints.scheduled.setPriceRise(
+          as(bob),
+          box.id!,
+          date: today.addDays(20).toDb(),
+          amountCents: 3499,
+        );
+        final far = await endpoints.scheduled.create(
+          as(bob),
+          shared.id!,
+          -999,
+          'MUSIQUE',
+          ScheduleFrequency.monthly,
+          today.addDays(3).toDb(),
+          subscription: true,
+        );
+        await endpoints.scheduled.setPriceRise(
+          as(bob),
+          far.id!,
+          date: today.addDays(60).toDb(),
+          amountCents: 1299,
+        );
+
+        Future<AppNotification> notif(
+          UuidValue u,
+          int? groupId,
+          String key, {
+          bool read = false,
+        }) => AppNotification.db.insertRow(
+          db,
+          AppNotification(
+            authUserId: u,
+            groupId: groupId,
+            type: 'overdraft_forecast',
+            data: '{}',
+            dedupKey: key,
+            readAt: read ? DateTime.now().toUtc() : null,
+          ),
+        );
+        final mine = await notif(bob, groupA, 'a');
+        await notif(bob, groupA, 'b', read: true);
+        await notif(bob, groupA + 1000, 'c');
+        await notif(alice, groupA, 'd');
+
+        final fields = {
+          'lender': 'Banque Exemple',
+          'label': 'Voiture',
+          'kind': 'car',
+          'principal_cents': 1500000,
+          'annual_rate_milli': 3450,
+          'duration_months': 48,
+          'payment_cents': 33500,
+          'insurance_monthly_cents': 0,
+          'first_due_date': '2026-12-05',
+        };
+        final proposal = await ProposalService.propose(
+          sessionBuilder.build(),
+          groupId: groupA,
+          kind: 'create_loan',
+          targetId: groupA,
+          currentValue: null,
+          proposedValue: null,
+          proposedData: jsonEncode(fields),
+          reason: 'ai_loan',
+          data: fields,
+          origin: 'ai',
+          provider: 'Test',
+          model: 'test-1',
+          forUser: bob,
+        );
+
+        final s = await endpoints.analysis.summary(
+          as(bob),
+          groupA,
+          today.toDb(),
+        );
+        expect(s.today.toLocalDate(), today);
+        expect(s.until.toLocalDate(), today.addDays(30));
+        expect(
+          [for (final f in s.forecasts) f.accountId],
+          [shared.id],
+          reason: 'checking accounts the user sees, no savings',
+        );
+        final f = s.forecasts.single;
+        expect(f.currentBalanceCents, 100000);
+        expect(f.plannedDebitsCents, lessThanOrEqualTo(-30000 - 2999));
+        expect(f.lowestBalanceCents, lessThanOrEqualTo(f.endBalanceCents));
+        expect(f.missedCount, 0);
+        expect([for (final n in s.alerts) n.id], [mine.id]);
+        expect([for (final p in s.proposals) p.id], [proposal!.id]);
+        expect([for (final r in s.priceRises) r.id], [box.id]);
+        expect(s.priceRises.single.priceRiseAmountCents, -3499);
+
+        final admin = await endpoints.analysis.summary(
+          as(alice),
+          groupA,
+          today.toDb(),
+        );
+        expect(admin.forecasts, hasLength(2));
+        expect(admin.proposals, isEmpty, reason: "only the user's own");
+        expect(admin.alerts, hasLength(1));
+
+        final r = await endpoints.analysis.summary(
+          as(reader),
+          groupA,
+          today.toDb(),
+        );
+        expect(r.alerts, isEmpty);
+        expect(r.proposals, isEmpty);
+
+        await expectLater(
+          endpoints.analysis.summary(as(mallory), groupA, today.toDb()),
+          denied,
+        );
+        await expectLater(
+          endpoints.analysis.summary(
+            as(bob),
+            groupA,
+            today.addDays(5).toDb(),
+          ),
+          invalid,
+        );
+      });
     });
 
     group('calendar', () {

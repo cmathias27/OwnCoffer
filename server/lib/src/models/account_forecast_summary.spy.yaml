@@ -1,0 +1,18 @@
+### The 30-day forecast of one account, in a few figures (decision 0035).
+class: AccountForecastSummary
+fields:
+  accountId: int
+  accountName: String
+  currency: String
+  currentBalanceCents: int
+  ### Balance expected on the last day.
+  endBalanceCents: int
+  lowestBalanceCents: int
+  lowestDate: DateTime
+  alertThresholdCents: int
+  firstBelowThresholdDate: DateTime?
+  ### Planned debits and credits over the period (late ones included).
+  plannedDebitsCents: int
+  plannedCreditsCents: int
+  ### Planned operations that are late.
+  missedCount: int

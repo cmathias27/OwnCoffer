@@ -22,6 +22,7 @@ import 'import_screen.dart';
 import 'invoices_screen.dart';
 import 'loans_screen.dart';
 import 'members_screen.dart';
+import 'month_summary_screen.dart';
 import 'pepite_screen.dart';
 import 'notifications_screen.dart';
 import 'operations_screen.dart';
@@ -144,6 +145,31 @@ class _HomeScreenState extends State<HomeScreen> {
             _pepiteSees(2);
             _forecastKey.currentState?.showAccount(accountId);
           },
+        ),
+      ),
+    );
+    await _loadUnread();
+  }
+
+  Future<void> _openSummary(GroupMembership membership) async {
+    final navigator = Navigator.of(context);
+    await navigator.push(
+      MaterialPageRoute<void>(
+        builder: (summaryContext) => MonthSummaryScreen(
+          membership: membership,
+          onOpenForecast: (accountId) {
+            Navigator.of(summaryContext).pop();
+            _selectTab(2);
+            if (accountId != null) {
+              _forecastKey.currentState?.showAccount(accountId);
+            }
+          },
+          onOpenNotifications: _openNotifications,
+          onOpenAdvisor: () => navigator.push(
+            MaterialPageRoute<void>(
+              builder: (_) => AdvisorScreen(membership: membership),
+            ),
+          ),
         ),
       ),
     );
@@ -388,6 +414,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   DashboardTarget.notifications => _openNotifications(),
                   DashboardTarget.imports => _selectTab(3),
                   DashboardTarget.start => _openStart(),
+                  DashboardTarget.summary => _openSummary(current),
                 },
               ),
             ],

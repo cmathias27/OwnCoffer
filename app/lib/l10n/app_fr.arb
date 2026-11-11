@@ -4439,5 +4439,101 @@
   "pepiteItemLantern": "Lanterne",
   "pepiteItemLanternHelp": "Une douce lumière le soir",
   "pepiteItemMat": "Tapis",
-  "pepiteItemMatHelp": "Un tapis tout doux"
+  "pepiteItemMatHelp": "Un tapis tout doux",
+  "summaryTitle": "Récapitulatif du mois",
+  "summaryOpen": "Récapitulatif : les 30 prochains jours",
+  "summaryHelp": "Ce qui vous attend d'ici le {date} : solde prévu, alertes et propositions à décider. Tout est calculé par OwnCoffer, sans IA.",
+  "@summaryHelp": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryForecastTitle": "Prévision à 30 jours",
+  "summaryNoAccount": "Aucun compte courant visible.",
+  "summaryToday": "Aujourd'hui : {amount}",
+  "@summaryToday": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryEnd": "Le {date} : {amount}",
+  "@summaryEnd": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryLowest": "Point bas : {amount} le {date}",
+  "@summaryLowest": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryBelow": "Sous le seuil d'alerte ({threshold}) dès le {date}",
+  "@summaryBelow": {
+    "placeholders": {
+      "threshold": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryPlanned": "Sorties prévues {debits} (dépenses courantes estimées comprises) · entrées prévues {credits}",
+  "@summaryPlanned": {
+    "placeholders": {
+      "debits": {
+        "type": "String"
+      },
+      "credits": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryMissed": "{count, plural, =1{1 opération prévue en retard} other{{count} opérations prévues en retard}}",
+  "@summaryMissed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "summaryOpenForecast": "Voir la prévision",
+  "summaryAlertsTitle": "Alertes non lues",
+  "summaryNoAlert": "Aucune alerte en attente.",
+  "summaryOpenNotifications": "Voir toutes les notifications",
+  "summaryProposalsTitle": "Propositions en attente",
+  "summaryNoProposal": "Aucune proposition à décider.",
+  "summaryOpenAdvisor": "Décider dans Mon conseiller",
+  "summaryPriceRisesTitle": "Hausses d'abonnements annoncées",
+  "summaryPriceRise": "{label} : {amount} à partir du {date}",
+  "@summaryPriceRise": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryAskAi": "Demander une explication à l'IA",
+  "summaryAiQuestion": "Explique-moi simplement les 30 prochains jours : le solde prévu de mes comptes courants, le point bas, les alertes et les propositions en attente. Utilise les prévisions et les conseils calculés par OwnCoffer, sans refaire les calculs."
 }
