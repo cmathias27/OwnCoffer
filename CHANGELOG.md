@@ -2,6 +2,12 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.13.1 (novembre 2026)
+
+### Android : import de relevés
+- **Choix du compte conservé** : changer de compte dans l'écran d'import ne vide plus le fichier partagé ou choisi ; l'aperçu est refait pour le nouveau compte (doublons propres à chaque compte).
+- **Sélecteur de fichiers** : pour un relevé, il s'ouvre directement sur le dossier **Téléchargements** au lieu de « Récents », qui peut omettre les fichiers `.qif` et `.ofx` (type inconnu d'Android).
+
 ## 1.13.0 (novembre 2026)
 
 ### La boutique de Pépite

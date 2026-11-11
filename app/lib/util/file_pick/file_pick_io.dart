@@ -12,9 +12,20 @@ import '../file_pick.dart';
 /// dialog.
 bool get canUseCamera => Platform.isAndroid || Platform.isIOS;
 
+bool _isStatement(List<String> extensions) =>
+    extensions.any((e) => e.contains('qif') || e.contains('ofx'));
+
+/// Android: bank statements open in the Download folder rather than
+/// "Recent", whose list can leave out files of unknown type (.qif, .ofx).
+/// Ignored before Android 8 or when the folder is missing.
+String? _initialDirectory(List<String> extensions) =>
+    Platform.isAndroid && _isStatement(extensions)
+    ? 'content://com.android.externalstorage.documents/document/'
+          'primary%3ADownload'
+    : null;
+
 XTypeGroup _group(List<String> extensions) {
-  if (Platform.isAndroid &&
-      extensions.any((e) => e.contains('qif') || e.contains('ofx'))) {
+  if (Platform.isAndroid && _isStatement(extensions)) {
     // Android's Storage Access Framework filters ONLY by MIME type, not by
     // extension. Android's MimeTypeMap has no mapping for .qif or .ofx, so
     // filtering by extensions on Android causes the system file picker to gray
@@ -52,6 +63,7 @@ Future<PickedFile?> pickFile(
   }
   final f = await openFile(
     acceptedTypeGroups: [if (extensions.isNotEmpty) _group(extensions)],
+    initialDirectory: _initialDirectory(extensions),
   );
   if (f == null) return null;
   return PickedFile(f.name, await f.readAsBytes());
@@ -60,6 +72,7 @@ Future<PickedFile?> pickFile(
 Future<List<PickedFile>> pickFiles(List<String> extensions) async {
   final files = await openFiles(
     acceptedTypeGroups: [if (extensions.isNotEmpty) _group(extensions)],
+    initialDirectory: _initialDirectory(extensions),
   );
   return [for (final f in files) PickedFile(f.name, await f.readAsBytes())];
 }
