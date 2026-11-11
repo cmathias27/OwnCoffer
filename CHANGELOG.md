@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.22.0 (novembre 2026)
+
+### Hors-ligne : consultation sans réseau (décision 0037)
+- **Applications Windows et Android connectées à un serveur** : quand le serveur ne répond pas (pas de réseau, serveur de la maison éteint), les dernières données lues restent consultables : comptes, opérations, prévisions, récapitulatif, factures, crédits, notifications…
+- **Bandeau « Serveur injoignable : données du …, en lecture seule »** au-dessus de toutes les pages ; les modifications échouent comme avant, rien n'est enregistré en douce.
+- **Copie protégée** : chiffrée sous Windows (clé gardée par Windows), dans le dossier privé de l'application sous Android ; gardée 30 jours au plus, effacée à la déconnexion et au changement de serveur. L'application web ne garde toujours rien.
+
 ## 1.21.0 (novembre 2026)
 
 ### Scan des tickets : pré-remplissage et opération créée depuis le ticket (décision 0036)

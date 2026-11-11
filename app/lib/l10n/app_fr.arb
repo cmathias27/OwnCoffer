@@ -2522,7 +2522,13 @@
   "receiptCheckConfirm": "Utiliser ces informations",
   "receiptCheckNoValue": "Non trouvé",
   "receiptCheckSource": "Lu : {source}",
-  "@receiptCheckSource": {"placeholders": {"source": {"type": "String"}}},
+  "@receiptCheckSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
   "invoiceHintAmount": "Montant payé",
   "invoiceHintAmountInvalid": "Montant illisible (exemple : 499,00).",
   "invoiceHintMerchant": "Commerçant",
@@ -3319,7 +3325,16 @@
   "groupAuditFormer": "ancien membre ou administrateur du serveur",
   "groupAuditMore": "Voir les plus anciennes",
   "auditLine": "{what} : {did}",
-  "@auditLine": {"placeholders": {"what": {"type": "String"}, "did": {"type": "String"}}},
+  "@auditLine": {
+    "placeholders": {
+      "what": {
+        "type": "String"
+      },
+      "did": {
+        "type": "String"
+      }
+    }
+  },
   "auditEntityTransaction": "Opération",
   "auditEntityAccount": "Compte",
   "auditEntityImport": "Import",
@@ -3403,15 +3418,45 @@
   "loanEventNote": "Note",
   "loanEventInvalid": "Indiquez au moins un nouveau taux, une nouvelle mensualité ou une nouvelle durée.",
   "loanEventRate": "taux à {rate}",
-  "@loanEventRate": {"placeholders": {"rate": {"type": "String"}}},
+  "@loanEventRate": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
   "loanEventPayment": "mensualité de {amount}",
-  "@loanEventPayment": {"placeholders": {"amount": {"type": "String"}}},
+  "@loanEventPayment": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "loanEventMonths": "encore {months}",
-  "@loanEventMonths": {"placeholders": {"months": {"type": "String"}}},
+  "@loanEventMonths": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
   "loanEventDraw": "{amount} utilisés",
-  "@loanEventDraw": {"placeholders": {"amount": {"type": "String"}}},
+  "@loanEventDraw": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "loanEventRepaid": "{amount} remboursés en plus",
-  "@loanEventRepaid": {"placeholders": {"amount": {"type": "String"}}},
+  "@loanEventRepaid": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "error_loan_event_invalid": "Ce changement n'est pas possible pour ce crédit (date avant la première échéance, ou valeurs hors limites).",
   "error_loan_event_unpaid": "Avec ce changement, le crédit ne serait jamais remboursé : la mensualité ne couvre pas les intérêts.",
   "error_loan_over_limit": "Ce montant dépasse le plafond de la réserve.",
@@ -3420,40 +3465,139 @@
   "aiReadLoan": "Lire ce document avec l'IA",
   "aiReadTitle": "Lire avec l'IA",
   "aiReadExternal": "Le document sera envoyé à {provider} ({model}), un fournisseur en ligne, pour être lu. L'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.",
-  "@aiReadExternal": {"placeholders": {"provider": {"type": "String"}, "model": {"type": "String"}}},
+  "@aiReadExternal": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      },
+      "model": {
+        "type": "String"
+      }
+    }
+  },
   "aiReadLocal": "Le document sera lu par {provider} ({model}), sur votre réseau. L'IA ne fait que relever ce qui est écrit : OwnCoffer vérifie, fait les calculs et vous propose les changements dans Mon conseiller.",
-  "@aiReadLocal": {"placeholders": {"provider": {"type": "String"}, "model": {"type": "String"}}},
+  "@aiReadLocal": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      },
+      "model": {
+        "type": "String"
+      }
+    }
+  },
   "aiReadGo": "Lire",
   "aiReadRunning": "Lecture en cours…",
   "aiReadDone": "{count, plural, =1{Une proposition vous attend dans Mon conseiller.} other{{count} propositions vous attendent dans Mon conseiller.}}",
-  "@aiReadDone": {"placeholders": {"count": {"type": "int"}}},
+  "@aiReadDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "aiReadNothingNew": "Rien de nouveau dans ce document.",
   "aiReadNotReady": "Pour lire un document, activez l'assistant (icône ✨) avec un modèle qui lit les images.",
   "aiReadNoPdf": "Ce PDF ne peut pas être envoyé à ce fournisseur. Joignez plutôt une photo ou une capture d'écran.",
   "aiReadPdfRenderedConsent": "Le PDF sera converti sur cet appareil en 5 images de page au maximum (1600 px par côté). {destination} Le PDF original ne sera pas modifié.",
-  "@aiReadPdfRenderedConsent": {"placeholders": {"destination": {"type": "String"}}},
+  "@aiReadPdfRenderedConsent": {
+    "placeholders": {
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
   "advisorAiSplit": "Ventiler « {label} » d'après le ticket",
-  "@advisorAiSplit": {"placeholders": {"label": {"type": "String"}}},
+  "@advisorAiSplit": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "advisorAiSplitWhy": "Opération de {amount} du {date}, répartie ainsi :",
-  "@advisorAiSplitWhy": {"placeholders": {"amount": {"type": "String"}, "date": {"type": "String"}}},
+  "@advisorAiSplitWhy": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "advisorAiSplitRest": "Dont {amount} que les lignes du ticket n'expliquent pas (remise, arrondi, ligne illisible), à classer : calculé par OwnCoffer.",
-  "@advisorAiSplitRest": {"placeholders": {"amount": {"type": "String"}}},
+  "@advisorAiSplitRest": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "advisorAiInvoiceHints": "Compléter la facture « {name} »",
-  "@advisorAiInvoiceHints": {"placeholders": {"name": {"type": "String"}}},
+  "@advisorAiInvoiceHints": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "advisorAiLoanTerms": "Mettre à jour le crédit « {lender} » d'après son document",
-  "@advisorAiLoanTerms": {"placeholders": {"lender": {"type": "String"}}},
+  "@advisorAiLoanTerms": {
+    "placeholders": {
+      "lender": {
+        "type": "String"
+      }
+    }
+  },
   "advisorLoanCheck": "Tableau comparé au calcul d'OwnCoffer : {count} échéance(s) vérifiée(s).",
-  "@advisorLoanCheck": {"placeholders": {"count": {"type": "int"}}},
+  "@advisorLoanCheck": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "advisorLoanCheckOk": "Les chiffres lus correspondent au calcul.",
   "advisorLoanCheckGap": "Échéance {number}, {field} : le document indique {read}, OwnCoffer calcule {computed}.",
-  "@advisorLoanCheckGap": {"placeholders": {"number": {"type": "int"}, "field": {"type": "String"}, "read": {"type": "String"}, "computed": {"type": "String"}}},
+  "@advisorLoanCheckGap": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "field": {
+        "type": "String"
+      },
+      "read": {
+        "type": "String"
+      },
+      "computed": {
+        "type": "String"
+      }
+    }
+  },
   "advisorLoanCheckInterest": "Total des intérêts : le document indique {read}, OwnCoffer calcule {computed}.",
-  "@advisorLoanCheckInterest": {"placeholders": {"read": {"type": "String"}, "computed": {"type": "String"}}},
+  "@advisorLoanCheckInterest": {
+    "placeholders": {
+      "read": {
+        "type": "String"
+      },
+      "computed": {
+        "type": "String"
+      }
+    }
+  },
   "advisorLoanFieldPayment": "mensualité",
   "advisorLoanFieldInterest": "intérêts",
   "advisorLoanFieldRemaining": "capital restant dû",
   "advisorReadIn": "Lu dans « {name} ».",
-  "@advisorReadIn": {"placeholders": {"name": {"type": "String"}}},
+  "@advisorReadIn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "error_receipt_mismatch": "Les lignes lues sur le ticket dépassent le montant de l'opération : ce n'est sans doute pas son ticket.",
   "error_document_nothing_read": "L'IA n'a rien pu lire d'utile dans ce document.",
   "error_ai_document_not_image": "Ce modèle ne lit que les images : joignez une photo ou une capture du document.",
@@ -3479,38 +3623,146 @@
   "insightsIntro": "Calculées par OwnCoffer, sans IA, sur les comptes que vous voyez.",
   "insightsReliability": "Fiabilité des prévisions",
   "insightsPlanned": "{paid} opérations prévues sur {due} sont arrivées comme prévu ces trois derniers mois ({percent} %).",
-  "@insightsPlanned": {"placeholders": {"paid": {"type": "int"}, "due": {"type": "int"}, "percent": {"type": "int"}}},
+  "@insightsPlanned": {
+    "placeholders": {
+      "paid": {
+        "type": "int"
+      },
+      "due": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "insightsPlannedNone": "Aucune opération prévue ces trois derniers mois.",
   "insightsPlannedLate": "{count, plural, =1{1 n'est pas arrivée (en retard ou manquée).} other{{count} ne sont pas arrivées (en retard ou manquées).}}",
-  "@insightsPlannedLate": {"placeholders": {"count": {"type": "int"}}},
+  "@insightsPlannedLate": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "insightsVariable": "Dépenses variables de {month} : {estimate} estimés d'avance, {actual} réellement dépensés.",
-  "@insightsVariable": {"placeholders": {"month": {"type": "String"}, "estimate": {"type": "String"}, "actual": {"type": "String"}}},
+  "@insightsVariable": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "estimate": {
+        "type": "String"
+      },
+      "actual": {
+        "type": "String"
+      }
+    }
+  },
   "insightsVariableUnknown": "Pas encore assez d'historique pour comparer les dépenses variables estimées à la réalité.",
   "insightsReliabilityHow": "Les opérations prévues sont comptées d'après le calendrier des échéances ; l'estimation des dépenses variables est la médiane des trois mois qui précèdent.",
   "insightsUnusual": "Opérations inhabituelles",
   "insightsUnusualNone": "Rien d'inhabituel ce mois-ci ni le mois dernier.",
   "insightsDuplicate": "même libellé et même montant à quelques jours d'écart : prélevé deux fois ?",
   "insightsAboveUsual": "d'habitude {usual} (médiane de {count} opérations)",
-  "@insightsAboveUsual": {"placeholders": {"usual": {"type": "String"}, "count": {"type": "int"}}},
+  "@insightsAboveUsual": {
+    "placeholders": {
+      "usual": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "insightsFees": "Frais bancaires sur 12 mois",
   "insightsFeesNone": "Aucun frais bancaire repéré sur 12 mois.",
   "insightsFeesTotal": "{amount} sur 12 mois",
-  "@insightsFeesTotal": {"placeholders": {"amount": {"type": "String"}}},
+  "@insightsFeesTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "insightsFeesHow": "Opérations classées en frais bancaires ou agios, et celles dont le libellé commence comme un frais (frais, commission, agios, cotisation de carte…). Les remboursements de frais sont déduits.",
   "noticeOverdraft": "« {account} » passera sous son seuil vers le {date}",
-  "@noticeOverdraft": {"placeholders": {"account": {"type": "String"}, "date": {"type": "String"}}},
+  "@noticeOverdraft": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "noticeOverdraftWhy": "Point bas prévu : {lowest} le {date}, pour un seuil de {threshold}. D'après les opérations prévues seulement.",
-  "@noticeOverdraftWhy": {"placeholders": {"lowest": {"type": "String"}, "date": {"type": "String"}, "threshold": {"type": "String"}}},
+  "@noticeOverdraftWhy": {
+    "placeholders": {
+      "lowest": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      },
+      "threshold": {
+        "type": "String"
+      }
+    }
+  },
   "noticeUnusual": "« {label} » : {amount}, bien plus que d'habitude",
-  "@noticeUnusual": {"placeholders": {"label": {"type": "String"}, "amount": {"type": "String"}}},
+  "@noticeUnusual": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "noticeUnusualWhy": "Le {date}. D'habitude {usual} (médiane de {count} opérations).",
-  "@noticeUnusualWhy": {"placeholders": {"date": {"type": "String"}, "usual": {"type": "String"}, "count": {"type": "int"}}},
+  "@noticeUnusualWhy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "usual": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "noticeDuplicate": "« {label} » de {amount} prélevé deux fois ?",
-  "@noticeDuplicate": {"placeholders": {"label": {"type": "String"}, "amount": {"type": "String"}}},
+  "@noticeDuplicate": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "noticeDuplicateWhy": "Le {date}, même libellé et même montant à quelques jours d'écart. Vérifiez sur le relevé.",
-  "@noticeDuplicateWhy": {"placeholders": {"date": {"type": "String"}}},
+  "@noticeDuplicateWhy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "noticeFees": "{amount} de frais bancaires sur 12 mois",
-  "@noticeFees": {"placeholders": {"amount": {"type": "String"}}},
+  "@noticeFees": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "noticeFeesWhy": "Les plus coûteux ci-dessous. Une offre plus simple ou une autre banque coûterait peut-être moins : la page Analyses donne le détail mois par mois.",
   "noticeUnderstood": "Compris",
   "noticeIgnore": "Ignorer",
@@ -3518,28 +3770,70 @@
   "noticeIgnored": "Carte ignorée.",
   "batchImportChoose": "Plusieurs fichiers",
   "batchImportTitle": "{count, plural, =1{Importer 1 fichier} other{Importer {count} fichiers}}",
-  "@batchImportTitle": {"placeholders": {"count": {"type": "int"}}},
+  "@batchImportTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "batchImportHelp": "Chaque fichier est lu d'abord. Le compte est reconnu d'après le fichier quand il le dit (OFX), sinon c'est celui choisi. Les doublons possibles sont laissés de côté ; pour les vérifier un par un, importez le fichier seul.",
   "batchImportReading": "Lecture…",
   "batchImportPreview": "{added} nouvelles, {duplicates} déjà présentes, {possible} doublons possibles laissés de côté",
-  "@batchImportPreview": {"placeholders": {"added": {"type": "int"}, "duplicates": {"type": "int"}, "possible": {"type": "int"}}},
+  "@batchImportPreview": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      },
+      "duplicates": {
+        "type": "int"
+      },
+      "possible": {
+        "type": "int"
+      }
+    }
+  },
   "batchImportSameFile": "Ce fichier a déjà été importé dans ce compte.",
   "batchImportGo": "{count, plural, =0{Rien à importer} =1{Importer 1 fichier} other{Importer {count} fichiers}}",
-  "@batchImportGo": {"placeholders": {"count": {"type": "int"}}},
+  "@batchImportGo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "trashTitle": "Corbeille",
   "trashHelp": "Les opérations mises à la corbeille ne comptent plus nulle part. Restaurez-les, ou supprimez-les pour de bon (avec leur ventilation et leurs factures).",
   "trashNone": "La corbeille est vide.",
   "trashSince": "mise à la corbeille le {date}",
-  "@trashSince": {"placeholders": {"date": {"type": "String"}}},
+  "@trashSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "trashRestore": "Restaurer",
   "trashRestored": "Opération restaurée.",
   "trashDeleteForGood": "Supprimer définitivement",
   "trashDeleteConfirm": "Supprimer définitivement « {label} » ? Ce n'est pas annulable ; un nouvel import du relevé la ramènera.",
-  "@trashDeleteConfirm": {"placeholders": {"label": {"type": "String"}}},
+  "@trashDeleteConfirm": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "trashDeleted": "Opération supprimée.",
   "trashEmpty": "Vider",
   "trashEmptyConfirm": "{count, plural, =1{Supprimer définitivement l'opération de la corbeille ?} other{Supprimer définitivement les {count} opérations de la corbeille ?}} Ce n'est pas annulable.",
-  "@trashEmptyConfirm": {"placeholders": {"count": {"type": "int"}}},
+  "@trashEmptyConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "trashEmptied": "Corbeille vidée.",
   "chatHistory": "Conversations précédentes",
   "chatHistoryHelp": "Vos 30 dernières conversations, gardées sur votre serveur et visibles par vous seul. Touchez-en une pour la reprendre.",
@@ -3579,7 +3873,16 @@
   "loanFamilyLoans": "Crédits",
   "loanFamilyConsumer": "Crédits à la consommation",
   "loanFamilyTotals": "{monthly} / mois · reste {remaining}",
-  "@loanFamilyTotals": {"placeholders": {"monthly": {"type": "String"}, "remaining": {"type": "String"}}},
+  "@loanFamilyTotals": {
+    "placeholders": {
+      "monthly": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
   "loanSortRemaining": "Reste à rembourser",
   "loanSortMonthly": "Mensualité",
   "loanSortEnd": "Date de fin",
@@ -3587,31 +3890,85 @@
   "subscriptionChange": "Changer de contrat",
   "subscriptionChangeHelp": "Comparer une autre offre sur 1 à 10 ans, puis appliquer le nouveau prix.",
   "simApply": "Appliquer à « {label} » : {amount} par prélèvement",
-  "@simApply": {"placeholders": {"label": {"type": "String"}, "amount": {"type": "String"}}},
+  "@simApply": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "simApplyHelp": "Le prélèvement prévu prend ce nouveau montant : prévisions, budget et alertes le suivent. Les prélèvements passés ne changent pas.",
   "simApplied": "Nouveau prix appliqué à « {label} ».",
-  "@simApplied": {"placeholders": {"label": {"type": "String"}}},
+  "@simApplied": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "loanChangeTitle": "Renégocier ou changer de taux",
   "loanChangeCardHelp": "Simulez l'offre de votre banque (taux, mensualité, durée, frais) avant de l'enregistrer.",
   "loanChangeIntro": "« {lender} » aujourd'hui : taux {rate}, mensualité {payment}, {remaining} restant à rembourser. Indiquez l'offre, au moins un nouveau taux, une nouvelle mensualité ou une nouvelle durée.",
-  "@loanChangeIntro": {"placeholders": {"lender": {"type": "String"}, "rate": {"type": "String"}, "payment": {"type": "String"}, "remaining": {"type": "String"}}},
+  "@loanChangeIntro": {
+    "placeholders": {
+      "lender": {
+        "type": "String"
+      },
+      "rate": {
+        "type": "String"
+      },
+      "payment": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
   "loanChangeOffer": "L'offre",
   "loanChangeMonthsSuffix": "mois",
   "loanChangeFees": "Frais du changement",
   "loanChangeFeesHelp": "Frais de dossier, indemnités de remboursement anticipé, garantie… Facultatif.",
   "loanChangeSimulate": "Simuler",
   "loanChangeSaves": "Vous économiseriez {amount}",
-  "@loanChangeSaves": {"placeholders": {"amount": {"type": "String"}}},
+  "@loanChangeSaves": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "loanChangeCosts": "Cela vous coûterait {amount} de plus",
-  "@loanChangeCosts": {"placeholders": {"amount": {"type": "String"}}},
+  "@loanChangeCosts": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "loanChangeNow": "Aujourd'hui",
   "loanChangeAfter": "Après",
   "loanChangeInstalmentsLeft": "Échéances restantes",
   "loanChangeEnd": "Fin",
   "loanChangeFeesCounted": "{amount} de frais déduits.",
-  "@loanChangeFeesCounted": {"placeholders": {"amount": {"type": "String"}}},
+  "@loanChangeFeesCounted": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "loanChangePaysOff": "{months, plural, =1{Rentabilisé dès le premier mois.} other{Rentabilisé au bout de {months} mois.}}",
-  "@loanChangePaysOff": {"placeholders": {"months": {"type": "int"}}},
+  "@loanChangePaysOff": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
   "loanChangeNeverPaysOff": "Jamais rentabilisé sur la durée du crédit.",
   "loanChangeHow": "Calculé par OwnCoffer à partir du tableau d'amortissement, assurance comprise dans les prélèvements comparés. Indicatif : l'offre de la banque fait foi.",
   "loanChangeRecord": "Enregistrer ce changement",
@@ -3947,16 +4304,34 @@
   "lockIntroDevice": "Déverrouillez avec votre appareil pour reprendre où vous en étiez.",
   "lockUnlock": "Déverrouiller",
   "lockUseDevice": "Utiliser {method}",
-  "@lockUseDevice": {"placeholders": {"method": {"type": "String"}}},
+  "@lockUseDevice": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
   "lockMethodAndroid": "l'empreinte ou le code du téléphone",
   "lockMethodWindows": "Windows Hello",
   "lockReason": "Déverrouiller OwnCoffer",
   "lockWrongPassword": "{count, plural, =1{Mot de passe incorrect. Dernier essai avant la déconnexion.} other{Mot de passe incorrect. Encore {count} essais avant la déconnexion.}}",
-  "@lockWrongPassword": {"placeholders": {"count": {"type": "int"}}},
+  "@lockWrongPassword": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "lockDeviceFailed": "Déverrouillage par l'appareil refusé ou annulé.",
   "lockSignedOut": "Déconnecté par le verrouillage automatique. Reconnectez-vous.",
   "lockOfferTitle": "La prochaine fois, déverrouiller avec {method} ?",
-  "@lockOfferTitle": {"placeholders": {"method": {"type": "String"}}},
+  "@lockOfferTitle": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
   "lockOfferBody": "Plus rapide que le mot de passe. Vous pourrez changer d'avis dans Sécurité.",
   "lockOfferYes": "Oui",
   "lockOfferNo": "Non merci",
@@ -3968,9 +4343,21 @@
   "lockNeedsDeviceLock": "Configurez d'abord un verrouillage d'écran (code, empreinte ou Windows Hello) sur cet appareil.",
   "lockDelay": "Délai sans utilisation",
   "lockMinutes": "{count} min",
-  "@lockMinutes": {"placeholders": {"count": {"type": "int"}}},
+  "@lockMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "lockUseDeviceSetting": "Déverrouiller avec {method}",
-  "@lockUseDeviceSetting": {"placeholders": {"method": {"type": "String"}}},
+  "@lockUseDeviceSetting": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
   "lockHideContent": "Masquer l'écran hors du premier plan",
   "lockHideContentHelp": "Dans la liste des applications ouvertes, ou quand la fenêtre n'est plus active.",
   "lockHideContentAndroid": "Dans la liste des applications ouvertes ; bloque aussi les captures d'écran.",
@@ -3987,12 +4374,30 @@
   "pepiteDone2": "Tout est à jour cette semaine. Chapeau !",
   "pepiteSober": "Un de tes comptes passe sous zéro. On regarde ensemble ce qui arrive, calmement, étape par étape.",
   "pepiteWeeks": "{count, plural, =0{Aucune semaine pour l'instant} =1{1 semaine ensemble} other{{count} semaines ensemble}}",
-  "@pepiteWeeks": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteSeeds": "{count, plural, =0{Aucune graine} =1{1 graine} other{{count} graines}}",
-  "@pepiteSeeds": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteSeeds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteStart": "Faire mes comptes (≈ 10 min)",
   "pepiteContinue": "Continuer ({done}/3)",
-  "@pepiteContinue": {"placeholders": {"done": {"type": "int"}}},
+  "@pepiteContinue": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteLater": "Plus tard",
   "pepiteLaterReply": "Pas de souci, je te le rappelle demain.",
   "pepiteReserve": "Ma réserve",
@@ -4011,9 +4416,21 @@
   "pepiteCelebrateTitle": "Bravo !",
   "pepiteNoticedWeek": "J'ai vu tes comptes de la semaine : relevé, opérations et prévision. Je la compte pour toi !",
   "pepiteEarned": "{count, plural, =0{Cette semaine était déjà comptée : tes graines sont bien au chaud.} =1{+1 graine dans ta réserve !} other{+{count} graines dans ta réserve !}}",
-  "@pepiteEarned": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteEarned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteNewBadge": "Nouveau badge : {name}",
-  "@pepiteNewBadge": {"placeholders": {"name": {"type": "String"}}},
+  "@pepiteNewBadge": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteThanks": "Merci Pépite",
   "pepiteBadgesTitle": "Badges",
   "pepiteBadgeLocked": "À gagner",
@@ -4022,14 +4439,35 @@
   "pepiteBadgeFirstRitual": "Première semaine",
   "pepiteBadgeFirstRitualHelp": "Faire ses comptes une première fois",
   "pepiteBadgeWeeks": "{count} semaines",
-  "@pepiteBadgeWeeks": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteBadgeWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteBadgeWeeksHelp": "Faire ses comptes {count} semaines, pas forcément de suite",
-  "@pepiteBadgeWeeksHelp": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteBadgeWeeksHelp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteBadgeYear": "Un an ensemble",
   "pepiteBadgeYearHelp": "Un an depuis la première semaine",
   "pepiteHowTitle": "Comment ça marche",
   "pepiteHow": "Chaque semaine où tu fais tes comptes, tu gagnes {ritual} graines, et chaque badge en donne {badge}. Ce sont les semaines qui comptent, pas les jours d'affilée : une semaine manquée n'efface rien, et ton total gagné ne baisse jamais, même quand tu dépenses des graines dans la boutique.",
-  "@pepiteHow": {"placeholders": {"ritual": {"type": "int"}, "badge": {"type": "int"}}},
+  "@pepiteHow": {
+    "placeholders": {
+      "ritual": {
+        "type": "int"
+      },
+      "badge": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteSettingsTitle": "Pépite",
   "pepiteEnable": "Afficher Pépite",
   "pepiteEnableHelp": "Pépite, le hamster d'OwnCoffer, t'accompagne pour faire tes comptes chaque semaine. Ta réserve est gardée même si tu le caches.",
@@ -4326,25 +4764,61 @@
   "pepiteShopMenuHelp": "Habiller Pépite et décorer son terrier avec tes graines",
   "pepiteShopIntro": "Dépense tes graines pour habiller Pépite et décorer son terrier. Les graines ne valent rien d’autre et ne s’échangent contre rien : ton total gagné ne baisse jamais.",
   "pepiteShopToSpend": "{count, plural, =0{Aucune graine à dépenser} =1{1 graine à dépenser} other{{count} graines à dépenser}}",
-  "@pepiteShopToSpend": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteShopToSpend": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteShopEarned": "{count, plural, =0{aucune gagnée pour l’instant} =1{1 gagnée en tout} other{{count} gagnées en tout}}",
-  "@pepiteShopEarned": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteShopEarned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteShopAccessories": "Accessoires",
   "pepiteShopAccessoriesHelp": "Pépite en porte un à la fois.",
   "pepiteShopBurrow": "Le terrier",
   "pepiteShopBurrowHelp": "Installe autant d’objets que tu veux autour de Pépite.",
   "pepiteShopBuy": "Acheter",
   "pepiteShopBuyConfirm": "Acheter « {item} » pour {price} graines ? Il te restera {left} graines à dépenser.",
-  "@pepiteShopBuyConfirm": {"placeholders": {"item": {"type": "String"}, "price": {"type": "int"}, "left": {"type": "int"}}},
+  "@pepiteShopBuyConfirm": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "price": {
+        "type": "int"
+      },
+      "left": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteShopBought": "« {item} » est à toi !",
-  "@pepiteShopBought": {"placeholders": {"item": {"type": "String"}}},
+  "@pepiteShopBought": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteShopWear": "Porter",
   "pepiteShopTakeOff": "Retirer",
   "pepiteShopPlace": "Installer",
   "pepiteShopStore": "Ranger",
   "pepiteShopOwned": "À toi",
   "pepiteShopMissing": "{count, plural, =1{Encore 1 graine} other{Encore {count} graines}}",
-  "@pepiteShopMissing": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteShopMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteShopAppsOnly": "Seulement dans l’application Android ou Windows : une fois acquis, il se voit partout.",
   "error_pepite_item_unknown": "Cet objet n’existe pas dans la boutique.",
   "error_pepite_item_owned": "Tu as déjà cet objet.",
@@ -4353,27 +4827,78 @@
   "error_pepite_challenge_done": "Ton défi du mois est déjà réussi : rendez-vous le mois prochain pour un nouveau.",
   "pepiteChallengeTitle": "Défi du mois",
   "pepiteChallengeIntro": "{seeds, plural, =1{Choisis un petit défi pour ce mois si tu en as envie. Je vois seule quand tu avances ; réussi, il te rapporte 1 graine. Abandonné ou pas fini : rien n’est perdu.} other{Choisis un petit défi pour ce mois si tu en as envie. Je vois seule quand tu avances ; réussi, il te rapporte {seeds} graines. Abandonné ou pas fini : rien n’est perdu.}}",
-  "@pepiteChallengeIntro": {"placeholders": {"seeds": {"type": "int"}}},
+  "@pepiteChallengeIntro": {
+    "placeholders": {
+      "seeds": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeChoose": "Choisir",
   "pepiteChallengeDrop": "Abandonner",
   "pepiteChallengeOthers": "Ou change de défi (le compte repart de zéro) :",
   "pepiteChallengeProgress": "{progress} sur {target}",
-  "@pepiteChallengeProgress": {"placeholders": {"progress": {"type": "int"}, "target": {"type": "int"}}},
+  "@pepiteChallengeProgress": {
+    "placeholders": {
+      "progress": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeWon": "{seeds, plural, =1{Défi réussi : +1 graine ! Un nouveau t’attend le mois prochain.} other{Défi réussi : +{seeds} graines ! Un nouveau t’attend le mois prochain.}}",
-  "@pepiteChallengeWon": {"placeholders": {"seeds": {"type": "int"}}},
+  "@pepiteChallengeWon": {
+    "placeholders": {
+      "seeds": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeDone": "Défi du mois réussi : {name}",
-  "@pepiteChallengeDone": {"placeholders": {"name": {"type": "String"}}},
+  "@pepiteChallengeDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteChallengeClassify": "Ranger {count} opérations",
-  "@pepiteChallengeClassify": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteChallengeClassify": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeClassifyHelp": "Donne une catégorie à des opérations, à la main, dans Opérations.",
   "pepiteChallengeInvoices": "Rattacher {count} factures",
-  "@pepiteChallengeInvoices": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteChallengeInvoices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeInvoicesHelp": "Joins une facture ou un ticket à son opération.",
   "pepiteChallengeRules": "Créer {count} règles de classement",
-  "@pepiteChallengeRules": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteChallengeRules": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeRulesHelp": "Une règle range seule les prochaines opérations du même libellé.",
   "pepiteChallengeSubscriptions": "Déclarer {count} abonnements",
-  "@pepiteChallengeSubscriptions": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteChallengeSubscriptions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeSubscriptionsHelp": "Dans la fiche d’une opération qui revient, « C’est un abonnement ».",
   "pepiteChallengeGoal": "Se fixer un objectif",
   "pepiteChallengeGoalHelp": "Un plafond de dépenses ou une somme à mettre de côté, dans Budget.",
@@ -4381,36 +4906,132 @@
   "pepiteChallengesSettingHelp": "La carte « Défi du mois » sur cette page, et son annonce quand il est réussi, sur cet appareil.",
   "error_pepite_year_invalid": "Cette année n’est pas encore passée.",
   "pepiteYearTitle": "Ton année {year} avec Pépite",
-  "@pepiteYearTitle": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearTitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearMenu": "Ton année {year}",
-  "@pepiteYearMenu": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearMenu": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearMenuHelp": "Ce que tu as fait cette année-là, raconté par Pépite.",
   "pepiteYearReady": "Ton année {year} est prête !",
-  "@pepiteYearReady": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearReady": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearIntro": "Voici ce que tu as fait en {year}. Rien n’est comparé à personne : c’est ton année à toi.",
-  "@pepiteYearIntro": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearIntro": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearEmpty": "Je n’ai rien vu passer en {year}. Ce n’est pas grave : la prochaine année commence quand tu veux.",
-  "@pepiteYearEmpty": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearEmpty": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearWeeks": "{count, plural, =0{Aucune semaine de comptes} =1{1 semaine de comptes} other{{count} semaines de comptes}}",
-  "@pepiteYearWeeks": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearSeeds": "{count, plural, =0{Aucune graine gagnée} =1{1 graine gagnée} other{{count} graines gagnées}}",
-  "@pepiteYearSeeds": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearSeeds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearBadges": "{count, plural, =0{Aucun nouveau badge} =1{1 nouveau badge} other{{count} nouveaux badges}}",
-  "@pepiteYearBadges": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearBadges": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearChallenges": "{count, plural, =1{1 défi du mois réussi} other{{count} défis du mois réussis}}",
-  "@pepiteYearChallenges": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearChallenges": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearGoals": "Objectifs tenus {percent} % du temps",
-  "@pepiteYearGoals": {"placeholders": {"percent": {"type": "int"}}},
+  "@pepiteYearGoals": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearGoalsDetail": "{kept} mois tenus sur {tracked} mois suivis, tous objectifs confondus.",
-  "@pepiteYearGoalsDetail": {"placeholders": {"kept": {"type": "int"}, "tracked": {"type": "int"}}},
+  "@pepiteYearGoalsDetail": {
+    "placeholders": {
+      "kept": {
+        "type": "int"
+      },
+      "tracked": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearBestCategory": "Catégorie la mieux tenue : {name}",
-  "@pepiteYearBestCategory": {"placeholders": {"name": {"type": "String"}}},
+  "@pepiteYearBestCategory": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteYearBestCategoryDetail": "{count, plural, =1{Dans son objectif 1 mois.} other{Dans son objectif {count} mois.}}",
-  "@pepiteYearBestCategoryDetail": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearBestCategoryDetail": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearSubscriptions": "{count, plural, =1{1 abonnement arrêté} other{{count} abonnements arrêtés}}",
-  "@pepiteYearSubscriptions": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearSubscriptions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearSubscriptionsSaved": "{monthly} par mois de moins, soit {yearly} sur un an.",
-  "@pepiteYearSubscriptionsSaved": {"placeholders": {"monthly": {"type": "String"}, "yearly": {"type": "String"}}},
+  "@pepiteYearSubscriptionsSaved": {
+    "placeholders": {
+      "monthly": {
+        "type": "String"
+      },
+      "yearly": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteYearHow": "Calculé par OwnCoffer d’après tes propres actions et les comptes que tu vois, jamais par une IA. Les objectifs : mois de budget terminés dans l’objectif, pour les objectifs posés avant le début du mois. Les semaines comptées avant la version 1.16 sont rangées dans l’année de ta première semaine.",
   "error_pepite_item_apps_only": "Cet objet s’achète dans l’application Android ou Windows.",
   "error_pepite_item_not_owned": "Tu n’as pas encore cet objet.",
@@ -4553,5 +5174,13 @@
       }
     }
   },
-  "error_invoice_already_attached": "Ce justificatif est déjà joint à une opération."
+  "error_invoice_already_attached": "Ce justificatif est déjà joint à une opération.",
+  "offlineBanner": "Serveur injoignable : données du {when}, en lecture seule",
+  "@offlineBanner": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -11761,6 +11761,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce justificatif est déjà joint à une opération.'**
   String get error_invoice_already_attached;
+
+  /// No description provided for @offlineBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Serveur injoignable : données du {when}, en lecture seule'**
+  String offlineBanner(String when);
 }
 
 class _AppLocalizationsDelegate

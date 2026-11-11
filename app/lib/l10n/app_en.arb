@@ -907,7 +907,13 @@
   "receiptCheckConfirm": "Use these details",
   "receiptCheckNoValue": "Not found",
   "receiptCheckSource": "Read: {source}",
-  "@receiptCheckSource": {"placeholders": {"source": {"type": "String"}}},
+  "@receiptCheckSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
   "invoiceHintAmount": "Amount paid",
   "invoiceHintAmountInvalid": "Unreadable amount (example: 499.00).",
   "invoiceHintMerchant": "Merchant",
@@ -1321,7 +1327,13 @@
   "aiReadNotReady": "To read a document, turn the assistant on (✨ icon) with a model that reads images.",
   "aiReadNoPdf": "This PDF cannot be sent to this provider. Attach a photo or screenshot instead.",
   "aiReadPdfRenderedConsent": "The PDF will be rendered on this device into at most 5 page images (up to 1600 px per side) before transfer. {destination} The original PDF stays unchanged.",
-  "@aiReadPdfRenderedConsent": {"placeholders": {"destination": {"type": "String"}}},
+  "@aiReadPdfRenderedConsent": {
+    "placeholders": {
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
   "advisorAiSplit": "Split \"{label}\" from the receipt",
   "advisorAiSplitWhy": "Operation of {amount} on {date}, shared like this:",
   "advisorAiSplitRest": "Including {amount} the receipt's lines do not explain (discount, rounding, unreadable line), to classify: computed by OwnCoffer.",
@@ -1638,16 +1650,34 @@
   "lockIntroDevice": "Unlock with your device to pick up where you left off.",
   "lockUnlock": "Unlock",
   "lockUseDevice": "Use {method}",
-  "@lockUseDevice": {"placeholders": {"method": {"type": "String"}}},
+  "@lockUseDevice": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
   "lockMethodAndroid": "fingerprint or phone PIN",
   "lockMethodWindows": "Windows Hello",
   "lockReason": "Unlock OwnCoffer",
   "lockWrongPassword": "{count, plural, =1{Wrong password. Last try before signing out.} other{Wrong password. {count} tries left before signing out.}}",
-  "@lockWrongPassword": {"placeholders": {"count": {"type": "int"}}},
+  "@lockWrongPassword": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "lockDeviceFailed": "Device unlock refused or cancelled.",
   "lockSignedOut": "Signed out by the automatic lock. Please sign in again.",
   "lockOfferTitle": "Next time, unlock with {method}?",
-  "@lockOfferTitle": {"placeholders": {"method": {"type": "String"}}},
+  "@lockOfferTitle": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
   "lockOfferBody": "Quicker than the password. You can change your mind in Security.",
   "lockOfferYes": "Yes",
   "lockOfferNo": "No thanks",
@@ -1659,9 +1689,21 @@
   "lockNeedsDeviceLock": "First set up a screen lock (PIN, fingerprint or Windows Hello) on this device.",
   "lockDelay": "Time without use",
   "lockMinutes": "{count} min",
-  "@lockMinutes": {"placeholders": {"count": {"type": "int"}}},
+  "@lockMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "lockUseDeviceSetting": "Unlock with {method}",
-  "@lockUseDeviceSetting": {"placeholders": {"method": {"type": "String"}}},
+  "@lockUseDeviceSetting": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
   "lockHideContent": "Hide the screen when in the background",
   "lockHideContentHelp": "In the list of open apps, or when the window is no longer active.",
   "lockHideContentAndroid": "In the list of open apps; also blocks screenshots.",
@@ -1678,12 +1720,30 @@
   "pepiteDone2": "Everything is up to date this week. Hats off!",
   "pepiteSober": "One of your accounts goes below zero. Let's look at what's coming together, calmly, step by step.",
   "pepiteWeeks": "{count, plural, =0{No week yet} =1{1 week together} other{{count} weeks together}}",
-  "@pepiteWeeks": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteSeeds": "{count, plural, =0{No seeds} =1{1 seed} other{{count} seeds}}",
-  "@pepiteSeeds": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteSeeds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteStart": "Do my accounts (≈ 10 min)",
   "pepiteContinue": "Continue ({done}/3)",
-  "@pepiteContinue": {"placeholders": {"done": {"type": "int"}}},
+  "@pepiteContinue": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteLater": "Later",
   "pepiteLaterReply": "No problem, I'll remind you tomorrow.",
   "pepiteReserve": "My reserve",
@@ -1702,9 +1762,21 @@
   "pepiteCelebrateTitle": "Well done!",
   "pepiteNoticedWeek": "I saw your accounts this week: statement, transactions and forecast. I'm counting the week for you!",
   "pepiteEarned": "{count, plural, =0{This week was already counted: your seeds are safe and warm.} =1{+1 seed in your reserve!} other{+{count} seeds in your reserve!}}",
-  "@pepiteEarned": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteEarned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteNewBadge": "New badge: {name}",
-  "@pepiteNewBadge": {"placeholders": {"name": {"type": "String"}}},
+  "@pepiteNewBadge": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteThanks": "Thanks Pépite",
   "pepiteBadgesTitle": "Badges",
   "pepiteBadgeLocked": "To earn",
@@ -1713,14 +1785,35 @@
   "pepiteBadgeFirstRitual": "First week",
   "pepiteBadgeFirstRitualHelp": "Do the accounts a first time",
   "pepiteBadgeWeeks": "{count} weeks",
-  "@pepiteBadgeWeeks": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteBadgeWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteBadgeWeeksHelp": "Do the accounts {count} weeks, not necessarily in a row",
-  "@pepiteBadgeWeeksHelp": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteBadgeWeeksHelp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteBadgeYear": "A year together",
   "pepiteBadgeYearHelp": "A year since the first week",
   "pepiteHowTitle": "How it works",
   "pepiteHow": "Each week you do your accounts earns {ritual} seeds, and each badge gives {badge}. Weeks count, not days in a row: a missed week erases nothing, and your total earned never goes down, even when you spend seeds in the shop.",
-  "@pepiteHow": {"placeholders": {"ritual": {"type": "int"}, "badge": {"type": "int"}}},
+  "@pepiteHow": {
+    "placeholders": {
+      "ritual": {
+        "type": "int"
+      },
+      "badge": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteSettingsTitle": "Pépite",
   "pepiteEnable": "Show Pépite",
   "pepiteEnableHelp": "Pépite, OwnCoffer's hamster, helps you do your accounts every week. Your reserve is kept even if you hide it.",
@@ -1891,25 +1984,61 @@
   "pepiteShopMenuHelp": "Dress Pépite up and decorate its burrow with your seeds",
   "pepiteShopIntro": "Spend your seeds to dress Pépite up and decorate its burrow. Seeds are worth nothing else and can be exchanged for nothing: your total earned never goes down.",
   "pepiteShopToSpend": "{count, plural, =0{No seeds to spend} =1{1 seed to spend} other{{count} seeds to spend}}",
-  "@pepiteShopToSpend": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteShopToSpend": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteShopEarned": "{count, plural, =0{none earned yet} =1{1 earned in all} other{{count} earned in all}}",
-  "@pepiteShopEarned": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteShopEarned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteShopAccessories": "Accessories",
   "pepiteShopAccessoriesHelp": "Pépite wears one at a time.",
   "pepiteShopBurrow": "The burrow",
   "pepiteShopBurrowHelp": "Place as many items as you like around Pépite.",
   "pepiteShopBuy": "Buy",
   "pepiteShopBuyConfirm": "Buy “{item}” for {price} seeds? You will have {left} seeds left to spend.",
-  "@pepiteShopBuyConfirm": {"placeholders": {"item": {"type": "String"}, "price": {"type": "int"}, "left": {"type": "int"}}},
+  "@pepiteShopBuyConfirm": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "price": {
+        "type": "int"
+      },
+      "left": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteShopBought": "“{item}” is yours!",
-  "@pepiteShopBought": {"placeholders": {"item": {"type": "String"}}},
+  "@pepiteShopBought": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteShopWear": "Wear",
   "pepiteShopTakeOff": "Take off",
   "pepiteShopPlace": "Place",
   "pepiteShopStore": "Put away",
   "pepiteShopOwned": "Yours",
   "pepiteShopMissing": "{count, plural, =1{1 more seed} other{{count} more seeds}}",
-  "@pepiteShopMissing": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteShopMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteShopAppsOnly": "Only in the Android or Windows app: once acquired, it shows everywhere.",
   "error_pepite_item_unknown": "This item does not exist in the shop.",
   "error_pepite_item_owned": "You already have this item.",
@@ -1918,27 +2047,78 @@
   "error_pepite_challenge_done": "Your challenge of the month is already done: see you next month for a new one.",
   "pepiteChallengeTitle": "Challenge of the month",
   "pepiteChallengeIntro": "{seeds, plural, =1{Pick a small challenge for this month if you like. I see by myself how you are doing; done, it brings you 1 seed. Dropped or unfinished: nothing is lost.} other{Pick a small challenge for this month if you like. I see by myself how you are doing; done, it brings you {seeds} seeds. Dropped or unfinished: nothing is lost.}}",
-  "@pepiteChallengeIntro": {"placeholders": {"seeds": {"type": "int"}}},
+  "@pepiteChallengeIntro": {
+    "placeholders": {
+      "seeds": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeChoose": "Choose",
   "pepiteChallengeDrop": "Drop",
   "pepiteChallengeOthers": "Or change challenge (the count starts again from zero):",
   "pepiteChallengeProgress": "{progress} of {target}",
-  "@pepiteChallengeProgress": {"placeholders": {"progress": {"type": "int"}, "target": {"type": "int"}}},
+  "@pepiteChallengeProgress": {
+    "placeholders": {
+      "progress": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeWon": "{seeds, plural, =1{Challenge done: +1 seed! A new one awaits you next month.} other{Challenge done: +{seeds} seeds! A new one awaits you next month.}}",
-  "@pepiteChallengeWon": {"placeholders": {"seeds": {"type": "int"}}},
+  "@pepiteChallengeWon": {
+    "placeholders": {
+      "seeds": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeDone": "Challenge of the month done: {name}",
-  "@pepiteChallengeDone": {"placeholders": {"name": {"type": "String"}}},
+  "@pepiteChallengeDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteChallengeClassify": "Classify {count} operations",
-  "@pepiteChallengeClassify": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteChallengeClassify": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeClassifyHelp": "Give operations a category, by hand, in Operations.",
   "pepiteChallengeInvoices": "Attach {count} invoices",
-  "@pepiteChallengeInvoices": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteChallengeInvoices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeInvoicesHelp": "Attach an invoice or a receipt to its operation.",
   "pepiteChallengeRules": "Create {count} classification rules",
-  "@pepiteChallengeRules": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteChallengeRules": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeRulesHelp": "A rule classifies by itself the next operations with the same label.",
   "pepiteChallengeSubscriptions": "Declare {count} subscriptions",
-  "@pepiteChallengeSubscriptions": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteChallengeSubscriptions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteChallengeSubscriptionsHelp": "In the details of an operation that comes back, “This is a subscription”.",
   "pepiteChallengeGoal": "Set yourself a goal",
   "pepiteChallengeGoalHelp": "A spending cap or a sum to put aside, in Budget.",
@@ -1946,36 +2126,132 @@
   "pepiteChallengesSettingHelp": "The “Challenge of the month” card on this page, and its announcement when done, on this device.",
   "error_pepite_year_invalid": "This year is not over yet.",
   "pepiteYearTitle": "Your {year} with Pépite",
-  "@pepiteYearTitle": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearTitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearMenu": "Your {year}",
-  "@pepiteYearMenu": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearMenu": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearMenuHelp": "What you did that year, told by Pépite.",
   "pepiteYearReady": "Your {year} is ready!",
-  "@pepiteYearReady": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearReady": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearIntro": "Here is what you did in {year}. Nothing is compared to anyone: it is your own year.",
-  "@pepiteYearIntro": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearIntro": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearEmpty": "I saw nothing go by in {year}. No matter: the next year starts whenever you like.",
-  "@pepiteYearEmpty": {"placeholders": {"year": {"type": "int"}}},
+  "@pepiteYearEmpty": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearWeeks": "{count, plural, =0{No week of accounts} =1{1 week of accounts} other{{count} weeks of accounts}}",
-  "@pepiteYearWeeks": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearSeeds": "{count, plural, =0{No seed earned} =1{1 seed earned} other{{count} seeds earned}}",
-  "@pepiteYearSeeds": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearSeeds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearBadges": "{count, plural, =0{No new badge} =1{1 new badge} other{{count} new badges}}",
-  "@pepiteYearBadges": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearBadges": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearChallenges": "{count, plural, =1{1 challenge of the month done} other{{count} challenges of the month done}}",
-  "@pepiteYearChallenges": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearChallenges": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearGoals": "Goals kept {percent}% of the time",
-  "@pepiteYearGoals": {"placeholders": {"percent": {"type": "int"}}},
+  "@pepiteYearGoals": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearGoalsDetail": "{kept} months kept out of {tracked} months followed, all goals together.",
-  "@pepiteYearGoalsDetail": {"placeholders": {"kept": {"type": "int"}, "tracked": {"type": "int"}}},
+  "@pepiteYearGoalsDetail": {
+    "placeholders": {
+      "kept": {
+        "type": "int"
+      },
+      "tracked": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearBestCategory": "Best kept category: {name}",
-  "@pepiteYearBestCategory": {"placeholders": {"name": {"type": "String"}}},
+  "@pepiteYearBestCategory": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteYearBestCategoryDetail": "{count, plural, =1{Within its goal 1 month.} other{Within its goal {count} months.}}",
-  "@pepiteYearBestCategoryDetail": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearBestCategoryDetail": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearSubscriptions": "{count, plural, =1{1 subscription stopped} other{{count} subscriptions stopped}}",
-  "@pepiteYearSubscriptions": {"placeholders": {"count": {"type": "int"}}},
+  "@pepiteYearSubscriptions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pepiteYearSubscriptionsSaved": "{monthly} less a month, {yearly} over a year.",
-  "@pepiteYearSubscriptionsSaved": {"placeholders": {"monthly": {"type": "String"}, "yearly": {"type": "String"}}},
+  "@pepiteYearSubscriptionsSaved": {
+    "placeholders": {
+      "monthly": {
+        "type": "String"
+      },
+      "yearly": {
+        "type": "String"
+      }
+    }
+  },
   "pepiteYearHow": "Worked out by OwnCoffer from your own doings and the accounts you see, never by an AI. Goals: budget months ended within the goal, for goals set before the month began. Weeks counted before version 1.16 are put in the year of your first week.",
   "error_pepite_item_apps_only": "This item is bought in the Android or Windows app.",
   "error_pepite_item_not_owned": "You do not have this item yet.",
@@ -2037,5 +2313,6 @@
   "receiptOperationLabelMissing": "Enter a label.",
   "receiptOperationCreate": "Create",
   "receiptOperationCreated": "Operation created, receipt attached: {name}",
-  "error_invoice_already_attached": "This receipt is already attached to an operation."
+  "error_invoice_already_attached": "This receipt is already attached to an operation.",
+  "offlineBanner": "Server unreachable: data from {when}, read-only"
 }
