@@ -18,6 +18,12 @@ EmbeddedServer? _server;
 
 bool get standaloneRunning => _server != null;
 
+Future<void> stopStandalone() async {
+  final server = _server;
+  _server = null;
+  await server?.stop();
+}
+
 Future<Directory> _dataDir() async => Directory(
   '${(await getApplicationSupportDirectory()).path}/standalone',
 );

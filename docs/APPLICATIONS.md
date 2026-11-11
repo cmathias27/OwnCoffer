@@ -31,7 +31,7 @@ Elles ne sont **pas encore signées par un éditeur** ni publiées sur le Micros
 3. Windows SmartScreen affiche « Windows a protégé votre ordinateur » : c'est parce que l'application n'a pas de certificat d'éditeur. Cliquez sur **Informations complémentaires**, puis **Exécuter quand même**.
 4. Choisissez « Utiliser seul sur cet appareil », ou saisissez l'adresse de votre serveur (celle que vous ouvrez dans le navigateur).
 
-Mettre à jour : quand le serveur passe à une nouvelle version, une bannière le signale dans l'application ; « Télécharger » ouvre la page Applications. Remplacez le dossier par celui de la nouvelle version : votre session est conservée.
+Mettre à jour (décision 0032) : quand le serveur passe à une nouvelle version, une bannière le signale ; **« Installer »** télécharge le zip depuis GitHub, le vérifie avec `SHA256SUMS`, le décompresse à côté du dossier de l'application, puis, après « Fermer et mettre à jour », OwnCoffer se ferme, remplace son dossier (l'ancien est gardé en `.previous` jusqu'au lancement suivant) et se relance. Pour cela, **gardez l'application dans un dossier à elle** (par exemple `Documents\OwnCoffer`) : un dossier qui contient d'autres fichiers, ou un dossier protégé comme `Program Files`, n'est pas remplacé, et il faut alors remplacer le dossier à la main. Votre session et vos données sont conservées.
 
 ## Android
 
@@ -40,7 +40,7 @@ Mettre à jour : quand le serveur passe à une nouvelle version, une bannière l
 3. Play Protect peut avertir d'une application inconnue : choisissez **Installer quand même**.
 4. Choisissez « Utiliser seul sur cet appareil », ou saisissez l'adresse de votre serveur.
 
-Mettre à jour : quand le serveur passe à une nouvelle version, une bannière le signale ; « Télécharger » ouvre la page Applications. Installez le nouvel APK par-dessus. Si Android refuse (« conflit avec un paquet existant »), c'est que les deux versions n'ont pas été signées avec la même clé : désinstallez l'ancienne, puis installez la nouvelle. Vous n'y perdez que la session : vos données sont sur le serveur.
+Mettre à jour (décision 0032) : quand le serveur passe à une nouvelle version, une bannière le signale ; **« Installer »** télécharge l'APK depuis GitHub, le vérifie (`SHA256SUMS`, version attendue, même clé de signature que l'application installée) et ouvre l'installateur d'Android, qui demande de confirmer. La première fois, Android demande d'autoriser OwnCoffer à installer des applications : autorisez, revenez, puis « Installer » à nouveau. En mode autonome, page Applications → « Rechercher une nouvelle version ». À la main, installez le nouvel APK par-dessus. Si Android refuse (« conflit avec un paquet existant »), c'est que les deux versions n'ont pas été signées avec la même clé : désinstallez l'ancienne, puis installez la nouvelle. Vous n'y perdez que la session : vos données sont sur le serveur.
 
 > Pour le mainteneur : pour que chaque APK remplace le précédent, créez une fois une clé (`keytool -genkeypair -v -keystore owncoffer.jks -keyalg RSA -keysize 4096 -validity 10000 -alias owncoffer`) et ajoutez dans les secrets GitHub du dépôt `ANDROID_KEYSTORE_BASE64` (`base64 -w0 owncoffer.jks`), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` et `ANDROID_KEY_PASSWORD`. Gardez la clé précieusement : une autre clé obligera tout le monde à désinstaller.
 

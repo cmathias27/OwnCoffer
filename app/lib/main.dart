@@ -26,10 +26,14 @@ import 'util/server_address.dart';
 import 'util/standalone.dart';
 import 'util/standalone_backups.dart';
 import 'widgets/app_lock_layer.dart';
+import 'widgets/app_update_flow.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LicenseRegistry.addLicense(_dbIpLicense);
+  // Decision 0032: the update just installed is running; forget the
+  // download and the previous folder.
+  unawaited(appUpdater.cleanup());
   // Before any page: a web page reloaded while locked stays locked.
   await appLock.load();
   askServerAddress = () async => runApp(

@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.17.0 (novembre 2026)
+
+### Mises à jour des applications depuis l'application (décision 0032)
+- **« Installer »** dans la bannière « Nouvelle version » et la page Applications : la version du serveur est téléchargée depuis GitHub, vérifiée avec `SHA256SUMS` (fichier effacé s'il ne correspond pas), puis installée.
+- **Android** : nom du paquet, version et **clé de signature** comparés à l'application installée avant d'ouvrir l'installateur d'Android (qui demande de confirmer) ; autorisation « installer des applications » demandée la première fois.
+- **Windows** : la nouvelle version est décompressée à côté, OwnCoffer se ferme, remplace son dossier et se relance ; l'ancien dossier est gardé jusqu'au lancement suivant. Refusé si le dossier de l'application contient d'autres fichiers : rien de l'utilisateur n'est déplacé ni effacé.
+- **Mode autonome** : « Rechercher une nouvelle version » (page Applications) demande la dernière version à GitHub, seulement quand vous cliquez.
+- Chaque échec a son message et « Télécharger à la main ».
+
 ## 1.16.0 (novembre 2026)
 
 ### « Ton année avec Pépite » (décision 0031)

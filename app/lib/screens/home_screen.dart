@@ -35,6 +35,8 @@ import '../state/pepite_advice.dart';
 import '../util/file_pick.dart';
 import '../util/incoming_file.dart';
 import '../widgets/pepite.dart' show showPepiteCheer;
+import '../util/app_update.dart';
+import '../widgets/app_update_flow.dart';
 import '../widgets/pepite_apps.dart';
 import 'getting_started_screen.dart';
 import 'export_screen.dart';
@@ -819,7 +821,11 @@ class _CreateGroupState extends State<_CreateGroup> {
 /// to the new version. Nothing on the web app, which the server serves.
 class AppUpdateBanner extends StatefulWidget {
   final String? serverVersion;
-  const AppUpdateBanner({super.key, required this.serverVersion});
+
+  /// Tests give their own; the device's otherwise.
+  final AppUpdater? updater;
+
+  const AppUpdateBanner({super.key, required this.serverVersion, this.updater});
 
   @override
   State<AppUpdateBanner> createState() => _AppUpdateBannerState();
@@ -869,14 +875,26 @@ class _AppUpdateBannerState extends State<AppUpdateBanner> {
               onPressed: () => setState(() => _dismissedFor = server),
               child: Text(l.appsBannerLater),
             ),
-            TextButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => AppsScreen(serverVersion: server),
+            // Decision 0032: installed from here when the device can.
+            if ((widget.updater ?? appUpdater).supported)
+              TextButton(
+                key: const Key('app-update-install'),
+                onPressed: () => installAppUpdate(
+                  context,
+                  server,
+                  updater: widget.updater,
                 ),
+                child: Text(l.appsInstallShort),
+              )
+            else
+              TextButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => AppsScreen(serverVersion: server),
+                  ),
+                ),
+                child: Text(l.appsDownload),
               ),
-              child: Text(l.appsDownload),
-            ),
           ],
         ),
       ),

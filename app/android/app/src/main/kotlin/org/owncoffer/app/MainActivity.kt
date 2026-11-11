@@ -47,6 +47,8 @@ class MainActivity : FlutterFragmentActivity() {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, BackupFolder.CHANNEL)
             .setMethodCallHandler(backupFolder)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, AppUpdate.CHANNEL)
+            .setMethodCallHandler(AppUpdate(this))
         // The automatic lock's option (decision 0025): out of screenshots
         // and blank in the list of recent apps.
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, WINDOW_CHANNEL)

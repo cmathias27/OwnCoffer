@@ -8874,7 +8874,7 @@ abstract class AppLocalizations {
   /// No description provided for @appsUpdate.
   ///
   /// In fr, this message translates to:
-  /// **'Une nouvelle version de l\'application est disponible : {version}. Téléchargez-la ci-dessous et installez-la par-dessus celle-ci.'**
+  /// **'Une nouvelle version de l\'application est disponible : {version}.'**
   String appsUpdate(String version);
 
   /// No description provided for @appsNewerThanServer.
@@ -8918,6 +8918,138 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Télécharger'**
   String get appsDownload;
+
+  /// No description provided for @appsInstall.
+  ///
+  /// In fr, this message translates to:
+  /// **'Installer la version {version}'**
+  String appsInstall(String version);
+
+  /// No description provided for @appsInstallShort.
+  ///
+  /// In fr, this message translates to:
+  /// **'Installer'**
+  String get appsInstallShort;
+
+  /// No description provided for @appsInstallTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mise à jour vers la version {version}'**
+  String appsInstallTitle(String version);
+
+  /// No description provided for @appsInstallDownloading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléchargement depuis GitHub…'**
+  String get appsInstallDownloading;
+
+  /// No description provided for @appsInstallProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléchargement depuis GitHub… {percent} %'**
+  String appsInstallProgress(int percent);
+
+  /// No description provided for @appsInstallAndroid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Android vous demande de confirmer l\'installation. Vos données et votre session sont gardées.'**
+  String get appsInstallAndroid;
+
+  /// No description provided for @appsInstallWindows.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier est vérifié. OwnCoffer va se fermer, remplacer son dossier par la version {version} et se relancer. Vos données et votre session sont gardées.'**
+  String appsInstallWindows(String version);
+
+  /// No description provided for @appsInstallRestart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer et mettre à jour'**
+  String get appsInstallRestart;
+
+  /// No description provided for @appsInstallFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mise à jour impossible'**
+  String get appsInstallFailed;
+
+  /// No description provided for @appsInstallManual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger à la main'**
+  String get appsInstallManual;
+
+  /// No description provided for @appsInstallHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléchargé depuis GitHub, vérifié avec les empreintes publiées, puis installé : seulement quand vous le demandez.'**
+  String get appsInstallHelp;
+
+  /// No description provided for @appsCheckLatest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher une nouvelle version'**
+  String get appsCheckLatest;
+
+  /// No description provided for @appsLatestNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez la dernière version publiée.'**
+  String get appsLatestNone;
+
+  /// No description provided for @appsLatest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle version publiée : {version}'**
+  String appsLatest(String version);
+
+  /// No description provided for @appsInstallErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'GitHub ne répond pas ou le fichier est introuvable. Vérifiez la connexion et réessayez.'**
+  String get appsInstallErrorNetwork;
+
+  /// No description provided for @appsInstallErrorChecksum.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier téléchargé ne correspond pas à l\'empreinte publiée : il a été effacé, rien n\'est installé.'**
+  String get appsInstallErrorChecksum;
+
+  /// No description provided for @appsInstallErrorTooLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier est bien plus gros qu\'attendu : téléchargement arrêté, rien n\'est installé.'**
+  String get appsInstallErrorTooLarge;
+
+  /// No description provided for @appsInstallErrorPermission.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autorisez OwnCoffer à installer des applications dans la page des réglages qui vient de s\'ouvrir, puis réessayez.'**
+  String get appsInstallErrorPermission;
+
+  /// No description provided for @appsInstallErrorSignature.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette version n\'est pas signée avec la même clé que l\'application installée : installation refusée. Si vous lui faites confiance, désinstallez puis installez-la à la main.'**
+  String get appsInstallErrorSignature;
+
+  /// No description provided for @appsInstallErrorVersion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier téléchargé n\'est pas la version attendue d\'OwnCoffer : rien n\'est installé.'**
+  String get appsInstallErrorVersion;
+
+  /// No description provided for @appsInstallErrorFolder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de préparer la nouvelle version à côté du dossier de l\'application (dossier protégé ?). Remplacez le dossier à la main.'**
+  String get appsInstallErrorFolder;
+
+  /// No description provided for @appsInstallError.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'installation n\'a pas pu se faire.'**
+  String get appsInstallError;
 
   /// No description provided for @appsAllFiles.
   ///
@@ -9024,7 +9156,7 @@ abstract class AppLocalizations {
   /// No description provided for @appsStandaloneHint.
   ///
   /// In fr, this message translates to:
-  /// **'Mode autonome : les nouvelles versions sont sur la page des versions du projet (lien ci-dessous). Installez-la par-dessus celle-ci : vos données sont gardées.'**
+  /// **'Mode autonome : pas de serveur pour annoncer les nouvelles versions. Recherchez-en une ci-dessous ; vos données sont gardées.'**
   String get appsStandaloneHint;
 
   /// No description provided for @migrateTitle.

@@ -185,7 +185,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] Clé Android stable (secrets GitHub) et certificat de signature Windows
 - [ ] Hors-ligne et synchronisation
 - [x] Page « Applications » (télécharger Windows et Android dans la version du serveur), versions comparées, bannière quand l'application est en retard — *1.0.4*
-- [ ] Installation automatique des mises à jour des applications
+- [x] Installation des mises à jour des applications depuis l'application : téléchargée, vérifiée (empreintes, clé de signature sur Android), installée en un geste ; Windows se relance tout seul — *1.17.0 ([0032](decisions/0032-mises-a-jour-des-applications.md))*
 - [x] **Verrouillage automatique** après une absence (demandé le 5 novembre 2026) : mot de passe, empreinte sur Android, Windows Hello sur Windows ; déconnexion après 5 échecs ou 8 h ; masquage de l'écran en option — *1.5.0 ([0025](decisions/0025-verrouillage-automatique.md))*
 - [x] **Pépite, la mascotte** (demandée le 5 novembre 2026) : un hamster qui motive à faire ses comptes chaque semaine, rituel en 4 étapes, réserve de graines et badges gardés par le serveur (sur l'appareil en version autonome), rappel par notification en option sur Android et Windows — *1.6.0 ([0026](decisions/0026-mascotte-pepite.md))*
 - [x] **Sessions et appareils** (demandé le 6 novembre 2026, décision [0027](decisions/0027-sessions-et-appareils.md)) :

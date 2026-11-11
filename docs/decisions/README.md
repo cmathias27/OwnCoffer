@@ -35,5 +35,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0029](0029-pepite-autonome.md) | Pépite remarque toute seule les étapes de la semaine et annonce les badges | Décidé |
 | [0030](0030-pepite-defi-du-mois.md) | Pépite : le défi du mois, mesuré tout seul | Décidé |
 | [0031](0031-pepite-ton-annee.md) | Pépite : « Ton année » | Décidé |
+| [0032](0032-mises-a-jour-des-applications.md) | Mises à jour des applications installées depuis l'application | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.
