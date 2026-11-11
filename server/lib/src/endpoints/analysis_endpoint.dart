@@ -367,8 +367,7 @@ class AnalysisEndpoint extends Endpoint {
       priceRises: [
         for (final s in priceRises)
           if (s.priceRiseAmountCents != null &&
-              (s.endDate == null ||
-                  !s.endDate!.toLocalDate().isBefore(day)))
+              (s.endDate == null || !s.endDate!.toLocalDate().isBefore(day)))
             s,
       ],
     );
