@@ -11563,6 +11563,138 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Un tapis tout doux'**
   String get pepiteItemMatHelp;
+
+  /// No description provided for @summaryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récapitulatif du mois'**
+  String get summaryTitle;
+
+  /// No description provided for @summaryOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récapitulatif : les 30 prochains jours'**
+  String get summaryOpen;
+
+  /// No description provided for @summaryHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui vous attend d\'ici le {date} : solde prévu, alertes et propositions à décider. Tout est calculé par OwnCoffer, sans IA.'**
+  String summaryHelp(String date);
+
+  /// No description provided for @summaryForecastTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévision à 30 jours'**
+  String get summaryForecastTitle;
+
+  /// No description provided for @summaryNoAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun compte courant visible.'**
+  String get summaryNoAccount;
+
+  /// No description provided for @summaryToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui : {amount}'**
+  String summaryToday(String amount);
+
+  /// No description provided for @summaryEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le {date} : {amount}'**
+  String summaryEnd(String date, String amount);
+
+  /// No description provided for @summaryLowest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point bas : {amount} le {date}'**
+  String summaryLowest(String amount, String date);
+
+  /// No description provided for @summaryBelow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sous le seuil d\'alerte ({threshold}) dès le {date}'**
+  String summaryBelow(String threshold, String date);
+
+  /// No description provided for @summaryPlanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sorties prévues {debits} (dépenses courantes estimées comprises) · entrées prévues {credits}'**
+  String summaryPlanned(String debits, String credits);
+
+  /// No description provided for @summaryMissed.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération prévue en retard} other{{count} opérations prévues en retard}}'**
+  String summaryMissed(int count);
+
+  /// No description provided for @summaryOpenForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la prévision'**
+  String get summaryOpenForecast;
+
+  /// No description provided for @summaryAlertsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Alertes non lues'**
+  String get summaryAlertsTitle;
+
+  /// No description provided for @summaryNoAlert.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune alerte en attente.'**
+  String get summaryNoAlert;
+
+  /// No description provided for @summaryOpenNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir toutes les notifications'**
+  String get summaryOpenNotifications;
+
+  /// No description provided for @summaryProposalsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propositions en attente'**
+  String get summaryProposalsTitle;
+
+  /// No description provided for @summaryNoProposal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune proposition à décider.'**
+  String get summaryNoProposal;
+
+  /// No description provided for @summaryOpenAdvisor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Décider dans Mon conseiller'**
+  String get summaryOpenAdvisor;
+
+  /// No description provided for @summaryPriceRisesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hausses d\'abonnements annoncées'**
+  String get summaryPriceRisesTitle;
+
+  /// No description provided for @summaryPriceRise.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} : {amount} à partir du {date}'**
+  String summaryPriceRise(String label, String amount, String date);
+
+  /// No description provided for @summaryAskAi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demander une explication à l\'IA'**
+  String get summaryAskAi;
+
+  /// No description provided for @summaryAiQuestion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Explique-moi simplement les 30 prochains jours : le solde prévu de mes comptes courants, le point bas, les alertes et les propositions en attente. Utilise les prévisions et les conseils calculés par OwnCoffer, sans refaire les calculs.'**
+  String get summaryAiQuestion;
 }
 
 class _AppLocalizationsDelegate

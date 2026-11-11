@@ -64,6 +64,7 @@ import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'access_denied_exception.dart' as _i8te4v3o;
 import 'account.dart' as _iulmo8pc;
 import 'account_access.dart' as _idkoqesg;
+import 'account_forecast_summary.dart' as _ids6osoa;
 import 'account_kind.dart' as _ifkquxga;
 import 'account_visibility.dart' as _ioxxcdxl;
 import 'action_proposal.dart' as _ius3n358;
@@ -138,6 +139,7 @@ import 'member_info.dart' as _i2slp771;
 import 'member_role.dart' as _insyygng;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
 import 'month_review.dart' as _i5m4pdin;
+import 'month_summary.dart' as _ijuhpops;
 import 'notification.dart' as _irt10kca;
 import 'notification_settings.dart' as _iwwkm5c2;
 import 'occurrence_status.dart' as _it10dx4m;
@@ -180,6 +182,7 @@ import 'variable_estimate_info.dart' as _in08zzvs;
 export 'access_denied_exception.dart';
 export 'account.dart';
 export 'account_access.dart';
+export 'account_forecast_summary.dart';
 export 'account_kind.dart';
 export 'account_visibility.dart';
 export 'action_proposal.dart';
@@ -254,6 +257,7 @@ export 'member_info.dart';
 export 'member_role.dart';
 export 'missed_occurrence_info.dart';
 export 'month_review.dart';
+export 'month_summary.dart';
 export 'notification.dart';
 export 'notification_settings.dart';
 export 'occurrence_status.dart';
@@ -337,6 +341,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _idkoqesg.AccountAccess) {
       return _idkoqesg.AccountAccess.fromJson(data) as T;
+    }
+    if (t == _ids6osoa.AccountForecastSummary) {
+      return _ids6osoa.AccountForecastSummary.fromJson(data) as T;
     }
     if (t == _ifkquxga.AccountKind) {
       return _ifkquxga.AccountKind.fromJson(data) as T;
@@ -560,6 +567,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _i5m4pdin.MonthReview) {
       return _i5m4pdin.MonthReview.fromJson(data) as T;
     }
+    if (t == _ijuhpops.MonthSummary) {
+      return _ijuhpops.MonthSummary.fromJson(data) as T;
+    }
     if (t == _irt10kca.AppNotification) {
       return _irt10kca.AppNotification.fromJson(data) as T;
     }
@@ -688,6 +698,12 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_idkoqesg.AccountAccess?>()) {
       return (data != null ? _idkoqesg.AccountAccess.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ids6osoa.AccountForecastSummary?>()) {
+      return (data != null
+              ? _ids6osoa.AccountForecastSummary.fromJson(data)
+              : null)
           as T;
     }
     if (t == _isc.getType<_ifkquxga.AccountKind?>()) {
@@ -953,6 +969,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_i5m4pdin.MonthReview?>()) {
       return (data != null ? _i5m4pdin.MonthReview.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ijuhpops.MonthSummary?>()) {
+      return (data != null ? _ijuhpops.MonthSummary.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_irt10kca.AppNotification?>()) {
       return (data != null ? _irt10kca.AppNotification.fromJson(data) : null)
@@ -1260,6 +1279,18 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ids6osoa.AccountForecastSummary>) {
+      return (data as List)
+              .map((e) => deserialize<_ids6osoa.AccountForecastSummary>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_irt10kca.AppNotification>) {
+      return (data as List)
+              .map((e) => deserialize<_irt10kca.AppNotification>(e))
+              .toList()
+          as T;
+    }
     if (t == _isc.getType<List<String>?>()) {
       return (data != null
               ? (data as List).map((e) => deserialize<String>(e)).toList()
@@ -1516,6 +1547,7 @@ class Protocol extends _isc.SerializationManager {
       _i8te4v3o.AccessDeniedException => 'AccessDeniedException',
       _iulmo8pc.Account => 'Account',
       _idkoqesg.AccountAccess => 'AccountAccess',
+      _ids6osoa.AccountForecastSummary => 'AccountForecastSummary',
       _ifkquxga.AccountKind => 'AccountKind',
       _ioxxcdxl.AccountVisibility => 'AccountVisibility',
       _ius3n358.ActionProposal => 'ActionProposal',
@@ -1590,6 +1622,7 @@ class Protocol extends _isc.SerializationManager {
       _insyygng.MemberRole => 'MemberRole',
       _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
       _i5m4pdin.MonthReview => 'MonthReview',
+      _ijuhpops.MonthSummary => 'MonthSummary',
       _irt10kca.AppNotification => 'AppNotification',
       _iwwkm5c2.NotificationSettings => 'NotificationSettings',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
@@ -1649,6 +1682,8 @@ class Protocol extends _isc.SerializationManager {
         return 'Account';
       case _idkoqesg.AccountAccess():
         return 'AccountAccess';
+      case _ids6osoa.AccountForecastSummary():
+        return 'AccountForecastSummary';
       case _ifkquxga.AccountKind():
         return 'AccountKind';
       case _ioxxcdxl.AccountVisibility():
@@ -1797,6 +1832,8 @@ class Protocol extends _isc.SerializationManager {
         return 'MissedOccurrenceInfo';
       case _i5m4pdin.MonthReview():
         return 'MonthReview';
+      case _ijuhpops.MonthSummary():
+        return 'MonthSummary';
       case _irt10kca.AppNotification():
         return 'AppNotification';
       case _iwwkm5c2.NotificationSettings():
@@ -1905,6 +1942,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'AccountAccess') {
       return deserialize<_idkoqesg.AccountAccess>(data['data']);
+    }
+    if (dataClassName == 'AccountForecastSummary') {
+      return deserialize<_ids6osoa.AccountForecastSummary>(data['data']);
     }
     if (dataClassName == 'AccountKind') {
       return deserialize<_ifkquxga.AccountKind>(data['data']);
@@ -2127,6 +2167,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'MonthReview') {
       return deserialize<_i5m4pdin.MonthReview>(data['data']);
+    }
+    if (dataClassName == 'MonthSummary') {
+      return deserialize<_ijuhpops.MonthSummary>(data['data']);
     }
     if (dataClassName == 'AppNotification') {
       return deserialize<_irt10kca.AppNotification>(data['data']);

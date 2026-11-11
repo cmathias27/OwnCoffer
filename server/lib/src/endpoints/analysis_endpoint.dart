@@ -3,10 +3,12 @@ import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
 import '../finance/forecast_service.dart';
+import '../finance/proposal_service.dart';
 import '../finance/spending_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
 import '../security/scopes.dart';
+import '../security/session_devices.dart';
 import '../finance/insights_service.dart';
 import '../pepite/pepite_badges.dart';
 
@@ -251,6 +253,123 @@ class AnalysisEndpoint extends Endpoint {
       daysLeft: r.daysLeft,
       perDayCents: r.perDayCents,
       accountIds: [for (final a in accounts) a.id!],
+    );
+  }
+
+  /// Days the monthly summary looks ahead.
+  static const _summaryDays = 30;
+
+  /// Monthly summary on one page (decision 0035): the 30-day forecast of
+  /// the checking accounts the user may see, from the user's [today]
+  /// (within a day of the server's date), their unread alerts of this
+  /// group, the proposals waiting for them and the announced subscription
+  /// price rises. Everything comes from the engine; nothing is written but
+  /// the advisor's usual refresh of its proposals.
+  Future<MonthSummary> summary(
+    Session session,
+    int groupId,
+    DateTime today,
+  ) async {
+    final accounts = await Access.visibleAccounts(session, groupId);
+    final t = today.toUtc();
+    final day = core.LocalDate(t.year, t.month, t.day);
+    final server = core.LocalDate.fromDateTime(DateTime.now().toUtc());
+    if (day.daysUntil(server).abs() > 1) {
+      throw InvalidInputException(code: 'invalid_date', field: 'today');
+    }
+    final until = day.addDays(_summaryDays);
+
+    final forecasts = <AccountForecastSummary>[];
+    for (final a in accounts) {
+      if (a.kind != AccountKind.checking) continue;
+      final f = await ForecastService.compute(
+        session,
+        a,
+        day,
+        horizonDays: _summaryDays,
+        variable: true,
+      );
+      var debits = 0, credits = 0;
+      for (final e in f.events) {
+        if (e.amountCents < 0) {
+          debits += e.amountCents;
+        } else {
+          credits += e.amountCents;
+        }
+      }
+      forecasts.add(
+        AccountForecastSummary(
+          accountId: a.id!,
+          accountName: a.name,
+          currency: a.currency,
+          currentBalanceCents: f.currentBalanceCents,
+          endBalanceCents: f.days.isEmpty
+              ? f.currentBalanceCents
+              : f.days.last.balanceCents,
+          lowestBalanceCents: f.lowestBalanceCents,
+          lowestDate: f.lowestDate,
+          alertThresholdCents: f.alertThresholdCents,
+          firstBelowThresholdDate: f.firstBelowThresholdDate,
+          plannedDebitsCents: debits,
+          plannedCreditsCents: credits,
+          missedCount: f.missed.length,
+        ),
+      );
+    }
+
+    final user = Access.userId(session);
+    final current = session.authenticated?.authId;
+    final alerts = [
+      for (final n in await AppNotification.db.find(
+        session,
+        where: (n) =>
+            n.authUserId.equals(user) &
+            n.groupId.equals(groupId) &
+            n.readAt.equals(null),
+        orderByList: (n) => [n.createdAt.desc()],
+        limit: 20,
+      ))
+        if (SessionDevices.aboutOther(n, current)) n,
+    ];
+
+    await ProposalService.refreshAdvice(session, groupId);
+    final proposals = await ActionProposal.db.find(
+      session,
+      where: (p) =>
+          p.authUserId.equals(user) &
+          p.groupId.equals(groupId) &
+          p.status.equals('pending'),
+      orderByList: (p) => [p.createdAt.desc(), p.id.desc()],
+      limit: 50,
+    );
+
+    final Set<int> ids = {for (final a in accounts) a.id!};
+    final from = day.addDays(-7).toDb(), to = until.addDays(1).toDb();
+    final priceRises = ids.isEmpty
+        ? <ScheduledTransaction>[]
+        : await ScheduledTransaction.db.find(
+            session,
+            where: (s) =>
+                s.accountId.inSet(ids) &
+                s.deletedAt.equals(null) &
+                s.subscription.equals(true) &
+                (s.priceRiseDate >= from) &
+                (s.priceRiseDate < to),
+            orderBy: (s) => s.priceRiseDate,
+          );
+
+    return MonthSummary(
+      today: day.toDb(),
+      until: until.toDb(),
+      forecasts: forecasts,
+      alerts: alerts,
+      proposals: proposals,
+      priceRises: [
+        for (final s in priceRises)
+          if (s.priceRiseAmountCents != null &&
+              (s.endDate == null || !s.endDate!.toLocalDate().isBefore(day)))
+            s,
+      ],
     );
   }
 

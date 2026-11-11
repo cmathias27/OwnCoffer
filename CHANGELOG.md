@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.20.0 (novembre 2026)
+
+### Récapitulatif mensuel (décision 0035)
+- **Les 30 prochains jours sur une page**, depuis la carte « À surveiller » de l'accueil : pour chaque compte courant, solde du jour, solde prévu dans 30 jours, point bas, passage sous le seuil d'alerte, sorties et entrées prévues, échéances en retard.
+- **Alertes non lues, propositions en attente et hausses d'abonnement annoncées** rassemblées sur la même page, chacune menant à sa page pour agir.
+- **Explication par l'IA, facultative** : si une IA est configurée, un bouton lui demande d'expliquer les chiffres calculés par OwnCoffer, sans les refaire.
+
 ## 1.19.0 (novembre 2026)
 
 ### Abonnements mis en évidence et hausses de prix (décision 0034)

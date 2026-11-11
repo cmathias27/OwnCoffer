@@ -7329,4 +7329,93 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pepiteItemMatHelp => 'Un tapis tout doux';
+
+  @override
+  String get summaryTitle => 'Récapitulatif du mois';
+
+  @override
+  String get summaryOpen => 'Récapitulatif : les 30 prochains jours';
+
+  @override
+  String summaryHelp(String date) {
+    return 'Ce qui vous attend d\'ici le $date : solde prévu, alertes et propositions à décider. Tout est calculé par OwnCoffer, sans IA.';
+  }
+
+  @override
+  String get summaryForecastTitle => 'Prévision à 30 jours';
+
+  @override
+  String get summaryNoAccount => 'Aucun compte courant visible.';
+
+  @override
+  String summaryToday(String amount) {
+    return 'Aujourd\'hui : $amount';
+  }
+
+  @override
+  String summaryEnd(String date, String amount) {
+    return 'Le $date : $amount';
+  }
+
+  @override
+  String summaryLowest(String amount, String date) {
+    return 'Point bas : $amount le $date';
+  }
+
+  @override
+  String summaryBelow(String threshold, String date) {
+    return 'Sous le seuil d\'alerte ($threshold) dès le $date';
+  }
+
+  @override
+  String summaryPlanned(String debits, String credits) {
+    return 'Sorties prévues $debits (dépenses courantes estimées comprises) · entrées prévues $credits';
+  }
+
+  @override
+  String summaryMissed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations prévues en retard',
+      one: '1 opération prévue en retard',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get summaryOpenForecast => 'Voir la prévision';
+
+  @override
+  String get summaryAlertsTitle => 'Alertes non lues';
+
+  @override
+  String get summaryNoAlert => 'Aucune alerte en attente.';
+
+  @override
+  String get summaryOpenNotifications => 'Voir toutes les notifications';
+
+  @override
+  String get summaryProposalsTitle => 'Propositions en attente';
+
+  @override
+  String get summaryNoProposal => 'Aucune proposition à décider.';
+
+  @override
+  String get summaryOpenAdvisor => 'Décider dans Mon conseiller';
+
+  @override
+  String get summaryPriceRisesTitle => 'Hausses d\'abonnements annoncées';
+
+  @override
+  String summaryPriceRise(String label, String amount, String date) {
+    return '$label : $amount à partir du $date';
+  }
+
+  @override
+  String get summaryAskAi => 'Demander une explication à l\'IA';
+
+  @override
+  String get summaryAiQuestion =>
+      'Explique-moi simplement les 30 prochains jours : le solde prévu de mes comptes courants, le point bas, les alertes et les propositions en attente. Utilise les prévisions et les conseils calculés par OwnCoffer, sans refaire les calculs.';
 }

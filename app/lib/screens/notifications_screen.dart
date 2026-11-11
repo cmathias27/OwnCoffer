@@ -22,6 +22,10 @@ class NotificationsScreen extends StatefulWidget {
 
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();
+
+  /// Title and body of [n] in the user's language (also the monthly summary).
+  static (String, String?) texts(BuildContext context, AppNotification n) =>
+      _NotificationsScreenState.texts(context, n);
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
@@ -116,7 +120,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 separatorBuilder: (_, _) => const Divider(height: 1),
                 itemBuilder: (context, i) {
                   final n = items[i];
-                  final (title, body) = _texts(context, n);
+                  final (title, body) = texts(context, n);
                   final isUnread = n.readAt == null;
                   return ListTile(
                     leading: switch (n.type) {
@@ -180,7 +184,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  static (String, String?) _texts(BuildContext context, AppNotification n) {
+  static (String, String?) texts(BuildContext context, AppNotification n) {
     final l = AppLocalizations.of(context);
     if (n.type == 'goal_warning' ||
         n.type == 'goal_over' ||

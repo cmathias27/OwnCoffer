@@ -88,6 +88,7 @@ import 'package:owncoffer_client/src/protocol/mcp_token_created.dart'
 import 'package:owncoffer_client/src/protocol/member_info.dart' as _igteyn7f;
 import 'package:owncoffer_client/src/protocol/member_role.dart' as _ibbiwcdo;
 import 'package:owncoffer_client/src/protocol/month_review.dart' as _ilg6npsn;
+import 'package:owncoffer_client/src/protocol/month_summary.dart' as _iccoybcj;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
 import 'package:owncoffer_client/src/protocol/notification_settings.dart'
     as _inuj1ggb;
@@ -917,6 +918,24 @@ class EndpointAnalysis extends _isc.EndpointRef {
     {
       'groupId': groupId,
       'accountId': accountId,
+    },
+  );
+
+  /// Monthly summary on one page (decision 0035): the 30-day forecast of
+  /// the checking accounts the user may see, from the user's [today]
+  /// (within a day of the server's date), their unread alerts of this
+  /// group, the proposals waiting for them and the announced subscription
+  /// price rises. Everything comes from the engine; nothing is written but
+  /// the advisor's usual refresh of its proposals.
+  _ida.Future<_iccoybcj.MonthSummary> summary(
+    int groupId,
+    DateTime today,
+  ) => caller.callServerEndpoint<_iccoybcj.MonthSummary>(
+    'analysis',
+    'summary',
+    {
+      'groupId': groupId,
+      'today': today,
     },
   );
 

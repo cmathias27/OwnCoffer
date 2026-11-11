@@ -7276,4 +7276,93 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pepiteItemMatHelp => 'A soft rug';
+
+  @override
+  String get summaryTitle => 'Monthly summary';
+
+  @override
+  String get summaryOpen => 'Summary: the next 30 days';
+
+  @override
+  String summaryHelp(String date) {
+    return 'What lies ahead until $date: expected balance, alerts and proposals to decide. Everything is computed by OwnCoffer, without AI.';
+  }
+
+  @override
+  String get summaryForecastTitle => '30-day forecast';
+
+  @override
+  String get summaryNoAccount => 'No visible checking account.';
+
+  @override
+  String summaryToday(String amount) {
+    return 'Today: $amount';
+  }
+
+  @override
+  String summaryEnd(String date, String amount) {
+    return 'On $date: $amount';
+  }
+
+  @override
+  String summaryLowest(String amount, String date) {
+    return 'Lowest point: $amount on $date';
+  }
+
+  @override
+  String summaryBelow(String threshold, String date) {
+    return 'Below the alert threshold ($threshold) from $date';
+  }
+
+  @override
+  String summaryPlanned(String debits, String credits) {
+    return 'Expected out $debits (estimated everyday spending included) · expected in $credits';
+  }
+
+  @override
+  String summaryMissed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count planned operations late',
+      one: '1 planned operation late',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get summaryOpenForecast => 'See the forecast';
+
+  @override
+  String get summaryAlertsTitle => 'Unread alerts';
+
+  @override
+  String get summaryNoAlert => 'No alert waiting.';
+
+  @override
+  String get summaryOpenNotifications => 'See all notifications';
+
+  @override
+  String get summaryProposalsTitle => 'Proposals waiting';
+
+  @override
+  String get summaryNoProposal => 'No proposal to decide.';
+
+  @override
+  String get summaryOpenAdvisor => 'Decide in My advisor';
+
+  @override
+  String get summaryPriceRisesTitle => 'Announced subscription rises';
+
+  @override
+  String summaryPriceRise(String label, String amount, String date) {
+    return '$label: $amount from $date';
+  }
+
+  @override
+  String get summaryAskAi => 'Ask the AI to explain';
+
+  @override
+  String get summaryAiQuestion =>
+      'Explain the next 30 days simply: the expected balance of my checking accounts, the lowest point, the alerts and the proposals waiting. Use the forecasts and advice computed by OwnCoffer, without redoing the calculations.';
 }

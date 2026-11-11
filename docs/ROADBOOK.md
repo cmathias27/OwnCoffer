@@ -219,7 +219,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [ ] Tableau d'amortissement lu en entier (changement de taux ou pause d'échéances en cours de crédit)
 - [ ] Remboursement anticipé simulé avec l'indemnité lue dans l'offre de prêt (calcul du moteur)
 - [x] **Abonnements mis en évidence** dans Opérations : total mensuel, hausse constatée signalée, rappel avant une hausse de prix — décision 0034, *1.19.0*
-- [ ] Récapitulatif mensuel : prévision à 30 jours, alertes et propositions en attente sur une page (calculé par le moteur, explication facultative par l'IA)
+- [x] Récapitulatif mensuel : prévision à 30 jours, alertes et propositions en attente sur une page (calculé par le moteur, explication facultative par l'IA) — décision 0035, *1.20.0*
 - [ ] Coût et volume de l'IA par fonction (lecture de documents, classement, discussion), en plus du plafond mensuel
 - [x] Tests du serveur lancés aussi dans un fuseau horaire autre que l'UTC (un bug de date a échappé à la CI ; corrigé en 1.2.0) — *1.2.0*
 - [x] **Lecture des documents enregistrés depuis l'assistant** : permettre à l'utilisateur de demander au chat d'analyser un justificatif ou document de crédit déjà stocké, avec sélection explicite du document, contrôles d'accès groupe/compte et confirmation avant tout envoi à un fournisseur externe ; le document et ses métadonnées ne sont accessibles qu'à travers des outils de contexte contrôlés par le serveur. — *1.4.0 (issue #136, PR #137)*

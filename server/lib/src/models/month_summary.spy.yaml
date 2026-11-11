@@ -1,0 +1,16 @@
+### Monthly summary on one page (decision 0035): the 30-day forecast of the
+### checking accounts the user may see, the alerts not read yet and the
+### proposals waiting for a decision. Computed by the engine, without AI.
+class: MonthSummary
+fields:
+  today: DateTime
+  ### Last day of the forecast (today + 30 days).
+  until: DateTime
+  forecasts: List<AccountForecastSummary>
+  ### Unread alerts of this group for the user, newest first.
+  alerts: List<AppNotification>
+  ### Proposals waiting for the user's decision in this group, newest first.
+  proposals: List<ActionProposal>
+  ### Subscriptions whose announced price rise falls in the period (or is
+  ### at most 7 days past and not applied yet), soonest first.
+  priceRises: List<ScheduledTransaction>

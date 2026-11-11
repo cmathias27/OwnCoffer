@@ -23,6 +23,9 @@ enum DashboardTarget {
 
   /// « Bien démarrer » (decision 0028).
   start,
+
+  /// Monthly summary (decision 0035).
+  summary,
 }
 
 /// The home page: where the money stands today and what comes next, on
@@ -474,6 +477,13 @@ class DashboardScreenState extends State<DashboardScreen> {
             title: Text(l.dashboardUnread(widget.unread)),
             onTap: () => widget.onOpen(DashboardTarget.notifications),
           ),
+        ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.event_note_outlined),
+          title: Text(l.summaryOpen),
+          onTap: () => widget.onOpen(DashboardTarget.summary),
+        ),
         if (widget.onAdvisor != null)
           ListTile(
             dense: true,

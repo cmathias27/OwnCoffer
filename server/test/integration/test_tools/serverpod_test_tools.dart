@@ -90,6 +90,7 @@ import 'package:owncoffer_server/src/generated/mcp_token_created.dart'
 import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/month_review.dart' as _ir8qupm5;
+import 'package:owncoffer_server/src/generated/month_summary.dart' as _i9ltumt5;
 import 'package:owncoffer_server/src/generated/notification.dart' as _ieap9unx;
 import 'package:owncoffer_server/src/generated/notification_settings.dart'
     as _id4w1v6o;
@@ -2532,6 +2533,41 @@ class _AnalysisEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_idzqc1lk.LeftToLiveReport>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_i9ltumt5.MonthSummary> summary(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    DateTime today,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'analysis',
+            method: 'summary',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'analysis',
+          methodName: 'summary',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'today': today,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_i9ltumt5.MonthSummary>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
