@@ -9612,7 +9612,7 @@ abstract class AppLocalizations {
   /// No description provided for @pepiteRitualIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Quatre étapes, une dizaine de minutes en tout. Fais-les dans l\'ordre que tu veux : je coche au fur et à mesure.'**
+  /// **'Quatre étapes, une dizaine de minutes en tout, dans l\'ordre que tu veux. Je coche toute seule ce que je vois : un relevé importé, une opération vérifiée, la prévision regardée. Dès que les trois sont faites, je fête ta semaine.'**
   String get pepiteRitualIntro;
 
   /// No description provided for @pepiteStepImport.
@@ -9624,7 +9624,7 @@ abstract class AppLocalizations {
   /// No description provided for @pepiteStepImportHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Environ 3 min. Pas de nouveau relevé ? Coche simplement.'**
+  /// **'Environ 3 min. Je le vois dès que tu importes. Pas de nouveau relevé ? Coche simplement.'**
   String get pepiteStepImportHelp;
 
   /// No description provided for @pepiteStepCheck.
@@ -9636,7 +9636,7 @@ abstract class AppLocalizations {
   /// No description provided for @pepiteStepCheckHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Environ 4 min : les catégories et les opérations à classer.'**
+  /// **'Environ 4 min : les catégories et les opérations à classer. Je le vois dès que tu ouvres ou modifies tes opérations.'**
   String get pepiteStepCheckHelp;
 
   /// No description provided for @pepiteStepForecast.
@@ -9648,7 +9648,7 @@ abstract class AppLocalizations {
   /// No description provided for @pepiteStepForecastHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Environ 2 min : le solde des 30 prochains jours.'**
+  /// **'Environ 2 min : le solde des 30 prochains jours. Je le vois dès que tu ouvres la prévision.'**
   String get pepiteStepForecastHelp;
 
   /// No description provided for @pepiteStepCelebrate.
@@ -9680,6 +9680,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Bravo !'**
   String get pepiteCelebrateTitle;
+
+  /// No description provided for @pepiteNoticedWeek.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai vu tes comptes de la semaine : relevé, opérations et prévision. Je la compte pour toi !'**
+  String get pepiteNoticedWeek;
 
   /// No description provided for @pepiteEarned.
   ///

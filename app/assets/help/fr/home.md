@@ -20,7 +20,7 @@ Chaque carte mène à sa page : touchez-la pour voir le détail.
 
 ## Pépite, le hamster des comptes
 
-**Pépite** vous accompagne pour faire vos comptes **une fois par semaine**, en une dizaine de minutes, en quatre étapes : importer les derniers relevés, vérifier les opérations, regarder la prévision, puis **fêter ça**. « Ouvrir » mène à la page de l'étape ; cochez la case si l'étape n'a rien à faire cette semaine.
+**Pépite** vous accompagne pour faire vos comptes **une fois par semaine**, en une dizaine de minutes, en quatre étapes : importer les derniers relevés, vérifier les opérations, regarder la prévision, puis **fêter ça**. Pépite **coche toute seule** ce qu'elle voit — un relevé importé, une opération vérifiée ou modifiée, la prévision ouverte — et **compte la semaine dès que les trois sont faites**, sans attendre « Fêter ça ». Elle annonce aussi les badges gagnés en chemin. « Ouvrir » mène à la page de l'étape ; cochez la case si l'étape n'a rien à faire cette semaine (pas de nouveau relevé, par exemple).
 
 - Chaque semaine faite donne **10 graines**, chaque badge **5 graines**. Ce sont les semaines qui comptent, pas les jours d'affilée : une semaine manquée n'efface rien et le total gagné ne baisse jamais.
 - **La boutique de Pépite** (dans **Pépite et ma réserve**) : les graines se dépensent en **accessoires** (écharpe, lunettes, bonnet…, un porté à la fois) et en objets pour son **terrier** (coussin, roue, cabane…, autant qu'on veut). Chaque objet s'achète une fois ; on voit les graines à dépenser à côté du total gagné, qui ne baisse pas. Le **sac à dos** s'achète dans l'application Android ou Windows, puis se voit partout. Les graines ne valent rien d'autre et ne s'échangent contre rien.

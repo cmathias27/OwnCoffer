@@ -28,6 +28,7 @@ abstract class PepiteStatus
     required this.newBadges,
     required this.items,
     required this.equipped,
+    this.weekSteps,
   }) : spentSeeds = spentSeeds ?? 0;
 
   factory PepiteStatus({
@@ -42,6 +43,7 @@ abstract class PepiteStatus
     required List<String> newBadges,
     required List<String> items,
     required List<String> equipped,
+    List<String>? weekSteps,
   }) = _PepiteStatusImpl;
 
   factory PepiteStatus.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -75,6 +77,11 @@ abstract class PepiteStatus
       equipped: _iylp5nsw.Protocol().deserialize<List<String>>(
         jsonSerialization['equipped'],
       ),
+      weekSteps: jsonSerialization['weekSteps'] == null
+          ? null
+          : _iylp5nsw.Protocol().deserialize<List<String>>(
+              jsonSerialization['weekSteps'],
+            ),
     );
   }
 
@@ -105,6 +112,11 @@ abstract class PepiteStatus
   /// Codes of currently equipped items (accessory and/or burrow).
   List<String> equipped;
 
+  /// Steps of this week's ritual seen in the data (decision 0029):
+  /// `statements` (a statement imported by the user), `check` (an
+  /// operation they changed). Null from an older server.
+  List<String>? weekSteps;
+
   /// Returns a shallow copy of this [PepiteStatus]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
@@ -120,6 +132,7 @@ abstract class PepiteStatus
     List<String>? newBadges,
     List<String>? items,
     List<String>? equipped,
+    List<String>? weekSteps,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -136,6 +149,7 @@ abstract class PepiteStatus
       'newBadges': newBadges.toJson(),
       'items': items.toJson(),
       'equipped': equipped.toJson(),
+      if (weekSteps != null) 'weekSteps': weekSteps?.toJson(),
     };
   }
 
@@ -154,6 +168,7 @@ abstract class PepiteStatus
       'newBadges': newBadges.toJson(),
       'items': items.toJson(),
       'equipped': equipped.toJson(),
+      if (weekSteps != null) 'weekSteps': weekSteps?.toJson(),
     };
   }
 
@@ -178,6 +193,7 @@ class _PepiteStatusImpl extends PepiteStatus {
     required List<String> newBadges,
     required List<String> items,
     required List<String> equipped,
+    List<String>? weekSteps,
   }) : super._(
          seeds: seeds,
          spentSeeds: spentSeeds,
@@ -190,6 +206,7 @@ class _PepiteStatusImpl extends PepiteStatus {
          newBadges: newBadges,
          items: items,
          equipped: equipped,
+         weekSteps: weekSteps,
        );
 
   /// Returns a shallow copy of this [PepiteStatus]
@@ -208,6 +225,7 @@ class _PepiteStatusImpl extends PepiteStatus {
     List<String>? newBadges,
     List<String>? items,
     List<String>? equipped,
+    Object? weekSteps = _Undefined,
   }) {
     return PepiteStatus(
       seeds: seeds ?? this.seeds,
@@ -225,6 +243,9 @@ class _PepiteStatusImpl extends PepiteStatus {
       newBadges: newBadges ?? this.newBadges.map((e0) => e0).toList(),
       items: items ?? this.items.map((e0) => e0).toList(),
       equipped: equipped ?? this.equipped.map((e0) => e0).toList(),
+      weekSteps: weekSteps is List<String>?
+          ? weekSteps
+          : this.weekSteps?.map((e0) => e0).toList(),
     );
   }
 }

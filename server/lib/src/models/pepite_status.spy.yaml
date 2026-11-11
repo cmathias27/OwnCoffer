@@ -17,3 +17,7 @@ fields:
   items: List<String>
   ### Codes of currently equipped items (accessory and/or burrow).
   equipped: List<String>
+  ### Steps of this week's ritual seen in the data (decision 0029):
+  ### `statements` (a statement imported by the user), `check` (an
+  ### operation they changed). Null from an older server.
+  weekSteps: List<String>?

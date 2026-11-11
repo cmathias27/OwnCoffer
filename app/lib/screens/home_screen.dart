@@ -30,9 +30,11 @@ import '../state/app_lock.dart';
 import '../help/help.dart';
 import '../assistant/chat_controller.dart';
 import 'apps_screen.dart';
+import '../state/pepite.dart';
 import '../state/pepite_advice.dart';
 import '../util/file_pick.dart';
 import '../util/incoming_file.dart';
+import '../widgets/pepite.dart' show showPepiteCheer;
 import '../widgets/pepite_apps.dart';
 import 'getting_started_screen.dart';
 import 'export_screen.dart';
@@ -86,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const Duration(minutes: 2),
       (_) => _loadUnread(),
     );
+    pepite.addListener(_onPepite);
     IncomingFileHandler.init();
     _incomingFileSub = IncomingFileHandler.files.listen((file) {
       if (mounted) {
@@ -115,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _unreadTimer?.cancel();
     _incomingFileSub?.cancel();
+    pepite.removeListener(_onPepite);
     // Signed out: the conversation is forgotten.
     chat.detach();
     super.dispose();
@@ -135,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (_) => NotificationsScreen(
           onOpenForecast: (accountId) {
             setState(() => _tab = 2);
+            _pepiteSees(2);
             _forecastKey.currentState?.showAccount(accountId);
           },
         ),
@@ -150,8 +155,42 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) setState(() => _accounts = list);
   }
 
+  /// Pépite notices by herself the steps of the week (decision 0029): the
+  /// operations or the forecast opened; the server sees imports and
+  /// changes, so she looks again.
+  void _pepiteSees(int tab) {
+    if (tab == 1) unawaited(pepite.markStep(PepiteStep.check));
+    if (tab == 2) unawaited(pepite.markStep(PepiteStep.forecast));
+    unawaited(pepite.notice());
+  }
+
+  var _cheering = false;
+
+  void _onPepite() {
+    if (_cheering || !pepite.hasCheer) return;
+    _cheering = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        final cheer = pepite.takeCheer();
+        if (!mounted || cheer == null) return;
+        final apps = await showPepiteCheer(context, cheer);
+        if (apps && mounted) {
+          await Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => AppsScreen(serverVersion: AppVersions.server),
+            ),
+          );
+        }
+      } finally {
+        _cheering = false;
+      }
+      if (mounted) _onPepite();
+    });
+  }
+
   void _selectTab(int i) {
     setState(() => _tab = i);
+    _pepiteSees(i);
     if (i == 0) _accountsKey.currentState?.reload();
     if (i == 2) _forecastKey.currentState?.reload();
     if (i == 4) _categoriesKey.currentState?.reload();
@@ -274,7 +313,10 @@ class _HomeScreenState extends State<HomeScreen> {
               AccountsScreen(
                 key: _accountsKey,
                 membership: current,
-                onOpen: (a) => setState(() => (_openAccount = a, _tab = 1)),
+                onOpen: (a) {
+                  setState(() => (_openAccount = a, _tab = 1));
+                  _pepiteSees(1);
+                },
               ),
               OperationsScreen(
                 key: ValueKey(
@@ -301,6 +343,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 onFileHandled: () => setState(() => _pendingImportFile = null),
                 onImported: () {
                   setState(() => _imports++);
+                  unawaited(pepite.markStep(PepiteStep.statements));
+                  unawaited(pepite.notice(force: true));
                   _forecastKey.currentState?.reload();
                   _accountsKey.currentState?.reload();
                 },

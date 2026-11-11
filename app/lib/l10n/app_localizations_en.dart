@@ -5969,28 +5969,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pepiteRitualIntro =>
-      'Four steps, about ten minutes in all. Do them in any order you like: I tick them as you go.';
+      'Four steps, about ten minutes in all, in any order you like. I tick on my own what I see: a statement imported, a transaction checked, the forecast looked at. As soon as all three are done, I celebrate your week.';
 
   @override
   String get pepiteStepImport => 'Import the latest statements';
 
   @override
   String get pepiteStepImportHelp =>
-      'About 3 min. No new statement? Just tick it.';
+      'About 3 min. I see it as soon as you import. No new statement? Just tick it.';
 
   @override
   String get pepiteStepCheck => 'Check the transactions';
 
   @override
   String get pepiteStepCheckHelp =>
-      'About 4 min: categories and transactions to classify.';
+      'About 4 min: categories and transactions to classify. I see it as soon as you open or change your transactions.';
 
   @override
   String get pepiteStepForecast => 'Look at the forecast';
 
   @override
   String get pepiteStepForecastHelp =>
-      'About 2 min: the balance over the next 30 days.';
+      'About 2 min: the balance over the next 30 days. I see it as soon as you open the forecast.';
 
   @override
   String get pepiteStepCelebrate => 'Celebrate!';
@@ -6007,6 +6007,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pepiteCelebrateTitle => 'Well done!';
+
+  @override
+  String get pepiteNoticedWeek =>
+      'I saw your accounts this week: statement, transactions and forecast. I\'m counting the week for you!';
 
   @override
   String pepiteEarned(int count) {

@@ -20,7 +20,7 @@ Each card leads to its page: tap it to see the details.
 
 ## Pépite, the accounts hamster
 
-**Pépite** helps you do your accounts **once a week**, in about ten minutes, in four steps: import the latest statements, check the operations, look at the forecast, then **celebrate**. "Open" leads to the page of the step; tick the box if the step has nothing to do this week.
+**Pépite** helps you do your accounts **once a week**, in about ten minutes, in four steps: import the latest statements, check the operations, look at the forecast, then **celebrate**. Pépite **ticks on her own** what she sees — a statement imported, a transaction checked or changed, the forecast opened — and **counts the week as soon as all three are done**, without waiting for "Celebrate". She also announces the badges earned along the way. "Open" leads to the page of the step; tick the box if the step has nothing to do this week (no new statement, for instance).
 
 - Each week done gives **10 seeds**, each badge **5 seeds**. Weeks count, not days in a row: a missed week erases nothing and the total earned never goes down.
 - **Pépite's shop** (in **Pépite and my reserve**): seeds are spent on **accessories** (scarf, glasses, beanie…, one worn at a time) and items for its **burrow** (cushion, wheel, hut…, as many as you like). Each item is bought once; the seeds to spend show next to the total earned, which does not go down. The **backpack** is bought in the Android or Windows app, then shows everywhere. Seeds are worth nothing else and can be exchanged for nothing.

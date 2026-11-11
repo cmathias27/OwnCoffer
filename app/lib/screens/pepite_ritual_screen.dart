@@ -8,9 +8,10 @@ import '../widgets/pepite.dart';
 import 'apps_screen.dart';
 
 /// The weekly ritual with Pépite, four steps: import, check, forecast,
-/// celebrate. "Ouvrir" ticks the step and goes back to the page of the
-/// app it needs (the screen returns that step); the box ticks it without
-/// going (no new statement this week, for instance).
+/// celebrate. Pépite ticks by herself what she sees (decision 0029) and
+/// counts the week once the three are done; "Ouvrir" goes back to the page
+/// of the app the step needs (the screen returns that step); the box ticks
+/// it without going (no new statement this week, for instance).
 class PepiteRitualScreen extends StatelessWidget {
   const PepiteRitualScreen({super.key});
 
@@ -23,11 +24,7 @@ class PepiteRitualScreen extends StatelessWidget {
         listenable: pepite,
         builder: (context, _) {
           final done = pepite.steps;
-          final ready = [
-            PepiteStep.statements,
-            PepiteStep.check,
-            PepiteStep.forecast,
-          ].every(done.contains);
+          final ready = pepite.ritualReady;
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [

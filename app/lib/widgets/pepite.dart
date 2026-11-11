@@ -607,6 +607,58 @@ Future<bool> celebrateWithPepite(BuildContext context) async {
     return false;
   }
   if (!context.mounted) return false;
+  return _cheerDialog(
+    context,
+    seeds: s.earnedSeeds,
+    badges: s.newBadges,
+    reserve: s.seeds,
+  );
+}
+
+/// Pépite cheers about what she noticed by herself (decision 0029): the
+/// week completed, in the dialog of the ritual; badges alone, in a short
+/// message. True when the user then asked to see the apps.
+Future<bool> showPepiteCheer(BuildContext context, PepiteCheer cheer) async {
+  final l = AppLocalizations.of(context);
+  if (!cheer.week) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const PepiteImage(PepitePose.cheer, size: 40),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                [
+                  for (final code in cheer.badges)
+                    l.pepiteNewBadge(pepiteBadgeText(l, code).$1),
+                  l.pepiteEarned(cheer.seeds),
+                ].join('\n'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    return false;
+  }
+  return _cheerDialog(
+    context,
+    seeds: cheer.seeds,
+    badges: cheer.badges,
+    reserve: cheer.status.seeds,
+    noticed: true,
+  );
+}
+
+Future<bool> _cheerDialog(
+  BuildContext context, {
+  required int seeds,
+  required List<String> badges,
+  required int reserve,
+  bool noticed = false,
+}) async {
+  final l = AppLocalizations.of(context);
   final apps = pepite.invitesApps;
   final see = await showDialog<bool>(
     context: context,
@@ -616,8 +668,12 @@ Future<bool> celebrateWithPepite(BuildContext context) async {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(l.pepiteEarned(s.earnedSeeds), textAlign: TextAlign.center),
-          for (final code in s.newBadges) ...[
+          if (noticed) ...[
+            Text(l.pepiteNoticedWeek, textAlign: TextAlign.center),
+            const SizedBox(height: 8),
+          ],
+          Text(l.pepiteEarned(seeds), textAlign: TextAlign.center),
+          for (final code in badges) ...[
             const SizedBox(height: 8),
             Text(
               l.pepiteNewBadge(pepiteBadgeText(l, code).$1),
@@ -626,7 +682,7 @@ Future<bool> celebrateWithPepite(BuildContext context) async {
             ),
           ],
           const SizedBox(height: 12),
-          PepiteSeeds(s.seeds),
+          PepiteSeeds(reserve),
           if (apps) ...[
             const SizedBox(height: 12),
             Text(l.pepiteAppsRitualEnd, textAlign: TextAlign.center),

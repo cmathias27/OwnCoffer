@@ -156,6 +156,65 @@ void main() {
       expect(other.badges, isEmpty);
     });
 
+    test(
+      'the steps of the week are seen in the data (decision 0029)',
+      () async {
+        final group = (await endpoints.group.create(as(alice), 'A')).group.id!;
+        final account = await endpoints.account.create(
+          as(alice),
+          group,
+          'Courant',
+          AccountKind.checking,
+        );
+        expect((await endpoints.pepite.status(as(alice), today)).weekSteps, []);
+        StatementImport import(DateTime at, {DateTime? cancelled}) =>
+            StatementImport(
+              accountId: account.id!,
+              format: 'qif',
+              fileName: 'releve.qif',
+              fileHash: 'x',
+              encoding: 'utf-8',
+              readCount: 0,
+              addedCount: 0,
+              duplicateCount: 0,
+              possibleDuplicateCount: 0,
+              errorCount: 0,
+              classifiedCount: 0,
+              authorId: alice,
+              createdAt: at,
+              cancelledAt: cancelled,
+            );
+        final now = DateTime.now().toUtc();
+        // Last month's import, and a cancelled one: not this week.
+        await StatementImport.db.insert(db, [
+          import(now.subtract(const Duration(days: 30))),
+          import(now, cancelled: now),
+        ]);
+        expect((await endpoints.pepite.status(as(alice), today)).weekSteps, []);
+        await StatementImport.db.insertRow(db, import(now));
+        expect((await endpoints.pepite.status(as(alice), today)).weekSteps, [
+          'statements',
+        ]);
+        // An operation changed by Alice: checked. Mallory sees nothing.
+        final op = await endpoints.transaction.create(
+          as(alice),
+          account.id!,
+          today,
+          -1250,
+          'Boulangerie',
+        );
+        await endpoints.transaction.setCleared(as(alice), op.id!, true);
+        expect((await endpoints.pepite.status(as(alice), today)).weekSteps, [
+          'statements',
+          'check',
+        ]);
+        expect(
+          (await endpoints.pepite.status(as(mallory), today)).weekSteps,
+          [],
+        );
+      },
+    );
+
     test('a first session on an app earns « Pépite nomade »', () async {
       Future<void> seen(UuidValue u, String platform) async =>
           SessionDevices.seen(
