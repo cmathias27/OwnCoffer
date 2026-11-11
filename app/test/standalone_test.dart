@@ -186,6 +186,109 @@ void main() {
     },
     timeout: const Timeout(Duration(minutes: 3)),
   );
+
+  test(
+    'standalone database encrypted: an earlier plain one too, backups '
+    'restorable anywhere, nothing without the key',
+    () async {
+      final here = Directory.systemTemp.createTempSync('owncoffer-key-');
+      final there = Directory.systemTemp.createTempSync('owncoffer-elsewhere-');
+      addTearDown(() {
+        here.deleteSync(recursive: true);
+        there.deleteSync(recursive: true);
+      });
+      const pass = 'ma phrase de sauvegarde';
+      final key = DatabaseKey.generate();
+      final db = File(EmbeddedServer.databasePath(here));
+      Future<Client> signedIn(EmbeddedServer server) async {
+        final client = Client(server.api.toString())
+          ..authSessionManager = FlutterAuthSessionManager(storage: _Memory());
+        await client.auth.updateSignedInUser(
+          AuthSuccess.fromJson(await server.signIn()),
+        );
+        return client;
+      }
+
+      // A device of an earlier version: a plain file.
+      expect(EmbeddedServer.databaseState(here), DatabaseFileState.missing);
+      var server = await EmbeddedServer.start(dataDir: here);
+      var client = await signedIn(server);
+      final group = (await client.group.create('Mes comptes')).group;
+      final account = await client.account.create(
+        group.id!,
+        'Courant',
+        AccountKind.checking,
+      );
+      await client.transaction.create(
+        account.id!,
+        DateTime.utc(2026, 11, 2),
+        -990,
+        'CAFE',
+      );
+      client.close();
+      await server.stop();
+      expect(EmbeddedServer.databaseState(here), DatabaseFileState.plain);
+
+      // Encrypted at the next start, the data kept.
+      server = await EmbeddedServer.start(dataDir: here, databaseKey: key);
+      expect(EmbeddedServer.databaseState(here), DatabaseFileState.encrypted);
+      client = await signedIn(server);
+      await client.transaction.create(
+        account.id!,
+        DateTime.utc(2026, 11, 3),
+        -1250,
+        'BOULANGERIE',
+      );
+      expect(
+        (await client.transaction.list(account.id!)).items.map(
+          (t) => t.cleanLabel,
+        ),
+        containsAll(['CAFE', 'BOULANGERIE']),
+      );
+      final file = File('${here.path}/written.ocbackup');
+      await server.backupTo(file, pass);
+      client.close();
+      await server.stop();
+      final raw = latin1.decode(db.readAsBytesSync(), allowInvalid: true);
+      expect(raw, isNot(contains('BOULANGERIE')));
+      expect(raw, isNot(contains('SQLite format 3')));
+
+      // Without the key, or with another one: refused, the file untouched.
+      final before = db.readAsBytesSync();
+      await expectLater(
+        EmbeddedServer.start(
+          dataDir: here,
+          databaseKey: DatabaseKey.generate(),
+        ),
+        throwsA(isA<DatabaseKeyLostException>()),
+      );
+      await expectLater(
+        EmbeddedServer.start(dataDir: here),
+        throwsA(isA<StateError>()),
+      );
+      expect(db.readAsBytesSync(), before);
+
+      // The backup needs its passphrase only: restored on a device with a
+      // key of its own, encrypted there at the start.
+      await DeviceBackup.restoreInto(there, file.readAsBytesSync(), pass);
+      expect(EmbeddedServer.databaseState(there), DatabaseFileState.plain);
+      final other = DatabaseKey.generate();
+      server = await EmbeddedServer.start(dataDir: there, databaseKey: other);
+      expect(EmbeddedServer.databaseState(there), DatabaseFileState.encrypted);
+      client = await signedIn(server);
+      final groups = await client.group.myGroups();
+      final restored = await client.account.list(groups.single.group.id!);
+      expect(
+        (await client.transaction.list(restored.single.id!)).items.map(
+          (t) => t.cleanLabel,
+        ),
+        containsAll(['CAFE', 'BOULANGERIE']),
+      );
+      client.close();
+      await server.stop();
+    },
+    timeout: const Timeout(Duration(minutes: 3)),
+  );
 }
 
 /// The app keeps its session in the device's secure storage; here, memory.

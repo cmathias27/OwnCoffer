@@ -3715,6 +3715,8 @@
   "startingStandalone": "Ouverture de vos comptes…",
   "standaloneStartFailed": "Impossible d'ouvrir vos comptes sur cet appareil",
   "standaloneStartFailedHelp": "Réessayez. Si cela recommence, copiez le détail ci-dessous et envoyez-le (il ne contient aucune donnée bancaire). « Retour » permet aussi de se connecter à un serveur.",
+  "standaloneKeyLost": "Les données de cet appareil sont chiffrées, et la clé que Windows gardait pour elles est introuvable (compte Windows réinitialisé, ou dossier copié depuis un autre ordinateur). Le fichier est intact, mais illisible sans elle. « Repartir de zéro » le met de côté sans l'effacer ; restaurez ensuite votre dernière sauvegarde (Exporter mes données → Sauvegardes de l'appareil).",
+  "standaloneSetAside": "Repartir de zéro",
   "standaloneChangeMode": "Changer de mode",
   "standaloneModeNote": "Mode autonome : vos données sont sur cet appareil.",
   "appsStandaloneHint": "Mode autonome : pas de serveur pour annoncer les nouvelles versions. Recherchez-en une ci-dessous ; vos données sont gardées.",

@@ -8,7 +8,7 @@ OwnCoffer est une application libre (AGPL-3.0, avec une exception pour Serverpod
 - Fonctionnalités détaillées : `docs/CAHIER_DES_CHARGES.md`.
 - Décisions d'architecture : `docs/decisions/` — à respecter ; pour en changer une, écrire une nouvelle décision.
 
-**Phase actuelle : phase 5 terminée (version 1.0 préparée, audit externe à trouver), phase 6 commencée** — applications Windows et Android connectées au serveur, décision 0020 ; version autonome commencée (décision 0022 : serveur embarqué sur SQLite) ; restent sa migration vers un serveur et sa sauvegarde chiffrée, le hors-ligne ; mises à jour des applications installées depuis l'application (décision 0032, 1.17.0). Continuer à corriger en priorité ce que l'utilisateur remonte de son usage réel (#20).
+**Phase actuelle : phase 5 terminée (version 1.0 préparée, audit externe à trouver), phase 6 commencée** — applications Windows et Android connectées au serveur, décision 0020 ; version autonome complète (décision 0022 : serveur embarqué sur SQLite, migration, sauvegarde chiffrée, base chiffrée par SQLite3MC selon la décision 0033, 1.18.0) ; restent le hors-ligne et les synchronisations, le scan des tickets et les abonnements mis en évidence dans Opérations. Continuer à corriger en priorité ce que l'utilisateur remonte de son usage réel (#20).
 
 ## Pile technique décidée
 

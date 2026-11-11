@@ -11,11 +11,14 @@ import 'package:sqlite_async/sqlite_async.dart';
 import 'src/auth/email_config.dart';
 import 'src/finance/alert_service.dart';
 import 'src/generated/serverpod.dart';
+import 'src/standalone/database_key.dart';
 import 'src/standalone/device_backup.dart';
 import 'src/standalone/local_owner.dart';
 import 'src/standalone/sqlite_migrations.g.dart';
 import 'src/startup.dart';
 
+export 'src/standalone/database_key.dart'
+    show DatabaseFileState, DatabaseKey, DatabaseKeyLostException;
 export 'src/standalone/device_backup.dart'
     show BackupPassphraseException, BackupTooNewException, DeviceBackup;
 
@@ -29,7 +32,20 @@ class EmbeddedServer {
   /// Where the app's client sends its calls (random local port).
   final Uri api;
 
-  EmbeddedServer._(this.pod, this.api);
+  /// The key of the database file and the pool opened with it (decision
+  /// 0033); none for a plain file.
+  final String? _key;
+  final SqliteDatabase? _keyedPool;
+
+  EmbeddedServer._(this.pod, this.api, this._key, this._keyedPool);
+
+  /// The database file of [dataDir].
+  static String databasePath(Directory dataDir) =>
+      '${dataDir.path}/owncoffer.db';
+
+  /// Whether the database of [dataDir] is missing, plain or encrypted.
+  static DatabaseFileState databaseState(Directory dataDir) =>
+      DatabaseKey.state(databasePath(dataDir));
 
   /// A session for the device's owner, as the JSON of an AuthSuccess (the
   /// app turns it into its own client class).
@@ -42,9 +58,16 @@ class EmbeddedServer {
     }
   }
 
-  Future<void> stop() {
+  Future<void> stop() async {
     AlertService.stop();
-    return pod.shutdown(exitProcess: false);
+    try {
+      await pod.shutdown(exitProcess: false);
+    } finally {
+      await _keyedPool?.close().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {},
+      );
+    }
   }
 
   /// The app's private folder this server runs on.
@@ -69,6 +92,13 @@ class EmbeddedServer {
       await session.close();
     }
     try {
+      // The copy has the device's key: the backup carries the passphrase
+      // alone, to be restored on any device.
+      final key = _key;
+      if (key != null) {
+        final copyPath = copy.path;
+        await Isolate.run(() => DatabaseKey.decrypt(copyPath, key));
+      }
       // A backup that could not be restored is worse than none: the copy
       // is checked whole before it is sealed.
       final copyPath = copy.path;
@@ -118,10 +148,14 @@ class EmbeddedServer {
 
   /// Starts the server on [dataDir], the app's private folder: it receives
   /// the secrets (config/passwords.yaml, created once and never sent), the
-  /// migrations (written at each start) and the database file.
+  /// migrations (written at each start) and the database file, encrypted
+  /// with [databaseKey] if given (decision 0033): a plain file, from an
+  /// earlier version or a restore, is encrypted first. Throws
+  /// [DatabaseKeyLostException] if the file does not open with the key.
   static Future<EmbeddedServer> start({
     required Directory dataDir,
     Map<String, String> migrations = sqliteMigrations,
+    String? databaseKey,
   }) async {
     await dataDir.create(recursive: true);
     final config = Directory('${dataDir.path}/config')..createSync();
@@ -155,9 +189,29 @@ shared:
 
     // Serverpod retries a database it cannot open every 10 seconds, without
     // end: check the file opens first, so a failure shows its reason.
-    final dbPath = '${dataDir.path}/owncoffer.db';
-    await _checkDatabase(dbPath);
+    final dbPath = databasePath(dataDir);
+    final keyedPool = databaseKey == null
+        ? null
+        : await _openEncrypted(dbPath, databaseKey);
+    if (keyedPool == null) await _checkDatabase(dbPath);
+    try {
+      return await _start(dataDir, dbPath, passwords, databaseKey, keyedPool);
+    } on Object {
+      await keyedPool?.close().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {},
+      );
+      rethrow;
+    }
+  }
 
+  static Future<EmbeddedServer> _start(
+    Directory dataDir,
+    String dbPath,
+    File passwords,
+    String? databaseKey,
+    SqliteDatabase? keyedPool,
+  ) async {
     final pod = Serverpod(
       const ['--apply-migrations'],
       serverDirectory: dataDir,
@@ -217,6 +271,8 @@ shared:
     return EmbeddedServer._(
       pod,
       Uri.parse('http://127.0.0.1:${pod.server.port}/'),
+      databaseKey,
+      keyedPool,
     )..dataDir = dataDir;
   }
 }
@@ -234,6 +290,34 @@ String _password(File passwords, String key) {
   return match.group(1)!;
 }
 
+/// The pool of connections on the encrypted file at [path], which
+/// Serverpod then shares; a plain file is encrypted first (off the app's
+/// thread: a few GB with documents take a while).
+Future<SqliteDatabase> _openEncrypted(String path, String key) async {
+  final state = DatabaseKey.state(path);
+  if (state == DatabaseFileState.plain) {
+    try {
+      await Isolate.run(() => DatabaseKey.encrypt(path, key));
+    } on Object catch (e) {
+      throw StateError('SQLite cannot encrypt the database: $e');
+    }
+  }
+  try {
+    return await DatabaseKey.openPool(
+      path,
+      key,
+    ).timeout(const Duration(seconds: 30));
+  } on sqlite3.SqliteException catch (e) {
+    if (state == DatabaseFileState.encrypted &&
+        e.resultCode == sqlite3.SqlError.SQLITE_NOTADB) {
+      throw const DatabaseKeyLostException();
+    }
+    throw StateError('SQLite pool cannot open the database: $e');
+  } on Object catch (e) {
+    throw StateError('SQLite pool cannot open the database: $e');
+  }
+}
+
 /// Opens the database file as Serverpod does (SQLite library, then its
 /// connection pool), and fails with the reason if it cannot.
 Future<void> _checkDatabase(String path) async {
@@ -248,7 +332,11 @@ Future<void> _checkDatabase(String path) async {
   } on Object catch (e) {
     throw StateError('SQLite pool cannot open the database: $e');
   } finally {
-    await db.close().timeout(const Duration(seconds: 5), onTimeout: () {});
+    // A pool that never opened fails to close as well: its first error is
+    // the one to show.
+    try {
+      await db.close().timeout(const Duration(seconds: 5), onTimeout: () {});
+    } on Object catch (_) {}
   }
 }
 

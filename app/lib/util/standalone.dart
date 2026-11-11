@@ -52,6 +52,14 @@ bool isWrongPassphrase(Object e) => impl.isWrongPassphrase(e);
 /// The backup comes from a newer version of the app: update this one first.
 bool isBackupTooNew(Object e) => impl.isBackupTooNew(e);
 
+/// The database of this device is encrypted and its key is gone (Windows
+/// account reset, folder copied from another computer, decision 0033).
+bool isDatabaseKeyLost(Object e) => impl.isDatabaseKeyLost(e);
+
+/// Puts the database whose key is gone aside, never deleted, so that the
+/// app starts empty and a backup can be restored.
+Future<void> setAsideLockedDatabase() => impl.setAsideLockedDatabase();
+
 /// Whether the embedded server is running (false after a restore stopped
 /// it, even a failed one: the app must start it again).
 bool get standaloneRunning => impl.standaloneRunning;

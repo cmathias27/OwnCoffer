@@ -5660,6 +5660,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Try again. If it happens again, copy the details below and send them (they contain no bank data). “Back” also lets you connect to a server instead.';
 
   @override
+  String get standaloneKeyLost =>
+      'The data on this device is encrypted, and the key Windows kept for it cannot be found (Windows account reset, or folder copied from another computer). The file is intact, but unreadable without it. “Start afresh” puts it aside without deleting it; then restore your latest backup (Export my data → Device backups).';
+
+  @override
+  String get standaloneSetAside => 'Start afresh';
+
+  @override
   String get standaloneChangeMode => 'Change mode';
 
   @override
