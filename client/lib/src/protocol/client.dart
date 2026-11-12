@@ -55,6 +55,8 @@ import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
 import 'package:owncoffer_client/src/protocol/forecast_result.dart'
     as _ip0wp7v2;
 import 'package:owncoffer_client/src/protocol/frequency.dart' as _i1mv9fwy;
+import 'package:owncoffer_client/src/protocol/global_search_result.dart'
+    as _ieews2ou;
 import 'package:owncoffer_client/src/protocol/goal.dart' as _ita8uvsc;
 import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
@@ -2463,6 +2465,29 @@ class EndpointScheduled extends _isc.EndpointRef {
   );
 }
 
+/// The search at the top of every screen (decision 0041): operations of
+/// all the visible accounts, loans and invoices of the household. Read
+/// only; the text searched is neither kept nor logged.
+/// {@category Endpoint}
+class EndpointSearch extends _isc.EndpointRef {
+  EndpointSearch(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'search';
+
+  _ida.Future<_ieews2ou.GlobalSearchResult> global(
+    int groupId,
+    String query,
+  ) => caller.callServerEndpoint<_ieews2ou.GlobalSearchResult>(
+    'search',
+    'global',
+    {
+      'groupId': groupId,
+      'query': query,
+    },
+  );
+}
+
 /// First launch wizard (no login: no account exists yet).
 /// {@category Endpoint}
 class EndpointSetup extends _isc.EndpointRef {
@@ -2920,6 +2945,7 @@ class Client extends _isc.ServerpodClientShared {
     presence = EndpointPresence(this);
     rule = EndpointRule(this);
     scheduled = EndpointScheduled(this);
+    search = EndpointSearch(this);
     setup = EndpointSetup(this);
     transaction = EndpointTransaction(this);
     transfer = EndpointTransfer(this);
@@ -2975,6 +3001,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointScheduled scheduled;
 
+  late final EndpointSearch search;
+
   late final EndpointSetup setup;
 
   late final EndpointTransaction transaction;
@@ -3011,6 +3039,7 @@ class Client extends _isc.ServerpodClientShared {
     'presence': presence,
     'rule': rule,
     'scheduled': scheduled,
+    'search': search,
     'setup': setup,
     'transaction': transaction,
     'transfer': transfer,

@@ -170,6 +170,12 @@ void main() {
           ),
         );
         expect(search.total, greaterThan(0));
+        final everywhere = await timed(
+          'search from every screen',
+          fast,
+          () => endpoints.search.global(as(alice), groupId, 'magasin 12'),
+        );
+        expect(everywhere.operations, isNotEmpty);
         await timed(
           'operations, one category',
           fast,

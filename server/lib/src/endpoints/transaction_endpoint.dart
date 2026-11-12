@@ -38,7 +38,7 @@ class TransactionEndpoint extends Endpoint {
     int? offset,
   }) async {
     final account = await Access.requireAccount(session, accountId);
-    final pattern = _likePattern(search);
+    final pattern = likePattern(search);
     // Same provider: same cleaned label (e.g. every `EDF` debit).
     final provider = sameLabel == null || sameLabel.trim().isEmpty
         ? null
@@ -777,7 +777,7 @@ class TransactionEndpoint extends Endpoint {
   }
 
   /// `%text%` with LIKE wildcards escaped, or null for an empty search.
-  static String? _likePattern(String? search) {
+  static String? likePattern(String? search) {
     final s = search?.trim() ?? '';
     if (s.isEmpty) return null;
     final escaped = s

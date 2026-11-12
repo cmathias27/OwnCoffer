@@ -193,6 +193,8 @@ scheduled:
   - forecast:
   - simulatePurchase:
   - confirmMatch:
+search:
+  - global:
 setup:
   - status:
   - start:
