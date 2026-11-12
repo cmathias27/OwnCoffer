@@ -11765,8 +11765,98 @@ abstract class AppLocalizations {
   /// No description provided for @offlineBanner.
   ///
   /// In fr, this message translates to:
-  /// **'Serveur injoignable : données du {when}, en lecture seule'**
+  /// **'Serveur injoignable : données du {when}. Les nouvelles opérations sont gardées pour plus tard ; modifier ou supprimer attend le retour du réseau.'**
   String offlineBanner(String when);
+
+  /// No description provided for @outboxKept.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération gardée sur l\'appareil : elle sera envoyée dès que le serveur répondra.'**
+  String get outboxKept;
+
+  /// No description provided for @outboxWaiting.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération à envoyer} other{{count} opérations à envoyer}}'**
+  String outboxWaiting(int count);
+
+  /// No description provided for @outboxRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération refusée par le serveur} other{{count} opérations refusées par le serveur}}'**
+  String outboxRefused(int count);
+
+  /// No description provided for @outboxTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'À synchroniser'**
+  String get outboxTitle;
+
+  /// No description provided for @outboxIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations saisies sans réseau. Celles en attente partent dès que le serveur répond ; une opération refusée reste ici jusqu\'à ce que vous la renvoyiez ou l\'abandonniez.'**
+  String get outboxIntro;
+
+  /// No description provided for @outboxEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien à synchroniser.'**
+  String get outboxEmpty;
+
+  /// No description provided for @outboxSendNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer maintenant'**
+  String get outboxSendNow;
+
+  /// No description provided for @outboxStateWaiting.
+  ///
+  /// In fr, this message translates to:
+  /// **'En attente d\'envoi'**
+  String get outboxStateWaiting;
+
+  /// No description provided for @outboxStateRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refusée : {reason}'**
+  String outboxStateRefused(String reason);
+
+  /// No description provided for @outboxRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renvoyer'**
+  String get outboxRetry;
+
+  /// No description provided for @outboxDrop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abandonner'**
+  String get outboxDrop;
+
+  /// No description provided for @outboxDropConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abandonner cette opération ? Elle ne sera jamais envoyée.'**
+  String get outboxDropConfirm;
+
+  /// No description provided for @outboxLeaveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations pas encore envoyées'**
+  String get outboxLeaveTitle;
+
+  /// No description provided for @outboxLeaveBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération saisie sans réseau n\'a pas encore été envoyée au serveur : elle sera perdue.} other{{count} opérations saisies sans réseau n\'ont pas encore été envoyées au serveur : elles seront perdues.}}'**
+  String outboxLeaveBody(int count);
+
+  /// No description provided for @outboxLeaveConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer et les perdre'**
+  String get outboxLeaveConfirm;
 }
 
 class _AppLocalizationsDelegate

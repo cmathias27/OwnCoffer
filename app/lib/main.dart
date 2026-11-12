@@ -10,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'client.dart';
 import 'l10n/app_localizations.dart';
 import 'l10n/error_messages.dart';
+import 'screens/outbox_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/first_launch_screen.dart';
 import 'screens/server_address_screen.dart';
@@ -23,6 +24,7 @@ import 'state/presence.dart';
 import 'state/session.dart';
 import 'assistant/chat_bubble.dart';
 import 'util/offline.dart';
+import 'util/outbox.dart';
 import 'util/server_address.dart';
 import 'util/standalone.dart';
 import 'util/standalone_backups.dart';
@@ -294,6 +296,9 @@ class OwnCofferApp extends StatelessWidget {
           : (context, child) => AppLockLayer(
               lock: appLock,
               child: OfflineBanner(
+                onOpenOutbox: () => _navigator.currentState?.push(
+                  MaterialPageRoute<void>(builder: (_) => const OutboxScreen()),
+                ),
                 child: ChatLayer(
                   navigator: _navigator,
                   child: child ?? const SizedBox(),
@@ -343,11 +348,16 @@ class _RootState extends State<_Root> {
         if (changed) unawaited(pepite.signedIn());
         if (changed) unawaited(pepiteAdvice.signedIn());
         if (changed) unawaited(presence.attach());
+        final user = client.auth.authInfo?.authUserId;
+        if (changed && user != null) unawaited(outbox.signedIn('$user'));
       case SessionStage.signedOut || SessionStage.setup:
         appLock.detach();
         presence.detach();
         // Signed out: nothing read under this account stays on the device.
         if (changed) unawaited(clearOfflineStore());
+        // Entries not sent stay for this account's next sign-in, unless
+        // the user chose to drop them when signing out.
+        if (changed) outbox.signedOut();
         if (changed) unawaited(pepite.signedOut());
         if (changed) pepiteAdvice.signedOut();
       default:
@@ -383,7 +393,7 @@ class _RootState extends State<_Root> {
               ),
               if (ServerAddress.needed)
                 TextButton(
-                  onPressed: changeServer,
+                  onPressed: () => changeServerAfterOutbox(context),
                   child: Text(AppLocalizations.of(context).serverAddressChange),
                 ),
             ],

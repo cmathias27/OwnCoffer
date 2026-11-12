@@ -11,7 +11,8 @@ import 'offline/offline_stub.dart'
 /// Offline reading of the Windows and Android apps connected to a server
 /// (decision 0037): the last answer of each read below is kept on the
 /// device, encrypted, and shown when the server cannot be reached. Writes
-/// are never kept nor replayed: without the server they fail as before.
+/// are never kept nor replayed: without the server they fail as before,
+/// except new manual entries, kept in the outbox (`outbox.dart`).
 ///
 /// The web app keeps no financial data (decision 0011), nor does the
 /// standalone mode need it (its server is on the device).
@@ -71,10 +72,11 @@ abstract class OfflineStore {
 /// The store of this device, or null on the web.
 Future<OfflineStore?> openOfflineStore() => impl.openOfflineStore();
 
-/// Forgets every kept answer of this device.
-Future<void> clearOfflineStore() async {
+/// Forgets every kept answer of this device; with [outbox], also the
+/// entries not sent yet (another server).
+Future<void> clearOfflineStore({bool outbox = false}) async {
   offlineSince.value = null;
-  await impl.clearOfflineStore();
+  await impl.clearOfflineStore(outbox: outbox);
 }
 
 /// Whether [error] means the server could not be reached at all (no
@@ -82,7 +84,7 @@ Future<void> clearOfflineStore() async {
 bool isUnreachable(Object error) => impl.isUnreachable(error);
 
 /// Status codes of a proxy whose server is down (Caddy, Cloudflare).
-bool _gatewayDown(int status) =>
+bool gatewayDown(int status) =>
     status == 502 ||
     status == 503 ||
     status == 504 ||
@@ -117,7 +119,7 @@ class OfflineHttpClient extends http.BaseClient {
         request.method != 'POST' ||
         !offlineReads.contains(call)) {
       final response = await inner.send(request);
-      if (!_gatewayDown(response.statusCode)) offlineSince.value = null;
+      if (!gatewayDown(response.statusCode)) offlineSince.value = null;
       return response;
     }
     // The arguments are part of the key: one answer per account, month…
@@ -129,7 +131,7 @@ class OfflineHttpClient extends http.BaseClient {
       if (!isUnreachable(e) && e is! TimeoutException) rethrow;
       return await _kept(key, request) ?? (throw e);
     }
-    if (_gatewayDown(response.statusCode)) {
+    if (gatewayDown(response.statusCode)) {
       final kept = await _kept(key, request);
       if (kept != null) {
         await response.stream.drain<void>();

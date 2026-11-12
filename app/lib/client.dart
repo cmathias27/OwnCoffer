@@ -6,6 +6,7 @@ import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 import 'util/offline.dart';
+import 'util/outbox.dart';
 import 'util/server_address.dart';
 
 // When you are running the app on a physical device, you need to set the
@@ -52,12 +53,14 @@ bool isStandalone = false;
 /// found as above.
 ///
 /// The Windows and Android apps connected to a server keep a copy of what
-/// they read, shown when the server cannot be reached (decision 0037).
+/// they read, shown when the server cannot be reached (decision 0037), and
+/// keep the entries made meanwhile until it answers (decision 0038).
 Future<void> initializeClient({String? url}) async {
   final store = url == null && ServerAddress.needed
       ? await _offlineStore()
       : null;
   offlineSince.value = null;
+  outbox.attach(store == null ? null : await _outboxStore());
   client =
       Client(
           url ?? await _resolveServerUrl(),
@@ -68,6 +71,14 @@ Future<void> initializeClient({String? url}) async {
         ..connectivityMonitor = FlutterConnectivityMonitor()
         ..authSessionManager = FlutterAuthSessionManager();
   unawaited(client.auth.initialize());
+}
+
+Future<OutboxStore?> _outboxStore() async {
+  try {
+    return await openOutboxStore();
+  } on Object {
+    return null;
+  }
 }
 
 /// A store that cannot open (no secret store yet…) leaves the app online
@@ -102,6 +113,7 @@ Future<void> changeServer() async {
     }
   }
   await ServerAddress.forget();
-  await clearOfflineStore();
+  await clearOfflineStore(outbox: true);
+  await outbox.clear();
   await askServerAddress();
 }

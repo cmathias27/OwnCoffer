@@ -2524,6 +2524,10 @@ class EndpointTransaction extends _isc.EndpointRef {
 
   /// Manual entry (cash, a cheque not yet on the statement…). Classified by
   /// the rules unless a category is given.
+  ///
+  /// [clientRef]: the device's own id of an entry made offline (decision
+  /// 0037). The same id on the same account returns the operation already
+  /// created, so an entry sent again is never doubled.
   _ida.Future<_ivksw0b3.BankTransaction> create(
     int accountId,
     DateTime date,
@@ -2531,6 +2535,7 @@ class EndpointTransaction extends _isc.EndpointRef {
     String label, {
     String? note,
     int? categoryId,
+    String? clientRef,
   }) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
     'transaction',
     'create',
@@ -2541,6 +2546,7 @@ class EndpointTransaction extends _isc.EndpointRef {
       'label': label,
       'note': note,
       'categoryId': categoryId,
+      'clientRef': clientRef,
     },
   );
 

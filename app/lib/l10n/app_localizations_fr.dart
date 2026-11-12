@@ -7458,6 +7458,82 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String offlineBanner(String when) {
-    return 'Serveur injoignable : données du $when, en lecture seule';
+    return 'Serveur injoignable : données du $when. Les nouvelles opérations sont gardées pour plus tard ; modifier ou supprimer attend le retour du réseau.';
   }
+
+  @override
+  String get outboxKept =>
+      'Opération gardée sur l\'appareil : elle sera envoyée dès que le serveur répondra.';
+
+  @override
+  String outboxWaiting(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations à envoyer',
+      one: '1 opération à envoyer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String outboxRefused(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations refusées par le serveur',
+      one: '1 opération refusée par le serveur',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get outboxTitle => 'À synchroniser';
+
+  @override
+  String get outboxIntro =>
+      'Opérations saisies sans réseau. Celles en attente partent dès que le serveur répond ; une opération refusée reste ici jusqu\'à ce que vous la renvoyiez ou l\'abandonniez.';
+
+  @override
+  String get outboxEmpty => 'Rien à synchroniser.';
+
+  @override
+  String get outboxSendNow => 'Envoyer maintenant';
+
+  @override
+  String get outboxStateWaiting => 'En attente d\'envoi';
+
+  @override
+  String outboxStateRefused(String reason) {
+    return 'Refusée : $reason';
+  }
+
+  @override
+  String get outboxRetry => 'Renvoyer';
+
+  @override
+  String get outboxDrop => 'Abandonner';
+
+  @override
+  String get outboxDropConfirm =>
+      'Abandonner cette opération ? Elle ne sera jamais envoyée.';
+
+  @override
+  String get outboxLeaveTitle => 'Opérations pas encore envoyées';
+
+  @override
+  String outboxLeaveBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count opérations saisies sans réseau n\'ont pas encore été envoyées au serveur : elles seront perdues.',
+      one:
+          '1 opération saisie sans réseau n\'a pas encore été envoyée au serveur : elle sera perdue.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get outboxLeaveConfirm => 'Continuer et les perdre';
 }

@@ -40,6 +40,7 @@ abstract class BankTransaction
     this.scheduledDueDate,
     this.transferPairId,
     this.createdBy,
+    this.clientRef,
     DateTime? createdAt,
     DateTime? updatedAt,
     this.deletedAt,
@@ -71,6 +72,7 @@ abstract class BankTransaction
     DateTime? scheduledDueDate,
     int? transferPairId,
     _isc.UuidValue? createdBy,
+    String? clientRef,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -114,6 +116,7 @@ abstract class BankTransaction
           : _isc.UuidValueJsonExtension.fromJson(
               jsonSerialization['createdBy'],
             ),
+      clientRef: jsonSerialization['clientRef'] as String?,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -184,6 +187,10 @@ abstract class BankTransaction
 
   _isc.UuidValue? createdBy;
 
+  /// Id given by the device to an operation entered offline (decision
+  /// 0037): sent again after a lost answer, it is not created twice.
+  String? clientRef;
+
   DateTime createdAt;
 
   DateTime updatedAt;
@@ -216,6 +223,7 @@ abstract class BankTransaction
     DateTime? scheduledDueDate,
     int? transferPairId,
     _isc.UuidValue? createdBy,
+    String? clientRef,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -247,6 +255,7 @@ abstract class BankTransaction
         'scheduledDueDate': scheduledDueDate?.toJson(),
       if (transferPairId != null) 'transferPairId': transferPairId,
       if (createdBy != null) 'createdBy': createdBy?.toJson(),
+      if (clientRef != null) 'clientRef': clientRef,
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -280,6 +289,7 @@ abstract class BankTransaction
         'scheduledDueDate': scheduledDueDate?.toJson(),
       if (transferPairId != null) 'transferPairId': transferPairId,
       if (createdBy != null) 'createdBy': createdBy?.toJson(),
+      if (clientRef != null) 'clientRef': clientRef,
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -318,6 +328,7 @@ class _BankTransactionImpl extends BankTransaction {
     DateTime? scheduledDueDate,
     int? transferPairId,
     _isc.UuidValue? createdBy,
+    String? clientRef,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -344,6 +355,7 @@ class _BankTransactionImpl extends BankTransaction {
          scheduledDueDate: scheduledDueDate,
          transferPairId: transferPairId,
          createdBy: createdBy,
+         clientRef: clientRef,
          createdAt: createdAt,
          updatedAt: updatedAt,
          deletedAt: deletedAt,
@@ -376,6 +388,7 @@ class _BankTransactionImpl extends BankTransaction {
     Object? scheduledDueDate = _Undefined,
     Object? transferPairId = _Undefined,
     Object? createdBy = _Undefined,
+    Object? clientRef = _Undefined,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
@@ -411,6 +424,7 @@ class _BankTransactionImpl extends BankTransaction {
           ? transferPairId
           : this.transferPairId,
       createdBy: createdBy is _isc.UuidValue? ? createdBy : this.createdBy,
+      clientRef: clientRef is String? ? clientRef : this.clientRef,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,

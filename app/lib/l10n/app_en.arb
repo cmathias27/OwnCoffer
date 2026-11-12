@@ -2314,5 +2314,20 @@
   "receiptOperationCreate": "Create",
   "receiptOperationCreated": "Operation created, receipt attached: {name}",
   "error_invoice_already_attached": "This receipt is already attached to an operation.",
-  "offlineBanner": "Server unreachable: data from {when}, read-only"
+  "offlineBanner": "Server unreachable: data from {when}. New operations are kept for later; changes and deletions wait for the network.",
+  "outboxKept": "Operation kept on this device: it will be sent as soon as the server answers.",
+  "outboxWaiting": "{count, plural, =1{1 operation to send} other{{count} operations to send}}",
+  "outboxRefused": "{count, plural, =1{1 operation refused by the server} other{{count} operations refused by the server}}",
+  "outboxTitle": "To sync",
+  "outboxIntro": "Operations entered without network. Waiting ones are sent as soon as the server answers; a refused operation stays here until you send it again or drop it.",
+  "outboxEmpty": "Nothing to sync.",
+  "outboxSendNow": "Send now",
+  "outboxStateWaiting": "Waiting to be sent",
+  "outboxStateRefused": "Refused: {reason}",
+  "outboxRetry": "Send again",
+  "outboxDrop": "Drop",
+  "outboxDropConfirm": "Drop this operation? It will never be sent.",
+  "outboxLeaveTitle": "Operations not sent yet",
+  "outboxLeaveBody": "{count, plural, =1{1 operation entered without network has not been sent to the server yet: it will be lost.} other{{count} operations entered without network have not been sent to the server yet: they will be lost.}}",
+  "outboxLeaveConfirm": "Continue and lose them"
 }

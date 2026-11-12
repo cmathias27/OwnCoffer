@@ -4,7 +4,8 @@
 # server's run-mode configs and migrations for SQLite ones, does its job,
 # then puts everything back, whatever happens.
 #
-#   tool/standalone.sh migrations   regenerates server/standalone/migrations
+#   tool/standalone.sh migrations [--force]
+#                                   regenerates server/standalone/migrations
 #                                   (a new version only if the schema
 #                                   changed) and the Dart copy shipped in
 #                                   the apps (server/lib/src/standalone/
@@ -49,7 +50,7 @@ cp -r standalone/migrations migrations
 
 case $mode in
   migrations)
-    serverpod create-migration
+    serverpod create-migration "$@"
     rm -rf standalone/migrations
     cp -r migrations standalone/migrations
     dart run tool/embed_migrations.dart standalone/migrations \

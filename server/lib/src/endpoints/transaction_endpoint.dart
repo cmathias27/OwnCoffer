@@ -139,6 +139,10 @@ class TransactionEndpoint extends Endpoint {
 
   /// Manual entry (cash, a cheque not yet on the statement…). Classified by
   /// the rules unless a category is given.
+  ///
+  /// [clientRef]: the device's own id of an entry made offline (decision
+  /// 0037). The same id on the same account returns the operation already
+  /// created, so an entry sent again is never doubled.
   Future<BankTransaction> create(
     Session session,
     int accountId,
@@ -147,12 +151,20 @@ class TransactionEndpoint extends Endpoint {
     String label, {
     String? note,
     int? categoryId,
+    String? clientRef,
   }) async {
     final account = await Access.requireAccount(
       session,
       accountId,
       write: true,
     );
+    if (clientRef != null && !_clientRef.hasMatch(clientRef)) {
+      throw InvalidInputException(code: 'invalid_name', field: 'clientRef');
+    }
+    final known = clientRef == null
+        ? null
+        : await _byClientRef(session, accountId, clientRef);
+    if (known != null) return known;
     final text = _label(label);
     _amount(amountCents);
     if (categoryId != null) {
@@ -171,26 +183,48 @@ class TransactionEndpoint extends Endpoint {
       source = ClassificationService.toDb(c.source);
       ruleRef = c.ruleId?.toString();
     }
-    final saved = await BankTransaction.db.insertRow(
-      session,
-      BankTransaction(
-        accountId: accountId,
-        date: _day(date),
-        amountCents: amountCents,
-        rawLabel: text,
-        note: note?.trim().isEmpty ?? true ? null : note!.trim(),
-        cleanLabel: cleaned.display,
-        operationKind: cleaned.kind.name,
-        categoryId: category,
-        categorySource: source,
-        categoryRuleRef: ruleRef,
-        createdBy: Access.userId(session),
-      ),
-    );
+    final BankTransaction saved;
+    try {
+      saved = await BankTransaction.db.insertRow(
+        session,
+        BankTransaction(
+          accountId: accountId,
+          date: _day(date),
+          amountCents: amountCents,
+          rawLabel: text,
+          note: note?.trim().isEmpty ?? true ? null : note!.trim(),
+          cleanLabel: cleaned.display,
+          operationKind: cleaned.kind.name,
+          categoryId: category,
+          categorySource: source,
+          categoryRuleRef: ruleRef,
+          createdBy: Access.userId(session),
+          clientRef: clientRef,
+        ),
+      );
+    } on Object {
+      // The same entry sent twice at once: the other send created it.
+      final other = clientRef == null
+          ? null
+          : await _byClientRef(session, accountId, clientRef);
+      if (other == null) rethrow;
+      return other;
+    }
     await _audit(session, account, 'create', saved.id, after: saved);
     await AlertService.checkAfterChange(session, account);
     return saved;
   }
+
+  static final _clientRef = RegExp(r'^[0-9A-Za-z-]{16,64}$');
+
+  static Future<BankTransaction?> _byClientRef(
+    Session session,
+    int accountId,
+    String clientRef,
+  ) => BankTransaction.db.findFirstRow(
+    session,
+    where: (t) => t.accountId.equals(accountId) & t.clientRef.equals(clientRef),
+  );
 
   /// Date, amount and label can only be changed on manual entries: imported
   /// operations keep what the bank wrote. The note can always be changed.
