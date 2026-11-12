@@ -214,8 +214,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadAccounts() async {
     final g = widget.session.currentGroup;
     if (g == null) return;
-    final list = await client.account.list(g.group.id!);
-    if (mounted) setState(() => _accounts = list);
+    try {
+      final list = await client.account.list(g.group.id!);
+      if (mounted) setState(() => _accounts = list);
+    } on Object {
+      // Offline: the pages say it themselves; the "+" menu waits.
+    }
   }
 
   /// Pépite notices by herself the steps of the week (decision 0029): the
@@ -510,7 +514,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  /// `?` (decision 0041, point 19): the keys of the app.
+  /// `?` (decision 0041, point 20): the keys of the app.
   Future<void> _showShortcuts() {
     final l = AppLocalizations.of(context);
     Widget row(String keys, String what) => ListTile(

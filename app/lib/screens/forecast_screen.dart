@@ -77,8 +77,14 @@ class ForecastScreenState extends State<ForecastScreen> {
   }
 
   Future<void> _loadCategories() async {
-    final list = await client.category.list(widget.membership.group.id!);
-    if (mounted) setState(() => _categories = {for (final c in list) c.id!: c});
+    try {
+      final list = await client.category.list(widget.membership.group.id!);
+      if (mounted) {
+        setState(() => _categories = {for (final c in list) c.id!: c});
+      }
+    } on Object {
+      // Offline: the operations show without their category names.
+    }
   }
 
   Future<void> reload() => _reload();

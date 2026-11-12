@@ -148,6 +148,9 @@ class SectionBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final section = page.section;
+    // On a phone the bottom bar already names the section: the tabs keep
+    // the whole width, without icons, so that none hides off-screen.
+    final narrow = MediaQuery.sizeOf(context).width < 600;
     return Material(
       color: Theme.of(context).colorScheme.surface,
       child: Padding(
@@ -159,14 +162,16 @@ class SectionBar extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    Breadcrumb([section.label(l)]),
-                    const SizedBox(width: 8),
+                    if (!narrow) ...[
+                      Breadcrumb([section.label(l)]),
+                      const SizedBox(width: 8),
+                    ],
                     for (final p in section.pages)
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: ChoiceChip(
                           key: Key('page-${p.name}'),
-                          avatar: Icon(p.icon, size: 18),
+                          avatar: narrow ? null : Icon(p.icon, size: 18),
                           label: Text(p.label(l)),
                           selected: p == page,
                           showCheckmark: false,
