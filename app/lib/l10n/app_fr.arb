@@ -5313,5 +5313,86 @@
   "scanAdjust": "Ajuster les coins",
   "scanKeep": "Garder",
   "scanBlurred": "La photo semble floue : le texte risque d'être illisible.",
-  "scanRetake": "Reprendre la photo"
+  "scanRetake": "Reprendre la photo",
+  "navMoney": "Argent",
+  "navPlan": "Prévoir",
+  "navPapers": "Papiers",
+  "navAdvisor": "Conseiller",
+  "breadcrumbLabel": "Vous êtes ici : {path}",
+  "@breadcrumbLabel": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "addScanReceipt": "Scanner un ticket",
+  "addImportStatement": "Importer un relevé",
+  "addMenuTooltip": "Ajouter",
+  "addChooseAccount": "Sur quel compte ?",
+  "settingsTitle": "Réglages",
+  "settingsDisplay": "Affichage",
+  "settingsSimpleMode": "Mode simple",
+  "settingsSimpleModeHelp": "Masque les fonctions avancées : règles, administration, analyses détaillées.",
+  "settingsLargeText": "Grand texte",
+  "settingsHighContrast": "Contraste élevé",
+  "settingsHousehold": "Foyer",
+  "settingsCategories": "Catégories et règles",
+  "settingsApp": "L'application",
+  "shortcutsTitle": "Raccourcis clavier",
+  "shortcutSearch": "Rechercher partout",
+  "shortcutNew": "Ajouter une opération",
+  "shortcutSections": "Ouvrir une rubrique (Accueil … Conseiller)",
+  "shortcutHelp": "Afficher ces raccourcis",
+  "globalSearchOpen": "Rechercher",
+  "globalSearchHint": "Opération, créancier, fonction…",
+  "globalSearchClear": "Effacer",
+  "globalSearchIntro": "Cherchez une opération, un crédit, une facture ou une fonction de l'application.",
+  "globalSearchOffline": "Hors ligne : seules les fonctions de l'application sont cherchées.",
+  "globalSearchNothing": "Rien trouvé pour « {query} ».",
+  "@globalSearchNothing": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "globalSearchFunctions": "Fonctions",
+  "advisorNewBadge": "{count, plural, =1{1 nouveau conseil} other{{count} nouveaux conseils}}",
+  "@advisorNewBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchKwHome": "accueil, tableau de bord, résumé, tout va bien",
+  "searchKwAccounts": "comptes, solde, banque, livret",
+  "searchKwOperations": "opérations, transactions, dépenses, mouvements, relevé",
+  "searchKwToClassify": "classer, non classées, catégoriser",
+  "searchKwForecast": "prévisions, solde prévu, avenir, découvert, échéances",
+  "searchKwBudget": "budget, objectifs, dépenses du mois, reste à vivre",
+  "searchKwSubscriptions": "abonnements, prélèvements, hausse de prix",
+  "searchKwLoans": "crédits, prêts, emprunt, échéancier, créancier",
+  "searchKwInvoices": "factures, garanties, justificatifs, documents",
+  "searchKwScan": "scanner, ticket, photo, caisse",
+  "searchKwImport": "importer, relevé, fichier, qif, ofx, csv",
+  "searchKwAdvisor": "conseiller, conseils, propositions, économies",
+  "searchKwNewOperation": "nouvelle opération, ajouter, saisir, dépense",
+  "searchKwCategories": "catégories, classement",
+  "searchKwRules": "règles, classement automatique",
+  "searchKwNotifications": "notifications, alertes, cloche",
+  "searchKwSummary": "récapitulatif, mois, bilan",
+  "searchKwStart": "premiers pas, démarrer, guide",
+  "searchKwExport": "exporter, sauvegarde, télécharger",
+  "searchKwMembers": "membres, foyer, inviter, partage",
+  "searchKwSecurity": "sécurité, mot de passe, double authentification, sessions",
+  "searchKwAssistant": "assistant, ia, intelligence artificielle, modèle",
+  "searchKwApps": "applications, android, windows, téléphone",
+  "searchKwPepite": "pépite, mascotte, badges",
+  "searchKwDisplay": "affichage, mode simple, grand texte, contraste",
+  "searchKwHelp": "aide, mode d'emploi, comment",
+  "searchKwShortcuts": "raccourcis, clavier, touches",
+  "searchKwFeedback": "avis, signaler, bug, suggestion",
+  "searchKwAdmin": "administration, serveur, mises à jour, sauvegardes"
 }

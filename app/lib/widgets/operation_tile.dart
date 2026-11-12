@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../l10n/app_localizations.dart';
+import '../theme/app_theme.dart';
 import '../util/format.dart';
 
 /// One operation in a list, the same everywhere (Operations, Budget):
@@ -163,7 +164,7 @@ class OperationTile extends StatelessWidget {
         context.money(t.amountCents, currency: currency),
         style: theme.textTheme.titleSmall?.copyWith(
           fontFamily: 'Manrope',
-          color: t.amountCents > 0 ? Colors.green.shade700 : null,
+          color: t.amountCents > 0 ? context.moneyColors.positive : null,
         ),
       ),
     );

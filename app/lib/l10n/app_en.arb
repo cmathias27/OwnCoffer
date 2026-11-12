@@ -2341,5 +2341,86 @@
   "scanAdjust": "Adjust the corners",
   "scanKeep": "Keep",
   "scanBlurred": "The photo looks blurred: the text may be unreadable.",
-  "scanRetake": "Take it again"
+  "scanRetake": "Take it again",
+  "navMoney": "Money",
+  "navPlan": "Plan",
+  "navPapers": "Papers",
+  "navAdvisor": "Advisor",
+  "breadcrumbLabel": "You are here: {path}",
+  "@breadcrumbLabel": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "addScanReceipt": "Scan a receipt",
+  "addImportStatement": "Import a statement",
+  "addMenuTooltip": "Add",
+  "addChooseAccount": "Which account?",
+  "settingsTitle": "Settings",
+  "settingsDisplay": "Display",
+  "settingsSimpleMode": "Simple mode",
+  "settingsSimpleModeHelp": "Hides the advanced features: rules, administration, detailed analyses.",
+  "settingsLargeText": "Large text",
+  "settingsHighContrast": "High contrast",
+  "settingsHousehold": "Household",
+  "settingsCategories": "Categories and rules",
+  "settingsApp": "The app",
+  "shortcutsTitle": "Keyboard shortcuts",
+  "shortcutSearch": "Search everywhere",
+  "shortcutNew": "Add an operation",
+  "shortcutSections": "Open a section (Home … Advisor)",
+  "shortcutHelp": "Show these shortcuts",
+  "globalSearchOpen": "Search",
+  "globalSearchHint": "Operation, creditor, feature…",
+  "globalSearchClear": "Clear",
+  "globalSearchIntro": "Look for an operation, a loan, an invoice or a feature of the app.",
+  "globalSearchOffline": "Offline: only the features of the app are searched.",
+  "globalSearchNothing": "Nothing found for \"{query}\".",
+  "@globalSearchNothing": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "globalSearchFunctions": "Features",
+  "advisorNewBadge": "{count, plural, =1{1 new advice} other{{count} new advices}}",
+  "@advisorNewBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchKwHome": "home, dashboard, overview, all good",
+  "searchKwAccounts": "accounts, balance, bank, savings",
+  "searchKwOperations": "operations, transactions, expenses, movements, statement",
+  "searchKwToClassify": "classify, unclassified, categorise",
+  "searchKwForecast": "forecast, expected balance, future, overdraft, scheduled",
+  "searchKwBudget": "budget, goals, monthly spending, left to live",
+  "searchKwSubscriptions": "subscriptions, direct debits, price rise",
+  "searchKwLoans": "loans, borrowing, schedule, lender, creditor",
+  "searchKwInvoices": "invoices, warranties, receipts, documents",
+  "searchKwScan": "scan, receipt, photo, till",
+  "searchKwImport": "import, statement, file, qif, ofx, csv",
+  "searchKwAdvisor": "advisor, advice, proposals, savings",
+  "searchKwNewOperation": "new operation, add, enter, expense",
+  "searchKwCategories": "categories, classification",
+  "searchKwRules": "rules, automatic classification",
+  "searchKwNotifications": "notifications, alerts, bell",
+  "searchKwSummary": "summary, month, review",
+  "searchKwStart": "getting started, start, guide",
+  "searchKwExport": "export, backup, download",
+  "searchKwMembers": "members, household, invite, sharing",
+  "searchKwSecurity": "security, password, two-factor, sessions",
+  "searchKwAssistant": "assistant, ai, artificial intelligence, model",
+  "searchKwApps": "apps, android, windows, phone",
+  "searchKwPepite": "pepite, mascot, badges",
+  "searchKwDisplay": "display, simple mode, large text, contrast",
+  "searchKwHelp": "help, manual, how to",
+  "searchKwShortcuts": "shortcuts, keyboard, keys",
+  "searchKwFeedback": "feedback, report, bug, suggestion",
+  "searchKwAdmin": "administration, server, updates, backups"
 }

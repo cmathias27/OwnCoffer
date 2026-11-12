@@ -7606,4 +7606,209 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scanRetake => 'Reprendre la photo';
+
+  @override
+  String get navMoney => 'Argent';
+
+  @override
+  String get navPlan => 'Prévoir';
+
+  @override
+  String get navPapers => 'Papiers';
+
+  @override
+  String get navAdvisor => 'Conseiller';
+
+  @override
+  String breadcrumbLabel(String path) {
+    return 'Vous êtes ici : $path';
+  }
+
+  @override
+  String get addScanReceipt => 'Scanner un ticket';
+
+  @override
+  String get addImportStatement => 'Importer un relevé';
+
+  @override
+  String get addMenuTooltip => 'Ajouter';
+
+  @override
+  String get addChooseAccount => 'Sur quel compte ?';
+
+  @override
+  String get settingsTitle => 'Réglages';
+
+  @override
+  String get settingsDisplay => 'Affichage';
+
+  @override
+  String get settingsSimpleMode => 'Mode simple';
+
+  @override
+  String get settingsSimpleModeHelp =>
+      'Masque les fonctions avancées : règles, administration, analyses détaillées.';
+
+  @override
+  String get settingsLargeText => 'Grand texte';
+
+  @override
+  String get settingsHighContrast => 'Contraste élevé';
+
+  @override
+  String get settingsHousehold => 'Foyer';
+
+  @override
+  String get settingsCategories => 'Catégories et règles';
+
+  @override
+  String get settingsApp => 'L\'application';
+
+  @override
+  String get shortcutsTitle => 'Raccourcis clavier';
+
+  @override
+  String get shortcutSearch => 'Rechercher partout';
+
+  @override
+  String get shortcutNew => 'Ajouter une opération';
+
+  @override
+  String get shortcutSections => 'Ouvrir une rubrique (Accueil … Conseiller)';
+
+  @override
+  String get shortcutHelp => 'Afficher ces raccourcis';
+
+  @override
+  String get globalSearchOpen => 'Rechercher';
+
+  @override
+  String get globalSearchHint => 'Opération, créancier, fonction…';
+
+  @override
+  String get globalSearchClear => 'Effacer';
+
+  @override
+  String get globalSearchIntro =>
+      'Cherchez une opération, un crédit, une facture ou une fonction de l\'application.';
+
+  @override
+  String get globalSearchOffline =>
+      'Hors ligne : seules les fonctions de l\'application sont cherchées.';
+
+  @override
+  String globalSearchNothing(String query) {
+    return 'Rien trouvé pour « $query ».';
+  }
+
+  @override
+  String get globalSearchFunctions => 'Fonctions';
+
+  @override
+  String advisorNewBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nouveaux conseils',
+      one: '1 nouveau conseil',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchKwHome => 'accueil, tableau de bord, résumé, tout va bien';
+
+  @override
+  String get searchKwAccounts => 'comptes, solde, banque, livret';
+
+  @override
+  String get searchKwOperations =>
+      'opérations, transactions, dépenses, mouvements, relevé';
+
+  @override
+  String get searchKwToClassify => 'classer, non classées, catégoriser';
+
+  @override
+  String get searchKwForecast =>
+      'prévisions, solde prévu, avenir, découvert, échéances';
+
+  @override
+  String get searchKwBudget =>
+      'budget, objectifs, dépenses du mois, reste à vivre';
+
+  @override
+  String get searchKwSubscriptions =>
+      'abonnements, prélèvements, hausse de prix';
+
+  @override
+  String get searchKwLoans => 'crédits, prêts, emprunt, échéancier, créancier';
+
+  @override
+  String get searchKwInvoices =>
+      'factures, garanties, justificatifs, documents';
+
+  @override
+  String get searchKwScan => 'scanner, ticket, photo, caisse';
+
+  @override
+  String get searchKwImport => 'importer, relevé, fichier, qif, ofx, csv';
+
+  @override
+  String get searchKwAdvisor => 'conseiller, conseils, propositions, économies';
+
+  @override
+  String get searchKwNewOperation =>
+      'nouvelle opération, ajouter, saisir, dépense';
+
+  @override
+  String get searchKwCategories => 'catégories, classement';
+
+  @override
+  String get searchKwRules => 'règles, classement automatique';
+
+  @override
+  String get searchKwNotifications => 'notifications, alertes, cloche';
+
+  @override
+  String get searchKwSummary => 'récapitulatif, mois, bilan';
+
+  @override
+  String get searchKwStart => 'premiers pas, démarrer, guide';
+
+  @override
+  String get searchKwExport => 'exporter, sauvegarde, télécharger';
+
+  @override
+  String get searchKwMembers => 'membres, foyer, inviter, partage';
+
+  @override
+  String get searchKwSecurity =>
+      'sécurité, mot de passe, double authentification, sessions';
+
+  @override
+  String get searchKwAssistant =>
+      'assistant, ia, intelligence artificielle, modèle';
+
+  @override
+  String get searchKwApps => 'applications, android, windows, téléphone';
+
+  @override
+  String get searchKwPepite => 'pépite, mascotte, badges';
+
+  @override
+  String get searchKwDisplay =>
+      'affichage, mode simple, grand texte, contraste';
+
+  @override
+  String get searchKwHelp => 'aide, mode d\'emploi, comment';
+
+  @override
+  String get searchKwShortcuts => 'raccourcis, clavier, touches';
+
+  @override
+  String get searchKwFeedback => 'avis, signaler, bug, suggestion';
+
+  @override
+  String get searchKwAdmin =>
+      'administration, serveur, mises à jour, sauvegardes';
 }

@@ -3,6 +3,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
+import '../theme/app_theme.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/balance_chart.dart';
@@ -456,7 +457,7 @@ class _Amount extends StatelessWidget {
     text,
     style: Theme.of(context).textTheme.titleSmall?.copyWith(
       fontFamily: 'Manrope',
-      color: cents > 0 ? Colors.green.shade700 : null,
+      color: cents > 0 ? context.moneyColors.positive : null,
     ),
   );
 }

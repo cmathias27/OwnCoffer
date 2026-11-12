@@ -6,6 +6,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
+import '../theme/app_theme.dart';
 import '../l10n/error_messages.dart';
 import '../util/file_pick.dart';
 import '../util/format.dart';
@@ -292,7 +293,7 @@ class _ImportScreenState extends State<ImportScreen> {
         _Notice(
           icon: Icons.check_circle_outline,
           text: l.importAccountRecognised,
-          color: Colors.green.shade700,
+          color: context.moneyColors.positive,
         ),
       ];
     }
@@ -574,7 +575,7 @@ class _Summary extends StatelessWidget {
                     ? _Notice(
                         icon: Icons.check_circle_outline,
                         text: l.importBalanceMatches,
-                        color: Colors.green.shade700,
+                        color: context.moneyColors.positive,
                       )
                     : _Notice(
                         icon: Icons.warning_amber,
@@ -687,7 +688,7 @@ class _PreviewTile extends StatelessWidget {
           context.money(line.amountCents, currency: currency),
           style: theme.textTheme.titleSmall?.copyWith(
             fontFamily: 'Manrope',
-            color: line.amountCents > 0 ? Colors.green.shade700 : null,
+            color: line.amountCents > 0 ? context.moneyColors.positive : null,
           ),
         ),
       ),

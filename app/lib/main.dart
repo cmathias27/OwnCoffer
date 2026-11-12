@@ -22,6 +22,8 @@ import 'state/pepite.dart';
 import 'state/pepite_advice.dart';
 import 'state/presence.dart';
 import 'state/session.dart';
+import 'state/ui_prefs.dart';
+import 'theme/app_theme.dart';
 import 'assistant/chat_bubble.dart';
 import 'util/offline.dart';
 import 'util/outbox.dart';
@@ -41,6 +43,7 @@ void main() async {
   unawaited(appUpdater.cleanup());
   // Before any page: a web page reloaded while locked stays locked.
   await appLock.load();
+  await uiPrefs.load();
   askServerAddress = () async => runApp(
     OwnCofferApp(
       home: FirstLaunchScreen(
@@ -175,91 +178,6 @@ class StandaloneStartError implements Exception {
   String toString() => '[$step] $cause';
 }
 
-/// Indigo main colour (docs/MAQUETTES.md).
-const _brand = Color(0xFF3346C8);
-
-ThemeData _buildTheme(Brightness brightness) {
-  final base = ThemeData(
-    // `fidelity` keeps the brand indigo instead of a desaturated tone.
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: _brand,
-      brightness: brightness,
-      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-    ),
-    fontFamily: 'Inter',
-  );
-  final scheme = base.colorScheme;
-  final soft = BorderRadius.circular(16);
-  // Titles and figures in Manrope, text in Inter (docs/MAQUETTES.md). The
-  // soft look: round cards without hard shadow, round dialogs, filled
-  // fields, pill chips, floating messages.
-  return base.copyWith(
-    cardTheme: CardThemeData(
-      elevation: 0,
-      color: scheme.surfaceContainer,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-    ),
-    dialogTheme: DialogThemeData(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-    ),
-    bottomSheetTheme: const BottomSheetThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-      ),
-    ),
-    chipTheme: base.chipTheme.copyWith(shape: const StadiumBorder()),
-    listTileTheme: ListTileThemeData(
-      shape: RoundedRectangleBorder(borderRadius: soft),
-    ),
-    snackBarTheme: SnackBarThemeData(
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: soft),
-    ),
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: scheme.surfaceContainerHighest.withValues(alpha: 0.5),
-      border: OutlineInputBorder(
-        borderRadius: soft,
-        borderSide: BorderSide.none,
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: soft,
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: soft,
-        borderSide: BorderSide(color: scheme.primary, width: 2),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: soft,
-        borderSide: BorderSide(color: scheme.error),
-      ),
-    ),
-    textTheme: base.textTheme.copyWith(
-      displayLarge: base.textTheme.displayLarge?.copyWith(
-        fontFamily: 'Manrope',
-      ),
-      displayMedium: base.textTheme.displayMedium?.copyWith(
-        fontFamily: 'Manrope',
-      ),
-      displaySmall: base.textTheme.displaySmall?.copyWith(
-        fontFamily: 'Manrope',
-      ),
-      headlineLarge: base.textTheme.headlineLarge?.copyWith(
-        fontFamily: 'Manrope',
-      ),
-      headlineMedium: base.textTheme.headlineMedium?.copyWith(
-        fontFamily: 'Manrope',
-      ),
-      headlineSmall: base.textTheme.headlineSmall?.copyWith(
-        fontFamily: 'Manrope',
-      ),
-      titleLarge: base.textTheme.titleLarge?.copyWith(fontFamily: 'Manrope'),
-    ),
-  );
-}
-
 /// The pages' navigator, for the chat window above them.
 final _navigator = GlobalKey<NavigatorState>();
 
@@ -272,40 +190,79 @@ class OwnCofferApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      // French by default when the browser language is not supported.
-      localeResolutionCallback: (locale, supported) => supported.firstWhere(
-        (s) => s.languageCode == locale?.languageCode,
-        orElse: () => const Locale('fr'),
-      ),
-      theme: _buildTheme(Brightness.light),
-      darkTheme: _buildTheme(Brightness.dark),
-      themeMode: ThemeMode.system,
-      navigatorKey: _navigator,
-      // The assistant's bubble stays above every page, the lock above all.
-      builder: home != null
-          ? null
-          : (context, child) => AppLockLayer(
-              lock: appLock,
-              child: OfflineBanner(
-                onOpenOutbox: () => _navigator.currentState?.push(
-                  MaterialPageRoute<void>(builder: (_) => const OutboxScreen()),
-                ),
-                child: ChatLayer(
-                  navigator: _navigator,
-                  child: child ?? const SizedBox(),
+    // Large text and high contrast change the whole app at once.
+    return ListenableBuilder(
+      listenable: uiPrefs,
+      builder: (context, _) => MaterialApp(
+        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        // French by default when the browser language is not supported.
+        localeResolutionCallback: (locale, supported) => supported.firstWhere(
+          (s) => s.languageCode == locale?.languageCode,
+          orElse: () => const Locale('fr'),
+        ),
+        theme: buildAppTheme(
+          Brightness.light,
+          highContrast: uiPrefs.highContrast,
+        ),
+        darkTheme: buildAppTheme(
+          Brightness.dark,
+          highContrast: uiPrefs.highContrast,
+        ),
+        highContrastTheme: buildAppTheme(Brightness.light, highContrast: true),
+        highContrastDarkTheme: buildAppTheme(
+          Brightness.dark,
+          highContrast: true,
+        ),
+        themeMode: ThemeMode.system,
+        navigatorKey: _navigator,
+        // The assistant's bubble stays above every page, the lock above all.
+        builder: home != null
+            ? (context, child) => _LargeText(child: child ?? const SizedBox())
+            : (context, child) => _LargeText(
+                child: AppLockLayer(
+                  lock: appLock,
+                  child: OfflineBanner(
+                    onOpenOutbox: () => _navigator.currentState?.push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const OutboxScreen(),
+                      ),
+                    ),
+                    child: ChatLayer(
+                      navigator: _navigator,
+                      child: child ?? const SizedBox(),
+                    ),
+                  ),
                 ),
               ),
-            ),
-      home: home ?? const _Root(),
+        home: home ?? const _Root(),
+      ),
+    );
+  }
+}
+
+/// « Grands caractères » (decision 0041, point 18): on top of the size
+/// chosen in the system.
+class _LargeText extends StatelessWidget {
+  final Widget child;
+  const _LargeText({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = uiPrefs.textScale;
+    if (scale == 1) return child;
+    final media = MediaQuery.of(context);
+    return MediaQuery(
+      data: media.copyWith(
+        textScaler: TextScaler.linear(media.textScaler.scale(14) / 14 * scale),
+      ),
+      child: child,
     );
   }
 }

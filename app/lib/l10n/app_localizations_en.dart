@@ -7553,4 +7553,203 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanRetake => 'Take it again';
+
+  @override
+  String get navMoney => 'Money';
+
+  @override
+  String get navPlan => 'Plan';
+
+  @override
+  String get navPapers => 'Papers';
+
+  @override
+  String get navAdvisor => 'Advisor';
+
+  @override
+  String breadcrumbLabel(String path) {
+    return 'You are here: $path';
+  }
+
+  @override
+  String get addScanReceipt => 'Scan a receipt';
+
+  @override
+  String get addImportStatement => 'Import a statement';
+
+  @override
+  String get addMenuTooltip => 'Add';
+
+  @override
+  String get addChooseAccount => 'Which account?';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsDisplay => 'Display';
+
+  @override
+  String get settingsSimpleMode => 'Simple mode';
+
+  @override
+  String get settingsSimpleModeHelp =>
+      'Hides the advanced features: rules, administration, detailed analyses.';
+
+  @override
+  String get settingsLargeText => 'Large text';
+
+  @override
+  String get settingsHighContrast => 'High contrast';
+
+  @override
+  String get settingsHousehold => 'Household';
+
+  @override
+  String get settingsCategories => 'Categories and rules';
+
+  @override
+  String get settingsApp => 'The app';
+
+  @override
+  String get shortcutsTitle => 'Keyboard shortcuts';
+
+  @override
+  String get shortcutSearch => 'Search everywhere';
+
+  @override
+  String get shortcutNew => 'Add an operation';
+
+  @override
+  String get shortcutSections => 'Open a section (Home … Advisor)';
+
+  @override
+  String get shortcutHelp => 'Show these shortcuts';
+
+  @override
+  String get globalSearchOpen => 'Search';
+
+  @override
+  String get globalSearchHint => 'Operation, creditor, feature…';
+
+  @override
+  String get globalSearchClear => 'Clear';
+
+  @override
+  String get globalSearchIntro =>
+      'Look for an operation, a loan, an invoice or a feature of the app.';
+
+  @override
+  String get globalSearchOffline =>
+      'Offline: only the features of the app are searched.';
+
+  @override
+  String globalSearchNothing(String query) {
+    return 'Nothing found for \"$query\".';
+  }
+
+  @override
+  String get globalSearchFunctions => 'Features';
+
+  @override
+  String advisorNewBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new advices',
+      one: '1 new advice',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchKwHome => 'home, dashboard, overview, all good';
+
+  @override
+  String get searchKwAccounts => 'accounts, balance, bank, savings';
+
+  @override
+  String get searchKwOperations =>
+      'operations, transactions, expenses, movements, statement';
+
+  @override
+  String get searchKwToClassify => 'classify, unclassified, categorise';
+
+  @override
+  String get searchKwForecast =>
+      'forecast, expected balance, future, overdraft, scheduled';
+
+  @override
+  String get searchKwBudget => 'budget, goals, monthly spending, left to live';
+
+  @override
+  String get searchKwSubscriptions =>
+      'subscriptions, direct debits, price rise';
+
+  @override
+  String get searchKwLoans => 'loans, borrowing, schedule, lender, creditor';
+
+  @override
+  String get searchKwInvoices => 'invoices, warranties, receipts, documents';
+
+  @override
+  String get searchKwScan => 'scan, receipt, photo, till';
+
+  @override
+  String get searchKwImport => 'import, statement, file, qif, ofx, csv';
+
+  @override
+  String get searchKwAdvisor => 'advisor, advice, proposals, savings';
+
+  @override
+  String get searchKwNewOperation => 'new operation, add, enter, expense';
+
+  @override
+  String get searchKwCategories => 'categories, classification';
+
+  @override
+  String get searchKwRules => 'rules, automatic classification';
+
+  @override
+  String get searchKwNotifications => 'notifications, alerts, bell';
+
+  @override
+  String get searchKwSummary => 'summary, month, review';
+
+  @override
+  String get searchKwStart => 'getting started, start, guide';
+
+  @override
+  String get searchKwExport => 'export, backup, download';
+
+  @override
+  String get searchKwMembers => 'members, household, invite, sharing';
+
+  @override
+  String get searchKwSecurity => 'security, password, two-factor, sessions';
+
+  @override
+  String get searchKwAssistant =>
+      'assistant, ai, artificial intelligence, model';
+
+  @override
+  String get searchKwApps => 'apps, android, windows, phone';
+
+  @override
+  String get searchKwPepite => 'pepite, mascot, badges';
+
+  @override
+  String get searchKwDisplay => 'display, simple mode, large text, contrast';
+
+  @override
+  String get searchKwHelp => 'help, manual, how to';
+
+  @override
+  String get searchKwShortcuts => 'shortcuts, keyboard, keys';
+
+  @override
+  String get searchKwFeedback => 'feedback, report, bug, suggestion';
+
+  @override
+  String get searchKwAdmin => 'administration, server, updates, backups';
 }

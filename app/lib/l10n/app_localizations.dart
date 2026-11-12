@@ -11934,6 +11934,366 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Reprendre la photo'**
   String get scanRetake;
+
+  /// No description provided for @navMoney.
+  ///
+  /// In fr, this message translates to:
+  /// **'Argent'**
+  String get navMoney;
+
+  /// No description provided for @navPlan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévoir'**
+  String get navPlan;
+
+  /// No description provided for @navPapers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Papiers'**
+  String get navPapers;
+
+  /// No description provided for @navAdvisor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conseiller'**
+  String get navAdvisor;
+
+  /// No description provided for @breadcrumbLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous êtes ici : {path}'**
+  String breadcrumbLabel(String path);
+
+  /// No description provided for @addScanReceipt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner un ticket'**
+  String get addScanReceipt;
+
+  /// No description provided for @addImportStatement.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un relevé'**
+  String get addImportStatement;
+
+  /// No description provided for @addMenuTooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get addMenuTooltip;
+
+  /// No description provided for @addChooseAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur quel compte ?'**
+  String get addChooseAccount;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsDisplay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affichage'**
+  String get settingsDisplay;
+
+  /// No description provided for @settingsSimpleMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode simple'**
+  String get settingsSimpleMode;
+
+  /// No description provided for @settingsSimpleModeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masque les fonctions avancées : règles, administration, analyses détaillées.'**
+  String get settingsSimpleModeHelp;
+
+  /// No description provided for @settingsLargeText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Grand texte'**
+  String get settingsLargeText;
+
+  /// No description provided for @settingsHighContrast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contraste élevé'**
+  String get settingsHighContrast;
+
+  /// No description provided for @settingsHousehold.
+  ///
+  /// In fr, this message translates to:
+  /// **'Foyer'**
+  String get settingsHousehold;
+
+  /// No description provided for @settingsCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories et règles'**
+  String get settingsCategories;
+
+  /// No description provided for @settingsApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'application'**
+  String get settingsApp;
+
+  /// No description provided for @shortcutsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Raccourcis clavier'**
+  String get shortcutsTitle;
+
+  /// No description provided for @shortcutSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher partout'**
+  String get shortcutSearch;
+
+  /// No description provided for @shortcutNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une opération'**
+  String get shortcutNew;
+
+  /// No description provided for @shortcutSections.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir une rubrique (Accueil … Conseiller)'**
+  String get shortcutSections;
+
+  /// No description provided for @shortcutHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher ces raccourcis'**
+  String get shortcutHelp;
+
+  /// No description provided for @globalSearchOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher'**
+  String get globalSearchOpen;
+
+  /// No description provided for @globalSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération, créancier, fonction…'**
+  String get globalSearchHint;
+
+  /// No description provided for @globalSearchClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer'**
+  String get globalSearchClear;
+
+  /// No description provided for @globalSearchIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cherchez une opération, un crédit, une facture ou une fonction de l\'application.'**
+  String get globalSearchIntro;
+
+  /// No description provided for @globalSearchOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors ligne : seules les fonctions de l\'application sont cherchées.'**
+  String get globalSearchOffline;
+
+  /// No description provided for @globalSearchNothing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien trouvé pour « {query} ».'**
+  String globalSearchNothing(String query);
+
+  /// No description provided for @globalSearchFunctions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fonctions'**
+  String get globalSearchFunctions;
+
+  /// No description provided for @advisorNewBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 nouveau conseil} other{{count} nouveaux conseils}}'**
+  String advisorNewBadge(int count);
+
+  /// No description provided for @searchKwHome.
+  ///
+  /// In fr, this message translates to:
+  /// **'accueil, tableau de bord, résumé, tout va bien'**
+  String get searchKwHome;
+
+  /// No description provided for @searchKwAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'comptes, solde, banque, livret'**
+  String get searchKwAccounts;
+
+  /// No description provided for @searchKwOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'opérations, transactions, dépenses, mouvements, relevé'**
+  String get searchKwOperations;
+
+  /// No description provided for @searchKwToClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'classer, non classées, catégoriser'**
+  String get searchKwToClassify;
+
+  /// No description provided for @searchKwForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'prévisions, solde prévu, avenir, découvert, échéances'**
+  String get searchKwForecast;
+
+  /// No description provided for @searchKwBudget.
+  ///
+  /// In fr, this message translates to:
+  /// **'budget, objectifs, dépenses du mois, reste à vivre'**
+  String get searchKwBudget;
+
+  /// No description provided for @searchKwSubscriptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'abonnements, prélèvements, hausse de prix'**
+  String get searchKwSubscriptions;
+
+  /// No description provided for @searchKwLoans.
+  ///
+  /// In fr, this message translates to:
+  /// **'crédits, prêts, emprunt, échéancier, créancier'**
+  String get searchKwLoans;
+
+  /// No description provided for @searchKwInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'factures, garanties, justificatifs, documents'**
+  String get searchKwInvoices;
+
+  /// No description provided for @searchKwScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'scanner, ticket, photo, caisse'**
+  String get searchKwScan;
+
+  /// No description provided for @searchKwImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'importer, relevé, fichier, qif, ofx, csv'**
+  String get searchKwImport;
+
+  /// No description provided for @searchKwAdvisor.
+  ///
+  /// In fr, this message translates to:
+  /// **'conseiller, conseils, propositions, économies'**
+  String get searchKwAdvisor;
+
+  /// No description provided for @searchKwNewOperation.
+  ///
+  /// In fr, this message translates to:
+  /// **'nouvelle opération, ajouter, saisir, dépense'**
+  String get searchKwNewOperation;
+
+  /// No description provided for @searchKwCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'catégories, classement'**
+  String get searchKwCategories;
+
+  /// No description provided for @searchKwRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'règles, classement automatique'**
+  String get searchKwRules;
+
+  /// No description provided for @searchKwNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'notifications, alertes, cloche'**
+  String get searchKwNotifications;
+
+  /// No description provided for @searchKwSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'récapitulatif, mois, bilan'**
+  String get searchKwSummary;
+
+  /// No description provided for @searchKwStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'premiers pas, démarrer, guide'**
+  String get searchKwStart;
+
+  /// No description provided for @searchKwExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'exporter, sauvegarde, télécharger'**
+  String get searchKwExport;
+
+  /// No description provided for @searchKwMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'membres, foyer, inviter, partage'**
+  String get searchKwMembers;
+
+  /// No description provided for @searchKwSecurity.
+  ///
+  /// In fr, this message translates to:
+  /// **'sécurité, mot de passe, double authentification, sessions'**
+  String get searchKwSecurity;
+
+  /// No description provided for @searchKwAssistant.
+  ///
+  /// In fr, this message translates to:
+  /// **'assistant, ia, intelligence artificielle, modèle'**
+  String get searchKwAssistant;
+
+  /// No description provided for @searchKwApps.
+  ///
+  /// In fr, this message translates to:
+  /// **'applications, android, windows, téléphone'**
+  String get searchKwApps;
+
+  /// No description provided for @searchKwPepite.
+  ///
+  /// In fr, this message translates to:
+  /// **'pépite, mascotte, badges'**
+  String get searchKwPepite;
+
+  /// No description provided for @searchKwDisplay.
+  ///
+  /// In fr, this message translates to:
+  /// **'affichage, mode simple, grand texte, contraste'**
+  String get searchKwDisplay;
+
+  /// No description provided for @searchKwHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'aide, mode d\'emploi, comment'**
+  String get searchKwHelp;
+
+  /// No description provided for @searchKwShortcuts.
+  ///
+  /// In fr, this message translates to:
+  /// **'raccourcis, clavier, touches'**
+  String get searchKwShortcuts;
+
+  /// No description provided for @searchKwFeedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'avis, signaler, bug, suggestion'**
+  String get searchKwFeedback;
+
+  /// No description provided for @searchKwAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'administration, serveur, mises à jour, sauvegardes'**
+  String get searchKwAdmin;
 }
 
 class _AppLocalizationsDelegate
