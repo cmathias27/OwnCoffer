@@ -42,5 +42,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0036](0036-scan-tickets-preremplissage-operation.md) | Scan des tickets : pré-remplissage et opération créée depuis le ticket | Décidé |
 | [0037](0037-hors-ligne-consultation.md) | Hors-ligne : consultation sans réseau dans les applications connectées | Décidé |
 | [0038](0038-hors-ligne-saisie.md) | Hors-ligne : saisie sans réseau et envoi au retour du serveur | Décidé |
+| [0039](0039-recadrage-automatique-des-tickets.md) | Recadrage automatique des tickets, sur l'appareil | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.

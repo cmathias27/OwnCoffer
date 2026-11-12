@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.24.0 (novembre 2026)
+
+### Scan des tickets : recadrage automatique (décision 0039)
+- **Ticket trouvé seul** : quand le papier est trouvé à coup sûr sur la photo, il est aussitôt redressé et rendu lisible ; il reste à le garder, ou à ajuster les coins s'il manque un morceau.
+- **Ticket de travers** : les bords sont trouvés même pour un ticket tourné ou posé en biais.
+- **Photo floue signalée** : « La photo semble floue », avec « Reprendre la photo » quand elle vient de l'appareil photo.
+- **Plus lisible** : l'ombre du téléphone et l'éclairage d'un seul côté sont égalisés, l'impression thermique pâlie redevient foncée.
+- Tout se fait sur l'appareil (web, Android, Windows), sans service Google ni envoi.
+
 ## 1.23.0 (novembre 2026)
 
 ### Hors-ligne : saisie sans réseau (décision 0038)

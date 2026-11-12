@@ -20,46 +20,81 @@ class RgbaImage {
       RgbaImage(width, height, Uint8List(width * height * 4));
 }
 
+/// What [findDocument] saw in a photo.
+class DocumentDetection {
+  /// Clockwise from the top left, in pixels of the analysed image.
+  final List<ScanPoint> corners;
+
+  /// A whole four-sided sheet, clearly lighter than what surrounds it and
+  /// filling its outline: the crop can be applied without asking
+  /// (decision 0039). The corners stay adjustable either way.
+  final bool sure;
+
+  const DocumentDetection(this.corners, {required this.sure});
+}
+
 /// Corners of a document photographed on a darker background, clockwise
 /// from the top left; the whole image (slightly inset) when no clear
-/// document is found. Meant for a small preview (≈ 300 px): the user
-/// adjusts the corners anyway.
+/// document is found. Meant for a small preview (≈ 400 px): the user
+/// can adjust the corners anyway. See [findDocument].
+List<ScanPoint> detectDocument(RgbaImage img) => findDocument(img).corners;
+
+/// [detectDocument], and whether the document was found for sure.
 ///
-/// The paper is told apart by its lightness (Otsu threshold), the largest
-/// light region is kept, and its corners are its extreme points along the
-/// two diagonals.
-List<ScanPoint> detectDocument(RgbaImage img) {
+/// The paper is told apart by its lightness (Otsu threshold on a lightly
+/// smoothed image, so that the print does not cut it into pieces); the
+/// largest light region is kept, preferring one that does not run along
+/// most of the frame (a light table). Its corners are those of the
+/// largest quadrilateral inscribed in its convex outline, which follows
+/// a tilted or turned ticket as well as a straight one.
+DocumentDetection findDocument(RgbaImage img) {
   final w = img.width, h = img.height;
-  final fallback = <ScanPoint>[
+  final unsure = DocumentDetection([
     (x: w * 0.05, y: h * 0.05),
     (x: w * 0.95, y: h * 0.05),
     (x: w * 0.95, y: h * 0.95),
     (x: w * 0.05, y: h * 0.95),
-  ];
-  if (w < 8 || h < 8) return fallback;
+  ], sure: false);
+  if (w < 8 || h < 8) return unsure;
+  final n = w * h;
 
-  final gray = Uint8List(w * h);
-  final histogram = List<int>.filled(256, 0);
-  for (var i = 0; i < w * h; i++) {
+  final luma = Uint8List(n);
+  for (var i = 0; i < n; i++) {
     final p = i * 4;
-    final g =
+    luma[i] =
         (img.pixels[p] * 299 +
             img.pixels[p + 1] * 587 +
             img.pixels[p + 2] * 114) ~/
         1000;
-    gray[i] = g;
-    histogram[g]++;
   }
-  final threshold = _otsu(histogram, w * h);
+  // 3 × 3 average.
+  final gray = Uint8List(n);
+  final histogram = List<int>.filled(256, 0);
+  for (var y = 0; y < h; y++) {
+    for (var x = 0; x < w; x++) {
+      var sum = 0, count = 0;
+      for (var yy = math.max(0, y - 1); yy <= math.min(h - 1, y + 1); yy++) {
+        for (var xx = math.max(0, x - 1); xx <= math.min(w - 1, x + 1); xx++) {
+          sum += luma[yy * w + xx];
+          count++;
+        }
+      }
+      final g = sum ~/ count;
+      gray[y * w + x] = g;
+      histogram[g]++;
+    }
+  }
+  final threshold = _otsu(histogram, n);
 
-  // Largest 4-connected light region.
-  final label = Int32List(w * h);
-  var best = 0, bestSize = 0, current = 0;
+  // 4-connected light regions, with the sides of the frame each touches.
+  final label = Int32List(n);
+  final sizes = <int>[0];
+  final sides = <int>[0];
   final stack = <int>[];
-  for (var start = 0; start < w * h; start++) {
+  for (var start = 0; start < n; start++) {
     if (gray[start] <= threshold || label[start] != 0) continue;
-    current++;
-    var size = 0;
+    final current = sizes.length;
+    var size = 0, touched = 0;
     stack.add(start);
     label[start] = current;
     while (stack.isNotEmpty) {
@@ -73,34 +108,255 @@ List<ScanPoint> detectDocument(RgbaImage img) {
         }
       }
 
-      if (x > 0) visit(i - 1);
-      if (x < w - 1) visit(i + 1);
-      if (y > 0) visit(i - w);
-      if (y < h - 1) visit(i + w);
+      if (x > 0) {
+        visit(i - 1);
+      } else {
+        touched |= 1;
+      }
+      if (x < w - 1) {
+        visit(i + 1);
+      } else {
+        touched |= 2;
+      }
+      if (y > 0) {
+        visit(i - w);
+      } else {
+        touched |= 4;
+      }
+      if (y < h - 1) {
+        visit(i + w);
+      } else {
+        touched |= 8;
+      }
     }
-    if (size > bestSize) {
-      bestSize = size;
-      best = current;
-    }
+    sizes.add(size);
+    sides.add(touched);
   }
-  // Too small (no paper) or the whole frame (no background): no guess.
-  if (bestSize < w * h * 0.08 || bestSize > w * h * 0.97) return fallback;
+  int countSides(int mask) =>
+      (mask & 1) + (mask >> 1 & 1) + (mask >> 2 & 1) + (mask >> 3 & 1);
+  var best = 0;
+  bool better(int c) {
+    if (best == 0) return true;
+    final framed = countSides(sides[c]) <= 2,
+        bestFramed = countSides(sides[best]) <= 2;
+    if (framed != bestFramed) return framed;
+    return sizes[c] > sizes[best];
+  }
 
-  var tl = (s: double.infinity, p: fallback[0]);
-  var tr = (s: -double.infinity, p: fallback[1]);
-  var br = (s: -double.infinity, p: fallback[2]);
-  var bl = (s: double.infinity, p: fallback[3]);
-  for (var i = 0; i < w * h; i++) {
-    if (label[i] != best) continue;
-    final x = (i % w).toDouble(), y = (i ~/ w).toDouble();
-    final p = (x: x + 0.5, y: y + 0.5);
-    if (x + y < tl.s) tl = (s: x + y, p: p);
-    if (x + y > br.s) br = (s: x + y, p: p);
-    if (x - y > tr.s) tr = (s: x - y, p: p);
-    if (x - y < bl.s) bl = (s: x - y, p: p);
+  for (var c = 1; c < sizes.length; c++) {
+    if (sizes[c] >= n * 0.08 && better(c)) best = c;
   }
-  final corners = [tl.p, tr.p, br.p, bl.p];
-  return _area(corners) < w * h * 0.05 ? fallback : corners;
+  // No paper, or the whole frame (no background): no guess.
+  if (best == 0 || sizes[best] > n * 0.97) return unsure;
+
+  // Outline row by row (print inside the paper does not matter).
+  final points = <ScanPoint>[];
+  var spanArea = 0;
+  var inside = 0, outside = 0;
+  for (var y = 0; y < h; y++) {
+    var left = -1, right = -1;
+    for (var x = 0; x < w; x++) {
+      final i = y * w + x;
+      if (label[i] == best) {
+        if (left < 0) left = x;
+        right = x;
+        inside += luma[i];
+      } else {
+        outside += luma[i];
+      }
+    }
+    if (left < 0) continue;
+    spanArea += right - left + 1;
+    points
+      ..add((x: left.toDouble(), y: y.toDouble()))
+      ..add((x: left.toDouble(), y: y + 1.0))
+      ..add((x: right + 1.0, y: y.toDouble()))
+      ..add((x: right + 1.0, y: y + 1.0));
+  }
+  final hull = _convexHull(points);
+  if (hull.length < 4) return unsure;
+  final corners = _clockwiseFromTopLeft(_largestQuad(hull));
+  final quadArea = _area(corners);
+  if (quadArea < n * 0.05) return unsure;
+
+  final size = sizes[best];
+  final contrast = inside / size - outside / math.max(1, n - size);
+  final fill = spanArea / quadArea;
+  final sure =
+      sides[best] == 0 &&
+      contrast >= 40 &&
+      fill >= 0.9 &&
+      fill <= 1.1 &&
+      quadArea / _area(hull) >= 0.95 &&
+      _anglesBetween(corners, 40, 140);
+  return DocumentDetection(corners, sure: sure);
+}
+
+/// Convex hull (Andrew's monotone chain), without collinear points.
+List<ScanPoint> _convexHull(List<ScanPoint> points) {
+  final p = [...points]
+    ..sort((a, b) => a.x != b.x ? a.x.compareTo(b.x) : a.y.compareTo(b.y));
+  double cross(ScanPoint o, ScanPoint a, ScanPoint b) =>
+      (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+  final hull = <ScanPoint>[];
+  for (final pass in [p, p.reversed.toList()]) {
+    final start = hull.length;
+    for (final q in pass) {
+      while (hull.length >= start + 2 &&
+          cross(hull[hull.length - 2], hull.last, q) <= 0) {
+        hull.removeLast();
+      }
+      hull.add(q);
+    }
+    hull.removeLast();
+  }
+  return hull;
+}
+
+/// The largest quadrilateral with its corners on the convex polygon [hull]
+/// (at least 4 points), found in O(n²): for two opposite corners, the best
+/// third and fourth corners only move forward along the outline.
+List<ScanPoint> _largestQuad(List<ScanPoint> hull) {
+  final n = hull.length;
+  ScanPoint at(int i) => hull[i % n];
+  double triangle(int a, int b, int c) {
+    final p = at(a), q = at(b), r = at(c);
+    return ((q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x)).abs();
+  }
+
+  var best = -1.0;
+  var quad = hull.sublist(0, 4);
+  for (var i = 0; i < n; i++) {
+    var j = i + 1, l = i + 3;
+    for (var k = i + 2; k <= i + n - 2; k++) {
+      while (j + 1 < k && triangle(i, j + 1, k) >= triangle(i, j, k)) {
+        j++;
+      }
+      if (l <= k) l = k + 1;
+      while (l + 1 < i + n && triangle(k, l + 1, i) >= triangle(k, l, i)) {
+        l++;
+      }
+      final area = triangle(i, j, k) + triangle(k, l, i);
+      if (area > best) {
+        best = area;
+        quad = [at(i), at(j), at(k), at(l)];
+      }
+    }
+  }
+  return quad;
+}
+
+/// [quad] (convex) ordered clockwise on screen, starting with the corner
+/// nearest the top left.
+List<ScanPoint> _clockwiseFromTopLeft(List<ScanPoint> quad) {
+  final cx = quad.fold(0.0, (s, p) => s + p.x) / quad.length;
+  final cy = quad.fold(0.0, (s, p) => s + p.y) / quad.length;
+  final sorted = [...quad]
+    ..sort(
+      (a, b) => math
+          .atan2(a.y - cy, a.x - cx)
+          .compareTo(math.atan2(b.y - cy, b.x - cx)),
+    );
+  var first = 0;
+  for (var i = 1; i < sorted.length; i++) {
+    if (sorted[i].x + sorted[i].y < sorted[first].x + sorted[first].y) {
+      first = i;
+    }
+  }
+  return [...sorted.sublist(first), ...sorted.sublist(0, first)];
+}
+
+/// Whether every inner angle of [quad] is within [low]–[high] degrees.
+bool _anglesBetween(List<ScanPoint> quad, double low, double high) {
+  for (var i = 0; i < 4; i++) {
+    final p = quad[(i + 3) % 4], q = quad[i], r = quad[(i + 1) % 4];
+    final ax = p.x - q.x, ay = p.y - q.y, bx = r.x - q.x, by = r.y - q.y;
+    final norms = math.sqrt((ax * ax + ay * ay) * (bx * bx + by * by));
+    if (norms == 0) return false;
+    final angle =
+        math.acos(((ax * bx + ay * by) / norms).clamp(-1.0, 1.0)) *
+        180 /
+        math.pi;
+    if (angle < low || angle > high) return false;
+  }
+  return true;
+}
+
+/// Blur level above which a photo is said to be blurred (decision 0039).
+const blurredAbove = 0.5;
+
+/// How blurred [img] looks, from 0 (sharp) to 1 (no detail left), within
+/// the bounding box of [within] when given; null when there is too little
+/// detail to tell (a blank sheet).
+///
+/// No-reference measure of Crété-Roffet et al. (2007): the image is
+/// blurred again (9 pixels) and the loss of variation between neighbours
+/// is measured; a sharp image loses much, a blurred one little.
+/// Differences under 4 levels (sensor noise) are ignored.
+double? blurLevel(RgbaImage img, {List<ScanPoint>? within}) {
+  var x0 = 0, y0 = 0, x1 = img.width, y1 = img.height;
+  if (within != null && within.isNotEmpty) {
+    x0 = within.map((p) => p.x).reduce(math.min).floor().clamp(0, img.width);
+    x1 = within.map((p) => p.x).reduce(math.max).ceil().clamp(0, img.width);
+    y0 = within.map((p) => p.y).reduce(math.min).floor().clamp(0, img.height);
+    y1 = within.map((p) => p.y).reduce(math.max).ceil().clamp(0, img.height);
+  }
+  final w = x1 - x0, h = y1 - y0;
+  if (w < 16 || h < 16) return null;
+  final f = Float64List(w * h);
+  for (var y = 0; y < h; y++) {
+    for (var x = 0; x < w; x++) {
+      final p = ((y + y0) * img.width + x + x0) * 4;
+      f[y * w + x] =
+          (img.pixels[p] * 299 +
+              img.pixels[p + 1] * 587 +
+              img.pixels[p + 2] * 114) /
+          1000;
+    }
+  }
+
+  // One direction: [count] lines of [length] pixels, [step] apart along
+  // a line and [stride] apart between lines.
+  ({double variation, double kept}) direction(
+    int count,
+    int length,
+    int step,
+    int stride,
+  ) {
+    var variation = 0.0, kept = 0.0;
+    final line = Float64List(length), blurred = Float64List(length);
+    for (var c = 0; c < count; c++) {
+      for (var i = 0; i < length; i++) {
+        line[i] = f[c * stride + i * step];
+      }
+      for (var i = 0; i < length; i++) {
+        var sum = 0.0;
+        for (var k = -4; k <= 4; k++) {
+          sum += line[(i + k).clamp(0, length - 1)];
+        }
+        blurred[i] = sum / 9;
+      }
+      for (var i = 1; i < length; i++) {
+        final d = (line[i] - line[i - 1]).abs();
+        if (d < 4) continue;
+        final b = (blurred[i] - blurred[i - 1]).abs();
+        variation += d;
+        kept += math.max(0, d - b);
+      }
+    }
+    return (variation: variation, kept: kept);
+  }
+
+  final across = direction(h, w, 1, w);
+  final down = direction(w, h, w, 1);
+  // A direction with too little detail (under one edge per two lines, on
+  // average) is not measured.
+  final levels = [
+    if (across.variation >= h * 50)
+      (across.variation - across.kept) / across.variation,
+    if (down.variation >= w * 50) (down.variation - down.kept) / down.variation,
+  ];
+  return levels.isEmpty ? null : levels.reduce(math.max);
 }
 
 int _otsu(List<int> histogram, int total) {
@@ -246,13 +502,16 @@ RgbaImage warpDocument(
   return out;
 }
 
-/// A paper document made easier to read: levels stretched so that the
-/// paper is white and the ink dark (2 % of the pixels clipped on each
-/// side), colours kept. In place.
+/// A paper document made easier to read, in place: the lighting is evened
+/// out (shadow of the phone, paper lit from one side), then the levels
+/// are stretched so that the paper is white and the ink dark (2 % of the
+/// pixels clipped on each side), colours kept. Faded thermal print comes
+/// out dark again (decision 0039).
 void enhanceDocument(RgbaImage img) {
   final p = img.pixels;
   final n = img.width * img.height;
   if (n == 0) return;
+  _evenLighting(img);
   final histogram = List<int>.filled(256, 0);
   for (var i = 0; i < n; i++) {
     final j = i * 4;
@@ -278,6 +537,67 @@ void enhanceDocument(RgbaImage img) {
     p[j] = table[p[j]];
     p[j + 1] = table[p[j + 1]];
     p[j + 2] = table[p[j + 2]];
+  }
+}
+
+/// Divides each pixel by the paper's colour around it. The paper's colour
+/// is the lightest value of cells of about 1/24 of the image, then of
+/// their neighbours (so that a large logo is not taken for paper),
+/// interpolated between cell centres.
+void _evenLighting(RgbaImage img) {
+  final w = img.width, h = img.height, p = img.pixels;
+  final cell = math.max(8, math.max(w, h) ~/ 24);
+  final gw = (w + cell - 1) ~/ cell, gh = (h + cell - 1) ~/ cell;
+  final lightest = Uint8List(gw * gh * 3);
+  for (var y = 0; y < h; y++) {
+    final row = y ~/ cell * gw;
+    for (var x = 0; x < w; x++) {
+      final g = (row + x ~/ cell) * 3, j = (y * w + x) * 4;
+      for (var c = 0; c < 3; c++) {
+        if (p[j + c] > lightest[g + c]) lightest[g + c] = p[j + c];
+      }
+    }
+  }
+  final paper = Float64List(gw * gh * 3);
+  for (var gy = 0; gy < gh; gy++) {
+    for (var gx = 0; gx < gw; gx++) {
+      for (var c = 0; c < 3; c++) {
+        var v = 0;
+        for (
+          var yy = math.max(0, gy - 1);
+          yy <= math.min(gh - 1, gy + 1);
+          yy++
+        ) {
+          for (
+            var xx = math.max(0, gx - 1);
+            xx <= math.min(gw - 1, gx + 1);
+            xx++
+          ) {
+            v = math.max(v, lightest[(yy * gw + xx) * 3 + c]);
+          }
+        }
+        // A black page stays black rather than being blown up.
+        paper[(gy * gw + gx) * 3 + c] = math.max(v, 32).toDouble();
+      }
+    }
+  }
+  for (var y = 0; y < h; y++) {
+    final fy = ((y + 0.5) / cell - 0.5).clamp(0.0, gh - 1.0);
+    final y0 = fy.floor(), y1 = math.min(y0 + 1, gh - 1), ty = fy - y0;
+    for (var x = 0; x < w; x++) {
+      final fx = ((x + 0.5) / cell - 0.5).clamp(0.0, gw - 1.0);
+      final x0 = fx.floor(), x1 = math.min(x0 + 1, gw - 1), tx = fx - x0;
+      final j = (y * w + x) * 4;
+      for (var c = 0; c < 3; c++) {
+        final a = paper[(y0 * gw + x0) * 3 + c];
+        final b = paper[(y0 * gw + x1) * 3 + c];
+        final d = paper[(y1 * gw + x0) * 3 + c];
+        final e = paper[(y1 * gw + x1) * 3 + c];
+        final top = a + (b - a) * tx, bottom = d + (e - d) * tx;
+        final light = top + (bottom - top) * ty;
+        p[j + c] = (p[j + c] * 255 / light).round().clamp(0, 255);
+      }
+    }
   }
 }
 

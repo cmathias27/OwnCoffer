@@ -7536,4 +7536,21 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get outboxLeaveConfirm => 'Continuer et les perdre';
+
+  @override
+  String get scanFound =>
+      'Ticket trouvé et redressé. Vérifiez qu\'il est entier ; sinon, ajustez les coins.';
+
+  @override
+  String get scanAdjust => 'Ajuster les coins';
+
+  @override
+  String get scanKeep => 'Garder';
+
+  @override
+  String get scanBlurred =>
+      'La photo semble floue : le texte risque d\'être illisible.';
+
+  @override
+  String get scanRetake => 'Reprendre la photo';
 }

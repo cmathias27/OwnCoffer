@@ -5,7 +5,7 @@ Gardez les factures et tickets avec l'opération qui les a payés, et retrouvez-
 ## Joindre une facture
 
 - Dans la fiche d'une opération : **« Joindre un fichier »** (PDF ou image déjà sur l'appareil, 10 Mo au plus) ou, sur téléphone, **« Scanner avec l'appareil photo »**, qui ouvre directement l'appareil photo.
-- Une photo est **recadrée comme par un scanner** : la feuille est repérée, vous ajustez les coins, elle est redressée et rendue plus lisible. Tout se fait sur votre appareil.
+- Une photo est **recadrée comme par un scanner** : quand le ticket est bien repéré, il est aussitôt redressé et rendu plus lisible (ombres égalisées, impression pâlie foncée) ; sinon, ou s'il manque un morceau, vous ajustez les coins. Une photo floue est signalée, avec un bouton pour la reprendre. Tout se fait sur votre appareil.
 - Le nom du fichier est fait tout seul : date, commerçant, description, montant.
 
 ## Facture sans opération

@@ -2329,5 +2329,10 @@
   "outboxDropConfirm": "Drop this operation? It will never be sent.",
   "outboxLeaveTitle": "Operations not sent yet",
   "outboxLeaveBody": "{count, plural, =1{1 operation entered without network has not been sent to the server yet: it will be lost.} other{{count} operations entered without network have not been sent to the server yet: they will be lost.}}",
-  "outboxLeaveConfirm": "Continue and lose them"
+  "outboxLeaveConfirm": "Continue and lose them",
+  "scanFound": "Receipt found and straightened. Check that it is whole; if not, adjust the corners.",
+  "scanAdjust": "Adjust the corners",
+  "scanKeep": "Keep",
+  "scanBlurred": "The photo looks blurred: the text may be unreadable.",
+  "scanRetake": "Take it again"
 }

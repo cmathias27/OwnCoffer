@@ -29,7 +29,7 @@ Aucune bibliothèque unique ne couvre les trois (vérifié sur pub.dev et npm le
 - Trois intégrations à maintenir derrière une seule interface ; la CI teste l'extraction sur du texte, pas le moteur de reconnaissance.
 - Poids : les modèles de langue et le `.wasm` ajoutent quelques dizaines de Mo au total ; le web les charge seulement au premier scan.
 - **Points à vérifier avant d'écrire du code** : licence exacte de chaque paquet Dart au moment de l'ajout (règle du CLAUDE.md) et compatibilité de `platform_ocr` avec notre version de Flutter, qualité réelle sur des tickets thermiques faux, taille ajoutée à l'APK et au zip Windows, comportement d'`image_picker` quand le recadrage automatique sera ajouté.
-- Le recadrage automatique (bords, perspective, netteté) est une décision à part : scanner de documents du système sur Android, quatre coins à placer sur le web.
+- Le recadrage automatique (bords, perspective, netteté) est une décision à part : scanner de documents du système sur Android, quatre coins à placer sur le web. *Remplacé par la décision [0039](0039-recadrage-automatique-des-tickets.md) : tout en Dart pur sur l'appareil, le scanner du système étant celui de Google Play Services.*
 
 ## Mise en œuvre sur Android (3 novembre 2026)
 
