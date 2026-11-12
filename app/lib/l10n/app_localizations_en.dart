@@ -7824,4 +7824,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String homeAdvicesAllCount(int count) {
     return 'See all $count';
   }
+
+  @override
+  String get periodThisMonth => 'This month';
+
+  @override
+  String get periodLastMonth => 'Last month';
+
+  @override
+  String get periodThisYear => 'This year';
+
+  @override
+  String get budgetShowDetail => 'Show the detail';
+
+  @override
+  String get budgetHideDetail => 'Hide the detail';
 }

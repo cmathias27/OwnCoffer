@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../state/ui_prefs.dart';
 import '../theme/app_theme.dart';
+import '../widgets/period_bar.dart';
 import '../util/format.dart';
 import '../state/pepite.dart';
 import '../widgets/pepite.dart';
@@ -102,7 +103,11 @@ class DashboardScreenState extends State<DashboardScreen> {
         client.analysis
             .leftToLive(_groupId)
             .then<LeftToLiveReport?>((r) => r, onError: (_) => null),
-        client.analysis.report(_groupId, BudgetPeriod.month, today),
+        client.analysis.report(
+          _groupId,
+          sharedPeriodRange(uiPrefs.period, today).$1,
+          sharedPeriodRange(uiPrefs.period, today).$2,
+        ),
         client.scheduled
             .calendar(_groupId, today)
             .then<DueCalendar?>((c) => c, onError: (_) => null),

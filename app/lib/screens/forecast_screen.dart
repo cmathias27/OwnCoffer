@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
+import '../state/ui_prefs.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../l10n/error_messages.dart';
@@ -35,7 +38,12 @@ class ForecastScreen extends StatefulWidget {
 
 class ForecastScreenState extends State<ForecastScreen> {
   static const _horizons = [30, 90, 365];
-  late Account? _account = widget.accounts.firstOrNull;
+  late Account? _account = _remembered;
+
+  /// The account opened last on this device (decision 0041, point 9).
+  Account? get _remembered =>
+      widget.accounts.where((a) => a.id == uiPrefs.accountId).firstOrNull ??
+      widget.accounts.firstOrNull;
   var _horizon = 30;
 
   /// Counts the estimated variable spending (groceries, fuel…).
@@ -62,7 +70,7 @@ class ForecastScreenState extends State<ForecastScreen> {
       _account = null;
     }
     if (_account == null || !widget.accounts.any((a) => a.id == _account!.id)) {
-      _account = widget.accounts.firstOrNull;
+      _account = _remembered;
       _reload();
     }
   }
@@ -188,6 +196,7 @@ class ForecastScreenState extends State<ForecastScreen> {
                         _forecast = null;
                         _scheduled = [];
                       });
+                      unawaited(uiPrefs.setAccountId(id));
                       _reload();
                     },
                   ),

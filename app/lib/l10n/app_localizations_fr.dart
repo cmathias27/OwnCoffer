@@ -7884,4 +7884,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String homeAdvicesAllCount(int count) {
     return 'Voir les $count';
   }
+
+  @override
+  String get periodThisMonth => 'Ce mois';
+
+  @override
+  String get periodLastMonth => 'Mois précédent';
+
+  @override
+  String get periodThisYear => 'Cette année';
+
+  @override
+  String get budgetShowDetail => 'Voir le détail';
+
+  @override
+  String get budgetHideDetail => 'Masquer le détail';
 }

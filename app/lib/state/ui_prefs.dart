@@ -20,7 +20,7 @@ class SecureUiStore implements LockStore {
 }
 
 /// The period shared by the home, budget and analysis screens.
-enum SharedPeriod { thisMonth, lastMonth, twelveMonths }
+enum SharedPeriod { thisMonth, lastMonth, thisYear }
 
 class UiPrefs extends ChangeNotifier {
   final LockStore store;
@@ -73,8 +73,11 @@ class UiPrefs extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _save(String key, String? value) async {
-    notifyListeners();
+  /// Only the look of the app is listened to (the whole app is built
+  /// again); the other choices are read when a screen opens, and may be
+  /// saved while a screen is being built.
+  Future<void> _save(String key, String? value, {bool look = false}) async {
+    if (look) notifyListeners();
     try {
       await store.write(key, value);
     } on Object {
@@ -84,17 +87,17 @@ class UiPrefs extends ChangeNotifier {
 
   Future<void> setSimpleMode(bool on) {
     _simpleMode = on;
-    return _save('simple', '$on');
+    return _save('simple', '$on', look: true);
   }
 
   Future<void> setLargeText(bool on) {
     _largeText = on;
-    return _save('largeText', '$on');
+    return _save('largeText', '$on', look: true);
   }
 
   Future<void> setHighContrast(bool on) {
     _highContrast = on;
-    return _save('contrast', '$on');
+    return _save('contrast', '$on', look: true);
   }
 
   Future<void> setPeriod(SharedPeriod p) {

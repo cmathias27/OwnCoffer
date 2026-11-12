@@ -32,7 +32,7 @@ L'application a grandi rubrique par rubrique. Elle compte aujourd'hui :
 ### Recherche globale
 
 5. **Recherche globale** en haut de chaque écran (touche `/`). Elle cherche à la fois :
-   - **dans le serveur** (point d'accès `search.global`) : opérations de tous les comptes visibles par l'utilisateur, crédits (prêteur, libellé), factures (fournisseur, nom) et catégories. Au plus 8 résultats par type. Mêmes règles d'accès que chaque écran, avec un test d'isolation. Aucune donnée enregistrée, rien de journalisé ;
+   - **dans le serveur** (point d'accès `search.global`) : opérations de tous les comptes visibles par l'utilisateur, crédits (prêteur, libellé) et factures (fournisseur, nom). Les catégories se trouvent par la fonction « Catégories » des réglages. Au plus 8 résultats par type. Mêmes règles d'accès que chaque écran, avec un test d'isolation. Aucune donnée enregistrée, rien de journalisé ;
    - **dans l'application** : ses fonctions, à partir de leurs libellés traduits et de mots-clés (« exporter », « mot de passe », « membres »…). Ouvrir un résultat ouvre l'écran correspondant.
 
    Hors ligne, seules les fonctions sont proposées.
@@ -45,7 +45,7 @@ L'application a grandi rubrique par rubrique. Elle compte aujourd'hui :
    - ce qui va bien est replié ;
    - une carte « Conseils du moment » avec les 3 premiers conseils et « Voir tout ».
 7. **Mon conseiller en avant** : une rubrique à part entière, avec un compteur des conseils nouveaux depuis la dernière visite. La date de cette visite est gardée sur l'appareil.
-8. **Barre de période commune** (ce mois, mois précédent, 12 mois) et **compte choisi gardé** d'un écran à l'autre. Les deux sont mémorisés sur l'appareil, sans donnée financière.
+8. **Barre de période commune** (ce mois, mois précédent, cette année) et **compte choisi gardé** d'un écran à l'autre. Les deux sont mémorisés sur l'appareil, sans donnée financière.
 9. **Fiche crédit en onglets** : Résumé, Échéancier, Opérations, Documents, Simuler. **Budget** : la vue du mois d'abord, l'analyse derrière « Voir le détail ».
 10. **Hiérarchie visuelle constante** :
     - un chiffre clé en grand par carte, les explications en petit et en gris ;

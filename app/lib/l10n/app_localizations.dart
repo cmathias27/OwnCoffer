@@ -12378,6 +12378,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Voir les {count}'**
   String homeAdvicesAllCount(int count);
+
+  /// No description provided for @periodThisMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois'**
+  String get periodThisMonth;
+
+  /// No description provided for @periodLastMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois précédent'**
+  String get periodLastMonth;
+
+  /// No description provided for @periodThisYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette année'**
+  String get periodThisYear;
+
+  /// No description provided for @budgetShowDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir le détail'**
+  String get budgetShowDetail;
+
+  /// No description provided for @budgetHideDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer le détail'**
+  String get budgetHideDetail;
 }
 
 class _AppLocalizationsDelegate

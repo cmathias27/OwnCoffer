@@ -2484,5 +2484,10 @@
         "type": "int"
       }
     }
-  }
+  },
+  "periodThisMonth": "This month",
+  "periodLastMonth": "Last month",
+  "periodThisYear": "This year",
+  "budgetShowDetail": "Show the detail",
+  "budgetHideDetail": "Hide the detail"
 }

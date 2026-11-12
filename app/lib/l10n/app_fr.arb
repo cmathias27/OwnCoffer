@@ -5456,5 +5456,10 @@
         "type": "int"
       }
     }
-  }
+  },
+  "periodThisMonth": "Ce mois",
+  "periodLastMonth": "Mois précédent",
+  "periodThisYear": "Cette année",
+  "budgetShowDetail": "Voir le détail",
+  "budgetHideDetail": "Masquer le détail"
 }
