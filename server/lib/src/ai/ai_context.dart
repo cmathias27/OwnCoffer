@@ -158,16 +158,20 @@ class AiContext {
     ),
     _tool(
       'simulate_loan_change',
-      'What renegotiating a loan would do, computed by the loan engine: '
-          'instalment, interest left, instalments left and end date, before '
-          'and after; saving with the fees; the month it pays off. Nothing '
-          'is saved.',
+      'What renegotiating or pausing a loan would do, computed by the loan '
+          'engine: instalment, interest left, instalments left and end date, '
+          'before and after; saving with the fees; the month it pays off. '
+          'A pause: pause_months instalments with only the interest paid, or '
+          'nothing paid and the interest added to the capital owed '
+          '(pause_capitalized). Nothing is saved.',
       {
         'loan_id': {'type': 'integer'},
         'date': {'type': 'string', 'description': 'From, YYYY-MM-DD.'},
         'annual_rate_milli': {'type': 'integer'},
         'payment_cents': {'type': 'integer'},
         'remaining_months': {'type': 'integer'},
+        'pause_months': {'type': 'integer'},
+        'pause_capitalized': {'type': 'boolean'},
         'fees_cents': {'type': 'integer'},
       },
       required: ['loan_id'],
@@ -736,6 +740,8 @@ class AiContext {
         annualRateMilli: (a['annual_rate_milli'] as num?)?.toInt(),
         paymentCents: (a['payment_cents'] as num?)?.toInt(),
         remainingMonths: (a['remaining_months'] as num?)?.toInt(),
+        pauseMonths: (a['pause_months'] as num?)?.toInt(),
+        pauseCapitalized: a['pause_capitalized'] == true,
       ),
       feesCents: (a['fees_cents'] as num?)?.toInt(),
     );

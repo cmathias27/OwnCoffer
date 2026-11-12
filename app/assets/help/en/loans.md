@@ -30,12 +30,13 @@ With a debit account, the instalments enter the **forecast balance**.
 
 The **"Renegotiate or change the rate"** card of a loan's sheet simulates your bank's offer: new rate, new instalment or new duration, and the **fees** of the change. OwnCoffer compares **today and after**: instalment, interest left, instalments, end date, then the **saving net of fees** and the **month it pays off**. **"Record this change"** adds it to the loan's changes.
 
-## Changes: variable rate, renegotiation
+## Changes: variable rate, renegotiation, pause
 
 In a loan's sheet, **"Add a change"**:
 
 - **New rate** (variable rate): from a date. The end date is kept and the instalment computed again; if the debited instalment is known, it is kept and the end date moves.
 - **Renegotiation**: new rate, and a new instalment or a new remaining duration.
+- **Instalment holiday (pause)**: the lender suspends the instalments for a few months. **Interest paid** (partial pause): only the interest and the insurance are debited. **Nothing paid** (full pause): only the insurance is debited, the interest is added to what is left to repay. The loan ends as much later; in the schedule, these months are marked "(pause)".
 - **Early repayment**: an amount repaid on top; the instalment is kept, the loan ends sooner.
 
 The table, the remaining principal, the planned instalments and the balance forecast follow. A change is removed in one tap. A change that would never let the loan be repaid is refused.
@@ -47,6 +48,8 @@ Choose the **"Revolving credit"** type: enter the **amount used** today, the deb
 ## Read a document with the AI
 
 With the assistant on and a model that reads images, the ✨ button of a loan document has it read: the terms it states (rate, duration, instalment, insurance…) are **proposed** in My advisor, with before and after. Nothing changes without your agreement.
+
+For an **amortisation table**, the AI copies every row (up to 12 pages); OwnCoffer's engine, without AI, compares each instalment with its computation and **deduces the changes**: new rate, new instalment, pause, early repayment, with their date. They are proposed as the loan's "Changes", and the ones you entered before the first row read are kept. A row nothing explains (a figure misread, for example) is **reported**, never guessed.
 
 ## Debt ratio
 

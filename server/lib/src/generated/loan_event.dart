@@ -14,7 +14,9 @@ import 'package:serverpod/serverpod.dart' as _is;
 
 /// Something that changed a loan from a date on (core.LoanChange): a new
 /// rate (variable rate, renegotiation), a new instalment, a new remaining
-/// duration, money drawn (revolving credit, > 0) or repaid early (< 0).
+/// duration, money drawn (revolving credit, > 0) or repaid early (< 0), a
+/// pause of instalments (interest only, or nothing paid and the interest
+/// added to what is owed when pauseCapitalized).
 /// Kept in the loan; the schedule is computed again from them.
 abstract class LoanEvent
     implements _is.SerializableModel, _is.ProtocolSerialization {
@@ -24,6 +26,8 @@ abstract class LoanEvent
     this.paymentCents,
     this.remainingMonths,
     this.drawCents,
+    this.pauseMonths,
+    this.pauseCapitalized,
     this.note,
   });
 
@@ -33,6 +37,8 @@ abstract class LoanEvent
     int? paymentCents,
     int? remainingMonths,
     int? drawCents,
+    int? pauseMonths,
+    bool? pauseCapitalized,
     String? note,
   }) = _LoanEventImpl;
 
@@ -43,6 +49,12 @@ abstract class LoanEvent
       paymentCents: jsonSerialization['paymentCents'] as int?,
       remainingMonths: jsonSerialization['remainingMonths'] as int?,
       drawCents: jsonSerialization['drawCents'] as int?,
+      pauseMonths: jsonSerialization['pauseMonths'] as int?,
+      pauseCapitalized: jsonSerialization['pauseCapitalized'] == null
+          ? null
+          : _is.BoolJsonExtension.fromJson(
+              jsonSerialization['pauseCapitalized'],
+            ),
       note: jsonSerialization['note'] as String?,
     );
   }
@@ -57,6 +69,10 @@ abstract class LoanEvent
 
   int? drawCents;
 
+  int? pauseMonths;
+
+  bool? pauseCapitalized;
+
   String? note;
 
   /// Returns a shallow copy of this [LoanEvent]
@@ -68,6 +84,8 @@ abstract class LoanEvent
     int? paymentCents,
     int? remainingMonths,
     int? drawCents,
+    int? pauseMonths,
+    bool? pauseCapitalized,
     String? note,
   });
   @override
@@ -79,6 +97,8 @@ abstract class LoanEvent
       if (paymentCents != null) 'paymentCents': paymentCents,
       if (remainingMonths != null) 'remainingMonths': remainingMonths,
       if (drawCents != null) 'drawCents': drawCents,
+      if (pauseMonths != null) 'pauseMonths': pauseMonths,
+      if (pauseCapitalized != null) 'pauseCapitalized': pauseCapitalized,
       if (note != null) 'note': note,
     };
   }
@@ -92,6 +112,8 @@ abstract class LoanEvent
       if (paymentCents != null) 'paymentCents': paymentCents,
       if (remainingMonths != null) 'remainingMonths': remainingMonths,
       if (drawCents != null) 'drawCents': drawCents,
+      if (pauseMonths != null) 'pauseMonths': pauseMonths,
+      if (pauseCapitalized != null) 'pauseCapitalized': pauseCapitalized,
       if (note != null) 'note': note,
     };
   }
@@ -111,6 +133,8 @@ class _LoanEventImpl extends LoanEvent {
     int? paymentCents,
     int? remainingMonths,
     int? drawCents,
+    int? pauseMonths,
+    bool? pauseCapitalized,
     String? note,
   }) : super._(
          date: date,
@@ -118,6 +142,8 @@ class _LoanEventImpl extends LoanEvent {
          paymentCents: paymentCents,
          remainingMonths: remainingMonths,
          drawCents: drawCents,
+         pauseMonths: pauseMonths,
+         pauseCapitalized: pauseCapitalized,
          note: note,
        );
 
@@ -131,6 +157,8 @@ class _LoanEventImpl extends LoanEvent {
     Object? paymentCents = _Undefined,
     Object? remainingMonths = _Undefined,
     Object? drawCents = _Undefined,
+    Object? pauseMonths = _Undefined,
+    Object? pauseCapitalized = _Undefined,
     Object? note = _Undefined,
   }) {
     return LoanEvent(
@@ -143,6 +171,10 @@ class _LoanEventImpl extends LoanEvent {
           ? remainingMonths
           : this.remainingMonths,
       drawCents: drawCents is int? ? drawCents : this.drawCents,
+      pauseMonths: pauseMonths is int? ? pauseMonths : this.pauseMonths,
+      pauseCapitalized: pauseCapitalized is bool?
+          ? pauseCapitalized
+          : this.pauseCapitalized,
       note: note is String? ? note : this.note,
     );
   }

@@ -370,4 +370,58 @@ void main() {
       },
     );
   });
+
+  testWidgets('a pause of the instalments: months, interest paid or nothing '
+      'paid, refused out of the limits', (tester) async {
+    LoanEvent? got;
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('fr'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => TextButton(
+            onPressed: () async => got = await showLoanEventDialog(
+              context,
+              Loan(
+                groupId: 1,
+                kind: LoanKind.mortgage,
+                lender: 'Banque',
+                principalCents: 10000000,
+                annualRateMilli: 1000,
+                durationMonths: 120,
+                firstDueDate: DateTime.utc(2026, 1, 5),
+              ),
+            ),
+            child: const Text('open'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Nouveau taux (taux variable)'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Report d\'échéances (pause)').last);
+    await tester.pumpAndSettle();
+    final months = find.widgetWithText(TextField, 'Nombre de mois de pause');
+    await tester.enterText(months, '121');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+    expect(find.text('Indiquez une pause de 1 à 120 mois.'), findsOneWidget);
+    await tester.enterText(months, '3');
+    await tester.tap(find.text('Rien payé'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('les intérêts s\'ajoutent'), findsOneWidget);
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+    expect(got?.pauseMonths, 3);
+    expect(got?.pauseCapitalized, isTrue);
+    expect(tester.takeException(), isNull);
+  });
 }

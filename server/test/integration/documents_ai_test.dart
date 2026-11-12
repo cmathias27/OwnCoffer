@@ -208,7 +208,7 @@ void main() {
         endpoints.ai.readInvoice(
           as(bob),
           invoice.invoice.id!,
-          pageImagesBase64: List.filled(6, base64Encode([1])),
+          pageImagesBase64: List.filled(13, base64Encode([1])),
         ),
         code('ai_document_too_many_pages'),
       );
@@ -421,6 +421,161 @@ void main() {
       // Reading changes nothing: the loan is as it was until accepted.
       final now = (await Loan.db.findById(db, loan.id!))!;
       expect(now.annualRateMilli, 1000);
+    });
+
+    test(
+      'the whole table read: the engine finds the rate change and the '
+      'pause, proposes them as the loan\'s changes, undone cleanly',
+      () async {
+        final loan = (await endpoints.loan.create(
+          as(bob),
+          groupA,
+          Loan(
+            groupId: 0,
+            kind: LoanKind.mortgage,
+            lender: 'Banque',
+            principalCents: 10000000,
+            annualRateMilli: 1000,
+            durationMonths: 120,
+            firstDueDate: DateTime.utc(2026, 1, 5),
+          ),
+        )).loan;
+        // A change the user entered, before the rows of the table: kept.
+        await endpoints.loan.addEvent(
+          as(bob),
+          loan.id!,
+          LoanEvent(date: DateTime.utc(2026, 3, 1), paymentCents: 90000),
+        );
+        final doc = await endpoints.loan.uploadDocument(
+          as(bob),
+          loan.id!,
+          'tableau.png',
+          _png(),
+        );
+        final terms = core.LoanTerms(
+          principalCents: 10000000,
+          annualRateMilli: 1000,
+          months: 120,
+          firstDue: core.LocalDate(2026, 1, 5),
+        );
+        final real = core.amortize(
+          terms,
+          changes: [
+            core.LoanChange(
+              date: core.LocalDate(2026, 3, 1),
+              paymentCents: 90000,
+            ),
+            core.LoanChange(
+              date: core.LocalDate(2027, 1, 5),
+              annualRateMilli: 2400,
+            ),
+            core.LoanChange(
+              date: core.LocalDate(2028, 6, 5),
+              pauseMonths: 3,
+              pauseCapitalized: true,
+            ),
+          ],
+        );
+        // The table from row 6 on, as printed.
+        AiGateway.adapter = _Reader('loan_terms', {
+          'schedule': [
+            for (final i in real.skip(5))
+              {
+                'number': i.number,
+                'payment_cents': i.paymentCents,
+                'interest_cents': i.interestCents,
+                'remaining_cents': i.remainingCents,
+              },
+          ],
+        });
+        final p = (await endpoints.ai.readLoanDocument(
+          as(bob),
+          doc.id!,
+        )).proposals.single;
+        final proposed = jsonDecode(p.proposedData!) as Map;
+        expect(proposed.keys, ['events']);
+        expect(proposed['events'], [
+          {'date': '2026-03-01', 'payment_cents': 90000},
+          {'date': '2027-01-05', 'annual_rate_milli': 2400},
+          {'date': '2028-06-05', 'pause_months': 3, 'pause_capitalized': true},
+        ]);
+        final check =
+            (jsonDecode(p.data) as Map)['check'] as Map<String, dynamic>;
+        expect(check['rows_compared'], real.length - 5);
+        expect((check['first_number'], check['last_number']), (6, real.length));
+        expect(check['gap_count'], 0);
+        expect(check['events_found'], 2);
+        expect(check['mismatches'], isEmpty);
+
+        await endpoints.advisor.accept(as(bob), p.id!);
+        final schedule = await endpoints.loan.schedule(as(bob), loan.id!);
+        expect(schedule, hasLength(real.length));
+        expect(
+          schedule.where((i) => i.paused == true).map((i) => i.number),
+          [
+            for (final i in real)
+              if (i.paused) i.number,
+          ],
+        );
+        expect(schedule.last.remainingCents, 0);
+        // Read again, the same table proposes nothing new once accepted.
+        expect(
+          (await endpoints.ai.readLoanDocument(as(bob), doc.id!)).proposals,
+          isEmpty,
+        );
+        await endpoints.advisor.undo(as(bob), p.id!);
+        final now = (await Loan.db.findById(db, loan.id!))!;
+        expect(now.events!.map((e) => e.paymentCents), [90000]);
+      },
+    );
+
+    test('a pause entered by hand: the loan lasts longer, it is refused '
+        'out of the limits', () async {
+      final loan = (await endpoints.loan.create(
+        as(bob),
+        groupA,
+        Loan(
+          groupId: 0,
+          kind: LoanKind.mortgage,
+          lender: 'Banque',
+          principalCents: 10000000,
+          annualRateMilli: 1000,
+          durationMonths: 120,
+          firstDueDate: DateTime.utc(2026, 1, 5),
+        ),
+      )).loan;
+      final info = await endpoints.loan.addEvent(
+        as(bob),
+        loan.id!,
+        LoanEvent(
+          date: DateTime.utc(2026, 6, 1),
+          pauseMonths: 6,
+          pauseCapitalized: false,
+        ),
+      );
+      expect(info.loan.events!.single.pauseMonths, 6);
+      final s = await endpoints.loan.schedule(as(bob), loan.id!);
+      expect(s, hasLength(126));
+      expect(s.where((i) => i.paused == true), hasLength(6));
+      await expectLater(
+        endpoints.loan.addEvent(
+          as(bob),
+          loan.id!,
+          LoanEvent(date: DateTime.utc(2027, 6, 1), pauseMonths: 500),
+        ),
+        code('loan_event_invalid'),
+      );
+      await expectLater(
+        endpoints.loan.addEvent(
+          as(mallory),
+          loan.id!,
+          LoanEvent(date: DateTime.utc(2027, 6, 1), pauseMonths: 2),
+        ),
+        denied,
+        reason: 'another group cannot pause the loan',
+      );
+      final kept = (await Loan.db.findById(db, loan.id!))!;
+      expect(kept.events, hasLength(1));
     });
   });
 }

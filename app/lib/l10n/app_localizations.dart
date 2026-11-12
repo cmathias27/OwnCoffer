@@ -7828,6 +7828,72 @@ abstract class AppLocalizations {
   /// **'{amount} remboursés en plus'**
   String loanEventRepaid(String amount);
 
+  /// No description provided for @loanEventKindPause.
+  ///
+  /// In fr, this message translates to:
+  /// **'Report d\'échéances (pause)'**
+  String get loanEventKindPause;
+
+  /// No description provided for @loanEventPauseHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La banque suspend les mensualités quelques mois. Le crédit finit d\'autant plus tard ; la mensualité d\'après est recalculée, sauf si la mensualité prélevée est connue.'**
+  String get loanEventPauseHelp;
+
+  /// No description provided for @loanEventPauseMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de mois de pause'**
+  String get loanEventPauseMonths;
+
+  /// No description provided for @loanEventPausePartial.
+  ///
+  /// In fr, this message translates to:
+  /// **'Intérêts payés'**
+  String get loanEventPausePartial;
+
+  /// No description provided for @loanEventPauseTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien payé'**
+  String get loanEventPauseTotal;
+
+  /// No description provided for @loanEventPausePartialHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Report partiel : seuls les intérêts (et l\'assurance) sont prélevés, le capital ne baisse pas.'**
+  String get loanEventPausePartialHelp;
+
+  /// No description provided for @loanEventPauseTotalHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Report total : rien n\'est prélevé sauf l\'assurance, les intérêts s\'ajoutent à ce qui reste à rembourser.'**
+  String get loanEventPauseTotalHelp;
+
+  /// No description provided for @loanEventPauseInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez une pause de 1 à 120 mois.'**
+  String get loanEventPauseInvalid;
+
+  /// No description provided for @loanEventPausedPartial.
+  ///
+  /// In fr, this message translates to:
+  /// **'pause de {months}, intérêts payés'**
+  String loanEventPausedPartial(String months);
+
+  /// No description provided for @loanEventPausedTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'pause de {months}, intérêts ajoutés au capital'**
+  String loanEventPausedTotal(String months);
+
+  /// No description provided for @loanRowPaused.
+  ///
+  /// In fr, this message translates to:
+  /// **'{date} (pause)'**
+  String loanRowPaused(String date);
+
   /// No description provided for @error_loan_event_invalid.
   ///
   /// In fr, this message translates to:
@@ -8001,6 +8067,36 @@ abstract class AppLocalizations {
   /// **'capital restant dû'**
   String get advisorLoanFieldRemaining;
 
+  /// No description provided for @advisorLoanEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{aucun} =1{1 changement} other{{count} changements}}'**
+  String advisorLoanEvents(int count);
+
+  /// No description provided for @advisorLoanFieldMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'absente du calcul'**
+  String get advisorLoanFieldMissing;
+
+  /// No description provided for @advisorLoanCheckTable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéances {first} à {last} lues ; changements trouvés par le calcul : {found}.'**
+  String advisorLoanCheckTable(int first, int last, int found);
+
+  /// No description provided for @advisorLoanCheckMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance {number} : absente du calcul d\'OwnCoffer (le crédit y finit plus tôt).'**
+  String advisorLoanCheckMissing(int number);
+
+  /// No description provided for @advisorLoanCheckMoreGaps.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 autre écart} other{{count} autres écarts}}.'**
+  String advisorLoanCheckMoreGaps(int count);
+
   /// No description provided for @advisorReadIn.
   ///
   /// In fr, this message translates to:
@@ -8040,7 +8136,7 @@ abstract class AppLocalizations {
   /// No description provided for @error_ai_document_too_many_pages.
   ///
   /// In fr, this message translates to:
-  /// **'Ce PDF dépasse la limite de 5 pages pour la lecture par l\'IA.'**
+  /// **'Ce PDF dépasse la limite de 12 pages pour la lecture par l\'IA.'**
   String get error_ai_document_too_many_pages;
 
   /// No description provided for @error_pdf_empty.

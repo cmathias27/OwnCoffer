@@ -3540,6 +3540,38 @@
       }
     }
   },
+  "loanEventKindPause": "Report d'échéances (pause)",
+  "loanEventPauseHelp": "La banque suspend les mensualités quelques mois. Le crédit finit d'autant plus tard ; la mensualité d'après est recalculée, sauf si la mensualité prélevée est connue.",
+  "loanEventPauseMonths": "Nombre de mois de pause",
+  "loanEventPausePartial": "Intérêts payés",
+  "loanEventPauseTotal": "Rien payé",
+  "loanEventPausePartialHelp": "Report partiel : seuls les intérêts (et l'assurance) sont prélevés, le capital ne baisse pas.",
+  "loanEventPauseTotalHelp": "Report total : rien n'est prélevé sauf l'assurance, les intérêts s'ajoutent à ce qui reste à rembourser.",
+  "loanEventPauseInvalid": "Indiquez une pause de 1 à 120 mois.",
+  "loanEventPausedPartial": "pause de {months}, intérêts payés",
+  "@loanEventPausedPartial": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "loanEventPausedTotal": "pause de {months}, intérêts ajoutés au capital",
+  "@loanEventPausedTotal": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "loanRowPaused": "{date} (pause)",
+  "@loanRowPaused": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "error_loan_event_invalid": "Ce changement n'est pas possible pour ce crédit (date avant la première échéance, ou valeurs hors limites).",
   "error_loan_event_unpaid": "Avec ce changement, le crédit ne serait jamais remboursé : la mensualité ne couvre pas les intérêts.",
   "error_loan_over_limit": "Ce montant dépasse le plafond de la réserve.",
@@ -3673,6 +3705,45 @@
   "advisorLoanFieldPayment": "mensualité",
   "advisorLoanFieldInterest": "intérêts",
   "advisorLoanFieldRemaining": "capital restant dû",
+  "advisorLoanEvents": "{count, plural, =0{aucun} =1{1 changement} other{{count} changements}}",
+  "@advisorLoanEvents": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "advisorLoanFieldMissing": "absente du calcul",
+  "advisorLoanCheckTable": "Échéances {first} à {last} lues ; changements trouvés par le calcul : {found}.",
+  "@advisorLoanCheckTable": {
+    "placeholders": {
+      "first": {
+        "type": "int"
+      },
+      "last": {
+        "type": "int"
+      },
+      "found": {
+        "type": "int"
+      }
+    }
+  },
+  "advisorLoanCheckMissing": "Échéance {number} : absente du calcul d'OwnCoffer (le crédit y finit plus tôt).",
+  "@advisorLoanCheckMissing": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "advisorLoanCheckMoreGaps": "{count, plural, =1{1 autre écart} other{{count} autres écarts}}.",
+  "@advisorLoanCheckMoreGaps": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "advisorReadIn": "Lu dans « {name} ».",
   "@advisorReadIn": {
     "placeholders": {
@@ -3686,7 +3757,7 @@
   "error_ai_document_not_image": "Ce modèle ne lit que les images : joignez une photo ou une capture du document.",
   "error_ai_document_too_large": "Document trop lourd pour être lu (8 Mo au plus).",
   "error_ai_document_invalid_image": "Les images de page du PDF sont invalides. Réessayez avec le document original.",
-  "error_ai_document_too_many_pages": "Ce PDF dépasse la limite de 5 pages pour la lecture par l'IA.",
+  "error_ai_document_too_many_pages": "Ce PDF dépasse la limite de 12 pages pour la lecture par l'IA.",
   "error_pdf_empty": "Le fichier PDF est vide.",
   "error_pdf_too_large": "Le document PDF ou ses images dépassent la taille autorisée (8 Mo au plus).",
   "error_pdf_render_failed": "Impossible de convertir les pages du PDF en image.",

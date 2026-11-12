@@ -30,12 +30,13 @@ Avec un compte de prélèvement, les échéances entrent dans le **solde prévu*
 
 La carte **« Renégocier ou changer de taux »** de la fiche d'un crédit simule l'offre de votre banque : nouveau taux, nouvelle mensualité ou nouvelle durée, et les **frais** du changement. OwnCoffer compare **aujourd'hui et après** : mensualité, intérêts restants, échéances, date de fin, puis l'**économie nette** des frais et le **mois où c'est rentabilisé**. **« Enregistrer ce changement »** l'ajoute aux changements du crédit.
 
-## Changements : taux variable, renégociation
+## Changements : taux variable, renégociation, pause
 
 Dans la fiche d'un crédit, **« Ajouter un changement »** :
 
 - **Nouveau taux** (taux variable) : à partir d'une date. La date de fin est gardée et la mensualité recalculée ; si la mensualité prélevée est connue, elle est gardée et c'est la date de fin qui bouge.
 - **Renégociation** : nouveau taux, et nouvelle mensualité ou nouvelle durée restante.
+- **Report d'échéances (pause)** : la banque suspend les mensualités quelques mois. **Intérêts payés** (report partiel) : seuls les intérêts et l'assurance sont prélevés. **Rien payé** (report total) : seule l'assurance est prélevée, les intérêts s'ajoutent à ce qui reste à rembourser. Le crédit finit d'autant plus tard ; dans l'échéancier, ces mois sont marqués « (pause) ».
 - **Remboursement anticipé** : une somme remboursée en plus ; la mensualité est gardée, le crédit finit plus tôt.
 
 Le tableau, le capital restant, les échéances prévues et la prévision du solde suivent. Un changement se retire d'un geste. Un changement qui ne permettrait jamais de rembourser le crédit est refusé.
@@ -47,6 +48,8 @@ Choisissez le type **« Crédit renouvelable »** : indiquez le **montant utilis
 ## Lire un document avec l'IA
 
 Avec l'assistant activé et un modèle qui lit les images, le bouton ✨ d'un document du crédit le fait lire : les conditions qu'il indique (taux, durée, mensualité, assurance…) sont **proposées** dans Mon conseiller, avec l'avant et l'après. Rien ne change sans votre accord.
+
+Pour un **tableau d'amortissement**, l'IA recopie chaque ligne (jusqu'à 12 pages) ; c'est le moteur d'OwnCoffer, sans IA, qui compare chaque échéance à son calcul et **en déduit les changements** : nouveau taux, nouvelle mensualité, pause, remboursement anticipé, avec leur date. Ils sont proposés comme les « Changements » du crédit, et ceux que vous aviez saisis avant la première ligne lue sont gardés. Une ligne que rien n'explique (chiffre mal lu, par exemple) est **signalée**, jamais devinée.
 
 ## Taux d'endettement
 

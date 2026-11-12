@@ -878,10 +878,7 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
   );
 
   Future<void> _addEvent() async {
-    final event = await showDialog<LoanEvent>(
-      context: context,
-      builder: (_) => _LoanEventDialog(loan: _info.loan),
-    );
+    final event = await showLoanEventDialog(context, _info.loan);
     if (event == null) return;
     await _changeEvents(() => client.loan.addEvent(_info.loan.id!, event));
   }
@@ -896,6 +893,10 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
       l.loanEventMonths(l.loanMonths(e.remainingMonths!)),
     if ((e.drawCents ?? 0) > 0) l.loanEventDraw(context.money(e.drawCents!)),
     if ((e.drawCents ?? 0) < 0) l.loanEventRepaid(context.money(-e.drawCents!)),
+    if (e.pauseMonths != null)
+      e.pauseCapitalized == true
+          ? l.loanEventPausedTotal(l.loanMonths(e.pauseMonths!))
+          : l.loanEventPausedPartial(l.loanMonths(e.pauseMonths!)),
   ].join(' · ');
 
   Widget _eventsCard(
@@ -1466,7 +1467,15 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                                           selected: i.date == info.nextDueDate,
                                           cells: [
                                             DataCell(Text('${i.number}')),
-                                            DataCell(Text(context.day(i.date))),
+                                            DataCell(
+                                              Text(
+                                                i.paused == true
+                                                    ? l.loanRowPaused(
+                                                        context.day(i.date),
+                                                      )
+                                                    : context.day(i.date),
+                                              ),
+                                            ),
                                             DataCell(
                                               Text(
                                                 context.money(
@@ -2465,10 +2474,17 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
   }
 }
 
-enum _EventKind { rate, renegotiation, draw, repayment }
+enum _EventKind { rate, renegotiation, pause, draw, repayment }
 
-/// One change of a loan: a new rate, a renegotiation, money drawn
-/// (revolving credit) or repaid early.
+/// Asks for one change of [loan]; null when cancelled.
+Future<LoanEvent?> showLoanEventDialog(BuildContext context, Loan loan) =>
+    showDialog<LoanEvent>(
+      context: context,
+      builder: (_) => _LoanEventDialog(loan: loan),
+    );
+
+/// One change of a loan: a new rate, a renegotiation, a pause of the
+/// instalments, money drawn (revolving credit) or repaid early.
 class _LoanEventDialog extends StatefulWidget {
   final Loan loan;
   const _LoanEventDialog({required this.loan});
@@ -2486,12 +2502,14 @@ class _LoanEventDialogState extends State<_LoanEventDialog> {
   final _payment = TextEditingController();
   final _months = TextEditingController();
   final _amount = TextEditingController();
+  final _pause = TextEditingController();
   final _note = TextEditingController();
+  var _capitalized = false;
   String? _error;
 
   @override
   void dispose() {
-    for (final c in [_rate, _payment, _months, _amount, _note]) {
+    for (final c in [_rate, _payment, _months, _amount, _pause, _note]) {
       c.dispose();
     }
     super.dispose();
@@ -2524,6 +2542,16 @@ class _LoanEventDialogState extends State<_LoanEventDialog> {
           annualRateMilli: rate,
           paymentCents: payment,
           remainingMonths: payment == null ? months : null,
+        );
+      case _EventKind.pause:
+        final pause = int.tryParse(_pause.text.trim());
+        if (pause == null || pause < 1 || pause > 120) {
+          return setState(() => _error = l.loanEventPauseInvalid);
+        }
+        e = LoanEvent(
+          date: _date,
+          pauseMonths: pause,
+          pauseCapitalized: _capitalized,
         );
       case _EventKind.draw || _EventKind.repayment:
         if (amount == null || amount <= 0) {
@@ -2575,6 +2603,7 @@ class _LoanEventDialogState extends State<_LoanEventDialog> {
                         _EventKind.rate => l.loanEventKindRate,
                         _EventKind.renegotiation =>
                           l.loanEventKindRenegotiation,
+                        _EventKind.pause => l.loanEventKindPause,
                         _EventKind.draw => l.loanEventKindDraw,
                         _EventKind.repayment => l.loanEventKindRepayment,
                       }),
@@ -2587,6 +2616,7 @@ class _LoanEventDialogState extends State<_LoanEventDialog> {
                 switch (_kind) {
                   _EventKind.rate => l.loanEventRateHelp,
                   _EventKind.renegotiation => l.loanEventRenegotiationHelp,
+                  _EventKind.pause => l.loanEventPauseHelp,
                   _EventKind.draw => l.loanEventDrawHelp,
                   _EventKind.repayment => l.loanEventRepaymentHelp,
                 },
@@ -2630,6 +2660,38 @@ class _LoanEventDialogState extends State<_LoanEventDialog> {
                     helperText: l.loanEventNewMonthsHelp,
                     helperMaxLines: 2,
                   ),
+                ),
+              ],
+              if (_kind == _EventKind.pause) ...[
+                TextField(
+                  controller: _pause,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: l.loanEventPauseMonths,
+                  ),
+                ),
+                gap,
+                SegmentedButton<bool>(
+                  segments: [
+                    ButtonSegment(
+                      value: false,
+                      label: Text(l.loanEventPausePartial),
+                    ),
+                    ButtonSegment(
+                      value: true,
+                      label: Text(l.loanEventPauseTotal),
+                    ),
+                  ],
+                  selected: {_capitalized},
+                  onSelectionChanged: (v) =>
+                      setState(() => _capitalized = v.single),
+                ),
+                gap,
+                Text(
+                  _capitalized
+                      ? l.loanEventPauseTotalHelp
+                      : l.loanEventPausePartialHelp,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
               if (_kind == _EventKind.draw || _kind == _EventKind.repayment)

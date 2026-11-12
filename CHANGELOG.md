@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.27.0 (novembre 2026)
+### Crédits : tableau d'amortissement lu en entier (décision 0042)
+- **Report d'échéances (pause)** dans « Ajouter un changement » : nombre de mois, puis intérêts payés (report partiel) ou rien payé (report total, les intérêts s'ajoutent à ce qui reste dû). Le crédit finit d'autant plus tard ; l'échéancier marque les mois en pause.
+- **Tableau de la banque lu en entier** : l'IA recopie chaque ligne (jusqu'à 12 pages, au lieu de 5). Le moteur, sans IA, compare chaque échéance à son calcul et **en déduit les changements** (nouveau taux, nouvelle mensualité, pause, remboursement anticipé, avec leur date), proposés dans Mon conseiller comme les changements du crédit. Ceux que vous aviez saisis avant la première ligne lue sont gardés.
+- Une ligne que rien n'explique (chiffre mal lu) est signalée, jamais devinée ; Mon conseiller montre les échéances lues, les changements trouvés et les écarts restants.
+- La ligne 1 du tableau donne les intérêts intercalaires de la première échéance.
+
 ## 1.26.0 (novembre 2026)
 ### Refonte de l'interface (décision 0041)
 - **Cinq rubriques** partout (Accueil, Argent, Prévoir, Papiers, Conseiller), en onglets quand une rubrique a plusieurs écrans, avec un **fil d'Ariane** (« Prévoir › Crédits › Maison »). Les écrans rares passent dans **Réglages** ; en haut ne restent que le foyer, la recherche, la cloche et Réglages.

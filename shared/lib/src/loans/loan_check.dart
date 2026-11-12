@@ -95,6 +95,7 @@ LoanCheck checkLoan(
     if (best == null) {
       var gap = loanCheckWindowDays + 1;
       for (final (i, s) in schedule.indexed) {
+        if (s.totalCents == 0) continue;
         final g = s.date.daysUntil(d.date).abs();
         if (g < gap) (best, gap) = (i, g);
       }
@@ -118,6 +119,8 @@ LoanCheck checkLoan(
   for (final (i, s) in schedule.indexed) {
     final ds = found[i];
     if (ds.isEmpty) {
+      // A paused instalment without insurance takes nothing.
+      if (s.totalCents == 0) continue;
       if (s.date >= historyFrom && s.date.addDays(toleranceDays) <= historyTo) {
         rows.add(
           LoanCheckRow(
