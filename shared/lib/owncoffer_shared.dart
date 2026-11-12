@@ -43,6 +43,7 @@ export 'src/import/statement_reader.dart';
 export 'src/labels/label_cleaner.dart';
 export 'src/loans/amortization.dart';
 export 'src/loans/instalment_plans.dart';
+export 'src/loans/loan_check.dart';
 export 'src/local_date.dart';
 export 'src/money.dart';
 export 'src/pepite/pepite_shop.dart';

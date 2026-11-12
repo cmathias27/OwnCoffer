@@ -14,6 +14,7 @@ import '../util/file_save.dart';
 import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/category_field.dart';
+import '../widgets/loan_check.dart';
 import '../widgets/undo.dart';
 import '../widgets/ai_read.dart';
 import 'loan_change_screen.dart';
@@ -645,6 +646,7 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
   late LoanInfo _info = widget.info;
   List<LoanInstallment>? _schedule;
   List<BankTransaction>? _operations;
+  LoanCheckReport? _check;
   List<LoanDocument>? _documents;
   var _allOperations = false;
   final _extra = TextEditingController();
@@ -666,13 +668,21 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
 
   Future<void> _load() async {
     try {
-      final (s, ops, docs) = await (
+      final (s, ops, docs, check) = await (
         client.loan.schedule(_info.loan.id!),
         client.loan.operations(_info.loan.id!),
         client.loan.documents(_info.loan.id!),
+        client.loan.check(_info.loan.id!),
       ).wait;
       if (mounted) {
-        setState(() => (_schedule = s, _operations = ops, _documents = docs));
+        setState(
+          () => (
+            _schedule = s,
+            _operations = ops,
+            _documents = docs,
+            _check = check,
+          ),
+        );
       }
     } on Object catch (e) {
       if (mounted) {
@@ -1077,6 +1087,11 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(l.loanOperationsTitle, style: theme.textTheme.titleMedium),
+            if (LoanCheckView.shows(_check))
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: LoanCheckView(report: _check!, currency: currency),
+              ),
             if (ops == null)
               const Padding(
                 padding: EdgeInsets.all(16),

@@ -76,6 +76,8 @@ import 'package:owncoffer_server/src/generated/left_to_live_report.dart'
 import 'package:owncoffer_server/src/generated/loan.dart' as _i2yv792g;
 import 'package:owncoffer_server/src/generated/loan_change_simulation.dart'
     as _iczduvrd;
+import 'package:owncoffer_server/src/generated/loan_check_report.dart'
+    as _iqomydi3;
 import 'package:owncoffer_server/src/generated/loan_document.dart' as _ib7nzwu9;
 import 'package:owncoffer_server/src/generated/loan_event.dart' as _ifjfj2mv;
 import 'package:owncoffer_server/src/generated/loan_from_operation.dart'
@@ -4360,6 +4362,37 @@ class _LoanEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<List<_ivm4hoam.BankTransaction>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iqomydi3.LoanCheckReport> check(
+    _ist.TestSessionBuilder sessionBuilder,
+    int loanId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'loan',
+            method: 'check',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'loan',
+          methodName: 'check',
+          parameters: _ist.testObjectToJson({'loanId': loanId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iqomydi3.LoanCheckReport>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

@@ -1855,6 +1855,89 @@
       }
     }
   },
+  "loanCheckAllPaid": "{count, plural, =1{L'échéance des relevés importés a bien été prélevée.} other{Les {count} échéances des relevés importés ont bien été prélevées.}}",
+  "@loanCheckAllPaid": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loanCheckToLook": "{count, plural, =1{1 point à vérifier} other{{count} points à vérifier}} ({paid} échéances prélevées comme prévu)",
+  "@loanCheckToLook": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "paid": {
+        "type": "int"
+      }
+    }
+  },
+  "loanCheckMissing": "Échéance {number} du {date} : aucun prélèvement trouvé.",
+  "@loanCheckMissing": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "loanCheckDuplicate": "Échéance {number} du {date} : prélevée {count} fois.",
+  "@loanCheckDuplicate": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loanCheckDifferent": "Échéance {number} du {date} : {debited} prélevés au lieu de {expected}.",
+  "@loanCheckDifferent": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      },
+      "debited": {
+        "type": "String"
+      },
+      "expected": {
+        "type": "String"
+      }
+    }
+  },
+  "loanCheckUnexpected": "Prélèvement du {date} ({amount}) loin de toute échéance.",
+  "@loanCheckUnexpected": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "loanCheckBasis": "Comparaison faite par le moteur entre l'échéancier calculé et les prélèvements du compte, du {from} au {to}. Le tableau de la banque fait foi.",
+  "@loanCheckBasis": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
   "loanActualPayment": "Mensualité prélevée (assurance comprise)",
   "loanActualPaymentHelp": "Le montant réellement prélevé chaque mois : c'est la seule valeur certaine. Le capital restant, les intérêts et la date de fin en sont déduits.",
   "loanActualPreview": "Avec {amount} prélevés par mois, le crédit serait remboursé en {months} mois.",

@@ -367,6 +367,59 @@ void main() {
       );
     });
 
+    test('instalments checked against the real debits; isolation', () async {
+      final source = await debit(shared, due(4), instalment);
+      final third = await debit(shared, due(3), instalment);
+      final again = await debit(
+        shared,
+        due(3).add(const Duration(days: 3)),
+        instalment,
+      );
+      // Nothing in due(2); 30 € more in due(1).
+      final more = await debit(shared, due(1), instalment + 3000);
+      // The imported history goes on after due(1).
+      await debit(
+        shared,
+        due(1).add(const Duration(days: 10)),
+        70000,
+        label: 'LOYER',
+      );
+      final r = await endpoints.loan.createFromTransaction(
+        as(bob),
+        source.id!,
+        terms().copyWith(firstDueDate: due(4)),
+      );
+      final id = r.info.loan.id!;
+      final c = await endpoints.loan.check(as(reader), id);
+      expect(c.available, isTrue);
+      expect(c.historyFrom, due(4));
+      expect(c.paidCount, 1, reason: 'due(4)');
+      expect(
+        [for (final l in c.lines) (l.status, l.number)],
+        [
+          (LoanCheckStatus.duplicate, 2),
+          (LoanCheckStatus.missing, 3),
+          (LoanCheckStatus.differentAmount, 4),
+        ],
+      );
+      expect(
+        [for (final t in c.lines[0].debits) t.id],
+        unorderedEquals([third.id, again.id]),
+      );
+      expect(c.lines[1].debits, isEmpty);
+      expect(c.lines[2].debits.single.id, more.id);
+      expect(c.lines[2].gapCents, 3000);
+      expect(c.lines[2].expectedCents, instalment);
+
+      await expectLater(endpoints.loan.check(as(mallory), id), denied);
+
+      // Without an account, nothing to compare.
+      final manual = await endpoints.loan.create(as(bob), groupA, terms());
+      final none = await endpoints.loan.check(as(bob), manual.loan.id!);
+      expect(none.available, isFalse);
+      expect(none.lines, isEmpty);
+    });
+
     group('attach to an existing loan', () {
       test('a loan without account takes the debit, its label and a rule; '
           'undo puts things back', () async {

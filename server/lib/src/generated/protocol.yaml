@@ -126,6 +126,7 @@ loan:
   - detectedInstalments:
   - schedule:
   - operations:
+  - check:
   - documents:
   - uploadDocument:
   - downloadDocument:

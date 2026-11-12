@@ -1,0 +1,8 @@
+### Result of comparing an instalment with the real debits (decision 0040).
+enum: LoanCheckStatus
+serialized: byName
+values:
+  - missing
+  - duplicate
+  - differentAmount
+  - unexpected

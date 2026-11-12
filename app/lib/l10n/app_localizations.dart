@@ -3966,6 +3966,53 @@ abstract class AppLocalizations {
   /// **'Voir les {count} prélèvements'**
   String loanOperationsMore(int count);
 
+  /// No description provided for @loanCheckAllPaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{L\'échéance des relevés importés a bien été prélevée.} other{Les {count} échéances des relevés importés ont bien été prélevées.}}'**
+  String loanCheckAllPaid(int count);
+
+  /// No description provided for @loanCheckToLook.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 point à vérifier} other{{count} points à vérifier}} ({paid} échéances prélevées comme prévu)'**
+  String loanCheckToLook(int count, int paid);
+
+  /// No description provided for @loanCheckMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance {number} du {date} : aucun prélèvement trouvé.'**
+  String loanCheckMissing(int number, String date);
+
+  /// No description provided for @loanCheckDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance {number} du {date} : prélevée {count} fois.'**
+  String loanCheckDuplicate(int number, String date, int count);
+
+  /// No description provided for @loanCheckDifferent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance {number} du {date} : {debited} prélevés au lieu de {expected}.'**
+  String loanCheckDifferent(
+    int number,
+    String date,
+    String debited,
+    String expected,
+  );
+
+  /// No description provided for @loanCheckUnexpected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prélèvement du {date} ({amount}) loin de toute échéance.'**
+  String loanCheckUnexpected(String date, String amount);
+
+  /// No description provided for @loanCheckBasis.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comparaison faite par le moteur entre l\'échéancier calculé et les prélèvements du compte, du {from} au {to}. Le tableau de la banque fait foi.'**
+  String loanCheckBasis(String from, String to);
+
   /// No description provided for @loanActualPayment.
   ///
   /// In fr, this message translates to:
