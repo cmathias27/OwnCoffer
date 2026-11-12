@@ -227,7 +227,13 @@ Future<InvoiceInfo?> attachWaitingInvoice(
 Future<PickedFile?> _pick(BuildContext context, bool camera) async {
   final f = await pickFile(extensions: invoiceExtensions, camera: camera);
   if (f == null || !isScannable(f.name) || !context.mounted) return f;
-  return scanInvoicePhoto(context, f);
+  return scanInvoicePhoto(
+    context,
+    f,
+    retake: camera && canUseCamera
+        ? () => pickFile(extensions: invoiceExtensions, camera: true)
+        : null,
+  );
 }
 
 Future<void> openInvoice(BuildContext context, InvoiceInfo info) async {

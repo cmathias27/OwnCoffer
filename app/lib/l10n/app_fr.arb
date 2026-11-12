@@ -5225,5 +5225,10 @@
       }
     }
   },
-  "outboxLeaveConfirm": "Continuer et les perdre"
+  "outboxLeaveConfirm": "Continuer et les perdre",
+  "scanFound": "Ticket trouvé et redressé. Vérifiez qu'il est entier ; sinon, ajustez les coins.",
+  "scanAdjust": "Ajuster les coins",
+  "scanKeep": "Garder",
+  "scanBlurred": "La photo semble floue : le texte risque d'être illisible.",
+  "scanRetake": "Reprendre la photo"
 }

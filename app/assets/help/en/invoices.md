@@ -5,7 +5,7 @@ Keep invoices and receipts with the operation that paid them, and find them the 
 ## Attach an invoice
 
 - In an operation's sheet: **"Attach a file"** (a PDF or image already on the device, 10 MB at most) or, on a phone, **"Scan with the camera"**, which opens the camera straight away.
-- A photo is **cropped as by a scanner**: the sheet is found, you adjust the corners, it is straightened and made easier to read. Everything happens on your device.
+- A photo is **cropped as by a scanner**: when the receipt is clearly found, it is straightened and made easier to read straight away (shadows evened out, faded print darkened); otherwise, or if a piece is missing, you adjust the corners. A blurred photo is pointed out, with a button to take it again. Everything happens on your device.
 - The file name is made for you: date, merchant, description, amount.
 
 ## Invoice without an operation

@@ -7483,4 +7483,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get outboxLeaveConfirm => 'Continue and lose them';
+
+  @override
+  String get scanFound =>
+      'Receipt found and straightened. Check that it is whole; if not, adjust the corners.';
+
+  @override
+  String get scanAdjust => 'Adjust the corners';
+
+  @override
+  String get scanKeep => 'Keep';
+
+  @override
+  String get scanBlurred =>
+      'The photo looks blurred: the text may be unreadable.';
+
+  @override
+  String get scanRetake => 'Take it again';
 }

@@ -11857,6 +11857,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Continuer et les perdre'**
   String get outboxLeaveConfirm;
+
+  /// No description provided for @scanFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket trouvé et redressé. Vérifiez qu\'il est entier ; sinon, ajustez les coins.'**
+  String get scanFound;
+
+  /// No description provided for @scanAdjust.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajuster les coins'**
+  String get scanAdjust;
+
+  /// No description provided for @scanKeep.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garder'**
+  String get scanKeep;
+
+  /// No description provided for @scanBlurred.
+  ///
+  /// In fr, this message translates to:
+  /// **'La photo semble floue : le texte risque d\'être illisible.'**
+  String get scanBlurred;
+
+  /// No description provided for @scanRetake.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre la photo'**
+  String get scanRetake;
 }
 
 class _AppLocalizationsDelegate
