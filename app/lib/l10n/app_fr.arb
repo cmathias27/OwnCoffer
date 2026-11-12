@@ -5175,12 +5175,55 @@
     }
   },
   "error_invoice_already_attached": "Ce justificatif est déjà joint à une opération.",
-  "offlineBanner": "Serveur injoignable : données du {when}, en lecture seule",
+  "offlineBanner": "Serveur injoignable : données du {when}. Les nouvelles opérations sont gardées pour plus tard ; modifier ou supprimer attend le retour du réseau.",
   "@offlineBanner": {
     "placeholders": {
       "when": {
         "type": "String"
       }
     }
-  }
+  },
+  "outboxKept": "Opération gardée sur l'appareil : elle sera envoyée dès que le serveur répondra.",
+  "outboxWaiting": "{count, plural, =1{1 opération à envoyer} other{{count} opérations à envoyer}}",
+  "@outboxWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "outboxRefused": "{count, plural, =1{1 opération refusée par le serveur} other{{count} opérations refusées par le serveur}}",
+  "@outboxRefused": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "outboxTitle": "À synchroniser",
+  "outboxIntro": "Opérations saisies sans réseau. Celles en attente partent dès que le serveur répond ; une opération refusée reste ici jusqu'à ce que vous la renvoyiez ou l'abandonniez.",
+  "outboxEmpty": "Rien à synchroniser.",
+  "outboxSendNow": "Envoyer maintenant",
+  "outboxStateWaiting": "En attente d'envoi",
+  "outboxStateRefused": "Refusée : {reason}",
+  "@outboxStateRefused": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "outboxRetry": "Renvoyer",
+  "outboxDrop": "Abandonner",
+  "outboxDropConfirm": "Abandonner cette opération ? Elle ne sera jamais envoyée.",
+  "outboxLeaveTitle": "Opérations pas encore envoyées",
+  "outboxLeaveBody": "{count, plural, =1{1 opération saisie sans réseau n'a pas encore été envoyée au serveur : elle sera perdue.} other{{count} opérations saisies sans réseau n'ont pas encore été envoyées au serveur : elles seront perdues.}}",
+  "@outboxLeaveBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "outboxLeaveConfirm": "Continuer et les perdre"
 }

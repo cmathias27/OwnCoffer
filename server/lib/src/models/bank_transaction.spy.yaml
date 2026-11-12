@@ -35,6 +35,9 @@ fields:
   ### Other side of a transfer between two accounts of the group.
   transferPairId: int?
   createdBy: UuidValue?
+  ### Id given by the device to an operation entered offline (decision
+  ### 0037): sent again after a lost answer, it is not created twice.
+  clientRef: String?
   createdAt: DateTime, default=now
   updatedAt: DateTime, default=now
   deletedAt: DateTime?
@@ -43,6 +46,9 @@ indexes:
     fields: accountId, date
   transactions_account_fingerprint_idx:
     fields: accountId, fingerprint
+    unique: true
+  transactions_account_client_ref_idx:
+    fields: accountId, clientRef
     unique: true
   transactions_import_idx:
     fields: importId

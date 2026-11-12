@@ -26,6 +26,7 @@ import 'month_summary_screen.dart';
 import 'pepite_screen.dart';
 import 'notifications_screen.dart';
 import 'operations_screen.dart';
+import 'outbox_screen.dart';
 import 'security_screen.dart';
 import '../state/app_lock.dart';
 import '../help/help.dart';
@@ -585,7 +586,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Standalone: no password to sign in again; the data stays
                 // on the device when another mode is chosen.
                 PopupMenuItem(
-                  value: isStandalone ? changeServer : s.signOut,
+                  value: isStandalone
+                      ? changeServer
+                      : () => signOutAfterOutbox(context, s.signOut),
                   child: ListTile(
                     leading: Icon(
                       isStandalone ? Icons.swap_horiz : Icons.logout,
@@ -672,7 +675,9 @@ class _HomeScreenState extends State<HomeScreen> {
             IconButton(
               tooltip: isStandalone ? l.standaloneChangeMode : l.signOut,
               icon: Icon(isStandalone ? Icons.swap_horiz : Icons.logout),
-              onPressed: isStandalone ? changeServer : s.signOut,
+              onPressed: isStandalone
+                  ? changeServer
+                  : () => signOutAfterOutbox(context, s.signOut),
             ),
         ],
       ),

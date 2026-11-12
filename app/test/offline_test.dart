@@ -183,7 +183,9 @@ void main() {
     }
   });
 
-  testWidgets('the banner says from when, read-only', (tester) async {
+  testWidgets('the banner says from when, and what waits for the network', (
+    tester,
+  ) async {
     final since = ValueNotifier<DateTime?>(null);
     await tester.pumpWidget(
       MaterialApp(
@@ -201,7 +203,7 @@ void main() {
     await tester.pump();
     expect(find.byIcon(Icons.cloud_off_outlined), findsOneWidget);
     expect(find.textContaining('18:05'), findsOneWidget);
-    expect(find.textContaining('lecture seule'), findsOneWidget);
+    expect(find.textContaining('modifier ou supprimer'), findsOneWidget);
     expect(find.text('page'), findsOneWidget);
   });
 }

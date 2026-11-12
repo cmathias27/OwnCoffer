@@ -4635,6 +4635,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'clientRef': _is.ParameterDescription(
+              name: 'clientRef',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -4650,6 +4655,7 @@ class Endpoints extends _is.EndpointDispatch {
                         params['label'],
                         note: params['note'],
                         categoryId: params['categoryId'],
+                        clientRef: params['clientRef'],
                       ),
         ),
         'update': _is.MethodConnector(

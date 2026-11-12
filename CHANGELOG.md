@@ -2,6 +2,15 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.23.0 (novembre 2026)
+
+### Hors-ligne : saisie sans réseau (décision 0038)
+- **Applications Windows et Android connectées à un serveur** : une opération saisie à la main quand le serveur ne répond pas est gardée sur l'appareil (chiffrée sous Windows), puis envoyée toute seule dès qu'il répond à nouveau.
+- **Jamais en double** : chaque opération porte un identifiant créé sur l'appareil ; le serveur ne la crée qu'une fois, même si la réponse s'est perdue.
+- **Page « À synchroniser »**, ouverte depuis la ligne affichée sous le bandeau : opérations en attente et opérations refusées par le serveur, avec la raison, à renvoyer ou abandonner. Rien n'est perdu en silence ; la déconnexion demande avant d'effacer ce qui n'est pas parti.
+- Modifier ou supprimer reste impossible hors ligne : aucun conflit possible entre deux appareils.
+- Opérations : la page ne signale plus d'erreur quand les catégories ne peuvent pas être lues hors ligne.
+
 ## 1.22.0 (novembre 2026)
 
 ### Hors-ligne : consultation sans réseau (décision 0037)

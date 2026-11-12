@@ -6616,6 +6616,7 @@ class _TransactionEndpoint {
     String label, {
     String? note,
     int? categoryId,
+    String? clientRef,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -6635,6 +6636,7 @@ class _TransactionEndpoint {
             'label': label,
             'note': note,
             'categoryId': categoryId,
+            'clientRef': clientRef,
           }),
           serializationManager: _serializationManager,
         );

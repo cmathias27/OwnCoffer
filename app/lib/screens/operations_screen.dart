@@ -8,6 +8,8 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import '../util/offline.dart';
+import '../util/outbox.dart';
 import '../widgets/category_field.dart';
 import '../widgets/operation_sheet.dart';
 import '../widgets/operation_tile.dart';
@@ -67,17 +69,26 @@ class _OperationsScreenState extends State<OperationsScreen> {
     super.initState();
     _loadCategories();
     _reload();
+    // Operations entered offline reached the server.
+    outbox.sent.addListener(_reload);
   }
 
   @override
   void dispose() {
+    outbox.sent.removeListener(_reload);
     _search.dispose();
     _debounce?.cancel();
     super.dispose();
   }
 
   Future<void> _loadCategories() async {
-    final list = await client.category.list(widget.membership.group.id!);
+    final List<Category> list;
+    try {
+      list = await client.category.list(widget.membership.group.id!);
+    } on Object {
+      // Offline with no kept copy: operations are shown without categories.
+      return;
+    }
     if (mounted) setState(() => _categories = {for (final c in list) c.id!: c});
   }
 
@@ -276,7 +287,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
     final saved = await showDialog<bool>(
       context: context,
       builder: (_) => _ManualEntryDialog(
-        accountId: _account!.id!,
+        account: _account!,
         categories: _categories,
       ),
     );
@@ -686,9 +697,9 @@ class _OperationsScreenState extends State<OperationsScreen> {
 }
 
 class _ManualEntryDialog extends StatefulWidget {
-  final int accountId;
+  final Account account;
   final Map<int, Category> categories;
-  const _ManualEntryDialog({required this.accountId, required this.categories});
+  const _ManualEntryDialog({required this.account, required this.categories});
 
   @override
   State<_ManualEntryDialog> createState() => _ManualEntryDialogState();
@@ -716,17 +727,39 @@ class _ManualEntryDialogState extends State<_ManualEntryDialog> {
       return;
     }
     setState(() => (_busy = true, _error = null));
+    // Known offline: kept at once, sent when the server answers.
+    if (offlineSince.value != null && await _keep()) return;
     try {
       await client.transaction.create(
-        widget.accountId,
+        widget.account.id!,
         _date,
         cents,
         _label.text,
       );
       if (mounted) Navigator.of(context).pop(true);
     } on Object catch (e) {
-      setState(() => (_busy = false, _error = errorText(l, e)));
+      if (cannotReach(e) && await _keep()) return;
+      if (mounted) setState(() => (_busy = false, _error = errorText(l, e)));
     }
+  }
+
+  /// Offline entry (decision 0038): the operation waits on the device.
+  Future<bool> _keep() async {
+    final kept = await outbox.keep(
+      accountId: widget.account.id!,
+      accountName: widget.account.name,
+      date: _date,
+      amountCents: parseUserAmount(_amount.text)!,
+      label: _label.text,
+    );
+    if (!kept || !mounted) return kept;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context).outboxKept)),
+    );
+    Navigator.of(context).pop(false);
+    return true;
   }
 
   @override

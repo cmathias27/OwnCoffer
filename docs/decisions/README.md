@@ -41,5 +41,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0035](0035-recapitulatif-mensuel.md) | Récapitulatif mensuel sur une page | Décidé |
 | [0036](0036-scan-tickets-preremplissage-operation.md) | Scan des tickets : pré-remplissage et opération créée depuis le ticket | Décidé |
 | [0037](0037-hors-ligne-consultation.md) | Hors-ligne : consultation sans réseau dans les applications connectées | Décidé |
+| [0038](0038-hors-ligne-saisie.md) | Hors-ligne : saisie sans réseau et envoi au retour du serveur | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.

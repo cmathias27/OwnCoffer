@@ -7,6 +7,7 @@ import '../state/session.dart';
 import '../util/server_address.dart';
 import '../widgets/form_card.dart';
 import 'account_flow.dart';
+import 'outbox_screen.dart';
 
 /// Email + password sign-in, with the invitation and password-reset flows.
 class SignInScreen extends StatefulWidget {
@@ -104,7 +105,7 @@ class _SignInScreenState extends State<SignInScreen> {
         if (ServerAddress.needed)
           TextButton.icon(
             icon: const Icon(Icons.dns_outlined),
-            onPressed: changeServer,
+            onPressed: () => changeServerAfterOutbox(context),
             label: Text(l.serverAddressChange),
           ),
       ],

@@ -322,6 +322,88 @@ void main() {
       },
     );
 
+    test('an entry sent again with its device id is not doubled; '
+        'isolation (decision 0037)', () async {
+      const ref = '3f2a9c1e-7b4d-4e8a-9c0f-1a2b3c4d5e6f';
+      Future<BankTransaction> send(TestSessionBuilder who, int accountId) =>
+          endpoints.transaction.create(
+            who,
+            accountId,
+            DateTime.utc(2026, 11, 2),
+            -1250,
+            'BOULANGERIE',
+            clientRef: ref,
+          );
+      final before = (await endpoints.transaction.list(
+        as(alice),
+        account.id!,
+      )).total;
+      final first = await send(as(alice), account.id!);
+      expect(first.clientRef, ref);
+      final again = await send(as(alice), account.id!);
+      expect(again.id, first.id);
+      expect(
+        (await endpoints.transaction.list(as(alice), account.id!)).total,
+        before + 1,
+      );
+
+      // The same id on another account is another entry.
+      final savings = await endpoints.account.create(
+        as(alice),
+        groupA,
+        'Livret',
+        AccountKind.savings,
+      );
+      final other = await send(as(alice), savings.id!);
+      expect(other.id, isNot(first.id));
+
+      // A malformed id is refused, nothing is created.
+      for (final bad in [
+        'short',
+        'x' * 65,
+        'abc def ghi jkl mno',
+        "1' OR 1=1 --xx",
+      ]) {
+        await expectLater(
+          endpoints.transaction.create(
+            as(alice),
+            account.id!,
+            DateTime.utc(2026, 11, 2),
+            -100,
+            'X',
+            clientRef: bad,
+          ),
+          throwsA(isA<InvalidInputException>()),
+        );
+      }
+
+      // Another group can neither reuse the id to read the entry nor add
+      // to the account; a reader cannot write either.
+      final malloryGroup = (await endpoints.group.myGroups(
+        as(mallory),
+      )).single.group.id!;
+      final malloryAccount = await endpoints.account.create(
+        as(mallory),
+        malloryGroup,
+        'M',
+        AccountKind.checking,
+      );
+      await expectLater(
+        send(as(mallory), account.id!),
+        throwsA(isA<AccessDeniedException>()),
+      );
+      await expectLater(
+        send(as(reader), account.id!),
+        throwsA(isA<AccessDeniedException>()),
+      );
+      final own = await send(as(mallory), malloryAccount.id!);
+      expect(own.id, isNot(first.id));
+      expect(own.accountId, malloryAccount.id);
+      expect(
+        (await endpoints.transaction.list(as(alice), account.id!)).total,
+        before + 1,
+      );
+    });
     test('imported operations keep what the bank wrote', () async {
       final t = (await endpoints.transaction.list(
         as(alice),

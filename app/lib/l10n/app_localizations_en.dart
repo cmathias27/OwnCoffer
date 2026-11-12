@@ -7406,6 +7406,81 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String offlineBanner(String when) {
-    return 'Server unreachable: data from $when, read-only';
+    return 'Server unreachable: data from $when. New operations are kept for later; changes and deletions wait for the network.';
   }
+
+  @override
+  String get outboxKept =>
+      'Operation kept on this device: it will be sent as soon as the server answers.';
+
+  @override
+  String outboxWaiting(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations to send',
+      one: '1 operation to send',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String outboxRefused(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations refused by the server',
+      one: '1 operation refused by the server',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get outboxTitle => 'To sync';
+
+  @override
+  String get outboxIntro =>
+      'Operations entered without network. Waiting ones are sent as soon as the server answers; a refused operation stays here until you send it again or drop it.';
+
+  @override
+  String get outboxEmpty => 'Nothing to sync.';
+
+  @override
+  String get outboxSendNow => 'Send now';
+
+  @override
+  String get outboxStateWaiting => 'Waiting to be sent';
+
+  @override
+  String outboxStateRefused(String reason) {
+    return 'Refused: $reason';
+  }
+
+  @override
+  String get outboxRetry => 'Send again';
+
+  @override
+  String get outboxDrop => 'Drop';
+
+  @override
+  String get outboxDropConfirm => 'Drop this operation? It will never be sent.';
+
+  @override
+  String get outboxLeaveTitle => 'Operations not sent yet';
+
+  @override
+  String outboxLeaveBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count operations entered without network have not been sent to the server yet: they will be lost.',
+      one:
+          '1 operation entered without network has not been sent to the server yet: it will be lost.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get outboxLeaveConfirm => 'Continue and lose them';
 }
