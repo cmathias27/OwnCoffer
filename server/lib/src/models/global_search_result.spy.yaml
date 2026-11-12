@@ -1,0 +1,10 @@
+### Results of the search from the top of every screen (decision 0041):
+### only what the user may see, at most a few of each kind, nothing kept.
+class: GlobalSearchResult
+fields:
+  ### Operations of the visible accounts, newest first.
+  operations: List<BankTransaction>
+  ### Visible loans whose lender or label matches.
+  loans: List<Loan>
+  ### Invoices whose name, label, merchant or operation matches.
+  invoices: List<InvoiceInfo>

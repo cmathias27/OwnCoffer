@@ -3,6 +3,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
+import '../theme/app_theme.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/admin_backups.dart';
@@ -299,7 +300,7 @@ class AdminHealthView extends StatelessWidget {
             color: ok == false
                 ? theme.colorScheme.error
                 : ok == true
-                ? Colors.green.shade700
+                ? context.moneyColors.positive
                 : null,
           ),
           title: Text(label),

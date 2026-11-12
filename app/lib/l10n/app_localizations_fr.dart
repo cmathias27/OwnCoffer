@@ -524,7 +524,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navImport => 'Importer';
 
   @override
-  String get navForecast => 'Prévisions';
+  String get navForecast => 'Solde prévu';
 
   @override
   String get navCategories => 'Catégories';
@@ -1382,7 +1382,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notifUnknown => 'Notification';
 
   @override
-  String get notifOpenForecast => 'Voir les prévisions';
+  String get notifOpenForecast => 'Voir le solde prévu';
 
   @override
   String get importAccountRecognised => 'Compte reconnu d\'après le fichier.';
@@ -3966,7 +3966,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get dashboardUpcomingNone => 'Aucune échéance prévue d\'ici 7 jours.';
 
   @override
-  String get dashboardSeeForecast => 'Voir les prévisions';
+  String get dashboardSeeForecast => 'Voir le solde prévu';
 
   @override
   String get dashboardMonthSpending => 'Ce mois-ci';
@@ -7606,4 +7606,484 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scanRetake => 'Reprendre la photo';
+
+  @override
+  String get navMoney => 'Argent';
+
+  @override
+  String get navPlan => 'Prévoir';
+
+  @override
+  String get navPapers => 'Papiers';
+
+  @override
+  String get navAdvisor => 'Conseiller';
+
+  @override
+  String breadcrumbLabel(String path) {
+    return 'Vous êtes ici : $path';
+  }
+
+  @override
+  String get addScanReceipt => 'Scanner un ticket';
+
+  @override
+  String get addImportStatement => 'Importer un relevé';
+
+  @override
+  String get addMenuTooltip => 'Ajouter';
+
+  @override
+  String get addChooseAccount => 'Sur quel compte ?';
+
+  @override
+  String get settingsTitle => 'Réglages';
+
+  @override
+  String get settingsDisplay => 'Affichage';
+
+  @override
+  String get settingsSimpleMode => 'Mode simple';
+
+  @override
+  String get settingsSimpleModeHelp =>
+      'Masque les fonctions avancées : règles, administration, analyses détaillées.';
+
+  @override
+  String get settingsLargeText => 'Grand texte';
+
+  @override
+  String get settingsHighContrast => 'Contraste élevé';
+
+  @override
+  String get settingsHousehold => 'Foyer';
+
+  @override
+  String get settingsCategories => 'Catégories et règles';
+
+  @override
+  String get settingsApp => 'L\'application';
+
+  @override
+  String get shortcutsTitle => 'Raccourcis clavier';
+
+  @override
+  String get shortcutSearch => 'Rechercher partout';
+
+  @override
+  String get shortcutNew => 'Ajouter une opération';
+
+  @override
+  String get shortcutSections => 'Ouvrir une rubrique (Accueil … Conseiller)';
+
+  @override
+  String get shortcutHelp => 'Afficher ces raccourcis';
+
+  @override
+  String get globalSearchOpen => 'Rechercher';
+
+  @override
+  String get globalSearchHint => 'Opération, créancier, fonction…';
+
+  @override
+  String get globalSearchClear => 'Effacer';
+
+  @override
+  String get globalSearchIntro =>
+      'Cherchez une opération, un crédit, une facture ou une fonction de l\'application.';
+
+  @override
+  String get globalSearchOffline =>
+      'Hors ligne : seules les fonctions de l\'application sont cherchées.';
+
+  @override
+  String globalSearchNothing(String query) {
+    return 'Rien trouvé pour « $query ».';
+  }
+
+  @override
+  String get globalSearchFunctions => 'Fonctions';
+
+  @override
+  String advisorNewBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nouveaux conseils',
+      one: '1 nouveau conseil',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchKwHome => 'accueil, tableau de bord, résumé, tout va bien';
+
+  @override
+  String get searchKwAccounts => 'comptes, solde, banque, livret';
+
+  @override
+  String get searchKwOperations =>
+      'opérations, transactions, dépenses, mouvements, relevé';
+
+  @override
+  String get searchKwToClassify => 'classer, non classées, catégoriser';
+
+  @override
+  String get searchKwForecast =>
+      'prévisions, solde prévu, avenir, découvert, échéances';
+
+  @override
+  String get searchKwBudget =>
+      'budget, objectifs, dépenses du mois, reste à vivre';
+
+  @override
+  String get searchKwSubscriptions =>
+      'abonnements, prélèvements, hausse de prix';
+
+  @override
+  String get searchKwLoans => 'crédits, prêts, emprunt, échéancier, créancier';
+
+  @override
+  String get searchKwInvoices =>
+      'factures, garanties, justificatifs, documents';
+
+  @override
+  String get searchKwScan => 'scanner, ticket, photo, caisse';
+
+  @override
+  String get searchKwImport => 'importer, relevé, fichier, qif, ofx, csv';
+
+  @override
+  String get searchKwAdvisor => 'conseiller, conseils, propositions, économies';
+
+  @override
+  String get searchKwNewOperation =>
+      'nouvelle opération, ajouter, saisir, dépense';
+
+  @override
+  String get searchKwCategories => 'catégories, classement';
+
+  @override
+  String get searchKwRules => 'règles, classement automatique';
+
+  @override
+  String get searchKwNotifications => 'notifications, alertes, cloche';
+
+  @override
+  String get searchKwSummary => 'récapitulatif, mois, bilan';
+
+  @override
+  String get searchKwStart => 'premiers pas, démarrer, guide';
+
+  @override
+  String get searchKwExport => 'exporter, sauvegarde, télécharger';
+
+  @override
+  String get searchKwMembers => 'membres, foyer, inviter, partage';
+
+  @override
+  String get searchKwSecurity =>
+      'sécurité, mot de passe, double authentification, sessions';
+
+  @override
+  String get searchKwAssistant =>
+      'assistant, ia, intelligence artificielle, modèle';
+
+  @override
+  String get searchKwApps => 'applications, android, windows, téléphone';
+
+  @override
+  String get searchKwPepite => 'pépite, mascotte, badges';
+
+  @override
+  String get searchKwDisplay =>
+      'affichage, mode simple, grand texte, contraste';
+
+  @override
+  String get searchKwHelp => 'aide, mode d\'emploi, comment';
+
+  @override
+  String get searchKwShortcuts => 'raccourcis, clavier, touches';
+
+  @override
+  String get searchKwFeedback => 'avis, signaler, bug, suggestion';
+
+  @override
+  String get searchKwAdmin =>
+      'administration, serveur, mises à jour, sauvegardes';
+
+  @override
+  String get swipeOpen => 'Ouvrir';
+
+  @override
+  String get homeAllGood => 'Tout va bien : rien d\'urgent à regarder.';
+
+  @override
+  String homeIssuesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count points à regarder',
+      one: '1 point à regarder',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeIssueOverdrawn(String account, String amount) {
+    return '$account est à découvert : $amount';
+  }
+
+  @override
+  String homeIssueWillOverdraw(String account, String date) {
+    return '$account passerait à découvert le $date';
+  }
+
+  @override
+  String homeIssueToClassify(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opérations du mois à classer',
+      one: '1 opération du mois à classer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeGoodTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count choses qui vont bien',
+      one: '1 chose qui va bien',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeGoodNoOverdraft => 'Aucun découvert prévu dans les 30 jours';
+
+  @override
+  String get homeGoodClassified =>
+      'Toutes les opérations du mois sont classées';
+
+  @override
+  String get homeGoodNoNotification => 'Aucune notification en attente';
+
+  @override
+  String get homeAdvicesTitle => 'Conseils du moment';
+
+  @override
+  String get homeAdvicesNone => 'Aucun conseil en attente pour l\'instant.';
+
+  @override
+  String get homeAdvicesAll => 'Voir tout';
+
+  @override
+  String homeAdvicesAllCount(int count) {
+    return 'Voir les $count';
+  }
+
+  @override
+  String get periodThisMonth => 'Ce mois';
+
+  @override
+  String get periodLastMonth => 'Mois précédent';
+
+  @override
+  String get periodThisYear => 'Cette année';
+
+  @override
+  String get budgetShowDetail => 'Voir le détail';
+
+  @override
+  String get budgetHideDetail => 'Masquer le détail';
+
+  @override
+  String get loanTabSummary => 'Résumé';
+
+  @override
+  String get loanTabSchedule => 'Échéancier';
+
+  @override
+  String get loanTabOperations => 'Opérations';
+
+  @override
+  String get loanTabDocuments => 'Documents';
+
+  @override
+  String get loanTabSimulate => 'Simuler';
+
+  @override
+  String get whyThisFigure => 'Pourquoi ce chiffre ?';
+
+  @override
+  String get whyTotal => 'Total';
+
+  @override
+  String get whyBalanceTitle => 'Solde d\'aujourd\'hui';
+
+  @override
+  String get whyBalanceText =>
+      'La somme des soldes connus aujourd\'hui de vos comptes en euros : le dernier relevé importé, plus les opérations enregistrées depuis. Les comptes dans une autre devise ne sont pas additionnés. Le point bas vient de la prévision : opérations prévues et échéances de crédit des 30 prochains jours.';
+
+  @override
+  String get whyLeftBalance => 'Solde des comptes courants aujourd\'hui';
+
+  @override
+  String whyLeftDebits(String date) {
+    return 'Prélèvements prévus jusqu\'au $date';
+  }
+
+  @override
+  String whyLeftCredits(String date) {
+    return 'Rentrées prévues jusqu\'au $date';
+  }
+
+  @override
+  String get whyLeftDays => 'Jours restants';
+
+  @override
+  String get whyLeftPerDay => 'Par jour';
+
+  @override
+  String get whyNetUnclassified => 'dont opérations non classées';
+
+  @override
+  String get whyNetText =>
+      'Revenus de la période, moins les dépenses et l\'épargne mise de côté. Les virements entre vos comptes ne comptent pas. Une opération non classée compte comme revenu si c\'est une entrée, comme dépense si c\'est une sortie.';
+
+  @override
+  String get cardHelpTooltip => 'Que montre cette carte ?';
+
+  @override
+  String get cardHelpWatch =>
+      'Ce qui mérite un coup d\'œil, le plus urgent d\'abord : un compte à découvert, un découvert prévu, un compte sous son seuil d\'alerte, des opérations à classer, des notifications. Ce qui va bien est replié en dessous.';
+
+  @override
+  String get cardHelpAdvices =>
+      'Les conseils de « Mon conseiller » qui attendent votre réponse. Chacun montre ses chiffres et son calcul ; rien n\'est modifié sans votre accord.';
+
+  @override
+  String get cardHelpUpcoming =>
+      'Les opérations prévues et les échéances de crédit des 7 prochains jours, sur les comptes que vous voyez.';
+
+  @override
+  String get cardHelpTopSpending =>
+      'Les catégories où vous avez le plus dépensé sur la période choisie. Les virements entre vos comptes n\'en font pas partie.';
+
+  @override
+  String get notifFilterAll => 'Toutes';
+
+  @override
+  String notifFilterAlerts(int count) {
+    return 'Alertes ($count)';
+  }
+
+  @override
+  String notifFilterAdvice(int count) {
+    return 'Conseils ($count)';
+  }
+
+  @override
+  String notifFilterSystem(int count) {
+    return 'Système ($count)';
+  }
+
+  @override
+  String get notifFilterEmpty => 'Aucune notification de ce type.';
+
+  @override
+  String get emptyAccountsHint =>
+      'Un compte regroupe les opérations d\'une banque. Créez-le, puis importez un relevé pour voir votre solde et sa prévision.';
+
+  @override
+  String get emptyOperationsHint =>
+      'Importez un relevé de votre banque (+ en haut, « Importer un relevé ») ou saisissez une opération.';
+
+  @override
+  String get emptyOperationsFiltered =>
+      'Aucune opération ne correspond à ces filtres.';
+
+  @override
+  String get emptyClearFilters => 'Effacer les filtres';
+
+  @override
+  String get emptyNotificationsHint =>
+      'Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications.';
+
+  @override
+  String firstStepsTitle(int done, int total) {
+    return 'Premiers pas · $done/$total';
+  }
+
+  @override
+  String get firstStepsHide => 'Masquer';
+
+  @override
+  String get firstStepAccount => 'Créer un compte';
+
+  @override
+  String get firstStepAccountHelp =>
+      'Son nom, sa banque et son solde de départ suffisent.';
+
+  @override
+  String get firstStepImport => 'Importer un relevé';
+
+  @override
+  String get firstStepImportHelp =>
+      'Téléchargez un relevé QIF, OFX ou CSV depuis votre banque, puis déposez-le ici.';
+
+  @override
+  String get firstStepCategories => 'Classer les opérations';
+
+  @override
+  String get firstStepCategoriesHelp =>
+      'Donnez une catégorie aux opérations non classées : OwnCoffer s\'en souviendra pour les suivantes.';
+
+  @override
+  String homeIssueLoanMissed(String loan) {
+    return 'Une échéance de « $loan » n\'a pas été prélevée';
+  }
+
+  @override
+  String homeIssueSubscriptionRise(String label, String before, String after) {
+    return '$label est passé de $before à $after';
+  }
+
+  @override
+  String homeIssueNewAdvices(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nouveaux conseils',
+      one: '1 nouveau conseil',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHelpOpen => 'Ouvrir l\'aide';
+
+  @override
+  String get whyForecastToday => 'Solde d\'aujourd\'hui';
+
+  @override
+  String get whyForecastCredits => 'Rentrées prévues';
+
+  @override
+  String get whyForecastDebits => 'Prélèvements et échéances prévus';
+
+  @override
+  String get whyForecastOther => 'Dépenses courantes estimées et autres écarts';
+
+  @override
+  String whyForecastEnd(String date) {
+    return 'Solde prévu le $date';
+  }
+
+  @override
+  String get whyForecastText =>
+      'Le moteur part du solde d\'aujourd\'hui, ajoute jour par jour les opérations prévues (salaires, prélèvements, abonnements, échéances de crédit), puis l\'estimation des dépenses courantes tirée de vos derniers mois. Aucune IA n\'intervient dans ce calcul.';
 }

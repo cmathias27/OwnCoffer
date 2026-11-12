@@ -249,7 +249,7 @@
   "navAccounts": "Comptes",
   "navOperations": "Opérations",
   "navImport": "Importer",
-  "navForecast": "Prévisions",
+  "navForecast": "Solde prévu",
   "navCategories": "Catégories",
   "accountsTitle": "Comptes",
   "accountsEmpty": "Aucun compte pour l'instant.",
@@ -874,7 +874,7 @@
     }
   },
   "notifUnknown": "Notification",
-  "notifOpenForecast": "Voir les prévisions",
+  "notifOpenForecast": "Voir le solde prévu",
   "importAccountRecognised": "Compte reconnu d'après le fichier.",
   "importOtherAccountMatch": "Ce fichier correspond au compte « {account} ».",
   "@importOtherAccountMatch": {
@@ -2981,7 +2981,7 @@
   },
   "dashboardUpcoming": "Cette semaine",
   "dashboardUpcomingNone": "Aucune échéance prévue d'ici 7 jours.",
-  "dashboardSeeForecast": "Voir les prévisions",
+  "dashboardSeeForecast": "Voir le solde prévu",
   "dashboardMonthSpending": "Ce mois-ci",
   "dashboardMonthTotals": "{expense} dépensés, {income} reçus",
   "@dashboardMonthTotals": {
@@ -5313,5 +5313,281 @@
   "scanAdjust": "Ajuster les coins",
   "scanKeep": "Garder",
   "scanBlurred": "La photo semble floue : le texte risque d'être illisible.",
-  "scanRetake": "Reprendre la photo"
+  "scanRetake": "Reprendre la photo",
+  "navMoney": "Argent",
+  "navPlan": "Prévoir",
+  "navPapers": "Papiers",
+  "navAdvisor": "Conseiller",
+  "breadcrumbLabel": "Vous êtes ici : {path}",
+  "@breadcrumbLabel": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "addScanReceipt": "Scanner un ticket",
+  "addImportStatement": "Importer un relevé",
+  "addMenuTooltip": "Ajouter",
+  "addChooseAccount": "Sur quel compte ?",
+  "settingsTitle": "Réglages",
+  "settingsDisplay": "Affichage",
+  "settingsSimpleMode": "Mode simple",
+  "settingsSimpleModeHelp": "Masque les fonctions avancées : règles, administration, analyses détaillées.",
+  "settingsLargeText": "Grand texte",
+  "settingsHighContrast": "Contraste élevé",
+  "settingsHousehold": "Foyer",
+  "settingsCategories": "Catégories et règles",
+  "settingsApp": "L'application",
+  "shortcutsTitle": "Raccourcis clavier",
+  "shortcutSearch": "Rechercher partout",
+  "shortcutNew": "Ajouter une opération",
+  "shortcutSections": "Ouvrir une rubrique (Accueil … Conseiller)",
+  "shortcutHelp": "Afficher ces raccourcis",
+  "globalSearchOpen": "Rechercher",
+  "globalSearchHint": "Opération, créancier, fonction…",
+  "globalSearchClear": "Effacer",
+  "globalSearchIntro": "Cherchez une opération, un crédit, une facture ou une fonction de l'application.",
+  "globalSearchOffline": "Hors ligne : seules les fonctions de l'application sont cherchées.",
+  "globalSearchNothing": "Rien trouvé pour « {query} ».",
+  "@globalSearchNothing": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "globalSearchFunctions": "Fonctions",
+  "advisorNewBadge": "{count, plural, =1{1 nouveau conseil} other{{count} nouveaux conseils}}",
+  "@advisorNewBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchKwHome": "accueil, tableau de bord, résumé, tout va bien",
+  "searchKwAccounts": "comptes, solde, banque, livret",
+  "searchKwOperations": "opérations, transactions, dépenses, mouvements, relevé",
+  "searchKwToClassify": "classer, non classées, catégoriser",
+  "searchKwForecast": "prévisions, solde prévu, avenir, découvert, échéances",
+  "searchKwBudget": "budget, objectifs, dépenses du mois, reste à vivre",
+  "searchKwSubscriptions": "abonnements, prélèvements, hausse de prix",
+  "searchKwLoans": "crédits, prêts, emprunt, échéancier, créancier",
+  "searchKwInvoices": "factures, garanties, justificatifs, documents",
+  "searchKwScan": "scanner, ticket, photo, caisse",
+  "searchKwImport": "importer, relevé, fichier, qif, ofx, csv",
+  "searchKwAdvisor": "conseiller, conseils, propositions, économies",
+  "searchKwNewOperation": "nouvelle opération, ajouter, saisir, dépense",
+  "searchKwCategories": "catégories, classement",
+  "searchKwRules": "règles, classement automatique",
+  "searchKwNotifications": "notifications, alertes, cloche",
+  "searchKwSummary": "récapitulatif, mois, bilan",
+  "searchKwStart": "premiers pas, démarrer, guide",
+  "searchKwExport": "exporter, sauvegarde, télécharger",
+  "searchKwMembers": "membres, foyer, inviter, partage",
+  "searchKwSecurity": "sécurité, mot de passe, double authentification, sessions",
+  "searchKwAssistant": "assistant, ia, intelligence artificielle, modèle",
+  "searchKwApps": "applications, android, windows, téléphone",
+  "searchKwPepite": "pépite, mascotte, badges",
+  "searchKwDisplay": "affichage, mode simple, grand texte, contraste",
+  "searchKwHelp": "aide, mode d'emploi, comment",
+  "searchKwShortcuts": "raccourcis, clavier, touches",
+  "searchKwFeedback": "avis, signaler, bug, suggestion",
+  "searchKwAdmin": "administration, serveur, mises à jour, sauvegardes",
+  "swipeOpen": "Ouvrir",
+  "homeAllGood": "Tout va bien : rien d'urgent à regarder.",
+  "homeIssuesCount": "{count, plural, =1{1 point à regarder} other{{count} points à regarder}}",
+  "@homeIssuesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeIssueOverdrawn": "{account} est à découvert : {amount}",
+  "@homeIssueOverdrawn": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueWillOverdraw": "{account} passerait à découvert le {date}",
+  "@homeIssueWillOverdraw": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueToClassify": "{count, plural, =1{1 opération du mois à classer} other{{count} opérations du mois à classer}}",
+  "@homeIssueToClassify": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeGoodTitle": "{count, plural, =1{1 chose qui va bien} other{{count} choses qui vont bien}}",
+  "@homeGoodTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeGoodNoOverdraft": "Aucun découvert prévu dans les 30 jours",
+  "homeGoodClassified": "Toutes les opérations du mois sont classées",
+  "homeGoodNoNotification": "Aucune notification en attente",
+  "homeAdvicesTitle": "Conseils du moment",
+  "homeAdvicesNone": "Aucun conseil en attente pour l'instant.",
+  "homeAdvicesAll": "Voir tout",
+  "homeAdvicesAllCount": "Voir les {count}",
+  "@homeAdvicesAllCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "periodThisMonth": "Ce mois",
+  "periodLastMonth": "Mois précédent",
+  "periodThisYear": "Cette année",
+  "budgetShowDetail": "Voir le détail",
+  "budgetHideDetail": "Masquer le détail",
+  "loanTabSummary": "Résumé",
+  "loanTabSchedule": "Échéancier",
+  "loanTabOperations": "Opérations",
+  "loanTabDocuments": "Documents",
+  "loanTabSimulate": "Simuler",
+  "whyThisFigure": "Pourquoi ce chiffre ?",
+  "whyTotal": "Total",
+  "whyBalanceTitle": "Solde d'aujourd'hui",
+  "whyBalanceText": "La somme des soldes connus aujourd'hui de vos comptes en euros : le dernier relevé importé, plus les opérations enregistrées depuis. Les comptes dans une autre devise ne sont pas additionnés. Le point bas vient de la prévision : opérations prévues et échéances de crédit des 30 prochains jours.",
+  "whyLeftBalance": "Solde des comptes courants aujourd'hui",
+  "whyLeftDebits": "Prélèvements prévus jusqu'au {date}",
+  "@whyLeftDebits": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyLeftCredits": "Rentrées prévues jusqu'au {date}",
+  "@whyLeftCredits": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyLeftDays": "Jours restants",
+  "whyLeftPerDay": "Par jour",
+  "whyNetUnclassified": "dont opérations non classées",
+  "whyNetText": "Revenus de la période, moins les dépenses et l'épargne mise de côté. Les virements entre vos comptes ne comptent pas. Une opération non classée compte comme revenu si c'est une entrée, comme dépense si c'est une sortie.",
+  "cardHelpTooltip": "Que montre cette carte ?",
+  "cardHelpWatch": "Ce qui mérite un coup d'œil, le plus urgent d'abord : un compte à découvert, un découvert prévu, un compte sous son seuil d'alerte, des opérations à classer, des notifications. Ce qui va bien est replié en dessous.",
+  "cardHelpAdvices": "Les conseils de « Mon conseiller » qui attendent votre réponse. Chacun montre ses chiffres et son calcul ; rien n'est modifié sans votre accord.",
+  "cardHelpUpcoming": "Les opérations prévues et les échéances de crédit des 7 prochains jours, sur les comptes que vous voyez.",
+  "cardHelpTopSpending": "Les catégories où vous avez le plus dépensé sur la période choisie. Les virements entre vos comptes n'en font pas partie.",
+  "notifFilterAll": "Toutes",
+  "notifFilterAlerts": "Alertes ({count})",
+  "@notifFilterAlerts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterAdvice": "Conseils ({count})",
+  "@notifFilterAdvice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterSystem": "Système ({count})",
+  "@notifFilterSystem": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterEmpty": "Aucune notification de ce type.",
+  "emptyAccountsHint": "Un compte regroupe les opérations d'une banque. Créez-le, puis importez un relevé pour voir votre solde et sa prévision.",
+  "emptyOperationsHint": "Importez un relevé de votre banque (+ en haut, « Importer un relevé ») ou saisissez une opération.",
+  "emptyOperationsFiltered": "Aucune opération ne correspond à ces filtres.",
+  "emptyClearFilters": "Effacer les filtres",
+  "emptyNotificationsHint": "Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications.",
+  "firstStepsTitle": "Premiers pas · {done}/{total}",
+  "@firstStepsTitle": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "firstStepsHide": "Masquer",
+  "firstStepAccount": "Créer un compte",
+  "firstStepAccountHelp": "Son nom, sa banque et son solde de départ suffisent.",
+  "firstStepImport": "Importer un relevé",
+  "firstStepImportHelp": "Téléchargez un relevé QIF, OFX ou CSV depuis votre banque, puis déposez-le ici.",
+  "firstStepCategories": "Classer les opérations",
+  "firstStepCategoriesHelp": "Donnez une catégorie aux opérations non classées : OwnCoffer s'en souviendra pour les suivantes.",
+  "homeIssueLoanMissed": "Une échéance de « {loan} » n'a pas été prélevée",
+  "@homeIssueLoanMissed": {
+    "placeholders": {
+      "loan": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueSubscriptionRise": "{label} est passé de {before} à {after}",
+  "@homeIssueSubscriptionRise": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueNewAdvices": "{count, plural, =1{1 nouveau conseil} other{{count} nouveaux conseils}}",
+  "@homeIssueNewAdvices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHelpOpen": "Ouvrir l'aide",
+  "whyForecastToday": "Solde d'aujourd'hui",
+  "whyForecastCredits": "Rentrées prévues",
+  "whyForecastDebits": "Prélèvements et échéances prévus",
+  "whyForecastOther": "Dépenses courantes estimées et autres écarts",
+  "whyForecastEnd": "Solde prévu le {date}",
+  "@whyForecastEnd": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyForecastText": "Le moteur part du solde d'aujourd'hui, ajoute jour par jour les opérations prévues (salaires, prélèvements, abonnements, échéances de crédit), puis l'estimation des dépenses courantes tirée de vos derniers mois. Aucune IA n'intervient dans ce calcul."
 }

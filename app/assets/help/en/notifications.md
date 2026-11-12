@@ -10,6 +10,8 @@ The bell at the top of the screen gathers what OwnCoffer wants to tell you; the 
 
 Each alert is sent only once for the same threshold and period, and only covers the accounts you can see.
 
+The **filters** at the top of the list sort by family: **alerts** (overdraft, goals reached or exceeded), **advice** (overrun announced, end of warranty) and **system** (sessions, devices).
+
 ## Choose what you receive
 
 The **settings** button of the Notifications page opens your choices, for each alert: **in the app**, and **also by email** when it can be (overdraft, warranty). For goals, each threshold is turned off on its own: 80 %, exceeded, overrun announced. These settings are yours only.

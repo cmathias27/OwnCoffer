@@ -2,16 +2,20 @@
 
 Home shows at a glance where the money stands today and what is coming, on the accounts you can see.
 
+Home always stays on the current month: it answers "is all well today?".
+
 ## The cards
 
+- **First steps** (at the beginning): create an account, import a statement, classify the operations. Each step ticks itself from your data; the card goes away once the three are done, and "Hide" removes it on this device.
+- **All well?**: a one-line summary, then one point per thing to look at, the most urgent first: an account overdrawn or that would be within 30 days, a loan instalment not debited, operations of the month to classify, a subscription whose price went up, new advice. Tapping a point opens the page where it can be dealt with. **What is going well** is folded underneath.
+- **Current advice**: the first three pieces of advice from **My advisor**, and "See all".
 - **Total of the accounts**, with the **lowest point of the next 30 days** (account, amount and date) and the balance of each account.
 - **Left to live on** until the end of the budget month: balance of the current accounts, minus the planned debits, plus the planned income.
 - **Month summary**: income, spending and savings.
 - **This week**: the due dates of the next 7 days (subscriptions, loans, planned operations).
-- **This month**: spent, received, and the operations to classify.
-- **To watch**: the accounts that will go below their alert threshold, the unread notifications.
+- **This month**: spent, received, and the categories where you spent the most (hidden in simple mode).
 
-Each card leads to its page: tap it to see the details.
+Each card leads to its page: tap it to see the details. The small **?** of a card says what it shows and leads to the matching help; **"Why this figure?"**, under a key figure, shows the lines of the calculation.
 
 ## Good to know
 
@@ -28,7 +32,7 @@ Each card leads to its page: tap it to see the details.
 - **The challenge of the month** (in **Pépite and my reserve**), optional: pick one from the list (classify 20 operations, attach 5 invoices, create 3 rules, declare 2 subscriptions, set yourself a goal). Pépite counts by herself what you do from the moment you chose it, on all your devices; done, it brings **10 seeds**, once a month. Dropped or unfinished: nothing is lost. "Offer a challenge every month" hides it on this device.
 - **Badges to earn**: shown as silhouettes in **Pépite and my reserve**, with a hint to discover OwnCoffer's features (sorting rules, scheduled operations, invoices, loans, subscriptions, security, reconciliation, goals in %, invited members). No badge depends on an amount.
 - **Later** hides the reminder until the next day.
-- In the account menu, **Pépite and my reserve** shows the seeds and badges, and sets Pépite up on this device: shown or not, and a **reminder by notification** (Android and Windows, off by default) on the day and at the time you choose.
+- In **Settings**, **Pépite and my reserve** shows the seeds and badges, and sets Pépite up on this device: shown or not, and a **reminder by notification** (Android and Windows, off by default) on the day and at the time you choose.
 - In a browser, as long as you have never had a session in the Android or Windows app, Pépite suggests them: a card on the home page (one day a week at most), a word at the end of the ritual, a banner on an Android phone (recognised by the browser itself, nothing is sent). **Later** forgets it for a week, **Don't suggest again** for good; nothing while an account is overdrawn. The first session in an app earns the **Pépite on the go** badge.
 - **Getting started**: the list of what makes the app useful (first statement, rule, scheduled operation, goal, security, backup, app, reminder, members), ticked from your data; "Open" leads to each step. A card on the home page suggests it while steps are left; "Not now" removes it, the list stays in **Pépite and my reserve**. The server administrator also finds their own there: backups, restore test, automatic updates, invitations, AI, proxy.
 - **Did you know?**: on the first visit of a page, a tip about that page, one a day at most. "Got it" or "Learn more" (the help page), and it never comes back, even on another device. **Show the tips**, in Pépite and my reserve, turns them off on this device.

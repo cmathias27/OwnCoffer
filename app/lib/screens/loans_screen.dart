@@ -7,6 +7,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
+import '../navigation/sections.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/file_pick.dart';
@@ -100,6 +101,13 @@ class LoansScreenState extends State<LoansScreen> {
       await reload();
       widget.onChanged?.call();
     }
+  }
+
+  /// Opens a loan found by the global search (decision 0041, point 5).
+  Future<void> openLoan(int loanId) async {
+    if (_data == null) await reload();
+    final info = _data?.loans.where((i) => i.loan.id == loanId).firstOrNull;
+    if (info != null && mounted) await _open(info);
   }
 
   Future<void> _open(LoanInfo info) async {
@@ -1211,6 +1219,12 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
         ],
       ),
     );
+    final canSimulate = info.nextDueDate != null;
+    // Each tab scrolls on its own (decision 0041, point 9).
+    Widget tab(List<Widget> children) => ListView(
+      padding: const EdgeInsets.all(16),
+      children: children,
+    );
     final years = <int, List<LoanInstallment>>{};
     for (final i in _schedule ?? const <LoanInstallment>[]) {
       years.putIfAbsent(i.date.year, () => []).add(i);
@@ -1220,289 +1234,356 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) Navigator.of(context).pop(_changed);
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(loan.label ?? loanKindText(l, loan.kind)),
-          actions: [
-            if (widget.canWrite) ...[
-              IconButton(
-                tooltip: l.loanEdit,
-                icon: const Icon(Icons.edit_outlined),
-                onPressed: _edit,
-              ),
-              IconButton(
-                tooltip: l.loanDelete,
-                icon: const Icon(Icons.delete_outline),
-                onPressed: _delete,
-              ),
-            ],
-          ],
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Card(
-              margin: EdgeInsets.zero,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: _LoanSummary(info: info),
-              ),
+      child: DefaultTabController(
+        length: canSimulate ? 5 : 4,
+        child: Scaffold(
+          appBar: AppBar(
+            title: TrailTitle(
+              trail: [l.navPlan, l.navLoans],
+              title: loan.label ?? loanKindText(l, loan.kind),
             ),
-            const SizedBox(height: 12),
-            Card(
-              margin: EdgeInsets.zero,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    line(l.loanPrincipal, context.money(loan.principalCents)),
-                    line(l.loanRate, rateText(context, loan.annualRateMilli)),
-                    if (loan.aprMilli != null)
-                      line(l.loanApr, rateText(context, loan.aprMilli!)),
-                    if (loan.creditLimitCents != null) ...[
-                      line(
-                        l.loanCreditLimit,
-                        context.money(loan.creditLimitCents!),
-                      ),
-                      line(
-                        l.loanCreditAvailable,
-                        context.money(
-                          loan.creditLimitCents! - info.remainingCents,
-                        ),
-                      ),
-                    ],
-                    if (loan.kind != LoanKind.revolving)
-                      line(l.loanDuration, l.loanMonths(loan.durationMonths)),
-                    line(
-                      info.paymentIsActual
-                          ? l.loanPaymentActual
-                          : l.loanPaymentComputed,
-                      context.money(
-                        info.paymentCents + loan.insuranceMonthlyCents,
-                      ),
-                    ),
-                    if (info.paymentIsActual &&
-                        info.totalCount != loan.durationMonths)
-                      line(
-                        l.loanEstimatedDuration,
-                        l.loanMonths(info.totalCount),
-                      ),
-                    if (loan.insuranceMonthlyCents > 0)
-                      line(
-                        l.loanInsurance,
-                        context.money(loan.insuranceMonthlyCents),
-                      ),
-                    const Divider(),
-                    line(
-                      l.loanInterestPaid,
-                      context.money(info.interestPaidCents),
-                    ),
-                    line(
-                      l.loanInterestLeft,
-                      context.money(info.interestRemainingCents),
-                    ),
-                    line(l.loanCost, context.money(info.costCents)),
-                    if (account != null) line(l.loanAccount, account.name),
-                    const SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.info_outline,
-                          size: 18,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            info.paymentIsActual
-                                ? l.loanEstimatesNote
-                                : l.loanEstimatesNoteComputed,
-                            style: theme.textTheme.bodySmall,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+            bottom: TabBar(
+              key: const Key('loan-tabs'),
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              tabs: [
+                Tab(text: l.loanTabSummary),
+                Tab(text: l.loanTabSchedule),
+                Tab(text: l.loanTabOperations),
+                Tab(text: l.loanTabDocuments),
+                if (canSimulate) Tab(text: l.loanTabSimulate),
+              ],
+            ),
+            actions: [
+              if (widget.canWrite) ...[
+                IconButton(
+                  tooltip: l.loanEdit,
+                  icon: const Icon(Icons.edit_outlined),
+                  onPressed: _edit,
                 ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            if (widget.canWrite &&
-                info.nextDueDate != null &&
-                loan.kind != LoanKind.installments)
-              _renegotiateCard(context, l, theme),
-            const SizedBox(height: 12),
-            _eventsCard(context, l, theme),
-            const SizedBox(height: 12),
-            _operationsCard(context, l, theme),
-            const SizedBox(height: 12),
-            _documentsCard(context, l, theme),
-            const SizedBox(height: 12),
-            if (info.nextDueDate != null)
-              Card(
-                margin: EdgeInsets.zero,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        l.loanSimulationTitle,
-                        style: theme.textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l.loanSimulationHelp,
-                        style: theme.textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _extra,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                    decimal: true,
-                                  ),
-                              decoration: InputDecoration(
-                                labelText: l.loanSimulationAmount,
-                                suffixText: '€',
-                              ),
-                              onSubmitted: (_) => _simulate(),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          FilledButton.tonal(
-                            onPressed: _simulate,
-                            child: Text(l.loanSimulate),
-                          ),
-                        ],
-                      ),
-                      if (_simulation != null) ...[
-                        const SizedBox(height: 12),
-                        line(
-                          l.loanSimulationSaved,
-                          context.money(_simulation!.interestSavedCents),
-                        ),
-                        line(
-                          l.loanSimulationEnd,
-                          _simulation!.endDate == null
-                              ? l.loanSimulationRepaid
-                              : context.day(_simulation!.endDate!),
-                        ),
-                        line(
-                          l.loanSimulationLeft,
-                          '${_simulation!.installmentsLeft}',
-                        ),
-                      ],
-                    ],
+                IconButton(
+                  tooltip: l.loanDelete,
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: _delete,
+                ),
+              ],
+            ],
+          ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (_error != null)
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    _error!,
+                    style: TextStyle(color: theme.colorScheme.error),
                   ),
                 ),
-              ),
-            if (_error != null)
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Text(
-                  _error!,
-                  style: TextStyle(color: theme.colorScheme.error),
-                ),
-              ),
-            const SizedBox(height: 12),
-            Text(l.loanScheduleTitle, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
-            if (_schedule == null)
-              const Center(child: CircularProgressIndicator())
-            else
-              for (final MapEntry(key: year, value: rows) in years.entries)
-                Card(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: ExpansionTile(
-                    initiallyExpanded:
-                        year == (info.nextDueDate ?? info.endDate).year,
-                    title: Text('$year'),
-                    subtitle: Text(
-                      l.loanYearSummary(
-                        context.money(
-                          rows.fold(0, (a, i) => a + i.principalCents),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    tab([
+                      Card(
+                        margin: EdgeInsets.zero,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: _LoanSummary(info: info),
                         ),
-                        context.money(
-                          rows.fold(0, (a, i) => a + i.interestCents),
-                        ),
-                        context.money(rows.last.remainingCents),
                       ),
-                      style: theme.textTheme.bodySmall,
-                    ),
-                    children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          headingTextStyle: theme.textTheme.labelMedium,
-                          columns: [
-                            DataColumn(
-                              label: Text(l.loanColNumber),
-                              numeric: true,
-                            ),
-                            DataColumn(label: Text(l.loanColDate)),
-                            DataColumn(
-                              label: Text(l.loanColPayment),
-                              numeric: true,
-                            ),
-                            DataColumn(
-                              label: Text(l.loanColPrincipal),
-                              numeric: true,
-                            ),
-                            DataColumn(
-                              label: Text(l.loanColInterest),
-                              numeric: true,
-                            ),
-                            if (loan.insuranceMonthlyCents > 0)
-                              DataColumn(
-                                label: Text(l.loanColInsurance),
-                                numeric: true,
+                      const SizedBox(height: 12),
+                      Card(
+                        margin: EdgeInsets.zero,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            children: [
+                              line(
+                                l.loanPrincipal,
+                                context.money(loan.principalCents),
                               ),
-                            DataColumn(
-                              label: Text(l.loanColRemaining),
-                              numeric: true,
-                            ),
-                          ],
-                          rows: [
-                            for (final i in rows)
-                              DataRow(
-                                selected: i.date == info.nextDueDate,
-                                cells: [
-                                  DataCell(Text('${i.number}')),
-                                  DataCell(Text(context.day(i.date))),
-                                  DataCell(
-                                    Text(
-                                      context.money(
-                                        i.paymentCents + i.insuranceCents,
-                                      ),
+                              line(
+                                l.loanRate,
+                                rateText(context, loan.annualRateMilli),
+                              ),
+                              if (loan.aprMilli != null)
+                                line(
+                                  l.loanApr,
+                                  rateText(context, loan.aprMilli!),
+                                ),
+                              if (loan.creditLimitCents != null) ...[
+                                line(
+                                  l.loanCreditLimit,
+                                  context.money(loan.creditLimitCents!),
+                                ),
+                                line(
+                                  l.loanCreditAvailable,
+                                  context.money(
+                                    loan.creditLimitCents! -
+                                        info.remainingCents,
+                                  ),
+                                ),
+                              ],
+                              if (loan.kind != LoanKind.revolving)
+                                line(
+                                  l.loanDuration,
+                                  l.loanMonths(loan.durationMonths),
+                                ),
+                              line(
+                                info.paymentIsActual
+                                    ? l.loanPaymentActual
+                                    : l.loanPaymentComputed,
+                                context.money(
+                                  info.paymentCents +
+                                      loan.insuranceMonthlyCents,
+                                ),
+                              ),
+                              if (info.paymentIsActual &&
+                                  info.totalCount != loan.durationMonths)
+                                line(
+                                  l.loanEstimatedDuration,
+                                  l.loanMonths(info.totalCount),
+                                ),
+                              if (loan.insuranceMonthlyCents > 0)
+                                line(
+                                  l.loanInsurance,
+                                  context.money(loan.insuranceMonthlyCents),
+                                ),
+                              const Divider(),
+                              line(
+                                l.loanInterestPaid,
+                                context.money(info.interestPaidCents),
+                              ),
+                              line(
+                                l.loanInterestLeft,
+                                context.money(info.interestRemainingCents),
+                              ),
+                              line(l.loanCost, context.money(info.costCents)),
+                              if (account != null)
+                                line(l.loanAccount, account.name),
+                              const SizedBox(height: 8),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.info_outline,
+                                    size: 18,
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      info.paymentIsActual
+                                          ? l.loanEstimatesNote
+                                          : l.loanEstimatesNoteComputed,
+                                      style: theme.textTheme.bodySmall,
                                     ),
-                                  ),
-                                  DataCell(
-                                    Text(context.money(i.principalCents)),
-                                  ),
-                                  DataCell(
-                                    Text(context.money(i.interestCents)),
-                                  ),
-                                  if (loan.insuranceMonthlyCents > 0)
-                                    DataCell(
-                                      Text(context.money(i.insuranceCents)),
-                                    ),
-                                  DataCell(
-                                    Text(context.money(i.remainingCents)),
                                   ),
                                 ],
                               ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                      const SizedBox(height: 12),
+                      if (widget.canWrite &&
+                          info.nextDueDate != null &&
+                          loan.kind != LoanKind.installments)
+                        _renegotiateCard(context, l, theme),
+                      const SizedBox(height: 12),
+                      _eventsCard(context, l, theme),
+                    ]),
+                    tab([
+                      Text(
+                        l.loanScheduleTitle,
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      if (_schedule == null)
+                        const Center(child: CircularProgressIndicator())
+                      else
+                        for (final MapEntry(key: year, value: rows)
+                            in years.entries)
+                          Card(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: ExpansionTile(
+                              initiallyExpanded:
+                                  year ==
+                                  (info.nextDueDate ?? info.endDate).year,
+                              title: Text('$year'),
+                              subtitle: Text(
+                                l.loanYearSummary(
+                                  context.money(
+                                    rows.fold(
+                                      0,
+                                      (a, i) => a + i.principalCents,
+                                    ),
+                                  ),
+                                  context.money(
+                                    rows.fold(0, (a, i) => a + i.interestCents),
+                                  ),
+                                  context.money(rows.last.remainingCents),
+                                ),
+                                style: theme.textTheme.bodySmall,
+                              ),
+                              children: [
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: DataTable(
+                                    headingTextStyle:
+                                        theme.textTheme.labelMedium,
+                                    columns: [
+                                      DataColumn(
+                                        label: Text(l.loanColNumber),
+                                        numeric: true,
+                                      ),
+                                      DataColumn(label: Text(l.loanColDate)),
+                                      DataColumn(
+                                        label: Text(l.loanColPayment),
+                                        numeric: true,
+                                      ),
+                                      DataColumn(
+                                        label: Text(l.loanColPrincipal),
+                                        numeric: true,
+                                      ),
+                                      DataColumn(
+                                        label: Text(l.loanColInterest),
+                                        numeric: true,
+                                      ),
+                                      if (loan.insuranceMonthlyCents > 0)
+                                        DataColumn(
+                                          label: Text(l.loanColInsurance),
+                                          numeric: true,
+                                        ),
+                                      DataColumn(
+                                        label: Text(l.loanColRemaining),
+                                        numeric: true,
+                                      ),
+                                    ],
+                                    rows: [
+                                      for (final i in rows)
+                                        DataRow(
+                                          selected: i.date == info.nextDueDate,
+                                          cells: [
+                                            DataCell(Text('${i.number}')),
+                                            DataCell(Text(context.day(i.date))),
+                                            DataCell(
+                                              Text(
+                                                context.money(
+                                                  i.paymentCents +
+                                                      i.insuranceCents,
+                                                ),
+                                              ),
+                                            ),
+                                            DataCell(
+                                              Text(
+                                                context.money(i.principalCents),
+                                              ),
+                                            ),
+                                            DataCell(
+                                              Text(
+                                                context.money(i.interestCents),
+                                              ),
+                                            ),
+                                            if (loan.insuranceMonthlyCents > 0)
+                                              DataCell(
+                                                Text(
+                                                  context.money(
+                                                    i.insuranceCents,
+                                                  ),
+                                                ),
+                                              ),
+                                            DataCell(
+                                              Text(
+                                                context.money(i.remainingCents),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                    ]),
+                    tab([
+                      _operationsCard(context, l, theme),
+                    ]),
+                    tab([
+                      _documentsCard(context, l, theme),
+                    ]),
+                    if (canSimulate)
+                      tab([
+                        Card(
+                          margin: EdgeInsets.zero,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  l.loanSimulationTitle,
+                                  style: theme.textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  l.loanSimulationHelp,
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        controller: _extra,
+                                        keyboardType:
+                                            const TextInputType.numberWithOptions(
+                                              decimal: true,
+                                            ),
+                                        decoration: InputDecoration(
+                                          labelText: l.loanSimulationAmount,
+                                          suffixText: '€',
+                                        ),
+                                        onSubmitted: (_) => _simulate(),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    FilledButton.tonal(
+                                      onPressed: _simulate,
+                                      child: Text(l.loanSimulate),
+                                    ),
+                                  ],
+                                ),
+                                if (_simulation != null) ...[
+                                  const SizedBox(height: 12),
+                                  line(
+                                    l.loanSimulationSaved,
+                                    context.money(
+                                      _simulation!.interestSavedCents,
+                                    ),
+                                  ),
+                                  line(
+                                    l.loanSimulationEnd,
+                                    _simulation!.endDate == null
+                                        ? l.loanSimulationRepaid
+                                        : context.day(_simulation!.endDate!),
+                                  ),
+                                  line(
+                                    l.loanSimulationLeft,
+                                    '${_simulation!.installmentsLeft}',
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]),
+                  ],
                 ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -144,7 +144,7 @@
   "navAccounts": "Accounts",
   "navOperations": "Operations",
   "navImport": "Import",
-  "navForecast": "Forecast",
+  "navForecast": "Expected balance",
   "navCategories": "Categories",
   "accountsTitle": "Accounts",
   "accountsEmpty": "No account yet.",
@@ -359,7 +359,7 @@
   "notifOverdraftTitle": "{account}: overdraft expected on {date}",
   "notifOverdraftBody": "Expected balance that day when the alert was raised: {balance} (threshold {threshold}).",
   "notifUnknown": "Notification",
-  "notifOpenForecast": "Show the forecast",
+  "notifOpenForecast": "See the expected balance",
   "importAccountRecognised": "Account recognised from the file.",
   "importOtherAccountMatch": "This file matches the account “{account}”.",
   "importSwitchAccount": "Import into “{account}”",
@@ -1072,7 +1072,7 @@
   "dashboardLowest": "Lowest point in the next 30 days: {amount} on {account}, on {date}",
   "dashboardUpcoming": "This week",
   "dashboardUpcomingNone": "No due date in the next 7 days.",
-  "dashboardSeeForecast": "See the forecast",
+  "dashboardSeeForecast": "See the expected balance",
   "dashboardMonthSpending": "This month",
   "dashboardMonthTotals": "{expense} spent, {income} received",
   "dashboardToClassify": "{count, plural, =1{1 operation to classify} other{{count} operations to classify}}",
@@ -2341,5 +2341,281 @@
   "scanAdjust": "Adjust the corners",
   "scanKeep": "Keep",
   "scanBlurred": "The photo looks blurred: the text may be unreadable.",
-  "scanRetake": "Take it again"
+  "scanRetake": "Take it again",
+  "navMoney": "Money",
+  "navPlan": "Plan",
+  "navPapers": "Papers",
+  "navAdvisor": "Advisor",
+  "breadcrumbLabel": "You are here: {path}",
+  "@breadcrumbLabel": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "addScanReceipt": "Scan a receipt",
+  "addImportStatement": "Import a statement",
+  "addMenuTooltip": "Add",
+  "addChooseAccount": "Which account?",
+  "settingsTitle": "Settings",
+  "settingsDisplay": "Display",
+  "settingsSimpleMode": "Simple mode",
+  "settingsSimpleModeHelp": "Hides the advanced features: rules, administration, detailed analyses.",
+  "settingsLargeText": "Large text",
+  "settingsHighContrast": "High contrast",
+  "settingsHousehold": "Household",
+  "settingsCategories": "Categories and rules",
+  "settingsApp": "The app",
+  "shortcutsTitle": "Keyboard shortcuts",
+  "shortcutSearch": "Search everywhere",
+  "shortcutNew": "Add an operation",
+  "shortcutSections": "Open a section (Home … Advisor)",
+  "shortcutHelp": "Show these shortcuts",
+  "globalSearchOpen": "Search",
+  "globalSearchHint": "Operation, creditor, feature…",
+  "globalSearchClear": "Clear",
+  "globalSearchIntro": "Look for an operation, a loan, an invoice or a feature of the app.",
+  "globalSearchOffline": "Offline: only the features of the app are searched.",
+  "globalSearchNothing": "Nothing found for \"{query}\".",
+  "@globalSearchNothing": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "globalSearchFunctions": "Features",
+  "advisorNewBadge": "{count, plural, =1{1 new advice} other{{count} new advices}}",
+  "@advisorNewBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchKwHome": "home, dashboard, overview, all good",
+  "searchKwAccounts": "accounts, balance, bank, savings",
+  "searchKwOperations": "operations, transactions, expenses, movements, statement",
+  "searchKwToClassify": "classify, unclassified, categorise",
+  "searchKwForecast": "forecast, expected balance, future, overdraft, scheduled",
+  "searchKwBudget": "budget, goals, monthly spending, left to live",
+  "searchKwSubscriptions": "subscriptions, direct debits, price rise",
+  "searchKwLoans": "loans, borrowing, schedule, lender, creditor",
+  "searchKwInvoices": "invoices, warranties, receipts, documents",
+  "searchKwScan": "scan, receipt, photo, till",
+  "searchKwImport": "import, statement, file, qif, ofx, csv",
+  "searchKwAdvisor": "advisor, advice, proposals, savings",
+  "searchKwNewOperation": "new operation, add, enter, expense",
+  "searchKwCategories": "categories, classification",
+  "searchKwRules": "rules, automatic classification",
+  "searchKwNotifications": "notifications, alerts, bell",
+  "searchKwSummary": "summary, month, review",
+  "searchKwStart": "getting started, start, guide",
+  "searchKwExport": "export, backup, download",
+  "searchKwMembers": "members, household, invite, sharing",
+  "searchKwSecurity": "security, password, two-factor, sessions",
+  "searchKwAssistant": "assistant, ai, artificial intelligence, model",
+  "searchKwApps": "apps, android, windows, phone",
+  "searchKwPepite": "pepite, mascot, badges",
+  "searchKwDisplay": "display, simple mode, large text, contrast",
+  "searchKwHelp": "help, manual, how to",
+  "searchKwShortcuts": "shortcuts, keyboard, keys",
+  "searchKwFeedback": "feedback, report, bug, suggestion",
+  "searchKwAdmin": "administration, server, updates, backups",
+  "swipeOpen": "Open",
+  "homeAllGood": "All is well: nothing urgent to look at.",
+  "homeIssuesCount": "{count, plural, =1{1 thing to look at} other{{count} things to look at}}",
+  "@homeIssuesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeIssueOverdrawn": "{account} is overdrawn: {amount}",
+  "@homeIssueOverdrawn": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueWillOverdraw": "{account} would be overdrawn on {date}",
+  "@homeIssueWillOverdraw": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueToClassify": "{count, plural, =1{1 operation of the month to classify} other{{count} operations of the month to classify}}",
+  "@homeIssueToClassify": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeGoodTitle": "{count, plural, =1{1 thing going well} other{{count} things going well}}",
+  "@homeGoodTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeGoodNoOverdraft": "No overdraft expected in the next 30 days",
+  "homeGoodClassified": "Every operation of the month is classified",
+  "homeGoodNoNotification": "No notification waiting",
+  "homeAdvicesTitle": "Current advice",
+  "homeAdvicesNone": "No advice waiting for now.",
+  "homeAdvicesAll": "See all",
+  "homeAdvicesAllCount": "See all {count}",
+  "@homeAdvicesAllCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "periodThisMonth": "This month",
+  "periodLastMonth": "Last month",
+  "periodThisYear": "This year",
+  "budgetShowDetail": "Show the detail",
+  "budgetHideDetail": "Hide the detail",
+  "loanTabSummary": "Summary",
+  "loanTabSchedule": "Schedule",
+  "loanTabOperations": "Operations",
+  "loanTabDocuments": "Documents",
+  "loanTabSimulate": "Simulate",
+  "whyThisFigure": "Why this figure?",
+  "whyTotal": "Total",
+  "whyBalanceTitle": "Balance today",
+  "whyBalanceText": "The sum of today's known balances of your accounts in euros: the last imported statement, plus the operations recorded since. Accounts in another currency are not added up. The low point comes from the forecast: planned operations and loan instalments of the next 30 days.",
+  "whyLeftBalance": "Balance of the current accounts today",
+  "whyLeftDebits": "Planned debits until {date}",
+  "@whyLeftDebits": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyLeftCredits": "Planned credits until {date}",
+  "@whyLeftCredits": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyLeftDays": "Days left",
+  "whyLeftPerDay": "Per day",
+  "whyNetUnclassified": "of which operations not classified",
+  "whyNetText": "Income of the period, minus spending and money put aside. Transfers between your accounts do not count. An operation not classified counts as income if money came in, as spending if it went out.",
+  "cardHelpTooltip": "What does this card show?",
+  "cardHelpWatch": "What deserves a look, the most urgent first: an overdrawn account, an expected overdraft, an account below its alert threshold, operations to classify, notifications. What goes well is folded below.",
+  "cardHelpAdvices": "The advice of « My advisor » waiting for your answer. Each one shows its figures and its calculation; nothing is changed without your consent.",
+  "cardHelpUpcoming": "The planned operations and loan instalments of the next 7 days, on the accounts you can see.",
+  "cardHelpTopSpending": "The categories where you spent the most over the chosen period. Transfers between your accounts are not part of it.",
+  "notifFilterAll": "All",
+  "notifFilterAlerts": "Alerts ({count})",
+  "@notifFilterAlerts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterAdvice": "Advice ({count})",
+  "@notifFilterAdvice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterSystem": "System ({count})",
+  "@notifFilterSystem": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterEmpty": "No notification of this kind.",
+  "emptyAccountsHint": "An account gathers the operations of one bank. Create it, then import a statement to see your balance and its forecast.",
+  "emptyOperationsHint": "Import a statement from your bank (+ at the top, « Import a statement ») or enter an operation.",
+  "emptyOperationsFiltered": "No operation matches these filters.",
+  "emptyClearFilters": "Clear the filters",
+  "emptyNotificationsHint": "Alerts (expected overdraft, goal exceeded) and reminders will arrive here. Choose which ones in Settings › Notifications.",
+  "firstStepsTitle": "First steps · {done}/{total}",
+  "@firstStepsTitle": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "firstStepsHide": "Hide",
+  "firstStepAccount": "Create an account",
+  "firstStepAccountHelp": "Its name, its bank and its starting balance are enough.",
+  "firstStepImport": "Import a statement",
+  "firstStepImportHelp": "Download a QIF, OFX or CSV statement from your bank, then drop it here.",
+  "firstStepCategories": "Classify the operations",
+  "firstStepCategoriesHelp": "Give a category to the operations not classified: OwnCoffer remembers it for the next ones.",
+  "homeIssueLoanMissed": "An instalment of « {loan} » was not debited",
+  "@homeIssueLoanMissed": {
+    "placeholders": {
+      "loan": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueSubscriptionRise": "{label} went from {before} to {after}",
+  "@homeIssueSubscriptionRise": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueNewAdvices": "{count, plural, =1{1 new piece of advice} other{{count} new pieces of advice}}",
+  "@homeIssueNewAdvices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHelpOpen": "Open the help",
+  "whyForecastToday": "Balance today",
+  "whyForecastCredits": "Planned credits",
+  "whyForecastDebits": "Planned debits and instalments",
+  "whyForecastOther": "Estimated everyday spending and other gaps",
+  "whyForecastEnd": "Expected balance on {date}",
+  "@whyForecastEnd": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyForecastText": "The engine starts from today's balance, adds day by day the planned operations (salaries, debits, subscriptions, loan instalments), then the estimate of everyday spending drawn from your last months. No AI takes part in this calculation."
 }

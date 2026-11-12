@@ -2,6 +2,19 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.26.0 (novembre 2026)
+### Refonte de l'interface (décision 0041)
+- **Cinq rubriques** partout (Accueil, Argent, Prévoir, Papiers, Conseiller), en onglets quand une rubrique a plusieurs écrans, avec un **fil d'Ariane** (« Prévoir › Crédits › Maison »). Les écrans rares passent dans **Réglages** ; en haut ne restent que le foyer, la recherche, la cloche et Réglages.
+- **Mon conseiller en avant** : une rubrique à part, avec le nombre de conseils nouveaux depuis la dernière visite, et une carte « Conseils du moment » sur l'Accueil.
+- **Recherche globale** (touche `/`) : opérations de tous les comptes visibles, crédits, factures et fonctions de l'application (« exporter », « mot de passe »…). Hors ligne, les fonctions seules.
+- **Bouton « + »** : saisir une opération, scanner un ticket, importer un relevé.
+- **Accueil « tout va bien ? »** : une phrase de synthèse, les points à regarder triés par urgence (découvert, échéance de crédit non prélevée, opérations à classer, hausse d'abonnement, nouveaux conseils), ce qui va bien replié, et **Premiers pas** en trois étapes pour bien démarrer.
+- **« Pourquoi ce chiffre ? »** sous le total des comptes, le reste à vivre, le bilan et le solde prévu ; un petit **?** sur les cartes principales ; des **pages vides qui disent quoi faire**.
+- **Budget** : barre de période (ce mois, mois précédent, cette année), la vue du mois d'abord et l'analyse derrière « Voir le détail ». **Fiche crédit en onglets** : Résumé, Échéancier, Opérations, Documents, Simuler. Le compte choisi est gardé d'un écran à l'autre.
+- **Notifications filtrées** : alertes, conseils, système.
+- **Confort** : mode simple, grand texte et contraste élevé dans Réglages ; glisser une opération sur téléphone (droite : classer, gauche : ouvrir) ; raccourcis clavier `/`, `N`, `1` à `5`, `?`.
+- Libellés plus simples (« Solde prévu » au lieu de « Prévisions ») et aide mise à jour.
+
 ## 1.25.0 (novembre 2026)
 ### Crédits : échéances rapprochées des prélèvements (décision 0040)
 - **Chaque échéance vérifiée** : sur la fiche d'un crédit lié à un compte, le moteur compare l'échéancier aux prélèvements réels et signale une échéance **sans prélèvement**, **prélevée deux fois**, **d'un autre montant** (avec les deux montants), ou un prélèvement loin de toute échéance.

@@ -1,6 +1,8 @@
-# Forecast
+# Expected balance
 
-The balance curve day by day, over 30 days, 90 days or a year, for each account.
+The balance curve day by day, over 30 days, 90 days or a year, for each account. The account chosen is kept on this device, for the operations too.
+
+**"Why this figure?"**, under the end balance, shows the calculation: today's balance, plus the planned income, minus the planned debits, plus the rest (estimated variable spending).
 
 ## What is counted
 

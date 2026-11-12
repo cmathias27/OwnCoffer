@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../l10n/app_localizations.dart';
+import '../theme/app_theme.dart';
 import 'admin_backups.dart';
 
 /// Versions and updates: what runs, what is available, automatic updates
@@ -92,7 +93,7 @@ class AdminUpdatesView extends StatelessWidget {
                       newer ? Icons.new_releases_outlined : Icons.verified,
                       color: newer
                           ? theme.colorScheme.primary
-                          : Colors.green.shade700,
+                          : context.moneyColors.positive,
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -209,7 +210,7 @@ class AdminUpdatesView extends StatelessWidget {
                     ? Icons.check_circle_outline
                     : Icons.error_outline,
                 color: h.result == 'installed'
-                    ? Colors.green.shade700
+                    ? context.moneyColors.positive
                     : theme.colorScheme.error,
               ),
               title: Text(

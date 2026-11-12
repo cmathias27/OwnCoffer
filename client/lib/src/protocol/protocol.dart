@@ -105,6 +105,7 @@ import 'forecast_day.dart' as _ids0ngao;
 import 'forecast_event_info.dart' as _iuscnr1n;
 import 'forecast_result.dart' as _idemr8ki;
 import 'frequency.dart' as _ixycnzxw;
+import 'global_search_result.dart' as _i9m2w48w;
 import 'goal.dart' as _ibqaulxu;
 import 'group_member.dart' as _igiek2ee;
 import 'group_membership.dart' as _i54nduyh;
@@ -226,6 +227,7 @@ export 'forecast_day.dart';
 export 'forecast_event_info.dart';
 export 'forecast_result.dart';
 export 'frequency.dart';
+export 'global_search_result.dart';
 export 'goal.dart';
 export 'group_member.dart';
 export 'group_membership.dart';
@@ -470,6 +472,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ixycnzxw.ScheduleFrequency) {
       return _ixycnzxw.ScheduleFrequency.fromJson(data) as T;
+    }
+    if (t == _i9m2w48w.GlobalSearchResult) {
+      return _i9m2w48w.GlobalSearchResult.fromJson(data) as T;
     }
     if (t == _ibqaulxu.Goal) {
       return _ibqaulxu.Goal.fromJson(data) as T;
@@ -860,6 +865,10 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _ixycnzxw.ScheduleFrequency.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_i9m2w48w.GlobalSearchResult?>()) {
+      return (data != null ? _i9m2w48w.GlobalSearchResult.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_ibqaulxu.Goal?>()) {
       return (data != null ? _ibqaulxu.Goal.fromJson(data) : null) as T;
     }
@@ -1223,6 +1232,22 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_i0mjlwv3.BankTransaction>) {
+      return (data as List)
+              .map((e) => deserialize<_i0mjlwv3.BankTransaction>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i7jednjp.Loan>) {
+      return (data as List).map((e) => deserialize<_i7jednjp.Loan>(e)).toList()
+          as T;
+    }
+    if (t == List<_im7mm4oj.InvoiceInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_im7mm4oj.InvoiceInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_iso7nf03.ImportIssueInfo>) {
       return (data as List)
               .map((e) => deserialize<_iso7nf03.ImportIssueInfo>(e))
@@ -1247,12 +1272,6 @@ class Protocol extends _isc.SerializationManager {
     if (t == List<_ip53xvp1.FeeLine>) {
       return (data as List)
               .map((e) => deserialize<_ip53xvp1.FeeLine>(e))
-              .toList()
-          as T;
-    }
-    if (t == List<_i0mjlwv3.BankTransaction>) {
-      return (data as List)
-              .map((e) => deserialize<_i0mjlwv3.BankTransaction>(e))
               .toList()
           as T;
     }
@@ -1621,6 +1640,7 @@ class Protocol extends _isc.SerializationManager {
       _iuscnr1n.ForecastEventInfo => 'ForecastEventInfo',
       _idemr8ki.ForecastResult => 'ForecastResult',
       _ixycnzxw.ScheduleFrequency => 'ScheduleFrequency',
+      _i9m2w48w.GlobalSearchResult => 'GlobalSearchResult',
       _ibqaulxu.Goal => 'Goal',
       _igiek2ee.GroupMember => 'GroupMember',
       _i54nduyh.GroupMembership => 'GroupMembership',
@@ -1800,6 +1820,8 @@ class Protocol extends _isc.SerializationManager {
         return 'ForecastResult';
       case _ixycnzxw.ScheduleFrequency():
         return 'ScheduleFrequency';
+      case _i9m2w48w.GlobalSearchResult():
+        return 'GlobalSearchResult';
       case _ibqaulxu.Goal():
         return 'Goal';
       case _igiek2ee.GroupMember():
@@ -2107,6 +2129,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'ScheduleFrequency') {
       return deserialize<_ixycnzxw.ScheduleFrequency>(data['data']);
+    }
+    if (dataClassName == 'GlobalSearchResult') {
+      return deserialize<_i9m2w48w.GlobalSearchResult>(data['data']);
     }
     if (dataClassName == 'Goal') {
       return deserialize<_ibqaulxu.Goal>(data['data']);

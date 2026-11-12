@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../l10n/app_localizations.dart';
+import '../theme/app_theme.dart';
 import '../util/format.dart';
 
 /// Backups kept on the host: state of the nightly one, a backup on demand,
@@ -76,7 +77,7 @@ class AdminBackupsView extends StatelessWidget {
     Widget status(bool bad, String text) => ListTile(
       leading: Icon(
         bad ? Icons.error_outline : Icons.check_circle_outline,
-        color: bad ? theme.colorScheme.error : Colors.green.shade700,
+        color: bad ? theme.colorScheme.error : context.moneyColors.positive,
       ),
       title: Text(
         text,

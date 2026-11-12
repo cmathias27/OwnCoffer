@@ -44,5 +44,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0038](0038-hors-ligne-saisie.md) | Hors-ligne : saisie sans réseau et envoi au retour du serveur | Décidé |
 | [0039](0039-recadrage-automatique-des-tickets.md) | Recadrage automatique des tickets, sur l'appareil | Décidé |
 | [0040](0040-credit-rapproche-des-prelevements.md) | Crédit rapproché des prélèvements réels | Décidé |
+| [0041](0041-refonte-de-l-interface.md) | Refonte de l'interface : rubriques, recherche globale, Mon conseiller en avant | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.

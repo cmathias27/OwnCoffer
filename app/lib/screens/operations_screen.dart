@@ -5,7 +5,9 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
+import '../state/ui_prefs.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/soft.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../util/offline.dart';
@@ -23,20 +25,69 @@ class OperationsScreen extends StatefulWidget {
   final List<Account> accounts;
   final Account? initialAccount;
 
+  /// Opened from elsewhere for one purpose (search, filter, new operation).
+  final OperationsIntent? intent;
+
   const OperationsScreen({
     super.key,
     required this.membership,
     required this.accounts,
     this.initialAccount,
+    this.intent,
   });
 
   @override
   State<OperationsScreen> createState() => _OperationsScreenState();
 }
 
+/// Why the operations are opened: a search, the operations to classify,
+/// the subscriptions, or a new operation to enter at once.
+class OperationsIntent {
+  final String? search;
+  final bool toClassify;
+  final bool subscriptions;
+  final bool add;
+  const OperationsIntent({
+    this.search,
+    this.toClassify = false,
+    this.subscriptions = false,
+    this.add = false,
+  });
+}
+
+/// The remembered filters (decision 0041, point 20), kept on the device as
+/// `toClassify,uncleared,subscriptions,category`.
+({bool toClassify, bool uncleared, bool subscriptions, int? category})
+decodeOperationFilters(String s) {
+  final parts = s.split(',');
+  bool on(int i) => parts.length > i && parts[i] == '1';
+  return (
+    toClassify: on(0),
+    uncleared: on(1),
+    subscriptions: on(2),
+    category: parts.length > 3 ? int.tryParse(parts[3]) : null,
+  );
+}
+
+String encodeOperationFilters({
+  required bool toClassify,
+  required bool uncleared,
+  required bool subscriptions,
+  int? category,
+}) => [
+  toClassify ? '1' : '0',
+  uncleared ? '1' : '0',
+  subscriptions ? '1' : '0',
+  category?.toString() ?? '',
+].join(',');
+
 class _OperationsScreenState extends State<OperationsScreen> {
   static const _page = 100;
-  late Account? _account = widget.initialAccount ?? widget.accounts.firstOrNull;
+  // The account opened last on this device (decision 0041, point 9).
+  late Account? _account =
+      widget.initialAccount ??
+      widget.accounts.where((a) => a.id == uiPrefs.accountId).firstOrNull ??
+      widget.accounts.firstOrNull;
   final _search = TextEditingController();
   Timer? _debounce;
   var _toClassify = false;
@@ -67,7 +118,26 @@ class _OperationsScreenState extends State<OperationsScreen> {
   @override
   void initState() {
     super.initState();
-    _loadCategories();
+    final intent = widget.intent;
+    if (intent != null) {
+      _search.text = intent.search ?? '';
+      _toClassify = intent.toClassify;
+      _subscriptionsOnly = intent.subscriptions;
+    } else {
+      final f = decodeOperationFilters(uiPrefs.operationFilters);
+      _toClassify = f.toClassify;
+      _uncleared = f.uncleared;
+      _subscriptionsOnly = f.subscriptions;
+      _categoryFilter = f.toClassify ? null : f.category;
+    }
+    if (intent?.add ?? false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await _loadCategories();
+        if (mounted && _account != null && _canWrite) await _add();
+      });
+    } else {
+      _loadCategories();
+    }
     _reload();
     // Operations entered offline reached the server.
     outbox.sent.addListener(_reload);
@@ -92,7 +162,52 @@ class _OperationsScreenState extends State<OperationsScreen> {
     if (mounted) setState(() => _categories = {for (final c in list) c.id!: c});
   }
 
+  bool get _filtered =>
+      _search.text.trim().isNotEmpty ||
+      _toClassify ||
+      _uncleared ||
+      _subscriptionsOnly ||
+      _categoryFilter != null;
+
+  /// Nothing to show: either the filters hide everything, or the account
+  /// has no operation yet (decision 0041, point 13).
+  Widget _empty(AppLocalizations l, Account? account) => _filtered
+      ? EmptyState(
+          icon: Icons.filter_alt_off_outlined,
+          text: l.emptyOperationsFiltered,
+          actionLabel: l.emptyClearFilters,
+          onAction: _clearFilters,
+        )
+      : EmptyState(
+          icon: Icons.receipt_long_outlined,
+          text: l.operationsEmpty,
+          hint: l.emptyOperationsHint,
+          actionLabel: _canWrite && account != null ? l.operationAdd : null,
+          onAction: _canWrite && account != null ? _add : null,
+        );
+
+  void _clearFilters() {
+    _search.clear();
+    setState(() {
+      _toClassify = false;
+      _uncleared = false;
+      _subscriptionsOnly = false;
+      _categoryFilter = null;
+    });
+    _reload();
+  }
+
   Future<void> _reload() async {
+    unawaited(
+      uiPrefs.setOperationFilters(
+        encodeOperationFilters(
+          toClassify: _toClassify,
+          uncleared: _uncleared,
+          subscriptions: _subscriptionsOnly,
+          category: _categoryFilter,
+        ),
+      ),
+    );
     _items.clear();
     _withInvoices.clear();
     _total = 0;
@@ -283,6 +398,69 @@ class _OperationsScreenState extends State<OperationsScreen> {
     if (mounted) await _reload();
   }
 
+  /// Swipe right: the category at once, with undo.
+  Future<void> _classify(BankTransaction t) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final choice = await showCategoryPicker(
+      context,
+      categories: _categories.values.toList(),
+      selected: t.categoryId,
+    );
+    if (choice == null || !mounted || choice.id == t.categoryId) return;
+    try {
+      final saved = await client.transaction.setCategory(t.id!, choice.id);
+      if (!mounted) return;
+      _classified(saved);
+      showUndo(
+        messenger,
+        l,
+        l.categoryChanged,
+        () => client.transaction.setCategory(t.id!, t.categoryId),
+        after: () {
+          if (mounted) _reload();
+        },
+      );
+    } on Object catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(errorText(l, e))));
+    }
+  }
+
+  void _classified(BankTransaction t) => setState(() {
+    final i = _items.indexWhere((x) => x.id == t.id);
+    // Classified: no longer in the operations to classify.
+    if (i >= 0) {
+      if (_toClassify && t.categoryId != null) {
+        _items.removeAt(i);
+        _total--;
+      } else {
+        _items[i] = t;
+      }
+    }
+  });
+
+  Widget _swipeBackground(
+    BuildContext context,
+    IconData icon,
+    String label,
+    Alignment alignment,
+  ) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      color: scheme.secondaryContainer,
+      alignment: alignment,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: scheme.onSecondaryContainer),
+          const SizedBox(width: 8),
+          Text(label, style: TextStyle(color: scheme.onSecondaryContainer)),
+        ],
+      ),
+    );
+  }
+
   Future<void> _add() async {
     final saved = await showDialog<bool>(
       context: context,
@@ -330,6 +508,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
                           (a) => a.id == id,
                         ),
                       );
+                      unawaited(uiPrefs.setAccountId(id));
                       _reload();
                     },
                   ),
@@ -475,7 +654,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
             child: _error != null
                 ? Center(child: Text(_error!))
                 : _items.isEmpty && !_loading
-                ? Center(child: Text(l.operationsEmpty))
+                ? _empty(l, account)
                 : ListView.builder(
                     padding: const EdgeInsets.only(bottom: 96),
                     itemCount: _items.length + 1,
@@ -504,7 +683,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
                       final diff = isRise
                           ? (op.amountCents.abs() - sub.amountCents.abs())
                           : null;
-                      return OperationTile(
+                      final tile = OperationTile(
                         selected: _selected.isEmpty
                             ? null
                             : _selected.contains(op.id),
@@ -520,6 +699,35 @@ class _OperationsScreenState extends State<OperationsScreen> {
                         currency: account?.currency ?? 'EUR',
                         onTap: () =>
                             _selected.isEmpty ? _open(op) : _select(op),
+                      );
+                      if (!_canWrite ||
+                          _selected.isNotEmpty ||
+                          MediaQuery.sizeOf(context).width >= 600) {
+                        return tile;
+                      }
+                      return Dismissible(
+                        key: ValueKey('swipe-${op.id}'),
+                        confirmDismiss: (direction) async {
+                          if (direction == DismissDirection.startToEnd) {
+                            await _classify(op);
+                          } else {
+                            await _open(op);
+                          }
+                          return false;
+                        },
+                        background: _swipeBackground(
+                          context,
+                          Icons.label_outline,
+                          l.classifyNow,
+                          Alignment.centerLeft,
+                        ),
+                        secondaryBackground: _swipeBackground(
+                          context,
+                          Icons.open_in_new,
+                          l.swipeOpen,
+                          Alignment.centerRight,
+                        ),
+                        child: tile,
                       );
                     },
                   ),

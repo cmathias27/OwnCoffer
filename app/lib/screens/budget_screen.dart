@@ -4,11 +4,14 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
+import '../state/ui_prefs.dart';
+import '../widgets/period_bar.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/undo.dart';
+import '../widgets/why.dart';
 import '../widgets/category_field.dart';
 import '../widgets/operation_sheet.dart';
 import '../widgets/operation_tile.dart';
@@ -99,14 +102,20 @@ class BudgetScreen extends StatefulWidget {
 }
 
 class BudgetScreenState extends State<BudgetScreen> {
-  var _period = BudgetPeriod.month;
-  var _date = todayUtcMidnight();
+  // The period shared with the other screens (decision 0041, point 8).
+  late SharedPeriod? _shared = uiPrefs.period;
+  late var _period = sharedPeriodRange(uiPrefs.period, todayUtcMidnight()).$1;
+  late var _date = sharedPeriodRange(uiPrefs.period, todayUtcMidnight()).$2;
   int? _accountId;
   SpendingReport? _report;
   LeftToLiveReport? _left;
   Map<int, Category> _categories = {};
   final Set<int> _expanded = {};
   var _view = SpendingView.pie;
+
+  /// The categories and the history are folded behind « Voir le détail »
+  /// (decision 0041, point 9).
+  var _detail = false;
 
   /// Periods in the history (charts).
   var _periods = 6;
@@ -167,7 +176,19 @@ class BudgetScreenState extends State<BudgetScreen> {
     final d = n < 0
         ? r.start.subtract(const Duration(days: 1))
         : r.last.add(const Duration(days: 1));
-    setState(() => _date = d);
+    setState(() => (_date = d, _shared = null));
+    reload();
+  }
+
+  void _useShared(SharedPeriod p) {
+    final (period, date) = sharedPeriodRange(p, todayUtcMidnight());
+    setState(() {
+      _shared = p;
+      _period = period;
+      _date = date;
+      _expanded.clear();
+      _drill.clear();
+    });
     reload();
   }
 
@@ -398,6 +419,27 @@ class BudgetScreenState extends State<BudgetScreen> {
       ],
       if (_period == BudgetPeriod.month) ...[gap, _goals(context, l, r)],
       gap,
+      Center(
+        child: TextButton.icon(
+          key: const Key('budget-detail'),
+          onPressed: () => setState(() => _detail = !_detail),
+          icon: Icon(_detail ? Icons.expand_less : Icons.expand_more),
+          label: Text(_detail ? l.budgetHideDetail : l.budgetShowDetail),
+        ),
+      ),
+      if (_detail) ..._detailCards(context, l, r),
+    ];
+  }
+
+  /// The categories of the period and the history.
+  List<Widget> _detailCards(
+    BuildContext context,
+    AppLocalizations l,
+    SpendingReport r,
+  ) {
+    const gap = SizedBox(height: 16);
+    return [
+      gap,
       _viewBar(context, l),
       gap,
       _ranking(context, l, r, CategoryKind.expense),
@@ -441,6 +483,11 @@ class BudgetScreenState extends State<BudgetScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: PeriodBar(selected: _shared, onChanged: _useShared),
+        ),
+        const SizedBox(height: 8),
         Wrap(
           spacing: 12,
           runSpacing: 8,
@@ -471,6 +518,7 @@ class BudgetScreenState extends State<BudgetScreen> {
               onSelectionChanged: (s) {
                 setState(() {
                   _period = s.single;
+                  _shared = null;
                   _expanded.clear();
                   _drill.clear();
                 });
@@ -1388,6 +1436,23 @@ class BalanceCard extends StatelessWidget {
                   ),
               ],
             ),
+            const SizedBox(height: 4),
+            WhyButton(
+              key: const Key('why-net'),
+              title: l.budgetNet,
+              lines: [
+                WhyLine(l.budgetIncome, r.incomeCents),
+                WhyLine(l.budgetExpenses, -r.expenseCents),
+                WhyLine(l.budgetSavings, -r.savingsCents),
+                WhyLine(l.budgetNet, r.netCents, total: true),
+                if (r.unclassifiedCount > 0)
+                  WhyLine.text(
+                    l.whyNetUnclassified,
+                    '${r.unclassifiedCount}',
+                  ),
+              ],
+              explanation: l.whyNetText,
+            ),
           ],
         ),
       ),
@@ -1528,6 +1593,29 @@ class LeftToLiveCard extends StatelessWidget {
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onPrimaryContainer,
               ),
+            ),
+            WhyButton(
+              key: const Key('why-left'),
+              color: theme.colorScheme.onPrimaryContainer,
+              title: l.leftToLiveTitle,
+              lines: [
+                WhyLine(l.whyLeftBalance, r.balanceCents),
+                WhyLine(
+                  l.whyLeftDebits(context.day(r.last)),
+                  r.plannedDebitsCents,
+                ),
+                WhyLine(
+                  l.whyLeftCredits(context.day(r.last)),
+                  r.plannedCreditsCents,
+                ),
+                WhyLine(l.leftToLiveTitle, r.leftCents, total: true),
+                WhyLine.text(
+                  l.whyLeftDays,
+                  '${r.daysLeft}',
+                ),
+                WhyLine(l.whyLeftPerDay, r.perDayCents, total: true),
+              ],
+              explanation: l.leftToLiveHelp,
             ),
           ],
         ),

@@ -10,6 +10,8 @@ La cloche en haut de l'écran réunit ce qu'OwnCoffer veut vous signaler ; le no
 
 Chaque alerte n'est envoyée qu'une fois pour le même seuil et la même période, et ne porte que sur les comptes que vous voyez.
 
+Les **filtres** en haut de la liste trient par famille : **alertes** (découvert, objectifs atteints ou dépassés), **conseils** (dépassement annoncé, fin de garantie) et **système** (sessions, appareils).
+
 ## Choisir ce qu'on reçoit
 
 Le bouton **réglages** de la page Notifications ouvre vos choix, pour chaque alerte : **dans l'application**, et **aussi par courriel** quand elle peut l'être (découvert, garantie). Pour les objectifs, chaque seuil se coupe à part : 80 %, dépassé, dépassement annoncé. Ces réglages ne valent que pour vous.

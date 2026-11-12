@@ -63,6 +63,7 @@ import '../endpoints/pepite_endpoint.dart' as _iagql2g7;
 import '../endpoints/presence_endpoint.dart' as _iol1r7pe;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
+import '../endpoints/search_endpoint.dart' as _ipmmezh5;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
 import '../endpoints/transaction_endpoint.dart' as _iyokctnp;
 import '../endpoints/transfer_endpoint.dart' as _ikqanwsd;
@@ -214,6 +215,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'scheduled',
+          null,
+        ),
+      'search': _ipmmezh5.SearchEndpoint()
+        ..initialize(
+          server,
+          'search',
           null,
         ),
       'setup': _i5xhv8r1.SetupEndpoint()
@@ -4485,6 +4492,37 @@ class Endpoints extends _is.EndpointDispatch {
                     params['scheduledId'],
                     params['dueDate'],
                     params['transactionId'],
+                  ),
+        ),
+      },
+    );
+    connectors['search'] = _is.EndpointConnector(
+      name: 'search',
+      endpoint: endpoints['search']!,
+      methodConnectors: {
+        'global': _is.MethodConnector(
+          name: 'global',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'query': _is.ParameterDescription(
+              name: 'query',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['search'] as _ipmmezh5.SearchEndpoint).global(
+                    session,
+                    params['groupId'],
+                    params['query'],
                   ),
         ),
       },

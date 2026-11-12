@@ -4,6 +4,8 @@ The Budget shows where the money goes over a period: week, month, quarter or yea
 
 ## The page, from top to bottom
 
+At the top, the **period bar**: this month, last month or this year, kept on this device; the menu next to it also offers the week and the quarter. The month view comes first; **"Show the detail"** opens the analysis (views, rankings, history). **"Why this figure?"** shows the calculation of the summary and of the left to live on.
+
 - **Summary**: income, spending, savings and what is left, compared with the previous period.
 - **Left to live on** until the next pay, and per day.
 - **Operations to classify**, with a button to classify them.

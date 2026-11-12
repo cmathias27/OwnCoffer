@@ -965,7 +965,7 @@ abstract class AppLocalizations {
   /// No description provided for @navForecast.
   ///
   /// In fr, this message translates to:
-  /// **'Prévisions'**
+  /// **'Solde prévu'**
   String get navForecast;
 
   /// No description provided for @navCategories.
@@ -2260,7 +2260,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifOpenForecast.
   ///
   /// In fr, this message translates to:
-  /// **'Voir les prévisions'**
+  /// **'Voir le solde prévu'**
   String get notifOpenForecast;
 
   /// No description provided for @importAccountRecognised.
@@ -6355,7 +6355,7 @@ abstract class AppLocalizations {
   /// No description provided for @dashboardSeeForecast.
   ///
   /// In fr, this message translates to:
-  /// **'Voir les prévisions'**
+  /// **'Voir le solde prévu'**
   String get dashboardSeeForecast;
 
   /// No description provided for @dashboardMonthSpending.
@@ -11934,6 +11934,774 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Reprendre la photo'**
   String get scanRetake;
+
+  /// No description provided for @navMoney.
+  ///
+  /// In fr, this message translates to:
+  /// **'Argent'**
+  String get navMoney;
+
+  /// No description provided for @navPlan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévoir'**
+  String get navPlan;
+
+  /// No description provided for @navPapers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Papiers'**
+  String get navPapers;
+
+  /// No description provided for @navAdvisor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conseiller'**
+  String get navAdvisor;
+
+  /// No description provided for @breadcrumbLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous êtes ici : {path}'**
+  String breadcrumbLabel(String path);
+
+  /// No description provided for @addScanReceipt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner un ticket'**
+  String get addScanReceipt;
+
+  /// No description provided for @addImportStatement.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un relevé'**
+  String get addImportStatement;
+
+  /// No description provided for @addMenuTooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get addMenuTooltip;
+
+  /// No description provided for @addChooseAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur quel compte ?'**
+  String get addChooseAccount;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsDisplay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affichage'**
+  String get settingsDisplay;
+
+  /// No description provided for @settingsSimpleMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode simple'**
+  String get settingsSimpleMode;
+
+  /// No description provided for @settingsSimpleModeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masque les fonctions avancées : règles, administration, analyses détaillées.'**
+  String get settingsSimpleModeHelp;
+
+  /// No description provided for @settingsLargeText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Grand texte'**
+  String get settingsLargeText;
+
+  /// No description provided for @settingsHighContrast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contraste élevé'**
+  String get settingsHighContrast;
+
+  /// No description provided for @settingsHousehold.
+  ///
+  /// In fr, this message translates to:
+  /// **'Foyer'**
+  String get settingsHousehold;
+
+  /// No description provided for @settingsCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories et règles'**
+  String get settingsCategories;
+
+  /// No description provided for @settingsApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'application'**
+  String get settingsApp;
+
+  /// No description provided for @shortcutsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Raccourcis clavier'**
+  String get shortcutsTitle;
+
+  /// No description provided for @shortcutSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher partout'**
+  String get shortcutSearch;
+
+  /// No description provided for @shortcutNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une opération'**
+  String get shortcutNew;
+
+  /// No description provided for @shortcutSections.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir une rubrique (Accueil … Conseiller)'**
+  String get shortcutSections;
+
+  /// No description provided for @shortcutHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher ces raccourcis'**
+  String get shortcutHelp;
+
+  /// No description provided for @globalSearchOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher'**
+  String get globalSearchOpen;
+
+  /// No description provided for @globalSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération, créancier, fonction…'**
+  String get globalSearchHint;
+
+  /// No description provided for @globalSearchClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer'**
+  String get globalSearchClear;
+
+  /// No description provided for @globalSearchIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cherchez une opération, un crédit, une facture ou une fonction de l\'application.'**
+  String get globalSearchIntro;
+
+  /// No description provided for @globalSearchOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors ligne : seules les fonctions de l\'application sont cherchées.'**
+  String get globalSearchOffline;
+
+  /// No description provided for @globalSearchNothing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien trouvé pour « {query} ».'**
+  String globalSearchNothing(String query);
+
+  /// No description provided for @globalSearchFunctions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fonctions'**
+  String get globalSearchFunctions;
+
+  /// No description provided for @advisorNewBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 nouveau conseil} other{{count} nouveaux conseils}}'**
+  String advisorNewBadge(int count);
+
+  /// No description provided for @searchKwHome.
+  ///
+  /// In fr, this message translates to:
+  /// **'accueil, tableau de bord, résumé, tout va bien'**
+  String get searchKwHome;
+
+  /// No description provided for @searchKwAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'comptes, solde, banque, livret'**
+  String get searchKwAccounts;
+
+  /// No description provided for @searchKwOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'opérations, transactions, dépenses, mouvements, relevé'**
+  String get searchKwOperations;
+
+  /// No description provided for @searchKwToClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'classer, non classées, catégoriser'**
+  String get searchKwToClassify;
+
+  /// No description provided for @searchKwForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'prévisions, solde prévu, avenir, découvert, échéances'**
+  String get searchKwForecast;
+
+  /// No description provided for @searchKwBudget.
+  ///
+  /// In fr, this message translates to:
+  /// **'budget, objectifs, dépenses du mois, reste à vivre'**
+  String get searchKwBudget;
+
+  /// No description provided for @searchKwSubscriptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'abonnements, prélèvements, hausse de prix'**
+  String get searchKwSubscriptions;
+
+  /// No description provided for @searchKwLoans.
+  ///
+  /// In fr, this message translates to:
+  /// **'crédits, prêts, emprunt, échéancier, créancier'**
+  String get searchKwLoans;
+
+  /// No description provided for @searchKwInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'factures, garanties, justificatifs, documents'**
+  String get searchKwInvoices;
+
+  /// No description provided for @searchKwScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'scanner, ticket, photo, caisse'**
+  String get searchKwScan;
+
+  /// No description provided for @searchKwImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'importer, relevé, fichier, qif, ofx, csv'**
+  String get searchKwImport;
+
+  /// No description provided for @searchKwAdvisor.
+  ///
+  /// In fr, this message translates to:
+  /// **'conseiller, conseils, propositions, économies'**
+  String get searchKwAdvisor;
+
+  /// No description provided for @searchKwNewOperation.
+  ///
+  /// In fr, this message translates to:
+  /// **'nouvelle opération, ajouter, saisir, dépense'**
+  String get searchKwNewOperation;
+
+  /// No description provided for @searchKwCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'catégories, classement'**
+  String get searchKwCategories;
+
+  /// No description provided for @searchKwRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'règles, classement automatique'**
+  String get searchKwRules;
+
+  /// No description provided for @searchKwNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'notifications, alertes, cloche'**
+  String get searchKwNotifications;
+
+  /// No description provided for @searchKwSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'récapitulatif, mois, bilan'**
+  String get searchKwSummary;
+
+  /// No description provided for @searchKwStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'premiers pas, démarrer, guide'**
+  String get searchKwStart;
+
+  /// No description provided for @searchKwExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'exporter, sauvegarde, télécharger'**
+  String get searchKwExport;
+
+  /// No description provided for @searchKwMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'membres, foyer, inviter, partage'**
+  String get searchKwMembers;
+
+  /// No description provided for @searchKwSecurity.
+  ///
+  /// In fr, this message translates to:
+  /// **'sécurité, mot de passe, double authentification, sessions'**
+  String get searchKwSecurity;
+
+  /// No description provided for @searchKwAssistant.
+  ///
+  /// In fr, this message translates to:
+  /// **'assistant, ia, intelligence artificielle, modèle'**
+  String get searchKwAssistant;
+
+  /// No description provided for @searchKwApps.
+  ///
+  /// In fr, this message translates to:
+  /// **'applications, android, windows, téléphone'**
+  String get searchKwApps;
+
+  /// No description provided for @searchKwPepite.
+  ///
+  /// In fr, this message translates to:
+  /// **'pépite, mascotte, badges'**
+  String get searchKwPepite;
+
+  /// No description provided for @searchKwDisplay.
+  ///
+  /// In fr, this message translates to:
+  /// **'affichage, mode simple, grand texte, contraste'**
+  String get searchKwDisplay;
+
+  /// No description provided for @searchKwHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'aide, mode d\'emploi, comment'**
+  String get searchKwHelp;
+
+  /// No description provided for @searchKwShortcuts.
+  ///
+  /// In fr, this message translates to:
+  /// **'raccourcis, clavier, touches'**
+  String get searchKwShortcuts;
+
+  /// No description provided for @searchKwFeedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'avis, signaler, bug, suggestion'**
+  String get searchKwFeedback;
+
+  /// No description provided for @searchKwAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'administration, serveur, mises à jour, sauvegardes'**
+  String get searchKwAdmin;
+
+  /// No description provided for @swipeOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir'**
+  String get swipeOpen;
+
+  /// No description provided for @homeAllGood.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout va bien : rien d\'urgent à regarder.'**
+  String get homeAllGood;
+
+  /// No description provided for @homeIssuesCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 point à regarder} other{{count} points à regarder}}'**
+  String homeIssuesCount(int count);
+
+  /// No description provided for @homeIssueOverdrawn.
+  ///
+  /// In fr, this message translates to:
+  /// **'{account} est à découvert : {amount}'**
+  String homeIssueOverdrawn(String account, String amount);
+
+  /// No description provided for @homeIssueWillOverdraw.
+  ///
+  /// In fr, this message translates to:
+  /// **'{account} passerait à découvert le {date}'**
+  String homeIssueWillOverdraw(String account, String date);
+
+  /// No description provided for @homeIssueToClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération du mois à classer} other{{count} opérations du mois à classer}}'**
+  String homeIssueToClassify(int count);
+
+  /// No description provided for @homeGoodTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 chose qui va bien} other{{count} choses qui vont bien}}'**
+  String homeGoodTitle(int count);
+
+  /// No description provided for @homeGoodNoOverdraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun découvert prévu dans les 30 jours'**
+  String get homeGoodNoOverdraft;
+
+  /// No description provided for @homeGoodClassified.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les opérations du mois sont classées'**
+  String get homeGoodClassified;
+
+  /// No description provided for @homeGoodNoNotification.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune notification en attente'**
+  String get homeGoodNoNotification;
+
+  /// No description provided for @homeAdvicesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conseils du moment'**
+  String get homeAdvicesTitle;
+
+  /// No description provided for @homeAdvicesNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun conseil en attente pour l\'instant.'**
+  String get homeAdvicesNone;
+
+  /// No description provided for @homeAdvicesAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir tout'**
+  String get homeAdvicesAll;
+
+  /// No description provided for @homeAdvicesAllCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les {count}'**
+  String homeAdvicesAllCount(int count);
+
+  /// No description provided for @periodThisMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois'**
+  String get periodThisMonth;
+
+  /// No description provided for @periodLastMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois précédent'**
+  String get periodLastMonth;
+
+  /// No description provided for @periodThisYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette année'**
+  String get periodThisYear;
+
+  /// No description provided for @budgetShowDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir le détail'**
+  String get budgetShowDetail;
+
+  /// No description provided for @budgetHideDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer le détail'**
+  String get budgetHideDetail;
+
+  /// No description provided for @loanTabSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résumé'**
+  String get loanTabSummary;
+
+  /// No description provided for @loanTabSchedule.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéancier'**
+  String get loanTabSchedule;
+
+  /// No description provided for @loanTabOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations'**
+  String get loanTabOperations;
+
+  /// No description provided for @loanTabDocuments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Documents'**
+  String get loanTabDocuments;
+
+  /// No description provided for @loanTabSimulate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simuler'**
+  String get loanTabSimulate;
+
+  /// No description provided for @whyThisFigure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pourquoi ce chiffre ?'**
+  String get whyThisFigure;
+
+  /// No description provided for @whyTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total'**
+  String get whyTotal;
+
+  /// No description provided for @whyBalanceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde d\'aujourd\'hui'**
+  String get whyBalanceTitle;
+
+  /// No description provided for @whyBalanceText.
+  ///
+  /// In fr, this message translates to:
+  /// **'La somme des soldes connus aujourd\'hui de vos comptes en euros : le dernier relevé importé, plus les opérations enregistrées depuis. Les comptes dans une autre devise ne sont pas additionnés. Le point bas vient de la prévision : opérations prévues et échéances de crédit des 30 prochains jours.'**
+  String get whyBalanceText;
+
+  /// No description provided for @whyLeftBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde des comptes courants aujourd\'hui'**
+  String get whyLeftBalance;
+
+  /// No description provided for @whyLeftDebits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prélèvements prévus jusqu\'au {date}'**
+  String whyLeftDebits(String date);
+
+  /// No description provided for @whyLeftCredits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rentrées prévues jusqu\'au {date}'**
+  String whyLeftCredits(String date);
+
+  /// No description provided for @whyLeftDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jours restants'**
+  String get whyLeftDays;
+
+  /// No description provided for @whyLeftPerDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par jour'**
+  String get whyLeftPerDay;
+
+  /// No description provided for @whyNetUnclassified.
+  ///
+  /// In fr, this message translates to:
+  /// **'dont opérations non classées'**
+  String get whyNetUnclassified;
+
+  /// No description provided for @whyNetText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus de la période, moins les dépenses et l\'épargne mise de côté. Les virements entre vos comptes ne comptent pas. Une opération non classée compte comme revenu si c\'est une entrée, comme dépense si c\'est une sortie.'**
+  String get whyNetText;
+
+  /// No description provided for @cardHelpTooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Que montre cette carte ?'**
+  String get cardHelpTooltip;
+
+  /// No description provided for @cardHelpWatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui mérite un coup d\'œil, le plus urgent d\'abord : un compte à découvert, un découvert prévu, un compte sous son seuil d\'alerte, des opérations à classer, des notifications. Ce qui va bien est replié en dessous.'**
+  String get cardHelpWatch;
+
+  /// No description provided for @cardHelpAdvices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les conseils de « Mon conseiller » qui attendent votre réponse. Chacun montre ses chiffres et son calcul ; rien n\'est modifié sans votre accord.'**
+  String get cardHelpAdvices;
+
+  /// No description provided for @cardHelpUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations prévues et les échéances de crédit des 7 prochains jours, sur les comptes que vous voyez.'**
+  String get cardHelpUpcoming;
+
+  /// No description provided for @cardHelpTopSpending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les catégories où vous avez le plus dépensé sur la période choisie. Les virements entre vos comptes n\'en font pas partie.'**
+  String get cardHelpTopSpending;
+
+  /// No description provided for @notifFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes'**
+  String get notifFilterAll;
+
+  /// No description provided for @notifFilterAlerts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Alertes ({count})'**
+  String notifFilterAlerts(int count);
+
+  /// No description provided for @notifFilterAdvice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conseils ({count})'**
+  String notifFilterAdvice(int count);
+
+  /// No description provided for @notifFilterSystem.
+  ///
+  /// In fr, this message translates to:
+  /// **'Système ({count})'**
+  String notifFilterSystem(int count);
+
+  /// No description provided for @notifFilterEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune notification de ce type.'**
+  String get notifFilterEmpty;
+
+  /// No description provided for @emptyAccountsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un compte regroupe les opérations d\'une banque. Créez-le, puis importez un relevé pour voir votre solde et sa prévision.'**
+  String get emptyAccountsHint;
+
+  /// No description provided for @emptyOperationsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importez un relevé de votre banque (+ en haut, « Importer un relevé ») ou saisissez une opération.'**
+  String get emptyOperationsHint;
+
+  /// No description provided for @emptyOperationsFiltered.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération ne correspond à ces filtres.'**
+  String get emptyOperationsFiltered;
+
+  /// No description provided for @emptyClearFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer les filtres'**
+  String get emptyClearFilters;
+
+  /// No description provided for @emptyNotificationsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications.'**
+  String get emptyNotificationsHint;
+
+  /// No description provided for @firstStepsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Premiers pas · {done}/{total}'**
+  String firstStepsTitle(int done, int total);
+
+  /// No description provided for @firstStepsHide.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer'**
+  String get firstStepsHide;
+
+  /// No description provided for @firstStepAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un compte'**
+  String get firstStepAccount;
+
+  /// No description provided for @firstStepAccountHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Son nom, sa banque et son solde de départ suffisent.'**
+  String get firstStepAccountHelp;
+
+  /// No description provided for @firstStepImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un relevé'**
+  String get firstStepImport;
+
+  /// No description provided for @firstStepImportHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléchargez un relevé QIF, OFX ou CSV depuis votre banque, puis déposez-le ici.'**
+  String get firstStepImportHelp;
+
+  /// No description provided for @firstStepCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classer les opérations'**
+  String get firstStepCategories;
+
+  /// No description provided for @firstStepCategoriesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donnez une catégorie aux opérations non classées : OwnCoffer s\'en souviendra pour les suivantes.'**
+  String get firstStepCategoriesHelp;
+
+  /// No description provided for @homeIssueLoanMissed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une échéance de « {loan} » n\'a pas été prélevée'**
+  String homeIssueLoanMissed(String loan);
+
+  /// No description provided for @homeIssueSubscriptionRise.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} est passé de {before} à {after}'**
+  String homeIssueSubscriptionRise(String label, String before, String after);
+
+  /// No description provided for @homeIssueNewAdvices.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 nouveau conseil} other{{count} nouveaux conseils}}'**
+  String homeIssueNewAdvices(int count);
+
+  /// No description provided for @cardHelpOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir l\'aide'**
+  String get cardHelpOpen;
+
+  /// No description provided for @whyForecastToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde d\'aujourd\'hui'**
+  String get whyForecastToday;
+
+  /// No description provided for @whyForecastCredits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rentrées prévues'**
+  String get whyForecastCredits;
+
+  /// No description provided for @whyForecastDebits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prélèvements et échéances prévus'**
+  String get whyForecastDebits;
+
+  /// No description provided for @whyForecastOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses courantes estimées et autres écarts'**
+  String get whyForecastOther;
+
+  /// No description provided for @whyForecastEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde prévu le {date}'**
+  String whyForecastEnd(String date);
+
+  /// No description provided for @whyForecastText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le moteur part du solde d\'aujourd\'hui, ajoute jour par jour les opérations prévues (salaires, prélèvements, abonnements, échéances de crédit), puis l\'estimation des dépenses courantes tirée de vos derniers mois. Aucune IA n\'intervient dans ce calcul.'**
+  String get whyForecastText;
 }
 
 class _AppLocalizationsDelegate

@@ -518,7 +518,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navImport => 'Import';
 
   @override
-  String get navForecast => 'Forecast';
+  String get navForecast => 'Expected balance';
 
   @override
   String get navCategories => 'Categories';
@@ -1375,7 +1375,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifUnknown => 'Notification';
 
   @override
-  String get notifOpenForecast => 'Show the forecast';
+  String get notifOpenForecast => 'See the expected balance';
 
   @override
   String get importAccountRecognised => 'Account recognised from the file.';
@@ -3943,7 +3943,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardUpcomingNone => 'No due date in the next 7 days.';
 
   @override
-  String get dashboardSeeForecast => 'See the forecast';
+  String get dashboardSeeForecast => 'See the expected balance';
 
   @override
   String get dashboardMonthSpending => 'This month';
@@ -7553,4 +7553,476 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanRetake => 'Take it again';
+
+  @override
+  String get navMoney => 'Money';
+
+  @override
+  String get navPlan => 'Plan';
+
+  @override
+  String get navPapers => 'Papers';
+
+  @override
+  String get navAdvisor => 'Advisor';
+
+  @override
+  String breadcrumbLabel(String path) {
+    return 'You are here: $path';
+  }
+
+  @override
+  String get addScanReceipt => 'Scan a receipt';
+
+  @override
+  String get addImportStatement => 'Import a statement';
+
+  @override
+  String get addMenuTooltip => 'Add';
+
+  @override
+  String get addChooseAccount => 'Which account?';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsDisplay => 'Display';
+
+  @override
+  String get settingsSimpleMode => 'Simple mode';
+
+  @override
+  String get settingsSimpleModeHelp =>
+      'Hides the advanced features: rules, administration, detailed analyses.';
+
+  @override
+  String get settingsLargeText => 'Large text';
+
+  @override
+  String get settingsHighContrast => 'High contrast';
+
+  @override
+  String get settingsHousehold => 'Household';
+
+  @override
+  String get settingsCategories => 'Categories and rules';
+
+  @override
+  String get settingsApp => 'The app';
+
+  @override
+  String get shortcutsTitle => 'Keyboard shortcuts';
+
+  @override
+  String get shortcutSearch => 'Search everywhere';
+
+  @override
+  String get shortcutNew => 'Add an operation';
+
+  @override
+  String get shortcutSections => 'Open a section (Home … Advisor)';
+
+  @override
+  String get shortcutHelp => 'Show these shortcuts';
+
+  @override
+  String get globalSearchOpen => 'Search';
+
+  @override
+  String get globalSearchHint => 'Operation, creditor, feature…';
+
+  @override
+  String get globalSearchClear => 'Clear';
+
+  @override
+  String get globalSearchIntro =>
+      'Look for an operation, a loan, an invoice or a feature of the app.';
+
+  @override
+  String get globalSearchOffline =>
+      'Offline: only the features of the app are searched.';
+
+  @override
+  String globalSearchNothing(String query) {
+    return 'Nothing found for \"$query\".';
+  }
+
+  @override
+  String get globalSearchFunctions => 'Features';
+
+  @override
+  String advisorNewBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new advices',
+      one: '1 new advice',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchKwHome => 'home, dashboard, overview, all good';
+
+  @override
+  String get searchKwAccounts => 'accounts, balance, bank, savings';
+
+  @override
+  String get searchKwOperations =>
+      'operations, transactions, expenses, movements, statement';
+
+  @override
+  String get searchKwToClassify => 'classify, unclassified, categorise';
+
+  @override
+  String get searchKwForecast =>
+      'forecast, expected balance, future, overdraft, scheduled';
+
+  @override
+  String get searchKwBudget => 'budget, goals, monthly spending, left to live';
+
+  @override
+  String get searchKwSubscriptions =>
+      'subscriptions, direct debits, price rise';
+
+  @override
+  String get searchKwLoans => 'loans, borrowing, schedule, lender, creditor';
+
+  @override
+  String get searchKwInvoices => 'invoices, warranties, receipts, documents';
+
+  @override
+  String get searchKwScan => 'scan, receipt, photo, till';
+
+  @override
+  String get searchKwImport => 'import, statement, file, qif, ofx, csv';
+
+  @override
+  String get searchKwAdvisor => 'advisor, advice, proposals, savings';
+
+  @override
+  String get searchKwNewOperation => 'new operation, add, enter, expense';
+
+  @override
+  String get searchKwCategories => 'categories, classification';
+
+  @override
+  String get searchKwRules => 'rules, automatic classification';
+
+  @override
+  String get searchKwNotifications => 'notifications, alerts, bell';
+
+  @override
+  String get searchKwSummary => 'summary, month, review';
+
+  @override
+  String get searchKwStart => 'getting started, start, guide';
+
+  @override
+  String get searchKwExport => 'export, backup, download';
+
+  @override
+  String get searchKwMembers => 'members, household, invite, sharing';
+
+  @override
+  String get searchKwSecurity => 'security, password, two-factor, sessions';
+
+  @override
+  String get searchKwAssistant =>
+      'assistant, ai, artificial intelligence, model';
+
+  @override
+  String get searchKwApps => 'apps, android, windows, phone';
+
+  @override
+  String get searchKwPepite => 'pepite, mascot, badges';
+
+  @override
+  String get searchKwDisplay => 'display, simple mode, large text, contrast';
+
+  @override
+  String get searchKwHelp => 'help, manual, how to';
+
+  @override
+  String get searchKwShortcuts => 'shortcuts, keyboard, keys';
+
+  @override
+  String get searchKwFeedback => 'feedback, report, bug, suggestion';
+
+  @override
+  String get searchKwAdmin => 'administration, server, updates, backups';
+
+  @override
+  String get swipeOpen => 'Open';
+
+  @override
+  String get homeAllGood => 'All is well: nothing urgent to look at.';
+
+  @override
+  String homeIssuesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count things to look at',
+      one: '1 thing to look at',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeIssueOverdrawn(String account, String amount) {
+    return '$account is overdrawn: $amount';
+  }
+
+  @override
+  String homeIssueWillOverdraw(String account, String date) {
+    return '$account would be overdrawn on $date';
+  }
+
+  @override
+  String homeIssueToClassify(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations of the month to classify',
+      one: '1 operation of the month to classify',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeGoodTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count things going well',
+      one: '1 thing going well',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeGoodNoOverdraft => 'No overdraft expected in the next 30 days';
+
+  @override
+  String get homeGoodClassified => 'Every operation of the month is classified';
+
+  @override
+  String get homeGoodNoNotification => 'No notification waiting';
+
+  @override
+  String get homeAdvicesTitle => 'Current advice';
+
+  @override
+  String get homeAdvicesNone => 'No advice waiting for now.';
+
+  @override
+  String get homeAdvicesAll => 'See all';
+
+  @override
+  String homeAdvicesAllCount(int count) {
+    return 'See all $count';
+  }
+
+  @override
+  String get periodThisMonth => 'This month';
+
+  @override
+  String get periodLastMonth => 'Last month';
+
+  @override
+  String get periodThisYear => 'This year';
+
+  @override
+  String get budgetShowDetail => 'Show the detail';
+
+  @override
+  String get budgetHideDetail => 'Hide the detail';
+
+  @override
+  String get loanTabSummary => 'Summary';
+
+  @override
+  String get loanTabSchedule => 'Schedule';
+
+  @override
+  String get loanTabOperations => 'Operations';
+
+  @override
+  String get loanTabDocuments => 'Documents';
+
+  @override
+  String get loanTabSimulate => 'Simulate';
+
+  @override
+  String get whyThisFigure => 'Why this figure?';
+
+  @override
+  String get whyTotal => 'Total';
+
+  @override
+  String get whyBalanceTitle => 'Balance today';
+
+  @override
+  String get whyBalanceText =>
+      'The sum of today\'s known balances of your accounts in euros: the last imported statement, plus the operations recorded since. Accounts in another currency are not added up. The low point comes from the forecast: planned operations and loan instalments of the next 30 days.';
+
+  @override
+  String get whyLeftBalance => 'Balance of the current accounts today';
+
+  @override
+  String whyLeftDebits(String date) {
+    return 'Planned debits until $date';
+  }
+
+  @override
+  String whyLeftCredits(String date) {
+    return 'Planned credits until $date';
+  }
+
+  @override
+  String get whyLeftDays => 'Days left';
+
+  @override
+  String get whyLeftPerDay => 'Per day';
+
+  @override
+  String get whyNetUnclassified => 'of which operations not classified';
+
+  @override
+  String get whyNetText =>
+      'Income of the period, minus spending and money put aside. Transfers between your accounts do not count. An operation not classified counts as income if money came in, as spending if it went out.';
+
+  @override
+  String get cardHelpTooltip => 'What does this card show?';
+
+  @override
+  String get cardHelpWatch =>
+      'What deserves a look, the most urgent first: an overdrawn account, an expected overdraft, an account below its alert threshold, operations to classify, notifications. What goes well is folded below.';
+
+  @override
+  String get cardHelpAdvices =>
+      'The advice of « My advisor » waiting for your answer. Each one shows its figures and its calculation; nothing is changed without your consent.';
+
+  @override
+  String get cardHelpUpcoming =>
+      'The planned operations and loan instalments of the next 7 days, on the accounts you can see.';
+
+  @override
+  String get cardHelpTopSpending =>
+      'The categories where you spent the most over the chosen period. Transfers between your accounts are not part of it.';
+
+  @override
+  String get notifFilterAll => 'All';
+
+  @override
+  String notifFilterAlerts(int count) {
+    return 'Alerts ($count)';
+  }
+
+  @override
+  String notifFilterAdvice(int count) {
+    return 'Advice ($count)';
+  }
+
+  @override
+  String notifFilterSystem(int count) {
+    return 'System ($count)';
+  }
+
+  @override
+  String get notifFilterEmpty => 'No notification of this kind.';
+
+  @override
+  String get emptyAccountsHint =>
+      'An account gathers the operations of one bank. Create it, then import a statement to see your balance and its forecast.';
+
+  @override
+  String get emptyOperationsHint =>
+      'Import a statement from your bank (+ at the top, « Import a statement ») or enter an operation.';
+
+  @override
+  String get emptyOperationsFiltered => 'No operation matches these filters.';
+
+  @override
+  String get emptyClearFilters => 'Clear the filters';
+
+  @override
+  String get emptyNotificationsHint =>
+      'Alerts (expected overdraft, goal exceeded) and reminders will arrive here. Choose which ones in Settings › Notifications.';
+
+  @override
+  String firstStepsTitle(int done, int total) {
+    return 'First steps · $done/$total';
+  }
+
+  @override
+  String get firstStepsHide => 'Hide';
+
+  @override
+  String get firstStepAccount => 'Create an account';
+
+  @override
+  String get firstStepAccountHelp =>
+      'Its name, its bank and its starting balance are enough.';
+
+  @override
+  String get firstStepImport => 'Import a statement';
+
+  @override
+  String get firstStepImportHelp =>
+      'Download a QIF, OFX or CSV statement from your bank, then drop it here.';
+
+  @override
+  String get firstStepCategories => 'Classify the operations';
+
+  @override
+  String get firstStepCategoriesHelp =>
+      'Give a category to the operations not classified: OwnCoffer remembers it for the next ones.';
+
+  @override
+  String homeIssueLoanMissed(String loan) {
+    return 'An instalment of « $loan » was not debited';
+  }
+
+  @override
+  String homeIssueSubscriptionRise(String label, String before, String after) {
+    return '$label went from $before to $after';
+  }
+
+  @override
+  String homeIssueNewAdvices(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new pieces of advice',
+      one: '1 new piece of advice',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHelpOpen => 'Open the help';
+
+  @override
+  String get whyForecastToday => 'Balance today';
+
+  @override
+  String get whyForecastCredits => 'Planned credits';
+
+  @override
+  String get whyForecastDebits => 'Planned debits and instalments';
+
+  @override
+  String get whyForecastOther => 'Estimated everyday spending and other gaps';
+
+  @override
+  String whyForecastEnd(String date) {
+    return 'Expected balance on $date';
+  }
+
+  @override
+  String get whyForecastText =>
+      'The engine starts from today\'s balance, adds day by day the planned operations (salaries, debits, subscriptions, loan instalments), then the estimate of everyday spending drawn from your last months. No AI takes part in this calculation.';
 }

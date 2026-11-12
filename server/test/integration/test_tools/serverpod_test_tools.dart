@@ -56,6 +56,8 @@ import 'package:owncoffer_server/src/generated/finance_group.dart' as _i6lqurfp;
 import 'package:owncoffer_server/src/generated/forecast_result.dart'
     as _isjvyxsm;
 import 'package:owncoffer_server/src/generated/frequency.dart' as _iugtcrzz;
+import 'package:owncoffer_server/src/generated/global_search_result.dart'
+    as _ifmghpmc;
 import 'package:owncoffer_server/src/generated/goal.dart' as _ix7anf6k;
 import 'package:owncoffer_server/src/generated/group_member.dart' as _iep4djhw;
 import 'package:owncoffer_server/src/generated/group_membership.dart'
@@ -319,6 +321,8 @@ class TestEndpoints {
 
   late final _ScheduledEndpoint scheduled;
 
+  late final _SearchEndpoint search;
+
   late final _SetupEndpoint setup;
 
   late final _TransactionEndpoint transaction;
@@ -428,6 +432,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     scheduled = _ScheduledEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    search = _SearchEndpoint(
       endpoints,
       serializationManager,
     );
@@ -6492,6 +6500,52 @@ class _ScheduledEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _SearchEndpoint {
+  _SearchEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<_ifmghpmc.GlobalSearchResult> global(
+    _ist.TestSessionBuilder sessionBuilder,
+    int groupId,
+    String query,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'search',
+            method: 'global',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'search',
+          methodName: 'global',
+          parameters: _ist.testObjectToJson({
+            'groupId': groupId,
+            'query': query,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ifmghpmc.GlobalSearchResult>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
