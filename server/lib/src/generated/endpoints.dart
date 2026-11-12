@@ -2924,6 +2924,24 @@ class Endpoints extends _is.EndpointDispatch {
                     params['loanId'],
                   ),
         ),
+        'check': _is.MethodConnector(
+          name: 'check',
+          params: {
+            'loanId': _is.ParameterDescription(
+              name: 'loanId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['loan'] as _imitaxsf.LoanEndpoint).check(
+                session,
+                params['loanId'],
+              ),
+        ),
         'documents': _is.MethodConnector(
           name: 'documents',
           params: {

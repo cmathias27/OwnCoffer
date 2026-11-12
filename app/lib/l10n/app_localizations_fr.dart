@@ -2447,6 +2447,59 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String loanCheckAllPaid(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Les $count échéances des relevés importés ont bien été prélevées.',
+      one: 'L\'échéance des relevés importés a bien été prélevée.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String loanCheckToLook(int count, int paid) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count points à vérifier',
+      one: '1 point à vérifier',
+    );
+    return '$_temp0 ($paid échéances prélevées comme prévu)';
+  }
+
+  @override
+  String loanCheckMissing(int number, String date) {
+    return 'Échéance $number du $date : aucun prélèvement trouvé.';
+  }
+
+  @override
+  String loanCheckDuplicate(int number, String date, int count) {
+    return 'Échéance $number du $date : prélevée $count fois.';
+  }
+
+  @override
+  String loanCheckDifferent(
+    int number,
+    String date,
+    String debited,
+    String expected,
+  ) {
+    return 'Échéance $number du $date : $debited prélevés au lieu de $expected.';
+  }
+
+  @override
+  String loanCheckUnexpected(String date, String amount) {
+    return 'Prélèvement du $date ($amount) loin de toute échéance.';
+  }
+
+  @override
+  String loanCheckBasis(String from, String to) {
+    return 'Comparaison faite par le moteur entre l\'échéancier calculé et les prélèvements du compte, du $from au $to. Le tableau de la banque fait foi.';
+  }
+
+  @override
   String get loanActualPayment => 'Mensualité prélevée (assurance comprise)';
 
   @override

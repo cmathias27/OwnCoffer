@@ -1,0 +1,14 @@
+### An instalment that needs a look, or a debit far from every instalment
+### (decision 0040).
+class: LoanCheckLine
+fields:
+  status: LoanCheckStatus
+  ### Null for an unexpected debit.
+  number: int?
+  dueDate: DateTime?
+  ### Instalment with insurance, as planned.
+  expectedCents: int?
+  ### Debited minus expected, for a different amount.
+  gapCents: int
+  ### The debits found for it, oldest first.
+  debits: List<BankTransaction>

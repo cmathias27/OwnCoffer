@@ -1,0 +1,15 @@
+### The loan's instalments compared with the real debits of its account,
+### by the engine (decision 0040).
+class: LoanCheckReport
+fields:
+  ### False when the loan has no account the user can see or the account
+  ### has no operation yet: nothing to compare.
+  available: bool
+  ### Imported history of the account used for the comparison.
+  historyFrom: DateTime?
+  historyTo: DateTime?
+  ### Instalments of that history debited once at the right amount.
+  paidCount: int
+  ### Everything else, missing and wrong instalments by date first, then
+  ### unexpected debits.
+  lines: List<LoanCheckLine>

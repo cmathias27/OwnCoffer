@@ -2436,6 +2436,59 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String loanCheckAllPaid(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'All $count instalments in the imported statements were debited as planned.',
+      one: 'The instalment in the imported statements was debited as planned.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String loanCheckToLook(int count, int paid) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count things to check',
+      one: '1 thing to check',
+    );
+    return '$_temp0 ($paid instalments debited as planned)';
+  }
+
+  @override
+  String loanCheckMissing(int number, String date) {
+    return 'Instalment $number due $date: no debit found.';
+  }
+
+  @override
+  String loanCheckDuplicate(int number, String date, int count) {
+    return 'Instalment $number due $date: debited $count times.';
+  }
+
+  @override
+  String loanCheckDifferent(
+    int number,
+    String date,
+    String debited,
+    String expected,
+  ) {
+    return 'Instalment $number due $date: $debited debited instead of $expected.';
+  }
+
+  @override
+  String loanCheckUnexpected(String date, String amount) {
+    return 'Debit of $date ($amount) far from any instalment.';
+  }
+
+  @override
+  String loanCheckBasis(String from, String to) {
+    return 'Comparison made by the engine between the computed schedule and the account\'s debits, from $from to $to. The bank\'s table prevails.';
+  }
+
+  @override
   String get loanActualPayment => 'Instalment debited (insurance included)';
 
   @override

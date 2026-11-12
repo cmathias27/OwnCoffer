@@ -171,6 +171,66 @@ class LoanEndpoint extends Endpoint {
     );
   }
 
+  /// The instalments compared with the real debits of the loan's account
+  /// (decision 0040): missing, duplicate or of another amount, and debits
+  /// far from every instalment. Only the imported history is checked.
+  Future<LoanCheckReport> check(Session session, int loanId) async {
+    final loan = await _find(session, loanId);
+    final accountId = loan.accountId;
+    final Set<int> ids = await _visibleIds(session, loan.groupId);
+    LoanCheckReport none() =>
+        LoanCheckReport(available: false, paidCount: 0, lines: const []);
+    if (accountId == null || !ids.contains(accountId)) return none();
+    Future<BankTransaction?> edge(bool first) =>
+        BankTransaction.db.findFirstRow(
+          session,
+          where: (t) =>
+              t.accountId.equals(accountId) & t.deletedAt.equals(null),
+          orderByList: (t) => [first ? t.date.asc() : t.date.desc()],
+        );
+    final oldest = await edge(true);
+    final newest = await edge(false);
+    if (oldest == null || newest == null) return none();
+    final debits = [
+      for (final t in await operations(session, loanId))
+        if (t.amountCents < 0) t,
+    ];
+    final byId = {for (final t in debits) t.id!: t};
+    final result = core.checkLoan(
+      core.amortize(_terms(loan), changes: _changes(loan)),
+      [
+        for (final t in debits)
+          (
+            id: t.id!,
+            date: t.date.toLocalDate(),
+            amountCents: -t.amountCents,
+            dueDate: t.scheduledId != null && t.scheduledId == loan.scheduledId
+                ? t.scheduledDueDate?.toLocalDate()
+                : null,
+          ),
+      ],
+      historyFrom: oldest.date.toLocalDate(),
+      historyTo: newest.date.toLocalDate(),
+    );
+    return LoanCheckReport(
+      available: true,
+      historyFrom: oldest.date,
+      historyTo: newest.date,
+      paidCount: result.count(core.LoanCheckStatus.paid),
+      lines: [
+        for (final r in result.problems)
+          LoanCheckLine(
+            status: LoanCheckStatus.values.byName(r.status.name),
+            number: r.instalment?.number,
+            dueDate: r.instalment?.date.toDb(),
+            expectedCents: r.instalment?.totalCents,
+            gapCents: r.gapCents,
+            debits: [for (final d in r.debits) byId[d.id]!],
+          ),
+      ],
+    );
+  }
+
   // --- documents ------------------------------------------------------------
 
   static const maxDocumentsPerLoan = 30;

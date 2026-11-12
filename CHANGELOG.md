@@ -2,6 +2,12 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.25.0 (novembre 2026)
+### Crédits : échéances rapprochées des prélèvements (décision 0040)
+- **Chaque échéance vérifiée** : sur la fiche d'un crédit lié à un compte, le moteur compare l'échéancier aux prélèvements réels et signale une échéance **sans prélèvement**, **prélevée deux fois**, **d'un autre montant** (avec les deux montants), ou un prélèvement loin de toute échéance.
+- Seule la période des relevés importés est vérifiée ; un retard de quelques jours ou un centime d'arrondi ne sont pas signalés, l'assurance prélevée à part non plus.
+- Calcul du moteur, sans IA, avec la période et la méthode affichées ; le tableau de la banque fait foi.
+
 ## 1.24.0 (novembre 2026)
 
 ### Scan des tickets : recadrage automatique (décision 0039)

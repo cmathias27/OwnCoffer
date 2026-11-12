@@ -74,6 +74,8 @@ import 'package:owncoffer_client/src/protocol/left_to_live_report.dart'
 import 'package:owncoffer_client/src/protocol/loan.dart' as _ig538h6x;
 import 'package:owncoffer_client/src/protocol/loan_change_simulation.dart'
     as _in49arm1;
+import 'package:owncoffer_client/src/protocol/loan_check_report.dart'
+    as _idps2iff;
 import 'package:owncoffer_client/src/protocol/loan_document.dart' as _ixzu9i3x;
 import 'package:owncoffer_client/src/protocol/loan_event.dart' as _iz3v8osk;
 import 'package:owncoffer_client/src/protocol/loan_from_operation.dart'
@@ -1639,6 +1641,16 @@ class EndpointLoan extends _isc.EndpointRef {
       caller.callServerEndpoint<List<_ivksw0b3.BankTransaction>>(
         'loan',
         'operations',
+        {'loanId': loanId},
+      );
+
+  /// The instalments compared with the real debits of the loan's account
+  /// (decision 0040): missing, duplicate or of another amount, and debits
+  /// far from every instalment. Only the imported history is checked.
+  _ida.Future<_idps2iff.LoanCheckReport> check(int loanId) =>
+      caller.callServerEndpoint<_idps2iff.LoanCheckReport>(
+        'loan',
+        'check',
         {'loanId': loanId},
       );
 
