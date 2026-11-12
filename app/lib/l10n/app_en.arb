@@ -2555,5 +2555,23 @@
   "emptyOperationsHint": "Import a statement from your bank (+ at the top, « Import a statement ») or enter an operation.",
   "emptyOperationsFiltered": "No operation matches these filters.",
   "emptyClearFilters": "Clear the filters",
-  "emptyNotificationsHint": "Alerts (expected overdraft, goal exceeded) and reminders will arrive here. Choose which ones in Settings › Notifications."
+  "emptyNotificationsHint": "Alerts (expected overdraft, goal exceeded) and reminders will arrive here. Choose which ones in Settings › Notifications.",
+  "firstStepsTitle": "First steps · {done}/{total}",
+  "@firstStepsTitle": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "firstStepsHide": "Hide",
+  "firstStepAccount": "Create an account",
+  "firstStepAccountHelp": "Its name, its bank and its starting balance are enough.",
+  "firstStepImport": "Import a statement",
+  "firstStepImportHelp": "Download a QIF, OFX or CSV statement from your bank, then drop it here.",
+  "firstStepCategories": "Classify the operations",
+  "firstStepCategoriesHelp": "Give a category to the operations not classified: OwnCoffer remembers it for the next ones."
 }

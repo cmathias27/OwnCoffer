@@ -8012,4 +8012,33 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get emptyNotificationsHint =>
       'Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications.';
+
+  @override
+  String firstStepsTitle(int done, int total) {
+    return 'Premiers pas · $done/$total';
+  }
+
+  @override
+  String get firstStepsHide => 'Masquer';
+
+  @override
+  String get firstStepAccount => 'Créer un compte';
+
+  @override
+  String get firstStepAccountHelp =>
+      'Son nom, sa banque et son solde de départ suffisent.';
+
+  @override
+  String get firstStepImport => 'Importer un relevé';
+
+  @override
+  String get firstStepImportHelp =>
+      'Téléchargez un relevé QIF, OFX ou CSV depuis votre banque, puis déposez-le ici.';
+
+  @override
+  String get firstStepCategories => 'Classer les opérations';
+
+  @override
+  String get firstStepCategoriesHelp =>
+      'Donnez une catégorie aux opérations non classées : OwnCoffer s\'en souviendra pour les suivantes.';
 }

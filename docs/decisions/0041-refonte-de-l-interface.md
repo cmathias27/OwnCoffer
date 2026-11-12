@@ -45,7 +45,7 @@ L'application a grandi rubrique par rubrique. Elle compte aujourd'hui :
    - ce qui va bien est replié ;
    - une carte « Conseils du moment » avec les 3 premiers conseils et « Voir tout ».
 7. **Mon conseiller en avant** : une rubrique à part entière, avec un compteur des conseils nouveaux depuis la dernière visite. La date de cette visite est gardée sur l'appareil.
-8. **Barre de période commune** (ce mois, mois précédent, cette année) et **compte choisi gardé** d'un écran à l'autre. Les deux sont mémorisés sur l'appareil, sans donnée financière.
+8. **Barre de période commune** (ce mois, mois précédent, cette année) en tête du Budget, et **compte choisi gardé** d'un écran à l'autre (opérations, solde prévu). Les deux sont mémorisés sur l'appareil, sans donnée financière. L'Accueil reste toujours sur le mois en cours : il répond à « tout va bien aujourd'hui ? ».
 9. **Fiche crédit en onglets** : Résumé, Échéancier, Opérations, Documents, Simuler. **Budget** : la vue du mois d'abord, l'analyse derrière « Voir le détail ».
 10. **Hiérarchie visuelle constante** :
     - un chiffre clé en grand par carte, les explications en petit et en gris ;

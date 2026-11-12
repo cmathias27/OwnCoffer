@@ -12594,6 +12594,54 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications.'**
   String get emptyNotificationsHint;
+
+  /// No description provided for @firstStepsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Premiers pas · {done}/{total}'**
+  String firstStepsTitle(int done, int total);
+
+  /// No description provided for @firstStepsHide.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer'**
+  String get firstStepsHide;
+
+  /// No description provided for @firstStepAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un compte'**
+  String get firstStepAccount;
+
+  /// No description provided for @firstStepAccountHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Son nom, sa banque et son solde de départ suffisent.'**
+  String get firstStepAccountHelp;
+
+  /// No description provided for @firstStepImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un relevé'**
+  String get firstStepImport;
+
+  /// No description provided for @firstStepImportHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléchargez un relevé QIF, OFX ou CSV depuis votre banque, puis déposez-le ici.'**
+  String get firstStepImportHelp;
+
+  /// No description provided for @firstStepCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classer les opérations'**
+  String get firstStepCategories;
+
+  /// No description provided for @firstStepCategoriesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donnez une catégorie aux opérations non classées : OwnCoffer s\'en souviendra pour les suivantes.'**
+  String get firstStepCategoriesHelp;
 }
 
 class _AppLocalizationsDelegate

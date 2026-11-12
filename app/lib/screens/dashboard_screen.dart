@@ -8,7 +8,6 @@ import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../state/ui_prefs.dart';
 import '../theme/app_theme.dart';
-import '../widgets/period_bar.dart';
 import '../util/format.dart';
 import '../widgets/why.dart';
 import '../state/pepite.dart';
@@ -69,6 +68,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   LeftToLiveReport? _left;
   SpendingReport? _month;
   DueCalendar? _calendar;
+  PepiteStart? _start;
   String? _error;
 
   /// Refreshes « Bien démarrer » with the rest of the page.
@@ -104,14 +104,14 @@ class DashboardScreenState extends State<DashboardScreen> {
         client.analysis
             .leftToLive(_groupId)
             .then<LeftToLiveReport?>((r) => r, onError: (_) => null),
-        client.analysis.report(
-          _groupId,
-          sharedPeriodRange(uiPrefs.period, today).$1,
-          sharedPeriodRange(uiPrefs.period, today).$2,
-        ),
+        client.analysis.report(_groupId, BudgetPeriod.month, today),
         client.scheduled
             .calendar(_groupId, today)
             .then<DueCalendar?>((c) => c, onError: (_) => null),
+        if (!uiPrefs.firstStepsHidden)
+          client.pepiteAdvice
+              .start(_groupId)
+              .then<PepiteStart?>((s) => s, onError: (_) => null),
       ]);
       if (!mounted) return;
       final forecasts = results[0] as List<ForecastResult?>;
@@ -123,6 +123,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         _left = results[1] as LeftToLiveReport?;
         _month = results[2] as SpendingReport?;
         _calendar = results[3] as DueCalendar?;
+        _start = results.length > 4 ? results[4] as PepiteStart? : null;
         _error = null;
         _reloads++;
       });
@@ -185,6 +186,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                 builder: (context, box) {
                   final wide = box.maxWidth >= 720;
                   final cards = <Widget>[
+                    ?_firstSteps(l, accounts, month),
                     _status(context, l, accounts, month),
                     if (widget.onAdvisor != null) _advicesCard(context, l),
                     _balance(context, l, accounts),
@@ -656,6 +658,83 @@ class DashboardScreenState extends State<DashboardScreen> {
           leading: const Icon(Icons.event_note_outlined),
           title: Text(l.summaryOpen),
           onTap: () => widget.onOpen(DashboardTarget.summary),
+        ),
+      ],
+    );
+  }
+
+  /// The first launch, in three steps (decision 0041, point 17): an
+  /// account, a statement, the categories. Shown until they are done or
+  /// hidden on this device.
+  Widget? _firstSteps(
+    AppLocalizations l,
+    List<(Account, ForecastResult?)> accounts,
+    SpendingReport? month,
+  ) {
+    final start = _start;
+    if (start == null || uiPrefs.firstStepsHidden) return null;
+    final hasAccount = accounts.isNotEmpty;
+    final imported = start.done.contains('account');
+    final classified =
+        imported &&
+        (start.done.contains('rules') ||
+            (month != null && month.unclassifiedCount == 0));
+    if (hasAccount && imported && classified) return null;
+    final steps = [
+      (
+        l.firstStepAccount,
+        l.firstStepAccountHelp,
+        hasAccount,
+        DashboardTarget.accounts,
+      ),
+      (
+        l.firstStepImport,
+        l.firstStepImportHelp,
+        imported,
+        DashboardTarget.imports,
+      ),
+      (
+        l.firstStepCategories,
+        l.firstStepCategoriesHelp,
+        classified,
+        DashboardTarget.operations,
+      ),
+    ];
+    final next = steps.indexWhere((s) => !s.$3);
+    final colors = context.moneyColors;
+    return SoftSection(
+      key: const Key('first-steps'),
+      icon: Icons.flag_outlined,
+      title: l.firstStepsTitle(steps.where((s) => s.$3).length, steps.length),
+      children: [
+        for (final (i, (title, help, done, target)) in steps.indexed)
+          ListTile(
+            key: Key('first-step-$i'),
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            leading: done
+                ? Icon(Icons.check_circle, color: colors.positive)
+                : CircleAvatar(radius: 12, child: Text('${i + 1}')),
+            title: Text(
+              title,
+              style: done
+                  ? const TextStyle(decoration: TextDecoration.lineThrough)
+                  : null,
+            ),
+            subtitle: i == next ? Text(help) : null,
+            trailing: done ? null : const Icon(Icons.chevron_right),
+            onTap: done ? null : () => widget.onOpen(target),
+          ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            key: const Key('first-steps-hide'),
+            onPressed: () async {
+              await uiPrefs.setFirstStepsHidden(true);
+              if (mounted) setState(() {});
+            },
+            child: Text(l.firstStepsHide),
+          ),
         ),
       ],
     );

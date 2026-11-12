@@ -7951,4 +7951,33 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get emptyNotificationsHint =>
       'Alerts (expected overdraft, goal exceeded) and reminders will arrive here. Choose which ones in Settings › Notifications.';
+
+  @override
+  String firstStepsTitle(int done, int total) {
+    return 'First steps · $done/$total';
+  }
+
+  @override
+  String get firstStepsHide => 'Hide';
+
+  @override
+  String get firstStepAccount => 'Create an account';
+
+  @override
+  String get firstStepAccountHelp =>
+      'Its name, its bank and its starting balance are enough.';
+
+  @override
+  String get firstStepImport => 'Import a statement';
+
+  @override
+  String get firstStepImportHelp =>
+      'Download a QIF, OFX or CSV statement from your bank, then drop it here.';
+
+  @override
+  String get firstStepCategories => 'Classify the operations';
+
+  @override
+  String get firstStepCategoriesHelp =>
+      'Give a category to the operations not classified: OwnCoffer remembers it for the next ones.';
 }

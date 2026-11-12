@@ -5527,5 +5527,23 @@
   "emptyOperationsHint": "Importez un relevé de votre banque (+ en haut, « Importer un relevé ») ou saisissez une opération.",
   "emptyOperationsFiltered": "Aucune opération ne correspond à ces filtres.",
   "emptyClearFilters": "Effacer les filtres",
-  "emptyNotificationsHint": "Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications."
+  "emptyNotificationsHint": "Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications.",
+  "firstStepsTitle": "Premiers pas · {done}/{total}",
+  "@firstStepsTitle": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "firstStepsHide": "Masquer",
+  "firstStepAccount": "Créer un compte",
+  "firstStepAccountHelp": "Son nom, sa banque et son solde de départ suffisent.",
+  "firstStepImport": "Importer un relevé",
+  "firstStepImportHelp": "Téléchargez un relevé QIF, OFX ou CSV depuis votre banque, puis déposez-le ici.",
+  "firstStepCategories": "Classer les opérations",
+  "firstStepCategoriesHelp": "Donnez une catégorie aux opérations non classées : OwnCoffer s'en souviendra pour les suivantes."
 }
