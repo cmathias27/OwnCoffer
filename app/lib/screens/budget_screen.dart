@@ -114,7 +114,7 @@ class BudgetScreenState extends State<BudgetScreen> {
   var _view = SpendingView.pie;
 
   /// The categories and the history are folded behind « Voir le détail »
-  /// (decision 0041, point 10).
+  /// (decision 0041, point 9).
   var _detail = false;
 
   /// Periods in the history (charts).

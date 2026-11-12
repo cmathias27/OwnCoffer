@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
+import '../help/help.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../state/ui_prefs.dart';
@@ -29,6 +30,13 @@ enum DashboardTarget {
 
   /// Monthly summary (decision 0035).
   summary,
+
+  /// The operations to classify, the subscriptions, the loans, the advisor
+  /// (decision 0041, point 6).
+  toClassify,
+  subscriptions,
+  loans,
+  advisor,
 }
 
 /// The home page: where the money stands today and what comes next, on
@@ -47,6 +55,9 @@ class DashboardScreen extends StatefulWidget {
   /// The advices waiting for an answer, best first (decision 0041, point 6),
   /// and how to name them.
   final List<ActionProposal> advices;
+
+  /// The advices found since the last visit of « Mon conseiller ».
+  final int newAdvices;
   final String Function(ActionProposal)? adviceTitle;
 
   const DashboardScreen({
@@ -56,6 +67,7 @@ class DashboardScreen extends StatefulWidget {
     this.unread = 0,
     this.onAdvisor,
     this.advices = const [],
+    this.newAdvices = 0,
     this.adviceTitle,
   });
 
@@ -69,6 +81,12 @@ class DashboardScreenState extends State<DashboardScreen> {
   SpendingReport? _month;
   DueCalendar? _calendar;
   PepiteStart? _start;
+
+  /// Subscriptions debited this month above their planned amount.
+  List<SubscriptionChange> _rises = const [];
+
+  /// Loans with an instalment missing in the last two months.
+  List<Loan> _missed = const [];
   String? _error;
 
   /// Refreshes « Bien démarrer » with the rest of the page.
@@ -108,6 +126,10 @@ class DashboardScreenState extends State<DashboardScreen> {
         client.scheduled
             .calendar(_groupId, today)
             .then<DueCalendar?>((c) => c, onError: (_) => null),
+        client.analysis
+            .review(_groupId, today)
+            .then<MonthReview?>((r) => r, onError: (_) => null),
+        _missedLoans(today),
         if (!uiPrefs.firstStepsHidden)
           client.pepiteAdvice
               .start(_groupId)
@@ -123,7 +145,15 @@ class DashboardScreenState extends State<DashboardScreen> {
         _left = results[1] as LeftToLiveReport?;
         _month = results[2] as SpendingReport?;
         _calendar = results[3] as DueCalendar?;
-        _start = results.length > 4 ? results[4] as PepiteStart? : null;
+        _rises = [
+          for (final c
+              in (results[4] as MonthReview?)?.subscriptionChanges ??
+                  const <SubscriptionChange>[])
+            // Amounts are negative: a rise is a larger debit.
+            if (c.actualCents < c.plannedCents) c,
+        ];
+        _missed = results[5] as List<Loan>;
+        _start = results.length > 6 ? results[6] as PepiteStart? : null;
         _error = null;
         _reloads++;
       });
@@ -409,6 +439,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       icon: Icons.event_outlined,
       title: l.dashboardUpcoming,
       help: l.cardHelpUpcoming,
+      helpTopic: HelpTopic.forecast,
       children: [
         if (items.isEmpty)
           Padding(
@@ -456,6 +487,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       icon: Icons.pie_chart_outline,
       title: l.dashboardMonthSpending,
       help: l.cardHelpTopSpending,
+      helpTopic: HelpTopic.budget,
       children: [
         Text(
           l.dashboardMonthTotals(
@@ -526,13 +558,47 @@ class DashboardScreenState extends State<DashboardScreen> {
         );
       }
     }
+    for (final loan in _missed) {
+      issues.add(
+        _Issue(
+          1,
+          Icons.event_busy_outlined,
+          l.homeIssueLoanMissed(loan.label ?? loan.lender),
+          DashboardTarget.loans,
+        ),
+      );
+    }
     if (month != null && month.unclassifiedCount > 0) {
       issues.add(
         _Issue(
           3,
           Icons.label_off_outlined,
           l.homeIssueToClassify(month.unclassifiedCount),
-          DashboardTarget.operations,
+          DashboardTarget.toClassify,
+        ),
+      );
+    }
+    for (final c in _rises) {
+      issues.add(
+        _Issue(
+          3,
+          Icons.trending_up,
+          l.homeIssueSubscriptionRise(
+            c.label,
+            context.money(-c.plannedCents),
+            context.money(-c.actualCents),
+          ),
+          DashboardTarget.subscriptions,
+        ),
+      );
+    }
+    if (widget.newAdvices > 0) {
+      issues.add(
+        _Issue(
+          4,
+          Icons.lightbulb_outline,
+          l.homeIssueNewAdvices(widget.newAdvices),
+          DashboardTarget.advisor,
         ),
       );
     }
@@ -548,6 +614,39 @@ class DashboardScreenState extends State<DashboardScreen> {
     }
     issues.sort((a, b) => a.urgency.compareTo(b.urgency));
     return issues;
+  }
+
+  /// The running loans whose check (decision 0040) finds an instalment
+  /// missing in the last two months; nothing when it cannot be told.
+  Future<List<Loan>> _missedLoans(DateTime today) async {
+    try {
+      final overview = await client.loan.overview(_groupId);
+      final since = today.subtract(const Duration(days: 62));
+      final running = [
+        for (final i in overview.loans)
+          if (i.nextDueDate != null && i.loan.accountId != null) i.loan,
+      ];
+      final checks = await Future.wait([
+        for (final loan in running)
+          client.loan
+              .check(loan.id!)
+              .then<LoanCheckReport?>((r) => r, onError: (_) => null),
+      ]);
+      return [
+        for (var i = 0; i < running.length; i++)
+          if (checks[i]?.lines.any(
+                (line) =>
+                    line.status == LoanCheckStatus.missing &&
+                    line.dueDate != null &&
+                    !line.dueDate!.isBefore(since) &&
+                    line.dueDate!.isBefore(today),
+              ) ??
+              false)
+            running[i],
+      ];
+    } on Object {
+      return const [];
+    }
   }
 
   /// « Tout va bien ? » answered in one sentence, at the top of the page.
@@ -611,6 +710,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       icon: Icons.visibility_outlined,
       title: l.dashboardWatch,
       help: l.cardHelpWatch,
+      helpTopic: HelpTopic.home,
       children: [
         if (issues.isEmpty)
           Padding(
@@ -663,7 +763,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  /// The first launch, in three steps (decision 0041, point 17): an
+  /// The first launch, in three steps (decision 0041, point 15): an
   /// account, a statement, the categories. Shown until they are done or
   /// hidden on this device.
   Widget? _firstSteps(
@@ -750,6 +850,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       icon: Icons.lightbulb_outline,
       title: l.homeAdvicesTitle,
       help: l.cardHelpAdvices,
+      helpTopic: HelpTopic.advisor,
       children: [
         if (shown.isEmpty)
           Padding(

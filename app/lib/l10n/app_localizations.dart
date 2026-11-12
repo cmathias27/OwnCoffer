@@ -12642,6 +12642,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Donnez une catégorie aux opérations non classées : OwnCoffer s\'en souviendra pour les suivantes.'**
   String get firstStepCategoriesHelp;
+
+  /// No description provided for @homeIssueLoanMissed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une échéance de « {loan} » n\'a pas été prélevée'**
+  String homeIssueLoanMissed(String loan);
+
+  /// No description provided for @homeIssueSubscriptionRise.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} est passé de {before} à {after}'**
+  String homeIssueSubscriptionRise(String label, String before, String after);
+
+  /// No description provided for @homeIssueNewAdvices.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 nouveau conseil} other{{count} nouveaux conseils}}'**
+  String homeIssueNewAdvices(int count);
+
+  /// No description provided for @cardHelpOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir l\'aide'**
+  String get cardHelpOpen;
+
+  /// No description provided for @whyForecastToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde d\'aujourd\'hui'**
+  String get whyForecastToday;
+
+  /// No description provided for @whyForecastCredits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rentrées prévues'**
+  String get whyForecastCredits;
+
+  /// No description provided for @whyForecastDebits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prélèvements et échéances prévus'**
+  String get whyForecastDebits;
+
+  /// No description provided for @whyForecastOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses courantes estimées et autres écarts'**
+  String get whyForecastOther;
+
+  /// No description provided for @whyForecastEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde prévu le {date}'**
+  String whyForecastEnd(String date);
+
+  /// No description provided for @whyForecastText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le moteur part du solde d\'aujourd\'hui, ajoute jour par jour les opérations prévues (salaires, prélèvements, abonnements, échéances de crédit), puis l\'estimation des dépenses courantes tirée de vos derniers mois. Aucune IA n\'intervient dans ce calcul.'**
+  String get whyForecastText;
 }
 
 class _AppLocalizationsDelegate

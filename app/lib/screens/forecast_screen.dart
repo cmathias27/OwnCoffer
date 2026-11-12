@@ -6,6 +6,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../state/ui_prefs.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/why.dart';
 import '../theme/app_theme.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
@@ -146,6 +147,41 @@ class ForecastScreenState extends State<ForecastScreen> {
     }
   }
 
+  /// How the engine goes from today's balance to the last day (decision
+  /// 0041, point 11): what comes in, what goes out, and the estimate of
+  /// everyday spending, which is the rest.
+  Widget _why(AppLocalizations l, ForecastResult f) {
+    final last = f.days.last;
+    var credits = 0, debits = 0;
+    for (final e in f.events) {
+      if (e.date.isAfter(last.date)) continue;
+      if (e.amountCents > 0) {
+        credits += e.amountCents;
+      } else {
+        debits += e.amountCents;
+      }
+    }
+    final rest = last.balanceCents - f.currentBalanceCents - credits - debits;
+    final currency = _account?.currency ?? 'EUR';
+    return WhyButton(
+      key: const Key('why-forecast'),
+      currency: currency,
+      title: l.forecastTitle,
+      lines: [
+        WhyLine(l.whyForecastToday, f.currentBalanceCents),
+        WhyLine(l.whyForecastCredits, credits),
+        WhyLine(l.whyForecastDebits, debits),
+        if (rest != 0) WhyLine(l.whyForecastOther, rest),
+        WhyLine(
+          l.whyForecastEnd(context.day(last.date)),
+          last.balanceCents,
+          total: true,
+        ),
+      ],
+      explanation: l.whyForecastText,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
@@ -281,13 +317,15 @@ class ForecastScreenState extends State<ForecastScreen> {
                           context.shortDay(f.lowestDate),
                         ),
                       ),
-                      if (f.days.isNotEmpty)
+                      if (f.days.isNotEmpty) ...[
                         Text(
                           l.forecastEnd(
                             context.day(f.days.last.date),
                             money(f.days.last.balanceCents),
                           ),
                         ),
+                        _why(l, f),
+                      ],
                       if (f.firstBelowThresholdDate != null)
                         Padding(
                           padding: const EdgeInsets.only(top: 8),

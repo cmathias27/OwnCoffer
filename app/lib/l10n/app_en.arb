@@ -2573,5 +2573,49 @@
   "firstStepImport": "Import a statement",
   "firstStepImportHelp": "Download a QIF, OFX or CSV statement from your bank, then drop it here.",
   "firstStepCategories": "Classify the operations",
-  "firstStepCategoriesHelp": "Give a category to the operations not classified: OwnCoffer remembers it for the next ones."
+  "firstStepCategoriesHelp": "Give a category to the operations not classified: OwnCoffer remembers it for the next ones.",
+  "homeIssueLoanMissed": "An instalment of « {loan} » was not debited",
+  "@homeIssueLoanMissed": {
+    "placeholders": {
+      "loan": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueSubscriptionRise": "{label} went from {before} to {after}",
+  "@homeIssueSubscriptionRise": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueNewAdvices": "{count, plural, =1{1 new piece of advice} other{{count} new pieces of advice}}",
+  "@homeIssueNewAdvices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHelpOpen": "Open the help",
+  "whyForecastToday": "Balance today",
+  "whyForecastCredits": "Planned credits",
+  "whyForecastDebits": "Planned debits and instalments",
+  "whyForecastOther": "Estimated everyday spending and other gaps",
+  "whyForecastEnd": "Expected balance on {date}",
+  "@whyForecastEnd": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyForecastText": "The engine starts from today's balance, adds day by day the planned operations (salaries, debits, subscriptions, loan instalments), then the estimate of everyday spending drawn from your last months. No AI takes part in this calculation."
 }

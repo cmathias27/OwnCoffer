@@ -8041,4 +8041,49 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get firstStepCategoriesHelp =>
       'Donnez une catégorie aux opérations non classées : OwnCoffer s\'en souviendra pour les suivantes.';
+
+  @override
+  String homeIssueLoanMissed(String loan) {
+    return 'Une échéance de « $loan » n\'a pas été prélevée';
+  }
+
+  @override
+  String homeIssueSubscriptionRise(String label, String before, String after) {
+    return '$label est passé de $before à $after';
+  }
+
+  @override
+  String homeIssueNewAdvices(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nouveaux conseils',
+      one: '1 nouveau conseil',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHelpOpen => 'Ouvrir l\'aide';
+
+  @override
+  String get whyForecastToday => 'Solde d\'aujourd\'hui';
+
+  @override
+  String get whyForecastCredits => 'Rentrées prévues';
+
+  @override
+  String get whyForecastDebits => 'Prélèvements et échéances prévus';
+
+  @override
+  String get whyForecastOther => 'Dépenses courantes estimées et autres écarts';
+
+  @override
+  String whyForecastEnd(String date) {
+    return 'Solde prévu le $date';
+  }
+
+  @override
+  String get whyForecastText =>
+      'Le moteur part du solde d\'aujourd\'hui, ajoute jour par jour les opérations prévues (salaires, prélèvements, abonnements, échéances de crédit), puis l\'estimation des dépenses courantes tirée de vos derniers mois. Aucune IA n\'intervient dans ce calcul.';
 }

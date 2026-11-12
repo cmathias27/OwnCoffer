@@ -7980,4 +7980,49 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get firstStepCategoriesHelp =>
       'Give a category to the operations not classified: OwnCoffer remembers it for the next ones.';
+
+  @override
+  String homeIssueLoanMissed(String loan) {
+    return 'An instalment of « $loan » was not debited';
+  }
+
+  @override
+  String homeIssueSubscriptionRise(String label, String before, String after) {
+    return '$label went from $before to $after';
+  }
+
+  @override
+  String homeIssueNewAdvices(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new pieces of advice',
+      one: '1 new piece of advice',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHelpOpen => 'Open the help';
+
+  @override
+  String get whyForecastToday => 'Balance today';
+
+  @override
+  String get whyForecastCredits => 'Planned credits';
+
+  @override
+  String get whyForecastDebits => 'Planned debits and instalments';
+
+  @override
+  String get whyForecastOther => 'Estimated everyday spending and other gaps';
+
+  @override
+  String whyForecastEnd(String date) {
+    return 'Expected balance on $date';
+  }
+
+  @override
+  String get whyForecastText =>
+      'The engine starts from today\'s balance, adds day by day the planned operations (salaries, debits, subscriptions, loan instalments), then the estimate of everyday spending drawn from your last months. No AI takes part in this calculation.';
 }

@@ -633,6 +633,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 membership: current,
                 unread: _unread,
                 advices: _advices,
+                newAdvices: _newAdvices,
                 adviceTitle: _adviceTitle,
                 onAdvisor: () => _selectPage(AppPage.advisor),
                 onOpen: (target) => switch (target) {
@@ -646,6 +647,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   DashboardTarget.imports => _selectPage(AppPage.imports),
                   DashboardTarget.start => _openStart(),
                   DashboardTarget.summary => _openSummary(current),
+                  DashboardTarget.toClassify => _openOperations(
+                    const OperationsIntent(toClassify: true),
+                  ),
+                  DashboardTarget.subscriptions => _openOperations(
+                    const OperationsIntent(subscriptions: true),
+                  ),
+                  DashboardTarget.loans => _selectPage(AppPage.loans),
+                  DashboardTarget.advisor => _selectPage(AppPage.advisor),
                 },
               ),
               AccountsScreen(

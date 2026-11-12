@@ -170,7 +170,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
       _categoryFilter != null;
 
   /// Nothing to show: either the filters hide everything, or the account
-  /// has no operation yet (decision 0041, point 15).
+  /// has no operation yet (decision 0041, point 13).
   Widget _empty(AppLocalizations l, Account? account) => _filtered
       ? EmptyState(
           icon: Icons.filter_alt_off_outlined,

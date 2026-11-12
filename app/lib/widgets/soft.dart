@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../help/help.dart';
 import 'why.dart';
 
 /// The soft look of OwnCoffer: sheets floating above the page, rounded on
@@ -98,12 +99,14 @@ class SoftSection extends StatelessWidget {
 
   /// What the card shows, behind a small « ? » (decision 0041, point 14).
   final String? help;
+  final HelpTopic? helpTopic;
   const SoftSection({
     super.key,
     required this.icon,
     required this.title,
     required this.children,
     this.help,
+    this.helpTopic,
   });
 
   @override
@@ -127,7 +130,8 @@ class SoftSection extends StatelessWidget {
                   Expanded(
                     child: Text(title, style: theme.textTheme.titleSmall),
                   ),
-                  if (help != null) CardHelp(title: title, text: help!),
+                  if (help != null)
+                    CardHelp(title: title, text: help!, topic: helpTopic),
                 ],
               ),
               const SizedBox(height: 6),
@@ -202,7 +206,7 @@ class ActionTile extends StatelessWidget {
   }
 }
 
-/// An empty page that says what to do next (decision 0041, point 15): an
+/// An empty page that says what to do next (decision 0041, point 13): an
 /// icon, what is missing, why it matters, and the first step.
 class EmptyState extends StatelessWidget {
   final IconData icon;

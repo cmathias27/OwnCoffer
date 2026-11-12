@@ -5545,5 +5545,49 @@
   "firstStepImport": "Importer un relevé",
   "firstStepImportHelp": "Téléchargez un relevé QIF, OFX ou CSV depuis votre banque, puis déposez-le ici.",
   "firstStepCategories": "Classer les opérations",
-  "firstStepCategoriesHelp": "Donnez une catégorie aux opérations non classées : OwnCoffer s'en souviendra pour les suivantes."
+  "firstStepCategoriesHelp": "Donnez une catégorie aux opérations non classées : OwnCoffer s'en souviendra pour les suivantes.",
+  "homeIssueLoanMissed": "Une échéance de « {loan} » n'a pas été prélevée",
+  "@homeIssueLoanMissed": {
+    "placeholders": {
+      "loan": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueSubscriptionRise": "{label} est passé de {before} à {after}",
+  "@homeIssueSubscriptionRise": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueNewAdvices": "{count, plural, =1{1 nouveau conseil} other{{count} nouveaux conseils}}",
+  "@homeIssueNewAdvices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHelpOpen": "Ouvrir l'aide",
+  "whyForecastToday": "Solde d'aujourd'hui",
+  "whyForecastCredits": "Rentrées prévues",
+  "whyForecastDebits": "Prélèvements et échéances prévus",
+  "whyForecastOther": "Dépenses courantes estimées et autres écarts",
+  "whyForecastEnd": "Solde prévu le {date}",
+  "@whyForecastEnd": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyForecastText": "Le moteur part du solde d'aujourd'hui, ajoute jour par jour les opérations prévues (salaires, prélèvements, abonnements, échéances de crédit), puis l'estimation des dépenses courantes tirée de vos derniers mois. Aucune IA n'intervient dans ce calcul."
 }

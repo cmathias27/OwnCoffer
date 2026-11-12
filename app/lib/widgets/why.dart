@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../help/help.dart';
 import '../l10n/app_localizations.dart';
 import '../util/format.dart';
 
@@ -15,7 +16,7 @@ class WhyLine {
     : cents = null;
 }
 
-/// « Pourquoi ce chiffre ? » (decision 0041, point 12): the lines of the
+/// « Pourquoi ce chiffre ? » (decision 0041, point 11): the lines of the
 /// calculation behind a key figure, then how it is made, in words.
 class WhyButton extends StatelessWidget {
   final String title;
@@ -117,7 +118,15 @@ class WhyButton extends StatelessWidget {
 class CardHelp extends StatelessWidget {
   final String title;
   final String text;
-  const CardHelp({super.key, required this.title, required this.text});
+
+  /// The help page this card belongs to, opened from the dialog.
+  final HelpTopic? topic;
+  const CardHelp({
+    super.key,
+    required this.title,
+    required this.text,
+    this.topic,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +143,17 @@ class CardHelp extends StatelessWidget {
           title: Text(title),
           content: Text(text),
           actions: [
+            if (topic case final t?)
+              TextButton(
+                key: const Key('card-help-open'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(builder: (_) => HelpPage(topic: t)),
+                  );
+                },
+                child: Text(l.cardHelpOpen),
+              ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(l.close),
