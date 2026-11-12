@@ -12408,6 +12408,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Masquer le détail'**
   String get budgetHideDetail;
+
+  /// No description provided for @loanTabSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résumé'**
+  String get loanTabSummary;
+
+  /// No description provided for @loanTabSchedule.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéancier'**
+  String get loanTabSchedule;
+
+  /// No description provided for @loanTabOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations'**
+  String get loanTabOperations;
+
+  /// No description provided for @loanTabDocuments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Documents'**
+  String get loanTabDocuments;
+
+  /// No description provided for @loanTabSimulate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simuler'**
+  String get loanTabSimulate;
 }
 
 class _AppLocalizationsDelegate

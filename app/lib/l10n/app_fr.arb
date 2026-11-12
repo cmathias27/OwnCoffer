@@ -5461,5 +5461,10 @@
   "periodLastMonth": "Mois précédent",
   "periodThisYear": "Cette année",
   "budgetShowDetail": "Voir le détail",
-  "budgetHideDetail": "Masquer le détail"
+  "budgetHideDetail": "Masquer le détail",
+  "loanTabSummary": "Résumé",
+  "loanTabSchedule": "Échéancier",
+  "loanTabOperations": "Opérations",
+  "loanTabDocuments": "Documents",
+  "loanTabSimulate": "Simuler"
 }

@@ -2489,5 +2489,10 @@
   "periodLastMonth": "Last month",
   "periodThisYear": "This year",
   "budgetShowDetail": "Show the detail",
-  "budgetHideDetail": "Hide the detail"
+  "budgetHideDetail": "Hide the detail",
+  "loanTabSummary": "Summary",
+  "loanTabSchedule": "Schedule",
+  "loanTabOperations": "Operations",
+  "loanTabDocuments": "Documents",
+  "loanTabSimulate": "Simulate"
 }

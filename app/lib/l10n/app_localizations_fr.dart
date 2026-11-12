@@ -7899,4 +7899,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get budgetHideDetail => 'Masquer le détail';
+
+  @override
+  String get loanTabSummary => 'Résumé';
+
+  @override
+  String get loanTabSchedule => 'Échéancier';
+
+  @override
+  String get loanTabOperations => 'Opérations';
+
+  @override
+  String get loanTabDocuments => 'Documents';
+
+  @override
+  String get loanTabSimulate => 'Simuler';
 }
