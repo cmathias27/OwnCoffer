@@ -16,6 +16,8 @@ La **mensualité prélevée** fait foi : le tableau, le capital restant et la da
 
 ## Ce que montre un crédit
 
+La fiche d'un crédit est rangée en onglets : **Résumé**, **Échéancier**, **Opérations**, **Documents** et, tant qu'il reste des échéances, **Simuler**.
+
 - **Tableau d'amortissement**, capital restant dû, intérêts payés et à payer, coût total, date de fin.
 - Les **prélèvements** déjà rattachés et le total payé.
 - **Échéances vérifiées** : avec un compte de prélèvement, chaque échéance des relevés importés est comparée aux prélèvements réels ; une échéance sans prélèvement, prélevée deux fois ou d'un autre montant, et un prélèvement loin de toute échéance sont signalés avec leurs montants.

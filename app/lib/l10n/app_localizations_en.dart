@@ -1375,7 +1375,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifUnknown => 'Notification';
 
   @override
-  String get notifOpenForecast => 'Show the forecast';
+  String get notifOpenForecast => 'See the expected balance';
 
   @override
   String get importAccountRecognised => 'Account recognised from the file.';
@@ -3943,7 +3943,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardUpcomingNone => 'No due date in the next 7 days.';
 
   @override
-  String get dashboardSeeForecast => 'See the forecast';
+  String get dashboardSeeForecast => 'See the expected balance';
 
   @override
   String get dashboardMonthSpending => 'This month';

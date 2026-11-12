@@ -218,6 +218,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] **Lisibilité de la conversation avec l'IA** (remontée le 2 novembre 2026) : les réponses sont affichées en texte brut, donc le gras, les titres, les listes et les tableaux de l'IA apparaissent avec leurs signes (`**`, `###`, `-`) ; mise en forme des réponses (petit rendu Markdown maison, sans dépendance, comme l'aide), largeur des bulles adaptée à la fenêtre, consigne de mise en forme dans la passerelle IA, test avec le texte à 200 % — *1.2.0*
 - [ ] **Latence de l'IA** (remontée le 1er novembre 2026) : mesurer où part le temps (passerelle externe, modèle ou OwnCoffer), afficher la réponse au fur et à mesure et l'étape en cours (« lecture du document… »), modèle plus rapide pour les tâches simples (classement)
 - [x] **Crédit rapproché des prélèvements réels** : mensualité manquante, en double ou d'un autre montant signalée par le moteur, sans IA — décision 0040, *1.25.0*
+- [x] **Refonte de l'interface** (remontée le 12 novembre 2026) : cinq rubriques, recherche globale, Mon conseiller en avant, Accueil « tout va bien ? », « Pourquoi ce chiffre ? », mode simple — décision 0041, *1.26.0*
 - [ ] Tableau d'amortissement lu en entier (changement de taux ou pause d'échéances en cours de crédit)
 - [ ] Remboursement anticipé simulé avec l'indemnité lue dans l'offre de prêt (calcul du moteur)
 - [x] **Abonnements mis en évidence** dans Opérations : total mensuel, hausse constatée signalée, rappel avant une hausse de prix — décision 0034, *1.19.0*

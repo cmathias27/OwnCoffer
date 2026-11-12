@@ -1,6 +1,8 @@
-# Prévisions
+# Solde prévu
 
-La courbe du solde jour par jour, sur 30 jours, 90 jours ou un an, pour chaque compte.
+La courbe du solde jour par jour, sur 30 jours, 90 jours ou un an, pour chaque compte. Le compte choisi est gardé sur cet appareil, aussi pour les opérations.
+
+**« Pourquoi ce chiffre ? »**, sous le solde de fin, montre le calcul : solde d'aujourd'hui, plus les rentrées prévues, moins les prélèvements prévus, plus le reste (dépenses variables estimées).
 
 ## Ce qui est compté
 

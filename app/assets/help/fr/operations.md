@@ -4,7 +4,9 @@ La liste de toutes les opérations des comptes que vous voyez, de la plus récen
 
 ## Trouver une opération
 
-- **Recherche** dans le libellé.
+- **Recherche** dans le libellé. Pour chercher dans tous les comptes à la fois, la loupe en haut de l'écran (touche `/`).
+- Sur un téléphone, **glisser une opération** vers la droite la classe, vers la gauche l'ouvre.
+- Les filtres choisis sont gardés sur cet appareil ; une liste vide par un filtre propose de les effacer.
 - **Filtres** : « À classer », « Non pointées », « Abonnements », par catégorie (sous-catégories comprises), par compte.
 
 ## La fiche d'une opération

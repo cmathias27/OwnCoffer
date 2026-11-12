@@ -16,6 +16,8 @@ The **debited instalment** is what counts: the table, the remaining principal an
 
 ## What a loan shows
 
+A loan's sheet is laid out in tabs: **Summary**, **Schedule**, **Operations**, **Documents** and, while instalments are left, **Simulate**.
+
 - **Amortisation table**, remaining principal, interest paid and to pay, total cost, end date.
 - The **debits** already linked and the total paid.
 - **Instalments checked**: with a debit account, each instalment of the imported statements is compared with the real debits; a missing instalment, one debited twice or of another amount, and a debit far from any instalment are shown with their figures.

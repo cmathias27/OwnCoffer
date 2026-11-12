@@ -20,7 +20,7 @@ The server backs up the database every night, **encrypted**, and checks right aw
 
 ## Take your data with you
 
-**"Export my data"** (account menu, or the icon at the top on a large screen) downloads everything you can see: a complete **JSON** file, or your operations as **CSV** for a spreadsheet. The file is made by your server and goes only to your device.
+**"Export my data"** (in Settings) downloads everything you can see: a complete **JSON** file, or your operations as **CSV** for a spreadsheet. The file is made by your server and goes only to your device.
 
 ## Free software
 

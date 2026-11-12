@@ -2260,7 +2260,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifOpenForecast.
   ///
   /// In fr, this message translates to:
-  /// **'Voir les prévisions'**
+  /// **'Voir le solde prévu'**
   String get notifOpenForecast;
 
   /// No description provided for @importAccountRecognised.
@@ -6355,7 +6355,7 @@ abstract class AppLocalizations {
   /// No description provided for @dashboardSeeForecast.
   ///
   /// In fr, this message translates to:
-  /// **'Voir les prévisions'**
+  /// **'Voir le solde prévu'**
   String get dashboardSeeForecast;
 
   /// No description provided for @dashboardMonthSpending.

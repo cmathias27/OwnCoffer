@@ -1382,7 +1382,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notifUnknown => 'Notification';
 
   @override
-  String get notifOpenForecast => 'Voir les prévisions';
+  String get notifOpenForecast => 'Voir le solde prévu';
 
   @override
   String get importAccountRecognised => 'Compte reconnu d\'après le fichier.';
@@ -3966,7 +3966,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get dashboardUpcomingNone => 'Aucune échéance prévue d\'ici 7 jours.';
 
   @override
-  String get dashboardSeeForecast => 'Voir les prévisions';
+  String get dashboardSeeForecast => 'Voir le solde prévu';
 
   @override
   String get dashboardMonthSpending => 'Ce mois-ci';

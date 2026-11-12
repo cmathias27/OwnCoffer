@@ -20,7 +20,7 @@ Le serveur sauvegarde la base chaque nuit, **chiffrée**, et vérifie aussitôt 
 
 ## Emporter vos données
 
-**« Exporter mes données »** (menu du compte, ou icône en haut sur grand écran) télécharge tout ce que vous voyez : un fichier **JSON** complet, ou vos opérations en **CSV** pour un tableur. Le fichier est créé par votre serveur et ne va que sur votre appareil.
+**« Exporter mes données »** (dans Réglages) télécharge tout ce que vous voyez : un fichier **JSON** complet, ou vos opérations en **CSV** pour un tableur. Le fichier est créé par votre serveur et ne va que sur votre appareil.
 
 ## Logiciel libre
 

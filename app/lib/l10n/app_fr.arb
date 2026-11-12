@@ -874,7 +874,7 @@
     }
   },
   "notifUnknown": "Notification",
-  "notifOpenForecast": "Voir les prévisions",
+  "notifOpenForecast": "Voir le solde prévu",
   "importAccountRecognised": "Compte reconnu d'après le fichier.",
   "importOtherAccountMatch": "Ce fichier correspond au compte « {account} ».",
   "@importOtherAccountMatch": {
@@ -2981,7 +2981,7 @@
   },
   "dashboardUpcoming": "Cette semaine",
   "dashboardUpcomingNone": "Aucune échéance prévue d'ici 7 jours.",
-  "dashboardSeeForecast": "Voir les prévisions",
+  "dashboardSeeForecast": "Voir le solde prévu",
   "dashboardMonthSpending": "Ce mois-ci",
   "dashboardMonthTotals": "{expense} dépensés, {income} reçus",
   "@dashboardMonthTotals": {

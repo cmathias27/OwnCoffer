@@ -4,7 +4,9 @@ The list of all the operations of the accounts you can see, newest first.
 
 ## Find an operation
 
-- **Search** in the label.
+- **Search** in the label. To search all the accounts at once, the magnifier at the top of the screen (`/` key).
+- On a phone, **swiping an operation** to the right classifies it, to the left opens it.
+- The filters chosen are kept on this device; a list emptied by a filter offers to clear them.
 - **Filters**: "To classify", "Not cleared", "Subscriptions", by category (sub-categories included), by account.
 
 ## An operation's sheet
