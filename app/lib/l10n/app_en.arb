@@ -144,7 +144,7 @@
   "navAccounts": "Accounts",
   "navOperations": "Operations",
   "navImport": "Import",
-  "navForecast": "Forecast",
+  "navForecast": "Expected balance",
   "navCategories": "Categories",
   "accountsTitle": "Accounts",
   "accountsEmpty": "No account yet.",
@@ -2494,5 +2494,66 @@
   "loanTabSchedule": "Schedule",
   "loanTabOperations": "Operations",
   "loanTabDocuments": "Documents",
-  "loanTabSimulate": "Simulate"
+  "loanTabSimulate": "Simulate",
+  "whyThisFigure": "Why this figure?",
+  "whyTotal": "Total",
+  "whyBalanceTitle": "Balance today",
+  "whyBalanceText": "The sum of today's known balances of your accounts in euros: the last imported statement, plus the operations recorded since. Accounts in another currency are not added up. The low point comes from the forecast: planned operations and loan instalments of the next 30 days.",
+  "whyLeftBalance": "Balance of the current accounts today",
+  "whyLeftDebits": "Planned debits until {date}",
+  "@whyLeftDebits": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyLeftCredits": "Planned credits until {date}",
+  "@whyLeftCredits": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyLeftDays": "Days left",
+  "whyLeftPerDay": "Per day",
+  "whyNetUnclassified": "of which operations not classified",
+  "whyNetText": "Income of the period, minus spending and money put aside. Transfers between your accounts do not count. An operation not classified counts as income if money came in, as spending if it went out.",
+  "cardHelpTooltip": "What does this card show?",
+  "cardHelpWatch": "What deserves a look, the most urgent first: an overdrawn account, an expected overdraft, an account below its alert threshold, operations to classify, notifications. What goes well is folded below.",
+  "cardHelpAdvices": "The advice of « My advisor » waiting for your answer. Each one shows its figures and its calculation; nothing is changed without your consent.",
+  "cardHelpUpcoming": "The planned operations and loan instalments of the next 7 days, on the accounts you can see.",
+  "cardHelpTopSpending": "The categories where you spent the most over the chosen period. Transfers between your accounts are not part of it.",
+  "notifFilterAll": "All",
+  "notifFilterAlerts": "Alerts ({count})",
+  "@notifFilterAlerts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterAdvice": "Advice ({count})",
+  "@notifFilterAdvice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterSystem": "System ({count})",
+  "@notifFilterSystem": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterEmpty": "No notification of this kind.",
+  "emptyAccountsHint": "An account gathers the operations of one bank. Create it, then import a statement to see your balance and its forecast.",
+  "emptyOperationsHint": "Import a statement from your bank (+ at the top, « Import a statement ») or enter an operation.",
+  "emptyOperationsFiltered": "No operation matches these filters.",
+  "emptyClearFilters": "Clear the filters",
+  "emptyNotificationsHint": "Alerts (expected overdraft, goal exceeded) and reminders will arrive here. Choose which ones in Settings › Notifications."
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'why.dart';
 
 /// The soft look of OwnCoffer: sheets floating above the page, rounded on
 /// every side, content grouped in rounded tonal cards, actions as tiles
@@ -95,11 +96,14 @@ class SoftSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
 
+  /// What the card shows, behind a small « ? » (decision 0041, point 14).
+  final String? help;
   const SoftSection({
     super.key,
     required this.icon,
     required this.title,
     required this.children,
+    this.help,
   });
 
   @override
@@ -123,6 +127,7 @@ class SoftSection extends StatelessWidget {
                   Expanded(
                     child: Text(title, style: theme.textTheme.titleSmall),
                   ),
+                  if (help != null) CardHelp(title: title, text: help!),
                 ],
               ),
               const SizedBox(height: 6),
@@ -190,6 +195,68 @@ class ActionTile extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// An empty page that says what to do next (decision 0041, point 15): an
+/// icon, what is missing, why it matters, and the first step.
+class EmptyState extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final String? hint;
+  final String? actionLabel;
+  final VoidCallback? onAction;
+
+  const EmptyState({
+    super.key,
+    required this.icon,
+    required this.text,
+    this.hint,
+    this.actionLabel,
+    this.onAction,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 48, color: theme.colorScheme.primary),
+              const SizedBox(height: 12),
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleMedium,
+              ),
+              if (hint != null) ...[
+                const SizedBox(height: 8),
+                Text(
+                  hint!,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+              if (actionLabel != null && onAction != null) ...[
+                const SizedBox(height: 16),
+                FilledButton.tonal(
+                  key: const Key('empty-action'),
+                  onPressed: onAction,
+                  child: Text(actionLabel!),
+                ),
+              ],
+            ],
           ),
         ),
       ),

@@ -7,6 +7,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import '../client.dart';
 import '../state/ui_prefs.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/soft.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../util/offline.dart';
@@ -159,6 +160,41 @@ class _OperationsScreenState extends State<OperationsScreen> {
       return;
     }
     if (mounted) setState(() => _categories = {for (final c in list) c.id!: c});
+  }
+
+  bool get _filtered =>
+      _search.text.trim().isNotEmpty ||
+      _toClassify ||
+      _uncleared ||
+      _subscriptionsOnly ||
+      _categoryFilter != null;
+
+  /// Nothing to show: either the filters hide everything, or the account
+  /// has no operation yet (decision 0041, point 15).
+  Widget _empty(AppLocalizations l, Account? account) => _filtered
+      ? EmptyState(
+          icon: Icons.filter_alt_off_outlined,
+          text: l.emptyOperationsFiltered,
+          actionLabel: l.emptyClearFilters,
+          onAction: _clearFilters,
+        )
+      : EmptyState(
+          icon: Icons.receipt_long_outlined,
+          text: l.operationsEmpty,
+          hint: l.emptyOperationsHint,
+          actionLabel: _canWrite && account != null ? l.operationAdd : null,
+          onAction: _canWrite && account != null ? _add : null,
+        );
+
+  void _clearFilters() {
+    _search.clear();
+    setState(() {
+      _toClassify = false;
+      _uncleared = false;
+      _subscriptionsOnly = false;
+      _categoryFilter = null;
+    });
+    _reload();
   }
 
   Future<void> _reload() async {
@@ -618,7 +654,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
             child: _error != null
                 ? Center(child: Text(_error!))
                 : _items.isEmpty && !_loading
-                ? Center(child: Text(l.operationsEmpty))
+                ? _empty(l, account)
                 : ListView.builder(
                     padding: const EdgeInsets.only(bottom: 96),
                     itemCount: _items.length + 1,

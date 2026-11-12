@@ -524,7 +524,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navImport => 'Importer';
 
   @override
-  String get navForecast => 'Prévisions';
+  String get navForecast => 'Solde prévu';
 
   @override
   String get navCategories => 'Catégories';
@@ -7914,4 +7914,102 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get loanTabSimulate => 'Simuler';
+
+  @override
+  String get whyThisFigure => 'Pourquoi ce chiffre ?';
+
+  @override
+  String get whyTotal => 'Total';
+
+  @override
+  String get whyBalanceTitle => 'Solde d\'aujourd\'hui';
+
+  @override
+  String get whyBalanceText =>
+      'La somme des soldes connus aujourd\'hui de vos comptes en euros : le dernier relevé importé, plus les opérations enregistrées depuis. Les comptes dans une autre devise ne sont pas additionnés. Le point bas vient de la prévision : opérations prévues et échéances de crédit des 30 prochains jours.';
+
+  @override
+  String get whyLeftBalance => 'Solde des comptes courants aujourd\'hui';
+
+  @override
+  String whyLeftDebits(String date) {
+    return 'Prélèvements prévus jusqu\'au $date';
+  }
+
+  @override
+  String whyLeftCredits(String date) {
+    return 'Rentrées prévues jusqu\'au $date';
+  }
+
+  @override
+  String get whyLeftDays => 'Jours restants';
+
+  @override
+  String get whyLeftPerDay => 'Par jour';
+
+  @override
+  String get whyNetUnclassified => 'dont opérations non classées';
+
+  @override
+  String get whyNetText =>
+      'Revenus de la période, moins les dépenses et l\'épargne mise de côté. Les virements entre vos comptes ne comptent pas. Une opération non classée compte comme revenu si c\'est une entrée, comme dépense si c\'est une sortie.';
+
+  @override
+  String get cardHelpTooltip => 'Que montre cette carte ?';
+
+  @override
+  String get cardHelpWatch =>
+      'Ce qui mérite un coup d\'œil, le plus urgent d\'abord : un compte à découvert, un découvert prévu, un compte sous son seuil d\'alerte, des opérations à classer, des notifications. Ce qui va bien est replié en dessous.';
+
+  @override
+  String get cardHelpAdvices =>
+      'Les conseils de « Mon conseiller » qui attendent votre réponse. Chacun montre ses chiffres et son calcul ; rien n\'est modifié sans votre accord.';
+
+  @override
+  String get cardHelpUpcoming =>
+      'Les opérations prévues et les échéances de crédit des 7 prochains jours, sur les comptes que vous voyez.';
+
+  @override
+  String get cardHelpTopSpending =>
+      'Les catégories où vous avez le plus dépensé sur la période choisie. Les virements entre vos comptes n\'en font pas partie.';
+
+  @override
+  String get notifFilterAll => 'Toutes';
+
+  @override
+  String notifFilterAlerts(int count) {
+    return 'Alertes ($count)';
+  }
+
+  @override
+  String notifFilterAdvice(int count) {
+    return 'Conseils ($count)';
+  }
+
+  @override
+  String notifFilterSystem(int count) {
+    return 'Système ($count)';
+  }
+
+  @override
+  String get notifFilterEmpty => 'Aucune notification de ce type.';
+
+  @override
+  String get emptyAccountsHint =>
+      'Un compte regroupe les opérations d\'une banque. Créez-le, puis importez un relevé pour voir votre solde et sa prévision.';
+
+  @override
+  String get emptyOperationsHint =>
+      'Importez un relevé de votre banque (+ en haut, « Importer un relevé ») ou saisissez une opération.';
+
+  @override
+  String get emptyOperationsFiltered =>
+      'Aucune opération ne correspond à ces filtres.';
+
+  @override
+  String get emptyClearFilters => 'Effacer les filtres';
+
+  @override
+  String get emptyNotificationsHint =>
+      'Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications.';
 }

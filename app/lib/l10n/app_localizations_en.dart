@@ -518,7 +518,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navImport => 'Import';
 
   @override
-  String get navForecast => 'Forecast';
+  String get navForecast => 'Expected balance';
 
   @override
   String get navCategories => 'Categories';
@@ -7854,4 +7854,101 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loanTabSimulate => 'Simulate';
+
+  @override
+  String get whyThisFigure => 'Why this figure?';
+
+  @override
+  String get whyTotal => 'Total';
+
+  @override
+  String get whyBalanceTitle => 'Balance today';
+
+  @override
+  String get whyBalanceText =>
+      'The sum of today\'s known balances of your accounts in euros: the last imported statement, plus the operations recorded since. Accounts in another currency are not added up. The low point comes from the forecast: planned operations and loan instalments of the next 30 days.';
+
+  @override
+  String get whyLeftBalance => 'Balance of the current accounts today';
+
+  @override
+  String whyLeftDebits(String date) {
+    return 'Planned debits until $date';
+  }
+
+  @override
+  String whyLeftCredits(String date) {
+    return 'Planned credits until $date';
+  }
+
+  @override
+  String get whyLeftDays => 'Days left';
+
+  @override
+  String get whyLeftPerDay => 'Per day';
+
+  @override
+  String get whyNetUnclassified => 'of which operations not classified';
+
+  @override
+  String get whyNetText =>
+      'Income of the period, minus spending and money put aside. Transfers between your accounts do not count. An operation not classified counts as income if money came in, as spending if it went out.';
+
+  @override
+  String get cardHelpTooltip => 'What does this card show?';
+
+  @override
+  String get cardHelpWatch =>
+      'What deserves a look, the most urgent first: an overdrawn account, an expected overdraft, an account below its alert threshold, operations to classify, notifications. What goes well is folded below.';
+
+  @override
+  String get cardHelpAdvices =>
+      'The advice of « My advisor » waiting for your answer. Each one shows its figures and its calculation; nothing is changed without your consent.';
+
+  @override
+  String get cardHelpUpcoming =>
+      'The planned operations and loan instalments of the next 7 days, on the accounts you can see.';
+
+  @override
+  String get cardHelpTopSpending =>
+      'The categories where you spent the most over the chosen period. Transfers between your accounts are not part of it.';
+
+  @override
+  String get notifFilterAll => 'All';
+
+  @override
+  String notifFilterAlerts(int count) {
+    return 'Alerts ($count)';
+  }
+
+  @override
+  String notifFilterAdvice(int count) {
+    return 'Advice ($count)';
+  }
+
+  @override
+  String notifFilterSystem(int count) {
+    return 'System ($count)';
+  }
+
+  @override
+  String get notifFilterEmpty => 'No notification of this kind.';
+
+  @override
+  String get emptyAccountsHint =>
+      'An account gathers the operations of one bank. Create it, then import a statement to see your balance and its forecast.';
+
+  @override
+  String get emptyOperationsHint =>
+      'Import a statement from your bank (+ at the top, « Import a statement ») or enter an operation.';
+
+  @override
+  String get emptyOperationsFiltered => 'No operation matches these filters.';
+
+  @override
+  String get emptyClearFilters => 'Clear the filters';
+
+  @override
+  String get emptyNotificationsHint =>
+      'Alerts (expected overdraft, goal exceeded) and reminders will arrive here. Choose which ones in Settings › Notifications.';
 }

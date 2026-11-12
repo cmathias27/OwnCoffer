@@ -3,6 +3,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/soft.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/balance_check_dialog.dart';
@@ -92,7 +93,13 @@ class AccountsScreenState extends State<AccountsScreen> {
           : rows == null
           ? const Center(child: CircularProgressIndicator())
           : rows.isEmpty
-          ? Center(child: Text(l.accountsEmpty))
+          ? EmptyState(
+              icon: Icons.account_balance_wallet_outlined,
+              text: l.accountsEmpty,
+              hint: l.emptyAccountsHint,
+              actionLabel: _isAdmin ? l.accountAdd : null,
+              onAction: _isAdmin ? () => _edit() : null,
+            )
           : RefreshIndicator(
               onRefresh: reload,
               child: ListView(

@@ -249,7 +249,7 @@
   "navAccounts": "Comptes",
   "navOperations": "Opérations",
   "navImport": "Importer",
-  "navForecast": "Prévisions",
+  "navForecast": "Solde prévu",
   "navCategories": "Catégories",
   "accountsTitle": "Comptes",
   "accountsEmpty": "Aucun compte pour l'instant.",
@@ -5466,5 +5466,66 @@
   "loanTabSchedule": "Échéancier",
   "loanTabOperations": "Opérations",
   "loanTabDocuments": "Documents",
-  "loanTabSimulate": "Simuler"
+  "loanTabSimulate": "Simuler",
+  "whyThisFigure": "Pourquoi ce chiffre ?",
+  "whyTotal": "Total",
+  "whyBalanceTitle": "Solde d'aujourd'hui",
+  "whyBalanceText": "La somme des soldes connus aujourd'hui de vos comptes en euros : le dernier relevé importé, plus les opérations enregistrées depuis. Les comptes dans une autre devise ne sont pas additionnés. Le point bas vient de la prévision : opérations prévues et échéances de crédit des 30 prochains jours.",
+  "whyLeftBalance": "Solde des comptes courants aujourd'hui",
+  "whyLeftDebits": "Prélèvements prévus jusqu'au {date}",
+  "@whyLeftDebits": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyLeftCredits": "Rentrées prévues jusqu'au {date}",
+  "@whyLeftCredits": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "whyLeftDays": "Jours restants",
+  "whyLeftPerDay": "Par jour",
+  "whyNetUnclassified": "dont opérations non classées",
+  "whyNetText": "Revenus de la période, moins les dépenses et l'épargne mise de côté. Les virements entre vos comptes ne comptent pas. Une opération non classée compte comme revenu si c'est une entrée, comme dépense si c'est une sortie.",
+  "cardHelpTooltip": "Que montre cette carte ?",
+  "cardHelpWatch": "Ce qui mérite un coup d'œil, le plus urgent d'abord : un compte à découvert, un découvert prévu, un compte sous son seuil d'alerte, des opérations à classer, des notifications. Ce qui va bien est replié en dessous.",
+  "cardHelpAdvices": "Les conseils de « Mon conseiller » qui attendent votre réponse. Chacun montre ses chiffres et son calcul ; rien n'est modifié sans votre accord.",
+  "cardHelpUpcoming": "Les opérations prévues et les échéances de crédit des 7 prochains jours, sur les comptes que vous voyez.",
+  "cardHelpTopSpending": "Les catégories où vous avez le plus dépensé sur la période choisie. Les virements entre vos comptes n'en font pas partie.",
+  "notifFilterAll": "Toutes",
+  "notifFilterAlerts": "Alertes ({count})",
+  "@notifFilterAlerts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterAdvice": "Conseils ({count})",
+  "@notifFilterAdvice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterSystem": "Système ({count})",
+  "@notifFilterSystem": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifFilterEmpty": "Aucune notification de ce type.",
+  "emptyAccountsHint": "Un compte regroupe les opérations d'une banque. Créez-le, puis importez un relevé pour voir votre solde et sa prévision.",
+  "emptyOperationsHint": "Importez un relevé de votre banque (+ en haut, « Importer un relevé ») ou saisissez une opération.",
+  "emptyOperationsFiltered": "Aucune opération ne correspond à ces filtres.",
+  "emptyClearFilters": "Effacer les filtres",
+  "emptyNotificationsHint": "Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications."
 }

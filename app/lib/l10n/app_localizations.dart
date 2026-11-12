@@ -965,7 +965,7 @@ abstract class AppLocalizations {
   /// No description provided for @navForecast.
   ///
   /// In fr, this message translates to:
-  /// **'Prévisions'**
+  /// **'Solde prévu'**
   String get navForecast;
 
   /// No description provided for @navCategories.
@@ -12438,6 +12438,162 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Simuler'**
   String get loanTabSimulate;
+
+  /// No description provided for @whyThisFigure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pourquoi ce chiffre ?'**
+  String get whyThisFigure;
+
+  /// No description provided for @whyTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total'**
+  String get whyTotal;
+
+  /// No description provided for @whyBalanceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde d\'aujourd\'hui'**
+  String get whyBalanceTitle;
+
+  /// No description provided for @whyBalanceText.
+  ///
+  /// In fr, this message translates to:
+  /// **'La somme des soldes connus aujourd\'hui de vos comptes en euros : le dernier relevé importé, plus les opérations enregistrées depuis. Les comptes dans une autre devise ne sont pas additionnés. Le point bas vient de la prévision : opérations prévues et échéances de crédit des 30 prochains jours.'**
+  String get whyBalanceText;
+
+  /// No description provided for @whyLeftBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde des comptes courants aujourd\'hui'**
+  String get whyLeftBalance;
+
+  /// No description provided for @whyLeftDebits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prélèvements prévus jusqu\'au {date}'**
+  String whyLeftDebits(String date);
+
+  /// No description provided for @whyLeftCredits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rentrées prévues jusqu\'au {date}'**
+  String whyLeftCredits(String date);
+
+  /// No description provided for @whyLeftDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jours restants'**
+  String get whyLeftDays;
+
+  /// No description provided for @whyLeftPerDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par jour'**
+  String get whyLeftPerDay;
+
+  /// No description provided for @whyNetUnclassified.
+  ///
+  /// In fr, this message translates to:
+  /// **'dont opérations non classées'**
+  String get whyNetUnclassified;
+
+  /// No description provided for @whyNetText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus de la période, moins les dépenses et l\'épargne mise de côté. Les virements entre vos comptes ne comptent pas. Une opération non classée compte comme revenu si c\'est une entrée, comme dépense si c\'est une sortie.'**
+  String get whyNetText;
+
+  /// No description provided for @cardHelpTooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Que montre cette carte ?'**
+  String get cardHelpTooltip;
+
+  /// No description provided for @cardHelpWatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui mérite un coup d\'œil, le plus urgent d\'abord : un compte à découvert, un découvert prévu, un compte sous son seuil d\'alerte, des opérations à classer, des notifications. Ce qui va bien est replié en dessous.'**
+  String get cardHelpWatch;
+
+  /// No description provided for @cardHelpAdvices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les conseils de « Mon conseiller » qui attendent votre réponse. Chacun montre ses chiffres et son calcul ; rien n\'est modifié sans votre accord.'**
+  String get cardHelpAdvices;
+
+  /// No description provided for @cardHelpUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations prévues et les échéances de crédit des 7 prochains jours, sur les comptes que vous voyez.'**
+  String get cardHelpUpcoming;
+
+  /// No description provided for @cardHelpTopSpending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les catégories où vous avez le plus dépensé sur la période choisie. Les virements entre vos comptes n\'en font pas partie.'**
+  String get cardHelpTopSpending;
+
+  /// No description provided for @notifFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes'**
+  String get notifFilterAll;
+
+  /// No description provided for @notifFilterAlerts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Alertes ({count})'**
+  String notifFilterAlerts(int count);
+
+  /// No description provided for @notifFilterAdvice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conseils ({count})'**
+  String notifFilterAdvice(int count);
+
+  /// No description provided for @notifFilterSystem.
+  ///
+  /// In fr, this message translates to:
+  /// **'Système ({count})'**
+  String notifFilterSystem(int count);
+
+  /// No description provided for @notifFilterEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune notification de ce type.'**
+  String get notifFilterEmpty;
+
+  /// No description provided for @emptyAccountsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un compte regroupe les opérations d\'une banque. Créez-le, puis importez un relevé pour voir votre solde et sa prévision.'**
+  String get emptyAccountsHint;
+
+  /// No description provided for @emptyOperationsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importez un relevé de votre banque (+ en haut, « Importer un relevé ») ou saisissez une opération.'**
+  String get emptyOperationsHint;
+
+  /// No description provided for @emptyOperationsFiltered.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération ne correspond à ces filtres.'**
+  String get emptyOperationsFiltered;
+
+  /// No description provided for @emptyClearFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer les filtres'**
+  String get emptyClearFilters;
+
+  /// No description provided for @emptyNotificationsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les alertes (découvert prévu, objectif dépassé) et les rappels arriveront ici. Choisissez lesquels dans Réglages › Notifications.'**
+  String get emptyNotificationsHint;
 }
 
 class _AppLocalizationsDelegate

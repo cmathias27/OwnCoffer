@@ -10,6 +10,7 @@ import '../state/ui_prefs.dart';
 import '../theme/app_theme.dart';
 import '../widgets/period_bar.dart';
 import '../util/format.dart';
+import '../widgets/why.dart';
 import '../state/pepite.dart';
 import '../widgets/pepite.dart';
 import '../widgets/soft.dart';
@@ -348,7 +349,21 @@ class DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                   ],
-                  const SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: WhyButton(
+                      key: const Key('why-balance'),
+                      color: scheme.onPrimaryContainer,
+                      title: l.whyBalanceTitle,
+                      lines: [
+                        for (final (a, f) in known)
+                          WhyLine(a.name, f.currentBalanceCents),
+                        WhyLine(l.whyTotal, total, total: true),
+                      ],
+                      explanation: l.whyBalanceText,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -391,6 +406,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     return SoftSection(
       icon: Icons.event_outlined,
       title: l.dashboardUpcoming,
+      help: l.cardHelpUpcoming,
       children: [
         if (items.isEmpty)
           Padding(
@@ -437,6 +453,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     return SoftSection(
       icon: Icons.pie_chart_outline,
       title: l.dashboardMonthSpending,
+      help: l.cardHelpTopSpending,
       children: [
         Text(
           l.dashboardMonthTotals(
@@ -591,6 +608,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     return SoftSection(
       icon: Icons.visibility_outlined,
       title: l.dashboardWatch,
+      help: l.cardHelpWatch,
       children: [
         if (issues.isEmpty)
           Padding(
@@ -652,6 +670,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       key: const Key('home-advices'),
       icon: Icons.lightbulb_outline,
       title: l.homeAdvicesTitle,
+      help: l.cardHelpAdvices,
       children: [
         if (shown.isEmpty)
           Padding(

@@ -11,6 +11,7 @@ import '../l10n/error_messages.dart';
 import '../util/format.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/undo.dart';
+import '../widgets/why.dart';
 import '../widgets/category_field.dart';
 import '../widgets/operation_sheet.dart';
 import '../widgets/operation_tile.dart';
@@ -1435,6 +1436,23 @@ class BalanceCard extends StatelessWidget {
                   ),
               ],
             ),
+            const SizedBox(height: 4),
+            WhyButton(
+              key: const Key('why-net'),
+              title: l.budgetNet,
+              lines: [
+                WhyLine(l.budgetIncome, r.incomeCents),
+                WhyLine(l.budgetExpenses, -r.expenseCents),
+                WhyLine(l.budgetSavings, -r.savingsCents),
+                WhyLine(l.budgetNet, r.netCents, total: true),
+                if (r.unclassifiedCount > 0)
+                  WhyLine.text(
+                    l.whyNetUnclassified,
+                    '${r.unclassifiedCount}',
+                  ),
+              ],
+              explanation: l.whyNetText,
+            ),
           ],
         ),
       ),
@@ -1575,6 +1593,29 @@ class LeftToLiveCard extends StatelessWidget {
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onPrimaryContainer,
               ),
+            ),
+            WhyButton(
+              key: const Key('why-left'),
+              color: theme.colorScheme.onPrimaryContainer,
+              title: l.leftToLiveTitle,
+              lines: [
+                WhyLine(l.whyLeftBalance, r.balanceCents),
+                WhyLine(
+                  l.whyLeftDebits(context.day(r.last)),
+                  r.plannedDebitsCents,
+                ),
+                WhyLine(
+                  l.whyLeftCredits(context.day(r.last)),
+                  r.plannedCreditsCents,
+                ),
+                WhyLine(l.leftToLiveTitle, r.leftCents, total: true),
+                WhyLine.text(
+                  l.whyLeftDays,
+                  '${r.daysLeft}',
+                ),
+                WhyLine(l.whyLeftPerDay, r.perDayCents, total: true),
+              ],
+              explanation: l.leftToLiveHelp,
             ),
           ],
         ),
