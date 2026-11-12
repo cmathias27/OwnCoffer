@@ -102,6 +102,13 @@ class LoansScreenState extends State<LoansScreen> {
     }
   }
 
+  /// Opens a loan found by the global search (decision 0041, point 5).
+  Future<void> openLoan(int loanId) async {
+    if (_data == null) await reload();
+    final info = _data?.loans.where((i) => i.loan.id == loanId).firstOrNull;
+    if (info != null && mounted) await _open(info);
+  }
+
   Future<void> _open(LoanInfo info) async {
     final changed = await Navigator.of(context).push<bool>(
       MaterialPageRoute(

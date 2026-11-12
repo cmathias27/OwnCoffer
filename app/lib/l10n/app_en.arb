@@ -2422,5 +2422,67 @@
   "searchKwHelp": "help, manual, how to",
   "searchKwShortcuts": "shortcuts, keyboard, keys",
   "searchKwFeedback": "feedback, report, bug, suggestion",
-  "searchKwAdmin": "administration, server, updates, backups"
+  "searchKwAdmin": "administration, server, updates, backups",
+  "swipeOpen": "Open",
+  "homeAllGood": "All is well: nothing urgent to look at.",
+  "homeIssuesCount": "{count, plural, =1{1 thing to look at} other{{count} things to look at}}",
+  "@homeIssuesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeIssueOverdrawn": "{account} is overdrawn: {amount}",
+  "@homeIssueOverdrawn": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueWillOverdraw": "{account} would be overdrawn on {date}",
+  "@homeIssueWillOverdraw": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueToClassify": "{count, plural, =1{1 operation of the month to classify} other{{count} operations of the month to classify}}",
+  "@homeIssueToClassify": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeGoodTitle": "{count, plural, =1{1 thing going well} other{{count} things going well}}",
+  "@homeGoodTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeGoodNoOverdraft": "No overdraft expected in the next 30 days",
+  "homeGoodClassified": "Every operation of the month is classified",
+  "homeGoodNoNotification": "No notification waiting",
+  "homeAdvicesTitle": "Current advice",
+  "homeAdvicesNone": "No advice waiting for now.",
+  "homeAdvicesAll": "See all",
+  "homeAdvicesAllCount": "See all {count}",
+  "@homeAdvicesAllCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -12294,6 +12294,90 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'administration, serveur, mises à jour, sauvegardes'**
   String get searchKwAdmin;
+
+  /// No description provided for @swipeOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir'**
+  String get swipeOpen;
+
+  /// No description provided for @homeAllGood.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout va bien : rien d\'urgent à regarder.'**
+  String get homeAllGood;
+
+  /// No description provided for @homeIssuesCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 point à regarder} other{{count} points à regarder}}'**
+  String homeIssuesCount(int count);
+
+  /// No description provided for @homeIssueOverdrawn.
+  ///
+  /// In fr, this message translates to:
+  /// **'{account} est à découvert : {amount}'**
+  String homeIssueOverdrawn(String account, String amount);
+
+  /// No description provided for @homeIssueWillOverdraw.
+  ///
+  /// In fr, this message translates to:
+  /// **'{account} passerait à découvert le {date}'**
+  String homeIssueWillOverdraw(String account, String date);
+
+  /// No description provided for @homeIssueToClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération du mois à classer} other{{count} opérations du mois à classer}}'**
+  String homeIssueToClassify(int count);
+
+  /// No description provided for @homeGoodTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 chose qui va bien} other{{count} choses qui vont bien}}'**
+  String homeGoodTitle(int count);
+
+  /// No description provided for @homeGoodNoOverdraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun découvert prévu dans les 30 jours'**
+  String get homeGoodNoOverdraft;
+
+  /// No description provided for @homeGoodClassified.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les opérations du mois sont classées'**
+  String get homeGoodClassified;
+
+  /// No description provided for @homeGoodNoNotification.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune notification en attente'**
+  String get homeGoodNoNotification;
+
+  /// No description provided for @homeAdvicesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conseils du moment'**
+  String get homeAdvicesTitle;
+
+  /// No description provided for @homeAdvicesNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun conseil en attente pour l\'instant.'**
+  String get homeAdvicesNone;
+
+  /// No description provided for @homeAdvicesAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir tout'**
+  String get homeAdvicesAll;
+
+  /// No description provided for @homeAdvicesAllCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les {count}'**
+  String homeAdvicesAllCount(int count);
 }
 
 class _AppLocalizationsDelegate

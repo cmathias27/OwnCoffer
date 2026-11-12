@@ -5394,5 +5394,67 @@
   "searchKwHelp": "aide, mode d'emploi, comment",
   "searchKwShortcuts": "raccourcis, clavier, touches",
   "searchKwFeedback": "avis, signaler, bug, suggestion",
-  "searchKwAdmin": "administration, serveur, mises à jour, sauvegardes"
+  "searchKwAdmin": "administration, serveur, mises à jour, sauvegardes",
+  "swipeOpen": "Ouvrir",
+  "homeAllGood": "Tout va bien : rien d'urgent à regarder.",
+  "homeIssuesCount": "{count, plural, =1{1 point à regarder} other{{count} points à regarder}}",
+  "@homeIssuesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeIssueOverdrawn": "{account} est à découvert : {amount}",
+  "@homeIssueOverdrawn": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueWillOverdraw": "{account} passerait à découvert le {date}",
+  "@homeIssueWillOverdraw": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeIssueToClassify": "{count, plural, =1{1 opération du mois à classer} other{{count} opérations du mois à classer}}",
+  "@homeIssueToClassify": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeGoodTitle": "{count, plural, =1{1 chose qui va bien} other{{count} choses qui vont bien}}",
+  "@homeGoodTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeGoodNoOverdraft": "Aucun découvert prévu dans les 30 jours",
+  "homeGoodClassified": "Toutes les opérations du mois sont classées",
+  "homeGoodNoNotification": "Aucune notification en attente",
+  "homeAdvicesTitle": "Conseils du moment",
+  "homeAdvicesNone": "Aucun conseil en attente pour l'instant.",
+  "homeAdvicesAll": "Voir tout",
+  "homeAdvicesAllCount": "Voir les {count}",
+  "@homeAdvicesAllCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

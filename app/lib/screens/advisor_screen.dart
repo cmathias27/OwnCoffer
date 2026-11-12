@@ -16,13 +16,30 @@ import '../help/help.dart';
 /// accepted change can be undone.
 class AdvisorScreen extends StatefulWidget {
   final GroupMembership membership;
-  const AdvisorScreen({super.key, required this.membership});
+
+  /// Shown as a section of the shell (decision 0041): no top bar of its own.
+  final bool embedded;
+
+  /// The proposals were loaded, with their titles (for the badge of new
+  /// advices and the advices of the home page).
+  final void Function(
+    List<ActionProposal> items,
+    String Function(ActionProposal) title,
+  )?
+  onLoaded;
+
+  const AdvisorScreen({
+    super.key,
+    required this.membership,
+    this.embedded = false,
+    this.onLoaded,
+  });
 
   @override
-  State<AdvisorScreen> createState() => _AdvisorScreenState();
+  State<AdvisorScreen> createState() => AdvisorScreenState();
 }
 
-class _AdvisorScreenState extends State<AdvisorScreen> {
+class AdvisorScreenState extends State<AdvisorScreen> {
   List<ActionProposal>? _items;
   Map<int, Category> _categories = {};
   String? _error;
@@ -36,6 +53,8 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
     super.initState();
     _load();
   }
+
+  Future<void> reload() => _load();
 
   Future<void> _load() async {
     try {
@@ -51,6 +70,10 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
         };
         _error = null;
       });
+      widget.onLoaded?.call(
+        _items!,
+        (p) => proposalTitle(context, p, _category),
+      );
     } on Object catch (e) {
       if (mounted) {
         setState(() => _error = errorText(AppLocalizations.of(context), e));
@@ -95,57 +118,59 @@ class _AdvisorScreenState extends State<AdvisorScreen> {
       for (final p in items ?? const <ActionProposal>[])
         if (p.status != 'pending') p,
     ];
+    final body = RefreshIndicator(
+      onRefresh: _load,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 32),
+        children: [
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(l.advisorIntro, style: theme.textTheme.bodyMedium),
+                  if (_error != null)
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(_error!, textAlign: TextAlign.center),
+                    )
+                  else if (items == null)
+                    const Padding(
+                      padding: EdgeInsets.all(48),
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  else ...[
+                    if (open.isEmpty)
+                      SoftSection(
+                        icon: Icons.thumb_up_alt_outlined,
+                        title: l.advisorNothing,
+                        children: [
+                          Text(l.advisorNothingHelp),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    for (final p in open) _card(context, l, p),
+                    if (past.isNotEmpty) ...[
+                      const SizedBox(height: 16),
+                      Text(l.advisorPast, style: theme.textTheme.titleSmall),
+                      for (final p in past) _pastRow(context, l, p),
+                    ],
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (widget.embedded) return body;
     return Scaffold(
       appBar: AppBar(
         title: Text(l.advisorTitle),
         actions: const [HelpButton(HelpTopic.advisor)],
       ),
-      body: RefreshIndicator(
-        onRefresh: _load,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(12, 8, 12, 32),
-          children: [
-            Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 760),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(l.advisorIntro, style: theme.textTheme.bodyMedium),
-                    if (_error != null)
-                      Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Text(_error!, textAlign: TextAlign.center),
-                      )
-                    else if (items == null)
-                      const Padding(
-                        padding: EdgeInsets.all(48),
-                        child: Center(child: CircularProgressIndicator()),
-                      )
-                    else ...[
-                      if (open.isEmpty)
-                        SoftSection(
-                          icon: Icons.thumb_up_alt_outlined,
-                          title: l.advisorNothing,
-                          children: [
-                            Text(l.advisorNothingHelp),
-                            const SizedBox(height: 8),
-                          ],
-                        ),
-                      for (final p in open) _card(context, l, p),
-                      if (past.isNotEmpty) ...[
-                        const SizedBox(height: 16),
-                        Text(l.advisorPast, style: theme.textTheme.titleSmall),
-                        for (final p in past) _pastRow(context, l, p),
-                      ],
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: body,
     );
   }
 

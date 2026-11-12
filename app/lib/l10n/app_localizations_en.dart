@@ -7752,4 +7752,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchKwAdmin => 'administration, server, updates, backups';
+
+  @override
+  String get swipeOpen => 'Open';
+
+  @override
+  String get homeAllGood => 'All is well: nothing urgent to look at.';
+
+  @override
+  String homeIssuesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count things to look at',
+      one: '1 thing to look at',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeIssueOverdrawn(String account, String amount) {
+    return '$account is overdrawn: $amount';
+  }
+
+  @override
+  String homeIssueWillOverdraw(String account, String date) {
+    return '$account would be overdrawn on $date';
+  }
+
+  @override
+  String homeIssueToClassify(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations of the month to classify',
+      one: '1 operation of the month to classify',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeGoodTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count things going well',
+      one: '1 thing going well',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeGoodNoOverdraft => 'No overdraft expected in the next 30 days';
+
+  @override
+  String get homeGoodClassified => 'Every operation of the month is classified';
+
+  @override
+  String get homeGoodNoNotification => 'No notification waiting';
+
+  @override
+  String get homeAdvicesTitle => 'Current advice';
+
+  @override
+  String get homeAdvicesNone => 'No advice waiting for now.';
+
+  @override
+  String get homeAdvicesAll => 'See all';
+
+  @override
+  String homeAdvicesAllCount(int count) {
+    return 'See all $count';
+  }
 }

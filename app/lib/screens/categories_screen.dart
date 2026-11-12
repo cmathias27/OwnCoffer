@@ -12,7 +12,14 @@ import '../widgets/category_field.dart';
 class CategoriesScreen extends StatefulWidget {
   final GroupMembership membership;
 
-  const CategoriesScreen({super.key, required this.membership});
+  /// 1 opens the rules.
+  final int initialTab;
+
+  const CategoriesScreen({
+    super.key,
+    required this.membership,
+    this.initialTab = 0,
+  });
 
   @override
   State<CategoriesScreen> createState() => CategoriesScreenState();
@@ -101,6 +108,7 @@ class CategoriesScreenState extends State<CategoriesScreen> {
     final l = AppLocalizations.of(context);
     return DefaultTabController(
       length: 2,
+      initialIndex: widget.initialTab,
       child: Builder(
         builder: (context) {
           final tabs = DefaultTabController.of(context);

@@ -6,6 +6,8 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../state/ui_prefs.dart';
+import '../theme/app_theme.dart';
 import '../util/format.dart';
 import '../state/pepite.dart';
 import '../widgets/pepite.dart';
@@ -41,12 +43,19 @@ class DashboardScreen extends StatefulWidget {
   /// Opens "Mon conseiller" (null: not available yet).
   final VoidCallback? onAdvisor;
 
+  /// The advices waiting for an answer, best first (decision 0041, point 6),
+  /// and how to name them.
+  final List<ActionProposal> advices;
+  final String Function(ActionProposal)? adviceTitle;
+
   const DashboardScreen({
     super.key,
     required this.membership,
     required this.onOpen,
     this.unread = 0,
     this.onAdvisor,
+    this.advices = const [],
+    this.adviceTitle,
   });
 
   @override
@@ -160,10 +169,18 @@ class DashboardScreenState extends State<DashboardScreen> {
           Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 1000),
+              child: _summarySentence(context, l, accounts, month),
+            ),
+          ),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
               child: LayoutBuilder(
                 builder: (context, box) {
                   final wide = box.maxWidth >= 720;
                   final cards = <Widget>[
+                    _status(context, l, accounts, month),
+                    if (widget.onAdvisor != null) _advicesCard(context, l),
                     _balance(context, l, accounts),
                     if (left != null)
                       _tap(
@@ -181,8 +198,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                         () => widget.onOpen(DashboardTarget.budget),
                       ),
                     _upcoming(context, l),
-                    if (month != null) _topSpending(context, l, month),
-                    _watch(context, l, accounts),
+                    if (month != null && !uiPrefs.simpleMode)
+                      _topSpending(context, l, month),
                   ];
                   if (!wide) {
                     return Column(
@@ -441,41 +458,174 @@ class DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  /// What deserves a look: notifications, accounts going below their
-  /// alert threshold.
-  Widget _watch(
+  /// What deserves a look, the most urgent first (decision 0041, point 6):
+  /// an account below zero today, then below zero later, then below its
+  /// alert threshold, then operations to classify and notifications.
+  List<_Issue> _issues(
+    AppLocalizations l,
+    BuildContext context,
+    List<(Account, ForecastResult?)> accounts,
+    SpendingReport? month,
+  ) {
+    final issues = <_Issue>[];
+    for (final (a, f) in accounts) {
+      if (f == null) continue;
+      if (f.currentBalanceCents < 0) {
+        issues.add(
+          _Issue(
+            0,
+            Icons.error_outline,
+            l.homeIssueOverdrawn(
+              a.name,
+              context.money(f.currentBalanceCents, currency: a.currency),
+            ),
+            DashboardTarget.forecast,
+          ),
+        );
+      } else if (f.lowestBalanceCents < 0) {
+        issues.add(
+          _Issue(
+            1,
+            Icons.trending_down,
+            l.homeIssueWillOverdraw(a.name, context.day(f.lowestDate)),
+            DashboardTarget.forecast,
+          ),
+        );
+      } else if (f.firstBelowThresholdDate case final d?) {
+        issues.add(
+          _Issue(
+            2,
+            Icons.warning_amber_rounded,
+            l.dashboardBelow(a.name, context.day(d)),
+            DashboardTarget.forecast,
+          ),
+        );
+      }
+    }
+    if (month != null && month.unclassifiedCount > 0) {
+      issues.add(
+        _Issue(
+          3,
+          Icons.label_off_outlined,
+          l.homeIssueToClassify(month.unclassifiedCount),
+          DashboardTarget.operations,
+        ),
+      );
+    }
+    if (widget.unread > 0) {
+      issues.add(
+        _Issue(
+          4,
+          Icons.notifications_active_outlined,
+          l.dashboardUnread(widget.unread),
+          DashboardTarget.notifications,
+        ),
+      );
+    }
+    issues.sort((a, b) => a.urgency.compareTo(b.urgency));
+    return issues;
+  }
+
+  /// « Tout va bien ? » answered in one sentence, at the top of the page.
+  Widget _summarySentence(
     BuildContext context,
     AppLocalizations l,
     List<(Account, ForecastResult?)> accounts,
+    SpendingReport? month,
   ) {
-    final below = [
-      for (final (a, f) in accounts)
-        if (f?.firstBelowThresholdDate case final d?) (a, d),
+    final theme = Theme.of(context);
+    final issues = _issues(l, context, accounts, month);
+    final urgent = issues.any((i) => i.urgency <= 1);
+    final colors = context.moneyColors;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
+      child: Row(
+        children: [
+          Icon(
+            issues.isEmpty
+                ? Icons.check_circle_outline
+                : urgent
+                ? Icons.error_outline
+                : Icons.info_outline,
+            color: issues.isEmpty
+                ? colors.positive
+                : urgent
+                ? colors.negative
+                : colors.muted,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              key: const Key('home-summary'),
+              issues.isEmpty ? l.homeAllGood : l.homeIssuesCount(issues.length),
+              style: theme.textTheme.titleMedium,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// The points to look at, most urgent first; what goes well is folded.
+  Widget _status(
+    BuildContext context,
+    AppLocalizations l,
+    List<(Account, ForecastResult?)> accounts,
+    SpendingReport? month,
+  ) {
+    final issues = _issues(l, context, accounts, month);
+    final colors = context.moneyColors;
+    final noOverdraft = accounts.every(
+      (e) => e.$2 == null || e.$2!.lowestBalanceCents >= 0,
+    );
+    final good = [
+      if (noOverdraft) l.homeGoodNoOverdraft,
+      if (month != null && month.unclassifiedCount == 0) l.homeGoodClassified,
+      if (widget.unread == 0) l.homeGoodNoNotification,
     ];
     return SoftSection(
       icon: Icons.visibility_outlined,
       title: l.dashboardWatch,
       children: [
-        if (below.isEmpty && widget.unread == 0)
+        if (issues.isEmpty)
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(l.dashboardAllGood),
           ),
-        for (final (a, d) in below)
+        for (final i in issues)
           ListTile(
             dense: true,
             contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.warning_amber_rounded),
-            title: Text(l.dashboardBelow(a.name, context.day(d))),
-            onTap: () => widget.onOpen(DashboardTarget.forecast),
+            leading: Icon(
+              i.icon,
+              color: i.urgency <= 1 ? colors.negative : null,
+            ),
+            title: Text(i.text),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => widget.onOpen(i.target),
           ),
-        if (widget.unread > 0)
-          ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.notifications_active_outlined),
-            title: Text(l.dashboardUnread(widget.unread)),
-            onTap: () => widget.onOpen(DashboardTarget.notifications),
+        if (good.isNotEmpty)
+          Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              key: const Key('home-good'),
+              tilePadding: EdgeInsets.zero,
+              dense: true,
+              leading: Icon(
+                Icons.thumb_up_alt_outlined,
+                color: colors.positive,
+              ),
+              title: Text(l.homeGoodTitle(good.length)),
+              children: [
+                for (final g in good)
+                  ListTile(
+                    dense: true,
+                    contentPadding: const EdgeInsets.only(left: 16),
+                    leading: Icon(Icons.check, color: colors.positive),
+                    title: Text(g),
+                  ),
+              ],
+            ),
           ),
         ListTile(
           dense: true,
@@ -484,15 +634,60 @@ class DashboardScreenState extends State<DashboardScreen> {
           title: Text(l.summaryOpen),
           onTap: () => widget.onOpen(DashboardTarget.summary),
         ),
-        if (widget.onAdvisor != null)
-          ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.lightbulb_outline),
-            title: Text(l.dashboardAdvisor),
-            onTap: widget.onAdvisor,
-          ),
       ],
     );
   }
+
+  /// « Conseils du moment »: the first three advices, the others behind
+  /// « Voir tout ».
+  Widget _advicesCard(BuildContext context, AppLocalizations l) {
+    final title = widget.adviceTitle;
+    final shown = title == null ? const <ActionProposal>[] : widget.advices;
+    return SoftSection(
+      key: const Key('home-advices'),
+      icon: Icons.lightbulb_outline,
+      title: l.homeAdvicesTitle,
+      children: [
+        if (shown.isEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(l.homeAdvicesNone),
+          ),
+        for (final p in shown.take(3))
+          ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.tips_and_updates_outlined),
+            title: Text(
+              title!(p),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            onTap: widget.onAdvisor,
+          ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            key: const Key('home-advices-all'),
+            onPressed: widget.onAdvisor,
+            child: Text(
+              shown.length > 3
+                  ? l.homeAdvicesAllCount(shown.length)
+                  : l.homeAdvicesAll,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// A point to look at on the home page.
+class _Issue {
+  /// 0 is the most urgent.
+  final int urgency;
+  final IconData icon;
+  final String text;
+  final DashboardTarget target;
+  const _Issue(this.urgency, this.icon, this.text, this.target);
 }
