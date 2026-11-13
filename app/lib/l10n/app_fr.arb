@@ -5612,6 +5612,64 @@
   "homeCardImportsHelp": "La date du dernier relevé importé",
   "homeCardNotifications": "Notifications",
   "homeCardNotificationsHelp": "Les notifications pas encore lues",
+  "homeCardBudget": "Objectifs du budget",
+  "homeCardBudgetHelp": "Ce qu'il reste sur vos objectifs de dépense du mois, et ceux dépassés",
+  "homeCardMonthSummary": "Récapitulatif",
+  "homeCardMonthSummaryHelp": "Les 30 prochains jours en bref : point bas, notifications et conseils",
+  "homeCardSearchHelp": "Chercher une opération, un crédit, une facture ou une fonction",
+  "homeCardNewOperationHelp": "Saisir à la main une dépense ou une recette",
+  "homeCardScanReceiptHelp": "Photographier un ticket pour l'enregistrer",
+  "homeCardCategoriesHelp": "Les catégories du foyer, à renommer ou à créer",
+  "homeCardRulesHelp": "Les règles qui classent les opérations toutes seules",
+  "homeCardMembersHelp": "Les membres du foyer et leurs droits",
+  "homeCardExportHelp": "Télécharger une copie de vos données",
+  "homeCardSecurityHelp": "Mot de passe, double authentification et appareils connectés",
+  "homeCardAssistantHelp": "Choisir et régler l'IA, si vous en voulez une",
+  "homeCardAppsHelp": "Les applications Android et Windows",
+  "homeCardDisplayHelp": "Thème, taille du texte et mode simple",
+  "homeCardHelpHelp": "L'aide de l'application, page par page",
+  "homeCardShortcutsHelp": "Les touches du clavier de l'application",
+  "homeCardFeedbackHelp": "Signaler un problème ou proposer une idée",
+  "homeCardAdminHelp": "Les comptes, les mises à jour et les réglages du serveur",
+  "homeAddSummaries": "Résumés des pages",
+  "homeAddShortcuts": "Raccourcis vers les fonctions",
+  "homeTileBudgetNone": "Aucun objectif de dépense ce mois-ci : fixez-en dans Budget.",
+  "homeTileBudgetLeft": "restent sur les objectifs du mois",
+  "homeTileBudgetSpent": "{spent} dépensés sur {planned} prévus",
+  "@homeTileBudgetSpent": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "planned": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileBudgetOver": "{count, plural, =1{1 objectif dépassé} other{{count} objectifs dépassés}}",
+  "@homeTileBudgetOver": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileSummaryLowest": "point bas le {date}",
+  "@homeTileSummaryLowest": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileSummaryAdvices": "{count, plural, =0{Aucun conseil en attente} =1{1 conseil en attente} other{{count} conseils en attente}}",
+  "@homeTileSummaryAdvices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeTilePerDay": "{amount} par jour",
   "@homeTilePerDay": {
     "placeholders": {

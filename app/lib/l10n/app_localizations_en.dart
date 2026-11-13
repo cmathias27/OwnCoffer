@@ -8117,6 +8117,119 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeCardNotificationsHelp => 'The notifications not read yet';
 
   @override
+  String get homeCardBudget => 'Budget goals';
+
+  @override
+  String get homeCardBudgetHelp =>
+      'What is left of this month\'s spending goals, and the ones exceeded';
+
+  @override
+  String get homeCardMonthSummary => 'Summary';
+
+  @override
+  String get homeCardMonthSummaryHelp =>
+      'The next 30 days in brief: lowest point, notifications and advices';
+
+  @override
+  String get homeCardSearchHelp =>
+      'Find an operation, a loan, an invoice or a function';
+
+  @override
+  String get homeCardNewOperationHelp =>
+      'Enter an expense or an income by hand';
+
+  @override
+  String get homeCardScanReceiptHelp =>
+      'Take a picture of a receipt to keep it';
+
+  @override
+  String get homeCardCategoriesHelp =>
+      'The household\'s categories, to rename or create';
+
+  @override
+  String get homeCardRulesHelp =>
+      'The rules that classify operations on their own';
+
+  @override
+  String get homeCardMembersHelp => 'The household\'s members and their rights';
+
+  @override
+  String get homeCardExportHelp => 'Download a copy of your data';
+
+  @override
+  String get homeCardSecurityHelp =>
+      'Password, two-factor authentication and signed-in devices';
+
+  @override
+  String get homeCardAssistantHelp =>
+      'Choose and set up an AI, if you want one';
+
+  @override
+  String get homeCardAppsHelp => 'The Android and Windows apps';
+
+  @override
+  String get homeCardDisplayHelp => 'Theme, text size and simple mode';
+
+  @override
+  String get homeCardHelpHelp => 'The app\'s help, page by page';
+
+  @override
+  String get homeCardShortcutsHelp => 'The app\'s keyboard keys';
+
+  @override
+  String get homeCardFeedbackHelp => 'Report a problem or suggest an idea';
+
+  @override
+  String get homeCardAdminHelp =>
+      'Accounts, updates and settings of the server';
+
+  @override
+  String get homeAddSummaries => 'Page summaries';
+
+  @override
+  String get homeAddShortcuts => 'Shortcuts to functions';
+
+  @override
+  String get homeTileBudgetNone =>
+      'No spending goal this month: set some in Budget.';
+
+  @override
+  String get homeTileBudgetLeft => 'left on this month\'s goals';
+
+  @override
+  String homeTileBudgetSpent(String spent, String planned) {
+    return '$spent spent of $planned planned';
+  }
+
+  @override
+  String homeTileBudgetOver(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count goals exceeded',
+      one: '1 goal exceeded',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileSummaryLowest(String date) {
+    return 'lowest on $date';
+  }
+
+  @override
+  String homeTileSummaryAdvices(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count advices waiting',
+      one: '1 advice waiting',
+      zero: 'No advice waiting',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String homeTilePerDay(String amount) {
     return '$amount a day';
   }

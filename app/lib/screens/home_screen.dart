@@ -640,6 +640,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 newAdvices: _newAdvices,
                 adviceTitle: _adviceTitle,
                 onAdvisor: () => _selectPage(AppPage.advisor),
+                functions: _functions.toSet(),
+                onFunction: _openFunction,
+                onSearch: _openSearch,
                 onOpen: (target) => switch (target) {
                   DashboardTarget.accounts => _selectPage(AppPage.accounts),
                   DashboardTarget.operations => _selectPage(

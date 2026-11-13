@@ -223,6 +223,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] Remboursement anticipé simulé avec l'indemnité lue dans l'offre de prêt (calcul du moteur) — clause saisie ou lue par l'IA, plafonnée au maximum légal — décision 0043, *1.28.0*
 - [x] **Accueil personnalisable** (demandé le 13 novembre 2026) : cartes affichées, masquées et ordonnées par l'utilisateur, gardées sur l'appareil — décision 0044, *1.29.0*
 - [x] **Accueil en widgets** (précisé le 13 novembre 2026) : chaque élément de l'application devient un widget petit, moyen ou grand, posé librement sur une grille et modifié sur place — décision 0045 (remplace 0044), *1.30.0*
+- [x] **Toutes les fonctions en widgets** (demandé le 13 novembre 2026) : chaque fonction de l'application peut être posée sur l'Accueil — widgets vivants Objectifs du budget et Récapitulatif, raccourcis pour les autres, selon les droits de l'utilisateur — décision 0046, *1.31.0*
 - [x] **Abonnements mis en évidence** dans Opérations : total mensuel, hausse constatée signalée, rappel avant une hausse de prix — décision 0034, *1.19.0*
 - [x] Récapitulatif mensuel : prévision à 30 jours, alertes et propositions en attente sur une page (calculé par le moteur, explication facultative par l'IA) — décision 0035, *1.20.0*
 - [ ] Coût et volume de l'IA par fonction (lecture de documents, classement, discussion), en plus du plafond mensuel

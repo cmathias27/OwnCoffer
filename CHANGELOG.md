@@ -2,6 +2,12 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.31.0 (novembre 2026)
+### Toutes les fonctions en widgets (décision 0046)
+- **Chaque fonction de l'application peut devenir un widget** de l'Accueil : Rechercher, Saisir une opération, Scanner un ticket, Catégories, Règles, Membres, Exporter mes données, Sécurité, Assistant, Applications, Affichage, Aide, Raccourcis clavier, Donner un avis, Administration du serveur. Un toucher ouvre la fonction.
+- Deux nouveaux widgets vivants : **Objectifs du budget** (reste sur les objectifs du mois, objectifs dépassés, catégories proches de leur limite) et **Récapitulatif** (les 30 prochains jours en bref).
+- Le catalogue « Ajouter un widget » sépare les résumés des pages et les raccourcis ; seules les fonctions permises à l'utilisateur sont proposées.
+
 ## 1.30.0 (novembre 2026)
 ### L'Accueil en widgets (décision 0045, remplace 0044)
 - L'Accueil devient une **grille de widgets** : deux colonnes sur un téléphone, quatre sur un grand écran. Chaque widget est **petit, moyen ou grand** et se pose **sur la case de votre choix** ; les cases vides restent vides.

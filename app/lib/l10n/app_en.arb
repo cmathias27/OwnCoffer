@@ -2640,6 +2640,64 @@
   "homeCardImportsHelp": "The date of the last statement imported",
   "homeCardNotifications": "Notifications",
   "homeCardNotificationsHelp": "The notifications not read yet",
+  "homeCardBudget": "Budget goals",
+  "homeCardBudgetHelp": "What is left of this month's spending goals, and the ones exceeded",
+  "homeCardMonthSummary": "Summary",
+  "homeCardMonthSummaryHelp": "The next 30 days in brief: lowest point, notifications and advices",
+  "homeCardSearchHelp": "Find an operation, a loan, an invoice or a function",
+  "homeCardNewOperationHelp": "Enter an expense or an income by hand",
+  "homeCardScanReceiptHelp": "Take a picture of a receipt to keep it",
+  "homeCardCategoriesHelp": "The household's categories, to rename or create",
+  "homeCardRulesHelp": "The rules that classify operations on their own",
+  "homeCardMembersHelp": "The household's members and their rights",
+  "homeCardExportHelp": "Download a copy of your data",
+  "homeCardSecurityHelp": "Password, two-factor authentication and signed-in devices",
+  "homeCardAssistantHelp": "Choose and set up an AI, if you want one",
+  "homeCardAppsHelp": "The Android and Windows apps",
+  "homeCardDisplayHelp": "Theme, text size and simple mode",
+  "homeCardHelpHelp": "The app's help, page by page",
+  "homeCardShortcutsHelp": "The app's keyboard keys",
+  "homeCardFeedbackHelp": "Report a problem or suggest an idea",
+  "homeCardAdminHelp": "Accounts, updates and settings of the server",
+  "homeAddSummaries": "Page summaries",
+  "homeAddShortcuts": "Shortcuts to functions",
+  "homeTileBudgetNone": "No spending goal this month: set some in Budget.",
+  "homeTileBudgetLeft": "left on this month's goals",
+  "homeTileBudgetSpent": "{spent} spent of {planned} planned",
+  "@homeTileBudgetSpent": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "planned": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileBudgetOver": "{count, plural, =1{1 goal exceeded} other{{count} goals exceeded}}",
+  "@homeTileBudgetOver": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileSummaryLowest": "lowest on {date}",
+  "@homeTileSummaryLowest": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileSummaryAdvices": "{count, plural, =0{No advice waiting} =1{1 advice waiting} other{{count} advices waiting}}",
+  "@homeTileSummaryAdvices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeTilePerDay": "{amount} a day",
   "@homeTilePerDay": {
     "placeholders": {

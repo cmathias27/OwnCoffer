@@ -47,6 +47,8 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0041](0041-refonte-de-l-interface.md) | Refonte de l'interface : rubriques, recherche globale, Mon conseiller en avant | Décidé |
 | [0042](0042-tableau-d-amortissement-complet.md) | Tableau d'amortissement lu en entier : le moteur déduit les changements, pause d'échéances | Décidé |
 | [0043](0043-indemnite-de-remboursement-anticipe.md) | Indemnité de remboursement anticipé : clause de l'offre plafonnée au maximum légal | Décidé |
-| [0044](0044-accueil-personnalisable.md) | Accueil personnalisable : cartes affichées, masquées et ordonnées, gardées sur l'appareil | Décidé |
+| [0044](0044-accueil-personnalisable.md) | Accueil personnalisable : cartes affichées, masquées et ordonnées, gardées sur l'appareil | Remplacée par 0045 |
+| [0045](0045-accueil-en-widgets.md) | L'Accueil en widgets petits, moyens ou grands, placés librement sur une grille et modifiés sur place | Décidé |
+| [0046](0046-toutes-les-fonctions-en-widgets.md) | Toutes les fonctions de l'application en widgets : Objectifs du budget, Récapitulatif et raccourcis, selon les droits | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.
