@@ -197,7 +197,7 @@ void main() {
         advices: false,
         act: () async {
           expect(find.text('Conseils du moment'), findsNothing);
-          expect(find.text('Solde des comptes'), findsOneWidget);
+          expect(find.text('Total des comptes'), findsOneWidget);
           await tester.tap(find.text('Annuler'));
         },
       );

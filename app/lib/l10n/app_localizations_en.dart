@@ -7949,10 +7949,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeCardPepiteHelp => 'The mascot, its steps and its badges';
 
   @override
-  String get homeCardSummary => 'At a glance';
+  String get homeCardSummary => 'All well?';
 
   @override
-  String get homeCardSummaryHelp => 'All good, or how many points to watch';
+  String get homeCardSummaryHelp =>
+      'The one-line summary: all well, or how many points to look at';
 
   @override
   String get homeCardFirstSteps => 'First steps';
@@ -7975,21 +7976,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeCardAdvicesHelp => 'The proposals of My advisor';
 
   @override
-  String get homeCardBalance => 'Account balance';
+  String get homeCardBalance => 'Total of the accounts';
 
   @override
   String get homeCardBalanceHelp =>
       'The money today and the lowest point over the next 30 days';
 
   @override
-  String get homeCardLeftToLive => 'Left to live';
+  String get homeCardLeftToLive => 'Left to live on';
 
   @override
   String get homeCardLeftToLiveHelp =>
       'What is left this month once the planned charges are paid';
 
   @override
-  String get homeCardMonthBalance => 'Month balance';
+  String get homeCardMonthBalance => 'Month summary';
 
   @override
   String get homeCardMonthBalanceHelp =>
@@ -8003,11 +8004,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'The debits and transfers planned for the coming days';
 
   @override
-  String get homeCardTopSpending => 'Month spending';
+  String get homeCardTopSpending => 'This month';
 
   @override
   String get homeCardTopSpendingHelp =>
-      'The categories where most money goes this month';
+      'Spent, received, and the categories where most money goes';
 
   @override
   String get homeAdvicesTitle => 'Current advice';

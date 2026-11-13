@@ -8010,11 +8010,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeCardPepiteHelp => 'La mascotte, ses étapes et ses badges';
 
   @override
-  String get homeCardSummary => 'En un coup d\'œil';
+  String get homeCardSummary => 'Tout va bien ?';
 
   @override
   String get homeCardSummaryHelp =>
-      'Tout va bien, ou le nombre de points à surveiller';
+      'La phrase de synthèse : tout va bien, ou le nombre de points à regarder';
 
   @override
   String get homeCardFirstSteps => 'Premiers pas';
@@ -8037,7 +8037,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeCardAdvicesHelp => 'Les propositions de Mon conseiller';
 
   @override
-  String get homeCardBalance => 'Solde des comptes';
+  String get homeCardBalance => 'Total des comptes';
 
   @override
   String get homeCardBalanceHelp =>
@@ -8065,11 +8065,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Les prélèvements et virements prévus des prochains jours';
 
   @override
-  String get homeCardTopSpending => 'Dépenses du mois';
+  String get homeCardTopSpending => 'Ce mois-ci';
 
   @override
   String get homeCardTopSpendingHelp =>
-      'Les catégories où part le plus d\'argent ce mois-ci';
+      'Dépensé, reçu, et les catégories où part le plus d\'argent';
 
   @override
   String get homeAdvicesTitle => 'Conseils du moment';

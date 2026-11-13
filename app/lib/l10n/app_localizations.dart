@@ -12562,13 +12562,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeCardSummary.
   ///
   /// In fr, this message translates to:
-  /// **'En un coup d\'œil'**
+  /// **'Tout va bien ?'**
   String get homeCardSummary;
 
   /// No description provided for @homeCardSummaryHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Tout va bien, ou le nombre de points à surveiller'**
+  /// **'La phrase de synthèse : tout va bien, ou le nombre de points à regarder'**
   String get homeCardSummaryHelp;
 
   /// No description provided for @homeCardFirstSteps.
@@ -12610,7 +12610,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeCardBalance.
   ///
   /// In fr, this message translates to:
-  /// **'Solde des comptes'**
+  /// **'Total des comptes'**
   String get homeCardBalance;
 
   /// No description provided for @homeCardBalanceHelp.
@@ -12658,13 +12658,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeCardTopSpending.
   ///
   /// In fr, this message translates to:
-  /// **'Dépenses du mois'**
+  /// **'Ce mois-ci'**
   String get homeCardTopSpending;
 
   /// No description provided for @homeCardTopSpendingHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Les catégories où part le plus d\'argent ce mois-ci'**
+  /// **'Dépensé, reçu, et les catégories où part le plus d\'argent'**
   String get homeCardTopSpendingHelp;
 
   /// No description provided for @homeAdvicesTitle.
