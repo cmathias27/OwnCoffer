@@ -12511,6 +12511,162 @@ abstract class AppLocalizations {
   /// **'Aucune notification en attente'**
   String get homeGoodNoNotification;
 
+  /// No description provided for @homeCustomize.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personnaliser l\'accueil'**
+  String get homeCustomize;
+
+  /// No description provided for @homeCustomizeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personnaliser l\'accueil'**
+  String get homeCustomizeTitle;
+
+  /// No description provided for @homeCustomizeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cochez les cartes à afficher et faites-les glisser pour choisir leur ordre. Ce choix est gardé sur cet appareil.'**
+  String get homeCustomizeHelp;
+
+  /// No description provided for @homeCustomizeMove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faire glisser pour déplacer'**
+  String get homeCustomizeMove;
+
+  /// No description provided for @homeCustomizeReset.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rétablir'**
+  String get homeCustomizeReset;
+
+  /// No description provided for @homeEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune carte affichée. Choisissez-en avec « Personnaliser l\'accueil ».'**
+  String get homeEmpty;
+
+  /// No description provided for @homeCardPepite.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pépite'**
+  String get homeCardPepite;
+
+  /// No description provided for @homeCardPepiteHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La mascotte, ses étapes et ses badges'**
+  String get homeCardPepiteHelp;
+
+  /// No description provided for @homeCardSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout va bien ?'**
+  String get homeCardSummary;
+
+  /// No description provided for @homeCardSummaryHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La phrase de synthèse : tout va bien, ou le nombre de points à regarder'**
+  String get homeCardSummaryHelp;
+
+  /// No description provided for @homeCardFirstSteps.
+  ///
+  /// In fr, this message translates to:
+  /// **'Premiers pas'**
+  String get homeCardFirstSteps;
+
+  /// No description provided for @homeCardFirstStepsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les trois étapes du démarrage, tant qu\'elles ne sont pas faites'**
+  String get homeCardFirstStepsHelp;
+
+  /// No description provided for @homeCardStatus.
+  ///
+  /// In fr, this message translates to:
+  /// **'À surveiller'**
+  String get homeCardStatus;
+
+  /// No description provided for @homeCardStatusHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Découverts prévus, opérations à classer, hausses, échéances manquées'**
+  String get homeCardStatusHelp;
+
+  /// No description provided for @homeCardAdvices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conseils du moment'**
+  String get homeCardAdvices;
+
+  /// No description provided for @homeCardAdvicesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les propositions de Mon conseiller'**
+  String get homeCardAdvicesHelp;
+
+  /// No description provided for @homeCardBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total des comptes'**
+  String get homeCardBalance;
+
+  /// No description provided for @homeCardBalanceHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'argent aujourd\'hui et le point bas des 30 prochains jours'**
+  String get homeCardBalanceHelp;
+
+  /// No description provided for @homeCardLeftToLive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste à vivre'**
+  String get homeCardLeftToLive;
+
+  /// No description provided for @homeCardLeftToLiveHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui reste ce mois-ci une fois les charges prévues payées'**
+  String get homeCardLeftToLiveHelp;
+
+  /// No description provided for @homeCardMonthBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan du mois'**
+  String get homeCardMonthBalance;
+
+  /// No description provided for @homeCardMonthBalanceHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus, dépenses et reste du mois, comparés au mois d\'avant'**
+  String get homeCardMonthBalanceHelp;
+
+  /// No description provided for @homeCardUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette semaine'**
+  String get homeCardUpcoming;
+
+  /// No description provided for @homeCardUpcomingHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les prélèvements et virements prévus des prochains jours'**
+  String get homeCardUpcomingHelp;
+
+  /// No description provided for @homeCardTopSpending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois-ci'**
+  String get homeCardTopSpending;
+
+  /// No description provided for @homeCardTopSpendingHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépensé, reçu, et les catégories où part le plus d\'argent'**
+  String get homeCardTopSpendingHelp;
+
   /// No description provided for @homeAdvicesTitle.
   ///
   /// In fr, this message translates to:

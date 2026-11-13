@@ -2,6 +2,11 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.29.0 (novembre 2026)
+### Accueil personnalisable (décision 0044)
+- **Personnaliser l'accueil**, en bas de l'Accueil : cochez les cartes à afficher (Pépite, Tout va bien ?, Premiers pas, À surveiller, Conseils du moment, Total des comptes, Reste à vivre, Bilan du mois, Cette semaine, Ce mois-ci) et faites-les glisser pour choisir leur ordre. « Rétablir » revient à l'Accueil d'origine.
+- Le choix est gardé sur l'appareil, comme le mode simple ; rien n'est envoyé au serveur.
+
 ## 1.28.0 (novembre 2026)
 ### Crédits : indemnité de remboursement anticipé (décision 0043)
 - La simulation d'un remboursement anticipé montre l'**indemnité** et l'**économie nette**, calculées par le moteur.

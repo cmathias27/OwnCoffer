@@ -7924,6 +7924,93 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeGoodNoNotification => 'No notification waiting';
 
   @override
+  String get homeCustomize => 'Customise home';
+
+  @override
+  String get homeCustomizeTitle => 'Customise home';
+
+  @override
+  String get homeCustomizeHelp =>
+      'Tick the cards to show and drag them to choose their order. This choice is kept on this device.';
+
+  @override
+  String get homeCustomizeMove => 'Drag to move';
+
+  @override
+  String get homeCustomizeReset => 'Reset';
+
+  @override
+  String get homeEmpty => 'No card shown. Choose some with “Customise home”.';
+
+  @override
+  String get homeCardPepite => 'Pépite';
+
+  @override
+  String get homeCardPepiteHelp => 'The mascot, its steps and its badges';
+
+  @override
+  String get homeCardSummary => 'All well?';
+
+  @override
+  String get homeCardSummaryHelp =>
+      'The one-line summary: all well, or how many points to look at';
+
+  @override
+  String get homeCardFirstSteps => 'First steps';
+
+  @override
+  String get homeCardFirstStepsHelp =>
+      'The three starting steps, until they are done';
+
+  @override
+  String get homeCardStatus => 'To watch';
+
+  @override
+  String get homeCardStatusHelp =>
+      'Expected overdrafts, operations to classify, rises, missed instalments';
+
+  @override
+  String get homeCardAdvices => 'Current advice';
+
+  @override
+  String get homeCardAdvicesHelp => 'The proposals of My advisor';
+
+  @override
+  String get homeCardBalance => 'Total of the accounts';
+
+  @override
+  String get homeCardBalanceHelp =>
+      'The money today and the lowest point over the next 30 days';
+
+  @override
+  String get homeCardLeftToLive => 'Left to live on';
+
+  @override
+  String get homeCardLeftToLiveHelp =>
+      'What is left this month once the planned charges are paid';
+
+  @override
+  String get homeCardMonthBalance => 'Month summary';
+
+  @override
+  String get homeCardMonthBalanceHelp =>
+      'Income, spending and what is left this month, against last month';
+
+  @override
+  String get homeCardUpcoming => 'This week';
+
+  @override
+  String get homeCardUpcomingHelp =>
+      'The debits and transfers planned for the coming days';
+
+  @override
+  String get homeCardTopSpending => 'This month';
+
+  @override
+  String get homeCardTopSpendingHelp =>
+      'Spent, received, and the categories where most money goes';
+
+  @override
   String get homeAdvicesTitle => 'Current advice';
 
   @override

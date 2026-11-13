@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'app_lock.dart' show LockStore;
+import 'home_layout.dart';
+
+export 'home_layout.dart';
 
 /// Display preferences of this device (decision 0041): never bank data,
 /// only choices of how the app looks and what it shows first.
@@ -35,6 +38,7 @@ class UiPrefs extends ChangeNotifier {
   DateTime? _advisorSeenAt;
   String _operationFilters = '';
   var _firstStepsHidden = false;
+  String? _homeLayout;
 
   /// Hides the advanced functions (rules, community categories, journal,
   /// administration); nothing is turned off on the server.
@@ -55,6 +59,13 @@ class UiPrefs extends ChangeNotifier {
   /// « Premiers pas » hidden from the home page.
   bool get firstStepsHidden => _firstStepsHidden;
 
+  /// The home cards shown and their order (decision 0044); « Premiers
+  /// pas » keeps its own switch, [firstStepsHidden].
+  HomeLayout get homeLayout {
+    final layout = HomeLayout.parse(_homeLayout, simple: _simpleMode);
+    return layout.toggled(HomeCard.firstSteps, !_firstStepsHidden);
+  }
+
   /// Text scale applied to the whole app.
   double get textScale => _largeText ? 1.25 : 1.0;
 
@@ -72,6 +83,7 @@ class UiPrefs extends ChangeNotifier {
       _advisorSeenAt = DateTime.tryParse(await store.read('advisorSeen') ?? '');
       _operationFilters = await store.read('opFilters') ?? '';
       _firstStepsHidden = flag(await store.read('firstSteps'));
+      _homeLayout = await store.read('home');
     } on Object {
       // Storage unavailable (private window, tests): defaults.
     }
@@ -125,6 +137,15 @@ class UiPrefs extends ChangeNotifier {
   Future<void> setFirstStepsHidden(bool hidden) {
     _firstStepsHidden = hidden;
     return _save('firstSteps', '$hidden');
+  }
+
+  /// Null goes back to the home page as it comes.
+  Future<void> setHomeLayout(HomeLayout? layout) async {
+    _homeLayout = layout?.toString();
+    await setFirstStepsHidden(
+      layout != null && !layout.shows(HomeCard.firstSteps),
+    );
+    await _save('home', _homeLayout);
   }
 
   Future<void> setOperationFilters(String filters) {

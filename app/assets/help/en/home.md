@@ -17,6 +17,15 @@ Home always stays on the current month: it answers "is all well today?".
 
 Each card leads to its page: tap it to see the details. The small **?** of a card says what it shows and leads to the matching help; **"Why this figure?"**, under a key figure, shows the lines of the calculation.
 
+## Customise home
+
+The **Customise home** button, at the bottom of the page, opens the list of cards. Tick the ones to show, untick the others, and drag the handle (≡) to choose the order. **Save** keeps the choice; **Reset** goes back to the original home page.
+
+- The choice is kept **on this device**: another device keeps its own home page. Nothing is sent to the server.
+- Pépite and "All well?" take the whole width; the other cards share two columns on a large screen.
+- A card ticked but with nothing to show (for instance First steps once the three steps are done) stays away.
+- A card added by a new version shows last; untick it if you do not need it.
+
 ## Good to know
 
 - Planned amounts only count what is declared (planned operations, subscriptions, loans). A forecast balance remains an estimate.

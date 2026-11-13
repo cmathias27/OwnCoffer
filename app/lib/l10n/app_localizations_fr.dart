@@ -7984,6 +7984,94 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeGoodNoNotification => 'Aucune notification en attente';
 
   @override
+  String get homeCustomize => 'Personnaliser l\'accueil';
+
+  @override
+  String get homeCustomizeTitle => 'Personnaliser l\'accueil';
+
+  @override
+  String get homeCustomizeHelp =>
+      'Cochez les cartes à afficher et faites-les glisser pour choisir leur ordre. Ce choix est gardé sur cet appareil.';
+
+  @override
+  String get homeCustomizeMove => 'Faire glisser pour déplacer';
+
+  @override
+  String get homeCustomizeReset => 'Rétablir';
+
+  @override
+  String get homeEmpty =>
+      'Aucune carte affichée. Choisissez-en avec « Personnaliser l\'accueil ».';
+
+  @override
+  String get homeCardPepite => 'Pépite';
+
+  @override
+  String get homeCardPepiteHelp => 'La mascotte, ses étapes et ses badges';
+
+  @override
+  String get homeCardSummary => 'Tout va bien ?';
+
+  @override
+  String get homeCardSummaryHelp =>
+      'La phrase de synthèse : tout va bien, ou le nombre de points à regarder';
+
+  @override
+  String get homeCardFirstSteps => 'Premiers pas';
+
+  @override
+  String get homeCardFirstStepsHelp =>
+      'Les trois étapes du démarrage, tant qu\'elles ne sont pas faites';
+
+  @override
+  String get homeCardStatus => 'À surveiller';
+
+  @override
+  String get homeCardStatusHelp =>
+      'Découverts prévus, opérations à classer, hausses, échéances manquées';
+
+  @override
+  String get homeCardAdvices => 'Conseils du moment';
+
+  @override
+  String get homeCardAdvicesHelp => 'Les propositions de Mon conseiller';
+
+  @override
+  String get homeCardBalance => 'Total des comptes';
+
+  @override
+  String get homeCardBalanceHelp =>
+      'L\'argent aujourd\'hui et le point bas des 30 prochains jours';
+
+  @override
+  String get homeCardLeftToLive => 'Reste à vivre';
+
+  @override
+  String get homeCardLeftToLiveHelp =>
+      'Ce qui reste ce mois-ci une fois les charges prévues payées';
+
+  @override
+  String get homeCardMonthBalance => 'Bilan du mois';
+
+  @override
+  String get homeCardMonthBalanceHelp =>
+      'Revenus, dépenses et reste du mois, comparés au mois d\'avant';
+
+  @override
+  String get homeCardUpcoming => 'Cette semaine';
+
+  @override
+  String get homeCardUpcomingHelp =>
+      'Les prélèvements et virements prévus des prochains jours';
+
+  @override
+  String get homeCardTopSpending => 'Ce mois-ci';
+
+  @override
+  String get homeCardTopSpendingHelp =>
+      'Dépensé, reçu, et les catégories où part le plus d\'argent';
+
+  @override
   String get homeAdvicesTitle => 'Conseils du moment';
 
   @override

@@ -221,6 +221,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] **Refonte de l'interface** (remontée le 12 novembre 2026) : cinq rubriques, recherche globale, Mon conseiller en avant, Accueil « tout va bien ? », « Pourquoi ce chiffre ? », mode simple — décision 0041, *1.26.0*
 - [x] Tableau d'amortissement lu en entier (changement de taux ou pause d'échéances en cours de crédit) — l'IA recopie les lignes, le moteur en déduit les changements ; pause d'échéances saisie à la main — décision 0042, *1.27.0*
 - [x] Remboursement anticipé simulé avec l'indemnité lue dans l'offre de prêt (calcul du moteur) — clause saisie ou lue par l'IA, plafonnée au maximum légal — décision 0043, *1.28.0*
+- [x] **Accueil personnalisable** (demandé le 13 novembre 2026) : cartes affichées, masquées et ordonnées par l'utilisateur, gardées sur l'appareil — décision 0044, *1.29.0*
 - [x] **Abonnements mis en évidence** dans Opérations : total mensuel, hausse constatée signalée, rappel avant une hausse de prix — décision 0034, *1.19.0*
 - [x] Récapitulatif mensuel : prévision à 30 jours, alertes et propositions en attente sur une page (calculé par le moteur, explication facultative par l'IA) — décision 0035, *1.20.0*
 - [ ] Coût et volume de l'IA par fonction (lecture de documents, classement, discussion), en plus du plafond mensuel

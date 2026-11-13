@@ -14,6 +14,7 @@ import '../widgets/why.dart';
 import '../state/pepite.dart';
 import '../widgets/pepite.dart';
 import '../widgets/soft.dart';
+import '../widgets/home_layout_dialog.dart';
 import 'budget_screen.dart';
 
 /// Where to go from the home page.
@@ -181,104 +182,91 @@ class DashboardScreenState extends State<DashboardScreen> {
     }
     final left = _left;
     final month = _month;
+    final layout = uiPrefs.homeLayout;
+    Widget? card(HomeCard c) => switch (c) {
+      HomeCard.pepite => PepiteCard(
+        key: ValueKey('pepite-${widget.membership.group.id}-$_reloads'),
+        membership: widget.membership,
+        overdrawn: accounts.any((e) => _overdrawn(e.$2)),
+        onStep: (step) => widget.onOpen(switch (step) {
+          PepiteStep.statements => DashboardTarget.imports,
+          PepiteStep.check => DashboardTarget.operations,
+          PepiteStep.forecast ||
+          PepiteStep.celebrate => DashboardTarget.forecast,
+        }),
+        onOpenStart: () => widget.onOpen(DashboardTarget.start),
+      ),
+      HomeCard.summary => _summarySentence(context, l, accounts, month),
+      HomeCard.firstSteps => _firstSteps(l, accounts, month),
+      HomeCard.status => _status(context, l, accounts, month),
+      HomeCard.advices =>
+        widget.onAdvisor == null ? null : _advicesCard(context, l),
+      HomeCard.balance => _balance(context, l, accounts),
+      HomeCard.leftToLive =>
+        left == null
+            ? null
+            : _tap(
+                LeftToLiveCard(report: left),
+                () => widget.onOpen(DashboardTarget.budget),
+              ),
+      HomeCard.monthBalance =>
+        month == null
+            ? null
+            : _tap(
+                BalanceCard(
+                  report: month,
+                  previous: month.history.length >= 2
+                      ? month.history[month.history.length - 2]
+                      : null,
+                ),
+                () => widget.onOpen(DashboardTarget.budget),
+              ),
+      HomeCard.upcoming => _upcoming(context, l),
+      HomeCard.topSpending =>
+        month == null ? null : _topSpending(context, l, month),
+    };
+    // The wide cards stand alone; the cards between them share two
+    // columns on a large screen.
+    final blocks = <Object>[];
+    for (final c in layout.visible) {
+      final w = card(c);
+      if (w == null) continue;
+      if (c.wide) {
+        blocks.add(w);
+      } else if (blocks.isNotEmpty && blocks.last is List<Widget>) {
+        (blocks.last as List<Widget>).add(w);
+      } else {
+        blocks.add(<Widget>[w]);
+      }
+    }
+    Widget centered(Widget child) => Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 1000),
+        child: child,
+      ),
+    );
     return RefreshIndicator(
       onRefresh: reload,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 32),
         children: [
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1000),
-              child: PepiteCard(
-                key: ValueKey('pepite-${widget.membership.group.id}-$_reloads'),
-                membership: widget.membership,
-                overdrawn: accounts.any((e) => _overdrawn(e.$2)),
-                onStep: (step) => widget.onOpen(switch (step) {
-                  PepiteStep.statements => DashboardTarget.imports,
-                  PepiteStep.check => DashboardTarget.operations,
-                  PepiteStep.forecast ||
-                  PepiteStep.celebrate => DashboardTarget.forecast,
-                }),
-                onOpenStart: () => widget.onOpen(DashboardTarget.start),
+          for (final b in blocks)
+            centered(b is Widget ? b : _grid(b as List<Widget>)),
+          if (blocks.isEmpty)
+            centered(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32),
+                child: Text(l.homeEmpty, textAlign: TextAlign.center),
               ),
             ),
-          ),
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1000),
-              child: _summarySentence(context, l, accounts, month),
-            ),
-          ),
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1000),
-              child: LayoutBuilder(
-                builder: (context, box) {
-                  final wide = box.maxWidth >= 720;
-                  final cards = <Widget>[
-                    ?_firstSteps(l, accounts, month),
-                    _status(context, l, accounts, month),
-                    if (widget.onAdvisor != null) _advicesCard(context, l),
-                    _balance(context, l, accounts),
-                    if (left != null)
-                      _tap(
-                        LeftToLiveCard(report: left),
-                        () => widget.onOpen(DashboardTarget.budget),
-                      ),
-                    if (month != null)
-                      _tap(
-                        BalanceCard(
-                          report: month,
-                          previous: month.history.length >= 2
-                              ? month.history[month.history.length - 2]
-                              : null,
-                        ),
-                        () => widget.onOpen(DashboardTarget.budget),
-                      ),
-                    _upcoming(context, l),
-                    if (month != null && !uiPrefs.simpleMode)
-                      _topSpending(context, l, month),
-                  ];
-                  if (!wide) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        for (final c in cards)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: c,
-                          ),
-                      ],
-                    );
-                  }
-                  // Two columns on a large screen.
-                  final first = [
-                    for (var i = 0; i < cards.length; i += 2) cards[i],
-                  ];
-                  final second = [
-                    for (var i = 1; i < cards.length; i += 2) cards[i],
-                  ];
-                  Widget column(List<Widget> list) => Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        for (final c in list)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: c,
-                          ),
-                      ],
-                    ),
-                  );
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      column(first),
-                      const SizedBox(width: 12),
-                      column(second),
-                    ],
-                  );
-                },
+          centered(
+            Align(
+              alignment: Alignment.center,
+              child: TextButton.icon(
+                key: const Key('home-customize'),
+                onPressed: _customize,
+                icon: const Icon(Icons.tune),
+                label: Text(l.homeCustomize),
               ),
             ),
           ),
@@ -286,6 +274,59 @@ class DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
+  /// Opens the editor of the home page; saved on this device.
+  Future<void> _customize() async {
+    final before = uiPrefs.homeLayout;
+    final chosen = await showDialog<HomeLayoutChoice>(
+      context: context,
+      builder: (_) => HomeLayoutDialog(
+        layout: before,
+        advices: widget.onAdvisor != null,
+        simple: uiPrefs.simpleMode,
+      ),
+    );
+    if (chosen == null || !mounted) return;
+    final firstStepsBack =
+        !before.shows(HomeCard.firstSteps) &&
+        (chosen.layout?.shows(HomeCard.firstSteps) ?? true);
+    await uiPrefs.setHomeLayout(chosen.layout);
+    if (!mounted) return;
+    setState(() {});
+    // « Premiers pas » shown again: its steps are fetched with the page.
+    if (firstStepsBack) await reload();
+  }
+
+  /// One block of cards: a column on a phone, two on a large screen.
+  Widget _grid(List<Widget> cards) => LayoutBuilder(
+    builder: (context, box) {
+      final wide = box.maxWidth >= 720;
+      Widget column(List<Widget> list) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final c in list)
+            Padding(padding: const EdgeInsets.only(bottom: 12), child: c),
+        ],
+      );
+      if (!wide) return column(cards);
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: column([
+              for (var i = 0; i < cards.length; i += 2) cards[i],
+            ]),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: column([
+              for (var i = 1; i < cards.length; i += 2) cards[i],
+            ]),
+          ),
+        ],
+      );
+    },
+  );
 
   Widget _tap(Widget child, VoidCallback onTap) => Material(
     color: Colors.transparent,

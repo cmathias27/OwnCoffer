@@ -17,6 +17,15 @@ L'Accueil reste toujours sur le mois en cours : il répond à « tout va bien au
 
 Chaque carte mène à sa page : touchez-la pour voir le détail. Le petit **?** d'une carte dit ce qu'elle montre et mène au passage de l'aide ; **« Pourquoi ce chiffre ? »**, sous un chiffre clé, montre les lignes du calcul.
 
+## Personnaliser l'accueil
+
+Le bouton **Personnaliser l'accueil**, en bas de la page, ouvre la liste des cartes. Cochez celles à afficher, décochez les autres, et faites glisser la poignée (≡) pour choisir l'ordre. **Enregistrer** garde le choix ; **Rétablir** revient à l'Accueil d'origine.
+
+- Le choix est gardé **sur cet appareil** : un autre appareil garde son propre Accueil. Rien n'est envoyé au serveur.
+- Pépite et « Tout va bien ? » prennent toute la largeur ; les autres cartes se partagent deux colonnes sur un grand écran.
+- Une carte cochée mais sans rien à montrer (par exemple Premiers pas une fois les trois étapes faites) reste absente.
+- Une carte ajoutée par une nouvelle version apparaît en dernier ; décochez-la si elle ne vous sert pas.
+
 ## Bon à savoir
 
 - Les montants prévus ne comptent que ce qui est déclaré (opérations prévues, abonnements, crédits). Un solde prévu reste une estimation.
