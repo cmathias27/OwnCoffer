@@ -345,19 +345,53 @@ class LoanEndpoint extends Endpoint {
     if (amountCents <= 0 || amountCents > core.maxLoanPrincipalCents) {
       throw InvalidInputException(code: 'amount_out_of_range');
     }
+    final terms = _terms(loan);
+    final changes = _changes(loan);
+    final today = _today();
     final r = core.simulateEarlyRepayment(
-      _terms(loan),
-      _today(),
+      terms,
+      today,
       amountCents,
-      changes: _changes(loan),
+      changes: changes,
+    );
+    final status = core.loanStatus(
+      terms,
+      core.amortize(terms, changes: changes),
+      today,
+    );
+    final penalty = core.prepaymentPenalty(
+      law: prepaymentLaw(loan.kind),
+      clause: core.PrepaymentClause(
+        interestMonths: loan.prepaymentInterestMonths,
+        percentMilli: loan.prepaymentPercentMilli,
+      ),
+      amountCents: amountCents,
+      owedBeforeCents: status.remainingCents,
+      rateMilli: core.loanRateOn(terms, changes, today),
+      monthsLeft: status.totalCount - status.paidCount,
+      interestSavedCents: r.interestSavedCents,
+      repaidLastYearCents: core.repaidOverYear(changes, today),
     );
     return EarlyRepayment(
       amountCents: amountCents,
       interestSavedCents: r.interestSavedCents,
       installmentsLeft: r.schedule.length,
       endDate: r.schedule.isEmpty ? null : r.schedule.last.date.toDb(),
+      penaltyCents: penalty.penaltyCents,
+      penaltyLegalMaxCents: penalty.legalMaxCents,
+      penaltyBasis: penalty.basis.name,
+      netSavedCents: r.interestSavedCents - penalty.penaltyCents,
     );
   }
+
+  /// The law capping the early repayment penalty of a loan (decision 0043):
+  /// home loans, consumer credit, or none (revolving credit, payments in
+  /// instalments).
+  static core.PrepaymentLaw prepaymentLaw(LoanKind kind) => switch (kind) {
+    LoanKind.mortgage => core.PrepaymentLaw.mortgage,
+    LoanKind.revolving || LoanKind.installments => core.PrepaymentLaw.none,
+    _ => core.PrepaymentLaw.consumer,
+  };
 
   /// What a change would do (renegotiation, new rate, new duration), with
   /// its fees: before and after, the saving and when it pays off. Nothing
@@ -1098,6 +1132,14 @@ class LoanEndpoint extends Endpoint {
     if (apr != null && (apr < 0 || apr > core.maxLoanRateMilli)) {
       throw InvalidInputException(code: 'loan_terms_invalid');
     }
+    final months = loan.prepaymentInterestMonths;
+    final percent = loan.prepaymentPercentMilli;
+    if ((months != null &&
+            (months < 0 || months > core.maxPrepaymentInterestMonths)) ||
+        (percent != null &&
+            (percent < 0 || percent > core.maxPrepaymentPercentMilli))) {
+      throw InvalidInputException(code: 'loan_terms_invalid');
+    }
     final limit = loan.creditLimitCents;
     if (limit != null &&
         (limit <= 0 ||
@@ -1135,6 +1177,11 @@ class LoanEndpoint extends Endpoint {
       categoryId: loan.categoryId,
       paymentCents: loan.paymentCents,
       creditLimitCents: revolving ? limit : null,
+      // No penalty on a revolving credit or a payment in instalments.
+      prepaymentInterestMonths:
+          prepaymentLaw(loan.kind) == core.PrepaymentLaw.none ? null : months,
+      prepaymentPercentMilli:
+          prepaymentLaw(loan.kind) == core.PrepaymentLaw.none ? null : percent,
     );
     try {
       _terms(clean);

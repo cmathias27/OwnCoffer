@@ -357,6 +357,81 @@ void main() {
       expect(all.interestSavedCents, info.interestRemainingCents);
     });
 
+    test('early repayment penalty: the legal maximum when the offer is not '
+        'known, its clause within the law, none on a revolving credit '
+        '(0043)', () async {
+      final info = await endpoints.loan.create(as(bob), groupA, mortgage());
+      final id = info.loan.id!;
+      // 20 000 € at 1 %: 6 months of interest = 100 €, under 3 % of the
+      // capital owed.
+      final legal = await endpoints.loan.simulate(as(reader), id, 2000000);
+      expect(legal.penaltyBasis, 'legalMax');
+      expect(legal.penaltyCents, 10000);
+      expect(legal.penaltyLegalMaxCents, 10000);
+      expect(legal.netSavedCents, legal.interestSavedCents - 10000);
+
+      await endpoints.loan.update(
+        as(bob),
+        info.loan.copyWith(prepaymentPercentMilli: 300),
+      );
+      final offer = await endpoints.loan.simulate(as(reader), id, 2000000);
+      expect(offer.penaltyBasis, 'offer');
+      expect(offer.penaltyCents, 6000, reason: '0.3 % of 20 000 €');
+      expect(offer.penaltyLegalMaxCents, 10000);
+
+      for (final bad in [
+        info.loan.copyWith(prepaymentInterestMonths: 13),
+        info.loan.copyWith(prepaymentPercentMilli: -1),
+      ]) {
+        await expectLater(
+          endpoints.loan.update(as(bob), bad),
+          throwsA(
+            isA<InvalidInputException>().having(
+              (e) => e.code,
+              'code',
+              'loan_terms_invalid',
+            ),
+          ),
+        );
+      }
+      await expectLater(
+        endpoints.loan.update(
+          as(mallory),
+          info.loan.copyWith(prepaymentPercentMilli: 0),
+        ),
+        throwsA(isA<AccessDeniedException>()),
+      );
+      expect(
+        (await Loan.db.findById(db, id))!.prepaymentPercentMilli,
+        300,
+        reason: 'another household changes nothing',
+      );
+
+      final revolving = await endpoints.loan.create(
+        as(bob),
+        groupA,
+        Loan(
+          groupId: 0,
+          kind: LoanKind.revolving,
+          lender: 'Banque',
+          principalCents: 300000,
+          annualRateMilli: 18000,
+          durationMonths: 1,
+          paymentCents: 10000,
+          firstDueDate: DateTime.utc(now.year, now.month, 5),
+          prepaymentInterestMonths: 6,
+        ),
+      );
+      expect(revolving.loan.prepaymentInterestMonths, isNull);
+      final free = await endpoints.loan.simulate(
+        as(bob),
+        revolving.loan.id!,
+        100000,
+      );
+      expect(free.penaltyCents, 0);
+      expect(free.penaltyBasis, 'none');
+    });
+
     test('invalid terms are refused', () async {
       for (final bad in [
         mortgage().copyWith(principalCents: 0),

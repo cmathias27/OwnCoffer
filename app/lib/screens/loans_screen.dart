@@ -1582,6 +1582,36 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                                     l.loanSimulationLeft,
                                     '${_simulation!.installmentsLeft}',
                                   ),
+                                  if (_simulation!.penaltyCents != null) ...[
+                                    line(
+                                      l.loanSimulationPenalty,
+                                      context.money(
+                                        _simulation!.penaltyCents!,
+                                      ),
+                                    ),
+                                    line(
+                                      l.loanSimulationNet,
+                                      context.money(
+                                        _simulation!.netSavedCents ??
+                                            _simulation!.interestSavedCents,
+                                      ),
+                                    ),
+                                    Text(
+                                      switch (_simulation!.penaltyBasis) {
+                                        'offer' => l.loanPenaltyFromOffer(
+                                          context.money(
+                                            _simulation!.penaltyLegalMaxCents ??
+                                                0,
+                                          ),
+                                        ),
+                                        'legalMax' => l.loanPenaltyLegalMax,
+                                        _ => l.loanPenaltyNone,
+                                      },
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall,
+                                    ),
+                                  ],
                                 ],
                               ],
                             ),
@@ -1693,6 +1723,14 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
   late final _firstInterest = TextEditingController(
     text: _money(_l?.firstInterestCents),
   );
+  late final _penaltyMonths = TextEditingController(
+    text: _l?.prepaymentInterestMonths?.toString() ?? '',
+  );
+  late final _penaltyPercent = TextEditingController(
+    text: _l?.prepaymentPercentMilli == null
+        ? ''
+        : _rateInput(_l!.prepaymentPercentMilli!),
+  );
   late int? _account = _l?.accountId ?? _op?.accountId;
   late int? _category = _l?.categoryId ?? _op?.categoryId;
   late List<Category> _categories = widget.categories ?? [];
@@ -1766,6 +1804,8 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
       _actual,
       _limit,
       _firstInterest,
+      _penaltyMonths,
+      _penaltyPercent,
     ]) {
       c.dispose();
     }
@@ -1908,6 +1948,13 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
       disbursementDate: !_installments && !_revolving ? _disbursement : null,
       firstInterestCents: !_installments && !_revolving
           ? parseUserAmount(_firstInterest.text)
+          : null,
+      prepaymentInterestMonths: !_installments && !_revolving
+          ? int.tryParse(_penaltyMonths.text.trim())
+          : null,
+      prepaymentPercentMilli:
+          !_installments && !_revolving && _penaltyPercent.text.trim() != ''
+          ? parseRateMilli(_penaltyPercent.text)
           : null,
       insuranceMonthlyCents: parseUserAmount(_insurance.text) ?? 0,
       feesCents: parseUserAmount(_fees.text) ?? 0,
@@ -2313,6 +2360,62 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                         ),
                         validator: optionalAmount,
                         onChanged: (_) => setState(() {}),
+                      ),
+                      gap,
+                      Text(
+                        l.loanPenaltyTitle,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      Text(
+                        l.loanPenaltyHelp,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _penaltyMonths,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: l.loanPenaltyMonths,
+                              ),
+                              validator: (v) {
+                                final t = v?.trim() ?? '';
+                                if (t.isEmpty) return null;
+                                final n = int.tryParse(t);
+                                return n == null ||
+                                        n < 0 ||
+                                        n > core.maxPrepaymentInterestMonths
+                                    ? l.loanPenaltyInvalid
+                                    : null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _penaltyPercent,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                              decoration: InputDecoration(
+                                labelText: l.loanPenaltyPercent,
+                                suffixText: '%',
+                              ),
+                              validator: (v) {
+                                final t = v?.trim() ?? '';
+                                if (t.isEmpty) return null;
+                                final m = parseRateMilli(t);
+                                return m == null ||
+                                        m > core.maxPrepaymentPercentMilli
+                                    ? l.loanPenaltyInvalid
+                                    : null;
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                       gap,
                     ],

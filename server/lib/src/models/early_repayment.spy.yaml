@@ -5,3 +5,11 @@ fields:
   interestSavedCents: int
   installmentsLeft: int
   endDate: DateTime?
+  ### Early repayment penalty (decision 0043): the offer's clause within the
+  ### legal maximum, or the legal maximum when the clause is unknown.
+  penaltyCents: int?
+  penaltyLegalMaxCents: int?
+  ### offer, legalMax or none.
+  penaltyBasis: String?
+  ### Interest saved minus the penalty.
+  netSavedCents: int?

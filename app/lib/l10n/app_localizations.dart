@@ -3198,6 +3198,66 @@ abstract class AppLocalizations {
   /// **'Échéances restantes'**
   String get loanSimulationLeft;
 
+  /// No description provided for @loanPenaltyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indemnité de remboursement anticipé'**
+  String get loanPenaltyTitle;
+
+  /// No description provided for @loanPenaltyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Selon l\'offre de prêt, facultatif : des mois d\'intérêts sur la somme remboursée et/ou un pourcentage de celle-ci (le plus bas s\'applique), 0 s\'il n\'y en a pas. Vide : OwnCoffer montre le maximum légal.'**
+  String get loanPenaltyHelp;
+
+  /// No description provided for @loanPenaltyMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois d\'intérêts'**
+  String get loanPenaltyMonths;
+
+  /// No description provided for @loanPenaltyPercent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pourcentage remboursé'**
+  String get loanPenaltyPercent;
+
+  /// No description provided for @loanPenaltyInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'De 0 à 12 mois, ou de 0 à 10 %.'**
+  String get loanPenaltyInvalid;
+
+  /// No description provided for @loanSimulationPenalty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indemnité'**
+  String get loanSimulationPenalty;
+
+  /// No description provided for @loanSimulationNet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Économie nette'**
+  String get loanSimulationNet;
+
+  /// No description provided for @loanPenaltyFromOffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indemnité selon l\'offre de prêt, dans la limite légale ({max}).'**
+  String loanPenaltyFromOffer(String max);
+
+  /// No description provided for @loanPenaltyLegalMax.
+  ///
+  /// In fr, this message translates to:
+  /// **'Offre inconnue : c\'est le maximum que la banque peut demander (prêt immobilier : 6 mois d\'intérêts, au plus 3 % du capital dû ; crédit à la consommation : 1 %, 0,5 % la dernière année, rien jusqu\'à 10 000 € par an). Indiquez la clause de l\'offre dans la fiche du crédit.'**
+  String get loanPenaltyLegalMax;
+
+  /// No description provided for @loanPenaltyNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas d\'indemnité pour ce remboursement.'**
+  String get loanPenaltyNone;
+
   /// No description provided for @loanScheduleTitle.
   ///
   /// In fr, this message translates to:

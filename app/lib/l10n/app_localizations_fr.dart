@@ -1953,6 +1953,40 @@ class AppLocalizationsFr extends AppLocalizations {
   String get loanSimulationLeft => 'Échéances restantes';
 
   @override
+  String get loanPenaltyTitle => 'Indemnité de remboursement anticipé';
+
+  @override
+  String get loanPenaltyHelp =>
+      'Selon l\'offre de prêt, facultatif : des mois d\'intérêts sur la somme remboursée et/ou un pourcentage de celle-ci (le plus bas s\'applique), 0 s\'il n\'y en a pas. Vide : OwnCoffer montre le maximum légal.';
+
+  @override
+  String get loanPenaltyMonths => 'Mois d\'intérêts';
+
+  @override
+  String get loanPenaltyPercent => 'Pourcentage remboursé';
+
+  @override
+  String get loanPenaltyInvalid => 'De 0 à 12 mois, ou de 0 à 10 %.';
+
+  @override
+  String get loanSimulationPenalty => 'Indemnité';
+
+  @override
+  String get loanSimulationNet => 'Économie nette';
+
+  @override
+  String loanPenaltyFromOffer(String max) {
+    return 'Indemnité selon l\'offre de prêt, dans la limite légale ($max).';
+  }
+
+  @override
+  String get loanPenaltyLegalMax =>
+      'Offre inconnue : c\'est le maximum que la banque peut demander (prêt immobilier : 6 mois d\'intérêts, au plus 3 % du capital dû ; crédit à la consommation : 1 %, 0,5 % la dernière année, rien jusqu\'à 10 000 € par an). Indiquez la clause de l\'offre dans la fiche du crédit.';
+
+  @override
+  String get loanPenaltyNone => 'Pas d\'indemnité pour ce remboursement.';
+
+  @override
   String get loanScheduleTitle => 'Tableau d\'amortissement';
 
   @override

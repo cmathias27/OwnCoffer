@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.28.0 (novembre 2026)
+### Crédits : indemnité de remboursement anticipé (décision 0043)
+- La simulation d'un remboursement anticipé montre l'**indemnité** et l'**économie nette**, calculées par le moteur.
+- La clause de l'offre de prêt (mois d'intérêts et/ou pourcentage de la somme remboursée) se saisit dans la fiche du crédit ou est **lue par l'IA** dans l'offre et proposée dans Mon conseiller.
+- Jamais au-delà du maximum légal : prêt immobilier, 6 mois d'intérêts et au plus 3 % du capital dû ; crédit à la consommation, 1 % (0,5 % la dernière année), au plus les intérêts économisés, rien jusqu'à 10 000 € sur 12 mois. Sans clause connue, ce maximum est montré. Rien sur un crédit renouvelable ni un paiement en plusieurs fois.
+- L'outil de simulation de l'assistant donne aussi l'indemnité.
+
 ## 1.27.0 (novembre 2026)
 ### Crédits : tableau d'amortissement lu en entier (décision 0042)
 - **Report d'échéances (pause)** dans « Ajouter un changement » : nombre de mois, puis intérêts payés (report partiel) ou rien payé (report total, les intérêts s'ajoutent à ce qui reste dû). Le crédit finit d'autant plus tard ; l'échéancier marque les mois en pause.

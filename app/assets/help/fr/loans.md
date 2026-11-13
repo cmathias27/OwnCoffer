@@ -21,7 +21,7 @@ La fiche d'un crédit est rangée en onglets : **Résumé**, **Échéancier**, *
 - **Tableau d'amortissement**, capital restant dû, intérêts payés et à payer, coût total, date de fin.
 - Les **prélèvements** déjà rattachés et le total payé.
 - **Échéances vérifiées** : avec un compte de prélèvement, chaque échéance des relevés importés est comparée aux prélèvements réels ; une échéance sans prélèvement, prélevée deux fois ou d'un autre montant, et un prélèvement loin de toute échéance sont signalés avec leurs montants.
-- **Remboursement anticipé simulé** : intérêts économisés et nouvelle date de fin.
+- **Remboursement anticipé simulé** : intérêts économisés, nouvelle date de fin, **indemnité** et économie nette. L'indemnité suit la clause de l'offre de prêt (à saisir dans la fiche, ou lue par l'IA dans l'offre), sans jamais dépasser le maximum légal : pour un prêt immobilier, 6 mois d'intérêts sur la somme remboursée et au plus 3 % du capital dû ; pour un crédit à la consommation, 1 % (0,5 % la dernière année), jamais plus que les intérêts économisés, et rien jusqu'à 10 000 € remboursés sur 12 mois. Sans la clause, c'est ce maximum qui est montré. Pas d'indemnité sur un crédit renouvelable ni un paiement en plusieurs fois. Un prêt immobilier n'en a pas non plus après une vente liée à une mutation, un décès ou une perte d'emploi subie : OwnCoffer ne le sait pas, c'est à vous de le vérifier.
 - **Documents** : tableau d'amortissement, offre de prêt, captures, gardés sur votre serveur.
 
 Avec un compte de prélèvement, les échéances entrent dans le **solde prévu**.
