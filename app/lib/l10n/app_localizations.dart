@@ -12514,26 +12514,14 @@ abstract class AppLocalizations {
   /// No description provided for @homeCustomize.
   ///
   /// In fr, this message translates to:
-  /// **'Personnaliser l\'accueil'**
+  /// **'Modifier l\'accueil'**
   String get homeCustomize;
-
-  /// No description provided for @homeCustomizeTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Personnaliser l\'accueil'**
-  String get homeCustomizeTitle;
 
   /// No description provided for @homeCustomizeHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Cochez les cartes à afficher et faites-les glisser pour choisir leur ordre. Ce choix est gardé sur cet appareil.'**
+  /// **'Faites glisser un widget par sa poignée pour le poser sur la case de votre choix ; le bouton de taille le fait passer de petit à moyen ou grand, la croix le retire. Ce choix est gardé sur cet appareil.'**
   String get homeCustomizeHelp;
-
-  /// No description provided for @homeCustomizeMove.
-  ///
-  /// In fr, this message translates to:
-  /// **'Faire glisser pour déplacer'**
-  String get homeCustomizeMove;
 
   /// No description provided for @homeCustomizeReset.
   ///
@@ -12544,7 +12532,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeEmpty.
   ///
   /// In fr, this message translates to:
-  /// **'Aucune carte affichée. Choisissez-en avec « Personnaliser l\'accueil ».'**
+  /// **'Aucun widget sur l\'accueil. Ajoutez-en avec « Modifier l\'accueil ».'**
   String get homeEmpty;
 
   /// No description provided for @homeCardPepite.
@@ -12666,6 +12654,348 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Dépensé, reçu, et les catégories où part le plus d\'argent'**
   String get homeCardTopSpendingHelp;
+
+  /// No description provided for @homeBoardTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier l\'accueil'**
+  String get homeBoardTitle;
+
+  /// No description provided for @homeBoardAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un widget'**
+  String get homeBoardAdd;
+
+  /// No description provided for @homeBoardAddNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les widgets sont déjà sur l\'accueil.'**
+  String get homeBoardAddNone;
+
+  /// No description provided for @homeBoardDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminé'**
+  String get homeBoardDone;
+
+  /// No description provided for @homeBoardDrag.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faire glisser pour placer'**
+  String get homeBoardDrag;
+
+  /// No description provided for @homeBoardRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer « {name} »'**
+  String homeBoardRemove(String name);
+
+  /// No description provided for @homeBoardResize.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taille : {size}'**
+  String homeBoardResize(String size);
+
+  /// No description provided for @homeBoardMenu.
+  ///
+  /// In fr, this message translates to:
+  /// **'Placer « {name} »'**
+  String homeBoardMenu(String name);
+
+  /// No description provided for @homeBoardUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Monter d\'une case'**
+  String get homeBoardUp;
+
+  /// No description provided for @homeBoardDown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Descendre d\'une case'**
+  String get homeBoardDown;
+
+  /// No description provided for @homeBoardLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une case à gauche'**
+  String get homeBoardLeft;
+
+  /// No description provided for @homeBoardRight.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une case à droite'**
+  String get homeBoardRight;
+
+  /// No description provided for @homeSizeSmall.
+  ///
+  /// In fr, this message translates to:
+  /// **'Petit'**
+  String get homeSizeSmall;
+
+  /// No description provided for @homeSizeMedium.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyen'**
+  String get homeSizeMedium;
+
+  /// No description provided for @homeSizeLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Grand'**
+  String get homeSizeLarge;
+
+  /// No description provided for @homeCardAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes'**
+  String get homeCardAccounts;
+
+  /// No description provided for @homeCardAccountsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le solde de chaque compte aujourd\'hui'**
+  String get homeCardAccountsHelp;
+
+  /// No description provided for @homeCardForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde prévu'**
+  String get homeCardForecast;
+
+  /// No description provided for @homeCardForecastHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La courbe du solde des 30 prochains jours et son point bas'**
+  String get homeCardForecastHelp;
+
+  /// No description provided for @homeCardOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernières opérations'**
+  String get homeCardOperations;
+
+  /// No description provided for @homeCardOperationsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations les plus récentes de vos comptes'**
+  String get homeCardOperationsHelp;
+
+  /// No description provided for @homeCardToClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'À classer'**
+  String get homeCardToClassify;
+
+  /// No description provided for @homeCardToClassifyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations du mois encore sans catégorie'**
+  String get homeCardToClassifyHelp;
+
+  /// No description provided for @homeCardSubscriptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnements'**
+  String get homeCardSubscriptions;
+
+  /// No description provided for @homeCardSubscriptionsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les abonnements prélevés ce mois-ci et leurs hausses de prix'**
+  String get homeCardSubscriptionsHelp;
+
+  /// No description provided for @homeCardLoans.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédits'**
+  String get homeCardLoans;
+
+  /// No description provided for @homeCardLoansHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le restant dû, les mensualités et la prochaine échéance'**
+  String get homeCardLoansHelp;
+
+  /// No description provided for @homeCardInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures'**
+  String get homeCardInvoices;
+
+  /// No description provided for @homeCardInvoicesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les factures et tickets pas encore rattachés à une opération'**
+  String get homeCardInvoicesHelp;
+
+  /// No description provided for @homeCardImports.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relevés'**
+  String get homeCardImports;
+
+  /// No description provided for @homeCardImportsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'La date du dernier relevé importé'**
+  String get homeCardImportsHelp;
+
+  /// No description provided for @homeCardNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notifications'**
+  String get homeCardNotifications;
+
+  /// No description provided for @homeCardNotificationsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les notifications pas encore lues'**
+  String get homeCardNotificationsHelp;
+
+  /// No description provided for @homeTilePerDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} par jour'**
+  String homeTilePerDay(String amount);
+
+  /// No description provided for @homeTileUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'jusqu\'au {date}'**
+  String homeTileUntil(String date);
+
+  /// No description provided for @homeTileLowest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point bas : {amount} le {date}'**
+  String homeTileLowest(String amount, String date);
+
+  /// No description provided for @homeTileNoForecast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas encore de prévision'**
+  String get homeTileNoForecast;
+
+  /// No description provided for @homeTileNoAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun compte'**
+  String get homeTileNoAccount;
+
+  /// No description provided for @homeTileOthers.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{et 1 autre} other{et {count} autres}}'**
+  String homeTileOthers(int count);
+
+  /// No description provided for @homeTileToClassify.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{tout est classé} =1{opération à classer} other{opérations à classer}}'**
+  String homeTileToClassify(int count);
+
+  /// No description provided for @homeTileUnread.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{rien de nouveau} =1{non lue} other{non lues}}'**
+  String homeTileUnread(int count);
+
+  /// No description provided for @homeTileAdvices.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{aucun conseil en attente} =1{conseil en attente} other{conseils en attente}}'**
+  String homeTileAdvices(int count);
+
+  /// No description provided for @homeTileUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{rien d\'ici 7 jours} =1{échéance d\'ici 7 jours} other{échéances d\'ici 7 jours}}'**
+  String homeTileUpcoming(int count);
+
+  /// No description provided for @homeTileIssues.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{tout va bien} =1{point à regarder} other{points à regarder}}'**
+  String homeTileIssues(int count);
+
+  /// No description provided for @homeTileSpent.
+  ///
+  /// In fr, this message translates to:
+  /// **'dépensés ce mois-ci'**
+  String get homeTileSpent;
+
+  /// No description provided for @homeTileNet.
+  ///
+  /// In fr, this message translates to:
+  /// **'reste du mois'**
+  String get homeTileNet;
+
+  /// No description provided for @homeTileNoOperation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération pour l\'instant'**
+  String get homeTileNoOperation;
+
+  /// No description provided for @homeTileNoLoan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun crédit en cours'**
+  String get homeTileNoLoan;
+
+  /// No description provided for @homeTileLoanMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} par mois'**
+  String homeTileLoanMonthly(String amount);
+
+  /// No description provided for @homeTileLoanNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochaine échéance le {date}'**
+  String homeTileLoanNext(String date);
+
+  /// No description provided for @homeTileUnattached.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{toutes rattachées} =1{sans opération} other{sans opération}}'**
+  String homeTileUnattached(int count);
+
+  /// No description provided for @homeTileImportLast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernier relevé le {date}'**
+  String homeTileImportLast(String date);
+
+  /// No description provided for @homeTileImportNever.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun relevé importé'**
+  String get homeTileImportNever;
+
+  /// No description provided for @homeTileImportAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un relevé'**
+  String get homeTileImportAction;
+
+  /// No description provided for @homeTileSubscriptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{aucun abonnement ce mois-ci} =1{1 abonnement ce mois-ci} other{{count} abonnements ce mois-ci}}'**
+  String homeTileSubscriptions(int count);
+
+  /// No description provided for @homeTileRises.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 hausse de prix} other{{count} hausses de prix}}'**
+  String homeTileRises(int count);
+
+  /// No description provided for @homeTileStepsDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout est prêt.'**
+  String get homeTileStepsDone;
 
   /// No description provided for @homeAdvicesTitle.
   ///

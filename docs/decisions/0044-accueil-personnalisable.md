@@ -1,6 +1,6 @@
 # 0044 — Accueil personnalisable
 
-**Statut** : Décidé (13 novembre 2026), mis en œuvre en 1.29.0.
+**Statut** : Remplacée par la décision 0045 (13 novembre 2026) ; mise en œuvre en 1.29.0.
 
 ## Contexte
 

@@ -85,7 +85,9 @@ void main() {
       await prefs.setAccountId(12);
       await prefs.markAdvisorSeen(DateTime.utc(2026, 11, 12, 8));
       await prefs.setOperationFilters('1,0,0,');
-      await prefs.setFirstStepsHidden(true);
+      await prefs.setHomeBoard(
+        HomeBoard.defaults(2).removed(HomeTileKind.firstSteps),
+      );
 
       final again = UiPrefs(store: store);
       await again.load();
@@ -95,7 +97,7 @@ void main() {
       expect(again.accountId, 12);
       expect(again.advisorSeenAt, DateTime.utc(2026, 11, 12, 8));
       expect(again.operationFilters, '1,0,0,');
-      expect(again.firstStepsHidden, isTrue);
+      expect(again.homeBoard(2).contains(HomeTileKind.firstSteps), isFalse);
     });
 
     test('only the look rebuilds the app', () async {

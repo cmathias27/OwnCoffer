@@ -7924,23 +7924,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeGoodNoNotification => 'No notification waiting';
 
   @override
-  String get homeCustomize => 'Customise home';
-
-  @override
-  String get homeCustomizeTitle => 'Customise home';
+  String get homeCustomize => 'Edit home';
 
   @override
   String get homeCustomizeHelp =>
-      'Tick the cards to show and drag them to choose their order. This choice is kept on this device.';
-
-  @override
-  String get homeCustomizeMove => 'Drag to move';
+      'Drag a widget by its handle to drop it on the cell you want; the size button switches it between small, medium and large, the cross removes it. This choice is kept on this device.';
 
   @override
   String get homeCustomizeReset => 'Reset';
 
   @override
-  String get homeEmpty => 'No card shown. Choose some with “Customise home”.';
+  String get homeEmpty =>
+      'No widget on the home page. Add some with “Edit home”.';
 
   @override
   String get homeCardPepite => 'Pépite';
@@ -8009,6 +8004,280 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeCardTopSpendingHelp =>
       'Spent, received, and the categories where most money goes';
+
+  @override
+  String get homeBoardTitle => 'Edit home';
+
+  @override
+  String get homeBoardAdd => 'Add a widget';
+
+  @override
+  String get homeBoardAddNone => 'Every widget is already on the home page.';
+
+  @override
+  String get homeBoardDone => 'Done';
+
+  @override
+  String get homeBoardDrag => 'Drag to place';
+
+  @override
+  String homeBoardRemove(String name) {
+    return 'Remove “$name”';
+  }
+
+  @override
+  String homeBoardResize(String size) {
+    return 'Size: $size';
+  }
+
+  @override
+  String homeBoardMenu(String name) {
+    return 'Place “$name”';
+  }
+
+  @override
+  String get homeBoardUp => 'One cell up';
+
+  @override
+  String get homeBoardDown => 'One cell down';
+
+  @override
+  String get homeBoardLeft => 'One cell left';
+
+  @override
+  String get homeBoardRight => 'One cell right';
+
+  @override
+  String get homeSizeSmall => 'Small';
+
+  @override
+  String get homeSizeMedium => 'Medium';
+
+  @override
+  String get homeSizeLarge => 'Large';
+
+  @override
+  String get homeCardAccounts => 'Accounts';
+
+  @override
+  String get homeCardAccountsHelp => 'Each account\'s balance today';
+
+  @override
+  String get homeCardForecast => 'Forecast balance';
+
+  @override
+  String get homeCardForecastHelp =>
+      'The balance curve over the next 30 days and its lowest point';
+
+  @override
+  String get homeCardOperations => 'Latest operations';
+
+  @override
+  String get homeCardOperationsHelp =>
+      'The most recent operations of your accounts';
+
+  @override
+  String get homeCardToClassify => 'To classify';
+
+  @override
+  String get homeCardToClassifyHelp =>
+      'This month\'s operations still without a category';
+
+  @override
+  String get homeCardSubscriptions => 'Subscriptions';
+
+  @override
+  String get homeCardSubscriptionsHelp =>
+      'The subscriptions debited this month and their price rises';
+
+  @override
+  String get homeCardLoans => 'Loans';
+
+  @override
+  String get homeCardLoansHelp =>
+      'What is left to repay, the instalments and the next due date';
+
+  @override
+  String get homeCardInvoices => 'Invoices';
+
+  @override
+  String get homeCardInvoicesHelp =>
+      'Invoices and receipts not linked to an operation yet';
+
+  @override
+  String get homeCardImports => 'Statements';
+
+  @override
+  String get homeCardImportsHelp => 'The date of the last statement imported';
+
+  @override
+  String get homeCardNotifications => 'Notifications';
+
+  @override
+  String get homeCardNotificationsHelp => 'The notifications not read yet';
+
+  @override
+  String homeTilePerDay(String amount) {
+    return '$amount a day';
+  }
+
+  @override
+  String homeTileUntil(String date) {
+    return 'until $date';
+  }
+
+  @override
+  String homeTileLowest(String amount, String date) {
+    return 'Lowest: $amount on $date';
+  }
+
+  @override
+  String get homeTileNoForecast => 'No forecast yet';
+
+  @override
+  String get homeTileNoAccount => 'No account';
+
+  @override
+  String homeTileOthers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'and $count more',
+      one: 'and 1 more',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileToClassify(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'operations to classify',
+      one: 'operation to classify',
+      zero: 'all classified',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileUnread(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'unread',
+      one: 'unread',
+      zero: 'nothing new',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileAdvices(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'advices waiting',
+      one: 'advice waiting',
+      zero: 'no advice waiting',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileUpcoming(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'due within 7 days',
+      one: 'due within 7 days',
+      zero: 'nothing within 7 days',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileIssues(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'points to look at',
+      one: 'point to look at',
+      zero: 'all well',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeTileSpent => 'spent this month';
+
+  @override
+  String get homeTileNet => 'left this month';
+
+  @override
+  String get homeTileNoOperation => 'No operation yet';
+
+  @override
+  String get homeTileNoLoan => 'No running loan';
+
+  @override
+  String homeTileLoanMonthly(String amount) {
+    return '$amount a month';
+  }
+
+  @override
+  String homeTileLoanNext(String date) {
+    return 'Next instalment on $date';
+  }
+
+  @override
+  String homeTileUnattached(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'without operation',
+      one: 'without operation',
+      zero: 'all linked',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileImportLast(String date) {
+    return 'Last statement on $date';
+  }
+
+  @override
+  String get homeTileImportNever => 'No statement imported';
+
+  @override
+  String get homeTileImportAction => 'Import a statement';
+
+  @override
+  String homeTileSubscriptions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count subscriptions this month',
+      one: '1 subscription this month',
+      zero: 'no subscription this month',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileRises(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count price rises',
+      one: '1 price rise',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeTileStepsDone => 'All set.';
 
   @override
   String get homeAdvicesTitle => 'Current advice';

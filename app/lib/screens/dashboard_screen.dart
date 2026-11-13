@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
@@ -7,15 +8,17 @@ import '../client.dart';
 import '../help/help.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../state/pepite.dart';
+import '../state/pepite_messages.dart';
 import '../state/ui_prefs.dart';
 import '../theme/app_theme.dart';
 import '../util/format.dart';
-import '../widgets/why.dart';
-import '../state/pepite.dart';
+import '../widgets/budget_charts.dart';
+import '../widgets/home_board_view.dart';
 import '../widgets/pepite.dart';
 import '../widgets/soft.dart';
-import '../widgets/home_layout_dialog.dart';
-import 'budget_screen.dart';
+import '../widgets/why.dart';
+import 'pepite_screen.dart';
 
 /// Where to go from the home page.
 enum DashboardTarget {
@@ -38,11 +41,15 @@ enum DashboardTarget {
   subscriptions,
   loans,
   advisor,
+
+  /// The invoices (decision 0045).
+  invoices,
 }
 
 /// The home page: where the money stands today and what comes next, on
-/// the accounts the user may see. Every figure comes from the deterministic
-/// engine (forecast, budget, due dates); each card leads to its page.
+/// the accounts the user may see, as widgets placed freely on a grid
+/// (decision 0045). Every figure comes from the deterministic engine
+/// (forecast, budget, due dates); each widget leads to its page.
 class DashboardScreen extends StatefulWidget {
   final GroupMembership membership;
   final ValueChanged<DashboardTarget> onOpen;
@@ -76,24 +83,51 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => DashboardScreenState();
 }
 
+/// The widgets whose figures are fetched only when they are on the board.
+const _onDemand = {
+  HomeTileKind.firstSteps,
+  HomeTileKind.operations,
+  HomeTileKind.invoices,
+  HomeTileKind.imports,
+  HomeTileKind.topSpending,
+};
+
 class DashboardScreenState extends State<DashboardScreen> {
   List<(Account, ForecastResult?)>? _accounts;
   LeftToLiveReport? _left;
   SpendingReport? _month;
   DueCalendar? _calendar;
   PepiteStart? _start;
+  LoanOverview? _loans;
 
   /// Subscriptions debited this month above their planned amount.
   List<SubscriptionChange> _rises = const [];
 
   /// Loans with an instalment missing in the last two months.
   List<Loan> _missed = const [];
+
+  /// Fetched only for the widgets on the board ([_onDemand]).
+  List<(BankTransaction, Account)>? _recent;
+  int? _unattached;
+  DateTime? _lastImport;
+  var _importsKnown = false;
+  Map<int, Category> _categories = const {};
+  Set<HomeTileKind> _fetched = const {};
   String? _error;
 
   /// Refreshes « Bien démarrer » with the rest of the page.
   var _reloads = 0;
 
+  /// The board being arranged; null outside editing.
+  HomeBoard? _draft;
+
+  /// « Rétablir » chosen while arranging: every grid goes back to the
+  /// home page as it comes once done.
+  var _reset = false;
+
   int get _groupId => widget.membership.group.id!;
+
+  bool get editing => _draft != null;
 
   @override
   void initState() {
@@ -107,8 +141,20 @@ class DashboardScreenState extends State<DashboardScreen> {
     if (oldWidget.membership.group.id != widget.membership.group.id) reload();
   }
 
+  /// The widgets on this device's boards (and the one being arranged).
+  Set<HomeTileKind> get _wanted => {
+    for (final b in [
+      uiPrefs.homeBoard(2),
+      uiPrefs.homeBoard(4),
+      ?_draft,
+    ])
+      for (final t in b.tiles) t.kind,
+  };
+
   Future<void> reload() async {
     final today = todayUtcMidnight();
+    final want = _wanted;
+    bool wants(HomeTileKind k) => want.contains(k);
     // A new import may have earned Pépite's first badge.
     unawaited(pepite.refresh());
     try {
@@ -130,15 +176,29 @@ class DashboardScreenState extends State<DashboardScreen> {
         client.analysis
             .review(_groupId, today)
             .then<MonthReview?>((r) => r, onError: (_) => null),
-        _missedLoans(today),
-        if (!uiPrefs.firstStepsHidden)
-          client.pepiteAdvice
-              .start(_groupId)
-              .then<PepiteStart?>((s) => s, onError: (_) => null),
+        _loanState(today),
+        wants(HomeTileKind.firstSteps)
+            ? client.pepiteAdvice
+                  .start(_groupId)
+                  .then<PepiteStart?>((s) => s, onError: (_) => null)
+            : Future.value(),
+        wants(HomeTileKind.operations) ? _recentOf(accounts) : Future.value(),
+        wants(HomeTileKind.invoices)
+            ? client.invoice
+                  .list(_groupId, unattached: true)
+                  .then<int?>((l) => l.length, onError: (_) => null)
+            : Future.value(),
+        wants(HomeTileKind.imports) ? _lastImportOf(accounts) : Future.value(),
+        wants(HomeTileKind.topSpending)
+            ? client.category
+                  .list(_groupId)
+                  .then<List<Category>?>((c) => c, onError: (_) => null)
+            : Future.value(),
       ]);
       if (!mounted) return;
       final forecasts = results[0] as List<ForecastResult?>;
       pepite.overdrawn = forecasts.any(_overdrawn);
+      final loans = results[5] as (LoanOverview?, List<Loan>);
       setState(() {
         _accounts = [
           for (var i = 0; i < accounts.length; i++) (accounts[i], forecasts[i]),
@@ -153,8 +213,21 @@ class DashboardScreenState extends State<DashboardScreen> {
             // Amounts are negative: a rise is a larger debit.
             if (c.actualCents < c.plannedCents) c,
         ];
-        _missed = results[5] as List<Loan>;
-        _start = results.length > 6 ? results[6] as PepiteStart? : null;
+        _loans = loans.$1;
+        _missed = loans.$2;
+        _start = results[6] as PepiteStart?;
+        _recent = results[7] as List<(BankTransaction, Account)>?;
+        _unattached = results[8] as int?;
+        _importsKnown = wants(HomeTileKind.imports) && results[9] != null;
+        _lastImport = switch (results[9]) {
+          final (DateTime?,) r => r.$1,
+          _ => null,
+        };
+        _categories = {
+          for (final c in results[10] as List<Category>? ?? const <Category>[])
+            c.id!: c,
+        };
+        _fetched = want;
         _error = null;
         _reloads++;
       });
@@ -165,10 +238,91 @@ class DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  /// The latest operations of every account, newest first.
+  Future<List<(BankTransaction, Account)>?> _recentOf(
+    List<Account> accounts,
+  ) async {
+    try {
+      final pages = await Future.wait([
+        for (final a in accounts) client.transaction.list(a.id!, limit: 8),
+      ]);
+      return [
+        for (var i = 0; i < accounts.length; i++)
+          for (final t in pages[i].items) (t, accounts[i]),
+      ]..sort((a, b) => b.$1.date.compareTo(a.$1.date));
+    } on Object {
+      return null;
+    }
+  }
+
+  /// The day of the last statement imported, in a record so that « never »
+  /// (null inside) differs from « cannot be told » (null record).
+  Future<(DateTime?,)?> _lastImportOf(List<Account> accounts) async {
+    try {
+      final lists = await Future.wait([
+        for (final a in accounts) client.import.history(a.id!),
+      ]);
+      DateTime? last;
+      for (final list in lists) {
+        for (final i in list) {
+          if (i.cancelledAt != null) continue;
+          if (last == null || i.createdAt.isAfter(last)) last = i.createdAt;
+        }
+      }
+      return (last,);
+    } on Object {
+      return null;
+    }
+  }
+
+  /// The loans, and the running ones whose check (decision 0040) finds an
+  /// instalment missing in the last two months; nothing when it cannot be
+  /// told.
+  Future<(LoanOverview?, List<Loan>)> _loanState(DateTime today) async {
+    LoanOverview? overview;
+    try {
+      overview = await client.loan.overview(_groupId);
+      final since = today.subtract(const Duration(days: 62));
+      final running = [
+        for (final i in overview.loans)
+          if (i.nextDueDate != null && i.loan.accountId != null) i.loan,
+      ];
+      final checks = await Future.wait([
+        for (final loan in running)
+          client.loan
+              .check(loan.id!)
+              .then<LoanCheckReport?>((r) => r, onError: (_) => null),
+      ]);
+      return (
+        overview,
+        [
+          for (var i = 0; i < running.length; i++)
+            if (checks[i]?.lines.any(
+                  (line) =>
+                      line.status == LoanCheckStatus.missing &&
+                      line.dueDate != null &&
+                      !line.dueDate!.isBefore(since) &&
+                      line.dueDate!.isBefore(today),
+                ) ??
+                false)
+              running[i],
+        ],
+      );
+    } on Object {
+      return (overview, const <Loan>[]);
+    }
+  }
+
+  /// All the money today, and its lowest point over the next 30 days.
+  /// Below zero now or in the forecast: Pépite stays sober.
+  static bool _overdrawn(ForecastResult? f) =>
+      f != null && (f.currentBalanceCents < 0 || f.lowestBalanceCents < 0);
+
+  // ---------------------------------------------------------------- page
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final accounts = _accounts;
     if (_error != null) {
       return Center(
         child: Padding(
@@ -177,296 +331,1015 @@ class DashboardScreenState extends State<DashboardScreen> {
         ),
       );
     }
-    if (accounts == null) {
+    if (_accounts == null) {
       return const Center(child: CircularProgressIndicator());
     }
-    final left = _left;
-    final month = _month;
-    final layout = uiPrefs.homeLayout;
-    Widget? card(HomeCard c) => switch (c) {
-      HomeCard.pepite => PepiteCard(
-        key: ValueKey('pepite-${widget.membership.group.id}-$_reloads'),
-        membership: widget.membership,
-        overdrawn: accounts.any((e) => _overdrawn(e.$2)),
-        onStep: (step) => widget.onOpen(switch (step) {
-          PepiteStep.statements => DashboardTarget.imports,
-          PepiteStep.check => DashboardTarget.operations,
-          PepiteStep.forecast ||
-          PepiteStep.celebrate => DashboardTarget.forecast,
-        }),
-        onOpenStart: () => widget.onOpen(DashboardTarget.start),
-      ),
-      HomeCard.summary => _summarySentence(context, l, accounts, month),
-      HomeCard.firstSteps => _firstSteps(l, accounts, month),
-      HomeCard.status => _status(context, l, accounts, month),
-      HomeCard.advices =>
-        widget.onAdvisor == null ? null : _advicesCard(context, l),
-      HomeCard.balance => _balance(context, l, accounts),
-      HomeCard.leftToLive =>
-        left == null
-            ? null
-            : _tap(
-                LeftToLiveCard(report: left),
-                () => widget.onOpen(DashboardTarget.budget),
-              ),
-      HomeCard.monthBalance =>
-        month == null
-            ? null
-            : _tap(
-                BalanceCard(
-                  report: month,
-                  previous: month.history.length >= 2
-                      ? month.history[month.history.length - 2]
-                      : null,
-                ),
-                () => widget.onOpen(DashboardTarget.budget),
-              ),
-      HomeCard.upcoming => _upcoming(context, l),
-      HomeCard.topSpending =>
-        month == null ? null : _topSpending(context, l, month),
-    };
-    // The wide cards stand alone; the cards between them share two
-    // columns on a large screen.
-    final blocks = <Object>[];
-    for (final c in layout.visible) {
-      final w = card(c);
-      if (w == null) continue;
-      if (c.wide) {
-        blocks.add(w);
-      } else if (blocks.isNotEmpty && blocks.last is List<Widget>) {
-        (blocks.last as List<Widget>).add(w);
-      } else {
-        blocks.add(<Widget>[w]);
-      }
-    }
-    Widget centered(Widget child) => Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1000),
-        child: child,
-      ),
-    );
-    return RefreshIndicator(
-      onRefresh: reload,
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(12, 8, 12, 32),
-        children: [
-          for (final b in blocks)
-            centered(b is Widget ? b : _grid(b as List<Widget>)),
-          if (blocks.isEmpty)
-            centered(
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 32),
-                child: Text(l.homeEmpty, textAlign: TextAlign.center),
-              ),
-            ),
-          centered(
-            Align(
-              alignment: Alignment.center,
-              child: TextButton.icon(
-                key: const Key('home-customize'),
-                onPressed: _customize,
-                icon: const Icon(Icons.tune),
-                label: Text(l.homeCustomize),
-              ),
-            ),
+    return LayoutBuilder(
+      builder: (context, box) {
+        final width = math.min(box.maxWidth - 24, 1000.0);
+        final columns = HomeBoard.columnsFor(width);
+        final draft = _draft;
+        final board = draft == null
+            ? uiPrefs.homeBoard(columns)
+            : HomeBoard.reflowed(draft, columns);
+        final shown = board;
+        final rowHeight = MediaQuery.textScalerOf(
+          context,
+        ).scale(136).clamp(136.0, 200.0);
+        Widget centered(Widget child) => Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1000),
+            child: child,
           ),
-        ],
-      ),
-    );
-  }
-
-  /// Opens the editor of the home page; saved on this device.
-  Future<void> _customize() async {
-    final before = uiPrefs.homeLayout;
-    final chosen = await showDialog<HomeLayoutChoice>(
-      context: context,
-      builder: (_) => HomeLayoutDialog(
-        layout: before,
-        advices: widget.onAdvisor != null,
-        simple: uiPrefs.simpleMode,
-      ),
-    );
-    if (chosen == null || !mounted) return;
-    final firstStepsBack =
-        !before.shows(HomeCard.firstSteps) &&
-        (chosen.layout?.shows(HomeCard.firstSteps) ?? true);
-    await uiPrefs.setHomeLayout(chosen.layout);
-    if (!mounted) return;
-    setState(() {});
-    // « Premiers pas » shown again: its steps are fetched with the page.
-    if (firstStepsBack) await reload();
-  }
-
-  /// One block of cards: a column on a phone, two on a large screen.
-  Widget _grid(List<Widget> cards) => LayoutBuilder(
-    builder: (context, box) {
-      final wide = box.maxWidth >= 720;
-      Widget column(List<Widget> list) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final c in list)
-            Padding(padding: const EdgeInsets.only(bottom: 12), child: c),
-        ],
-      );
-      if (!wide) return column(cards);
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: column([
-              for (var i = 0; i < cards.length; i += 2) cards[i],
-            ]),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: column([
-              for (var i = 1; i < cards.length; i += 2) cards[i],
-            ]),
-          ),
-        ],
-      );
-    },
-  );
-
-  Widget _tap(Widget child, VoidCallback onTap) => Material(
-    color: Colors.transparent,
-    borderRadius: BorderRadius.circular(24),
-    clipBehavior: Clip.antiAlias,
-    child: InkWell(onTap: onTap, child: child),
-  );
-
-  /// All the money today, and its lowest point over the next 30 days.
-  /// Below zero now or in the forecast: Pépite stays sober.
-  static bool _overdrawn(ForecastResult? f) =>
-      f != null && (f.currentBalanceCents < 0 || f.lowestBalanceCents < 0);
-
-  Widget _balance(
-    BuildContext context,
-    AppLocalizations l,
-    List<(Account, ForecastResult?)> accounts,
-  ) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    final known = [
-      for (final (a, f) in accounts)
-        if (f != null && a.currency == 'EUR') (a, f),
-    ];
-    final total = known.fold(0, (s, e) => s + e.$2.currentBalanceCents);
-    final lowest = known.isEmpty
-        ? null
-        : known.reduce(
-            (a, b) =>
-                a.$2.lowestBalanceCents <= b.$2.lowestBalanceCents ? a : b,
-          );
-    Widget blob(double size, double alpha) => Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: scheme.onPrimaryContainer.withValues(alpha: alpha),
-      ),
-    );
-    return Material(
-      color: scheme.primaryContainer,
-      borderRadius: BorderRadius.circular(28),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => widget.onOpen(DashboardTarget.accounts),
-        child: Stack(
-          children: [
-            Positioned(right: -50, top: -60, child: blob(180, 0.08)),
-            Positioned(right: 70, bottom: -70, child: blob(120, 0.05)),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l.dashboardBalance(known.length),
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      color: scheme.onPrimaryContainer,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    context.money(total),
-                    style: theme.textTheme.displaySmall?.copyWith(
-                      color: scheme.onPrimaryContainer,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  if (lowest != null) ...[
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(
-                          lowest.$2.lowestBalanceCents < 0
-                              ? Icons.warning_amber_rounded
-                              : Icons.trending_flat,
-                          size: 18,
-                          color: scheme.onPrimaryContainer,
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            l.dashboardLowest(
-                              lowest.$1.name,
-                              context.money(lowest.$2.lowestBalanceCents),
-                              context.day(lowest.$2.lowestDate),
-                            ),
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: scheme.onPrimaryContainer,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+        );
+        return RefreshIndicator(
+          onRefresh: reload,
+          child: ListView(
+            key: const Key('home-list'),
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 32),
+            children: [
+              if (editing) centered(_editBar(context, l, board)),
+              if (!editing)
+                centered(
                   Align(
-                    alignment: Alignment.centerLeft,
-                    child: WhyButton(
-                      key: const Key('why-balance'),
-                      color: scheme.onPrimaryContainer,
-                      title: l.whyBalanceTitle,
-                      lines: [
-                        for (final (a, f) in known)
-                          WhyLine(a.name, f.currentBalanceCents),
-                        WhyLine(l.whyTotal, total, total: true),
-                      ],
-                      explanation: l.whyBalanceText,
+                    alignment: Alignment.centerRight,
+                    child: TextButton.icon(
+                      key: const Key('home-customize'),
+                      onPressed: () => _edit(columns),
+                      icon: const Icon(Icons.dashboard_customize_outlined),
+                      label: Text(l.homeCustomize),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (final (a, f) in accounts)
-                        Chip(
-                          avatar: const Icon(
-                            Icons.account_balance_wallet_outlined,
-                            size: 16,
+                ),
+              if (shown.tiles.isEmpty)
+                centered(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32),
+                    child: Text(l.homeEmpty, textAlign: TextAlign.center),
+                  ),
+                ),
+              if (shown.tiles.isNotEmpty || editing)
+                centered(
+                  HomeBoardView(
+                    key: const Key('home-board'),
+                    board: shown,
+                    editing: editing,
+                    rowHeight: rowHeight,
+                    nameOf: (k) => _name(l, k),
+                    iconOf: _icon,
+                    onChanged: (b) => setState(() => _draft = b),
+                    tileBuilder: (context, t) => _tile(context, l, t),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Starts arranging the board of this grid.
+  void _edit(int columns) => setState(() {
+    _draft = uiPrefs.homeBoard(columns);
+    _reset = false;
+  });
+
+  /// The bar on top while arranging: what to do, add, reset, cancel, done.
+  Widget _editBar(BuildContext context, AppLocalizations l, HomeBoard board) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Material(
+        color: theme.colorScheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(24),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(l.homeBoardTitle, style: theme.textTheme.titleMedium),
+              const SizedBox(height: 4),
+              Text(l.homeCustomizeHelp, style: theme.textTheme.bodySmall),
+              const SizedBox(height: 8),
+              Wrap(
+                alignment: WrapAlignment.end,
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  FilledButton.tonalIcon(
+                    key: const Key('home-board-add'),
+                    onPressed: () => _add(board),
+                    icon: const Icon(Icons.add),
+                    label: Text(l.homeBoardAdd),
+                  ),
+                  TextButton(
+                    key: const Key('home-board-reset'),
+                    onPressed: () => setState(() {
+                      _draft = HomeBoard.defaults(
+                        board.columns,
+                        simple: uiPrefs.simpleMode,
+                      );
+                      _reset = true;
+                    }),
+                    child: Text(l.homeCustomizeReset),
+                  ),
+                  TextButton(
+                    key: const Key('home-board-cancel'),
+                    onPressed: () => setState(() => _draft = null),
+                    child: Text(l.cancel),
+                  ),
+                  FilledButton(
+                    key: const Key('home-board-done'),
+                    onPressed: () => _done(board),
+                    child: Text(l.homeBoardDone),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Keeps the board arranged on this device; fetches what its new widgets
+  /// need.
+  Future<void> _done(HomeBoard board) async {
+    // Kept in memory at once, written to the device's storage meanwhile.
+    // After « Rétablir », the other grid goes back to the home page as it
+    // comes; this one keeps what was arranged.
+    final saved = _reset
+        ? uiPrefs.resetHome(
+            keep:
+                board ==
+                    HomeBoard.defaults(
+                      board.columns,
+                      simple: uiPrefs.simpleMode,
+                    )
+                ? null
+                : board,
+          )
+        : uiPrefs.setHomeBoard(board);
+    setState(() {
+      _draft = null;
+      _reset = false;
+    });
+    await saved;
+    if (!mounted) return;
+    if (!_fetched.containsAll(_wanted.intersection(_onDemand))) await reload();
+  }
+
+  /// The catalogue of the widgets not on the board.
+  Future<void> _add(HomeBoard board) async {
+    final l = AppLocalizations.of(context);
+    final missing = [
+      for (final k in board.missing)
+        if (_available(k)) k,
+    ];
+    final chosen = await showSoftSheet<(HomeTileKind, TileSize)>(
+      context,
+      scroll: true,
+      builder: (context, scroll) => ListView(
+        controller: scroll,
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        children: [
+          Text(l.homeBoardAdd, style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 8),
+          if (missing.isEmpty) Text(l.homeBoardAddNone),
+          for (final k in missing)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ListTile(
+                    key: Key('home-add-${k.name}'),
+                    contentPadding: EdgeInsets.zero,
+                    leading: CircleAvatar(child: Icon(_icon(k))),
+                    title: Text(_name(l, k)),
+                    subtitle: Text(_help(l, k)),
+                    onTap: () => Navigator.pop(context, (k, k.defaultSize)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 56),
+                    child: Wrap(
+                      spacing: 8,
+                      children: [
+                        for (final s in k.sizes)
+                          ActionChip(
+                            key: Key('home-add-${k.name}-${s.name}'),
+                            avatar: Icon(
+                              s == k.defaultSize
+                                  ? Icons.add
+                                  : Icons.crop_square,
+                              size: 18,
+                            ),
+                            label: Text(homeSizeName(l, s)),
+                            onPressed: () => Navigator.pop(context, (k, s)),
                           ),
-                          label: Text(
-                            f == null
-                                ? a.name
-                                : '${a.name} · ${context.money(f.currentBalanceCents, currency: a.currency)}',
-                          ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
+        ],
+      ),
+    );
+    if (chosen == null || !mounted || _draft == null) return;
+    setState(() => _draft = board.added(chosen.$1, chosen.$2));
+    if (_onDemand.contains(chosen.$1) && !_fetched.contains(chosen.$1)) {
+      await reload();
+    }
+  }
+
+  /// « Conseils du moment » only where Mon conseiller exists; Pépite only
+  /// when it is on.
+  bool _available(HomeTileKind k) => switch (k) {
+    HomeTileKind.advices => widget.onAdvisor != null,
+    HomeTileKind.pepite => pepite.enabled,
+    _ => true,
+  };
+
+  // ------------------------------------------------------------ catalogue
+
+  static IconData _icon(HomeTileKind k) => switch (k) {
+    HomeTileKind.pepite => Icons.pets_outlined,
+    HomeTileKind.summary => Icons.check_circle_outline,
+    HomeTileKind.firstSteps => Icons.flag_outlined,
+    HomeTileKind.status => Icons.visibility_outlined,
+    HomeTileKind.advices => Icons.lightbulb_outline,
+    HomeTileKind.balance => Icons.account_balance_wallet_outlined,
+    HomeTileKind.leftToLive => Icons.savings_outlined,
+    HomeTileKind.monthBalance => Icons.balance_outlined,
+    HomeTileKind.upcoming => Icons.event_outlined,
+    HomeTileKind.topSpending => Icons.pie_chart_outline,
+    HomeTileKind.accounts => Icons.account_balance_outlined,
+    HomeTileKind.forecast => Icons.show_chart,
+    HomeTileKind.operations => Icons.receipt_long_outlined,
+    HomeTileKind.toClassify => Icons.label_off_outlined,
+    HomeTileKind.subscriptions => Icons.autorenew,
+    HomeTileKind.loans => Icons.real_estate_agent_outlined,
+    HomeTileKind.invoices => Icons.description_outlined,
+    HomeTileKind.imports => Icons.upload_file_outlined,
+    HomeTileKind.notifications => Icons.notifications_outlined,
+  };
+
+  static String _name(AppLocalizations l, HomeTileKind k) => switch (k) {
+    HomeTileKind.pepite => l.homeCardPepite,
+    HomeTileKind.summary => l.homeCardSummary,
+    HomeTileKind.firstSteps => l.homeCardFirstSteps,
+    HomeTileKind.status => l.homeCardStatus,
+    HomeTileKind.advices => l.homeCardAdvices,
+    HomeTileKind.balance => l.homeCardBalance,
+    HomeTileKind.leftToLive => l.homeCardLeftToLive,
+    HomeTileKind.monthBalance => l.homeCardMonthBalance,
+    HomeTileKind.upcoming => l.homeCardUpcoming,
+    HomeTileKind.topSpending => l.homeCardTopSpending,
+    HomeTileKind.accounts => l.homeCardAccounts,
+    HomeTileKind.forecast => l.homeCardForecast,
+    HomeTileKind.operations => l.homeCardOperations,
+    HomeTileKind.toClassify => l.homeCardToClassify,
+    HomeTileKind.subscriptions => l.homeCardSubscriptions,
+    HomeTileKind.loans => l.homeCardLoans,
+    HomeTileKind.invoices => l.homeCardInvoices,
+    HomeTileKind.imports => l.homeCardImports,
+    HomeTileKind.notifications => l.homeCardNotifications,
+  };
+
+  static String _help(AppLocalizations l, HomeTileKind k) => switch (k) {
+    HomeTileKind.pepite => l.homeCardPepiteHelp,
+    HomeTileKind.summary => l.homeCardSummaryHelp,
+    HomeTileKind.firstSteps => l.homeCardFirstStepsHelp,
+    HomeTileKind.status => l.homeCardStatusHelp,
+    HomeTileKind.advices => l.homeCardAdvicesHelp,
+    HomeTileKind.balance => l.homeCardBalanceHelp,
+    HomeTileKind.leftToLive => l.homeCardLeftToLiveHelp,
+    HomeTileKind.monthBalance => l.homeCardMonthBalanceHelp,
+    HomeTileKind.upcoming => l.homeCardUpcomingHelp,
+    HomeTileKind.topSpending => l.homeCardTopSpendingHelp,
+    HomeTileKind.accounts => l.homeCardAccountsHelp,
+    HomeTileKind.forecast => l.homeCardForecastHelp,
+    HomeTileKind.operations => l.homeCardOperationsHelp,
+    HomeTileKind.toClassify => l.homeCardToClassifyHelp,
+    HomeTileKind.subscriptions => l.homeCardSubscriptionsHelp,
+    HomeTileKind.loans => l.homeCardLoansHelp,
+    HomeTileKind.invoices => l.homeCardInvoicesHelp,
+    HomeTileKind.imports => l.homeCardImportsHelp,
+    HomeTileKind.notifications => l.homeCardNotificationsHelp,
+  };
+
+  // --------------------------------------------------------------- tiles
+
+  Widget _tile(BuildContext context, AppLocalizations l, HomeTile t) {
+    final s = t.size;
+    if (!_available(t.kind)) {
+      // Pépite turned off, no advisor: only its place while arranging.
+      return editing
+          ? _frame(l, t.kind, s, child: const SizedBox.shrink())
+          : const SizedBox.shrink();
+    }
+    return KeyedSubtree(
+      key: Key('home-card-${t.kind.name}'),
+      child: switch (t.kind) {
+        HomeTileKind.pepite => _pepiteTile(context, l, s),
+        HomeTileKind.summary => _summaryTile(context, l, s),
+        HomeTileKind.firstSteps => _firstStepsTile(context, l, s),
+        HomeTileKind.status => _statusTile(context, l, s),
+        HomeTileKind.advices => _advicesTile(context, l, s),
+        HomeTileKind.balance => _balanceTile(context, l, s),
+        HomeTileKind.leftToLive => _leftTile(context, l, s),
+        HomeTileKind.monthBalance => _monthTile(context, l, s),
+        HomeTileKind.upcoming => _upcomingTile(context, l, s),
+        HomeTileKind.topSpending => _spendingTile(context, l, s),
+        HomeTileKind.accounts => _accountsTile(context, l, s),
+        HomeTileKind.forecast => _forecastTile(context, l, s),
+        HomeTileKind.operations => _operationsTile(context, l, s),
+        HomeTileKind.toClassify => _toClassifyTile(context, l, s),
+        HomeTileKind.subscriptions => _subscriptionsTile(context, l, s),
+        HomeTileKind.loans => _loansTile(context, l, s),
+        HomeTileKind.invoices => _invoicesTile(context, l, s),
+        HomeTileKind.imports => _importsTile(context, l, s),
+        HomeTileKind.notifications => _notificationsTile(context, l, s),
+      },
+    );
+  }
+
+  /// The frame of a widget; the « ? » only when there is room for it.
+  Widget _frame(
+    AppLocalizations l,
+    HomeTileKind kind,
+    TileSize size, {
+    required Widget child,
+    DashboardTarget? target,
+    VoidCallback? onTap,
+    String? help,
+    HelpTopic? helpTopic,
+    bool accent = false,
+    String? title,
+  }) => HomeTileFrame(
+    icon: _icon(kind),
+    title: title ?? _name(l, kind),
+    accent: accent,
+    help: size == TileSize.small ? null : help,
+    helpTopic: helpTopic,
+    onTap: onTap ?? (target == null ? null : () => widget.onOpen(target)),
+    onLongPress: editing
+        ? null
+        : () => _edit(
+            HomeBoard.columnsFor(
+              math.min(MediaQuery.sizeOf(context).width - 24, 1000.0),
+            ),
+          ),
+    child: child,
+  );
+
+  /// A figure and the line below it, the usual content of a small widget.
+  Widget _figure(
+    String figure,
+    String? line, {
+    Color? color,
+    int lines = 2,
+    List<Widget> more = const [],
+  }) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      TileFigure(figure, color: color),
+      if (line != null) TileLine(line, maxLines: lines),
+      ...more,
+    ],
+  );
+
+  /// A row of a list inside a widget: a label and its amount.
+  Widget _row(
+    BuildContext context,
+    String label,
+    String? trailing, {
+    IconData? icon,
+    Color? iconColor,
+    VoidCallback? onTap,
+    String? sub,
+  }) {
+    final theme = Theme.of(context);
+    final row = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 18, color: iconColor),
+            const SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium,
+                ),
+                if (sub != null)
+                  Text(
+                    sub,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodySmall,
+                  ),
+              ],
+            ),
+          ),
+          if (trailing != null) ...[
+            const SizedBox(width: 8),
+            Text(
+              trailing,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+    if (onTap == null) return row;
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: onTap,
+      child: row,
+    );
+  }
+
+  /// How many rows of a list fit: one for a medium widget, more for a
+  /// large one.
+  static int _rowsFor(TileSize s) => switch (s) {
+    TileSize.small => 1,
+    TileSize.medium => 2,
+    TileSize.large => 6,
+  };
+
+  /// The rows of a list, the ones left over counted at the end.
+  List<Widget> _list(
+    AppLocalizations l,
+    TileSize size,
+    List<Widget> rows,
+  ) {
+    final n = _rowsFor(size);
+    if (rows.length <= n) return rows;
+    return [
+      ...rows.take(n - 1),
+      TileLine(l.homeTileOthers(rows.length - n + 1), maxLines: 1),
+    ];
+  }
+
+  Widget _pepiteTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final accounts = _accounts!;
+    final overdrawn = accounts.any((e) => _overdrawn(e.$2));
+    if (s == TileSize.large) {
+      // The whole card: ritual, apps, tip and « Bien démarrer ».
+      return Material(
+        color:
+            Theme.of(context).cardTheme.color ??
+            Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(24),
+        clipBehavior: Clip.antiAlias,
+        child: SingleChildScrollView(
+          child: PepiteCard(
+            key: ValueKey('pepite-${widget.membership.group.id}-$_reloads'),
+            membership: widget.membership,
+            overdrawn: overdrawn,
+            onStep: (step) => widget.onOpen(switch (step) {
+              PepiteStep.statements => DashboardTarget.imports,
+              PepiteStep.check => DashboardTarget.operations,
+              PepiteStep.forecast ||
+              PepiteStep.celebrate => DashboardTarget.forecast,
+            }),
+            onOpenStart: () => widget.onOpen(DashboardTarget.start),
+          ),
+        ),
+      );
+    }
+    return ListenableBuilder(
+      listenable: pepite,
+      builder: (context, _) {
+        final status = pepite.status;
+        final line = status == null
+            ? null
+            : pepiteLine(
+                l,
+                status,
+                overdrawn: overdrawn,
+                today: DateTime.now(),
+              );
+        return _frame(
+          l,
+          HomeTileKind.pepite,
+          s,
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (_) => const PepiteScreen()),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PepiteImage(
+                line?.pose ?? PepitePose.wave,
+                size: s == TileSize.small ? 56 : 72,
+              ),
+              if (s != TileSize.small && line != null) ...[
+                const SizedBox(width: 8),
+                Expanded(child: TileLine(line.text, maxLines: 4)),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _summaryTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final theme = Theme.of(context);
+    final issues = _issues(l, context, _accounts!, _month);
+    final urgent = issues.any((i) => i.urgency <= 1);
+    final colors = context.moneyColors;
+    final icon = Icon(
+      issues.isEmpty
+          ? Icons.check_circle_outline
+          : urgent
+          ? Icons.error_outline
+          : Icons.info_outline,
+      size: s == TileSize.small ? 32 : 28,
+      color: issues.isEmpty
+          ? colors.positive
+          : urgent
+          ? colors.negative
+          : colors.muted,
+    );
+    final text = Text(
+      key: const Key('home-summary'),
+      issues.isEmpty ? l.homeAllGood : l.homeIssuesCount(issues.length),
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+      style: s == TileSize.small
+          ? theme.textTheme.bodyMedium
+          : theme.textTheme.titleMedium,
+    );
+    return _frame(
+      l,
+      HomeTileKind.summary,
+      s,
+      target: issues.isEmpty ? DashboardTarget.summary : issues.first.target,
+      child: s == TileSize.small
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [icon, const SizedBox(height: 4), text],
+            )
+          : Row(
+              children: [
+                icon,
+                const SizedBox(width: 12),
+                Expanded(child: text),
+              ],
+            ),
+    );
+  }
+
+  Widget _statusTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final accounts = _accounts!;
+    final month = _month;
+    final issues = _issues(l, context, accounts, month);
+    final colors = context.moneyColors;
+    if (s == TileSize.small) {
+      return _frame(
+        l,
+        HomeTileKind.status,
+        s,
+        target: issues.isEmpty ? DashboardTarget.summary : issues.first.target,
+        child: _figure(
+          issues.isEmpty ? '✓' : '${issues.length}',
+          issues.isEmpty ? l.homeTileIssues(0) : issues.first.text,
+          color: issues.any((i) => i.urgency <= 1) ? colors.negative : null,
+        ),
+      );
+    }
+    final noOverdraft = accounts.every(
+      (e) => e.$2 == null || e.$2!.lowestBalanceCents >= 0,
+    );
+    final good = [
+      if (noOverdraft) l.homeGoodNoOverdraft,
+      if (month != null && month.unclassifiedCount == 0) l.homeGoodClassified,
+      if (widget.unread == 0) l.homeGoodNoNotification,
+    ];
+    return _frame(
+      l,
+      HomeTileKind.status,
+      s,
+      title: l.dashboardWatch,
+      help: l.cardHelpWatch,
+      helpTopic: HelpTopic.home,
+      target: DashboardTarget.summary,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (issues.isEmpty) ...[
+            TileLine(l.dashboardAllGood, maxLines: 2),
+            if (s == TileSize.large)
+              for (final g in good)
+                _row(
+                  context,
+                  g,
+                  null,
+                  icon: Icons.check,
+                  iconColor: colors.positive,
+                ),
+          ],
+          ..._list(l, s, [
+            for (final i in issues)
+              _row(
+                context,
+                i.text,
+                null,
+                icon: i.icon,
+                iconColor: i.urgency <= 1 ? colors.negative : null,
+                onTap: () => widget.onOpen(i.target),
+              ),
+          ]),
+          if (s == TileSize.large)
+            _row(
+              context,
+              l.summaryOpen,
+              null,
+              icon: Icons.event_note_outlined,
+              onTap: () => widget.onOpen(DashboardTarget.summary),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// The first launch, in three steps (decision 0041, point 15): an
+  /// account, a statement, the categories. « Masquer » takes the widget
+  /// off the board.
+  Widget _firstStepsTile(
+    BuildContext context,
+    AppLocalizations l,
+    TileSize s,
+  ) {
+    final start = _start;
+    final accounts = _accounts!;
+    final month = _month;
+    final hasAccount = accounts.isNotEmpty;
+    final imported = start?.done.contains('account') ?? false;
+    final classified =
+        imported &&
+        ((start?.done.contains('rules') ?? false) ||
+            (month != null && month.unclassifiedCount == 0));
+    final steps = [
+      (l.firstStepAccount, hasAccount, DashboardTarget.accounts),
+      (l.firstStepImport, imported, DashboardTarget.imports),
+      (l.firstStepCategories, classified, DashboardTarget.operations),
+    ];
+    final done = steps.where((e) => e.$2).length;
+    final next = steps.indexWhere((e) => !e.$2);
+    final colors = context.moneyColors;
+    final hide = TextButton(
+      key: const Key('first-steps-hide'),
+      onPressed: _hideFirstSteps,
+      child: Text(l.firstStepsHide),
+    );
+    return _frame(
+      l,
+      HomeTileKind.firstSteps,
+      s,
+      title: l.firstStepsTitle(done, steps.length),
+      target: next < 0 ? null : steps[next].$3,
+      child: KeyedSubtree(
+        key: const Key('first-steps'),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (next < 0)
+              TileLine(l.homeTileStepsDone)
+            else if (s == TileSize.medium)
+              _row(
+                context,
+                steps[next].$1,
+                null,
+                icon: Icons.chevron_right,
+                onTap: () => widget.onOpen(steps[next].$3),
+              )
+            else
+              for (final (i, (title, ok, target)) in steps.indexed)
+                InkWell(
+                  key: Key('first-step-$i'),
+                  onTap: ok ? null : () => widget.onOpen(target),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      children: [
+                        ok
+                            ? Icon(Icons.check_circle, color: colors.positive)
+                            : CircleAvatar(radius: 12, child: Text('${i + 1}')),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: ok
+                                ? const TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                  )
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            const Spacer(),
+            Align(alignment: Alignment.centerRight, child: hide),
           ],
         ),
       ),
     );
   }
 
+  /// « Masquer » on « Premiers pas »: off the boards of this device.
+  Future<void> _hideFirstSteps() async {
+    for (final columns in const [2, 4]) {
+      final board = uiPrefs.homeBoard(columns);
+      if (board.contains(HomeTileKind.firstSteps)) {
+        await uiPrefs.setHomeBoard(board.removed(HomeTileKind.firstSteps));
+      }
+    }
+    if (mounted) setState(() {});
+  }
+
+  Widget _advicesTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final title = widget.adviceTitle;
+    final shown = title == null ? const <ActionProposal>[] : widget.advices;
+    if (s == TileSize.small) {
+      return _frame(
+        l,
+        HomeTileKind.advices,
+        s,
+        onTap: widget.onAdvisor,
+        child: _figure('${shown.length}', l.homeTileAdvices(shown.length)),
+      );
+    }
+    final n = s == TileSize.medium ? 2 : 4;
+    return _frame(
+      l,
+      HomeTileKind.advices,
+      s,
+      title: l.homeAdvicesTitle,
+      help: l.cardHelpAdvices,
+      helpTopic: HelpTopic.advisor,
+      onTap: widget.onAdvisor,
+      child: KeyedSubtree(
+        key: const Key('home-advices'),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (shown.isEmpty) TileLine(l.homeAdvicesNone),
+            for (final p in shown.take(n))
+              _row(
+                context,
+                title!(p),
+                null,
+                icon: Icons.tips_and_updates_outlined,
+                onTap: widget.onAdvisor,
+              ),
+            if (shown.length > n)
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  key: const Key('home-advices-all'),
+                  onPressed: widget.onAdvisor,
+                  child: Text(l.homeAdvicesAllCount(shown.length)),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// The accounts in euros with a forecast, their total and the lowest.
+  ({
+    List<(Account, ForecastResult)> known,
+    int total,
+    (Account, ForecastResult)? lowest,
+  })
+  _money() {
+    final known = [
+      for (final (a, f) in _accounts!)
+        if (f != null && a.currency == 'EUR') (a, f),
+    ];
+    return (
+      known: known,
+      total: known.fold(0, (s, e) => s + e.$2.currentBalanceCents),
+      lowest: known.isEmpty
+          ? null
+          : known.reduce(
+              (a, b) =>
+                  a.$2.lowestBalanceCents <= b.$2.lowestBalanceCents ? a : b,
+            ),
+    );
+  }
+
+  Widget _balanceTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final scheme = Theme.of(context).colorScheme;
+    final m = _money();
+    final lowest = m.lowest;
+    return _frame(
+      l,
+      HomeTileKind.balance,
+      s,
+      accent: true,
+      title: s == TileSize.small
+          ? l.homeCardBalance
+          : l.dashboardBalance(m.known.length),
+      target: DashboardTarget.accounts,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TileFigure(
+            context.money(m.total),
+            large: s != TileSize.small,
+            color: scheme.onPrimaryContainer,
+          ),
+          if (s != TileSize.small && lowest != null)
+            TileLine(
+              l.dashboardLowest(
+                lowest.$1.name,
+                context.money(lowest.$2.lowestBalanceCents),
+                context.day(lowest.$2.lowestDate),
+              ),
+              color: scheme.onPrimaryContainer,
+            ),
+          if (s == TileSize.large) ...[
+            WhyButton(
+              key: const Key('why-balance'),
+              color: scheme.onPrimaryContainer,
+              title: l.whyBalanceTitle,
+              lines: [
+                for (final (a, f) in m.known)
+                  WhyLine(a.name, f.currentBalanceCents),
+                WhyLine(l.whyTotal, m.total, total: true),
+              ],
+              explanation: l.whyBalanceText,
+            ),
+            for (final (a, f) in _accounts!.take(3))
+              _row(
+                context,
+                a.name,
+                f == null
+                    ? null
+                    : context.money(
+                        f.currentBalanceCents,
+                        currency: a.currency,
+                      ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _accountsTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final accounts = _accounts!;
+    return _frame(
+      l,
+      HomeTileKind.accounts,
+      s,
+      target: DashboardTarget.accounts,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (accounts.isEmpty) TileLine(l.homeTileNoAccount),
+          ..._list(l, s == TileSize.medium ? TileSize.medium : s, [
+            for (final (a, f) in accounts)
+              _row(
+                context,
+                a.name,
+                f == null
+                    ? null
+                    : context.money(
+                        f.currentBalanceCents,
+                        currency: a.currency,
+                      ),
+                icon: Icons.account_balance_wallet_outlined,
+              ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Widget _leftTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final r = _left;
+    final colors = context.moneyColors;
+    if (r == null) {
+      return _frame(
+        l,
+        HomeTileKind.leftToLive,
+        s,
+        target: DashboardTarget.budget,
+        child: TileLine(l.homeTileNoForecast),
+      );
+    }
+    return _frame(
+      l,
+      HomeTileKind.leftToLive,
+      s,
+      target: DashboardTarget.budget,
+      help: l.leftToLiveHelp,
+      helpTopic: HelpTopic.budget,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TileFigure(
+            context.money(r.leftCents),
+            large: s == TileSize.large,
+            color: r.leftCents < 0 ? colors.negative : null,
+          ),
+          TileLine(
+            s == TileSize.small
+                ? l.homeTilePerDay(context.money(r.perDayCents))
+                : '${l.homeTilePerDay(context.money(r.perDayCents))}, '
+                      '${l.homeTileUntil(context.day(r.last))}',
+          ),
+          if (s == TileSize.large) ...[
+            const SizedBox(height: 4),
+            _row(context, l.whyLeftBalance, context.money(r.balanceCents)),
+            _row(
+              context,
+              l.whyLeftDebits(context.day(r.last)),
+              context.money(r.plannedDebitsCents),
+            ),
+            _row(
+              context,
+              l.whyLeftCredits(context.day(r.last)),
+              context.money(r.plannedCreditsCents),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _monthTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final r = _month;
+    final colors = context.moneyColors;
+    if (r == null) {
+      return _frame(
+        l,
+        HomeTileKind.monthBalance,
+        s,
+        target: DashboardTarget.budget,
+        child: const SizedBox.shrink(),
+      );
+    }
+    final out = r.expenseCents + r.savingsCents;
+    final scale = math.max(1, math.max(r.incomeCents, out));
+    return _frame(
+      l,
+      HomeTileKind.monthBalance,
+      s,
+      target: DashboardTarget.budget,
+      help: l.homeCardMonthBalanceHelp,
+      helpTopic: HelpTopic.budget,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TileFigure(
+            context.money(r.netCents),
+            large: s == TileSize.large,
+            color: r.netCents < 0 ? colors.negative : colors.positive,
+          ),
+          TileLine(
+            s == TileSize.small
+                ? l.homeTileNet
+                : l.dashboardMonthTotals(
+                    context.money(r.expenseCents),
+                    context.money(r.incomeCents),
+                  ),
+          ),
+          if (s == TileSize.large) ...[
+            const SizedBox(height: 8),
+            _row(context, l.budgetIncome, context.money(r.incomeCents)),
+            ThinBar(fraction: r.incomeCents / scale, color: ChartColors.good),
+            const SizedBox(height: 6),
+            _row(context, l.budgetExpenses, context.money(out)),
+            ThinBar(fraction: out / scale, color: ChartColors.critical),
+          ],
+        ],
+      ),
+    );
+  }
+
   /// The planned operations of the next 7 days.
-  Widget _upcoming(BuildContext context, AppLocalizations l) {
-    final theme = Theme.of(context);
+  Widget _upcomingTile(BuildContext context, AppLocalizations l, TileSize s) {
     final today = todayUtcMidnight();
     final until = today.add(const Duration(days: 7));
     final items = [
@@ -476,84 +1349,437 @@ class DashboardScreenState extends State<DashboardScreen> {
             !i.date.isAfter(until))
           i,
     ]..sort((a, b) => a.date.compareTo(b.date));
-    return SoftSection(
-      icon: Icons.event_outlined,
+    IconData icon(CalendarItem i) => i.loanId != null
+        ? Icons.account_balance_outlined
+        : i.subscription
+        ? Icons.autorenew
+        : Icons.event_repeat;
+    if (s == TileSize.small) {
+      return _frame(
+        l,
+        HomeTileKind.upcoming,
+        s,
+        target: DashboardTarget.forecast,
+        child: _figure(
+          '${items.length}',
+          items.isEmpty
+              ? l.homeTileUpcoming(0)
+              : '${items.first.label} · ${context.shortDay(items.first.date)}',
+        ),
+      );
+    }
+    return _frame(
+      l,
+      HomeTileKind.upcoming,
+      s,
       title: l.dashboardUpcoming,
       help: l.cardHelpUpcoming,
       helpTopic: HelpTopic.forecast,
-      children: [
-        if (items.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(l.dashboardUpcomingNone),
-          ),
-        for (final i in items.take(6))
-          ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(
-              i.loanId != null
-                  ? Icons.account_balance_outlined
-                  : i.subscription
-                  ? Icons.autorenew
-                  : Icons.event_repeat,
-            ),
-            title: Text(i.label, maxLines: 1, overflow: TextOverflow.ellipsis),
-            subtitle: Text(context.day(i.date)),
-            trailing: Text(
-              context.money(i.amountCents),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontFeatures: const [FontFeature.tabularFigures()],
+      target: DashboardTarget.forecast,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (items.isEmpty) TileLine(l.dashboardUpcomingNone),
+          ..._list(l, s, [
+            for (final i in items)
+              _row(
+                context,
+                i.label,
+                context.money(i.amountCents),
+                icon: icon(i),
+                sub: s == TileSize.large ? context.day(i.date) : null,
               ),
-            ),
-          ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            onPressed: () => widget.onOpen(DashboardTarget.forecast),
-            child: Text(l.dashboardSeeForecast),
-          ),
-        ),
-      ],
+          ]),
+        ],
+      ),
     );
   }
 
-  /// The month's spending and income, and what is left to classify.
-  Widget _topSpending(
-    BuildContext context,
-    AppLocalizations l,
-    SpendingReport month,
-  ) {
-    return SoftSection(
-      icon: Icons.pie_chart_outline,
+  /// The month's spending and income, and the categories where most goes.
+  Widget _spendingTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final r = _month;
+    if (r == null) {
+      return _frame(
+        l,
+        HomeTileKind.topSpending,
+        s,
+        target: DashboardTarget.budget,
+        child: const SizedBox.shrink(),
+      );
+    }
+    final top = [
+      for (final c in r.categories)
+        if (c.amountCents < 0 && _categories[c.categoryId] != null) c,
+    ]..sort((a, b) => a.amountCents.compareTo(b.amountCents));
+    final most = top.isEmpty ? 1 : -top.first.amountCents;
+    return _frame(
+      l,
+      HomeTileKind.topSpending,
+      s,
       title: l.dashboardMonthSpending,
       help: l.cardHelpTopSpending,
       helpTopic: HelpTopic.budget,
-      children: [
-        Text(
-          l.dashboardMonthTotals(
-            context.money(month.expenseCents),
-            context.money(month.incomeCents),
-          ),
-        ),
-        if (month.unclassifiedCount > 0)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              l.dashboardToClassify(month.unclassifiedCount),
-              style: Theme.of(context).textTheme.bodySmall,
+      target: DashboardTarget.budget,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (s == TileSize.small)
+            _figure(context.money(r.expenseCents), l.homeTileSpent)
+          else
+            TileLine(
+              l.dashboardMonthTotals(
+                context.money(r.expenseCents),
+                context.money(r.incomeCents),
+              ),
             ),
-          ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            onPressed: () => widget.onOpen(DashboardTarget.budget),
-            child: Text(l.dashboardSeeBudget),
-          ),
-        ),
-      ],
+          if (s != TileSize.small && r.unclassifiedCount > 0)
+            TileLine(l.dashboardToClassify(r.unclassifiedCount), maxLines: 1),
+          if (s == TileSize.large)
+            for (final c in top.take(4)) ...[
+              _row(
+                context,
+                context.categoryName(_categories[c.categoryId]!),
+                context.money(-c.amountCents),
+              ),
+              ThinBar(
+                fraction: -c.amountCents / most,
+                color: Theme.of(context).colorScheme.primary,
+                marker: c.goalCents == null || c.goalCents == 0
+                    ? null
+                    : c.goalCents!.abs() / most,
+                height: 6,
+              ),
+            ],
+        ],
+      ),
     );
   }
+
+  /// The balance of every account in euros, summed day by day.
+  List<int> _totalDays() {
+    final byDay = <DateTime, int>{};
+    for (final (a, f) in _accounts!) {
+      if (f == null || a.currency != 'EUR') continue;
+      for (final d in f.days) {
+        byDay[d.date] = (byDay[d.date] ?? 0) + d.balanceCents;
+      }
+    }
+    final days = byDay.keys.toList()..sort();
+    return [for (final d in days) byDay[d]!];
+  }
+
+  Widget _forecastTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final m = _money();
+    final lowest = m.lowest;
+    final days = _totalDays();
+    final colors = context.moneyColors;
+    if (lowest == null || days.length < 2) {
+      return _frame(
+        l,
+        HomeTileKind.forecast,
+        s,
+        target: DashboardTarget.forecast,
+        child: TileLine(l.homeTileNoForecast),
+      );
+    }
+    final low = days.reduce(math.min);
+    final lowDay = _lowestDay() ?? lowest.$2.lowestDate;
+    final line = l.homeTileLowest(context.money(low), context.day(lowDay));
+    if (s == TileSize.small) {
+      return _frame(
+        l,
+        HomeTileKind.forecast,
+        s,
+        target: DashboardTarget.forecast,
+        child: _figure(
+          context.money(low),
+          context.day(lowDay),
+          color: low < 0 ? colors.negative : null,
+        ),
+      );
+    }
+    return _frame(
+      l,
+      HomeTileKind.forecast,
+      s,
+      help: l.homeCardForecastHelp,
+      helpTopic: HelpTopic.forecast,
+      target: DashboardTarget.forecast,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (s == TileSize.large) TileFigure(context.money(m.total)),
+          TileLine(line, maxLines: 1, color: low < 0 ? colors.negative : null),
+          const SizedBox(height: 4),
+          Expanded(
+            child: Sparkline(values: days, semanticLabel: line),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// The day the summed balance is lowest.
+  DateTime? _lowestDay() {
+    final byDay = <DateTime, int>{};
+    for (final (a, f) in _accounts!) {
+      if (f == null || a.currency != 'EUR') continue;
+      for (final d in f.days) {
+        byDay[d.date] = (byDay[d.date] ?? 0) + d.balanceCents;
+      }
+    }
+    if (byDay.isEmpty) return null;
+    final days = byDay.keys.toList()..sort();
+    return days.reduce((a, b) => byDay[b]! < byDay[a]! ? b : a);
+  }
+
+  Widget _operationsTile(
+    BuildContext context,
+    AppLocalizations l,
+    TileSize s,
+  ) {
+    final recent = _recent;
+    return _frame(
+      l,
+      HomeTileKind.operations,
+      s,
+      target: DashboardTarget.operations,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (recent != null && recent.isEmpty) TileLine(l.homeTileNoOperation),
+          for (final (t, a) in (recent ?? const []).take(
+            _rowsFor(s) - (s == TileSize.large ? 1 : 0),
+          ))
+            _row(
+              context,
+              t.cleanLabel,
+              context.money(t.amountCents, currency: a.currency),
+              sub: s == TileSize.large
+                  ? '${context.shortDay(t.date)} · ${a.name}'
+                  : null,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _toClassifyTile(
+    BuildContext context,
+    AppLocalizations l,
+    TileSize s,
+  ) {
+    final n = _month?.unclassifiedCount ?? 0;
+    return _frame(
+      l,
+      HomeTileKind.toClassify,
+      s,
+      target: DashboardTarget.toClassify,
+      child: _figure(
+        '$n',
+        s == TileSize.small
+            ? l.homeTileToClassify(n)
+            : n == 0
+            ? l.homeGoodClassified
+            : l.homeIssueToClassify(n),
+        color: n > 0 ? context.moneyColors.negative : null,
+      ),
+    );
+  }
+
+  Widget _subscriptionsTile(
+    BuildContext context,
+    AppLocalizations l,
+    TileSize s,
+  ) {
+    final subs = [
+      for (final i in _calendar?.items ?? const <CalendarItem>[])
+        if (i.subscription) i,
+    ]..sort((a, b) => a.date.compareTo(b.date));
+    final total = subs.fold(0, (sum, i) => sum + i.amountCents);
+    final colors = context.moneyColors;
+    return _frame(
+      l,
+      HomeTileKind.subscriptions,
+      s,
+      help: l.homeCardSubscriptionsHelp,
+      helpTopic: HelpTopic.operations,
+      target: DashboardTarget.subscriptions,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TileFigure(context.money(total), large: s == TileSize.large),
+          TileLine(l.homeTileSubscriptions(subs.length), maxLines: 1),
+          if (s != TileSize.small && _rises.isNotEmpty)
+            TileLine(
+              l.homeTileRises(_rises.length),
+              maxLines: 1,
+              color: colors.negative,
+            ),
+          if (s == TileSize.large)
+            ..._list(l, TileSize.medium, [
+              for (final c in _rises)
+                _row(
+                  context,
+                  c.label,
+                  context.money(c.actualCents),
+                  icon: Icons.trending_up,
+                  iconColor: colors.negative,
+                ),
+            ]),
+          if (s == TileSize.large)
+            ..._list(l, TileSize.medium, [
+              for (final i in subs)
+                if (!_rises.any((c) => c.label == i.label))
+                  _row(
+                    context,
+                    i.label,
+                    context.money(i.amountCents),
+                    icon: Icons.autorenew,
+                  ),
+            ]),
+        ],
+      ),
+    );
+  }
+
+  Widget _loansTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final o = _loans;
+    final running = [
+      for (final i in o?.loans ?? const <LoanInfo>[])
+        if (i.nextDueDate != null) i,
+    ]..sort((a, b) => a.nextDueDate!.compareTo(b.nextDueDate!));
+    if (o == null || running.isEmpty) {
+      return _frame(
+        l,
+        HomeTileKind.loans,
+        s,
+        target: DashboardTarget.loans,
+        child: TileLine(l.homeTileNoLoan),
+      );
+    }
+    final scheme = Theme.of(context).colorScheme;
+    return _frame(
+      l,
+      HomeTileKind.loans,
+      s,
+      help: l.homeCardLoansHelp,
+      helpTopic: HelpTopic.loans,
+      target: DashboardTarget.loans,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TileFigure(
+            context.money(o.totalRemainingCents),
+            large: s == TileSize.large,
+          ),
+          TileLine(
+            s == TileSize.small
+                ? l.loanRemainingShort
+                : '${l.loanRemainingShort} · '
+                      '${l.homeTileLoanMonthly(context.money(o.totalMonthlyCents))}',
+            maxLines: 1,
+          ),
+          if (s != TileSize.small)
+            TileLine(
+              l.homeTileLoanNext(context.day(running.first.nextDueDate!)),
+              maxLines: 1,
+            ),
+          if (s == TileSize.large)
+            for (final i in running.take(3)) ...[
+              _row(
+                context,
+                i.loan.label ?? i.loan.lender,
+                context.money(i.remainingCents),
+              ),
+              ThinBar(
+                fraction: i.repaidPerMille / 1000,
+                color: scheme.primary,
+                height: 6,
+              ),
+            ],
+        ],
+      ),
+    );
+  }
+
+  Widget _invoicesTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final n = _unattached;
+    return _frame(
+      l,
+      HomeTileKind.invoices,
+      s,
+      target: DashboardTarget.invoices,
+      child: n == null
+          ? const SizedBox.shrink()
+          : _figure(
+              '$n',
+              s == TileSize.small
+                  ? l.homeTileUnattached(n)
+                  : l.homeCardInvoicesHelp,
+            ),
+    );
+  }
+
+  Widget _importsTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final last = _lastImport;
+    return _frame(
+      l,
+      HomeTileKind.imports,
+      s,
+      target: DashboardTarget.imports,
+      child: !_importsKnown
+          ? const SizedBox.shrink()
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (last == null)
+                  TileLine(l.homeTileImportNever)
+                else ...[
+                  TileFigure(context.shortDay(last)),
+                  TileLine(
+                    l.homeTileImportLast(context.day(last)),
+                    maxLines: 1,
+                  ),
+                ],
+                if (s != TileSize.small)
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    onPressed: () => widget.onOpen(DashboardTarget.imports),
+                    icon: const Icon(Icons.upload_file_outlined, size: 18),
+                    label: Text(l.homeTileImportAction),
+                  ),
+              ],
+            ),
+    );
+  }
+
+  Widget _notificationsTile(
+    BuildContext context,
+    AppLocalizations l,
+    TileSize s,
+  ) {
+    final n = widget.unread;
+    return _frame(
+      l,
+      HomeTileKind.notifications,
+      s,
+      target: DashboardTarget.notifications,
+      child: _figure(
+        '$n',
+        s == TileSize.small
+            ? l.homeTileUnread(n)
+            : n == 0
+            ? l.homeGoodNoNotification
+            : l.dashboardUnread(n),
+      ),
+    );
+  }
+
+  // -------------------------------------------------------------- issues
 
   /// What deserves a look, the most urgent first (decision 0041, point 6):
   /// an account below zero today, then below zero later, then below its
@@ -655,275 +1881,6 @@ class DashboardScreenState extends State<DashboardScreen> {
     }
     issues.sort((a, b) => a.urgency.compareTo(b.urgency));
     return issues;
-  }
-
-  /// The running loans whose check (decision 0040) finds an instalment
-  /// missing in the last two months; nothing when it cannot be told.
-  Future<List<Loan>> _missedLoans(DateTime today) async {
-    try {
-      final overview = await client.loan.overview(_groupId);
-      final since = today.subtract(const Duration(days: 62));
-      final running = [
-        for (final i in overview.loans)
-          if (i.nextDueDate != null && i.loan.accountId != null) i.loan,
-      ];
-      final checks = await Future.wait([
-        for (final loan in running)
-          client.loan
-              .check(loan.id!)
-              .then<LoanCheckReport?>((r) => r, onError: (_) => null),
-      ]);
-      return [
-        for (var i = 0; i < running.length; i++)
-          if (checks[i]?.lines.any(
-                (line) =>
-                    line.status == LoanCheckStatus.missing &&
-                    line.dueDate != null &&
-                    !line.dueDate!.isBefore(since) &&
-                    line.dueDate!.isBefore(today),
-              ) ??
-              false)
-            running[i],
-      ];
-    } on Object {
-      return const [];
-    }
-  }
-
-  /// « Tout va bien ? » answered in one sentence, at the top of the page.
-  Widget _summarySentence(
-    BuildContext context,
-    AppLocalizations l,
-    List<(Account, ForecastResult?)> accounts,
-    SpendingReport? month,
-  ) {
-    final theme = Theme.of(context);
-    final issues = _issues(l, context, accounts, month);
-    final urgent = issues.any((i) => i.urgency <= 1);
-    final colors = context.moneyColors;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
-      child: Row(
-        children: [
-          Icon(
-            issues.isEmpty
-                ? Icons.check_circle_outline
-                : urgent
-                ? Icons.error_outline
-                : Icons.info_outline,
-            color: issues.isEmpty
-                ? colors.positive
-                : urgent
-                ? colors.negative
-                : colors.muted,
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              key: const Key('home-summary'),
-              issues.isEmpty ? l.homeAllGood : l.homeIssuesCount(issues.length),
-              style: theme.textTheme.titleMedium,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// The points to look at, most urgent first; what goes well is folded.
-  Widget _status(
-    BuildContext context,
-    AppLocalizations l,
-    List<(Account, ForecastResult?)> accounts,
-    SpendingReport? month,
-  ) {
-    final issues = _issues(l, context, accounts, month);
-    final colors = context.moneyColors;
-    final noOverdraft = accounts.every(
-      (e) => e.$2 == null || e.$2!.lowestBalanceCents >= 0,
-    );
-    final good = [
-      if (noOverdraft) l.homeGoodNoOverdraft,
-      if (month != null && month.unclassifiedCount == 0) l.homeGoodClassified,
-      if (widget.unread == 0) l.homeGoodNoNotification,
-    ];
-    return SoftSection(
-      icon: Icons.visibility_outlined,
-      title: l.dashboardWatch,
-      help: l.cardHelpWatch,
-      helpTopic: HelpTopic.home,
-      children: [
-        if (issues.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(l.dashboardAllGood),
-          ),
-        for (final i in issues)
-          ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(
-              i.icon,
-              color: i.urgency <= 1 ? colors.negative : null,
-            ),
-            title: Text(i.text),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => widget.onOpen(i.target),
-          ),
-        if (good.isNotEmpty)
-          Theme(
-            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ExpansionTile(
-              key: const Key('home-good'),
-              tilePadding: EdgeInsets.zero,
-              dense: true,
-              leading: Icon(
-                Icons.thumb_up_alt_outlined,
-                color: colors.positive,
-              ),
-              title: Text(l.homeGoodTitle(good.length)),
-              children: [
-                for (final g in good)
-                  ListTile(
-                    dense: true,
-                    contentPadding: const EdgeInsets.only(left: 16),
-                    leading: Icon(Icons.check, color: colors.positive),
-                    title: Text(g),
-                  ),
-              ],
-            ),
-          ),
-        ListTile(
-          dense: true,
-          contentPadding: EdgeInsets.zero,
-          leading: const Icon(Icons.event_note_outlined),
-          title: Text(l.summaryOpen),
-          onTap: () => widget.onOpen(DashboardTarget.summary),
-        ),
-      ],
-    );
-  }
-
-  /// The first launch, in three steps (decision 0041, point 15): an
-  /// account, a statement, the categories. Shown until they are done or
-  /// hidden on this device.
-  Widget? _firstSteps(
-    AppLocalizations l,
-    List<(Account, ForecastResult?)> accounts,
-    SpendingReport? month,
-  ) {
-    final start = _start;
-    if (start == null || uiPrefs.firstStepsHidden) return null;
-    final hasAccount = accounts.isNotEmpty;
-    final imported = start.done.contains('account');
-    final classified =
-        imported &&
-        (start.done.contains('rules') ||
-            (month != null && month.unclassifiedCount == 0));
-    if (hasAccount && imported && classified) return null;
-    final steps = [
-      (
-        l.firstStepAccount,
-        l.firstStepAccountHelp,
-        hasAccount,
-        DashboardTarget.accounts,
-      ),
-      (
-        l.firstStepImport,
-        l.firstStepImportHelp,
-        imported,
-        DashboardTarget.imports,
-      ),
-      (
-        l.firstStepCategories,
-        l.firstStepCategoriesHelp,
-        classified,
-        DashboardTarget.operations,
-      ),
-    ];
-    final next = steps.indexWhere((s) => !s.$3);
-    final colors = context.moneyColors;
-    return SoftSection(
-      key: const Key('first-steps'),
-      icon: Icons.flag_outlined,
-      title: l.firstStepsTitle(steps.where((s) => s.$3).length, steps.length),
-      children: [
-        for (final (i, (title, help, done, target)) in steps.indexed)
-          ListTile(
-            key: Key('first-step-$i'),
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: done
-                ? Icon(Icons.check_circle, color: colors.positive)
-                : CircleAvatar(radius: 12, child: Text('${i + 1}')),
-            title: Text(
-              title,
-              style: done
-                  ? const TextStyle(decoration: TextDecoration.lineThrough)
-                  : null,
-            ),
-            subtitle: i == next ? Text(help) : null,
-            trailing: done ? null : const Icon(Icons.chevron_right),
-            onTap: done ? null : () => widget.onOpen(target),
-          ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            key: const Key('first-steps-hide'),
-            onPressed: () async {
-              await uiPrefs.setFirstStepsHidden(true);
-              if (mounted) setState(() {});
-            },
-            child: Text(l.firstStepsHide),
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// « Conseils du moment »: the first three advices, the others behind
-  /// « Voir tout ».
-  Widget _advicesCard(BuildContext context, AppLocalizations l) {
-    final title = widget.adviceTitle;
-    final shown = title == null ? const <ActionProposal>[] : widget.advices;
-    return SoftSection(
-      key: const Key('home-advices'),
-      icon: Icons.lightbulb_outline,
-      title: l.homeAdvicesTitle,
-      help: l.cardHelpAdvices,
-      helpTopic: HelpTopic.advisor,
-      children: [
-        if (shown.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(l.homeAdvicesNone),
-          ),
-        for (final p in shown.take(3))
-          ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.tips_and_updates_outlined),
-            title: Text(
-              title!(p),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            onTap: widget.onAdvisor,
-          ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            key: const Key('home-advices-all'),
-            onPressed: widget.onAdvisor,
-            child: Text(
-              shown.length > 3
-                  ? l.homeAdvicesAllCount(shown.length)
-                  : l.homeAdvicesAll,
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }
 
