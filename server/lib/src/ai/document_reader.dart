@@ -5,6 +5,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
+import '../endpoints/loan_endpoint.dart';
 import '../finance/loan_terms.dart';
 import '../finance/proposal_service.dart';
 import '../generated/protocol.dart';
@@ -381,7 +382,11 @@ abstract final class DocumentReader {
           'without insurance (0 when nothing is paid), interest, capital '
           'still owed after it, all in cents. Copy the figures, never compute '
           'them: rows where the rate changes or instalments are paused are '
-          'found from them. Also report the total interest.',
+          'found from them. Also report the total interest. If a loan offer '
+          'states the early repayment penalty (indemnité de remboursement '
+          'anticipé), report it as written: months of interest on the amount '
+          'repaid, and/or a percentage of it in thousandths of a percent '
+          '(3 % = 3000); 0 when it says there is none.',
       tool: _tool('loan_terms', 'The terms the document states.', {
         'principal_cents': {'type': 'integer'},
         'annual_rate_milli': {'type': 'integer'},
@@ -400,6 +405,18 @@ abstract final class DocumentReader {
               'Intercalary or initial interest of the first instalment.',
         },
         'total_interest_cents': {'type': 'integer'},
+        'prepayment_interest_months': {
+          'type': 'integer',
+          'description':
+              'Early repayment penalty: months of interest on the amount '
+              'repaid.',
+        },
+        'prepayment_percent_milli': {
+          'type': 'integer',
+          'description':
+              'Early repayment penalty: thousandths of a percent of the '
+              'amount repaid.',
+        },
         'schedule': {
           'type': 'array',
           'description': 'Every row of the amortisation table, in order.',
@@ -429,7 +446,12 @@ abstract final class DocumentReader {
     final before = {
       ...ProposalService.loanFields(loan),
       'events': eventsBefore,
+      'prepayment_interest_months': loan.prepaymentInterestMonths,
+      'prepayment_percent_milli': loan.prepaymentPercentMilli,
     };
+    // No penalty on a revolving credit or a payment in instalments.
+    final penalty =
+        LoanEndpoint.prepaymentLaw(loan.kind) != core.PrepaymentLaw.none;
     final first = _day(f['first_due_date']);
     final disb = _day(f['disbursement_date']);
     final readFields = <String, Object?>{
@@ -444,6 +466,16 @@ abstract final class DocumentReader {
       if (first != null) 'first_due_date': _iso(first),
       if (disb != null) 'disbursement_date': _iso(disb),
       'first_interest_cents': ?_cents(f['first_interest_cents']),
+      if (penalty)
+        'prepayment_interest_months': ?n(
+          'prepayment_interest_months',
+          core.maxPrepaymentInterestMonths,
+        ),
+      if (penalty)
+        'prepayment_percent_milli': ?n(
+          'prepayment_percent_milli',
+          core.maxPrepaymentPercentMilli,
+        ),
     };
     final rows = _tableRows(f);
     if (readFields.isEmpty && rows.isEmpty) {

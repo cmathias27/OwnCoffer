@@ -43,6 +43,8 @@ abstract class Loan
     this.matchPattern,
     this.ruleId,
     this.creditLimitCents,
+    this.prepaymentInterestMonths,
+    this.prepaymentPercentMilli,
     this.events,
     DateTime? createdAt,
     this.deletedAt,
@@ -72,6 +74,8 @@ abstract class Loan
     String? matchPattern,
     int? ruleId,
     int? creditLimitCents,
+    int? prepaymentInterestMonths,
+    int? prepaymentPercentMilli,
     List<_inh9sy0f.LoanEvent>? events,
     DateTime? createdAt,
     DateTime? deletedAt,
@@ -106,6 +110,10 @@ abstract class Loan
       matchPattern: jsonSerialization['matchPattern'] as String?,
       ruleId: jsonSerialization['ruleId'] as int?,
       creditLimitCents: jsonSerialization['creditLimitCents'] as int?,
+      prepaymentInterestMonths:
+          jsonSerialization['prepaymentInterestMonths'] as int?,
+      prepaymentPercentMilli:
+          jsonSerialization['prepaymentPercentMilli'] as int?,
       events: jsonSerialization['events'] == null
           ? null
           : _iylp5nsw.Protocol().deserialize<List<_inh9sy0f.LoanEvent>>(
@@ -183,6 +191,13 @@ abstract class Loan
   /// Revolving credit: the amount that may be drawn in all.
   int? creditLimitCents;
 
+  /// Early repayment penalty of the loan offer (decision 0043): months of
+  /// interest on the amount repaid, and/or thousandths of a percent of it
+  /// (the lower applies). Both null: unknown, the legal maximum is shown.
+  int? prepaymentInterestMonths;
+
+  int? prepaymentPercentMilli;
+
   /// Changes since the start (rate, instalment, duration, money drawn or
   /// repaid), oldest first.
   List<_inh9sy0f.LoanEvent>? events;
@@ -216,6 +231,8 @@ abstract class Loan
     String? matchPattern,
     int? ruleId,
     int? creditLimitCents,
+    int? prepaymentInterestMonths,
+    int? prepaymentPercentMilli,
     List<_inh9sy0f.LoanEvent>? events,
     DateTime? createdAt,
     DateTime? deletedAt,
@@ -246,6 +263,10 @@ abstract class Loan
       if (matchPattern != null) 'matchPattern': matchPattern,
       if (ruleId != null) 'ruleId': ruleId,
       if (creditLimitCents != null) 'creditLimitCents': creditLimitCents,
+      if (prepaymentInterestMonths != null)
+        'prepaymentInterestMonths': prepaymentInterestMonths,
+      if (prepaymentPercentMilli != null)
+        'prepaymentPercentMilli': prepaymentPercentMilli,
       if (events != null)
         'events': events?.toJson(valueToJson: (v) => v.toJson()),
       'createdAt': createdAt.toJson(),
@@ -279,6 +300,10 @@ abstract class Loan
       if (matchPattern != null) 'matchPattern': matchPattern,
       if (ruleId != null) 'ruleId': ruleId,
       if (creditLimitCents != null) 'creditLimitCents': creditLimitCents,
+      if (prepaymentInterestMonths != null)
+        'prepaymentInterestMonths': prepaymentInterestMonths,
+      if (prepaymentPercentMilli != null)
+        'prepaymentPercentMilli': prepaymentPercentMilli,
       if (events != null)
         'events': events?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'createdAt': createdAt.toJson(),
@@ -317,6 +342,8 @@ class _LoanImpl extends Loan {
     String? matchPattern,
     int? ruleId,
     int? creditLimitCents,
+    int? prepaymentInterestMonths,
+    int? prepaymentPercentMilli,
     List<_inh9sy0f.LoanEvent>? events,
     DateTime? createdAt,
     DateTime? deletedAt,
@@ -342,6 +369,8 @@ class _LoanImpl extends Loan {
          matchPattern: matchPattern,
          ruleId: ruleId,
          creditLimitCents: creditLimitCents,
+         prepaymentInterestMonths: prepaymentInterestMonths,
+         prepaymentPercentMilli: prepaymentPercentMilli,
          events: events,
          createdAt: createdAt,
          deletedAt: deletedAt,
@@ -373,6 +402,8 @@ class _LoanImpl extends Loan {
     Object? matchPattern = _Undefined,
     Object? ruleId = _Undefined,
     Object? creditLimitCents = _Undefined,
+    Object? prepaymentInterestMonths = _Undefined,
+    Object? prepaymentPercentMilli = _Undefined,
     Object? events = _Undefined,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
@@ -406,6 +437,12 @@ class _LoanImpl extends Loan {
       creditLimitCents: creditLimitCents is int?
           ? creditLimitCents
           : this.creditLimitCents,
+      prepaymentInterestMonths: prepaymentInterestMonths is int?
+          ? prepaymentInterestMonths
+          : this.prepaymentInterestMonths,
+      prepaymentPercentMilli: prepaymentPercentMilli is int?
+          ? prepaymentPercentMilli
+          : this.prepaymentPercentMilli,
       events: events is List<_inh9sy0f.LoanEvent>?
           ? events
           : this.events?.map((e0) => e0.copyWith()).toList(),

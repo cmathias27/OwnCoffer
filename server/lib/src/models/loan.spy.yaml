@@ -43,6 +43,11 @@ fields:
   ruleId: int?, relation(parent=rules, onDelete=SetNull)
   ### Revolving credit: the amount that may be drawn in all.
   creditLimitCents: int?
+  ### Early repayment penalty of the loan offer (decision 0043): months of
+  ### interest on the amount repaid, and/or thousandths of a percent of it
+  ### (the lower applies). Both null: unknown, the legal maximum is shown.
+  prepaymentInterestMonths: int?
+  prepaymentPercentMilli: int?
   ### Changes since the start (rate, instalment, duration, money drawn or
   ### repaid), oldest first.
   events: List<LoanEvent>?

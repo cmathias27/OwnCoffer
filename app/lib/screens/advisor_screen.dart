@@ -408,6 +408,8 @@ class AdvisorScreenState extends State<AdvisorScreen> {
           DateTime.tryParse('$v') ?? DateTime(2000),
         ),
         'events' => l.advisorLoanEvents(v is List ? v.length : 0),
+        'prepayment_interest_months' => '${(v as num).toInt()}',
+        'prepayment_percent_milli' => rateTextFromMilli((v as num).toInt()),
         _ => context.money((v as num).toInt()),
       };
     }
@@ -422,6 +424,10 @@ class AdvisorScreenState extends State<AdvisorScreen> {
       'disbursement_date' => l.loanDisbursementDate,
       'first_interest_cents' => l.loanFirstInterest,
       'events' => l.loanEventsTitle,
+      'prepayment_interest_months' =>
+        '${l.loanPenaltyTitle} (${l.loanPenaltyMonths})',
+      'prepayment_percent_milli' =>
+        '${l.loanPenaltyTitle} (${l.loanPenaltyPercent})',
       _ => k,
     };
     final check = d['check'] is Map ? d['check'] as Map : null;

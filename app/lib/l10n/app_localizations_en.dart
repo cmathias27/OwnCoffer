@@ -1944,6 +1944,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loanSimulationLeft => 'Instalments left';
 
   @override
+  String get loanPenaltyTitle => 'Early repayment penalty';
+
+  @override
+  String get loanPenaltyHelp =>
+      'From the loan offer, optional: months of interest on the amount repaid and/or a percentage of it (the lower applies), 0 when there is none. Empty: OwnCoffer shows the legal maximum.';
+
+  @override
+  String get loanPenaltyMonths => 'Months of interest';
+
+  @override
+  String get loanPenaltyPercent => 'Percentage repaid';
+
+  @override
+  String get loanPenaltyInvalid => '0 to 12 months, or 0 to 10 %.';
+
+  @override
+  String get loanSimulationPenalty => 'Penalty';
+
+  @override
+  String get loanSimulationNet => 'Net saving';
+
+  @override
+  String loanPenaltyFromOffer(String max) {
+    return 'Penalty from the loan offer, within the legal limit ($max).';
+  }
+
+  @override
+  String get loanPenaltyLegalMax =>
+      'Offer unknown: this is the most the lender may ask (home loan: 6 months of interest, at most 3 % of the capital owed; consumer credit: 1 %, 0.5 % in the last year, nothing up to €10,000 a year). Enter the offer\'s clause in the loan\'s form.';
+
+  @override
+  String get loanPenaltyNone => 'No penalty for this repayment.';
+
+  @override
   String get loanScheduleTitle => 'Amortisation schedule';
 
   @override

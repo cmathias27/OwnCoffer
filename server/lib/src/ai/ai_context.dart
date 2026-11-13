@@ -774,7 +774,16 @@ class AiContext {
       'interest_saved_cents': r.interestSavedCents,
       'instalments_left': r.installmentsLeft,
       'new_end_date': r.endDate == null ? null : _iso(r.endDate!),
-      'note': 'Computed by the loan engine, keeping the instalment.',
+      'penalty_cents': r.penaltyCents,
+      'penalty_legal_max_cents': r.penaltyLegalMaxCents,
+      'penalty_basis': r.penaltyBasis,
+      'net_saved_cents': r.netSavedCents,
+      'note':
+          'Computed by the loan engine, keeping the instalment. The penalty '
+          'follows the loan offer within the French legal maximum '
+          '(penalty_basis offer), or is that maximum when the offer is not '
+          'known (legalMax); home loans are exempt after a sale due to a '
+          'job move, a death or a forced job loss.',
     };
   }
 

@@ -411,6 +411,9 @@ abstract final class ProposalService {
     // Only when there are some: proposals made before 1.27.0 keep their key.
     if (l.events?.isNotEmpty ?? false)
       'events': [for (final e in l.events!) loanEventJson(e)],
+    // Only when known (decision 0043), for the same reason.
+    'prepayment_interest_months': ?l.prepaymentInterestMonths,
+    'prepayment_percent_milli': ?l.prepaymentPercentMilli,
   };
 
   /// A change of a loan in a proposal (decision 0042).
@@ -486,6 +489,12 @@ abstract final class ProposalService {
         firstInterestCents: f.containsKey('first_interest_cents')
             ? n('first_interest_cents')
             : l.firstInterestCents,
+        prepaymentInterestMonths: f.containsKey('prepayment_interest_months')
+            ? n('prepayment_interest_months')
+            : l.prepaymentInterestMonths,
+        prepaymentPercentMilli: f.containsKey('prepayment_percent_milli')
+            ? n('prepayment_percent_milli')
+            : l.prepaymentPercentMilli,
       ),
       // Undoing restores the changes as they were, none included.
       f.containsKey('events')

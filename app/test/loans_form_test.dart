@@ -355,6 +355,61 @@ void main() {
     },
   );
 
+  testWidgets('the early repayment penalty of the offer: shown from the '
+      'loan, refused out of the limits (0043)', (tester) async {
+    tester.view.physicalSize = const Size(800, 3200);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('fr'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: LoanFormScreen(
+          groupId: 1,
+          accounts: const [],
+          categories: const [],
+          loan: Loan(
+            groupId: 1,
+            id: 7,
+            kind: LoanKind.mortgage,
+            lender: 'Banque',
+            principalCents: 10000000,
+            annualRateMilli: 1000,
+            durationMonths: 120,
+            firstDueDate: DateTime.utc(2026, 1, 5),
+            prepaymentInterestMonths: 6,
+            prepaymentPercentMilli: 3000,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Indemnité de remboursement anticipé'), findsOneWidget);
+    final months = find.widgetWithText(TextFormField, "Mois d'intérêts");
+    final percent = find.widgetWithText(TextFormField, 'Pourcentage remboursé');
+    await tester.ensureVisible(months);
+    expect(
+      find.descendant(of: months, matching: find.text('6')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: percent, matching: find.text('3')),
+      findsOneWidget,
+    );
+    await tester.enterText(months, '13');
+    await tester.enterText(percent, '11');
+    await tester.tap(find.text('Enregistrer').last);
+    await tester.pump();
+    expect(find.text('De 0 à 12 mois, ou de 0 à 10 %.'), findsNWidgets(2));
+    expect(tester.takeException(), isNull);
+  });
+
   test('three families: loans, consumer credit, payments in instalments', () {
     expect(
       {for (final k in LoanKind.values) k: loanFamily(k)},

@@ -529,6 +529,51 @@ void main() {
       },
     );
 
+    test('the early repayment penalty of the offer is proposed, accepted '
+        'and undone (0043)', () async {
+      final loan = (await endpoints.loan.create(
+        as(bob),
+        groupA,
+        Loan(
+          groupId: 0,
+          kind: LoanKind.mortgage,
+          lender: 'Banque',
+          principalCents: 10000000,
+          annualRateMilli: 1000,
+          durationMonths: 120,
+          firstDueDate: DateTime.utc(2026, 1, 5),
+        ),
+      )).loan;
+      final doc = await endpoints.loan.uploadDocument(
+        as(bob),
+        loan.id!,
+        'offre.png',
+        _png(),
+      );
+      AiGateway.adapter = _Reader('loan_terms', {
+        'prepayment_interest_months': 6,
+        'prepayment_percent_milli': 3000,
+      });
+      final p = (await endpoints.ai.readLoanDocument(
+        as(bob),
+        doc.id!,
+      )).proposals.single;
+      expect(jsonDecode(p.proposedData!), {
+        'prepayment_interest_months': 6,
+        'prepayment_percent_milli': 3000,
+      });
+      await endpoints.advisor.accept(as(bob), p.id!);
+      var now = (await Loan.db.findById(db, loan.id!))!;
+      expect(
+        (now.prepaymentInterestMonths, now.prepaymentPercentMilli),
+        (6, 3000),
+      );
+      await endpoints.advisor.undo(as(bob), p.id!);
+      now = (await Loan.db.findById(db, loan.id!))!;
+      expect(now.prepaymentInterestMonths, isNull);
+      expect(now.prepaymentPercentMilli, isNull);
+    });
+
     test('a pause entered by hand: the loan lasts longer, it is refused '
         'out of the limits', () async {
       final loan = (await endpoints.loan.create(
