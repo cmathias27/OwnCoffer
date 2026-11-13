@@ -315,21 +315,21 @@ void main() {
         // Two spending goals: one exceeded, one not (decision 0046).
         CategoryFlow(
           categoryId: 7,
-          amountCents: -30000,
+          amountCents: 30000,
           count: 3,
           previousCents: 0,
           averageCents: 0,
           history: const [],
-          goalCents: -25000,
+          goalCents: 25000,
         ),
         CategoryFlow(
           categoryId: 8,
-          amountCents: -5000,
+          amountCents: 5000,
           count: 1,
           previousCents: 0,
           averageCents: 0,
           history: const [],
-          goalCents: -20000,
+          goalCents: 20000,
         ),
       ],
       history: const [],
@@ -625,6 +625,40 @@ void main() {
         ),
         findsOneWidget,
       );
+    });
+
+    testWidgets('the split of the spending, as in Budget', (tester) async {
+      await tester.runAsync(
+        () => uiPrefs.setHomeBoard(
+          _board('split:l:0:0,topSpending:l:0:2'),
+        ),
+      );
+      await open(tester, const Size(400, 900));
+      expect(tester.takeException(), isNull);
+      final split = find.byKey(const Key('home-card-split'));
+      Finder inSplit(Pattern text) =>
+          find.descendant(of: split, matching: find.textContaining(text));
+      expect(
+        find.descendant(
+          of: split,
+          matching: find.byKey(const Key('home-split-ring')),
+        ),
+        findsOneWidget,
+      );
+      // 300 + 50 spent: 86 % and 14 %, the total in the ring.
+      expect(inSplit('Courses'), findsOneWidget);
+      expect(inSplit('86'), findsOneWidget);
+      expect(inSplit('14'), findsOneWidget);
+      expect(inSplit(RegExp(r'^350,00')), findsOneWidget);
+      // « Ce mois-ci » lists the same categories.
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('home-card-topSpending')),
+          matching: find.text('Courses'),
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(split);
     });
 
     testWidgets('nothing on the board: said, and how to add', (tester) async {

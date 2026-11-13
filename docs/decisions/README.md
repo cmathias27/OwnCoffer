@@ -50,5 +50,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0044](0044-accueil-personnalisable.md) | Accueil personnalisable : cartes affichées, masquées et ordonnées, gardées sur l'appareil | Remplacée par 0045 |
 | [0045](0045-accueil-en-widgets.md) | L'Accueil en widgets petits, moyens ou grands, placés librement sur une grille et modifiés sur place | Décidé |
 | [0046](0046-toutes-les-fonctions-en-widgets.md) | Toutes les fonctions de l'application en widgets : Objectifs du budget, Récapitulatif et raccourcis, selon les droits | Décidé |
+| [0047](0047-widget-repartition-des-depenses.md) | Le widget « Répartition des dépenses » : le camembert de Budget sur l'Accueil | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.

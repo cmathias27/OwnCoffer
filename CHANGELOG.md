@@ -2,6 +2,11 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.32.0 (novembre 2026)
+### Widget « Répartition des dépenses » (décision 0047)
+- Nouveau widget de l'Accueil : le **camembert des dépenses du mois** par catégorie, comme la vue Camembert de Budget (petit : l'anneau ; moyen et grand : la légende avec les pourcentages).
+- Correction : « Ce mois-ci » en grand affiche de nouveau les catégories où vous dépensez le plus.
+
 ## 1.31.0 (novembre 2026)
 ### Toutes les fonctions en widgets (décision 0046)
 - **Chaque fonction de l'application peut devenir un widget** de l'Accueil : Rechercher, Saisir une opération, Scanner un ticket, Catégories, Règles, Membres, Exporter mes données, Sécurité, Assistant, Applications, Affichage, Aide, Raccourcis clavier, Donner un avis, Administration du serveur. Un toucher ouvre la fonction.

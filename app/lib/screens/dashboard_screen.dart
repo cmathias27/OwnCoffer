@@ -6,6 +6,8 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 
 import '../client.dart';
 import '../help/help.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
+
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../navigation/search.dart';
@@ -104,6 +106,7 @@ const _onDemand = {
   HomeTileKind.topSpending,
   HomeTileKind.budget,
   HomeTileKind.categories,
+  HomeTileKind.split,
 };
 
 class DashboardScreenState extends State<DashboardScreen> {
@@ -205,7 +208,8 @@ class DashboardScreenState extends State<DashboardScreen> {
         wants(HomeTileKind.imports) ? _lastImportOf(accounts) : Future.value(),
         wants(HomeTileKind.topSpending) ||
                 wants(HomeTileKind.budget) ||
-                wants(HomeTileKind.categories)
+                wants(HomeTileKind.categories) ||
+                wants(HomeTileKind.split)
             ? client.category
                   .list(_groupId)
                   .then<List<Category>?>((c) => c, onError: (_) => null)
@@ -649,6 +653,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.imports => Icons.upload_file_outlined,
     HomeTileKind.notifications => Icons.notifications_outlined,
     HomeTileKind.budget => Icons.track_changes,
+    HomeTileKind.split => Icons.donut_large,
     HomeTileKind.monthSummary => AppFunction.summary.icon,
     HomeTileKind.search => Icons.search,
     _ => _function(k)!.icon,
@@ -675,6 +680,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.imports => l.homeCardImports,
     HomeTileKind.notifications => l.homeCardNotifications,
     HomeTileKind.budget => l.homeCardBudget,
+    HomeTileKind.split => l.homeCardSplit,
     HomeTileKind.monthSummary => l.homeCardMonthSummary,
     HomeTileKind.search => l.globalSearchOpen,
     _ => _function(k)!.label(l),
@@ -701,6 +707,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.imports => l.homeCardImportsHelp,
     HomeTileKind.notifications => l.homeCardNotificationsHelp,
     HomeTileKind.budget => l.homeCardBudgetHelp,
+    HomeTileKind.split => l.homeCardSplitHelp,
     HomeTileKind.monthSummary => l.homeCardMonthSummaryHelp,
     HomeTileKind.search => l.homeCardSearchHelp,
     HomeTileKind.newOperation => l.homeCardNewOperationHelp,
@@ -752,6 +759,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         HomeTileKind.imports => _importsTile(context, l, s),
         HomeTileKind.notifications => _notificationsTile(context, l, s),
         HomeTileKind.budget => _budgetTile(context, l, s),
+        HomeTileKind.split => _splitTile(context, l, s),
         HomeTileKind.monthSummary => _monthSummaryTile(context, l, s),
         _ => _shortcutTile(context, l, t.kind, s),
       },
@@ -1500,11 +1508,8 @@ class DashboardScreenState extends State<DashboardScreen> {
         child: const SizedBox.shrink(),
       );
     }
-    final top = [
-      for (final c in r.categories)
-        if (c.amountCents < 0 && _categories[c.categoryId] != null) c,
-    ]..sort((a, b) => a.amountCents.compareTo(b.amountCents));
-    final most = top.isEmpty ? 1 : -top.first.amountCents;
+    final top = _spendingFlows(r);
+    final most = top.isEmpty ? 1 : top.first.amountCents;
     return _frame(
       l,
       HomeTileKind.topSpending,
@@ -1532,10 +1537,10 @@ class DashboardScreenState extends State<DashboardScreen> {
               _row(
                 context,
                 context.categoryName(_categories[c.categoryId]!),
-                context.money(-c.amountCents),
+                context.money(c.amountCents),
               ),
               ThinBar(
-                fraction: -c.amountCents / most,
+                fraction: c.amountCents / most,
                 color: Theme.of(context).colorScheme.primary,
                 marker: c.goalCents == null || c.goalCents == 0
                     ? null
@@ -2072,6 +2077,135 @@ class DashboardScreenState extends State<DashboardScreen> {
           TileLine(_help(l, k), maxLines: count != null ? 1 : 2),
         ],
       ),
+    );
+  }
+
+  /// The top-level expense categories of [r] with money spent, the
+  /// largest first. Flows are positive (money spent).
+  List<CategoryFlow> _spendingFlows(SpendingReport r) {
+    bool topExpense(int id) {
+      final c = _categories[id];
+      return c != null && c.kind == CategoryKind.expense && c.parentId == null;
+    }
+
+    return [
+      for (final c in r.categories)
+        if (c.amountCents > 0 && topExpense(c.categoryId)) c,
+    ]..sort((a, b) => b.amountCents.compareTo(a.amountCents));
+  }
+
+  /// The split of the month's spending by category (decision 0047): the
+  /// same parts as the pie of the budget page, the smallest merged into
+  /// « Autres ». A ring alone when small, with its legend otherwise.
+  Widget _splitTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final r = _month;
+    if (r == null || !_fetched.contains(HomeTileKind.split)) {
+      return _frame(
+        l,
+        HomeTileKind.split,
+        s,
+        target: DashboardTarget.budget,
+        child: const SizedBox.shrink(),
+      );
+    }
+    final parts = core.sharesWithOthers({
+      for (final c in _spendingFlows(r)) c.categoryId: c.amountCents,
+    }, max: SeriesColors.count);
+    final total = parts.fold(0, (a, p) => a + p.cents);
+    final slices = [
+      for (final (i, p) in parts.indexed)
+        ChartSlice(
+          label: p.id == null
+              ? l.pieOthers
+              : context.categoryName(_categories[p.id]!),
+          cents: p.cents,
+          color: p.id == null
+              ? SeriesColors.others(context)
+              : SeriesColors.of(context, i),
+        ),
+    ];
+    final ring = MiniDonut(
+      key: const Key('home-split-ring'),
+      slices: slices,
+      semanticLabel: [
+        l.pieSemantic,
+        for (final c in slices)
+          '${c.label} ${l.sharePercent((c.cents * 100 / total).round())}',
+      ].join(', '),
+      center: s == TileSize.small
+          ? null
+          : Text(
+              context.money(total),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+    );
+    Widget legend(int lines) {
+      final shown = slices.length <= lines
+          ? slices
+          : slices.take(lines - 1).toList();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (final c in shown)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1),
+              child: Row(
+                children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: c.color,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(child: TileLine(c.label, maxLines: 1)),
+                  const SizedBox(width: 4),
+                  TileLine(
+                    s == TileSize.large
+                        ? '${context.money(c.cents)} · '
+                              '${l.sharePercent((c.cents * 100 / total).round())}'
+                        : l.sharePercent((c.cents * 100 / total).round()),
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+            ),
+          if (slices.length > lines)
+            TileLine(l.homeTileOthers(slices.length - lines + 1), maxLines: 1),
+        ],
+      );
+    }
+
+    return _frame(
+      l,
+      HomeTileKind.split,
+      s,
+      help: l.homeCardSplitHelp,
+      helpTopic: HelpTopic.budget,
+      target: DashboardTarget.budget,
+      child: total <= 0
+          ? TileLine(l.homeTileSplitNone, maxLines: 3)
+          : switch (s) {
+              TileSize.small => ring,
+              TileSize.medium => Row(
+                children: [
+                  ring,
+                  const SizedBox(width: 12),
+                  Expanded(child: legend(3)),
+                ],
+              ),
+              TileSize.large => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: ring),
+                  const SizedBox(height: 8),
+                  legend(4),
+                ],
+              ),
+            },
     );
   }
 
