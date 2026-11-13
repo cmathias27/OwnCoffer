@@ -20,7 +20,9 @@ enum TileSize {
 
 /// What a widget of the home page shows. The first ten are the cards of
 /// decision 0044 (same names, so that its saved choice can be read); the
-/// others each sum up a page of the app.
+/// next ones each sum up a page of the app (decision 0045); the last ones
+/// open the other functions of the app (decision 0046). New kinds are only
+/// ever added at the end.
 enum HomeTileKind {
   pepite,
   summary,
@@ -40,7 +42,32 @@ enum HomeTileKind {
   loans,
   invoices,
   imports,
-  notifications;
+  notifications,
+
+  /// Decision 0046: the goals of the budget and the 30-day summary, live.
+  budget,
+  monthSummary,
+
+  /// Decision 0046: the other functions of the app, one tap away.
+  search,
+  newOperation,
+  scanReceipt,
+  categories,
+  rules,
+  members,
+  export,
+  security,
+  assistant,
+  apps,
+  display,
+  help,
+  shortcuts,
+  feedback,
+  admin;
+
+  /// A widget that opens a function rather than summing up a page
+  /// (decision 0046).
+  bool get isShortcut => index >= search.index;
 
   /// The sizes it can take, smallest first.
   List<TileSize> get sizes => switch (this) {
@@ -48,6 +75,7 @@ enum HomeTileKind {
       TileSize.small,
       TileSize.medium,
     ],
+    _ when isShortcut => const [TileSize.small, TileSize.medium],
     firstSteps || accounts || operations => const [
       TileSize.medium,
       TileSize.large,
@@ -59,6 +87,7 @@ enum HomeTileKind {
   TileSize get defaultSize => switch (this) {
     pepite || firstSteps || upcoming => TileSize.large,
     toClassify || notifications || leftToLive || monthBalance => TileSize.small,
+    _ when isShortcut => TileSize.small,
     _ => TileSize.medium,
   };
 

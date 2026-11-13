@@ -26,6 +26,10 @@ L'Accueil est une grille de widgets : deux colonnes sur un téléphone, quatre s
 - **Factures** : les factures pas encore rattachées à une opération.
 - **Imports** : la date du dernier relevé importé, et un bouton pour en importer un.
 - **Notifications** : les notifications non lues.
+- **Objectifs du budget** : ce qui reste sur vos objectifs de dépense du mois, dépensé sur prévu, les objectifs dépassés ; en grand, les catégories les plus proches de leur limite.
+- **Récapitulatif** : les 30 prochains jours en bref (point bas, notifications non lues ; en grand, conseils en attente, hausses d'abonnement et courbe).
+
+**Toutes les fonctions** peuvent aussi devenir un widget, sous forme de **raccourci** petit ou moyen : Rechercher, Saisir une opération, Scanner un ticket, Catégories, Règles, Membres, Exporter mes données, Sécurité, Assistant, Applications, Affichage, Aide, Raccourcis clavier, Donner un avis, Administration du serveur. Seules les fonctions que vous pouvez utiliser sont proposées (par exemple les règles hors du mode simple, l'administration pour l'administrateur du serveur).
 
 Le petit **?** d'un widget dit ce qu'il montre et mène au passage de l'aide ; **« Pourquoi ce chiffre ? »**, sous un chiffre clé, montre les lignes du calcul. Tous les chiffres sont ceux du moteur, comme sur leur page.
 
@@ -36,7 +40,7 @@ Touchez **Modifier l'accueil**, en haut de la page, ou appuyez longuement sur un
 - **glissez** un widget par sa poignée (✥) vers n'importe quelle case ; les cases vides restent vides ;
 - le bouton en bas à droite **change sa taille** ; le menu (…) le **déplace** d'une case (monter, descendre, gauche, droite) ou choisit sa taille, pratique au clavier ;
 - la **croix** le retire ;
-- **Ajouter un widget** ouvre la liste des widgets absents : touchez-en un, ou choisissez directement sa taille ;
+- **Ajouter un widget** ouvre la liste des widgets absents, les résumés des pages puis les raccourcis vers les fonctions : touchez-en un, ou choisissez directement sa taille ;
 - **Rétablir** propose l'Accueil d'origine, **Annuler** oublie les changements, **Terminé** les garde.
 
 Un widget posé ou agrandi sur d'autres les pousse vers le bas. La disposition est gardée **sur cet appareil**, une pour le téléphone et une pour le grand écran ; rien n'est envoyé au serveur.

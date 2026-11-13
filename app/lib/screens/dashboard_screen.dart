@@ -8,6 +8,7 @@ import '../client.dart';
 import '../help/help.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import '../navigation/search.dart';
 import '../state/pepite.dart';
 import '../state/pepite_messages.dart';
 import '../state/ui_prefs.dart';
@@ -68,6 +69,14 @@ class DashboardScreen extends StatefulWidget {
   final int newAdvices;
   final String Function(ActionProposal)? adviceTitle;
 
+  /// The functions this user may open (decision 0046: each one can be a
+  /// widget), and how to open them; null: no such widget.
+  final Set<AppFunction> functions;
+  final ValueChanged<AppFunction>? onFunction;
+
+  /// Opens the global search (null: no such widget).
+  final VoidCallback? onSearch;
+
   const DashboardScreen({
     super.key,
     required this.membership,
@@ -77,6 +86,9 @@ class DashboardScreen extends StatefulWidget {
     this.advices = const [],
     this.newAdvices = 0,
     this.adviceTitle,
+    this.functions = const {},
+    this.onFunction,
+    this.onSearch,
   });
 
   @override
@@ -90,6 +102,8 @@ const _onDemand = {
   HomeTileKind.invoices,
   HomeTileKind.imports,
   HomeTileKind.topSpending,
+  HomeTileKind.budget,
+  HomeTileKind.categories,
 };
 
 class DashboardScreenState extends State<DashboardScreen> {
@@ -189,7 +203,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                   .then<int?>((l) => l.length, onError: (_) => null)
             : Future.value(),
         wants(HomeTileKind.imports) ? _lastImportOf(accounts) : Future.value(),
-        wants(HomeTileKind.topSpending)
+        wants(HomeTileKind.topSpending) ||
+                wants(HomeTileKind.budget) ||
+                wants(HomeTileKind.categories)
             ? client.category
                   .list(_groupId)
                   .then<List<Category>?>((c) => c, onError: (_) => null)
@@ -496,6 +512,41 @@ class DashboardScreenState extends State<DashboardScreen> {
       for (final k in board.missing)
         if (_available(k)) k,
     ];
+    Widget entry(BuildContext context, HomeTileKind k) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ListTile(
+            key: Key('home-add-${k.name}'),
+            contentPadding: EdgeInsets.zero,
+            leading: CircleAvatar(child: Icon(_icon(k))),
+            title: Text(_name(l, k)),
+            subtitle: Text(_help(l, k)),
+            onTap: () => Navigator.pop(context, (k, k.defaultSize)),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 56),
+            child: Wrap(
+              spacing: 8,
+              children: [
+                for (final s in k.sizes)
+                  ActionChip(
+                    key: Key('home-add-${k.name}-${s.name}'),
+                    avatar: Icon(
+                      s == k.defaultSize ? Icons.add : Icons.crop_square,
+                      size: 18,
+                    ),
+                    label: Text(homeSizeName(l, s)),
+                    onPressed: () => Navigator.pop(context, (k, s)),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
     final chosen = await showSoftSheet<(HomeTileKind, TileSize)>(
       context,
       scroll: true,
@@ -506,43 +557,33 @@ class DashboardScreenState extends State<DashboardScreen> {
           Text(l.homeBoardAdd, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 8),
           if (missing.isEmpty) Text(l.homeBoardAddNone),
-          for (final k in missing)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  ListTile(
-                    key: Key('home-add-${k.name}'),
-                    contentPadding: EdgeInsets.zero,
-                    leading: CircleAvatar(child: Icon(_icon(k))),
-                    title: Text(_name(l, k)),
-                    subtitle: Text(_help(l, k)),
-                    onTap: () => Navigator.pop(context, (k, k.defaultSize)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 56),
-                    child: Wrap(
-                      spacing: 8,
-                      children: [
-                        for (final s in k.sizes)
-                          ActionChip(
-                            key: Key('home-add-${k.name}-${s.name}'),
-                            avatar: Icon(
-                              s == k.defaultSize
-                                  ? Icons.add
-                                  : Icons.crop_square,
-                              size: 18,
-                            ),
-                            label: Text(homeSizeName(l, s)),
-                            onPressed: () => Navigator.pop(context, (k, s)),
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+          // Decision 0046: the summaries of the pages, then the shortcuts.
+          for (final (title, kinds) in [
+            (
+              l.homeAddSummaries,
+              [
+                for (final k in missing)
+                  if (!k.isShortcut) k,
+              ],
             ),
+            (
+              l.homeAddShortcuts,
+              [
+                for (final k in missing)
+                  if (k.isShortcut) k,
+              ],
+            ),
+          ])
+            if (kinds.isNotEmpty) ...[
+              Padding(
+                padding: const EdgeInsets.only(top: 12, bottom: 4),
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              for (final k in kinds) entry(context, k),
+            ],
         ],
       ),
     );
@@ -554,11 +595,35 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   /// « Conseils du moment » only where Mon conseiller exists; Pépite only
-  /// when it is on.
+  /// when it is on; a function only where this user may open it (decision
+  /// 0046: the same rules as the search).
   bool _available(HomeTileKind k) => switch (k) {
     HomeTileKind.advices => widget.onAdvisor != null,
     HomeTileKind.pepite => pepite.enabled,
-    _ => true,
+    HomeTileKind.search => widget.onSearch != null,
+    _ => switch (_function(k)) {
+      null => true,
+      final f => widget.onFunction != null && widget.functions.contains(f),
+    },
+  };
+
+  /// The function a shortcut widget opens (decision 0046).
+  static AppFunction? _function(HomeTileKind k) => switch (k) {
+    HomeTileKind.newOperation => AppFunction.newOperation,
+    HomeTileKind.scanReceipt => AppFunction.scanReceipt,
+    HomeTileKind.categories => AppFunction.categories,
+    HomeTileKind.rules => AppFunction.rules,
+    HomeTileKind.members => AppFunction.members,
+    HomeTileKind.export => AppFunction.export,
+    HomeTileKind.security => AppFunction.security,
+    HomeTileKind.assistant => AppFunction.assistant,
+    HomeTileKind.apps => AppFunction.apps,
+    HomeTileKind.display => AppFunction.display,
+    HomeTileKind.help => AppFunction.help,
+    HomeTileKind.shortcuts => AppFunction.shortcuts,
+    HomeTileKind.feedback => AppFunction.feedback,
+    HomeTileKind.admin => AppFunction.admin,
+    _ => null,
   };
 
   // ------------------------------------------------------------ catalogue
@@ -583,6 +648,10 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.invoices => Icons.description_outlined,
     HomeTileKind.imports => Icons.upload_file_outlined,
     HomeTileKind.notifications => Icons.notifications_outlined,
+    HomeTileKind.budget => Icons.track_changes,
+    HomeTileKind.monthSummary => AppFunction.summary.icon,
+    HomeTileKind.search => Icons.search,
+    _ => _function(k)!.icon,
   };
 
   static String _name(AppLocalizations l, HomeTileKind k) => switch (k) {
@@ -605,6 +674,10 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.invoices => l.homeCardInvoices,
     HomeTileKind.imports => l.homeCardImports,
     HomeTileKind.notifications => l.homeCardNotifications,
+    HomeTileKind.budget => l.homeCardBudget,
+    HomeTileKind.monthSummary => l.homeCardMonthSummary,
+    HomeTileKind.search => l.globalSearchOpen,
+    _ => _function(k)!.label(l),
   };
 
   static String _help(AppLocalizations l, HomeTileKind k) => switch (k) {
@@ -627,6 +700,23 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.invoices => l.homeCardInvoicesHelp,
     HomeTileKind.imports => l.homeCardImportsHelp,
     HomeTileKind.notifications => l.homeCardNotificationsHelp,
+    HomeTileKind.budget => l.homeCardBudgetHelp,
+    HomeTileKind.monthSummary => l.homeCardMonthSummaryHelp,
+    HomeTileKind.search => l.homeCardSearchHelp,
+    HomeTileKind.newOperation => l.homeCardNewOperationHelp,
+    HomeTileKind.scanReceipt => l.homeCardScanReceiptHelp,
+    HomeTileKind.categories => l.homeCardCategoriesHelp,
+    HomeTileKind.rules => l.homeCardRulesHelp,
+    HomeTileKind.members => l.homeCardMembersHelp,
+    HomeTileKind.export => l.homeCardExportHelp,
+    HomeTileKind.security => l.homeCardSecurityHelp,
+    HomeTileKind.assistant => l.homeCardAssistantHelp,
+    HomeTileKind.apps => l.homeCardAppsHelp,
+    HomeTileKind.display => l.homeCardDisplayHelp,
+    HomeTileKind.help => l.homeCardHelpHelp,
+    HomeTileKind.shortcuts => l.homeCardShortcutsHelp,
+    HomeTileKind.feedback => l.homeCardFeedbackHelp,
+    HomeTileKind.admin => l.homeCardAdminHelp,
   };
 
   // --------------------------------------------------------------- tiles
@@ -661,6 +751,9 @@ class DashboardScreenState extends State<DashboardScreen> {
         HomeTileKind.invoices => _invoicesTile(context, l, s),
         HomeTileKind.imports => _importsTile(context, l, s),
         HomeTileKind.notifications => _notificationsTile(context, l, s),
+        HomeTileKind.budget => _budgetTile(context, l, s),
+        HomeTileKind.monthSummary => _monthSummaryTile(context, l, s),
+        _ => _shortcutTile(context, l, t.kind, s),
       },
     );
   }
@@ -1775,6 +1868,209 @@ class DashboardScreenState extends State<DashboardScreen> {
             : n == 0
             ? l.homeGoodNoNotification
             : l.dashboardUnread(n),
+      ),
+    );
+  }
+
+  // ------------------------------------------------- decision 0046 tiles
+
+  /// The spending goals of the month: what is left of them, spent against
+  /// planned, the goals exceeded and, when large, the goals nearest to
+  /// their limit (the same figures as the budget page).
+  Widget _budgetTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final colors = context.moneyColors;
+    final month = _month;
+    if (month == null || !_fetched.contains(HomeTileKind.budget)) {
+      return _frame(
+        l,
+        HomeTileKind.budget,
+        s,
+        target: DashboardTarget.budget,
+        child: const SizedBox.shrink(),
+      );
+    }
+    double used(CategoryFlow c) => c.amountCents.abs() / c.goalCents!.abs();
+    final goals = [
+      for (final c in month.categories)
+        if ((c.goalCents ?? 0) != 0 && _categories[c.categoryId] != null) c,
+    ]..sort((a, b) => used(b).compareTo(used(a)));
+    final planned = goals.fold(0, (sum, c) => sum + c.goalCents!.abs());
+    final spent = goals.fold(0, (sum, c) => sum + c.amountCents.abs());
+    final over = goals.where((c) => used(c) > 1).length;
+    final left = planned - spent;
+    const shown = 3;
+    return _frame(
+      l,
+      HomeTileKind.budget,
+      s,
+      help: l.homeCardBudgetHelp,
+      helpTopic: HelpTopic.budget,
+      target: DashboardTarget.budget,
+      child: goals.isEmpty
+          ? TileLine(l.homeTileBudgetNone, maxLines: 3)
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TileFigure(
+                  context.money(left),
+                  color: left < 0 ? colors.negative : null,
+                ),
+                TileLine(
+                  s == TileSize.small
+                      ? l.homeTileBudgetLeft
+                      : l.homeTileBudgetSpent(
+                          context.money(spent),
+                          context.money(planned),
+                        ),
+                  maxLines: s == TileSize.small ? 2 : 1,
+                ),
+                if (s != TileSize.small && over > 0)
+                  TileLine(
+                    l.homeTileBudgetOver(over),
+                    maxLines: 1,
+                    color: colors.negative,
+                  ),
+                if (s == TileSize.large)
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (final c in goals.take(
+                            goals.length > shown ? shown - 1 : shown,
+                          )) ...[
+                            _row(
+                              context,
+                              context.categoryName(_categories[c.categoryId]!),
+                              '${context.money(c.amountCents.abs())} / '
+                              '${context.money(c.goalCents!.abs())}',
+                            ),
+                            ThinBar(
+                              fraction: math.min(used(c), 1),
+                              color: used(c) > 1
+                                  ? colors.negative
+                                  : Theme.of(context).colorScheme.primary,
+                              height: 6,
+                            ),
+                          ],
+                          if (goals.length > shown)
+                            TileLine(
+                              l.homeTileOthers(goals.length - shown + 1),
+                              maxLines: 1,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+    );
+  }
+
+  /// The summary of the next 30 days (decision 0035) in brief: the lowest
+  /// point of the forecast, the notifications unread, the advices waiting.
+  Widget _monthSummaryTile(
+    BuildContext context,
+    AppLocalizations l,
+    TileSize s,
+  ) {
+    final colors = context.moneyColors;
+    final days = _totalDays();
+    final low = days.isEmpty ? null : days.reduce(math.min);
+    final lowDay = _lowestDay();
+    final lowColor = low != null && low < 0 ? colors.negative : null;
+    final unread = widget.unread;
+    final lowLine = low == null || lowDay == null
+        ? l.homeTileNoForecast
+        : l.homeTileLowest(context.money(low), context.day(lowDay));
+    return _frame(
+      l,
+      HomeTileKind.monthSummary,
+      s,
+      help: l.homeCardMonthSummaryHelp,
+      helpTopic: HelpTopic.home,
+      target: DashboardTarget.summary,
+      child: s == TileSize.small
+          ? low == null || lowDay == null
+                ? TileLine(l.homeTileNoForecast)
+                : _figure(
+                    context.money(low),
+                    l.homeTileSummaryLowest(context.day(lowDay)),
+                    color: lowColor,
+                  )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (s == TileSize.large && low != null)
+                  TileFigure(context.money(low), color: lowColor),
+                TileLine(lowLine, maxLines: 1, color: lowColor),
+                TileLine(
+                  unread == 0
+                      ? l.homeGoodNoNotification
+                      : l.dashboardUnread(unread),
+                  maxLines: 1,
+                ),
+                if (s == TileSize.large && widget.onAdvisor != null)
+                  TileLine(
+                    l.homeTileSummaryAdvices(widget.advices.length),
+                    maxLines: 1,
+                  ),
+                if (s == TileSize.large && _rises.isNotEmpty)
+                  TileLine(
+                    l.homeTileRises(_rises.length),
+                    maxLines: 1,
+                    color: colors.negative,
+                  ),
+                if (s == TileSize.large && days.length >= 2) ...[
+                  const SizedBox(height: 4),
+                  Expanded(
+                    child: Sparkline(values: days, semanticLabel: lowLine),
+                  ),
+                ],
+              ],
+            ),
+    );
+  }
+
+  /// A widget that opens a function of the app: its icon and what it does,
+  /// with a figure when there is one at hand (the number of categories).
+  Widget _shortcutTile(
+    BuildContext context,
+    AppLocalizations l,
+    HomeTileKind k,
+    TileSize s,
+  ) {
+    final f = _function(k);
+    final open = k == HomeTileKind.search
+        ? widget.onSearch
+        : f == null
+        ? null
+        : () => widget.onFunction?.call(f);
+    final count = k == HomeTileKind.categories && _fetched.contains(k)
+        ? _categories.length
+        : null;
+    return _frame(
+      l,
+      k,
+      s,
+      onTap: open,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (count != null)
+            TileFigure('$count')
+          else
+            Icon(
+              _icon(k),
+              size: 28,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          const SizedBox(height: 4),
+          if (k == HomeTileKind.members && s == TileSize.medium)
+            TileLine(widget.membership.group.name, maxLines: 1),
+          TileLine(_help(l, k), maxLines: count != null ? 1 : 2),
+        ],
       ),
     );
   }

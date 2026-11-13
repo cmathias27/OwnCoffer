@@ -12853,6 +12853,168 @@ abstract class AppLocalizations {
   /// **'Les notifications pas encore lues'**
   String get homeCardNotificationsHelp;
 
+  /// No description provided for @homeCardBudget.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectifs du budget'**
+  String get homeCardBudget;
+
+  /// No description provided for @homeCardBudgetHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qu\'il reste sur vos objectifs de dépense du mois, et ceux dépassés'**
+  String get homeCardBudgetHelp;
+
+  /// No description provided for @homeCardMonthSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récapitulatif'**
+  String get homeCardMonthSummary;
+
+  /// No description provided for @homeCardMonthSummaryHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les 30 prochains jours en bref : point bas, notifications et conseils'**
+  String get homeCardMonthSummaryHelp;
+
+  /// No description provided for @homeCardSearchHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chercher une opération, un crédit, une facture ou une fonction'**
+  String get homeCardSearchHelp;
+
+  /// No description provided for @homeCardNewOperationHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisir à la main une dépense ou une recette'**
+  String get homeCardNewOperationHelp;
+
+  /// No description provided for @homeCardScanReceiptHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photographier un ticket pour l\'enregistrer'**
+  String get homeCardScanReceiptHelp;
+
+  /// No description provided for @homeCardCategoriesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les catégories du foyer, à renommer ou à créer'**
+  String get homeCardCategoriesHelp;
+
+  /// No description provided for @homeCardRulesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les règles qui classent les opérations toutes seules'**
+  String get homeCardRulesHelp;
+
+  /// No description provided for @homeCardMembersHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les membres du foyer et leurs droits'**
+  String get homeCardMembersHelp;
+
+  /// No description provided for @homeCardExportHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger une copie de vos données'**
+  String get homeCardExportHelp;
+
+  /// No description provided for @homeCardSecurityHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe, double authentification et appareils connectés'**
+  String get homeCardSecurityHelp;
+
+  /// No description provided for @homeCardAssistantHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir et régler l\'IA, si vous en voulez une'**
+  String get homeCardAssistantHelp;
+
+  /// No description provided for @homeCardAppsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les applications Android et Windows'**
+  String get homeCardAppsHelp;
+
+  /// No description provided for @homeCardDisplayHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Thème, taille du texte et mode simple'**
+  String get homeCardDisplayHelp;
+
+  /// No description provided for @homeCardHelpHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'aide de l\'application, page par page'**
+  String get homeCardHelpHelp;
+
+  /// No description provided for @homeCardShortcutsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les touches du clavier de l\'application'**
+  String get homeCardShortcutsHelp;
+
+  /// No description provided for @homeCardFeedbackHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signaler un problème ou proposer une idée'**
+  String get homeCardFeedbackHelp;
+
+  /// No description provided for @homeCardAdminHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les comptes, les mises à jour et les réglages du serveur'**
+  String get homeCardAdminHelp;
+
+  /// No description provided for @homeAddSummaries.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résumés des pages'**
+  String get homeAddSummaries;
+
+  /// No description provided for @homeAddShortcuts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Raccourcis vers les fonctions'**
+  String get homeAddShortcuts;
+
+  /// No description provided for @homeTileBudgetNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun objectif de dépense ce mois-ci : fixez-en dans Budget.'**
+  String get homeTileBudgetNone;
+
+  /// No description provided for @homeTileBudgetLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'restent sur les objectifs du mois'**
+  String get homeTileBudgetLeft;
+
+  /// No description provided for @homeTileBudgetSpent.
+  ///
+  /// In fr, this message translates to:
+  /// **'{spent} dépensés sur {planned} prévus'**
+  String homeTileBudgetSpent(String spent, String planned);
+
+  /// No description provided for @homeTileBudgetOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 objectif dépassé} other{{count} objectifs dépassés}}'**
+  String homeTileBudgetOver(int count);
+
+  /// No description provided for @homeTileSummaryLowest.
+  ///
+  /// In fr, this message translates to:
+  /// **'point bas le {date}'**
+  String homeTileSummaryLowest(String date);
+
+  /// No description provided for @homeTileSummaryAdvices.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun conseil en attente} =1{1 conseil en attente} other{{count} conseils en attente}}'**
+  String homeTileSummaryAdvices(int count);
+
   /// No description provided for @homeTilePerDay.
   ///
   /// In fr, this message translates to:

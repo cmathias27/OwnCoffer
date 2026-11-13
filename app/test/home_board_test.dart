@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:owncoffer_app/client.dart';
 import 'package:owncoffer_app/l10n/app_localizations.dart';
+import 'package:owncoffer_app/navigation/search.dart';
 import 'package:owncoffer_app/screens/dashboard_screen.dart';
 import 'package:owncoffer_app/state/app_lock.dart' show LockStore;
 import 'package:owncoffer_app/state/pepite.dart';
@@ -310,9 +311,39 @@ void main() {
       unclassifiedCount: 3,
       unclassifiedInCents: 0,
       unclassifiedOutCents: -4000,
-      categories: const [],
+      categories: [
+        // Two spending goals: one exceeded, one not (decision 0046).
+        CategoryFlow(
+          categoryId: 7,
+          amountCents: -30000,
+          count: 3,
+          previousCents: 0,
+          averageCents: 0,
+          history: const [],
+          goalCents: -25000,
+        ),
+        CategoryFlow(
+          categoryId: 8,
+          amountCents: -5000,
+          count: 1,
+          previousCents: 0,
+          averageCents: 0,
+          history: const [],
+          goalCents: -20000,
+        ),
+      ],
       history: const [],
     );
+    final categories = [
+      for (final (id, name) in const [(7, 'Courses'), (8, 'Loisirs')])
+        Category(
+          id: id,
+          groupId: 1,
+          name: name,
+          kind: CategoryKind.expense,
+          createdAt: day,
+        ),
+    ];
     final membership = GroupMembership(
       group: FinanceGroup(
         id: 1,
@@ -333,6 +364,7 @@ void main() {
             '/api/account/list' => [account],
             '/api/scheduled/forecast' => forecast,
             '/api/analysis/report' => report,
+            '/api/category/list' => categories,
             _ => null,
           };
           if (answer == null) return http.Response('{}', 500);
@@ -351,7 +383,14 @@ void main() {
       }
     });
 
-    Future<DashboardTarget?> open(WidgetTester tester, Size size) async {
+    AppFunction? function;
+    var searched = false;
+
+    Future<DashboardTarget?> open(
+      WidgetTester tester,
+      Size size, {
+      Set<AppFunction> functions = const {...AppFunction.values},
+    }) async {
       tester.view.physicalSize = size;
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -372,6 +411,9 @@ void main() {
               onOpen: (t) => opened = t,
               onAdvisor: () {},
               adviceTitle: (p) => p.kind,
+              functions: functions,
+              onFunction: (f) => function = f,
+              onSearch: () => searched = true,
             ),
           ),
         ),
@@ -496,6 +538,93 @@ void main() {
       }
       expect(uiPrefs.homeBoard(2), HomeBoard.defaults(2));
       expect(uiPrefs.homeBoard(4), HomeBoard.defaults(4));
+    });
+
+    testWidgets('a shortcut opens its function, the search too', (
+      tester,
+    ) async {
+      function = null;
+      searched = false;
+      await tester.runAsync(
+        () => uiPrefs.setHomeBoard(
+          _board('newOperation:s:0:0,search:s:1:0,categories:m:0:1'),
+        ),
+      );
+      await open(tester, const Size(400, 900));
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.byKey(const Key('home-card-newOperation')));
+      expect(function, AppFunction.newOperation);
+      await tester.tap(find.byKey(const Key('home-card-search')));
+      expect(searched, isTrue);
+      // The categories of the household, counted.
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('home-card-categories')),
+          matching: find.text('2'),
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const Key('home-card-categories')));
+      expect(function, AppFunction.categories);
+    });
+
+    testWidgets('a function this user may not open: no widget', (
+      tester,
+    ) async {
+      await tester.runAsync(
+        () => uiPrefs.setHomeBoard(_board('admin:s:0:0,balance:m:0:1')),
+      );
+      await open(tester, const Size(400, 900), functions: const {});
+      expect(find.byKey(const Key('home-card-admin')), findsNothing);
+      await tester.tap(find.byKey(const Key('home-customize')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('home-board-add')));
+      await tester.pumpAndSettle();
+      // The whole catalogue, down to its end: no function refused.
+      final sheet = find
+          .descendant(
+            of: find.byType(DraggableScrollableSheet),
+            matching: find.byType(Scrollable),
+          )
+          .first;
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('home-add-monthSummary')),
+        200,
+        scrollable: sheet,
+      );
+      await tester.drag(sheet, const Offset(0, -2000));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('home-add-monthSummary')), findsOneWidget);
+      expect(find.byKey(const Key('home-add-rules')), findsNothing);
+      expect(find.byKey(const Key('home-add-admin')), findsNothing);
+      // The search is no function of the list: still offered.
+      expect(find.byKey(const Key('home-add-search')), findsOneWidget);
+    });
+
+    testWidgets('budget goals: left, spent against planned, exceeded', (
+      tester,
+    ) async {
+      await tester.runAsync(
+        () => uiPrefs.setHomeBoard(_board('budget:l:0:0,monthSummary:m:0:2')),
+      );
+      await open(tester, const Size(400, 900));
+      expect(tester.takeException(), isNull);
+      final budget = find.byKey(const Key('home-card-budget'));
+      Finder inBudget(Pattern text) => find.descendant(
+        of: budget,
+        matching: find.textContaining(text),
+      );
+      // 450 planned, 350 spent: 100 left; « Courses » above its goal.
+      expect(inBudget(RegExp(r'^100,00')), findsOneWidget);
+      expect(inBudget('1 objectif dépassé'), findsOneWidget);
+      expect(inBudget('Courses'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('home-card-monthSummary')),
+          matching: find.textContaining('Point bas'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('nothing on the board: said, and how to add', (tester) async {

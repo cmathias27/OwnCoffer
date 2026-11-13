@@ -8177,6 +8177,121 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeCardNotificationsHelp => 'Les notifications pas encore lues';
 
   @override
+  String get homeCardBudget => 'Objectifs du budget';
+
+  @override
+  String get homeCardBudgetHelp =>
+      'Ce qu\'il reste sur vos objectifs de dépense du mois, et ceux dépassés';
+
+  @override
+  String get homeCardMonthSummary => 'Récapitulatif';
+
+  @override
+  String get homeCardMonthSummaryHelp =>
+      'Les 30 prochains jours en bref : point bas, notifications et conseils';
+
+  @override
+  String get homeCardSearchHelp =>
+      'Chercher une opération, un crédit, une facture ou une fonction';
+
+  @override
+  String get homeCardNewOperationHelp =>
+      'Saisir à la main une dépense ou une recette';
+
+  @override
+  String get homeCardScanReceiptHelp =>
+      'Photographier un ticket pour l\'enregistrer';
+
+  @override
+  String get homeCardCategoriesHelp =>
+      'Les catégories du foyer, à renommer ou à créer';
+
+  @override
+  String get homeCardRulesHelp =>
+      'Les règles qui classent les opérations toutes seules';
+
+  @override
+  String get homeCardMembersHelp => 'Les membres du foyer et leurs droits';
+
+  @override
+  String get homeCardExportHelp => 'Télécharger une copie de vos données';
+
+  @override
+  String get homeCardSecurityHelp =>
+      'Mot de passe, double authentification et appareils connectés';
+
+  @override
+  String get homeCardAssistantHelp =>
+      'Choisir et régler l\'IA, si vous en voulez une';
+
+  @override
+  String get homeCardAppsHelp => 'Les applications Android et Windows';
+
+  @override
+  String get homeCardDisplayHelp => 'Thème, taille du texte et mode simple';
+
+  @override
+  String get homeCardHelpHelp => 'L\'aide de l\'application, page par page';
+
+  @override
+  String get homeCardShortcutsHelp =>
+      'Les touches du clavier de l\'application';
+
+  @override
+  String get homeCardFeedbackHelp =>
+      'Signaler un problème ou proposer une idée';
+
+  @override
+  String get homeCardAdminHelp =>
+      'Les comptes, les mises à jour et les réglages du serveur';
+
+  @override
+  String get homeAddSummaries => 'Résumés des pages';
+
+  @override
+  String get homeAddShortcuts => 'Raccourcis vers les fonctions';
+
+  @override
+  String get homeTileBudgetNone =>
+      'Aucun objectif de dépense ce mois-ci : fixez-en dans Budget.';
+
+  @override
+  String get homeTileBudgetLeft => 'restent sur les objectifs du mois';
+
+  @override
+  String homeTileBudgetSpent(String spent, String planned) {
+    return '$spent dépensés sur $planned prévus';
+  }
+
+  @override
+  String homeTileBudgetOver(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count objectifs dépassés',
+      one: '1 objectif dépassé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileSummaryLowest(String date) {
+    return 'point bas le $date';
+  }
+
+  @override
+  String homeTileSummaryAdvices(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count conseils en attente',
+      one: '1 conseil en attente',
+      zero: 'Aucun conseil en attente',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String homeTilePerDay(String amount) {
     return '$amount par jour';
   }

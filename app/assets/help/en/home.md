@@ -26,6 +26,10 @@ Home is a grid of widgets: two columns on a phone, four on a large screen. A wid
 - **Invoices**: the invoices not attached to an operation yet.
 - **Imports**: the date of the last statement imported, and a button to import one.
 - **Notifications**: the unread notifications.
+- **Budget goals**: what is left of this month's spending goals, spent against planned, the goals exceeded; when large, the categories closest to their limit.
+- **Summary**: the next 30 days in brief (lowest point, unread notifications; when large, advice waiting, subscription rises and the curve).
+
+**Every function** can also become a widget, as a small or medium **shortcut**: Search, Enter an operation, Scan a receipt, Categories, Rules, Members, Export my data, Security, Assistant, Apps, Display, Help, Keyboard shortcuts, Give feedback, Server administration. Only the functions you may use are offered (for instance rules outside simple mode, administration for the server administrator).
 
 The small **?** of a widget says what it shows and leads to the matching help; **"Why this figure?"**, under a key figure, shows the lines of the calculation. Every figure is the engine's, as on its page.
 
@@ -36,7 +40,7 @@ Tap **Edit home**, at the top of the page, or long-press a widget. The grid show
 - **drag** a widget by its handle (✥) to any cell; empty cells stay empty;
 - the button at the bottom right **changes its size**; the menu (…) **moves** it by one cell (up, down, left, right) or picks its size, handy with a keyboard;
 - the **cross** removes it;
-- **Add a widget** opens the list of the widgets not shown: tap one, or pick its size straight away;
+- **Add a widget** opens the list of the widgets not shown, the page summaries then the shortcuts to functions: tap one, or pick its size straight away;
 - **Reset** offers the original home page, **Cancel** forgets the changes, **Done** keeps them.
 
 A widget put or enlarged over others pushes them down. The layout is kept **on this device**, one for the phone and one for the large screen; nothing is sent to the server.
