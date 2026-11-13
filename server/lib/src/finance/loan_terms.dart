@@ -26,6 +26,8 @@ abstract final class LoanTermsOf {
         paymentCents: e.paymentCents,
         remainingMonths: e.remainingMonths,
         drawCents: e.drawCents ?? 0,
+        pauseMonths: e.pauseMonths,
+        pauseCapitalized: e.pauseCapitalized ?? false,
       ),
   ];
 

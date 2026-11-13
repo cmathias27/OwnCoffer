@@ -282,7 +282,7 @@ abstract final class AiGateway {
   }
 
   static const _maxDocumentBytes = 8 * 1024 * 1024;
-  static const _maxPages = 5;
+  static const _maxPages = 12;
   static const _maxTotalImagesBase64 = 16 * 1024 * 1024;
 
   static String _imageMimeType(List<int> bytes) {

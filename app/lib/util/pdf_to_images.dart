@@ -8,7 +8,7 @@ import 'file_pick.dart';
 /// passed to the AI reader after the user confirms the transfer.
 abstract final class PdfToImages {
   static const maxBytes = 8 * 1024 * 1024;
-  static const maxPages = 5;
+  static const maxPages = 12;
   static const maxPageSide = 1600.0;
   static const maxTotalImageBytes = 12 * 1024 * 1024;
 

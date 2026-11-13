@@ -408,7 +408,39 @@ abstract final class ProposalService {
     'first_due_date': l.firstDueDate.toIso8601String().substring(0, 10),
     'disbursement_date': l.disbursementDate?.toIso8601String().substring(0, 10),
     'first_interest_cents': l.firstInterestCents,
+    // Only when there are some: proposals made before 1.27.0 keep their key.
+    if (l.events?.isNotEmpty ?? false)
+      'events': [for (final e in l.events!) loanEventJson(e)],
   };
+
+  /// A change of a loan in a proposal (decision 0042).
+  static Map<String, Object?> loanEventJson(LoanEvent e) => {
+    'date': e.date.toIso8601String().substring(0, 10),
+    'annual_rate_milli': ?e.annualRateMilli,
+    'payment_cents': ?e.paymentCents,
+    'remaining_months': ?e.remainingMonths,
+    'draw_cents': ?e.drawCents,
+    'pause_months': ?e.pauseMonths,
+    'pause_capitalized': ?e.pauseCapitalized,
+    'note': ?e.note,
+  };
+
+  static LoanEvent? loanEventFromJson(Object? x) {
+    if (x is! Map) return null;
+    final d = DateTime.tryParse(x['date'] as String? ?? '');
+    if (d == null) return null;
+    int? n(String k) => (x[k] as num?)?.toInt();
+    return LoanEvent(
+      date: DateTime.utc(d.year, d.month, d.day),
+      annualRateMilli: n('annual_rate_milli'),
+      paymentCents: n('payment_cents'),
+      remainingMonths: n('remaining_months'),
+      drawCents: n('draw_cents'),
+      pauseMonths: n('pause_months'),
+      pauseCapitalized: x['pause_capitalized'] as bool?,
+      note: x['note'] as String?,
+    );
+  }
 
   static Map<String, Object?> invoiceHints(Invoice i) => {
     'amount_cents': i.hintAmountCents,
@@ -431,7 +463,8 @@ abstract final class ProposalService {
     final disb = f['disbursement_date'] == null
         ? null
         : DateTime.tryParse(f['disbursement_date'] as String);
-    await LoanEndpoint().update(
+    final events = f['events'];
+    await LoanEndpoint.updateWithEvents(
       session,
       l.copyWith(
         principalCents: n('principal_cents') ?? l.principalCents,
@@ -454,6 +487,15 @@ abstract final class ProposalService {
             ? n('first_interest_cents')
             : l.firstInterestCents,
       ),
+      // Undoing restores the changes as they were, none included.
+      f.containsKey('events')
+          ? [
+              if (events is List)
+                for (final x in events)
+                  loanEventFromJson(x) ??
+                      (throw InvalidInputException(code: 'loan_event_invalid')),
+            ]
+          : null,
     );
   }
 

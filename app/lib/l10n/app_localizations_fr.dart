@@ -4867,6 +4867,48 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get loanEventKindPause => 'Report d\'échéances (pause)';
+
+  @override
+  String get loanEventPauseHelp =>
+      'La banque suspend les mensualités quelques mois. Le crédit finit d\'autant plus tard ; la mensualité d\'après est recalculée, sauf si la mensualité prélevée est connue.';
+
+  @override
+  String get loanEventPauseMonths => 'Nombre de mois de pause';
+
+  @override
+  String get loanEventPausePartial => 'Intérêts payés';
+
+  @override
+  String get loanEventPauseTotal => 'Rien payé';
+
+  @override
+  String get loanEventPausePartialHelp =>
+      'Report partiel : seuls les intérêts (et l\'assurance) sont prélevés, le capital ne baisse pas.';
+
+  @override
+  String get loanEventPauseTotalHelp =>
+      'Report total : rien n\'est prélevé sauf l\'assurance, les intérêts s\'ajoutent à ce qui reste à rembourser.';
+
+  @override
+  String get loanEventPauseInvalid => 'Indiquez une pause de 1 à 120 mois.';
+
+  @override
+  String loanEventPausedPartial(String months) {
+    return 'pause de $months, intérêts payés';
+  }
+
+  @override
+  String loanEventPausedTotal(String months) {
+    return 'pause de $months, intérêts ajoutés au capital';
+  }
+
+  @override
+  String loanRowPaused(String date) {
+    return '$date (pause)';
+  }
+
+  @override
   String get error_loan_event_invalid =>
       'Ce changement n\'est pas possible pour ce crédit (date avant la première échéance, ou valeurs hors limites).';
 
@@ -4991,6 +5033,42 @@ class AppLocalizationsFr extends AppLocalizations {
   String get advisorLoanFieldRemaining => 'capital restant dû';
 
   @override
+  String advisorLoanEvents(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count changements',
+      one: '1 changement',
+      zero: 'aucun',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get advisorLoanFieldMissing => 'absente du calcul';
+
+  @override
+  String advisorLoanCheckTable(int first, int last, int found) {
+    return 'Échéances $first à $last lues ; changements trouvés par le calcul : $found.';
+  }
+
+  @override
+  String advisorLoanCheckMissing(int number) {
+    return 'Échéance $number : absente du calcul d\'OwnCoffer (le crédit y finit plus tôt).';
+  }
+
+  @override
+  String advisorLoanCheckMoreGaps(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count autres écarts',
+      one: '1 autre écart',
+    );
+    return '$_temp0.';
+  }
+
+  @override
   String advisorReadIn(String name) {
     return 'Lu dans « $name ».';
   }
@@ -5017,7 +5095,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get error_ai_document_too_many_pages =>
-      'Ce PDF dépasse la limite de 5 pages pour la lecture par l\'IA.';
+      'Ce PDF dépasse la limite de 12 pages pour la lecture par l\'IA.';
 
   @override
   String get error_pdf_empty => 'Le fichier PDF est vide.';

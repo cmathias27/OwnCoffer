@@ -141,6 +141,7 @@ class LoanEndpoint extends Endpoint {
           interestCents: i.interestCents,
           insuranceCents: i.insuranceCents,
           remainingCents: i.remainingCents,
+          paused: i.paused ? true : null,
         ),
     ];
   }
@@ -380,6 +381,8 @@ class LoanEndpoint extends Endpoint {
           paymentCents: event.paymentCents,
           remainingMonths: event.remainingMonths,
           drawCents: event.drawCents ?? 0,
+          pauseMonths: event.pauseMonths,
+          pauseCapitalized: event.pauseCapitalized ?? false,
         ),
         feesCents: feesCents ?? 0,
       );
@@ -417,29 +420,39 @@ class LoanEndpoint extends Endpoint {
     if (events.length >= _maxEvents) {
       throw InvalidInputException(code: 'loan_event_invalid');
     }
+    final clean = _cleanEvent(event, current.firstDueDate.toLocalDate());
+    events
+      ..add(clean)
+      ..sort((a, b) => a.date.compareTo(b.date));
+    final next = current.copyWith(events: events);
+    _checkEvents(next, clean.date.toLocalDate());
+    return _saveEvents(session, current, next, 'add_event');
+  }
+
+  /// A change as kept: its day, its note trimmed, on or after the first
+  /// instalment.
+  static LoanEvent _cleanEvent(LoanEvent event, core.LocalDate firstDue) {
     final note = event.note?.trim();
     if (note != null && note.length > 200) {
       throw InvalidInputException(code: 'invalid_name', field: 'note');
     }
     final u = event.date.toUtc();
     final day = core.LocalDate(u.year, u.month, u.day);
-    if (day < current.firstDueDate.toLocalDate()) {
+    if (day < firstDue) {
       throw InvalidInputException(code: 'loan_event_invalid');
     }
-    final clean = LoanEvent(
+    return LoanEvent(
       date: day.toDb(),
       annualRateMilli: event.annualRateMilli,
       paymentCents: event.paymentCents,
       remainingMonths: event.remainingMonths,
       drawCents: event.drawCents == 0 ? null : event.drawCents,
+      pauseMonths: event.pauseMonths,
+      pauseCapitalized: event.pauseMonths == null
+          ? null
+          : (event.pauseCapitalized ?? false),
       note: note == null || note.isEmpty ? null : note,
     );
-    events
-      ..add(clean)
-      ..sort((a, b) => a.date.compareTo(b.date));
-    final next = current.copyWith(events: events);
-    _checkEvents(next, day);
-    return _saveEvents(session, current, next, 'add_event');
   }
 
   /// Removes the change at [index] (as listed in the loan, oldest first).
@@ -468,7 +481,9 @@ class LoanEndpoint extends Endpoint {
     if (schedule.length >= core.maxLoanMonths ||
         schedule
             .take(schedule.length - 1)
-            .any((i) => i.principalCents <= 0 && i.remainingCents > 0)) {
+            .any(
+              (i) => !i.paused && i.principalCents <= 0 && i.remainingCents > 0,
+            )) {
       throw InvalidInputException(code: 'loan_event_unpaid');
     }
     final limit = loan.creditLimitCents;
@@ -525,22 +540,46 @@ class LoanEndpoint extends Endpoint {
     return _info(saved, _today());
   }
 
-  Future<LoanInfo> update(Session session, Loan loan) async {
+  Future<LoanInfo> update(Session session, Loan loan) =>
+      _update(session, loan, null);
+
+  /// The terms and, when [events] is given, all the changes of the loan
+  /// at once (a lender's table read, decision 0042): checked as addEvent
+  /// does, saved together or not at all. For the financial commands.
+  static Future<LoanInfo> updateWithEvents(
+    Session session,
+    Loan loan,
+    List<LoanEvent>? events,
+  ) => LoanEndpoint()._update(session, loan, events);
+
+  Future<LoanInfo> _update(
+    Session session,
+    Loan loan,
+    List<LoanEvent>? events,
+  ) async {
     final current = await _find(session, loan.id ?? -1, write: true);
     final clean = await _validated(session, current.groupId, loan);
+    var next = clean.copyWith(
+      id: current.id,
+      scheduledId: current.scheduledId,
+      matchPattern: current.matchPattern,
+      ruleId: current.ruleId,
+      events: current.events,
+      createdAt: current.createdAt,
+    );
+    if (events != null) {
+      if (events.length > _maxEvents) {
+        throw InvalidInputException(code: 'loan_event_invalid');
+      }
+      final first = next.firstDueDate.toLocalDate();
+      final list = [
+        for (final e in events) _cleanEvent(e, first),
+      ]..sort((a, b) => a.date.compareTo(b.date));
+      next = next.copyWith(events: list.isEmpty ? null : list);
+      _checkEvents(next, null);
+    }
     final saved = await session.db.transaction((tx) async {
-      final row = await Loan.db.updateRow(
-        session,
-        clean.copyWith(
-          id: current.id,
-          scheduledId: current.scheduledId,
-          matchPattern: current.matchPattern,
-          ruleId: current.ruleId,
-          events: current.events,
-          createdAt: current.createdAt,
-        ),
-        transaction: tx,
-      );
+      final row = await Loan.db.updateRow(session, next, transaction: tx);
       await _followCategory(session, row, tx);
       return _syncSchedule(session, row, tx);
     });

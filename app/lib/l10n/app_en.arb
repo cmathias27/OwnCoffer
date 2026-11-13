@@ -1318,6 +1318,38 @@
   "loanEventMonths": "{months} left",
   "loanEventDraw": "{amount} used",
   "loanEventRepaid": "{amount} repaid early",
+  "loanEventKindPause": "Instalment holiday (pause)",
+  "loanEventPauseHelp": "The lender suspends the instalments for a few months. The loan ends as much later; the instalment after it is recomputed, unless the instalment actually debited is known.",
+  "loanEventPauseMonths": "Months of pause",
+  "loanEventPausePartial": "Interest paid",
+  "loanEventPauseTotal": "Nothing paid",
+  "loanEventPausePartialHelp": "Partial pause: only the interest (and insurance) is debited, the capital does not go down.",
+  "loanEventPauseTotalHelp": "Full pause: nothing is debited but the insurance, the interest is added to what is left to repay.",
+  "loanEventPauseInvalid": "Enter a pause of 1 to 120 months.",
+  "loanEventPausedPartial": "{months} pause, interest paid",
+  "@loanEventPausedPartial": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "loanEventPausedTotal": "{months} pause, interest added to the capital",
+  "@loanEventPausedTotal": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "loanRowPaused": "{date} (pause)",
+  "@loanRowPaused": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "error_loan_event_invalid": "This change is not possible for this loan (date before the first due date, or values out of range).",
   "error_loan_event_unpaid": "With this change the loan would never be repaid: the instalment does not cover the interest.",
   "error_loan_over_limit": "This amount goes over the credit limit.",
@@ -1353,13 +1385,52 @@
   "advisorLoanFieldPayment": "payment",
   "advisorLoanFieldInterest": "interest",
   "advisorLoanFieldRemaining": "remaining capital",
+  "advisorLoanEvents": "{count, plural, =0{none} =1{1 change} other{{count} changes}}",
+  "@advisorLoanEvents": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "advisorLoanFieldMissing": "not in the schedule computed",
+  "advisorLoanCheckTable": "Instalments {first} to {last} read; changes found by the computation: {found}.",
+  "@advisorLoanCheckTable": {
+    "placeholders": {
+      "first": {
+        "type": "int"
+      },
+      "last": {
+        "type": "int"
+      },
+      "found": {
+        "type": "int"
+      }
+    }
+  },
+  "advisorLoanCheckMissing": "Instalment {number}: not in OwnCoffer's schedule (the loan ends earlier there).",
+  "@advisorLoanCheckMissing": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "advisorLoanCheckMoreGaps": "{count, plural, =1{1 more gap} other{{count} more gaps}}.",
+  "@advisorLoanCheckMoreGaps": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "advisorReadIn": "Read in \"{name}\".",
   "error_receipt_mismatch": "The lines read on the receipt exceed the operation's amount: it is probably not its receipt.",
   "error_document_nothing_read": "The AI could read nothing useful in this document.",
   "error_ai_document_not_image": "This model only reads images: attach a photo or a screenshot of the document.",
   "error_ai_document_too_large": "Document too large to be read (8 MB at most).",
   "error_ai_document_invalid_image": "The rendered PDF page images are invalid. Try again with the original document.",
-  "error_ai_document_too_many_pages": "This PDF exceeds the 5-page limit for AI reading.",
+  "error_ai_document_too_many_pages": "This PDF exceeds the 12-page limit for AI reading.",
   "error_pdf_empty": "The PDF file is empty.",
   "error_pdf_too_large": "The PDF document or its images exceed the allowed size (8 MB at most).",
   "error_pdf_render_failed": "Failed to convert the PDF pages to images.",

@@ -8,6 +8,14 @@ const int maxLoanPrincipalCents = 10000000000; // 100 million
 const int maxLoanRateMilli = 50000; // 50 %
 const int maxLoanMonths = 600; // 50 years
 
+/// Longest pause of instalments one change may ask for (a student loan
+/// may be deferred for years).
+const int maxLoanPauseMonths = 120;
+
+/// Largest amount owed once interest is added to it during a pause: past
+/// it, only the interest is paid (every product stays below 2^53).
+const int _maxOwedCents = 5 * maxLoanPrincipalCents;
+
 /// A fixed-rate loan with constant monthly instalments.
 class LoanTerms {
   final int principalCents;
@@ -117,7 +125,11 @@ class LoanTerms {
 /// - a new instalment (renegotiation, revolving credit): [paymentCents];
 /// - a new remaining duration (renegotiation): [remainingMonths];
 /// - money drawn ([drawCents] > 0, revolving credit) or repaid early
-///   ([drawCents] < 0).
+///   ([drawCents] < 0);
+/// - a pause of [pauseMonths] instalments (report d'échéances): only the
+///   interest is paid (partial pause), or nothing and the interest is
+///   added to what is owed ([pauseCapitalized], total pause). The loan
+///   lasts as many months longer; insurance stays due.
 /// Without a new instalment or duration, a loan computed from its duration
 /// keeps its end date (the instalment is computed again), and a loan that
 /// follows its actual instalment keeps it (the end date moves).
@@ -127,6 +139,8 @@ class LoanChange {
   final int? paymentCents;
   final int? remainingMonths;
   final int drawCents;
+  final int? pauseMonths;
+  final bool pauseCapitalized;
 
   LoanChange({
     required this.date,
@@ -134,6 +148,8 @@ class LoanChange {
     this.paymentCents,
     this.remainingMonths,
     this.drawCents = 0,
+    this.pauseMonths,
+    this.pauseCapitalized = false,
   }) {
     final r = annualRateMilli;
     if (r != null && (r < 0 || r > maxLoanRateMilli)) {
@@ -150,7 +166,15 @@ class LoanChange {
     if (drawCents.abs() > maxLoanPrincipalCents) {
       throw ArgumentError.value(drawCents, 'drawCents');
     }
-    if (r == null && p == null && m == null && drawCents == 0) {
+    final pause = pauseMonths;
+    if (pause != null && (pause < 1 || pause > maxLoanPauseMonths)) {
+      throw ArgumentError.value(pause, 'pauseMonths');
+    }
+    if (r == null &&
+        p == null &&
+        m == null &&
+        drawCents == 0 &&
+        pause == null) {
       throw ArgumentError('A change must change something');
     }
   }
@@ -175,6 +199,11 @@ class Installment {
   /// instalment is [paymentCents] minus it.
   final int extraInterestCents;
 
+  /// Paused instalment (report d'échéances): no capital repaid; with a total
+  /// pause nothing is paid and [principalCents] is negative, the interest
+  /// being added to what is owed.
+  final bool paused;
+
   const Installment({
     required this.number,
     required this.date,
@@ -184,6 +213,7 @@ class Installment {
     required this.insuranceCents,
     required this.remainingCents,
     this.extraInterestCents = 0,
+    this.paused = false,
   });
 
   /// The instalment without the intercalary interest.
@@ -306,6 +336,10 @@ List<Installment> amortize(
   final pending = [...changes]..sort((a, b) => a.date.compareTo(b.date));
   final result = <Installment>[];
   var remaining = t.principalCents;
+  // Paused instalments still to come, and whether their interest is added
+  // to what is owed.
+  var pauseLeft = 0;
+  var capitalize = false;
   for (var k = 1; k <= last && (remaining > 0 || pending.isNotEmpty); k++) {
     final date = t.firstDue.addMonths(k - 1);
     while (pending.isNotEmpty && pending.first.date <= date) {
@@ -327,9 +361,30 @@ List<Installment> amortize(
       } else if (!paymentDriven) {
         payment = loanPaymentCents(math.max(remaining, 1), rate, last - k + 1);
       }
+      final pause = c.pauseMonths;
+      if (pause != null) {
+        // A pause pushes the end back by its length; a new one replaces
+        // what is left of an earlier one.
+        last = math.min(last + pause - pauseLeft, maxLoanMonths);
+        pauseLeft = pause;
+        capitalize = c.pauseCapitalized;
+      }
     }
     if (remaining <= 0) {
       if (pending.isEmpty) break;
+      continue;
+    }
+    if (pauseLeft > 0) {
+      final i = _paused(t, k, date, remaining, rate, capitalize);
+      remaining = i.remainingCents;
+      result.add(i);
+      pauseLeft--;
+      // After the pause, a loan computed from its duration spreads what is
+      // owed over the instalments left; one that follows its actual
+      // instalment keeps it.
+      if (pauseLeft == 0 && !paymentDriven && last > k) {
+        payment = loanPaymentCents(math.max(remaining, 1), rate, last - k);
+      }
       continue;
     }
     final i = _instalment(t, k, date, remaining, rate, payment, last);
@@ -337,6 +392,34 @@ List<Installment> amortize(
     result.add(i);
   }
   return result;
+}
+
+/// Paused instalment [k] on [remaining] owed: the interest only, or
+/// nothing paid and the interest added to what is owed ([capitalize]).
+Installment _paused(
+  LoanTerms t,
+  int k,
+  LocalDate date,
+  int remaining,
+  int rate,
+  bool capitalize,
+) {
+  final month = _monthInterest(remaining, rate);
+  final interest = k == 1 ? t._firstInterest(remaining, rate) : month;
+  final added = capitalize && remaining + interest <= _maxOwedCents
+      ? interest
+      : 0;
+  return Installment(
+    number: k,
+    date: date,
+    paymentCents: interest - added,
+    principalCents: -added,
+    interestCents: interest,
+    insuranceCents: t.insuranceMonthlyCents,
+    remainingCents: remaining + added,
+    extraInterestCents: interest - month,
+    paused: true,
+  );
 }
 
 /// Instalment [k] on [remaining] owed: the interest of the month (of the

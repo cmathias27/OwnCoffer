@@ -404,9 +404,10 @@ class AdvisorScreenState extends State<AdvisorScreen> {
       return switch (k) {
         'annual_rate_milli' => rateTextFromMilli((v as num).toInt()),
         'duration_months' => l.loanMonths((v as num).toInt()),
-        'first_due_date' => context.day(
+        'first_due_date' || 'disbursement_date' => context.day(
           DateTime.tryParse('$v') ?? DateTime(2000),
         ),
+        'events' => l.advisorLoanEvents(v is List ? v.length : 0),
         _ => context.money((v as num).toInt()),
       };
     }
@@ -418,6 +419,9 @@ class AdvisorScreenState extends State<AdvisorScreen> {
       'payment_cents' => l.loanPaymentActual,
       'insurance_monthly_cents' => l.loanInsurance,
       'first_due_date' => l.loanFirstDue,
+      'disbursement_date' => l.loanDisbursementDate,
+      'first_interest_cents' => l.loanFirstInterest,
+      'events' => l.loanEventsTitle,
       _ => k,
     };
     final check = d['check'] is Map ? d['check'] as Map : null;
@@ -427,26 +431,54 @@ class AdvisorScreenState extends State<AdvisorScreen> {
     String field(Object? k) => switch (k) {
       'payment_cents' => l.advisorLoanFieldPayment,
       'interest_cents' => l.advisorLoanFieldInterest,
+      'missing' => l.advisorLoanFieldMissing,
       _ => l.advisorLoanFieldRemaining,
     };
     String money(Object? v) => context.money((v as num?)?.toInt() ?? 0);
+    int count(Object? v) => (v as num?)?.toInt() ?? 0;
     final interestDiffers = check?['total_interest_differs'] == true;
+    // The loan's changes: the ones added and the ones removed, one line each.
+    List<Map> events(Object? v) =>
+        v is List ? v.whereType<Map>().toList() : const [];
+    String key(Map e) => jsonEncode(e);
+    final eventsBefore = events(before['events']);
+    final eventsAfter = events(changed['events']);
+    final beforeKeys = {for (final e in eventsBefore) key(e)};
+    final afterKeys = {for (final e in eventsAfter) key(e)};
+    final gapCount = count(check?['gap_count']);
+    final hidden = gapCount - gaps.length;
     return [
       for (final e in changed.entries)
         Text(
           '· ${name('${e.key}')} : ${show('${e.key}', before[e.key])} → '
           '${show('${e.key}', e.value)}',
         ),
+      if (changed.containsKey('events')) ...[
+        for (final e in eventsAfter)
+          if (!beforeKeys.contains(key(e)))
+            Text('   + ${_loanEventLine(l, e)}'),
+        for (final e in eventsBefore)
+          if (!afterKeys.contains(key(e))) Text('   − ${_loanEventLine(l, e)}'),
+      ],
       if (check != null) ...[
         const SizedBox(height: 4),
-        if ((check['rows_compared'] as num?) != 0)
+        if (count(check['rows_compared']) != 0)
+          Text(l.advisorLoanCheck(count(check['rows_compared']))),
+        if (count(check['last_number']) > 0)
           Text(
-            l.advisorLoanCheck((check['rows_compared'] as num?)?.toInt() ?? 0),
+            l.advisorLoanCheckTable(
+              count(check['first_number']),
+              count(check['last_number']),
+              count(check['events_found']),
+            ),
           ),
         for (final g in gaps)
           Text(
-            '· ${l.advisorLoanCheckGap((g['number'] as num).toInt(), field(g['field']), money(g['read']), money(g['computed']))}',
+            g['field'] == 'missing'
+                ? '· ${l.advisorLoanCheckMissing((g['number'] as num).toInt())}'
+                : '· ${l.advisorLoanCheckGap((g['number'] as num).toInt(), field(g['field']), money(g['read']), money(g['computed']))}',
           ),
+        if (hidden > 0) Text('· ${l.advisorLoanCheckMoreGaps(hidden)}'),
         if (interestDiffers)
           Text(
             '· ${l.advisorLoanCheckInterest(money(check['total_interest_read']), money(check['total_interest_computed']))}',
@@ -454,6 +486,29 @@ class AdvisorScreenState extends State<AdvisorScreen> {
         if (gaps.isEmpty && !interestDiffers) Text(l.advisorLoanCheckOk),
       ],
     ];
+  }
+
+  /// One change of a loan, as a proposal stores it (decision 0042).
+  String _loanEventLine(AppLocalizations l, Map e) {
+    int? n(String k) => (e[k] as num?)?.toInt();
+    final draw = n('draw_cents') ?? 0;
+    final pause = n('pause_months');
+    final what = [
+      if (n('annual_rate_milli') != null)
+        l.loanEventRate(rateTextFromMilli(n('annual_rate_milli')!)),
+      if (n('payment_cents') != null)
+        l.loanEventPayment(context.money(n('payment_cents')!)),
+      if (n('remaining_months') != null)
+        l.loanEventMonths(l.loanMonths(n('remaining_months')!)),
+      if (draw > 0) l.loanEventDraw(context.money(draw)),
+      if (draw < 0) l.loanEventRepaid(context.money(-draw)),
+      if (pause != null)
+        e['pause_capitalized'] == true
+            ? l.loanEventPausedTotal(l.loanMonths(pause))
+            : l.loanEventPausedPartial(l.loanMonths(pause)),
+    ].join(' · ');
+    final date = DateTime.tryParse('${e['date']}');
+    return date == null ? what : '${context.day(date)} : $what';
   }
 
   Widget _pastRow(BuildContext context, AppLocalizations l, ActionProposal p) {

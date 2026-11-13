@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
+import '../finance/loan_terms.dart';
 import '../finance/proposal_service.dart';
 import '../generated/protocol.dart';
 import '../security/access.dart';
@@ -374,9 +376,12 @@ abstract final class DocumentReader {
           'borrowed, nominal annual rate in thousandths of a percent '
           '(3.45 % = 3450), duration in months, monthly instalment without '
           'insurance, monthly insurance, first due date. If the document has an '
-          'amortisation table, also report its first rows as printed '
-          '(instalment number, payment without insurance, interest, capital '
-          'still owed after it, all in cents) and the total interest.',
+          'amortisation table, report EVERY row as printed, on every page, '
+          'without skipping or summarising any: instalment number, payment '
+          'without insurance (0 when nothing is paid), interest, capital '
+          'still owed after it, all in cents. Copy the figures, never compute '
+          'them: rows where the rate changes or instalments are paused are '
+          'found from them. Also report the total interest.',
       tool: _tool('loan_terms', 'The terms the document states.', {
         'principal_cents': {'type': 'integer'},
         'annual_rate_milli': {'type': 'integer'},
@@ -397,7 +402,7 @@ abstract final class DocumentReader {
         'total_interest_cents': {'type': 'integer'},
         'schedule': {
           'type': 'array',
-          'description': 'First rows of the amortisation table.',
+          'description': 'Every row of the amortisation table, in order.',
           'items': {
             'type': 'object',
             'properties': {
@@ -416,7 +421,15 @@ abstract final class DocumentReader {
       return v == null || v < 0 || v > max ? null : v;
     }
 
-    final before = ProposalService.loanFields(loan);
+    final eventsBefore = [
+      for (final e in loan.events ?? const <LoanEvent>[])
+        ProposalService.loanEventJson(e),
+    ];
+    // With the changes, even none: undoing puts them back as they were.
+    final before = {
+      ...ProposalService.loanFields(loan),
+      'events': eventsBefore,
+    };
     final first = _day(f['first_due_date']);
     final disb = _day(f['disbursement_date']);
     final readFields = <String, Object?>{
@@ -432,33 +445,105 @@ abstract final class DocumentReader {
       if (disb != null) 'disbursement_date': _iso(disb),
       'first_interest_cents': ?_cents(f['first_interest_cents']),
     };
+    final rows = _tableRows(f);
+    if (readFields.isEmpty && rows.isEmpty) {
+      throw InvalidInputException(code: 'document_nothing_read');
+    }
     final changed = {
       for (final e in readFields.entries)
         if (before[e.key] != e.value) e.key: e.value,
     };
-    if (readFields.isEmpty) {
-      throw InvalidInputException(code: 'document_nothing_read');
+    // The loan engine must accept the terms as they would be.
+    core.LoanTerms termsOf(Map<String, Object?> m) {
+      try {
+        return core.LoanTerms(
+          principalCents: m['principal_cents']! as int,
+          annualRateMilli: m['annual_rate_milli']! as int,
+          months: m['duration_months']! as int,
+          // `_day` gives UTC midnight whatever the server's time zone is.
+          firstDue: _day(m['first_due_date'])!.toLocalDate(),
+          insuranceMonthlyCents: m['insurance_monthly_cents']! as int,
+          paymentCents: m['payment_cents'] as int?,
+          disbursementDate: _day(m['disbursement_date'])?.toLocalDate(),
+          firstInterestCents: m['first_interest_cents'] as int?,
+        );
+      } on ArgumentError {
+        throw InvalidInputException(code: 'loan_terms_invalid');
+      }
+    }
+
+    var terms = termsOf({...before, ...changed});
+    // The whole table, read by the loan engine (decision 0042): what changed
+    // the loan (rate, instalment, pause, money repaid) and the rows it does
+    // not explain.
+    var finalEvents = loan.events ?? const <LoanEvent>[];
+    core.LoanTableReading? table;
+    if (rows.isNotEmpty) {
+      final from = terms.firstDue.addMonths(
+        rows.map((r) => r.number).reduce(math.min) - 1,
+      );
+      final to = terms.firstDue.addMonths(
+        rows.map((r) => r.number).reduce(math.max) - 1,
+      );
+      // Changes the table cannot show: before its first row or after its
+      // last one. Those in between are what the table says.
+      final earlier = [
+        for (final e in finalEvents)
+          if (e.date.toLocalDate() <= from.addMonths(-1)) e,
+      ];
+      final later = [
+        for (final e in finalEvents)
+          if (e.date.toLocalDate() > to) e,
+      ];
+      table = core.readLoanTable(
+        terms,
+        rows,
+        known: LoanTermsOf.changes(loan.copyWith(events: earlier)),
+      );
+      final interest = table.firstInterestCents;
+      if (interest != null &&
+          !readFields.containsKey('first_interest_cents') &&
+          before['first_interest_cents'] != interest) {
+        changed['first_interest_cents'] = interest;
+        terms = termsOf({...before, ...changed});
+      }
+      if (table.changes.isNotEmpty) {
+        final found = [
+          ...earlier,
+          for (final c in table.changes)
+            LoanEvent(
+              date: c.date.toDb(),
+              annualRateMilli: c.annualRateMilli,
+              paymentCents: c.paymentCents,
+              remainingMonths: c.remainingMonths,
+              drawCents: c.drawCents == 0 ? null : c.drawCents,
+              pauseMonths: c.pauseMonths,
+              pauseCapitalized: c.pauseMonths == null
+                  ? null
+                  : c.pauseCapitalized,
+            ),
+          ...later,
+        ]..sort((a, b) => a.date.compareTo(b.date));
+        // Kept only when the loan engine accepts them: the loan is repaid.
+        final schedule = _scheduleOf(terms, loan, found);
+        if (schedule != null && found.length <= _maxLoanEvents) {
+          final json = [
+            for (final e in found) ProposalService.loanEventJson(e),
+          ];
+          if (jsonEncode(json) != jsonEncode(eventsBefore)) {
+            changed['events'] = json;
+            finalEvents = found;
+          }
+        }
+      }
     }
     if (changed.isEmpty) return _reply(read.provider, read.model, const []);
-    // The loan engine must accept the terms as they would be.
-    final merged = {...before, ...changed};
-    final core.LoanTerms terms;
-    try {
-      terms = core.LoanTerms(
-        principalCents: merged['principal_cents']! as int,
-        annualRateMilli: merged['annual_rate_milli']! as int,
-        months: merged['duration_months']! as int,
-        // `_day` gives UTC midnight whatever the server's time zone is.
-        firstDue: _day(merged['first_due_date'])!.toLocalDate(),
-        insuranceMonthlyCents: merged['insurance_monthly_cents']! as int,
-        paymentCents: merged['payment_cents'] as int?,
-        disbursementDate: _day(merged['disbursement_date'])?.toLocalDate(),
-        firstInterestCents: merged['first_interest_cents'] as int?,
-      );
-    } on ArgumentError {
-      throw InvalidInputException(code: 'loan_terms_invalid');
-    }
-    final check = _checkSchedule(terms, f);
+    final check = _checkTable(
+      table,
+      _scheduleOf(terms, loan, finalEvents) ?? core.amortize(terms),
+      f,
+      eventsFound: changed.containsKey('events') ? table!.changes.length : 0,
+    );
     final p = await ProposalService.propose(
       session,
       groupId: loan.groupId,
@@ -483,61 +568,55 @@ abstract final class DocumentReader {
     return _reply(read.provider, read.model, [?p]);
   }
 
+  /// As LoanEndpoint: most changes kept on a loan.
+  static const _maxLoanEvents = 50;
+
+  /// The schedule of [terms] with [events], null when the loan engine
+  /// refuses them or the loan would never be repaid.
+  static List<core.Installment>? _scheduleOf(
+    core.LoanTerms terms,
+    Loan loan,
+    List<LoanEvent> events,
+  ) {
+    try {
+      final s = core.amortize(
+        terms,
+        changes: LoanTermsOf.changes(loan.copyWith(events: events)),
+      );
+      return s.isEmpty || s.length >= core.maxLoanMonths ? null : s;
+    } on ArgumentError {
+      return null;
+    }
+  }
+
+  /// The rows of the table the model read, as the loan engine takes them.
+  static List<core.LoanTableRow> _tableRows(Map<String, Object?> f) => [
+    for (final x in ((f['schedule'] as List?) ?? const []).take(
+      core.maxLoanMonths,
+    ))
+      if (x is Map && x['number'] is num)
+        core.LoanTableRow(
+          number: (x['number'] as num).toInt(),
+          paymentCents: (x['payment_cents'] as num?)?.toInt(),
+          interestCents: (x['interest_cents'] as num?)?.toInt(),
+          remainingCents: (x['remaining_cents'] as num?)?.toInt(),
+        ),
+  ];
+
   /// Largest gap, in cents, between a figure of the document and the same
   /// figure computed by the engine that is not reported (banks round
   /// differently).
-  static const scheduleToleranceCents = 100;
-  static const _maxScheduleRows = 24;
-  static const _maxMismatches = 10;
+  static const scheduleToleranceCents = core.loanTableToleranceCents;
 
-  /// Compares the rows the model read from an amortisation table with the
-  /// schedule the loan engine computes from [terms]. The model reads, the
-  /// engine decides: every figure shown comes from the engine. Null when the
-  /// document has no table and no total to check.
-  static Map<String, Object?>? _checkSchedule(
-    core.LoanTerms terms,
-    Map<String, Object?> f,
-  ) {
-    final schedule = core.amortize(terms);
-    final mismatches = <Map<String, Object?>>[];
-    var compared = 0;
-    final seen = <int>{};
-    for (final x in ((f['schedule'] as List?) ?? const []).take(
-      _maxScheduleRows,
-    )) {
-      if (x is! Map) continue;
-      final number = (x['number'] as num?)?.toInt();
-      if (number == null ||
-          number < 1 ||
-          number > schedule.length ||
-          !seen.add(number)) {
-        continue;
-      }
-      final row = schedule[number - 1];
-      final figures = {
-        'payment_cents': row.paymentCents,
-        'interest_cents': row.interestCents,
-        'remaining_cents': row.remainingCents,
-      };
-      var counted = false;
-      for (final e in figures.entries) {
-        final read = (x[e.key] as num?)?.toInt();
-        if (read == null || read < 0 || read > core.maxLoanPrincipalCents) {
-          continue;
-        }
-        counted = true;
-        if ((read - e.value).abs() > scheduleToleranceCents &&
-            mismatches.length < _maxMismatches) {
-          mismatches.add({
-            'number': number,
-            'field': e.key,
-            'read': read,
-            'computed': e.value,
-          });
-        }
-      }
-      if (counted) compared++;
-    }
+  /// What the engine found comparing the table with the schedule it
+  /// computes, for the proposal (decision 0007: every figure shown comes
+  /// from the engine). Null when the document has no table and no total.
+  static Map<String, Object?>? _checkTable(
+    core.LoanTableReading? table,
+    List<core.Installment> schedule,
+    Map<String, Object?> f, {
+    required int eventsFound,
+  }) {
     final readInterest = (f['total_interest_cents'] as num?)?.toInt();
     int? totalGap;
     final computedInterest = schedule.fold(0, (a, i) => a + i.interestCents);
@@ -548,13 +627,31 @@ abstract final class DocumentReader {
       totalGap = gap > scheduleToleranceCents + computedInterest ~/ 200
           ? gap
           : 0;
-    } else {
-      totalGap = null;
     }
+    final compared = table?.rowsCompared ?? 0;
     if (compared == 0 && totalGap == null) return null;
     return {
       'rows_compared': compared,
-      'mismatches': mismatches,
+      if (compared > 0) ...{
+        'first_number': table!.firstNumber,
+        'last_number': table.lastNumber,
+        'gap_count': table.gapCount,
+        'events_found': eventsFound,
+      },
+      'mismatches': [
+        for (final g in table?.gaps ?? const <core.LoanTableGap>[])
+          {
+            'number': g.number,
+            'field': switch (g.field) {
+              'payment' => 'payment_cents',
+              'interest' => 'interest_cents',
+              'remaining' => 'remaining_cents',
+              _ => g.field,
+            },
+            'read': ?g.readCents,
+            'computed': ?g.computedCents,
+          },
+      ],
       if (totalGap != null) ...{
         'total_interest_read': readInterest,
         'total_interest_computed': computedInterest,

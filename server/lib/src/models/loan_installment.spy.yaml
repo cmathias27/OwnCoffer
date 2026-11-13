@@ -7,3 +7,5 @@ fields:
   interestCents: int
   insuranceCents: int
   remainingCents: int
+  ### Paused instalment (no capital repaid).
+  paused: bool?

@@ -22,6 +22,7 @@ abstract class LoanInstallment
     required this.interestCents,
     required this.insuranceCents,
     required this.remainingCents,
+    this.paused,
   });
 
   factory LoanInstallment({
@@ -32,6 +33,7 @@ abstract class LoanInstallment
     required int interestCents,
     required int insuranceCents,
     required int remainingCents,
+    bool? paused,
   }) = _LoanInstallmentImpl;
 
   factory LoanInstallment.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -43,6 +45,9 @@ abstract class LoanInstallment
       interestCents: jsonSerialization['interestCents'] as int,
       insuranceCents: jsonSerialization['insuranceCents'] as int,
       remainingCents: jsonSerialization['remainingCents'] as int,
+      paused: jsonSerialization['paused'] == null
+          ? null
+          : _isc.BoolJsonExtension.fromJson(jsonSerialization['paused']),
     );
   }
 
@@ -60,6 +65,9 @@ abstract class LoanInstallment
 
   int remainingCents;
 
+  /// Paused instalment (no capital repaid).
+  bool? paused;
+
   /// Returns a shallow copy of this [LoanInstallment]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
@@ -71,6 +79,7 @@ abstract class LoanInstallment
     int? interestCents,
     int? insuranceCents,
     int? remainingCents,
+    bool? paused,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -83,6 +92,7 @@ abstract class LoanInstallment
       'interestCents': interestCents,
       'insuranceCents': insuranceCents,
       'remainingCents': remainingCents,
+      if (paused != null) 'paused': paused,
     };
   }
 
@@ -97,6 +107,7 @@ abstract class LoanInstallment
       'interestCents': interestCents,
       'insuranceCents': insuranceCents,
       'remainingCents': remainingCents,
+      if (paused != null) 'paused': paused,
     };
   }
 
@@ -105,6 +116,8 @@ abstract class LoanInstallment
     return _isc.SerializationManager.encode(this);
   }
 }
+
+class _Undefined {}
 
 class _LoanInstallmentImpl extends LoanInstallment {
   _LoanInstallmentImpl({
@@ -115,6 +128,7 @@ class _LoanInstallmentImpl extends LoanInstallment {
     required int interestCents,
     required int insuranceCents,
     required int remainingCents,
+    bool? paused,
   }) : super._(
          number: number,
          date: date,
@@ -123,6 +137,7 @@ class _LoanInstallmentImpl extends LoanInstallment {
          interestCents: interestCents,
          insuranceCents: insuranceCents,
          remainingCents: remainingCents,
+         paused: paused,
        );
 
   /// Returns a shallow copy of this [LoanInstallment]
@@ -137,6 +152,7 @@ class _LoanInstallmentImpl extends LoanInstallment {
     int? interestCents,
     int? insuranceCents,
     int? remainingCents,
+    Object? paused = _Undefined,
   }) {
     return LoanInstallment(
       number: number ?? this.number,
@@ -146,6 +162,7 @@ class _LoanInstallmentImpl extends LoanInstallment {
       interestCents: interestCents ?? this.interestCents,
       insuranceCents: insuranceCents ?? this.insuranceCents,
       remainingCents: remainingCents ?? this.remainingCents,
+      paused: paused is bool? ? paused : this.paused,
     );
   }
 }
