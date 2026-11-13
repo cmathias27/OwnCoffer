@@ -5534,12 +5534,10 @@
   "homeGoodNoOverdraft": "Aucun découvert prévu dans les 30 jours",
   "homeGoodClassified": "Toutes les opérations du mois sont classées",
   "homeGoodNoNotification": "Aucune notification en attente",
-  "homeCustomize": "Personnaliser l'accueil",
-  "homeCustomizeTitle": "Personnaliser l'accueil",
-  "homeCustomizeHelp": "Cochez les cartes à afficher et faites-les glisser pour choisir leur ordre. Ce choix est gardé sur cet appareil.",
-  "homeCustomizeMove": "Faire glisser pour déplacer",
+  "homeCustomize": "Modifier l'accueil",
+  "homeCustomizeHelp": "Faites glisser un widget par sa poignée pour le poser sur la case de votre choix ; le bouton de taille le fait passer de petit à moyen ou grand, la croix le retire. Ce choix est gardé sur cet appareil.",
   "homeCustomizeReset": "Rétablir",
-  "homeEmpty": "Aucune carte affichée. Choisissez-en avec « Personnaliser l'accueil ».",
+  "homeEmpty": "Aucun widget sur l'accueil. Ajoutez-en avec « Modifier l'accueil ».",
   "homeCardPepite": "Pépite",
   "homeCardPepiteHelp": "La mascotte, ses étapes et ses badges",
   "homeCardSummary": "Tout va bien ?",
@@ -5560,6 +5558,192 @@
   "homeCardUpcomingHelp": "Les prélèvements et virements prévus des prochains jours",
   "homeCardTopSpending": "Ce mois-ci",
   "homeCardTopSpendingHelp": "Dépensé, reçu, et les catégories où part le plus d'argent",
+  "homeBoardTitle": "Modifier l'accueil",
+  "homeBoardAdd": "Ajouter un widget",
+  "homeBoardAddNone": "Tous les widgets sont déjà sur l'accueil.",
+  "homeBoardDone": "Terminé",
+  "homeBoardDrag": "Faire glisser pour placer",
+  "homeBoardRemove": "Retirer « {name} »",
+  "@homeBoardRemove": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBoardResize": "Taille : {size}",
+  "@homeBoardResize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBoardMenu": "Placer « {name} »",
+  "@homeBoardMenu": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBoardUp": "Monter d'une case",
+  "homeBoardDown": "Descendre d'une case",
+  "homeBoardLeft": "Une case à gauche",
+  "homeBoardRight": "Une case à droite",
+  "homeSizeSmall": "Petit",
+  "homeSizeMedium": "Moyen",
+  "homeSizeLarge": "Grand",
+  "homeCardAccounts": "Comptes",
+  "homeCardAccountsHelp": "Le solde de chaque compte aujourd'hui",
+  "homeCardForecast": "Solde prévu",
+  "homeCardForecastHelp": "La courbe du solde des 30 prochains jours et son point bas",
+  "homeCardOperations": "Dernières opérations",
+  "homeCardOperationsHelp": "Les opérations les plus récentes de vos comptes",
+  "homeCardToClassify": "À classer",
+  "homeCardToClassifyHelp": "Les opérations du mois encore sans catégorie",
+  "homeCardSubscriptions": "Abonnements",
+  "homeCardSubscriptionsHelp": "Les abonnements prélevés ce mois-ci et leurs hausses de prix",
+  "homeCardLoans": "Crédits",
+  "homeCardLoansHelp": "Le restant dû, les mensualités et la prochaine échéance",
+  "homeCardInvoices": "Factures",
+  "homeCardInvoicesHelp": "Les factures et tickets pas encore rattachés à une opération",
+  "homeCardImports": "Relevés",
+  "homeCardImportsHelp": "La date du dernier relevé importé",
+  "homeCardNotifications": "Notifications",
+  "homeCardNotificationsHelp": "Les notifications pas encore lues",
+  "homeTilePerDay": "{amount} par jour",
+  "@homeTilePerDay": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileUntil": "jusqu'au {date}",
+  "@homeTileUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileLowest": "Point bas : {amount} le {date}",
+  "@homeTileLowest": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileNoForecast": "Pas encore de prévision",
+  "homeTileNoAccount": "Aucun compte",
+  "homeTileOthers": "{count, plural, =1{et 1 autre} other{et {count} autres}}",
+  "@homeTileOthers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileToClassify": "{count, plural, =0{tout est classé} =1{opération à classer} other{opérations à classer}}",
+  "@homeTileToClassify": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileUnread": "{count, plural, =0{rien de nouveau} =1{non lue} other{non lues}}",
+  "@homeTileUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileAdvices": "{count, plural, =0{aucun conseil en attente} =1{conseil en attente} other{conseils en attente}}",
+  "@homeTileAdvices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileUpcoming": "{count, plural, =0{rien d'ici 7 jours} =1{échéance d'ici 7 jours} other{échéances d'ici 7 jours}}",
+  "@homeTileUpcoming": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileIssues": "{count, plural, =0{tout va bien} =1{point à regarder} other{points à regarder}}",
+  "@homeTileIssues": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileSpent": "dépensés ce mois-ci",
+  "homeTileNet": "reste du mois",
+  "homeTileNoOperation": "Aucune opération pour l'instant",
+  "homeTileNoLoan": "Aucun crédit en cours",
+  "homeTileLoanMonthly": "{amount} par mois",
+  "@homeTileLoanMonthly": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileLoanNext": "Prochaine échéance le {date}",
+  "@homeTileLoanNext": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileUnattached": "{count, plural, =0{toutes rattachées} =1{sans opération} other{sans opération}}",
+  "@homeTileUnattached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileImportLast": "Dernier relevé le {date}",
+  "@homeTileImportLast": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileImportNever": "Aucun relevé importé",
+  "homeTileImportAction": "Importer un relevé",
+  "homeTileSubscriptions": "{count, plural, =0{aucun abonnement ce mois-ci} =1{1 abonnement ce mois-ci} other{{count} abonnements ce mois-ci}}",
+  "@homeTileSubscriptions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileRises": "{count, plural, =1{1 hausse de prix} other{{count} hausses de prix}}",
+  "@homeTileRises": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileStepsDone": "Tout est prêt.",
   "homeAdvicesTitle": "Conseils du moment",
   "homeAdvicesNone": "Aucun conseil en attente pour l'instant.",
   "homeAdvicesAll": "Voir tout",

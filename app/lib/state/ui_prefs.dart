@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'app_lock.dart' show LockStore;
-import 'home_layout.dart';
+import 'home_board.dart';
 
-export 'home_layout.dart';
+export 'home_board.dart';
 
 /// Display preferences of this device (decision 0041): never bank data,
 /// only choices of how the app looks and what it shows first.
@@ -38,7 +38,8 @@ class UiPrefs extends ChangeNotifier {
   DateTime? _advisorSeenAt;
   String _operationFilters = '';
   var _firstStepsHidden = false;
-  String? _homeLayout;
+  String? _homeCards;
+  final _homeBoards = <int, String?>{};
 
   /// Hides the advanced functions (rules, community categories, journal,
   /// administration); nothing is turned off on the server.
@@ -59,11 +60,23 @@ class UiPrefs extends ChangeNotifier {
   /// « Premiers pas » hidden from the home page.
   bool get firstStepsHidden => _firstStepsHidden;
 
-  /// The home cards shown and their order (decision 0044); « Premiers
-  /// pas » keeps its own switch, [firstStepsHidden].
-  HomeLayout get homeLayout {
-    final layout = HomeLayout.parse(_homeLayout, simple: _simpleMode);
-    return layout.toggled(HomeCard.firstSteps, !_firstStepsHidden);
+  /// The widgets of the home page for a grid of [columns] (decision
+  /// 0045): the board saved for it, else the one saved for the other grid,
+  /// else the cards chosen with decision 0044, else the home page as it
+  /// comes.
+  HomeBoard homeBoard(int columns) {
+    final saved = HomeBoard.parse(_homeBoards[columns], columns);
+    if (saved != null) return saved;
+    for (final e in _homeBoards.entries) {
+      final other = HomeBoard.parse(e.value, e.key);
+      if (other != null) return HomeBoard.reflowed(other, columns);
+    }
+    return HomeBoard.fromCards(_homeCards, columns) ??
+        HomeBoard.defaults(
+          columns,
+          simple: _simpleMode,
+          firstSteps: !_firstStepsHidden,
+        );
   }
 
   /// Text scale applied to the whole app.
@@ -83,7 +96,10 @@ class UiPrefs extends ChangeNotifier {
       _advisorSeenAt = DateTime.tryParse(await store.read('advisorSeen') ?? '');
       _operationFilters = await store.read('opFilters') ?? '';
       _firstStepsHidden = flag(await store.read('firstSteps'));
-      _homeLayout = await store.read('home');
+      _homeCards = await store.read('home');
+      for (final columns in const [2, 4]) {
+        _homeBoards[columns] = await store.read('home.$columns');
+      }
     } on Object {
       // Storage unavailable (private window, tests): defaults.
     }
@@ -134,18 +150,26 @@ class UiPrefs extends ChangeNotifier {
     return _save('advisorSeen', at.toUtc().toIso8601String());
   }
 
-  Future<void> setFirstStepsHidden(bool hidden) {
-    _firstStepsHidden = hidden;
-    return _save('firstSteps', '$hidden');
+  /// Saves the board of its grid; the other grid keeps its own.
+  Future<void> setHomeBoard(HomeBoard board) {
+    _homeBoards[board.columns] = board.toString();
+    return _save('home.${board.columns}', board.toString());
   }
 
-  /// Null goes back to the home page as it comes.
-  Future<void> setHomeLayout(HomeLayout? layout) async {
-    _homeLayout = layout?.toString();
-    await setFirstStepsHidden(
-      layout != null && !layout.shows(HomeCard.firstSteps),
-    );
-    await _save('home', _homeLayout);
+  /// Back to the home page as it comes, on every grid but the one of
+  /// [keep], arranged after that.
+  Future<void> resetHome({HomeBoard? keep}) async {
+    _homeCards = null;
+    _firstStepsHidden = false;
+    final grids = {..._homeBoards.keys, ?keep?.columns};
+    for (final c in grids) {
+      _homeBoards[c] = c == keep?.columns ? keep.toString() : null;
+    }
+    await _save('home', null);
+    await _save('firstSteps', null);
+    for (final c in grids) {
+      await _save('home.$c', _homeBoards[c]);
+    }
   }
 
   Future<void> setOperationFilters(String filters) {

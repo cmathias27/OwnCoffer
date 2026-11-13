@@ -4,27 +4,42 @@ L'Accueil montre en un coup d'œil où en est l'argent aujourd'hui et ce qui arr
 
 L'Accueil reste toujours sur le mois en cours : il répond à « tout va bien aujourd'hui ? ».
 
-## Les cartes
+## Les widgets
 
-- **Premiers pas** (au début) : créer un compte, importer un relevé, classer les opérations. Chaque étape se coche toute seule d'après vos données ; la carte disparaît une fois les trois faites, et « Masquer » la retire sur cet appareil.
-- **Tout va bien ?** : une phrase de synthèse, puis un point par chose à regarder, du plus urgent au moins urgent : un compte à découvert ou qui le serait dans les 30 jours, une échéance de crédit non prélevée, des opérations du mois à classer, un abonnement dont le prix a augmenté, de nouveaux conseils. Toucher un point ouvre la page qui permet de le régler. **Ce qui va bien** est replié en dessous.
-- **Conseils du moment** : les trois premiers conseils de **Mon conseiller**, et « Voir tout ».
-- **Total des comptes**, avec le **point bas des 30 prochains jours** (le compte, le montant et la date) et le solde de chaque compte.
-- **Reste à vivre** jusqu'à la fin du mois budgétaire : solde des comptes courants, moins les prélèvements prévus, plus les rentrées prévues.
-- **Bilan du mois** : revenus, dépenses et épargne.
-- **Cette semaine** : les échéances des 7 prochains jours (abonnements, crédits, opérations prévues).
-- **Ce mois-ci** : dépensé, reçu, et les catégories où vous avez le plus dépensé (masqué en mode simple).
+L'Accueil est une grille de widgets : deux colonnes sur un téléphone, quatre sur un grand écran. Un widget est **petit** (une case), **moyen** (deux cases de large) ou **grand** (deux sur deux) ; plus il est grand, plus il en montre. Touchez un widget pour ouvrir sa page.
 
-Chaque carte mène à sa page : touchez-la pour voir le détail. Le petit **?** d'une carte dit ce qu'elle montre et mène au passage de l'aide ; **« Pourquoi ce chiffre ? »**, sous un chiffre clé, montre les lignes du calcul.
+- **Pépite** : le mot de la semaine, ou toute sa carte en grand.
+- **Tout va bien ?** et **À surveiller** : une phrase de synthèse, puis un point par chose à regarder, du plus urgent au moins urgent : un compte à découvert ou qui le serait dans les 30 jours, une échéance de crédit non prélevée, des opérations du mois à classer, un abonnement dont le prix a augmenté, de nouveaux conseils. Toucher un point ouvre la page qui permet de le régler.
+- **Premiers pas** (au début) : créer un compte, importer un relevé, classer les opérations. Chaque étape se coche toute seule d'après vos données ; « Masquer » retire le widget.
+- **Conseils du moment** : les premiers conseils de **Mon conseiller**.
+- **Total des comptes**, avec le **point bas des 30 prochains jours** ; en grand, « Pourquoi ce chiffre ? » et le solde des comptes.
+- **Comptes** : le solde de chaque compte.
+- **Reste à vivre** jusqu'à la fin du mois budgétaire, et par jour ; en grand, le détail du calcul.
+- **Bilan du mois** : ce qui reste du mois (revenus moins dépenses et épargne).
+- **Prévision** : le point bas des 30 jours et la courbe du solde de tous les comptes en euros.
+- **Cette semaine** : les échéances des 7 prochains jours.
+- **Ce mois-ci** : dépensé, reçu, et en grand les catégories où vous avez le plus dépensé.
+- **Opérations** : les dernières opérations de vos comptes.
+- **À classer** : le nombre d'opérations du mois à classer.
+- **Abonnements** : leur total ce mois-ci et les hausses de prix.
+- **Crédits** : le reste dû, les mensualités et la prochaine échéance.
+- **Factures** : les factures pas encore rattachées à une opération.
+- **Imports** : la date du dernier relevé importé, et un bouton pour en importer un.
+- **Notifications** : les notifications non lues.
 
-## Personnaliser l'accueil
+Le petit **?** d'un widget dit ce qu'il montre et mène au passage de l'aide ; **« Pourquoi ce chiffre ? »**, sous un chiffre clé, montre les lignes du calcul. Tous les chiffres sont ceux du moteur, comme sur leur page.
 
-Le bouton **Personnaliser l'accueil**, en bas de la page, ouvre la liste des cartes. Cochez celles à afficher, décochez les autres, et faites glisser la poignée (≡) pour choisir l'ordre. **Enregistrer** garde le choix ; **Rétablir** revient à l'Accueil d'origine.
+## Modifier l'accueil
 
-- Le choix est gardé **sur cet appareil** : un autre appareil garde son propre Accueil. Rien n'est envoyé au serveur.
-- Pépite et « Tout va bien ? » prennent toute la largeur ; les autres cartes se partagent deux colonnes sur un grand écran.
-- Une carte cochée mais sans rien à montrer (par exemple Premiers pas une fois les trois étapes faites) reste absente.
-- Une carte ajoutée par une nouvelle version apparaît en dernier ; décochez-la si elle ne vous sert pas.
+Touchez **Modifier l'accueil**, en haut de la page, ou appuyez longuement sur un widget. La grille apparaît :
+
+- **glissez** un widget par sa poignée (✥) vers n'importe quelle case ; les cases vides restent vides ;
+- le bouton en bas à droite **change sa taille** ; le menu (…) le **déplace** d'une case (monter, descendre, gauche, droite) ou choisit sa taille, pratique au clavier ;
+- la **croix** le retire ;
+- **Ajouter un widget** ouvre la liste des widgets absents : touchez-en un, ou choisissez directement sa taille ;
+- **Rétablir** propose l'Accueil d'origine, **Annuler** oublie les changements, **Terminé** les garde.
+
+Un widget posé ou agrandi sur d'autres les pousse vers le bas. La disposition est gardée **sur cet appareil**, une pour le téléphone et une pour le grand écran ; rien n'est envoyé au serveur.
 
 ## Bon à savoir
 

@@ -4,27 +4,42 @@ Home shows at a glance where the money stands today and what is coming, on the a
 
 Home always stays on the current month: it answers "is all well today?".
 
-## The cards
+## The widgets
 
-- **First steps** (at the beginning): create an account, import a statement, classify the operations. Each step ticks itself from your data; the card goes away once the three are done, and "Hide" removes it on this device.
-- **All well?**: a one-line summary, then one point per thing to look at, the most urgent first: an account overdrawn or that would be within 30 days, a loan instalment not debited, operations of the month to classify, a subscription whose price went up, new advice. Tapping a point opens the page where it can be dealt with. **What is going well** is folded underneath.
-- **Current advice**: the first three pieces of advice from **My advisor**, and "See all".
-- **Total of the accounts**, with the **lowest point of the next 30 days** (account, amount and date) and the balance of each account.
-- **Left to live on** until the end of the budget month: balance of the current accounts, minus the planned debits, plus the planned income.
-- **Month summary**: income, spending and savings.
-- **This week**: the due dates of the next 7 days (subscriptions, loans, planned operations).
-- **This month**: spent, received, and the categories where you spent the most (hidden in simple mode).
+Home is a grid of widgets: two columns on a phone, four on a large screen. A widget is **small** (one cell), **medium** (two cells wide) or **large** (two by two); the larger it is, the more it shows. Tap a widget to open its page.
 
-Each card leads to its page: tap it to see the details. The small **?** of a card says what it shows and leads to the matching help; **"Why this figure?"**, under a key figure, shows the lines of the calculation.
+- **Pépite**: the word of the week, or her whole card when large.
+- **All well?** and **To watch**: a one-line summary, then one point per thing to look at, the most urgent first: an account overdrawn or that would be within 30 days, a loan instalment not debited, operations of the month to classify, a subscription whose price went up, new advice. Tapping a point opens the page where it can be dealt with.
+- **First steps** (at the beginning): create an account, import a statement, classify the operations. Each step ticks itself from your data; "Hide" removes the widget.
+- **Current advice**: the first pieces of advice from **My advisor**.
+- **Total of the accounts**, with the **lowest point of the next 30 days**; when large, "Why this figure?" and the balance of the accounts.
+- **Accounts**: the balance of each account.
+- **Left to live on** until the end of the budget month, and per day; when large, the lines of the calculation.
+- **Month summary**: what is left of the month (income minus spending and savings).
+- **Forecast**: the lowest point of the 30 days and the curve of the balance of all the accounts in euros.
+- **This week**: the due dates of the next 7 days.
+- **This month**: spent, received, and when large the categories where you spent the most.
+- **Operations**: the latest operations of your accounts.
+- **To classify**: the number of operations of the month to classify.
+- **Subscriptions**: their total this month and the price rises.
+- **Loans**: what is still owed, the monthly payments and the next due date.
+- **Invoices**: the invoices not attached to an operation yet.
+- **Imports**: the date of the last statement imported, and a button to import one.
+- **Notifications**: the unread notifications.
 
-## Customise home
+The small **?** of a widget says what it shows and leads to the matching help; **"Why this figure?"**, under a key figure, shows the lines of the calculation. Every figure is the engine's, as on its page.
 
-The **Customise home** button, at the bottom of the page, opens the list of cards. Tick the ones to show, untick the others, and drag the handle (≡) to choose the order. **Save** keeps the choice; **Reset** goes back to the original home page.
+## Edit home
 
-- The choice is kept **on this device**: another device keeps its own home page. Nothing is sent to the server.
-- Pépite and "All well?" take the whole width; the other cards share two columns on a large screen.
-- A card ticked but with nothing to show (for instance First steps once the three steps are done) stays away.
-- A card added by a new version shows last; untick it if you do not need it.
+Tap **Edit home**, at the top of the page, or long-press a widget. The grid shows:
+
+- **drag** a widget by its handle (✥) to any cell; empty cells stay empty;
+- the button at the bottom right **changes its size**; the menu (…) **moves** it by one cell (up, down, left, right) or picks its size, handy with a keyboard;
+- the **cross** removes it;
+- **Add a widget** opens the list of the widgets not shown: tap one, or pick its size straight away;
+- **Reset** offers the original home page, **Cancel** forgets the changes, **Done** keeps them.
+
+A widget put or enlarged over others pushes them down. The layout is kept **on this device**, one for the phone and one for the large screen; nothing is sent to the server.
 
 ## Good to know
 

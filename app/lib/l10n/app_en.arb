@@ -2562,12 +2562,10 @@
   "homeGoodNoOverdraft": "No overdraft expected in the next 30 days",
   "homeGoodClassified": "Every operation of the month is classified",
   "homeGoodNoNotification": "No notification waiting",
-  "homeCustomize": "Customise home",
-  "homeCustomizeTitle": "Customise home",
-  "homeCustomizeHelp": "Tick the cards to show and drag them to choose their order. This choice is kept on this device.",
-  "homeCustomizeMove": "Drag to move",
+  "homeCustomize": "Edit home",
+  "homeCustomizeHelp": "Drag a widget by its handle to drop it on the cell you want; the size button switches it between small, medium and large, the cross removes it. This choice is kept on this device.",
   "homeCustomizeReset": "Reset",
-  "homeEmpty": "No card shown. Choose some with “Customise home”.",
+  "homeEmpty": "No widget on the home page. Add some with “Edit home”.",
   "homeCardPepite": "Pépite",
   "homeCardPepiteHelp": "The mascot, its steps and its badges",
   "homeCardSummary": "All well?",
@@ -2588,6 +2586,192 @@
   "homeCardUpcomingHelp": "The debits and transfers planned for the coming days",
   "homeCardTopSpending": "This month",
   "homeCardTopSpendingHelp": "Spent, received, and the categories where most money goes",
+  "homeBoardTitle": "Edit home",
+  "homeBoardAdd": "Add a widget",
+  "homeBoardAddNone": "Every widget is already on the home page.",
+  "homeBoardDone": "Done",
+  "homeBoardDrag": "Drag to place",
+  "homeBoardRemove": "Remove “{name}”",
+  "@homeBoardRemove": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBoardResize": "Size: {size}",
+  "@homeBoardResize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBoardMenu": "Place “{name}”",
+  "@homeBoardMenu": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBoardUp": "One cell up",
+  "homeBoardDown": "One cell down",
+  "homeBoardLeft": "One cell left",
+  "homeBoardRight": "One cell right",
+  "homeSizeSmall": "Small",
+  "homeSizeMedium": "Medium",
+  "homeSizeLarge": "Large",
+  "homeCardAccounts": "Accounts",
+  "homeCardAccountsHelp": "Each account's balance today",
+  "homeCardForecast": "Forecast balance",
+  "homeCardForecastHelp": "The balance curve over the next 30 days and its lowest point",
+  "homeCardOperations": "Latest operations",
+  "homeCardOperationsHelp": "The most recent operations of your accounts",
+  "homeCardToClassify": "To classify",
+  "homeCardToClassifyHelp": "This month's operations still without a category",
+  "homeCardSubscriptions": "Subscriptions",
+  "homeCardSubscriptionsHelp": "The subscriptions debited this month and their price rises",
+  "homeCardLoans": "Loans",
+  "homeCardLoansHelp": "What is left to repay, the instalments and the next due date",
+  "homeCardInvoices": "Invoices",
+  "homeCardInvoicesHelp": "Invoices and receipts not linked to an operation yet",
+  "homeCardImports": "Statements",
+  "homeCardImportsHelp": "The date of the last statement imported",
+  "homeCardNotifications": "Notifications",
+  "homeCardNotificationsHelp": "The notifications not read yet",
+  "homeTilePerDay": "{amount} a day",
+  "@homeTilePerDay": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileUntil": "until {date}",
+  "@homeTileUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileLowest": "Lowest: {amount} on {date}",
+  "@homeTileLowest": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileNoForecast": "No forecast yet",
+  "homeTileNoAccount": "No account",
+  "homeTileOthers": "{count, plural, =1{and 1 more} other{and {count} more}}",
+  "@homeTileOthers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileToClassify": "{count, plural, =0{all classified} =1{operation to classify} other{operations to classify}}",
+  "@homeTileToClassify": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileUnread": "{count, plural, =0{nothing new} =1{unread} other{unread}}",
+  "@homeTileUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileAdvices": "{count, plural, =0{no advice waiting} =1{advice waiting} other{advices waiting}}",
+  "@homeTileAdvices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileUpcoming": "{count, plural, =0{nothing within 7 days} =1{due within 7 days} other{due within 7 days}}",
+  "@homeTileUpcoming": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileIssues": "{count, plural, =0{all well} =1{point to look at} other{points to look at}}",
+  "@homeTileIssues": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileSpent": "spent this month",
+  "homeTileNet": "left this month",
+  "homeTileNoOperation": "No operation yet",
+  "homeTileNoLoan": "No running loan",
+  "homeTileLoanMonthly": "{amount} a month",
+  "@homeTileLoanMonthly": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileLoanNext": "Next instalment on {date}",
+  "@homeTileLoanNext": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileUnattached": "{count, plural, =0{all linked} =1{without operation} other{without operation}}",
+  "@homeTileUnattached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileImportLast": "Last statement on {date}",
+  "@homeTileImportLast": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileImportNever": "No statement imported",
+  "homeTileImportAction": "Import a statement",
+  "homeTileSubscriptions": "{count, plural, =0{no subscription this month} =1{1 subscription this month} other{{count} subscriptions this month}}",
+  "@homeTileSubscriptions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileRises": "{count, plural, =1{1 price rise} other{{count} price rises}}",
+  "@homeTileRises": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileStepsDone": "All set.",
   "homeAdvicesTitle": "Current advice",
   "homeAdvicesNone": "No advice waiting for now.",
   "homeAdvicesAll": "See all",

@@ -7984,24 +7984,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeGoodNoNotification => 'Aucune notification en attente';
 
   @override
-  String get homeCustomize => 'Personnaliser l\'accueil';
-
-  @override
-  String get homeCustomizeTitle => 'Personnaliser l\'accueil';
+  String get homeCustomize => 'Modifier l\'accueil';
 
   @override
   String get homeCustomizeHelp =>
-      'Cochez les cartes à afficher et faites-les glisser pour choisir leur ordre. Ce choix est gardé sur cet appareil.';
-
-  @override
-  String get homeCustomizeMove => 'Faire glisser pour déplacer';
+      'Faites glisser un widget par sa poignée pour le poser sur la case de votre choix ; le bouton de taille le fait passer de petit à moyen ou grand, la croix le retire. Ce choix est gardé sur cet appareil.';
 
   @override
   String get homeCustomizeReset => 'Rétablir';
 
   @override
   String get homeEmpty =>
-      'Aucune carte affichée. Choisissez-en avec « Personnaliser l\'accueil ».';
+      'Aucun widget sur l\'accueil. Ajoutez-en avec « Modifier l\'accueil ».';
 
   @override
   String get homeCardPepite => 'Pépite';
@@ -8070,6 +8064,280 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get homeCardTopSpendingHelp =>
       'Dépensé, reçu, et les catégories où part le plus d\'argent';
+
+  @override
+  String get homeBoardTitle => 'Modifier l\'accueil';
+
+  @override
+  String get homeBoardAdd => 'Ajouter un widget';
+
+  @override
+  String get homeBoardAddNone => 'Tous les widgets sont déjà sur l\'accueil.';
+
+  @override
+  String get homeBoardDone => 'Terminé';
+
+  @override
+  String get homeBoardDrag => 'Faire glisser pour placer';
+
+  @override
+  String homeBoardRemove(String name) {
+    return 'Retirer « $name »';
+  }
+
+  @override
+  String homeBoardResize(String size) {
+    return 'Taille : $size';
+  }
+
+  @override
+  String homeBoardMenu(String name) {
+    return 'Placer « $name »';
+  }
+
+  @override
+  String get homeBoardUp => 'Monter d\'une case';
+
+  @override
+  String get homeBoardDown => 'Descendre d\'une case';
+
+  @override
+  String get homeBoardLeft => 'Une case à gauche';
+
+  @override
+  String get homeBoardRight => 'Une case à droite';
+
+  @override
+  String get homeSizeSmall => 'Petit';
+
+  @override
+  String get homeSizeMedium => 'Moyen';
+
+  @override
+  String get homeSizeLarge => 'Grand';
+
+  @override
+  String get homeCardAccounts => 'Comptes';
+
+  @override
+  String get homeCardAccountsHelp => 'Le solde de chaque compte aujourd\'hui';
+
+  @override
+  String get homeCardForecast => 'Solde prévu';
+
+  @override
+  String get homeCardForecastHelp =>
+      'La courbe du solde des 30 prochains jours et son point bas';
+
+  @override
+  String get homeCardOperations => 'Dernières opérations';
+
+  @override
+  String get homeCardOperationsHelp =>
+      'Les opérations les plus récentes de vos comptes';
+
+  @override
+  String get homeCardToClassify => 'À classer';
+
+  @override
+  String get homeCardToClassifyHelp =>
+      'Les opérations du mois encore sans catégorie';
+
+  @override
+  String get homeCardSubscriptions => 'Abonnements';
+
+  @override
+  String get homeCardSubscriptionsHelp =>
+      'Les abonnements prélevés ce mois-ci et leurs hausses de prix';
+
+  @override
+  String get homeCardLoans => 'Crédits';
+
+  @override
+  String get homeCardLoansHelp =>
+      'Le restant dû, les mensualités et la prochaine échéance';
+
+  @override
+  String get homeCardInvoices => 'Factures';
+
+  @override
+  String get homeCardInvoicesHelp =>
+      'Les factures et tickets pas encore rattachés à une opération';
+
+  @override
+  String get homeCardImports => 'Relevés';
+
+  @override
+  String get homeCardImportsHelp => 'La date du dernier relevé importé';
+
+  @override
+  String get homeCardNotifications => 'Notifications';
+
+  @override
+  String get homeCardNotificationsHelp => 'Les notifications pas encore lues';
+
+  @override
+  String homeTilePerDay(String amount) {
+    return '$amount par jour';
+  }
+
+  @override
+  String homeTileUntil(String date) {
+    return 'jusqu\'au $date';
+  }
+
+  @override
+  String homeTileLowest(String amount, String date) {
+    return 'Point bas : $amount le $date';
+  }
+
+  @override
+  String get homeTileNoForecast => 'Pas encore de prévision';
+
+  @override
+  String get homeTileNoAccount => 'Aucun compte';
+
+  @override
+  String homeTileOthers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'et $count autres',
+      one: 'et 1 autre',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileToClassify(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'opérations à classer',
+      one: 'opération à classer',
+      zero: 'tout est classé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileUnread(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'non lues',
+      one: 'non lue',
+      zero: 'rien de nouveau',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileAdvices(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'conseils en attente',
+      one: 'conseil en attente',
+      zero: 'aucun conseil en attente',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileUpcoming(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'échéances d\'ici 7 jours',
+      one: 'échéance d\'ici 7 jours',
+      zero: 'rien d\'ici 7 jours',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileIssues(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'points à regarder',
+      one: 'point à regarder',
+      zero: 'tout va bien',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeTileSpent => 'dépensés ce mois-ci';
+
+  @override
+  String get homeTileNet => 'reste du mois';
+
+  @override
+  String get homeTileNoOperation => 'Aucune opération pour l\'instant';
+
+  @override
+  String get homeTileNoLoan => 'Aucun crédit en cours';
+
+  @override
+  String homeTileLoanMonthly(String amount) {
+    return '$amount par mois';
+  }
+
+  @override
+  String homeTileLoanNext(String date) {
+    return 'Prochaine échéance le $date';
+  }
+
+  @override
+  String homeTileUnattached(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'sans opération',
+      one: 'sans opération',
+      zero: 'toutes rattachées',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileImportLast(String date) {
+    return 'Dernier relevé le $date';
+  }
+
+  @override
+  String get homeTileImportNever => 'Aucun relevé importé';
+
+  @override
+  String get homeTileImportAction => 'Importer un relevé';
+
+  @override
+  String homeTileSubscriptions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count abonnements ce mois-ci',
+      one: '1 abonnement ce mois-ci',
+      zero: 'aucun abonnement ce mois-ci',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileRises(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hausses de prix',
+      one: '1 hausse de prix',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeTileStepsDone => 'Tout est prêt.';
 
   @override
   String get homeAdvicesTitle => 'Conseils du moment';

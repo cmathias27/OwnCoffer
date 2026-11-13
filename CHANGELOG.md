@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.30.0 (novembre 2026)
+### L'Accueil en widgets (décision 0045, remplace 0044)
+- L'Accueil devient une **grille de widgets** : deux colonnes sur un téléphone, quatre sur un grand écran. Chaque widget est **petit, moyen ou grand** et se pose **sur la case de votre choix** ; les cases vides restent vides.
+- **Un widget par page** en plus des cartes d'avant : Comptes, Prévision (courbe des 30 jours), Opérations récentes, À classer, Abonnements, Crédits, Factures, Imports, Notifications. Chacun montre un **résumé vivant** de sa page, plus détaillé quand il est plus grand, et l'ouvre d'un toucher.
+- **Modifier l'accueil** (ou un appui long sur un widget) : glisser un widget par sa poignée, changer sa taille, le déplacer d'une case par son menu, le retirer, **ajouter un widget** depuis le catalogue ; « Rétablir », « Annuler », « Terminé ».
+- La disposition est gardée sur l'appareil, une pour le téléphone et une pour le grand écran ; le choix fait en 1.29.0 est repris.
+
 ## 1.29.0 (novembre 2026)
 ### Accueil personnalisable (décision 0044)
 - **Personnaliser l'accueil**, en bas de l'Accueil : cochez les cartes à afficher (Pépite, Tout va bien ?, Premiers pas, À surveiller, Conseils du moment, Total des comptes, Reste à vivre, Bilan du mois, Cette semaine, Ce mois-ci) et faites-les glisser pour choisir leur ordre. « Rétablir » revient à l'Accueil d'origine.
