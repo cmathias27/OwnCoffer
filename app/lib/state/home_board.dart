@@ -21,8 +21,8 @@ enum TileSize {
 /// What a widget of the home page shows. The first ten are the cards of
 /// decision 0044 (same names, so that its saved choice can be read); the
 /// next ones each sum up a page of the app (decision 0045); the last ones
-/// open the other functions of the app (decision 0046). New kinds are only
-/// ever added at the end.
+/// open the other functions of the app (decision 0046), then the split of
+/// the spending (decision 0047). New kinds are only ever added at the end.
 enum HomeTileKind {
   pepite,
   summary,
@@ -63,11 +63,32 @@ enum HomeTileKind {
   help,
   shortcuts,
   feedback,
-  admin;
+  admin,
+
+  /// Decision 0047: the split of the month's spending, as on the budget
+  /// page.
+  split;
 
   /// A widget that opens a function rather than summing up a page
   /// (decision 0046).
-  bool get isShortcut => index >= search.index;
+  bool get isShortcut => switch (this) {
+    search ||
+    newOperation ||
+    scanReceipt ||
+    categories ||
+    rules ||
+    members ||
+    export ||
+    security ||
+    assistant ||
+    apps ||
+    display ||
+    help ||
+    shortcuts ||
+    feedback ||
+    admin => true,
+    _ => false,
+  };
 
   /// The sizes it can take, smallest first.
   List<TileSize> get sizes => switch (this) {

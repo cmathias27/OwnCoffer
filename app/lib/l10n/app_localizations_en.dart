@@ -8124,6 +8124,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'What is left of this month\'s spending goals, and the ones exceeded';
 
   @override
+  String get homeCardSplit => 'Spending split';
+
+  @override
+  String get homeCardSplitHelp =>
+      'The pie of this month\'s spending by category, as in Budget';
+
+  @override
+  String get homeTileSplitNone => 'No classified spending this month.';
+
+  @override
   String get homeCardMonthSummary => 'Summary';
 
   @override

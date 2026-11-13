@@ -27,6 +27,7 @@ L'Accueil est une grille de widgets : deux colonnes sur un téléphone, quatre s
 - **Imports** : la date du dernier relevé importé, et un bouton pour en importer un.
 - **Notifications** : les notifications non lues.
 - **Objectifs du budget** : ce qui reste sur vos objectifs de dépense du mois, dépensé sur prévu, les objectifs dépassés ; en grand, les catégories les plus proches de leur limite.
+- **Répartition des dépenses** : le camembert des dépenses du mois par catégorie, comme dans Budget ; l'anneau seul en petit, avec la légende et les pourcentages en moyen et en grand.
 - **Récapitulatif** : les 30 prochains jours en bref (point bas, notifications non lues ; en grand, conseils en attente, hausses d'abonnement et courbe).
 
 **Toutes les fonctions** peuvent aussi devenir un widget, sous forme de **raccourci** petit ou moyen : Rechercher, Saisir une opération, Scanner un ticket, Catégories, Règles, Membres, Exporter mes données, Sécurité, Assistant, Applications, Affichage, Aide, Raccourcis clavier, Donner un avis, Administration du serveur. Seules les fonctions que vous pouvez utiliser sont proposées (par exemple les règles hors du mode simple, l'administration pour l'administrateur du serveur).

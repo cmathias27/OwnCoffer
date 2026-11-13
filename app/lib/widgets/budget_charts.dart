@@ -670,6 +670,63 @@ class _DonutChartState extends State<DonutChart> {
   }
 }
 
+/// A [DonutChart] reduced to its ring, for a home widget (decision 0047):
+/// no legend and no touch of its own, [center] in the middle. It takes the
+/// largest square that fits.
+class MiniDonut extends StatelessWidget {
+  final List<ChartSlice> slices;
+  final String semanticLabel;
+  final Widget? center;
+
+  const MiniDonut({
+    super.key,
+    required this.slices,
+    required this.semanticLabel,
+    this.center,
+  });
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    label: semanticLabel,
+    child: LayoutBuilder(
+      builder: (context, box) {
+        final side = math.max(
+          24.0,
+          math.min(
+            box.maxWidth.isFinite ? box.maxWidth : 120.0,
+            box.maxHeight.isFinite ? box.maxHeight : 120.0,
+          ),
+        );
+        return Center(
+          child: SizedBox.square(
+            dimension: side,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                CustomPaint(
+                  size: Size.square(side),
+                  painter: _DonutPainter(
+                    slices: slices,
+                    ring: math.max(6, side * 0.16),
+                    surface: Theme.of(context).colorScheme.surfaceContainerHigh,
+                    track: ChartColors.track(context),
+                    highlight: null,
+                  ),
+                ),
+                if (center != null)
+                  Padding(
+                    padding: EdgeInsets.all(side * 0.24),
+                    child: FittedBox(fit: BoxFit.scaleDown, child: center),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    ),
+  );
+}
+
 class _DonutPainter extends CustomPainter {
   final List<ChartSlice> slices;
   final double ring;

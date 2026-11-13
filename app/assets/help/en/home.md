@@ -27,6 +27,7 @@ Home is a grid of widgets: two columns on a phone, four on a large screen. A wid
 - **Imports**: the date of the last statement imported, and a button to import one.
 - **Notifications**: the unread notifications.
 - **Budget goals**: what is left of this month's spending goals, spent against planned, the goals exceeded; when large, the categories closest to their limit.
+- **Spending split**: the pie of this month's spending by category, as in Budget; the ring alone when small, with the legend and percentages when medium or large.
 - **Summary**: the next 30 days in brief (lowest point, unread notifications; when large, advice waiting, subscription rises and the curve).
 
 **Every function** can also become a widget, as a small or medium **shortcut**: Search, Enter an operation, Scan a receipt, Categories, Rules, Members, Export my data, Security, Assistant, Apps, Display, Help, Keyboard shortcuts, Give feedback, Server administration. Only the functions you may use are offered (for instance rules outside simple mode, administration for the server administrator).

@@ -8184,6 +8184,16 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ce qu\'il reste sur vos objectifs de dépense du mois, et ceux dépassés';
 
   @override
+  String get homeCardSplit => 'Répartition des dépenses';
+
+  @override
+  String get homeCardSplitHelp =>
+      'Le camembert des dépenses du mois par catégorie, comme dans Budget';
+
+  @override
+  String get homeTileSplitNone => 'Aucune dépense classée ce mois-ci.';
+
+  @override
   String get homeCardMonthSummary => 'Récapitulatif';
 
   @override

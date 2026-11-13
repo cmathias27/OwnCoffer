@@ -12865,6 +12865,24 @@ abstract class AppLocalizations {
   /// **'Ce qu\'il reste sur vos objectifs de dépense du mois, et ceux dépassés'**
   String get homeCardBudgetHelp;
 
+  /// No description provided for @homeCardSplit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Répartition des dépenses'**
+  String get homeCardSplit;
+
+  /// No description provided for @homeCardSplitHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le camembert des dépenses du mois par catégorie, comme dans Budget'**
+  String get homeCardSplitHelp;
+
+  /// No description provided for @homeTileSplitNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune dépense classée ce mois-ci.'**
+  String get homeTileSplitNone;
+
   /// No description provided for @homeCardMonthSummary.
   ///
   /// In fr, this message translates to:
