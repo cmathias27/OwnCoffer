@@ -1938,6 +1938,31 @@ class Endpoints extends _is.EndpointDispatch {
                     params['taxRelevant'],
                   ),
         ),
+        'setExcludedFromBalance': _is.MethodConnector(
+          name: 'setExcludedFromBalance',
+          params: {
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'excludedFromBalance': _is.ParameterDescription(
+              name: 'excludedFromBalance',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['category'] as _ioevag4g.CategoryEndpoint)
+                  .setExcludedFromBalance(
+                    session,
+                    params['categoryId'],
+                    params['excludedFromBalance'],
+                  ),
+        ),
         'archive': _is.MethodConnector(
           name: 'archive',
           params: {
@@ -5611,6 +5636,32 @@ class Endpoints extends _is.EndpointDispatch {
                         params['source'],
                         params['ruleRef'],
                         params['splits'],
+                      ),
+        ),
+        'setBalanceOverride': _is.MethodConnector(
+          name: 'setBalanceOverride',
+          params: {
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'balanceOverride': _is.ParameterDescription(
+              name: 'balanceOverride',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['transaction'] as _iyokctnp.TransactionEndpoint)
+                      .setBalanceOverride(
+                        session,
+                        params['transactionId'],
+                        params['balanceOverride'],
                       ),
         ),
         'splits': _is.MethodConnector(

@@ -6767,5 +6767,24 @@
         "type": "String"
       }
     }
-  }
+  },
+  "categoryExcludedFromBalance": "Exclure du solde des comptes",
+  "categoryExcludedFromBalanceHelp": "Les opérations de cette catégorie ne seront pas déduites du solde de vos comptes (ex. débit différé de carte).",
+  "categoryExcludedFromBalanceBadge": "Hors solde",
+  "balanceInclusionLabel": "Prise en compte dans le solde",
+  "balanceInclusionHelp": "Définit si cette opération est déduite du solde du compte.",
+  "balanceAsCategory": "Comme la catégorie ({status})",
+  "@balanceAsCategory": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceStatusIncluded": "incluse",
+  "balanceStatusExcluded": "hors solde",
+  "balanceForceIncluded": "Déduite du compte (incluse)",
+  "balanceForceExcluded": "Hors solde (non déduite)",
+  "balanceOverrideUpdated": "Prise en compte dans le solde modifiée",
+  "operationExcludedFromBalanceBadge": "Hors solde"
 }

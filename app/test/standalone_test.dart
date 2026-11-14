@@ -19,8 +19,10 @@ void main() {
       addTearDown(() => dir.deleteSync(recursive: true));
 
       var server = await EmbeddedServer.start(dataDir: dir);
-      var client = Client(server.api.toString())
-        ..authSessionManager = FlutterAuthSessionManager(storage: _Memory());
+      var client = Client(
+        server.api.toString(),
+        connectionTimeout: const Duration(minutes: 1),
+      )..authSessionManager = FlutterAuthSessionManager(storage: _Memory());
       expect((await client.setup.status()).needsSetup, isFalse);
       final signIn = AuthSuccess.fromJson(await server.signIn());
       // No JWT refresh token: it is hashed by the native Argon2 library,
@@ -93,8 +95,10 @@ void main() {
       client.close();
       await server.stop();
       server = await EmbeddedServer.start(dataDir: dir);
-      client = Client(server.api.toString())
-        ..authSessionManager = FlutterAuthSessionManager(storage: _Memory());
+      client = Client(
+        server.api.toString(),
+        connectionTimeout: const Duration(minutes: 1),
+      )..authSessionManager = FlutterAuthSessionManager(storage: _Memory());
       await client.auth.updateSignedInUser(
         AuthSuccess.fromJson(await server.signIn()),
       );

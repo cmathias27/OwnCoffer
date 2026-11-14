@@ -29,6 +29,9 @@ fields:
   ### Group rule id or community rule key that set the category.
   categoryRuleRef: String?
   cleared: bool, default=false
+  ### Override on whether this operation counts in the balance: null = as its
+  ### category, true = counts, false = excluded (decision 0051).
+  balanceOverride: bool?
   ### Scheduled operation this one realises (reconciliation).
   scheduledId: int?, relation(parent=scheduled_transactions, onDelete=SetNull)
   scheduledDueDate: DateTime?

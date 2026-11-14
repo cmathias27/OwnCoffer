@@ -380,6 +380,34 @@ class TransactionEndpoint extends Endpoint {
     return updated;
   }
 
+  /// Sets or clears the balance override on an operation (decision 0051).
+  /// `balanceOverride`: null = follows category default, true = counts, false = excluded.
+  Future<BankTransaction> setBalanceOverride(
+    Session session,
+    int transactionId,
+    bool? balanceOverride,
+  ) async {
+    final (t, account) = await _find(session, transactionId);
+    await Access.requireMember(session, account.groupId, min: MemberRole.user);
+    await Closing.check(session, account.groupId, [t.date]);
+    final updated = await BankTransaction.db.updateRow(
+      session,
+      t.copyWith(
+        balanceOverride: balanceOverride,
+        updatedAt: DateTime.now().toUtc(),
+      ),
+    );
+    await _audit(
+      session,
+      account,
+      'set_balance_override',
+      t.id,
+      before: t,
+      after: updated,
+    );
+    return updated;
+  }
+
   /// Parts of a split operation (empty when not split).
   Future<List<TransactionSplit>> splits(
     Session session,

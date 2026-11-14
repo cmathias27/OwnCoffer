@@ -1118,6 +1118,20 @@ class EndpointCategory extends _isc.EndpointRef {
     },
   );
 
+  /// Sets whether operations in this category are excluded from account balances
+  /// by default (decision 0051, e.g. deferred card settlement).
+  _ida.Future<_i37qqsjr.Category> setExcludedFromBalance(
+    int categoryId,
+    bool excludedFromBalance,
+  ) => caller.callServerEndpoint<_i37qqsjr.Category>(
+    'category',
+    'setExcludedFromBalance',
+    {
+      'categoryId': categoryId,
+      'excludedFromBalance': excludedFromBalance,
+    },
+  );
+
   /// Moves the category to the trash; its operations become "to classify"
   /// only if the user chooses so (they keep the link until purge).
   _ida.Future<void> archive(int categoryId) => caller.callServerEndpoint<void>(
@@ -3059,6 +3073,20 @@ class EndpointTransaction extends _isc.EndpointRef {
       'source': source,
       'ruleRef': ruleRef,
       'splits': splits,
+    },
+  );
+
+  /// Sets or clears the balance override on an operation (decision 0051).
+  /// `balanceOverride`: null = follows category default, true = counts, false = excluded.
+  _ida.Future<_ivksw0b3.BankTransaction> setBalanceOverride(
+    int transactionId,
+    bool? balanceOverride,
+  ) => caller.callServerEndpoint<_ivksw0b3.BankTransaction>(
+    'transaction',
+    'setBalanceOverride',
+    {
+      'transactionId': transactionId,
+      'balanceOverride': balanceOverride,
     },
   );
 

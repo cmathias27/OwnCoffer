@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.36.0 (novembre 2026)
+### Opérations et catégories hors solde — débit différé (décision 0051)
+- **Débit différé sans doublon** : le total mensuel prélevé en fin de mois pour régler une carte à débit différé n'est plus déduit du solde du compte par défaut, évitant le double débit avec les paiements carte individuels.
+- **Catégories hors solde** : toute catégorie peut être exclue du solde des comptes (« Exclure du solde des comptes » dans Catégories). La catégorie standard « Débit différé de carte » est hors solde par défaut.
+- **Dérogation par opération** : dans le détail d'une opération (Suivi > Prise en compte dans le solde), choisissez entre « Selon la catégorie », « Déduite du compte (incluse) » ou « Hors solde (non déduite) ».
+- **Repérage visuel** : badge « Hors solde » affiché sur les opérations et catégories exclues du solde.
+
 ## 1.35.0 (novembre 2026)
 ### Projets, patrimoine, dépenses à plusieurs et suivi (décision 0050)
 - **Projets** (Prévoir) : projets d'épargne avec la somme à mettre de côté chaque mois pour tenir la date ; grosses dépenses de l'année (annuelles, semestrielles, trimestrielles) **lissées** en mensualités.

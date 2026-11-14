@@ -3015,6 +3015,41 @@ class _CategoryEndpoint {
     });
   }
 
+  _ida.Future<_iemw1gpx.Category> setExcludedFromBalance(
+    _ist.TestSessionBuilder sessionBuilder,
+    int categoryId,
+    bool excludedFromBalance,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'category',
+            method: 'setExcludedFromBalance',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'category',
+          methodName: 'setExcludedFromBalance',
+          parameters: _ist.testObjectToJson({
+            'categoryId': categoryId,
+            'excludedFromBalance': excludedFromBalance,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iemw1gpx.Category>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<void> archive(
     _ist.TestSessionBuilder sessionBuilder,
     int categoryId,
@@ -8024,6 +8059,41 @@ class _TransactionEndpoint {
             'source': source,
             'ruleRef': ruleRef,
             'splits': splits,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ivm4hoam.BankTransaction>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ivm4hoam.BankTransaction> setBalanceOverride(
+    _ist.TestSessionBuilder sessionBuilder,
+    int transactionId,
+    bool? balanceOverride,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'transaction',
+            method: 'setBalanceOverride',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transaction',
+          methodName: 'setBalanceOverride',
+          parameters: _ist.testObjectToJson({
+            'transactionId': transactionId,
+            'balanceOverride': balanceOverride,
           }),
           serializationManager: _serializationManager,
         );

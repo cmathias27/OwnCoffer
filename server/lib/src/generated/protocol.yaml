@@ -79,6 +79,7 @@ category:
   - create:
   - update:
   - setTaxRelevant:
+  - setExcludedFromBalance:
   - archive:
 event:
   - list:
@@ -241,6 +242,7 @@ transaction:
   - update:
   - setCategory:
   - restoreClassification:
+  - setBalanceOverride:
   - splits:
   - sameProvider:
   - setSplits:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
@@ -58,6 +59,10 @@ class OperationTile extends StatelessWidget {
     final theme = Theme.of(context);
     final t = operation;
     final c = category;
+    final inBalance = core.isEffectiveInBalance(
+      balanceOverride: t.balanceOverride,
+      categoryExcludedFromBalance: c?.excludedFromBalance ?? false,
+    );
     final mark = Icon(
       t.cleared ? Icons.check_circle : Icons.radio_button_unchecked,
       color: t.cleared ? theme.colorScheme.primary : theme.disabledColor,
@@ -156,6 +161,14 @@ class OperationTile extends StatelessWidget {
               TextSpan(
                 text: ' · ${l.subscriptionBadge}',
                 style: TextStyle(color: theme.colorScheme.primary),
+              ),
+            if (!inBalance)
+              TextSpan(
+                text: ' · ${l.operationExcludedFromBalanceBadge}',
+                style: TextStyle(
+                  color: theme.colorScheme.secondary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
           ],
         ),

@@ -17,7 +17,7 @@ void main() {
       final name = c['name'] as YamlMap;
       expected.add(
         '${c['id']}|$parent|$t|${name['fr']}|${name['en']}|${c['deprecated'] == true}'
-        '|${c['replaced_by']}|${c['since'] ?? 1}',
+        '|${c['replaced_by']}|${c['since'] ?? 1}|${c['excluded_from_balance'] == true}',
       );
       for (final child in (c['children'] as YamlList?) ?? const []) {
         walk(child as YamlMap, c['id'] as String, t);
@@ -30,7 +30,7 @@ void main() {
     expect([
       for (final c in standardCategories)
         '${c.id}|${c.parent}|${c.kind.name}|${c.fr}|${c.en}|${c.deprecated}'
-            '|${c.replacedBy}|${c.since}',
+            '|${c.replacedBy}|${c.since}|${c.excludedFromBalance}',
     ], expected);
     expect(standardCatalogVersion, doc['version']);
   });

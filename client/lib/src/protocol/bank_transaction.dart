@@ -36,6 +36,7 @@ abstract class BankTransaction
     _idpjit5g.CategorySource? categorySource,
     this.categoryRuleRef,
     bool? cleared,
+    this.balanceOverride,
     this.scheduledId,
     this.scheduledDueDate,
     this.transferPairId,
@@ -68,6 +69,7 @@ abstract class BankTransaction
     _idpjit5g.CategorySource? categorySource,
     String? categoryRuleRef,
     bool? cleared,
+    bool? balanceOverride,
     int? scheduledId,
     DateTime? scheduledDueDate,
     int? transferPairId,
@@ -104,6 +106,11 @@ abstract class BankTransaction
       cleared: jsonSerialization['cleared'] == null
           ? null
           : _isc.BoolJsonExtension.fromJson(jsonSerialization['cleared']),
+      balanceOverride: jsonSerialization['balanceOverride'] == null
+          ? null
+          : _isc.BoolJsonExtension.fromJson(
+              jsonSerialization['balanceOverride'],
+            ),
       scheduledId: jsonSerialization['scheduledId'] as int?,
       scheduledDueDate: jsonSerialization['scheduledDueDate'] == null
           ? null
@@ -177,6 +184,10 @@ abstract class BankTransaction
 
   bool cleared;
 
+  /// Override on whether this operation counts in the balance: null = as its
+  /// category, true = counts, false = excluded (decision 0051).
+  bool? balanceOverride;
+
   /// Scheduled operation this one realises (reconciliation).
   int? scheduledId;
 
@@ -219,6 +230,7 @@ abstract class BankTransaction
     _idpjit5g.CategorySource? categorySource,
     String? categoryRuleRef,
     bool? cleared,
+    bool? balanceOverride,
     int? scheduledId,
     DateTime? scheduledDueDate,
     int? transferPairId,
@@ -250,6 +262,7 @@ abstract class BankTransaction
       'categorySource': categorySource.toJson(),
       if (categoryRuleRef != null) 'categoryRuleRef': categoryRuleRef,
       'cleared': cleared,
+      if (balanceOverride != null) 'balanceOverride': balanceOverride,
       if (scheduledId != null) 'scheduledId': scheduledId,
       if (scheduledDueDate != null)
         'scheduledDueDate': scheduledDueDate?.toJson(),
@@ -284,6 +297,7 @@ abstract class BankTransaction
       'categorySource': categorySource.toJson(),
       if (categoryRuleRef != null) 'categoryRuleRef': categoryRuleRef,
       'cleared': cleared,
+      if (balanceOverride != null) 'balanceOverride': balanceOverride,
       if (scheduledId != null) 'scheduledId': scheduledId,
       if (scheduledDueDate != null)
         'scheduledDueDate': scheduledDueDate?.toJson(),
@@ -324,6 +338,7 @@ class _BankTransactionImpl extends BankTransaction {
     _idpjit5g.CategorySource? categorySource,
     String? categoryRuleRef,
     bool? cleared,
+    bool? balanceOverride,
     int? scheduledId,
     DateTime? scheduledDueDate,
     int? transferPairId,
@@ -351,6 +366,7 @@ class _BankTransactionImpl extends BankTransaction {
          categorySource: categorySource,
          categoryRuleRef: categoryRuleRef,
          cleared: cleared,
+         balanceOverride: balanceOverride,
          scheduledId: scheduledId,
          scheduledDueDate: scheduledDueDate,
          transferPairId: transferPairId,
@@ -384,6 +400,7 @@ class _BankTransactionImpl extends BankTransaction {
     _idpjit5g.CategorySource? categorySource,
     Object? categoryRuleRef = _Undefined,
     bool? cleared,
+    Object? balanceOverride = _Undefined,
     Object? scheduledId = _Undefined,
     Object? scheduledDueDate = _Undefined,
     Object? transferPairId = _Undefined,
@@ -416,6 +433,9 @@ class _BankTransactionImpl extends BankTransaction {
           ? categoryRuleRef
           : this.categoryRuleRef,
       cleared: cleared ?? this.cleared,
+      balanceOverride: balanceOverride is bool?
+          ? balanceOverride
+          : this.balanceOverride,
       scheduledId: scheduledId is int? ? scheduledId : this.scheduledId,
       scheduledDueDate: scheduledDueDate is DateTime?
           ? scheduledDueDate

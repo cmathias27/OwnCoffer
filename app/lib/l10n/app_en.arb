@@ -3256,5 +3256,24 @@
   "homeCardHealth": "Financial health",
   "homeCardHealthHelp": "A score out of 100 computed on your last full months: emergency savings, savings rate, debt, regularity.",
   "homeTileProjectsLine": "to put aside per month",
-  "homeTileNetWorthLine": "Accounts {accounts} · assets {assets} · loans {loans}"
+  "homeTileNetWorthLine": "Accounts {accounts} · assets {assets} · loans {loans}",
+  "categoryExcludedFromBalance": "Exclude from account balances",
+  "categoryExcludedFromBalanceHelp": "Operations in this category will not be deducted from your account balances (e.g. deferred card settlement).",
+  "categoryExcludedFromBalanceBadge": "Excluded from balance",
+  "balanceInclusionLabel": "Inclusion in balance",
+  "balanceInclusionHelp": "Defines whether this operation is deducted from the account balance.",
+  "balanceAsCategory": "Follows category ({status})",
+  "@balanceAsCategory": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceStatusIncluded": "included",
+  "balanceStatusExcluded": "excluded",
+  "balanceForceIncluded": "Deducted from account (included)",
+  "balanceForceExcluded": "Excluded from balance (not deducted)",
+  "balanceOverrideUpdated": "Balance inclusion updated",
+  "operationExcludedFromBalanceBadge": "Excluded"
 }

@@ -257,6 +257,7 @@ categories:
         name: { fr: "Retrait d'espèces", en: "Cash withdrawal" }
       - id: transfers.card_settlement
         name: { fr: "Débit différé de carte", en: "Deferred card settlement" }
+        excluded_from_balance: true
   - id: misc
     type: expense
     icon: category

@@ -27,9 +27,11 @@ abstract class Category
     this.icon,
     this.color,
     bool? taxRelevant,
+    bool? excludedFromBalance,
     DateTime? createdAt,
     this.deletedAt,
   }) : taxRelevant = taxRelevant ?? false,
+       excludedFromBalance = excludedFromBalance ?? false,
        createdAt = createdAt ?? DateTime.now();
 
   factory Category({
@@ -42,6 +44,7 @@ abstract class Category
     String? icon,
     String? color,
     bool? taxRelevant,
+    bool? excludedFromBalance,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _CategoryImpl;
@@ -61,6 +64,11 @@ abstract class Category
       taxRelevant: jsonSerialization['taxRelevant'] == null
           ? null
           : _is.BoolJsonExtension.fromJson(jsonSerialization['taxRelevant']),
+      excludedFromBalance: jsonSerialization['excludedFromBalance'] == null
+          ? null
+          : _is.BoolJsonExtension.fromJson(
+              jsonSerialization['excludedFromBalance'],
+            ),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _is.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -96,6 +104,10 @@ abstract class Category
   /// Its operations are listed in the yearly review for the tax return.
   bool taxRelevant;
 
+  /// Operations in this category do not count in the account's balance
+  /// (e.g. deferred card settlement, decision 0051).
+  bool excludedFromBalance;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -116,6 +128,7 @@ abstract class Category
     String? icon,
     String? color,
     bool? taxRelevant,
+    bool? excludedFromBalance,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -132,6 +145,7 @@ abstract class Category
       if (icon != null) 'icon': icon,
       if (color != null) 'color': color,
       'taxRelevant': taxRelevant,
+      'excludedFromBalance': excludedFromBalance,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -150,6 +164,7 @@ abstract class Category
       if (icon != null) 'icon': icon,
       if (color != null) 'color': color,
       'taxRelevant': taxRelevant,
+      'excludedFromBalance': excludedFromBalance,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -196,6 +211,7 @@ class _CategoryImpl extends Category {
     String? icon,
     String? color,
     bool? taxRelevant,
+    bool? excludedFromBalance,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -208,6 +224,7 @@ class _CategoryImpl extends Category {
          icon: icon,
          color: color,
          taxRelevant: taxRelevant,
+         excludedFromBalance: excludedFromBalance,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -226,6 +243,7 @@ class _CategoryImpl extends Category {
     Object? icon = _Undefined,
     Object? color = _Undefined,
     bool? taxRelevant,
+    bool? excludedFromBalance,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -239,6 +257,7 @@ class _CategoryImpl extends Category {
       icon: icon is String? ? icon : this.icon,
       color: color is String? ? color : this.color,
       taxRelevant: taxRelevant ?? this.taxRelevant,
+      excludedFromBalance: excludedFromBalance ?? this.excludedFromBalance,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );
@@ -291,6 +310,12 @@ class CategoryUpdateTable extends _is.UpdateTable<CategoryTable> {
     value,
   );
 
+  _is.ColumnValue<bool, bool> excludedFromBalance(bool value) =>
+      _is.ColumnValue(
+        table.excludedFromBalance,
+        value,
+      );
+
   _is.ColumnValue<DateTime, DateTime> createdAt(DateTime value) =>
       _is.ColumnValue(
         table.createdAt,
@@ -341,6 +366,11 @@ class CategoryTable extends _is.Table<int?> {
       this,
       hasDefault: true,
     );
+    excludedFromBalance = _is.ColumnBool(
+      'excludedFromBalance',
+      this,
+      hasDefault: true,
+    );
     createdAt = _is.ColumnDateTime(
       'createdAt',
       this,
@@ -373,6 +403,10 @@ class CategoryTable extends _is.Table<int?> {
   /// Its operations are listed in the yearly review for the tax return.
   late final _is.ColumnBool taxRelevant;
 
+  /// Operations in this category do not count in the account's balance
+  /// (e.g. deferred card settlement, decision 0051).
+  late final _is.ColumnBool excludedFromBalance;
+
   late final _is.ColumnDateTime createdAt;
 
   late final _is.ColumnDateTime deletedAt;
@@ -388,6 +422,7 @@ class CategoryTable extends _is.Table<int?> {
     icon,
     color,
     taxRelevant,
+    excludedFromBalance,
     createdAt,
     deletedAt,
   ];

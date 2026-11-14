@@ -774,6 +774,7 @@ const List<StandardCategoryDef> standardCategories = [
     fr: 'Débit différé de carte',
     en: 'Deferred card settlement',
     icon: 'swap_horiz',
+    excludedFromBalance: true,
   ),
   StandardCategoryDef(
     'misc',

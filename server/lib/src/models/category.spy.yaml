@@ -14,6 +14,9 @@ fields:
   color: String?
   ### Its operations are listed in the yearly review for the tax return.
   taxRelevant: bool, default=false
+  ### Operations in this category do not count in the account's balance
+  ### (e.g. deferred card settlement, decision 0051).
+  excludedFromBalance: bool, default=false
   createdAt: DateTime, default=now
   deletedAt: DateTime?
 indexes:

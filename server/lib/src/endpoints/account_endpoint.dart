@@ -233,11 +233,25 @@ class AccountEndpoint extends Endpoint {
           t.deletedAt.equals(null) &
           (t.date <= day.toDb()),
     );
+    final categories = await Category.db.find(
+      session,
+      where: (c) =>
+          c.groupId.equals(account.groupId) & c.deletedAt.equals(null),
+    );
+    final categoryExcluded = {
+      for (final c in categories) c.id!: c.excludedFromBalance,
+    };
     var computed = account.initialBalanceCents, uncleared = 0;
     DateTime? lastImported;
     for (final t in ops) {
-      computed += t.amountCents;
-      if (t.importId == null && !t.cleared) uncleared += t.amountCents;
+      final inBalance = core.isEffectiveInBalance(
+        balanceOverride: t.balanceOverride,
+        categoryExcludedFromBalance: categoryExcluded[t.categoryId] ?? false,
+      );
+      if (inBalance) {
+        computed += t.amountCents;
+        if (t.importId == null && !t.cleared) uncleared += t.amountCents;
+      }
       if (t.importId != null &&
           (lastImported == null || t.date.isAfter(lastImported))) {
         lastImported = t.date;
