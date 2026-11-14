@@ -11,7 +11,7 @@ Aucune date n'est fixée : une phase se termine quand sa validation est atteinte
 
 ```mermaid
 flowchart TD
-  P0["Phase 0 · Préparation et décisions (en cours)"] -->|Décisions écrites, dépôt prêt| P1
+  P0["Phase 0 · Préparation et décisions"] -->|Décisions écrites, dépôt prêt| P1
   P1["Phase 1 · Fondations techniques"] -->|Le serveur démarre en une commande| P2
   P2["Phase 2 · Utilisateurs et sécurité"] -->|Aucun accès possible d'un groupe à l'autre| P3
   P3["Phase 3 · Alpha : import, classement, solde prévu"] -->|"Alpha 0.1 : utilisée un mois"| P4
@@ -41,7 +41,11 @@ flowchart TD
 | [0015](decisions/0015-reseau-docker-isole-proxy.md) | **Réseau Docker isolé**, proxy Caddy sur le port unique (remplace la partie réseau de 0012) | Décidé |
 | [0016](decisions/0016-rls-apres-alpha.md) | **RLS PostgreSQL repoussée** après l'alpha, test d'isolation obligatoire | Décidé |
 
-## Phase 0 — Préparation et décisions *(en cours)*
+Les décisions suivantes (0017 et au-delà) sont listées dans [decisions/README.md](decisions/README.md).
+
+## Phase 0 — Préparation et décisions
+
+*Décisions et dépôt faits ; restent les exports anonymisés et les avis sur la présentation (#8).*
 
 Objectif : tout décider et tout organiser avant la première ligne de code.
 
@@ -65,7 +69,7 @@ Objectif : tout décider et tout organiser avant la première ligne de code.
 - [x] `CLAUDE.md` : consignes pour le développement avec Claude Code
 - [x] Milestones par phase, étiquettes, issues des phases 0 et 1
 - [x] Protéger la branche `main` (fusion par pull request ; vérifications au vert à ajouter avec la CI)
-- [ ] Tableau de suivi GitHub Projects (optionnel, les milestones suffisent au départ)
+- [x] ~~Tableau de suivi GitHub Projects~~ — *non retenu : les milestones et le roadbook suffisent*
 
 **Données et maquettes**
 
@@ -85,7 +89,7 @@ Objectif : un serveur vide mais complet, qui se lance en une commande et se test
 - [x] Base de données v1 avec migrations : utilisateurs, sessions, groupes, membres, comptes, opérations, catégories, catégories standard, règles, imports, journal d'audit
 - [x] Montants en centimes (entiers) partout, dates d'opération sans fuseau
 - [x] Intégration continue GitHub Actions : analyse, formatage, tests, image Docker `ghcr.io/cmathias27/owncoffer:edge`
-- [ ] Sécurité automatique : Dependabot, CodeQL, vérification des licences des dépendances
+- [ ] Sécurité automatique : Dependabot, CodeQL, vérification des licences des dépendances — *Dependabot (pub, actions, Docker) et OSV-Scanner dans la CI ; CodeQL ne lit pas le Dart ; reste la vérification automatique des licences (#14)*
 - [x] Page d'état minimale : version, connexion à la base, espace disque — *Administration > Santé et chiffres, 0.3.7 et 0.3.20*
 - [x] Bilingue dès le départ : textes de l'interface dans des fichiers de traduction FR et EN
 - [x] Application web installable (PWA) : manifeste, icônes, écran d'accueil Android ; aucune donnée financière mise en cache sur l'appareil (décision 0011)
@@ -97,7 +101,7 @@ Objectif : un serveur vide mais complet, qui se lance en une commande et se test
 Objectif : se connecter en sécurité, créer des groupes, inviter des membres ; personne ne voit les données d'un autre groupe.
 
 - [x] Assistant de premier lancement : compte administrateur du serveur et premier groupe (côté serveur ; écrans à venir)
-- [ ] Connexion email et mot de passe (Argon2), sessions, déconnexion de tous les appareils
+- [x] Connexion email et mot de passe (Argon2), sessions, déconnexion de tous les appareils — *Argon2 par `serverpod_auth` ; « Mes sessions », fermer toutes les autres, fermeture par l'administrateur — 1.7.0 ([0027](decisions/0027-sessions-et-appareils.md))*
 - [x] Double authentification TOTP, avec codes de secours (côté serveur ; écrans à venir)
 - [x] Blocage automatique des IP (5 échecs en 15 minutes, durée doublée à chaque récidive) et limite de requêtes
 - [x] Groupes, rôles (admin, user, lecteur) et invitations par lien expirant (côté serveur ; écrans à venir)
@@ -182,7 +186,8 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 
 - [x] Même code Flutter connecté au serveur : adresse du serveur au premier lancement, fichiers, enregistrement et liens natifs
 - [x] Compilées par la CI, jointes à chaque version : Windows (zip, non signé) et Android (APK hors Play Store) — [APPLICATIONS.md](APPLICATIONS.md)
-- [ ] Clé Android stable (secrets GitHub) et certificat de signature Windows
+- [x] Clé Android stable (secrets GitHub) — *1.1.1, la même clé pour toutes les versions*
+- [ ] Certificat de signature Windows
 - [x] Hors-ligne et synchronisation
   - [x] consultation sans réseau : dernières données lues gardées chiffrées sur l'appareil, bandeau « lecture seule », effacées à la déconnexion — décision 0037, *1.22.0*
   - [x] saisie sans réseau : créations mises en file et envoyées au retour de la connexion, refus visibles, sans conflit possible — décision [0038](decisions/0038-hors-ligne-saisie.md), *1.23.0*
@@ -206,7 +211,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
   - [x] « Migrer vers un serveur » (et retour par « Importer un export ») par l'export complet, factures comprises — *1.1.0* ; copie vérifiée (mêmes nombres, montants et soldes que la source), reprise sans renvoyer les groupes déjà envoyés — *1.4.4 (PR #147)*
   - [x] Sauvegarde chiffrée automatique vers un dossier, restauration sur cet appareil ou un autre — *1.1.0* ; restauration en deux temps avec l'ancien état gardé, refus d'une sauvegarde plus récente que l'application, contrôle d'intégrité, échecs affichés — *1.4.4 (PR #146)* ; dossier au choix sur Android, chiffrement par blocs pour les grosses sauvegardes (documents compris) — *1.4.5*
   - [x] Chiffrement du fichier SQLite (SQLite3 Multiple Ciphers, clé dans le magasin de secrets de l'appareil, migration automatique au premier démarrage) — *1.18.0 ([0033](decisions/0033-chiffrement-base-autonome.md))*
-- [ ] **Scan automatique des tickets à l'appareil photo** (demandé le 2 novembre 2026), en partant de la lecture de documents existante (0.3.31) :
+- [x] **Scan automatique des tickets à l'appareil photo** (demandé le 2 novembre 2026), en partant de la lecture de documents existante (0.3.31) :
   - [x] recadrage automatique : bords du ticket détectés, perspective redressée, contraste amélioré, photo floue signalée avec « Reprendre la photo » ; en Dart pur sur l'appareil pour les trois cibles (le scanner du système Android est celui de Google Play Services) — décision [0039](decisions/0039-recadrage-automatique-des-tickets.md), *1.24.0* ; déclenchement pendant la visée non retenu (paquet `camera` requis)
   - [x] lecture du texte sur l'appareil, sans IA et hors ligne (utilisable en version autonome) ; avec l'IA de l'utilisateur quand elle est configurée, lecture structurée plus fiable (montant, date, commerçant, TVA, lignes) — *1.3.0 (décision 0023, PR #129, #130, #133)*
   - [x] pré-remplissage de l'opération (montant, date, libellé, catégorie) et rapprochement avec l'opération bancaire correspondante, le ticket joint comme justificatif — décision 0036, *1.21.0*
@@ -231,7 +236,8 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] Tests du serveur lancés aussi dans un fuseau horaire autre que l'UTC (un bug de date a échappé à la CI ; corrigé en 1.2.0) — *1.2.0*
 - [x] **Lecture des documents enregistrés depuis l'assistant** : permettre à l'utilisateur de demander au chat d'analyser un justificatif ou document de crédit déjà stocké, avec sélection explicite du document, contrôles d'accès groupe/compte et confirmation avant tout envoi à un fournisseur externe ; le document et ses métadonnées ne sont accessibles qu'à travers des outils de contexte contrôlés par le serveur. — *1.4.0 (issue #136, PR #137)*
 - [x] **Lecture des PDF par l'IA depuis les boutons de documents** : supprimer le blocage actuel qui réserve les PDF à Anthropic. Ajouter une voie compatible avec les fournisseurs vision configurés : conversion serveur de pages PDF en images (limite de pages, taille et mémoire) ou extraction locale du texte, puis envoi selon les capacités réelles du fournisseur ; préserver la lecture PDF native Anthropic. Tester billets PDF avec OpenAI-compatible/Ollama et Anthropic, signaler clairement les limites de modèle, taille et document. — *1.4.0 (issue #136, PR #137)*
-- [ ] `check.sh` : message clair quand `server/config/passwords.yaml` manque (« lancez `./tool/setup_dev.sh` ») — *fait, ainsi qu'un rappel quand les tests du serveur échouent (base de test)* ; jeu de documents factices (tableau d'amortissement, ticket, facture et PDF) pour tester la lecture
+- [x] `check.sh` : message clair quand `server/config/passwords.yaml` manque (« lancez `./tool/setup_dev.sh` »), et rappel quand les tests du serveur échouent (base de test)
+- [ ] Jeu de documents factices (tableau d'amortissement, ticket, facture et PDF) pour tester la lecture
 - [x] Avant le scan des tickets : courte décision sur la bibliothèque de lecture du texte sur l'appareil (licence compatible AGPL, aucune télémétrie, fonctionne hors ligne) — [0023](decisions/0023-lecture-du-texte-sur-l-appareil.md)
 
 Les autres fonctionnalités du cahier des charges marquées « Après 1.0 » s'ajouteront une par une, selon les avis des utilisateurs.
