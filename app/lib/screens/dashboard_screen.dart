@@ -22,6 +22,7 @@ import '../widgets/pepite.dart';
 import '../widgets/soft.dart';
 import '../widgets/why.dart';
 import 'pepite_screen.dart';
+import 'review_screen.dart';
 
 /// Where to go from the home page.
 enum DashboardTarget {
@@ -107,12 +108,19 @@ const _onDemand = {
   HomeTileKind.budget,
   HomeTileKind.categories,
   HomeTileKind.split,
+  HomeTileKind.review,
+  HomeTileKind.comparison,
 };
 
 class DashboardScreenState extends State<DashboardScreen> {
   List<(Account, ForecastResult?)>? _accounts;
   LeftToLiveReport? _left;
   SpendingReport? _month;
+
+  /// The month-end review of this budget month and of the last one over
+  /// (decision 0049); the last one only when its widget is on the board.
+  MonthReview? _review;
+  MonthReview? _lastReview;
   DueCalendar? _calendar;
   PepiteStart? _start;
   LoanOverview? _loans;
@@ -209,12 +217,22 @@ class DashboardScreenState extends State<DashboardScreen> {
         wants(HomeTileKind.topSpending) ||
                 wants(HomeTileKind.budget) ||
                 wants(HomeTileKind.categories) ||
-                wants(HomeTileKind.split)
+                wants(HomeTileKind.split) ||
+                wants(HomeTileKind.review) ||
+                wants(HomeTileKind.comparison)
             ? client.category
                   .list(_groupId)
                   .then<List<Category>?>((c) => c, onError: (_) => null)
             : Future.value(),
       ]);
+      final current = results[4] as MonthReview?;
+      final monthStart =
+          current?.start ?? (results[2] as SpendingReport?)?.start;
+      final lastReview = wants(HomeTileKind.review) && monthStart != null
+          ? await client.analysis
+                .review(_groupId, monthStart.subtract(const Duration(days: 1)))
+                .then<MonthReview?>((r) => r, onError: (_) => null)
+          : null;
       if (!mounted) return;
       final forecasts = results[0] as List<ForecastResult?>;
       pepite.overdrawn = forecasts.any(_overdrawn);
@@ -226,10 +244,11 @@ class DashboardScreenState extends State<DashboardScreen> {
         _left = results[1] as LeftToLiveReport?;
         _month = results[2] as SpendingReport?;
         _calendar = results[3] as DueCalendar?;
+        _review = current;
+        _lastReview = lastReview;
         _rises = [
           for (final c
-              in (results[4] as MonthReview?)?.subscriptionChanges ??
-                  const <SubscriptionChange>[])
+              in current?.subscriptionChanges ?? const <SubscriptionChange>[])
             // Amounts are negative: a rise is a larger debit.
             if (c.actualCents < c.plannedCents) c,
         ];
@@ -654,6 +673,9 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.notifications => Icons.notifications_outlined,
     HomeTileKind.budget => Icons.track_changes,
     HomeTileKind.split => Icons.donut_large,
+    HomeTileKind.review => Icons.fact_check_outlined,
+    HomeTileKind.comparison => Icons.compare_arrows,
+    HomeTileKind.trends => Icons.bar_chart,
     HomeTileKind.monthSummary => AppFunction.summary.icon,
     HomeTileKind.search => Icons.search,
     _ => _function(k)!.icon,
@@ -681,6 +703,9 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.notifications => l.homeCardNotifications,
     HomeTileKind.budget => l.homeCardBudget,
     HomeTileKind.split => l.homeCardSplit,
+    HomeTileKind.review => l.homeCardReview,
+    HomeTileKind.comparison => l.homeCardComparison,
+    HomeTileKind.trends => l.homeCardTrends,
     HomeTileKind.monthSummary => l.homeCardMonthSummary,
     HomeTileKind.search => l.globalSearchOpen,
     _ => _function(k)!.label(l),
@@ -708,6 +733,9 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.notifications => l.homeCardNotificationsHelp,
     HomeTileKind.budget => l.homeCardBudgetHelp,
     HomeTileKind.split => l.homeCardSplitHelp,
+    HomeTileKind.review => l.homeCardReviewHelp,
+    HomeTileKind.comparison => l.homeCardComparisonHelp,
+    HomeTileKind.trends => l.homeCardTrendsHelp,
     HomeTileKind.monthSummary => l.homeCardMonthSummaryHelp,
     HomeTileKind.search => l.homeCardSearchHelp,
     HomeTileKind.newOperation => l.homeCardNewOperationHelp,
@@ -760,6 +788,9 @@ class DashboardScreenState extends State<DashboardScreen> {
         HomeTileKind.notifications => _notificationsTile(context, l, s),
         HomeTileKind.budget => _budgetTile(context, l, s),
         HomeTileKind.split => _splitTile(context, l, s),
+        HomeTileKind.review => _reviewTile(context, l, s),
+        HomeTileKind.comparison => _comparisonTile(context, l, s),
+        HomeTileKind.trends => _trendsTile(context, l, s),
         HomeTileKind.monthSummary => _monthSummaryTile(context, l, s),
         _ => _shortcutTile(context, l, t.kind, s),
       },
@@ -2077,6 +2108,253 @@ class DashboardScreenState extends State<DashboardScreen> {
           TileLine(_help(l, k), maxLines: count != null ? 1 : 2),
         ],
       ),
+    );
+  }
+
+  /// Opens the month-end review of the budget month containing [date].
+  void _openReview(DateTime date) => Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => ReviewScreen(membership: widget.membership, date: date),
+    ),
+  );
+
+  String _categoryLabel(int id) {
+    final c = _categories[id];
+    return c == null ? '…' : context.categoryName(c);
+  }
+
+  /// The review of the last budget month over (decision 0049): what was
+  /// left, against the month before, what went wrong.
+  Widget _reviewTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final r = _lastReview;
+    if (r == null || !_fetched.contains(HomeTileKind.review)) {
+      return _frame(
+        l,
+        HomeTileKind.review,
+        s,
+        target: DashboardTarget.budget,
+        child: const SizedBox.shrink(),
+      );
+    }
+    final colors = context.moneyColors;
+    final month = context.monthName(r.start);
+    final alerts = [
+      if (r.goalsOver.isNotEmpty) l.homeTileReviewGoalsOver(r.goalsOver.length),
+      if (r.bankFeesCents != 0)
+        l.homeTileReviewFees(context.money(r.bankFeesCents.abs())),
+    ];
+    return _frame(
+      l,
+      HomeTileKind.review,
+      s,
+      help: l.homeCardReviewHelp,
+      helpTopic: HelpTopic.budget,
+      onTap: () => _openReview(r.start),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TileFigure(
+            context.money(r.netCents),
+            large: s == TileSize.large,
+            color: r.netCents < 0 ? colors.negative : colors.positive,
+          ),
+          TileLine(
+            s == TileSize.small
+                ? month
+                : l.homeTileReviewBefore(
+                    month,
+                    context.money(r.previousNetCents),
+                  ),
+            maxLines: 1,
+          ),
+          if (s != TileSize.small)
+            TileLine(
+              alerts.isEmpty ? l.homeTileReviewClean : alerts.join(' · '),
+              maxLines: s == TileSize.large ? 2 : 1,
+              color: alerts.isEmpty ? null : colors.negative,
+            ),
+          if (s == TileSize.large) ...[
+            const SizedBox(height: 6),
+            for (final c in r.rises.take(2))
+              _row(
+                context,
+                _categoryLabel(c.categoryId),
+                context.money(c.amountCents),
+                icon: Icons.trending_up,
+                iconColor: colors.negative,
+                sub: l.homeTileVsAverage(context.money(c.averageCents)),
+              ),
+            if (r.biggestExpenses.isNotEmpty)
+              _row(
+                context,
+                l.homeTileReviewBiggest(r.biggestExpenses.first.cleanLabel),
+                context.money(r.biggestExpenses.first.amountCents),
+                icon: Icons.receipt_long_outlined,
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// This month against the average of the three before, category by
+  /// category (decision 0049): the rises and drops the engine finds.
+  Widget _comparisonTile(
+    BuildContext context,
+    AppLocalizations l,
+    TileSize s,
+  ) {
+    final r = _review;
+    if (r == null || !_fetched.contains(HomeTileKind.comparison)) {
+      return _frame(
+        l,
+        HomeTileKind.comparison,
+        s,
+        target: DashboardTarget.budget,
+        child: const SizedBox.shrink(),
+      );
+    }
+    final colors = context.moneyColors;
+    // The average below each row only on a large widget: a medium one
+    // holds a rise and a drop, no more.
+    Widget change(CategoryChangeInfo c, {required bool up}) => _row(
+      context,
+      _categoryLabel(c.categoryId),
+      context.money(c.amountCents),
+      icon: up ? Icons.trending_up : Icons.trending_down,
+      iconColor: up ? colors.negative : colors.positive,
+      sub: s == TileSize.large
+          ? l.homeTileVsAverage(context.money(c.averageCents))
+          : null,
+    );
+    final Widget child;
+    if (r.rises.isEmpty && r.drops.isEmpty) {
+      child = TileLine(l.homeTileComparisonNone, maxLines: 3);
+    } else if (s == TileSize.small) {
+      final up = r.rises.isNotEmpty;
+      final c = up ? r.rises.first : r.drops.first;
+      final gap = (c.amountCents - c.averageCents).abs();
+      child = _figure(
+        '${up ? '+' : '−'}${context.money(gap)}',
+        up
+            ? l.homeTileComparisonUp(_categoryLabel(c.categoryId))
+            : l.homeTileComparisonDown(_categoryLabel(c.categoryId)),
+        color: up ? colors.negative : colors.positive,
+      );
+    } else {
+      final large = s == TileSize.large;
+      child = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final c in r.rises.take(large ? 3 : 1)) change(c, up: true),
+          for (final c in r.drops.take(large ? 2 : 1)) change(c, up: false),
+        ],
+      );
+    }
+    return _frame(
+      l,
+      HomeTileKind.comparison,
+      s,
+      help: l.homeCardComparisonHelp,
+      helpTopic: HelpTopic.budget,
+      onTap: () => _openReview(r.start),
+      child: child,
+    );
+  }
+
+  /// Income and spending over the last six months (decision 0049), the
+  /// current one lighter: it is not over.
+  Widget _trendsTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final history = _month?.history ?? const <PeriodTotals>[];
+    // The months over, with something in them (none before the first
+    // import), give the averages; integer cents.
+    final over = [
+      for (final p in history.take(math.max(0, history.length - 1)))
+        if (p.incomeCents != 0 || p.expenseCents != 0) p,
+    ];
+    if (history.isEmpty) {
+      return _frame(
+        l,
+        HomeTileKind.trends,
+        s,
+        target: DashboardTarget.budget,
+        child: const SizedBox.shrink(),
+      );
+    }
+    int average(int Function(PeriodTotals) f) => over.isEmpty
+        ? 0
+        : over.fold<int>(0, (a, p) => a + f(p).abs()) ~/ over.length;
+    final spent = average((p) => p.expenseCents);
+    final earned = average((p) => p.incomeCents);
+    final expense = ChartColors.expense(context);
+    final income = ChartColors.income(context);
+    final Widget child;
+    if (over.isEmpty) {
+      child = TileLine(l.homeTileTrendsNone, maxLines: 3);
+    } else if (s == TileSize.small) {
+      child = _figure(context.money(spent), l.homeTileTrendsSpent);
+    } else if (s == TileSize.medium) {
+      child = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TileLine(
+            l.homeTileTrendsSpentValue(context.money(spent)),
+            maxLines: 1,
+          ),
+          const SizedBox(height: 4),
+          Expanded(
+            child: MiniBars(
+              key: const Key('home-trends-bars'),
+              series: [
+                [for (final p in history) p.expenseCents.abs()],
+              ],
+              colors: [expense],
+              lastPartial: true,
+            ),
+          ),
+        ],
+      );
+    } else {
+      child = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: MiniBars(
+              key: const Key('home-trends-bars'),
+              series: [
+                [for (final p in history) p.incomeCents.abs()],
+                [for (final p in history) p.expenseCents.abs()],
+              ],
+              colors: [income, expense],
+              lastPartial: true,
+            ),
+          ),
+          const SizedBox(height: 6),
+          _row(
+            context,
+            l.homeTileTrendsIncome,
+            context.money(earned),
+            icon: Icons.square_rounded,
+            iconColor: income,
+          ),
+          _row(
+            context,
+            l.homeTileTrendsExpense,
+            context.money(spent),
+            icon: Icons.square_rounded,
+            iconColor: expense,
+          ),
+        ],
+      );
+    }
+    return _frame(
+      l,
+      HomeTileKind.trends,
+      s,
+      help: l.homeCardTrendsHelp,
+      helpTopic: HelpTopic.budget,
+      target: DashboardTarget.budget,
+      child: child,
     );
   }
 

@@ -22,7 +22,9 @@ enum TileSize {
 /// decision 0044 (same names, so that its saved choice can be read); the
 /// next ones each sum up a page of the app (decision 0045); the last ones
 /// open the other functions of the app (decision 0046), then the split of
-/// the spending (decision 0047). New kinds are only ever added at the end.
+/// the spending (decision 0047), then the last month's review, the
+/// comparison and the trends (decision 0049). New kinds are only ever added
+/// at the end.
 enum HomeTileKind {
   pepite,
   summary,
@@ -67,7 +69,13 @@ enum HomeTileKind {
 
   /// Decision 0047: the split of the month's spending, as on the budget
   /// page.
-  split;
+  split,
+
+  /// Decision 0049: the review of the last month over, this month against
+  /// the three before, income and spending over six months.
+  review,
+  comparison,
+  trends;
 
   /// A widget that opens a function rather than summing up a page
   /// (decision 0046).

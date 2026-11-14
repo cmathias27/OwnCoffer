@@ -29,11 +29,14 @@ class MonthNav extends StatelessWidget {
           icon: const Icon(Icons.chevron_left),
           onPressed: () => onShift(-1),
         ),
-        Text(
-          s == null || e == null
-              ? '…'
-              : '${context.day(s)} – ${context.day(e)}',
-          style: Theme.of(context).textTheme.titleSmall,
+        Flexible(
+          child: Text(
+            s == null || e == null
+                ? '…'
+                : '${context.day(s)} – ${context.day(e)}',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
         ),
         IconButton(
           tooltip: l.periodNext,

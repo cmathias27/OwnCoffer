@@ -136,10 +136,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
               ],
               Expanded(child: Text(left)),
               const SizedBox(width: 8),
-              Text(
-                right,
-                style: const TextStyle(
-                  fontFeatures: [FontFeature.tabularFigures()],
+              // Flexible: on a phone, a long figure wraps instead of
+              // overflowing.
+              Flexible(
+                child: Text(
+                  right,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
                 ),
               ),
             ],

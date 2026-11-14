@@ -2,6 +2,13 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.34.0 (novembre 2026)
+### Widgets Mois écoulé, Comparaison et Tendances (décision 0049)
+- **Mois écoulé** : le bilan du dernier mois terminé sur l'Accueil (ce qui est resté, le mois d'avant, objectifs dépassés, frais bancaires, plus grosse dépense) ; un toucher ouvre son Bilan du mois.
+- **Comparaison** : ce mois-ci face à la moyenne des trois mois précédents, catégorie par catégorie, en hausse et en baisse.
+- **Tendances** : revenus et dépenses des six derniers mois en barres, avec la moyenne des mois terminés.
+- Correction : le Bilan du mois et le choix de période ne débordent plus sur un écran étroit.
+
 ## 1.33.0 (novembre 2026)
 ### Coût et volume de l'IA par fonction (décision 0048)
 - **Assistant : réglages** montre votre **consommation de l'IA** ce mois-ci et le mois précédent, par fonction (Discussion, Tickets et factures, Documents de crédit) : demandes, jetons envoyés et reçus, et coût estimé.

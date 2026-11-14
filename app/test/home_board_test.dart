@@ -7,6 +7,7 @@ import 'package:owncoffer_app/client.dart';
 import 'package:owncoffer_app/l10n/app_localizations.dart';
 import 'package:owncoffer_app/navigation/search.dart';
 import 'package:owncoffer_app/screens/dashboard_screen.dart';
+import 'package:owncoffer_app/screens/review_screen.dart';
 import 'package:owncoffer_app/state/app_lock.dart' show LockStore;
 import 'package:owncoffer_app/state/pepite.dart';
 import 'package:owncoffer_app/state/ui_prefs.dart';
@@ -332,7 +333,74 @@ void main() {
           goalCents: 20000,
         ),
       ],
-      history: const [],
+      // Six months, the first empty (before the first import), the current
+      // one last (decision 0049).
+      history: [
+        for (final (i, income, expense) in const [
+          (5, 0, 0),
+          (4, 20000, 18000),
+          (3, 24000, 22000),
+          (2, 22000, 20000),
+          (1, 22000, 20000),
+          (0, 250000, 130000),
+        ])
+          PeriodTotals(
+            start: DateTime.utc(day.year, day.month - i),
+            incomeCents: income,
+            expenseCents: expense,
+            savingsCents: 0,
+          ),
+      ],
+    );
+    // The month-end review, the same for this month and the last one.
+    final review = MonthReview(
+      start: DateTime.utc(day.year, day.month - 1),
+      last: DateTime.utc(day.year, day.month, 0),
+      incomeCents: 200000,
+      expenseCents: 155000,
+      savingsCents: 0,
+      netCents: 45000,
+      previousNetCents: 30000,
+      rises: [
+        CategoryChangeInfo(
+          categoryId: 7,
+          amountCents: 30000,
+          averageCents: 18000,
+        ),
+      ],
+      drops: [
+        CategoryChangeInfo(
+          categoryId: 8,
+          amountCents: 5000,
+          averageCents: 9000,
+        ),
+      ],
+      goalsOver: [
+        CategoryFlow(
+          categoryId: 7,
+          amountCents: 30000,
+          count: 3,
+          previousCents: 0,
+          averageCents: 0,
+          history: const [],
+          goalCents: 25000,
+        ),
+      ],
+      bankFeesCents: 0,
+      bankFees: const [],
+      biggestExpenses: [
+        BankTransaction(
+          accountId: 4,
+          date: day,
+          amountCents: -9000,
+          rawLabel: 'BOULANGERIE',
+          cleanLabel: 'BOULANGERIE',
+          operationKind: 'card',
+        ),
+      ],
+      subscriptionChanges: const [],
+      newSubscriptions: const [],
+      unclassifiedCount: 0,
     );
     final categories = [
       for (final (id, name) in const [(7, 'Courses'), (8, 'Loisirs')])
@@ -364,6 +432,7 @@ void main() {
             '/api/account/list' => [account],
             '/api/scheduled/forecast' => forecast,
             '/api/analysis/report' => report,
+            '/api/analysis/review' => review,
             '/api/category/list' => categories,
             _ => null,
           };
@@ -594,7 +663,7 @@ void main() {
       );
       await tester.drag(sheet, const Offset(0, -2000));
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('home-add-monthSummary')), findsOneWidget);
+      expect(find.byKey(const Key('home-add-trends')), findsOneWidget);
       expect(find.byKey(const Key('home-add-rules')), findsNothing);
       expect(find.byKey(const Key('home-add-admin')), findsNothing);
       // The search is no function of the list: still offered.
@@ -659,6 +728,68 @@ void main() {
         findsOneWidget,
       );
       await tester.tap(split);
+    });
+
+    testWidgets('last month, comparison and trends, from the engine (0049)', (
+      tester,
+    ) async {
+      await tester.runAsync(
+        () => uiPrefs.setHomeBoard(
+          _board('review:l:0:0,comparison:l:0:2,trends:l:0:4'),
+        ),
+      );
+      await open(tester, const Size(400, 1400));
+      expect(tester.takeException(), isNull);
+      Finder inCard(String kind, String text) => find.descendant(
+        of: find.byKey(Key('home-card-$kind')),
+        matching: find.textContaining(text),
+      );
+      // Last month: what was left, the month before, what went wrong.
+      expect(inCard('review', '1 objectif dépassé'), findsOneWidget);
+      expect(inCard('review', 'mois d\'avant'), findsOneWidget);
+      expect(
+        inCard('review', 'Plus grosse dépense : BOULANGERIE'),
+        findsOneWidget,
+      );
+      // This month against the three before: a rise and a drop.
+      expect(inCard('comparison', 'Courses'), findsOneWidget);
+      expect(inCard('comparison', 'Loisirs'), findsOneWidget);
+      expect(inCard('comparison', '180,00'), findsOneWidget);
+      // Six months: the averages of the months over only.
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('home-card-trends')),
+          matching: find.byKey(const Key('home-trends-bars')),
+        ),
+        findsOneWidget,
+      );
+      expect(inCard('trends', '200,00'), findsOneWidget);
+      expect(inCard('trends', '220,00'), findsOneWidget);
+      // A tap opens the review of that month.
+      await tester.tap(find.byKey(const Key('home-card-review')));
+      await tester.pumpAndSettle();
+      expect(find.byType(ReviewScreen), findsOneWidget);
+    });
+
+    testWidgets('small: one figure each', (tester) async {
+      await tester.runAsync(
+        () => uiPrefs.setHomeBoard(
+          _board('review:s:0:0,comparison:s:1:0,trends:s:0:1'),
+        ),
+      );
+      await open(tester, const Size(400, 900));
+      expect(tester.takeException(), isNull);
+      Finder inCard(String kind, String text) => find.descendant(
+        of: find.byKey(Key('home-card-$kind')),
+        matching: find.textContaining(text),
+      );
+      expect(inCard('review', '450,00'), findsOneWidget);
+      expect(inCard('comparison', '+120,00'), findsOneWidget);
+      expect(
+        inCard('comparison', 'Courses : plus que d\'habitude'),
+        findsOneWidget,
+      );
+      expect(inCard('trends', '200,00'), findsOneWidget);
     });
 
     testWidgets('nothing on the board: said, and how to add', (tester) async {

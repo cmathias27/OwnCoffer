@@ -8217,6 +8217,93 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTileSplitNone => 'No classified spending this month.';
 
   @override
+  String get homeCardReview => 'Last month';
+
+  @override
+  String get homeCardReviewHelp =>
+      'The review of the last month over, as in Month review: what was left, the month before, goals exceeded, bank fees and the biggest rises';
+
+  @override
+  String get homeCardComparison => 'Comparison';
+
+  @override
+  String get homeCardComparisonHelp =>
+      'This month against the average of the three months before: the categories going up and down found by the engine';
+
+  @override
+  String get homeCardTrends => 'Trends';
+
+  @override
+  String get homeCardTrendsHelp =>
+      'Income and spending over the last six months, the current one lighter, with the averages of the months over';
+
+  @override
+  String homeTileReviewBefore(String month, String previous) {
+    return '$month · month before: $previous';
+  }
+
+  @override
+  String homeTileReviewGoalsOver(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count goals exceeded',
+      one: '1 goal exceeded',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileReviewFees(String amount) {
+    return '$amount in bank fees';
+  }
+
+  @override
+  String get homeTileReviewClean => 'No goal exceeded, no bank fees.';
+
+  @override
+  String homeTileReviewBiggest(String label) {
+    return 'Biggest expense: $label';
+  }
+
+  @override
+  String homeTileVsAverage(String average) {
+    return '$average on average';
+  }
+
+  @override
+  String homeTileComparisonUp(String category) {
+    return '$category: more than usual';
+  }
+
+  @override
+  String homeTileComparisonDown(String category) {
+    return '$category: less than usual';
+  }
+
+  @override
+  String get homeTileComparisonNone =>
+      'Nothing unusual this month against the three months before.';
+
+  @override
+  String get homeTileTrendsSpent => 'spent per month on average';
+
+  @override
+  String homeTileTrendsSpentValue(String amount) {
+    return '$amount spent per month on average';
+  }
+
+  @override
+  String get homeTileTrendsIncome => 'Income per month on average';
+
+  @override
+  String get homeTileTrendsExpense => 'Spending per month on average';
+
+  @override
+  String get homeTileTrendsNone =>
+      'Not enough history yet: at least one month over is needed.';
+
+  @override
   String get homeCardMonthSummary => 'Summary';
 
   @override

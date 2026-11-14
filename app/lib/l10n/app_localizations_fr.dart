@@ -8277,6 +8277,94 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeTileSplitNone => 'Aucune dépense classée ce mois-ci.';
 
   @override
+  String get homeCardReview => 'Mois écoulé';
+
+  @override
+  String get homeCardReviewHelp =>
+      'Le bilan du dernier mois terminé, comme dans Bilan du mois : ce qui est resté, le mois d\'avant, les objectifs dépassés, les frais bancaires et les plus fortes hausses';
+
+  @override
+  String get homeCardComparison => 'Comparaison';
+
+  @override
+  String get homeCardComparisonHelp =>
+      'Ce mois-ci face à la moyenne des trois mois précédents : les catégories en hausse et en baisse relevées par le moteur';
+
+  @override
+  String get homeCardTrends => 'Tendances';
+
+  @override
+  String get homeCardTrendsHelp =>
+      'Revenus et dépenses des six derniers mois, le mois en cours plus clair, avec les moyennes des mois terminés';
+
+  @override
+  String homeTileReviewBefore(String month, String previous) {
+    return '$month · mois d\'avant : $previous';
+  }
+
+  @override
+  String homeTileReviewGoalsOver(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count objectifs dépassés',
+      one: '1 objectif dépassé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeTileReviewFees(String amount) {
+    return '$amount de frais bancaires';
+  }
+
+  @override
+  String get homeTileReviewClean =>
+      'Aucun objectif dépassé, aucun frais bancaire.';
+
+  @override
+  String homeTileReviewBiggest(String label) {
+    return 'Plus grosse dépense : $label';
+  }
+
+  @override
+  String homeTileVsAverage(String average) {
+    return '$average en moyenne';
+  }
+
+  @override
+  String homeTileComparisonUp(String category) {
+    return '$category : plus que d\'habitude';
+  }
+
+  @override
+  String homeTileComparisonDown(String category) {
+    return '$category : moins que d\'habitude';
+  }
+
+  @override
+  String get homeTileComparisonNone =>
+      'Rien d\'inhabituel ce mois-ci par rapport aux trois mois précédents.';
+
+  @override
+  String get homeTileTrendsSpent => 'dépensés par mois en moyenne';
+
+  @override
+  String homeTileTrendsSpentValue(String amount) {
+    return '$amount dépensés par mois en moyenne';
+  }
+
+  @override
+  String get homeTileTrendsIncome => 'Revenus par mois en moyenne';
+
+  @override
+  String get homeTileTrendsExpense => 'Dépenses par mois en moyenne';
+
+  @override
+  String get homeTileTrendsNone =>
+      'Pas encore assez d\'historique : il faut au moins un mois terminé.';
+
+  @override
   String get homeCardMonthSummary => 'Récapitulatif';
 
   @override

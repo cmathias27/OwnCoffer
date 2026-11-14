@@ -12997,6 +12997,126 @@ abstract class AppLocalizations {
   /// **'Aucune dépense classée ce mois-ci.'**
   String get homeTileSplitNone;
 
+  /// No description provided for @homeCardReview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois écoulé'**
+  String get homeCardReview;
+
+  /// No description provided for @homeCardReviewHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le bilan du dernier mois terminé, comme dans Bilan du mois : ce qui est resté, le mois d\'avant, les objectifs dépassés, les frais bancaires et les plus fortes hausses'**
+  String get homeCardReviewHelp;
+
+  /// No description provided for @homeCardComparison.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comparaison'**
+  String get homeCardComparison;
+
+  /// No description provided for @homeCardComparisonHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois-ci face à la moyenne des trois mois précédents : les catégories en hausse et en baisse relevées par le moteur'**
+  String get homeCardComparisonHelp;
+
+  /// No description provided for @homeCardTrends.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tendances'**
+  String get homeCardTrends;
+
+  /// No description provided for @homeCardTrendsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus et dépenses des six derniers mois, le mois en cours plus clair, avec les moyennes des mois terminés'**
+  String get homeCardTrendsHelp;
+
+  /// No description provided for @homeTileReviewBefore.
+  ///
+  /// In fr, this message translates to:
+  /// **'{month} · mois d\'avant : {previous}'**
+  String homeTileReviewBefore(String month, String previous);
+
+  /// No description provided for @homeTileReviewGoalsOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 objectif dépassé} other{{count} objectifs dépassés}}'**
+  String homeTileReviewGoalsOver(int count);
+
+  /// No description provided for @homeTileReviewFees.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} de frais bancaires'**
+  String homeTileReviewFees(String amount);
+
+  /// No description provided for @homeTileReviewClean.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun objectif dépassé, aucun frais bancaire.'**
+  String get homeTileReviewClean;
+
+  /// No description provided for @homeTileReviewBiggest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus grosse dépense : {label}'**
+  String homeTileReviewBiggest(String label);
+
+  /// No description provided for @homeTileVsAverage.
+  ///
+  /// In fr, this message translates to:
+  /// **'{average} en moyenne'**
+  String homeTileVsAverage(String average);
+
+  /// No description provided for @homeTileComparisonUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'{category} : plus que d\'habitude'**
+  String homeTileComparisonUp(String category);
+
+  /// No description provided for @homeTileComparisonDown.
+  ///
+  /// In fr, this message translates to:
+  /// **'{category} : moins que d\'habitude'**
+  String homeTileComparisonDown(String category);
+
+  /// No description provided for @homeTileComparisonNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien d\'inhabituel ce mois-ci par rapport aux trois mois précédents.'**
+  String get homeTileComparisonNone;
+
+  /// No description provided for @homeTileTrendsSpent.
+  ///
+  /// In fr, this message translates to:
+  /// **'dépensés par mois en moyenne'**
+  String get homeTileTrendsSpent;
+
+  /// No description provided for @homeTileTrendsSpentValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} dépensés par mois en moyenne'**
+  String homeTileTrendsSpentValue(String amount);
+
+  /// No description provided for @homeTileTrendsIncome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus par mois en moyenne'**
+  String get homeTileTrendsIncome;
+
+  /// No description provided for @homeTileTrendsExpense.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses par mois en moyenne'**
+  String get homeTileTrendsExpense;
+
+  /// No description provided for @homeTileTrendsNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas encore assez d\'historique : il faut au moins un mois terminé.'**
+  String get homeTileTrendsNone;
+
   /// No description provided for @homeCardMonthSummary.
   ///
   /// In fr, this message translates to:

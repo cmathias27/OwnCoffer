@@ -230,6 +230,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] **Accueil en widgets** (précisé le 13 novembre 2026) : chaque élément de l'application devient un widget petit, moyen ou grand, posé librement sur une grille et modifié sur place — décision 0045 (remplace 0044), *1.30.0*
 - [x] **Toutes les fonctions en widgets** (demandé le 13 novembre 2026) : chaque fonction de l'application peut être posée sur l'Accueil — widgets vivants Objectifs du budget et Récapitulatif, raccourcis pour les autres, selon les droits de l'utilisateur — décision 0046, *1.31.0*
 - [x] **Widget Répartition des dépenses** (demandé le 13 novembre 2026) : le camembert de Budget sur l'Accueil ; « Ce mois-ci » corrigé — décision 0047, *1.32.0*
+- [x] **Widgets Mois écoulé, Comparaison et Tendances** (idées d'accueil du 14 novembre 2026) : le bilan du dernier mois, ce mois face aux trois précédents, revenus et dépenses sur six mois — décision 0049, *1.34.0*
 - [x] **Abonnements mis en évidence** dans Opérations : total mensuel, hausse constatée signalée, rappel avant une hausse de prix — décision 0034, *1.19.0*
 - [x] Récapitulatif mensuel : prévision à 30 jours, alertes et propositions en attente sur une page (calculé par le moteur, explication facultative par l'IA) — décision 0035, *1.20.0*
 - [x] Coût et volume de l'IA par fonction (lecture de documents, classement, discussion), en plus du plafond mensuel — décision 0048, *1.33.0*
