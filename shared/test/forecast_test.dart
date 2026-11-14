@@ -226,6 +226,47 @@ void main() {
       expect(b.currentCents, 250035);
       expect(b.allRealCents, 237690);
     });
+
+    test('operations not in balance are excluded (decision 0051)', () {
+      final b = computeBalances(
+        initialBalanceCents: 100000,
+        today: d(2026, 10, 20),
+        operations: [
+          BalanceInput(d(2026, 10, 1), -65000, cleared: true),
+          // Deferred debit card settlement: not deducted from account.
+          BalanceInput(
+            d(2026, 10, 2),
+            -50000,
+            cleared: true,
+            inBalance: false,
+          ),
+          BalanceInput(d(2026, 10, 5), 20000),
+          BalanceInput(d(2026, 10, 25), -10000, inBalance: false),
+        ],
+      );
+      expect(b.clearedCents, 35000);
+      expect(b.currentCents, 55000);
+      expect(b.allRealCents, 55000);
+    });
+
+    test('isEffectiveInBalance decides from override and category (0051)', () {
+      expect(isEffectiveInBalance(), isTrue);
+      expect(isEffectiveInBalance(categoryExcludedFromBalance: true), isFalse);
+      expect(
+        isEffectiveInBalance(
+          balanceOverride: true,
+          categoryExcludedFromBalance: true,
+        ),
+        isTrue,
+      );
+      expect(
+        isEffectiveInBalance(
+          balanceOverride: false,
+          categoryExcludedFromBalance: false,
+        ),
+        isFalse,
+      );
+    });
   });
 
   group('reconcile', () {

@@ -32,7 +32,8 @@ String generate(String yamlText) {
       'icon: ${thisIcon == null ? 'null' : q(thisIcon)}'
       '${c['deprecated'] == true ? ', deprecated: true' : ''}'
       '${c['replaced_by'] == null ? '' : ', replacedBy: ${q(c['replaced_by'])}'}'
-      '${c['since'] == null ? '' : ', since: ${c['since']}'}),',
+      '${c['since'] == null ? '' : ', since: ${c['since']}'}'
+      '${c['excluded_from_balance'] == true ? ', excludedFromBalance: true' : ''}),',
     );
     for (final child in (c['children'] as YamlList?) ?? const []) {
       emit(

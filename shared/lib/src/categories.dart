@@ -37,6 +37,10 @@ class StandardCategoryDef {
   /// it when they are updated.
   final int since;
 
+  /// Whether operations in this category are excluded from the account
+  /// balance by default (decision 0051, e.g. deferred card settlement).
+  final bool excludedFromBalance;
+
   const StandardCategoryDef(
     this.id, {
     required this.parent,
@@ -47,6 +51,7 @@ class StandardCategoryDef {
     this.deprecated = false,
     this.replacedBy,
     this.since = 1,
+    this.excludedFromBalance = false,
   });
 
   String name(String languageCode) => languageCode == 'fr' ? fr : en;
@@ -55,3 +60,15 @@ class StandardCategoryDef {
 final Map<String, StandardCategoryDef> standardCategoriesById = {
   for (final c in standardCategories) c.id: c,
 };
+
+/// Whether an operation counts in the account's balance (decision 0051).
+///
+/// An explicit [balanceOverride] on the operation takes precedence.
+/// Otherwise, the operation follows its category's [categoryExcludedFromBalance].
+bool isEffectiveInBalance({
+  bool? balanceOverride,
+  bool categoryExcludedFromBalance = false,
+}) {
+  if (balanceOverride != null) return balanceOverride;
+  return !categoryExcludedFromBalance;
+}

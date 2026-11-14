@@ -61,12 +61,14 @@ class RealOperation {
   final LocalDate date;
   final int amountCents;
   final CleanedLabel label;
+  final bool inBalance;
 
   const RealOperation({
     required this.id,
     required this.date,
     required this.amountCents,
     required this.label,
+    this.inBalance = true,
   });
 }
 
@@ -222,7 +224,7 @@ Forecast computeForecast({
     }
   }
   for (final op in futureOperations) {
-    if (op.date > today && op.date <= until) {
+    if (op.inBalance && op.date > today && op.date <= until) {
       events.add(
         ForecastEvent(
           date: op.date,
@@ -290,7 +292,13 @@ class BalanceInput {
   final LocalDate date;
   final int amountCents;
   final bool cleared;
-  const BalanceInput(this.date, this.amountCents, {this.cleared = false});
+  final bool inBalance;
+  const BalanceInput(
+    this.date,
+    this.amountCents, {
+    this.cleared = false,
+    this.inBalance = true,
+  });
 }
 
 AccountBalances computeBalances({
@@ -298,7 +306,7 @@ AccountBalances computeBalances({
   required Iterable<BalanceInput> operations,
   required LocalDate today,
 }) {
-  final ops = operations.toList();
+  final ops = operations.where((o) => o.inBalance).toList();
   return AccountBalances(
     sumCents([
       initialBalanceCents,
