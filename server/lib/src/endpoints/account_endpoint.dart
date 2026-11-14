@@ -99,6 +99,42 @@ class AccountEndpoint extends Endpoint {
     return updated;
   }
 
+  /// A regulated savings account (decision 0050): its kind (null = none)
+  /// and its yearly rate in hundredths of a percent (null = unknown).
+  Future<Account> setSavingsTerms(
+    Session session,
+    int accountId,
+    RegulatedKind? kind,
+    int? interestRateBp,
+  ) async {
+    final current = await Access.requireAccount(session, accountId);
+    await Access.requireMember(session, current.groupId, min: MemberRole.admin);
+    if (interestRateBp != null &&
+        (interestRateBp < 0 || interestRateBp > 2000)) {
+      throw InvalidInputException(
+        code: 'invalid_rate',
+        field: 'interestRateBp',
+      );
+    }
+    final updated = await Account.db.updateRow(
+      session,
+      current.copyWith(
+        regulatedKind: kind,
+        interestRateBp: kind == null ? null : interestRateBp,
+      ),
+    );
+    await Audit.log(
+      session,
+      groupId: current.groupId,
+      action: 'update',
+      entity: 'account',
+      rowId: accountId,
+      before: current,
+      after: updated,
+    );
+    return updated;
+  }
+
   /// Moves the account to the trash (kept 30 days).
   Future<void> archive(Session session, int accountId) async {
     final current = await Access.requireAccount(session, accountId);

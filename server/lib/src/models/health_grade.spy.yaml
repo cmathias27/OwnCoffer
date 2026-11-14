@@ -1,0 +1,8 @@
+### Level of a financial health indicator (core.HealthLevel).
+enum: HealthGrade
+serialized: byName
+values:
+  - good
+  - fair
+  - weak
+  - unknown

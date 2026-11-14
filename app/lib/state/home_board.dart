@@ -23,8 +23,9 @@ enum TileSize {
 /// next ones each sum up a page of the app (decision 0045); the last ones
 /// open the other functions of the app (decision 0046), then the split of
 /// the spending (decision 0047), then the last month's review, the
-/// comparison and the trends (decision 0049). New kinds are only ever added
-/// at the end.
+/// comparison and the trends (decision 0049), then the savings projects,
+/// the net worth and the financial health (decision 0050). New kinds are
+/// only ever added at the end.
 enum HomeTileKind {
   pepite,
   summary,
@@ -75,7 +76,13 @@ enum HomeTileKind {
   /// the three before, income and spending over six months.
   review,
   comparison,
-  trends;
+  trends,
+
+  /// Decision 0050: the savings projects, the net worth, the financial
+  /// health score.
+  projects,
+  netWorth,
+  health;
 
   /// A widget that opens a function rather than summing up a page
   /// (decision 0046).

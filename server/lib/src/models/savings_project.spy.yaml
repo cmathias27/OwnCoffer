@@ -1,0 +1,17 @@
+### A savings project (holiday, car, works…): a target, an optional date and
+### what is already saved, entered by hand (decision 0050).
+class: SavingsProject
+table: savings_projects
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  name: String
+  targetCents: int
+  savedCents: int, default=0
+  targetDate: DateTime?
+  ### Account the money is kept on, for information.
+  accountId: int?, relation(parent=accounts, onDelete=SetNull)
+  createdAt: DateTime, default=now
+  archivedAt: DateTime?
+indexes:
+  savings_projects_group_idx:
+    fields: groupId

@@ -1,0 +1,14 @@
+### A free reminder of a member ("call the bank", "send the form"), notified
+### on its day (decision 0050).
+class: Reminder
+table: reminders
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  authUserId: UuidValue
+  text: String
+  dueDate: DateTime
+  doneAt: DateTime?
+  createdAt: DateTime, default=now
+indexes:
+  reminders_group_idx:
+    fields: groupId, authUserId

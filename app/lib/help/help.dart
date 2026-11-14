@@ -12,12 +12,16 @@ enum HelpTopic {
   home,
   accounts,
   operations,
+  together,
   import,
   categories,
   budget,
   forecast,
   loans,
+  projects,
+  wealth,
   invoices,
+  followUp,
   advisor,
   assistant,
   notifications,
@@ -250,6 +254,10 @@ class HelpScreen extends StatefulWidget {
     HelpTopic.security => Icons.shield_outlined,
     HelpTopic.admin => Icons.admin_panel_settings_outlined,
     HelpTopic.privacy => Icons.lock_outline,
+    HelpTopic.projects => Icons.savings_outlined,
+    HelpTopic.wealth => Icons.monitor_heart_outlined,
+    HelpTopic.together => Icons.groups_outlined,
+    HelpTopic.followUp => Icons.task_alt,
   };
 
   @override

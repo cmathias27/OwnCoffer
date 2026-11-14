@@ -1,0 +1,7 @@
+### Shared expenses of the group, balances and repayments to settle them
+### (core.sharedBalances, core.settle).
+class: SharedOverview
+fields:
+  expenses: List<SharedExpense>
+  balances: List<MemberBalance>
+  settlements: List<SettlementInfo>

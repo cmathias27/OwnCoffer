@@ -1,0 +1,8 @@
+class: HealthIndicatorInfo
+fields:
+  ### emergency, savingsRate, debt or regularity.
+  key: String
+  grade: HealthGrade
+  ### Tenths of a month (emergency), per mille (savingsRate, debt) or months
+  ### without overspending (regularity).
+  value: int?

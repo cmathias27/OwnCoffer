@@ -1,0 +1,12 @@
+### A contract renewed every year and the last day to cancel it
+### (core.contractDates).
+class: ContractInfo
+fields:
+  scheduledId: int
+  accountId: int
+  label: String
+  amountCents: int
+  noticeDays: int
+  renewal: DateTime
+  deadline: DateTime
+  daysToDeadline: int

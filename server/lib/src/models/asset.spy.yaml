@@ -1,0 +1,14 @@
+### Something owned outside the accounts (home, car, investments), valued
+### by hand, for the net worth (decision 0050).
+class: Asset
+table: assets
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  name: String
+  kind: AssetKind
+  valueCents: int
+  valuedAt: DateTime
+  createdAt: DateTime, default=now
+indexes:
+  assets_group_idx:
+    fields: groupId

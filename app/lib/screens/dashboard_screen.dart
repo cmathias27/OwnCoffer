@@ -11,6 +11,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../navigation/search.dart';
+import '../navigation/sections.dart';
 import '../state/pepite.dart';
 import '../state/pepite_messages.dart';
 import '../state/ui_prefs.dart';
@@ -23,6 +24,7 @@ import '../widgets/soft.dart';
 import '../widgets/why.dart';
 import 'pepite_screen.dart';
 import 'review_screen.dart';
+import 'wealth_screen.dart';
 
 /// Where to go from the home page.
 enum DashboardTarget {
@@ -48,6 +50,10 @@ enum DashboardTarget {
 
   /// The invoices (decision 0045).
   invoices,
+
+  /// The savings projects, the net worth and health (decision 0050).
+  projects,
+  wealth,
 }
 
 /// The home page: where the money stands today and what comes next, on
@@ -110,6 +116,9 @@ const _onDemand = {
   HomeTileKind.split,
   HomeTileKind.review,
   HomeTileKind.comparison,
+  HomeTileKind.projects,
+  HomeTileKind.netWorth,
+  HomeTileKind.health,
 };
 
 class DashboardScreenState extends State<DashboardScreen> {
@@ -137,6 +146,9 @@ class DashboardScreenState extends State<DashboardScreen> {
   DateTime? _lastImport;
   var _importsKnown = false;
   Map<int, Category> _categories = const {};
+  ProjectOverview? _projects;
+  WealthOverview? _wealth;
+  HealthReport? _health;
   Set<HomeTileKind> _fetched = const {};
   String? _error;
 
@@ -224,6 +236,21 @@ class DashboardScreenState extends State<DashboardScreen> {
                   .list(_groupId)
                   .then<List<Category>?>((c) => c, onError: (_) => null)
             : Future.value(),
+        wants(HomeTileKind.projects)
+            ? client.project
+                  .overview(_groupId)
+                  .then<ProjectOverview?>((o) => o, onError: (_) => null)
+            : Future.value(),
+        wants(HomeTileKind.netWorth)
+            ? client.wealth
+                  .overview(_groupId)
+                  .then<WealthOverview?>((o) => o, onError: (_) => null)
+            : Future.value(),
+        wants(HomeTileKind.health)
+            ? client.wealth
+                  .health(_groupId)
+                  .then<HealthReport?>((h) => h, onError: (_) => null)
+            : Future.value(),
       ]);
       final current = results[4] as MonthReview?;
       final monthStart =
@@ -266,6 +293,9 @@ class DashboardScreenState extends State<DashboardScreen> {
           for (final c in results[10] as List<Category>? ?? const <Category>[])
             c.id!: c,
         };
+        _projects = results[11] as ProjectOverview?;
+        _wealth = results[12] as WealthOverview?;
+        _health = results[13] as HealthReport?;
         _fetched = want;
         _error = null;
         _reloads++;
@@ -676,6 +706,9 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.review => Icons.fact_check_outlined,
     HomeTileKind.comparison => Icons.compare_arrows,
     HomeTileKind.trends => Icons.bar_chart,
+    HomeTileKind.projects => AppPage.projects.icon,
+    HomeTileKind.netWorth => AppPage.wealth.icon,
+    HomeTileKind.health => Icons.favorite_border,
     HomeTileKind.monthSummary => AppFunction.summary.icon,
     HomeTileKind.search => Icons.search,
     _ => _function(k)!.icon,
@@ -706,6 +739,9 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.review => l.homeCardReview,
     HomeTileKind.comparison => l.homeCardComparison,
     HomeTileKind.trends => l.homeCardTrends,
+    HomeTileKind.projects => l.homeCardProjects,
+    HomeTileKind.netWorth => l.homeCardNetWorth,
+    HomeTileKind.health => l.homeCardHealth,
     HomeTileKind.monthSummary => l.homeCardMonthSummary,
     HomeTileKind.search => l.globalSearchOpen,
     _ => _function(k)!.label(l),
@@ -736,6 +772,9 @@ class DashboardScreenState extends State<DashboardScreen> {
     HomeTileKind.review => l.homeCardReviewHelp,
     HomeTileKind.comparison => l.homeCardComparisonHelp,
     HomeTileKind.trends => l.homeCardTrendsHelp,
+    HomeTileKind.projects => l.homeCardProjectsHelp,
+    HomeTileKind.netWorth => l.homeCardNetWorthHelp,
+    HomeTileKind.health => l.homeCardHealthHelp,
     HomeTileKind.monthSummary => l.homeCardMonthSummaryHelp,
     HomeTileKind.search => l.homeCardSearchHelp,
     HomeTileKind.newOperation => l.homeCardNewOperationHelp,
@@ -791,6 +830,9 @@ class DashboardScreenState extends State<DashboardScreen> {
         HomeTileKind.review => _reviewTile(context, l, s),
         HomeTileKind.comparison => _comparisonTile(context, l, s),
         HomeTileKind.trends => _trendsTile(context, l, s),
+        HomeTileKind.projects => _projectsTile(context, l, s),
+        HomeTileKind.netWorth => _netWorthTile(context, l, s),
+        HomeTileKind.health => _healthTile(context, l, s),
         HomeTileKind.monthSummary => _monthSummaryTile(context, l, s),
         _ => _shortcutTile(context, l, t.kind, s),
       },
@@ -2355,6 +2397,168 @@ class DashboardScreenState extends State<DashboardScreen> {
       helpTopic: HelpTopic.budget,
       target: DashboardTarget.budget,
       child: child,
+    );
+  }
+
+  /// What to put aside each month for the savings projects and the spread
+  /// expenses, and how far the projects are (decision 0050).
+  Widget _projectsTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final o = _projects;
+    if (o == null || !_fetched.contains(HomeTileKind.projects)) {
+      return _frame(
+        l,
+        HomeTileKind.projects,
+        s,
+        target: DashboardTarget.projects,
+        child: const SizedBox.shrink(),
+      );
+    }
+    final open = [
+      for (final p in o.projects)
+        if (p.project.archivedAt == null && !p.reached) p,
+    ];
+    final monthly = o.projectsMonthlyCents + o.smoothedMonthlyCents;
+    // The projects one by one only on a large widget.
+    final rows = s == TileSize.large ? 3 : 0;
+    final Widget child;
+    if (open.isEmpty && monthly == 0) {
+      child = TileLine(l.projectsEmpty, maxLines: 4);
+    } else {
+      child = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TileFigure(context.money(monthly), large: s == TileSize.large),
+          TileLine(l.homeTileProjectsLine),
+          for (final p in open.take(rows)) ...[
+            const SizedBox(height: 6),
+            _row(
+              context,
+              p.project.name,
+              '${p.progressPerMille ~/ 10} %',
+              sub: p.overdue
+                  ? l.projectOverdue(context.money(p.remainingCents))
+                  : null,
+            ),
+            ThinBar(
+              fraction: (p.progressPerMille / 1000).clamp(0, 1).toDouble(),
+              color: p.overdue ? ChartColors.critical : ChartColors.good,
+            ),
+          ],
+        ],
+      );
+    }
+    return _frame(
+      l,
+      HomeTileKind.projects,
+      s,
+      help: l.homeCardProjectsHelp,
+      helpTopic: HelpTopic.projects,
+      target: DashboardTarget.projects,
+      child: child,
+    );
+  }
+
+  /// The net worth: accounts and assets less what is left on the loans
+  /// (decision 0050).
+  Widget _netWorthTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final w = _wealth;
+    if (w == null || !_fetched.contains(HomeTileKind.netWorth)) {
+      return _frame(
+        l,
+        HomeTileKind.netWorth,
+        s,
+        target: DashboardTarget.wealth,
+        child: const SizedBox.shrink(),
+      );
+    }
+    final colors = context.moneyColors;
+    return _frame(
+      l,
+      HomeTileKind.netWorth,
+      s,
+      help: l.homeCardNetWorthHelp,
+      helpTopic: HelpTopic.wealth,
+      target: DashboardTarget.wealth,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TileFigure(
+            context.money(w.netWorthCents),
+            large: s == TileSize.large,
+            color: w.netWorthCents < 0 ? colors.negative : null,
+          ),
+          if (s == TileSize.small)
+            TileLine(l.netWorthTotal)
+          else if (s == TileSize.medium)
+            TileLine(
+              l.homeTileNetWorthLine(
+                context.money(w.accountsCents),
+                context.money(w.assetsCents),
+                context.money(w.loansCents),
+              ),
+            )
+          else ...[
+            const SizedBox(height: 4),
+            _row(context, l.netWorthAccounts, context.money(w.accountsCents)),
+            _row(context, l.netWorthAssets, context.money(w.assetsCents)),
+            if (w.loansCents != 0)
+              _row(context, l.netWorthLoans, context.money(-w.loansCents)),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// The financial health score and its indicators (decision 0050).
+  Widget _healthTile(BuildContext context, AppLocalizations l, TileSize s) {
+    final h = _health;
+    if (h == null || !_fetched.contains(HomeTileKind.health)) {
+      return _frame(
+        l,
+        HomeTileKind.health,
+        s,
+        target: DashboardTarget.wealth,
+        child: const SizedBox.shrink(),
+      );
+    }
+    final theme = Theme.of(context);
+    final score = h.score;
+    // A medium widget names the weakest indicator known.
+    HealthIndicatorInfo? weakest;
+    for (final g in const [HealthGrade.weak, HealthGrade.fair]) {
+      weakest ??= h.indicators.where((i) => i.grade == g).firstOrNull;
+    }
+    return _frame(
+      l,
+      HomeTileKind.health,
+      s,
+      help: l.homeCardHealthHelp,
+      helpTopic: HelpTopic.wealth,
+      target: DashboardTarget.wealth,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TileFigure(
+            score == null ? l.healthNoScore : l.healthScore(score),
+            large: s == TileSize.large,
+          ),
+          if (s != TileSize.large)
+            TileLine(
+              s == TileSize.medium && weakest != null
+                  ? healthIndicatorText(context, weakest, h.months)
+                  : l.healthTitle,
+            )
+          else
+            for (final i in h.indicators.take(4))
+              _row(
+                context,
+                healthIndicatorText(context, i, h.months),
+                null,
+                icon: Icons.circle,
+                iconColor: healthGradeColor(theme, i.grade),
+              ),
+        ],
+      ),
     );
   }
 

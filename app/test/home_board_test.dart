@@ -423,6 +423,55 @@ void main() {
       role: MemberRole.user,
     );
 
+    // Decision 0050: projects, net worth, health.
+    final projects = ProjectOverview(
+      projects: [
+        SavingsProjectInfo(
+          project: SavingsProject(
+            id: 1,
+            groupId: 1,
+            name: 'Vacances',
+            targetCents: 200000,
+            savedCents: 50000,
+          ),
+          remainingCents: 150000,
+          monthsLeft: 6,
+          monthlyCents: 25000,
+          progressPerMille: 250,
+          reached: false,
+          overdue: false,
+        ),
+      ],
+      smoothed: const [],
+      smoothedMonthlyCents: 5000,
+      smoothedSetAsideCents: 0,
+      projectsMonthlyCents: 25000,
+    );
+    final wealth = WealthOverview(
+      accounts: const [],
+      assets: const [],
+      accountsCents: 1000000,
+      assetsCents: 2000000,
+      loansCents: 500000,
+      netWorthCents: 2500000,
+    );
+    final health = HealthReport(
+      score: 72,
+      indicators: [
+        HealthIndicatorInfo(
+          key: 'savingsRate',
+          grade: HealthGrade.good,
+          value: 125,
+        ),
+        HealthIndicatorInfo(key: 'debt', grade: HealthGrade.fair, value: 310),
+      ],
+      savingsCents: 600000,
+      monthlyIncomeCents: 250000,
+      monthlyExpenseCents: 200000,
+      monthlyLoanCents: 77500,
+      months: 3,
+    );
+
     setUp(() async {
       pepite.enabled = false;
       client = Client(
@@ -434,6 +483,9 @@ void main() {
             '/api/analysis/report' => report,
             '/api/analysis/review' => review,
             '/api/category/list' => categories,
+            '/api/project/overview' => projects,
+            '/api/wealth/overview' => wealth,
+            '/api/wealth/health' => health,
             _ => null,
           };
           if (answer == null) return http.Response('{}', 500);
@@ -657,17 +709,17 @@ void main() {
           )
           .first;
       await tester.scrollUntilVisible(
-        find.byKey(const Key('home-add-monthSummary')),
+        find.byKey(const Key('home-add-search')),
         200,
         scrollable: sheet,
       );
-      await tester.drag(sheet, const Offset(0, -2000));
-      await tester.pumpAndSettle();
-      expect(find.byKey(const Key('home-add-trends')), findsOneWidget);
-      expect(find.byKey(const Key('home-add-rules')), findsNothing);
-      expect(find.byKey(const Key('home-add-admin')), findsNothing);
       // The search is no function of the list: still offered.
       expect(find.byKey(const Key('home-add-search')), findsOneWidget);
+      await tester.drag(sheet, const Offset(0, -2000));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('home-add-health')), findsOneWidget);
+      expect(find.byKey(const Key('home-add-rules')), findsNothing);
+      expect(find.byKey(const Key('home-add-admin')), findsNothing);
     });
 
     testWidgets('budget goals: left, spent against planned, exceeded', (
@@ -769,6 +821,31 @@ void main() {
       await tester.tap(find.byKey(const Key('home-card-review')));
       await tester.pumpAndSettle();
       expect(find.byType(ReviewScreen), findsOneWidget);
+    });
+
+    testWidgets('projects, net worth and health, from the engine (0050)', (
+      tester,
+    ) async {
+      await tester.runAsync(
+        () => uiPrefs.setHomeBoard(
+          _board('projects:l:0:0,netWorth:l:0:2,health:m:0:4'),
+        ),
+      );
+      await open(tester, const Size(400, 1200));
+      expect(tester.takeException(), isNull);
+      Finder inCard(String kind, String text) => find.descendant(
+        of: find.byKey(Key('home-card-$kind')),
+        matching: find.textContaining(text),
+      );
+      // 250 for the project and 50 for the spread expenses, every month.
+      expect(inCard('projects', '300,00'), findsOneWidget);
+      expect(inCard('projects', 'Vacances'), findsOneWidget);
+      expect(inCard('projects', '25 %'), findsOneWidget);
+      expect(inCard('netWorth', 'Biens'), findsOneWidget);
+      expect(inCard('netWorth', 'Crédits restant dus'), findsOneWidget);
+      expect(inCard('health', '72 / 100'), findsOneWidget);
+      // A medium widget names the weakest indicator.
+      expect(inCard('health', 'Endettement : 31 %'), findsOneWidget);
     });
 
     testWidgets('small: one figure each', (tester) async {

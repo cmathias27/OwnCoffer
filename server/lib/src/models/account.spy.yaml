@@ -19,6 +19,10 @@ fields:
   ### number. Learnt at the first OFX import.
   bankAccountKey: String?, scope=serverOnly
   color: String?
+  ### A regulated savings account (decision 0050), with its yearly rate in
+  ### hundredths of a percent.
+  regulatedKind: RegulatedKind?
+  interestRateBp: int?
   createdAt: DateTime, default=now
   deletedAt: DateTime?
 indexes:

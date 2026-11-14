@@ -1,0 +1,8 @@
+enum: AssetKind
+serialized: byName
+values:
+  - property
+  - vehicle
+  - investment
+  - valuables
+  - other

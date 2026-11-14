@@ -2,6 +2,17 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.35.0 (novembre 2026)
+### Projets, patrimoine, dépenses à plusieurs et suivi (décision 0050)
+- **Projets** (Prévoir) : projets d'épargne avec la somme à mettre de côté chaque mois pour tenir la date ; grosses dépenses de l'année (annuelles, semestrielles, trimestrielles) **lissées** en mensualités.
+- **Patrimoine** (Prévoir) : patrimoine net (comptes + biens déclarés − crédits restant dus) ; **livrets réglementés** (Livret A, LDDS, LEP, Livret jeune) avec plafond et intérêts estimés par quinzaine ; **santé financière** notée sur 100 (épargne de précaution, taux d'épargne, endettement, régularité) ; **bilan de l'année** avec les montants des catégories utiles à la déclaration de revenus.
+- **À plusieurs** (Argent) : dépenses partagées entre membres, le moins de remboursements possible pour être quittes, **pot commun** au prorata des revenus.
+- **Suivi** (Papiers) : **remboursements attendus** reconnus à leur arrivée, **contrats** avec le dernier jour pour résilier, **événements** regroupant leurs opérations, **rappels** personnels ; notifications à l'échéance.
+- **Clôture des mois** (Budget, administrateur) : les opérations des mois vérifiés ne peuvent plus être modifiées ni reclassées ; les imports continuent.
+- **Vues enregistrées** dans Opérations : une recherche et des filtres retrouvés en un geste.
+- Trois nouveaux widgets d'Accueil : **Projets**, **Patrimoine**, **Santé financière**.
+- L'export et le transfert de données reprennent toutes ces nouveautés.
+
 ## 1.34.0 (novembre 2026)
 ### Widgets Mois écoulé, Comparaison et Tendances (décision 0049)
 - **Mois écoulé** : le bilan du dernier mois terminé sur l'Accueil (ce qui est resté, le mois d'avant, objectifs dépassés, frais bancaires, plus grosse dépense) ; un toucher ouvre son Bilan du mois.

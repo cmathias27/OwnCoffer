@@ -1,0 +1,12 @@
+### Monthly income declared by a member, to split the common pot in
+### proportion (decision 0050).
+class: PotShare
+table: pot_shares
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  authUserId: UuidValue
+  incomeCents: int
+indexes:
+  pot_shares_member_idx:
+    fields: groupId, authUserId
+    unique: true

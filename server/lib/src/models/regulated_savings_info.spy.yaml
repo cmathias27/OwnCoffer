@@ -1,0 +1,17 @@
+### A regulated savings account: room left under the ceiling and the
+### interest under the fortnight rule (core.fortnightInterest).
+class: RegulatedSavingsInfo
+fields:
+  accountId: int
+  name: String
+  kind: RegulatedKind
+  balanceCents: int
+  ceilingCents: int
+  ### Deposits still possible, never negative.
+  roomCents: int
+  ### Yearly rate in hundredths of a percent; null = not entered.
+  rateBp: int?
+  ### Interest of the fortnights already over this year.
+  interestSoFarCents: int?
+  ### Interest of the whole year if nothing moves any more.
+  interestYearCents: int?

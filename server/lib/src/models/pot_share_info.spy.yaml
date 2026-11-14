@@ -1,0 +1,6 @@
+class: PotShareInfo
+fields:
+  userId: UuidValue
+  email: String?
+  incomeCents: int
+  shareCents: int

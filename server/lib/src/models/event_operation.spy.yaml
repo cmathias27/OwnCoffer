@@ -1,0 +1,12 @@
+### An operation counted in a life event.
+class: EventOperation
+table: event_operations
+fields:
+  eventId: int, relation(parent=life_events, onDelete=Cascade)
+  transactionId: int, relation(parent=transactions, onDelete=Cascade)
+indexes:
+  event_operations_pair_idx:
+    fields: eventId, transactionId
+    unique: true
+  event_operations_transaction_idx:
+    fields: transactionId

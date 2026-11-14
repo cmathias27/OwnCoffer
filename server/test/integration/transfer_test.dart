@@ -179,6 +179,58 @@ void main() {
         categoryId: child.id,
       );
       await endpoints.goal.set(as(alice), groupA, child.id!, 30000);
+      // Planning and follow-up (decision 0050).
+      final day = DateTime.utc(2026, 9, 1);
+      await endpoints.project.save(
+        as(alice),
+        groupA,
+        SavingsProject(
+          groupId: 0,
+          name: 'Vacances',
+          targetCents: 120000,
+          savedCents: 20000,
+          accountId: livret.id,
+        ),
+      );
+      await endpoints.wealth.saveAsset(
+        as(alice),
+        groupA,
+        Asset(
+          groupId: 0,
+          name: 'Voiture',
+          kind: AssetKind.vehicle,
+          valueCents: 800000,
+          valuedAt: day,
+        ),
+      );
+      await endpoints.refund.save(
+        as(alice),
+        groupA,
+        ExpectedRefund(
+          groupId: 0,
+          createdBy: alice,
+          label: 'Mutuelle',
+          amountCents: 1234,
+          since: day,
+          accountId: courant.id,
+        ),
+      );
+      final event = await endpoints.event.save(
+        as(alice),
+        groupA,
+        LifeEvent(groupId: 0, name: 'Mariage', startDate: day),
+      );
+      await endpoints.event.attach(as(alice), event.id!, [op.id!]);
+      await endpoints.reminder.save(
+        as(alice),
+        groupA,
+        Reminder(
+          groupId: 0,
+          authUserId: alice,
+          text: 'Résilier la box',
+          dueDate: day,
+        ),
+      );
 
       final json = await endpoints.export.groupJson(as(alice), groupA);
       final result = await send(alice, json);
@@ -232,6 +284,22 @@ void main() {
           ExportSummary.of(jsonDecode(copy) as Map<String, dynamic>),
         ),
         isEmpty,
+      );
+      final newLivret = accounts.firstWhere((a) => a.name == 'Livret');
+      final projects = await endpoints.project.overview(as(alice), g);
+      expect(projects.projects.single.project.accountId, newLivret.id);
+      final refunds = await endpoints.refund.list(as(alice), g);
+      expect(refunds.single.accountId, newCourant.id);
+      expect(refunds.single.createdBy, alice);
+      final events = await endpoints.event.list(as(alice), g);
+      final eventOps = await endpoints.event.operations(
+        as(alice),
+        events.single.event.id!,
+      );
+      expect(eventOps.single.id, bloc.id);
+      expect(
+        (await endpoints.reminder.list(as(alice), g)).single.text,
+        'Résilier la box',
       );
       final now = DateTime.now().toUtc();
       final today = DateTime.utc(now.year, now.month, now.day);

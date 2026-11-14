@@ -90,6 +90,31 @@ class CategoryEndpoint extends Endpoint {
     return updated;
   }
 
+  /// Marks the category for the tax return (decision 0050): its operations
+  /// are listed in the yearly review.
+  Future<Category> setTaxRelevant(
+    Session session,
+    int categoryId,
+    bool taxRelevant,
+  ) async {
+    final current = await _find(session, categoryId);
+    await Access.requireMember(session, current.groupId, min: MemberRole.user);
+    final updated = await Category.db.updateRow(
+      session,
+      current.copyWith(taxRelevant: taxRelevant),
+    );
+    await Audit.log(
+      session,
+      groupId: current.groupId,
+      action: 'update',
+      entity: 'category',
+      rowId: categoryId,
+      before: current,
+      after: updated,
+    );
+    return updated;
+  }
+
   /// Moves the category to the trash; its operations become "to classify"
   /// only if the user chooses so (they keep the link until purge).
   Future<void> archive(Session session, int categoryId) async {

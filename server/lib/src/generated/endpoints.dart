@@ -16,22 +16,33 @@ import 'package:owncoffer_server/src/generated/account_visibility.dart'
     as _ioa13f9g;
 import 'package:owncoffer_server/src/generated/ai_message.dart' as _ijy47dz3;
 import 'package:owncoffer_server/src/generated/ai_provider.dart' as _iptn367l;
+import 'package:owncoffer_server/src/generated/asset.dart' as _ixcklldb;
 import 'package:owncoffer_server/src/generated/budget_period.dart' as _imscipj7;
 import 'package:owncoffer_server/src/generated/category_kind.dart' as _io27ugya;
 import 'package:owncoffer_server/src/generated/category_source.dart'
     as _is85mlpa;
 import 'package:owncoffer_server/src/generated/csv_columns.dart' as _iytxq8gu;
+import 'package:owncoffer_server/src/generated/expected_refund.dart'
+    as _ijqknek3;
 import 'package:owncoffer_server/src/generated/frequency.dart' as _iugtcrzz;
+import 'package:owncoffer_server/src/generated/life_event.dart' as _i27kevyq;
 import 'package:owncoffer_server/src/generated/loan.dart' as _i2yv792g;
 import 'package:owncoffer_server/src/generated/loan_event.dart' as _ifjfj2mv;
 import 'package:owncoffer_server/src/generated/member_role.dart' as _is2flj8o;
 import 'package:owncoffer_server/src/generated/notification_settings.dart'
     as _id4w1v6o;
 import 'package:owncoffer_server/src/generated/pepite_status.dart' as _iqopjt2h;
+import 'package:owncoffer_server/src/generated/regulated_kind.dart'
+    as _ibhiyjoj;
+import 'package:owncoffer_server/src/generated/reminder.dart' as _iq6fc8a3;
 import 'package:owncoffer_server/src/generated/rule_direction.dart'
     as _ini8nmtb;
 import 'package:owncoffer_server/src/generated/rule_match_type.dart'
     as _ijwgwf7y;
+import 'package:owncoffer_server/src/generated/savings_project.dart'
+    as _ict8q29d;
+import 'package:owncoffer_server/src/generated/shared_expense.dart'
+    as _ivdk3bm6;
 import 'package:owncoffer_server/src/generated/transaction_split.dart'
     as _i84rsuuz;
 import 'package:serverpod/serverpod.dart' as _is;
@@ -48,6 +59,7 @@ import '../endpoints/ai_endpoint.dart' as _igsjf4zh;
 import '../endpoints/analysis_endpoint.dart' as _i0sl0qub;
 import '../endpoints/app_lock_endpoint.dart' as _i1w4s0rn;
 import '../endpoints/category_endpoint.dart' as _ioevag4g;
+import '../endpoints/event_endpoint.dart' as _icw8lb6p;
 import '../endpoints/export_endpoint.dart' as _i0kmk8zv;
 import '../endpoints/feedback_endpoint.dart' as _iebcplle;
 import '../endpoints/goal_endpoint.dart' as _i2k4izhk;
@@ -61,13 +73,18 @@ import '../endpoints/notification_endpoint.dart' as _ihb11yhk;
 import '../endpoints/pepite_advice_endpoint.dart' as _i2lab1lj;
 import '../endpoints/pepite_endpoint.dart' as _iagql2g7;
 import '../endpoints/presence_endpoint.dart' as _iol1r7pe;
+import '../endpoints/project_endpoint.dart' as _iemg8ri2;
+import '../endpoints/refund_endpoint.dart' as _ie2hkz52;
+import '../endpoints/reminder_endpoint.dart' as _ixg1zk1k;
 import '../endpoints/rule_endpoint.dart' as _i1yhvvjn;
 import '../endpoints/scheduled_endpoint.dart' as _ip6habnq;
 import '../endpoints/search_endpoint.dart' as _ipmmezh5;
 import '../endpoints/setup_endpoint.dart' as _i5xhv8r1;
+import '../endpoints/shared_endpoint.dart' as _i8s9lgne;
 import '../endpoints/transaction_endpoint.dart' as _iyokctnp;
 import '../endpoints/transfer_endpoint.dart' as _ikqanwsd;
 import '../endpoints/two_factor_endpoint.dart' as _ivxdn6q3;
+import '../endpoints/wealth_endpoint.dart' as _igwfmz6t;
 
 class Endpoints extends _is.EndpointDispatch {
   @override
@@ -125,6 +142,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'category',
+          null,
+        ),
+      'event': _icw8lb6p.EventEndpoint()
+        ..initialize(
+          server,
+          'event',
           null,
         ),
       'export': _i0kmk8zv.ExportEndpoint()
@@ -205,6 +228,24 @@ class Endpoints extends _is.EndpointDispatch {
           'presence',
           null,
         ),
+      'project': _iemg8ri2.ProjectEndpoint()
+        ..initialize(
+          server,
+          'project',
+          null,
+        ),
+      'refund': _ie2hkz52.RefundEndpoint()
+        ..initialize(
+          server,
+          'refund',
+          null,
+        ),
+      'reminder': _ixg1zk1k.ReminderEndpoint()
+        ..initialize(
+          server,
+          'reminder',
+          null,
+        ),
       'rule': _i1yhvvjn.RuleEndpoint()
         ..initialize(
           server,
@@ -229,6 +270,12 @@ class Endpoints extends _is.EndpointDispatch {
           'setup',
           null,
         ),
+      'shared': _i8s9lgne.SharedEndpoint()
+        ..initialize(
+          server,
+          'shared',
+          null,
+        ),
       'transaction': _iyokctnp.TransactionEndpoint()
         ..initialize(
           server,
@@ -245,6 +292,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'twoFactor',
+          null,
+        ),
+      'wealth': _igwfmz6t.WealthEndpoint()
+        ..initialize(
+          server,
+          'wealth',
           null,
         ),
     };
@@ -597,6 +650,37 @@ class Endpoints extends _is.EndpointDispatch {
                     alertThresholdCents: params['alertThresholdCents'],
                     visibility: params['visibility'],
                     color: params['color'],
+                  ),
+        ),
+        'setSavingsTerms': _is.MethodConnector(
+          name: 'setSavingsTerms',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'kind': _is.ParameterDescription(
+              name: 'kind',
+              type: _is.getType<_ibhiyjoj.RegulatedKind?>(),
+              nullable: true,
+            ),
+            'interestRateBp': _is.ParameterDescription(
+              name: 'interestRateBp',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['account'] as _iaho7ul5.AccountEndpoint)
+                  .setSavingsTerms(
+                    session,
+                    params['accountId'],
+                    params['kind'],
+                    params['interestRateBp'],
                   ),
         ),
         'archive': _is.MethodConnector(
@@ -1829,6 +1913,31 @@ class Endpoints extends _is.EndpointDispatch {
                     color: params['color'],
                   ),
         ),
+        'setTaxRelevant': _is.MethodConnector(
+          name: 'setTaxRelevant',
+          params: {
+            'categoryId': _is.ParameterDescription(
+              name: 'categoryId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'taxRelevant': _is.ParameterDescription(
+              name: 'taxRelevant',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['category'] as _ioevag4g.CategoryEndpoint)
+                  .setTaxRelevant(
+                    session,
+                    params['categoryId'],
+                    params['taxRelevant'],
+                  ),
+        ),
         'archive': _is.MethodConnector(
           name: 'archive',
           params: {
@@ -1847,6 +1956,139 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['categoryId'],
                   ),
+        ),
+      },
+    );
+    connectors['event'] = _is.EndpointConnector(
+      name: 'event',
+      endpoint: endpoints['event']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['event'] as _icw8lb6p.EventEndpoint).list(
+                session,
+                params['groupId'],
+              ),
+        ),
+        'save': _is.MethodConnector(
+          name: 'save',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'event': _is.ParameterDescription(
+              name: 'event',
+              type: _is.getType<_i27kevyq.LifeEvent>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['event'] as _icw8lb6p.EventEndpoint).save(
+                session,
+                params['groupId'],
+                params['event'],
+              ),
+        ),
+        'remove': _is.MethodConnector(
+          name: 'remove',
+          params: {
+            'eventId': _is.ParameterDescription(
+              name: 'eventId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['event'] as _icw8lb6p.EventEndpoint).remove(
+                session,
+                params['eventId'],
+              ),
+        ),
+        'operations': _is.MethodConnector(
+          name: 'operations',
+          params: {
+            'eventId': _is.ParameterDescription(
+              name: 'eventId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['event'] as _icw8lb6p.EventEndpoint).operations(
+                    session,
+                    params['eventId'],
+                  ),
+        ),
+        'attach': _is.MethodConnector(
+          name: 'attach',
+          params: {
+            'eventId': _is.ParameterDescription(
+              name: 'eventId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'transactionIds': _is.ParameterDescription(
+              name: 'transactionIds',
+              type: _is.getType<List<int>>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['event'] as _icw8lb6p.EventEndpoint).attach(
+                session,
+                params['eventId'],
+                params['transactionIds'],
+              ),
+        ),
+        'detach': _is.MethodConnector(
+          name: 'detach',
+          params: {
+            'eventId': _is.ParameterDescription(
+              name: 'eventId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'transactionId': _is.ParameterDescription(
+              name: 'transactionId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['event'] as _icw8lb6p.EventEndpoint).detach(
+                session,
+                params['eventId'],
+                params['transactionId'],
+              ),
         ),
       },
     );
@@ -2145,6 +2387,31 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['groupId'],
                     params['day'],
+                  ),
+        ),
+        'setClosedUntil': _is.MethodConnector(
+          name: 'setClosedUntil',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'until': _is.ParameterDescription(
+              name: 'until',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['group'] as _iknqvl2r.GroupEndpoint)
+                  .setClosedUntil(
+                    session,
+                    params['groupId'],
+                    params['until'],
                   ),
         ),
         'members': _is.MethodConnector(
@@ -3825,6 +4092,311 @@ class Endpoints extends _is.EndpointDispatch {
         ),
       },
     );
+    connectors['project'] = _is.EndpointConnector(
+      name: 'project',
+      endpoint: endpoints['project']!,
+      methodConnectors: {
+        'overview': _is.MethodConnector(
+          name: 'overview',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['project'] as _iemg8ri2.ProjectEndpoint).overview(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'save': _is.MethodConnector(
+          name: 'save',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'project': _is.ParameterDescription(
+              name: 'project',
+              type: _is.getType<_ict8q29d.SavingsProject>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['project'] as _iemg8ri2.ProjectEndpoint).save(
+                    session,
+                    params['groupId'],
+                    params['project'],
+                  ),
+        ),
+        'addSaved': _is.MethodConnector(
+          name: 'addSaved',
+          params: {
+            'projectId': _is.ParameterDescription(
+              name: 'projectId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'amountCents': _is.ParameterDescription(
+              name: 'amountCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['project'] as _iemg8ri2.ProjectEndpoint).addSaved(
+                    session,
+                    params['projectId'],
+                    params['amountCents'],
+                  ),
+        ),
+        'setArchived': _is.MethodConnector(
+          name: 'setArchived',
+          params: {
+            'projectId': _is.ParameterDescription(
+              name: 'projectId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'archived': _is.ParameterDescription(
+              name: 'archived',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['project'] as _iemg8ri2.ProjectEndpoint)
+                  .setArchived(
+                    session,
+                    params['projectId'],
+                    params['archived'],
+                  ),
+        ),
+        'remove': _is.MethodConnector(
+          name: 'remove',
+          params: {
+            'projectId': _is.ParameterDescription(
+              name: 'projectId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['project'] as _iemg8ri2.ProjectEndpoint).remove(
+                    session,
+                    params['projectId'],
+                  ),
+        ),
+      },
+    );
+    connectors['refund'] = _is.EndpointConnector(
+      name: 'refund',
+      endpoint: endpoints['refund']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['refund'] as _ie2hkz52.RefundEndpoint).list(
+                session,
+                params['groupId'],
+              ),
+        ),
+        'save': _is.MethodConnector(
+          name: 'save',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'refund': _is.ParameterDescription(
+              name: 'refund',
+              type: _is.getType<_ijqknek3.ExpectedRefund>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['refund'] as _ie2hkz52.RefundEndpoint).save(
+                session,
+                params['groupId'],
+                params['refund'],
+              ),
+        ),
+        'setReceived': _is.MethodConnector(
+          name: 'setReceived',
+          params: {
+            'refundId': _is.ParameterDescription(
+              name: 'refundId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'received': _is.ParameterDescription(
+              name: 'received',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['refund'] as _ie2hkz52.RefundEndpoint).setReceived(
+                    session,
+                    params['refundId'],
+                    params['received'],
+                  ),
+        ),
+        'remove': _is.MethodConnector(
+          name: 'remove',
+          params: {
+            'refundId': _is.ParameterDescription(
+              name: 'refundId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['refund'] as _ie2hkz52.RefundEndpoint).remove(
+                    session,
+                    params['refundId'],
+                  ),
+        ),
+      },
+    );
+    connectors['reminder'] = _is.EndpointConnector(
+      name: 'reminder',
+      endpoint: endpoints['reminder']!,
+      methodConnectors: {
+        'list': _is.MethodConnector(
+          name: 'list',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['reminder'] as _ixg1zk1k.ReminderEndpoint).list(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'save': _is.MethodConnector(
+          name: 'save',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'reminder': _is.ParameterDescription(
+              name: 'reminder',
+              type: _is.getType<_iq6fc8a3.Reminder>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['reminder'] as _ixg1zk1k.ReminderEndpoint).save(
+                    session,
+                    params['groupId'],
+                    params['reminder'],
+                  ),
+        ),
+        'setDone': _is.MethodConnector(
+          name: 'setDone',
+          params: {
+            'reminderId': _is.ParameterDescription(
+              name: 'reminderId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'done': _is.ParameterDescription(
+              name: 'done',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['reminder'] as _ixg1zk1k.ReminderEndpoint).setDone(
+                    session,
+                    params['reminderId'],
+                    params['done'],
+                  ),
+        ),
+        'remove': _is.MethodConnector(
+          name: 'remove',
+          params: {
+            'reminderId': _is.ParameterDescription(
+              name: 'reminderId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['reminder'] as _ixg1zk1k.ReminderEndpoint).remove(
+                    session,
+                    params['reminderId'],
+                  ),
+        ),
+      },
+    );
     connectors['rule'] = _is.EndpointConnector(
       name: 'rule',
       endpoint: endpoints['rule']!,
@@ -4260,6 +4832,56 @@ class Endpoints extends _is.EndpointDispatch {
                     amountCents: params['amountCents'],
                   ),
         ),
+        'setContract': _is.MethodConnector(
+          name: 'setContract',
+          params: {
+            'scheduledId': _is.ParameterDescription(
+              name: 'scheduledId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'renewalDate': _is.ParameterDescription(
+              name: 'renewalDate',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'noticeDays': _is.ParameterDescription(
+              name: 'noticeDays',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .setContract(
+                    session,
+                    params['scheduledId'],
+                    renewalDate: params['renewalDate'],
+                    noticeDays: params['noticeDays'],
+                  ),
+        ),
+        'contracts': _is.MethodConnector(
+          name: 'contracts',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .contracts(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
         'applyPriceRise': _is.MethodConnector(
           name: 'applyPriceRise',
           params: {
@@ -4586,6 +5208,148 @@ class Endpoints extends _is.EndpointDispatch {
                 params['setupCode'],
                 params['email'],
               ),
+        ),
+      },
+    );
+    connectors['shared'] = _is.EndpointConnector(
+      name: 'shared',
+      endpoint: endpoints['shared']!,
+      methodConnectors: {
+        'overview': _is.MethodConnector(
+          name: 'overview',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shared'] as _i8s9lgne.SharedEndpoint).overview(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'add': _is.MethodConnector(
+          name: 'add',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'expense': _is.ParameterDescription(
+              name: 'expense',
+              type: _is.getType<_ivdk3bm6.SharedExpense>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['shared'] as _i8s9lgne.SharedEndpoint).add(
+                session,
+                params['groupId'],
+                params['expense'],
+              ),
+        ),
+        'remove': _is.MethodConnector(
+          name: 'remove',
+          params: {
+            'expenseId': _is.ParameterDescription(
+              name: 'expenseId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shared'] as _i8s9lgne.SharedEndpoint).remove(
+                    session,
+                    params['expenseId'],
+                  ),
+        ),
+        'pot': _is.MethodConnector(
+          name: 'pot',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['shared'] as _i8s9lgne.SharedEndpoint).pot(
+                session,
+                params['groupId'],
+              ),
+        ),
+        'setPot': _is.MethodConnector(
+          name: 'setPot',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'totalCents': _is.ParameterDescription(
+              name: 'totalCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shared'] as _i8s9lgne.SharedEndpoint).setPot(
+                    session,
+                    params['groupId'],
+                    params['totalCents'],
+                  ),
+        ),
+        'setIncome': _is.MethodConnector(
+          name: 'setIncome',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'userId': _is.ParameterDescription(
+              name: 'userId',
+              type: _is.getType<_is.UuidValue>(),
+              nullable: false,
+            ),
+            'incomeCents': _is.ParameterDescription(
+              name: 'incomeCents',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shared'] as _i8s9lgne.SharedEndpoint).setIncome(
+                    session,
+                    params['groupId'],
+                    params['userId'],
+                    params['incomeCents'],
+                  ),
         ),
       },
     );
@@ -5308,6 +6072,137 @@ class Endpoints extends _is.EndpointDispatch {
                   .disable(
                     session,
                     params['code'],
+                  ),
+        ),
+      },
+    );
+    connectors['wealth'] = _is.EndpointConnector(
+      name: 'wealth',
+      endpoint: endpoints['wealth']!,
+      methodConnectors: {
+        'overview': _is.MethodConnector(
+          name: 'overview',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['wealth'] as _igwfmz6t.WealthEndpoint).overview(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'savings': _is.MethodConnector(
+          name: 'savings',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['wealth'] as _igwfmz6t.WealthEndpoint).savings(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'health': _is.MethodConnector(
+          name: 'health',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['wealth'] as _igwfmz6t.WealthEndpoint).health(
+                    session,
+                    params['groupId'],
+                  ),
+        ),
+        'year': _is.MethodConnector(
+          name: 'year',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'year': _is.ParameterDescription(
+              name: 'year',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['wealth'] as _igwfmz6t.WealthEndpoint).year(
+                session,
+                params['groupId'],
+                params['year'],
+              ),
+        ),
+        'saveAsset': _is.MethodConnector(
+          name: 'saveAsset',
+          params: {
+            'groupId': _is.ParameterDescription(
+              name: 'groupId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'asset': _is.ParameterDescription(
+              name: 'asset',
+              type: _is.getType<_ixcklldb.Asset>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['wealth'] as _igwfmz6t.WealthEndpoint).saveAsset(
+                    session,
+                    params['groupId'],
+                    params['asset'],
+                  ),
+        ),
+        'removeAsset': _is.MethodConnector(
+          name: 'removeAsset',
+          params: {
+            'assetId': _is.ParameterDescription(
+              name: 'assetId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['wealth'] as _igwfmz6t.WealthEndpoint).removeAsset(
+                    session,
+                    params['assetId'],
                   ),
         ),
       },

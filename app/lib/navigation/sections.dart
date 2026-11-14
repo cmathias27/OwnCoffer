@@ -14,6 +14,10 @@ enum AppPage {
   invoices,
   imports,
   advisor,
+  projects,
+  wealth,
+  together,
+  followUp,
 }
 
 /// The five sections (decision 0041, point 1), the same on every screen.
@@ -23,9 +27,23 @@ extension AppSectionInfo on AppSection {
   /// Its pages, shown as tabs when there are several.
   List<AppPage> get pages => switch (this) {
     AppSection.home => const [AppPage.home],
-    AppSection.money => const [AppPage.accounts, AppPage.operations],
-    AppSection.plan => const [AppPage.forecast, AppPage.budget, AppPage.loans],
-    AppSection.papers => const [AppPage.invoices, AppPage.imports],
+    AppSection.money => const [
+      AppPage.accounts,
+      AppPage.operations,
+      AppPage.together,
+    ],
+    AppSection.plan => const [
+      AppPage.forecast,
+      AppPage.budget,
+      AppPage.projects,
+      AppPage.wealth,
+      AppPage.loans,
+    ],
+    AppSection.papers => const [
+      AppPage.invoices,
+      AppPage.followUp,
+      AppPage.imports,
+    ],
     AppSection.advisor => const [AppPage.advisor],
   };
 
@@ -68,6 +86,10 @@ extension AppPageInfo on AppPage {
     AppPage.invoices => l.navInvoices,
     AppPage.imports => l.navImport,
     AppPage.advisor => l.advisorTitle,
+    AppPage.projects => l.navProjects,
+    AppPage.wealth => l.navWealth,
+    AppPage.together => l.navTogether,
+    AppPage.followUp => l.navFollowUp,
   };
 
   IconData get icon => switch (this) {
@@ -80,6 +102,10 @@ extension AppPageInfo on AppPage {
     AppPage.invoices => Icons.description_outlined,
     AppPage.imports => Icons.upload_file_outlined,
     AppPage.advisor => Icons.lightbulb_outline,
+    AppPage.projects => Icons.savings_outlined,
+    AppPage.wealth => Icons.monitor_heart_outlined,
+    AppPage.together => Icons.groups_outlined,
+    AppPage.followUp => Icons.task_alt,
   };
 
   HelpTopic get help => switch (this) {
@@ -92,6 +118,10 @@ extension AppPageInfo on AppPage {
     AppPage.invoices => HelpTopic.invoices,
     AppPage.imports => HelpTopic.import,
     AppPage.advisor => HelpTopic.advisor,
+    AppPage.projects => HelpTopic.projects,
+    AppPage.wealth => HelpTopic.wealth,
+    AppPage.together => HelpTopic.together,
+    AppPage.followUp => HelpTopic.followUp,
   };
 }
 

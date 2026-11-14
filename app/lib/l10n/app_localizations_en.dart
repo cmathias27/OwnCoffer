@@ -8786,4 +8786,900 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get whyForecastText =>
       'The engine starts from today\'s balance, adds day by day the planned operations (salaries, debits, subscriptions, loan instalments), then the estimate of everyday spending drawn from your last months. No AI takes part in this calculation.';
+
+  @override
+  String entryInvalid(String label) {
+    return 'Check the field \"$label\".';
+  }
+
+  @override
+  String entryOptional(String label) {
+    return '$label (optional)';
+  }
+
+  @override
+  String get entryPickDate => 'Pick the date';
+
+  @override
+  String get entryClear => 'Clear';
+
+  @override
+  String get entryRemoveTitle => 'Remove?';
+
+  @override
+  String entryRemoveText(String name) {
+    return 'Remove \"$name\"? This cannot be undone.';
+  }
+
+  @override
+  String get entryRemove => 'Remove';
+
+  @override
+  String get navProjects => 'Projects';
+
+  @override
+  String get navWealth => 'Net worth';
+
+  @override
+  String get navTogether => 'Together';
+
+  @override
+  String get navFollowUp => 'Follow-up';
+
+  @override
+  String get projectAdd => 'New project';
+
+  @override
+  String get projectEdit => 'Edit the project';
+
+  @override
+  String get projectName => 'Project name';
+
+  @override
+  String get projectTarget => 'Amount to reach';
+
+  @override
+  String get projectSaved => 'Already put aside';
+
+  @override
+  String get projectDate => 'By when';
+
+  @override
+  String get projectAccount => 'Account where the money is kept';
+
+  @override
+  String get projectAddSaved => 'Put aside';
+
+  @override
+  String get projectAddSavedIntro =>
+      'What you have just put aside for this project. A negative amount takes it back.';
+
+  @override
+  String get projectAmount => 'Amount';
+
+  @override
+  String get projectsTitle => 'Projects';
+
+  @override
+  String get projectsIntro =>
+      'Your savings projects and the big yearly expenses, spread over the months.';
+
+  @override
+  String projectsMonthly(String amount) {
+    return 'To put aside: $amount a month';
+  }
+
+  @override
+  String projectsMonthlyDetail(String projects, String smoothed) {
+    return '$projects for your projects, $smoothed for spread expenses';
+  }
+
+  @override
+  String get projectsList => 'Savings projects';
+
+  @override
+  String get projectsEmpty =>
+      'No project yet: holidays, a car, a deposit… add the first one.';
+
+  @override
+  String get smoothedTitle => 'Spread expenses';
+
+  @override
+  String get smoothedIntro =>
+      'Planned operations that come less often than monthly, turned into a monthly amount.';
+
+  @override
+  String get smoothedEmpty =>
+      'No yearly, half-yearly or quarterly planned operation.';
+
+  @override
+  String smoothedTotals(String monthly, String setAside) {
+    return '$monthly a month · $setAside should already be put aside';
+  }
+
+  @override
+  String smoothedLine(String amount, int months, String next, String setAside) {
+    return '$amount every $months months · next on $next · already put aside: $setAside';
+  }
+
+  @override
+  String perMonth(String amount) {
+    return '$amount/month';
+  }
+
+  @override
+  String get projectReached => 'Target reached';
+
+  @override
+  String projectOverdue(String remaining) {
+    return 'Date passed, $remaining missing';
+  }
+
+  @override
+  String projectPlan(String monthly, int months) {
+    return '$monthly a month for $months months';
+  }
+
+  @override
+  String projectRemaining(String remaining) {
+    return '$remaining to go';
+  }
+
+  @override
+  String get projectArchived => 'Archived';
+
+  @override
+  String get projectUnarchive => 'Unarchive';
+
+  @override
+  String get projectArchive => 'Archive';
+
+  @override
+  String projectProgress(String saved, String target, int percent) {
+    return '$saved of $target ($percent %)';
+  }
+
+  @override
+  String projectBy(String date) {
+    return 'by $date';
+  }
+
+  @override
+  String get assetProperty => 'Property';
+
+  @override
+  String get assetVehicle => 'Vehicle';
+
+  @override
+  String get assetInvestment => 'Investment';
+
+  @override
+  String get assetValuables => 'Valuables';
+
+  @override
+  String get assetOther => 'Other';
+
+  @override
+  String get assetAdd => 'Add an asset';
+
+  @override
+  String get assetEdit => 'Edit the asset';
+
+  @override
+  String get assetIntro => 'An estimate is enough; update it now and then.';
+
+  @override
+  String get assetName => 'Name';
+
+  @override
+  String get assetKind => 'Kind';
+
+  @override
+  String get assetValue => 'Estimated value';
+
+  @override
+  String get assetValuedAt => 'Date of the estimate';
+
+  @override
+  String get assetsTitle => 'Assets';
+
+  @override
+  String get assetsEmpty => 'No asset declared.';
+
+  @override
+  String assetValuedOn(String date) {
+    return 'valued on $date';
+  }
+
+  @override
+  String get regulatedLivretA => 'Livret A';
+
+  @override
+  String get regulatedLdds => 'LDDS';
+
+  @override
+  String get regulatedLep => 'LEP';
+
+  @override
+  String get regulatedLivretJeune => 'Livret jeune';
+
+  @override
+  String get regulatedNoSavings =>
+      'No savings account: create one in Accounts.';
+
+  @override
+  String get regulatedSet => 'Regulated savings';
+
+  @override
+  String get regulatedSetIntro =>
+      'Pick a savings account, which account it is and its rate. Without a kind, it becomes an ordinary savings account again.';
+
+  @override
+  String get regulatedAccount => 'Savings account';
+
+  @override
+  String get regulatedKind => 'Account type';
+
+  @override
+  String get regulatedRate => 'Yearly rate';
+
+  @override
+  String get regulatedTitle => 'Regulated savings';
+
+  @override
+  String get regulatedIntro =>
+      'Ceiling and interest estimated under the fortnight rule. Only your bank is authoritative.';
+
+  @override
+  String get regulatedEmpty => 'No regulated savings account set.';
+
+  @override
+  String regulatedRoom(String balance, String ceiling, String room) {
+    return '$balance of $ceiling · $room room left';
+  }
+
+  @override
+  String get regulatedNoRate => 'Rate not set: interest not estimated.';
+
+  @override
+  String regulatedInterest(String rate, String soFar, String year) {
+    return 'Rate $rate % · interest earned $soFar · over the year $year';
+  }
+
+  @override
+  String get taxCategoriesTitle => 'Categories for taxes';
+
+  @override
+  String get taxCategoriesIntro =>
+      'Tick the categories whose operations matter for the tax return (donations, childcare, home help…).';
+
+  @override
+  String get taxCategoriesField => 'Categories';
+
+  @override
+  String get wealthTitle => 'Net worth';
+
+  @override
+  String get wealthIntro =>
+      'What you own, your savings accounts, the health of your finances and the year\'s review.';
+
+  @override
+  String get netWorthAccounts => 'Accounts';
+
+  @override
+  String get netWorthAssets => 'Assets';
+
+  @override
+  String get netWorthLoans => 'Loans left to repay';
+
+  @override
+  String get netWorthTotal => 'Net worth';
+
+  @override
+  String get healthGood => 'Good';
+
+  @override
+  String get healthFair => 'Fair';
+
+  @override
+  String get healthWeak => 'Weak';
+
+  @override
+  String get healthUnknown => 'Unknown';
+
+  @override
+  String get healthEmergencyUnknown => 'Emergency savings: not enough data';
+
+  @override
+  String healthEmergency(String value) {
+    return 'Emergency savings: $value months of spending';
+  }
+
+  @override
+  String get healthSavingsRateUnknown => 'Savings rate: not enough data';
+
+  @override
+  String healthSavingsRate(String rate) {
+    return 'Savings rate: $rate %';
+  }
+
+  @override
+  String get healthDebtUnknown => 'Debt: no known income';
+
+  @override
+  String healthDebt(String rate) {
+    return 'Debt: $rate % of income';
+  }
+
+  @override
+  String get healthRegularityUnknown => 'Regularity: no complete month yet';
+
+  @override
+  String healthRegularity(int good, int months) {
+    return 'Regularity: $good of $months months without spending more than earned';
+  }
+
+  @override
+  String get healthTitle => 'Financial health';
+
+  @override
+  String get healthNoScore => 'No score yet';
+
+  @override
+  String healthScore(int score) {
+    return '$score / 100';
+  }
+
+  @override
+  String healthBasis(String income, String expense, String savings) {
+    return 'Per month: income $income, spending $expense · savings $savings';
+  }
+
+  @override
+  String get healthHow =>
+      'Average of the known indicators, over your last complete months. Benchmarks: 3 months of emergency savings, 10 % savings, debt under 30 %.';
+
+  @override
+  String get yearReviewTitle => 'Yearly review';
+
+  @override
+  String get yearIncome => 'Income';
+
+  @override
+  String get yearExpense => 'Spending';
+
+  @override
+  String get yearSavings => 'Savings';
+
+  @override
+  String get yearInterest => 'Estimated savings interest';
+
+  @override
+  String get yearTopExpenses => 'Biggest spending';
+
+  @override
+  String yearCategoryLine(String name, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations',
+      one: '1 operation',
+    );
+    return '$name · $_temp0';
+  }
+
+  @override
+  String get yearTaxTitle => 'Tax return';
+
+  @override
+  String get yearTaxIntro =>
+      'Operations of the categories marked for taxes. OwnCoffer does not compute the tax: check these amounts.';
+
+  @override
+  String get yearTaxNone => 'No category marked, or no operation this year.';
+
+  @override
+  String yearTaxOperations(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations',
+      one: '1 operation',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get togetherMe => 'Me';
+
+  @override
+  String get togetherMember => 'Member';
+
+  @override
+  String get togetherFormerMember => 'Former member';
+
+  @override
+  String get togetherTitle => 'Together';
+
+  @override
+  String get togetherIntro =>
+      'Expenses shared between members, and the common pot split by income.';
+
+  @override
+  String get togetherAlone =>
+      'Invite at least one other member to share expenses.';
+
+  @override
+  String get sharedRepay => 'Repayment';
+
+  @override
+  String get sharedAdd => 'Shared expense';
+
+  @override
+  String get sharedRepayIntro => 'Money given back from one member to another.';
+
+  @override
+  String get sharedLabel => 'Label';
+
+  @override
+  String get sharedAmount => 'Amount';
+
+  @override
+  String get sharedDate => 'Date';
+
+  @override
+  String get sharedRepayFrom => 'Who pays back';
+
+  @override
+  String get sharedPaidBy => 'Paid by';
+
+  @override
+  String get sharedRepayTo => 'To whom';
+
+  @override
+  String get sharedFor => 'For whom';
+
+  @override
+  String get sharedRepayLabel => 'Repayment';
+
+  @override
+  String get sharedTitle => 'Shared expenses';
+
+  @override
+  String get sharedEmpty => 'No shared expense.';
+
+  @override
+  String get sharedSettled => 'Everyone is settled up.';
+
+  @override
+  String get sharedToSettle => 'To settle up';
+
+  @override
+  String sharedOwes(String from, String to, String amount) {
+    return '$from → $to: $amount';
+  }
+
+  @override
+  String sharedHistory(int count) {
+    return 'History ($count)';
+  }
+
+  @override
+  String sharedRepayLine(String date, String from, String to) {
+    return '$date · $from → $to';
+  }
+
+  @override
+  String sharedLine(String date, String payer, String participants) {
+    return '$date · paid by $payer for $participants';
+  }
+
+  @override
+  String get potSet => 'Pot amount';
+
+  @override
+  String get potSetIntro =>
+      'The amount to pay into the joint account each month. 0 for no pot.';
+
+  @override
+  String get potTotal => 'Per month';
+
+  @override
+  String potIncomeOf(String name) {
+    return 'Income of $name';
+  }
+
+  @override
+  String get potIncomeIntro =>
+      'Net monthly income, used only to split the pot.';
+
+  @override
+  String get potIncome => 'Monthly income';
+
+  @override
+  String get potTitle => 'Common pot';
+
+  @override
+  String get potIntro =>
+      'Everyone pays in proportion to income; equal shares while no income is known.';
+
+  @override
+  String get potNone => 'No common pot set.';
+
+  @override
+  String potTotalLine(String amount) {
+    return '$amount a month to pay in';
+  }
+
+  @override
+  String get potIncomeUnknown => 'Income not set';
+
+  @override
+  String potIncomeLine(String amount) {
+    return 'Income: $amount/month';
+  }
+
+  @override
+  String get refundAdd => 'Expected refund';
+
+  @override
+  String get refundEdit => 'Edit';
+
+  @override
+  String get refundIntro =>
+      'As soon as a credit of the same amount arrives after the start date, it is marked received by itself.';
+
+  @override
+  String get refundLabel => 'What';
+
+  @override
+  String get refundAmount => 'Amount';
+
+  @override
+  String get refundSince => 'Expected since';
+
+  @override
+  String get refundDueBy => 'Due by';
+
+  @override
+  String get refundAccount => 'Account it will reach';
+
+  @override
+  String get refundsTitle => 'Expected refunds';
+
+  @override
+  String get refundsEmpty => 'No expected refund.';
+
+  @override
+  String refundReceivedBy(String date) {
+    return 'Received on $date';
+  }
+
+  @override
+  String refundMatched(String date) {
+    return 'Received on $date, found in your operations';
+  }
+
+  @override
+  String refundLate(String date) {
+    return 'Late: due by $date';
+  }
+
+  @override
+  String refundAwaitedBy(String date) {
+    return 'Expected by $date';
+  }
+
+  @override
+  String refundAwaited(String date) {
+    return 'Expected since $date';
+  }
+
+  @override
+  String get refundMarkReceived => 'Mark received';
+
+  @override
+  String get refundReopen => 'Expect again';
+
+  @override
+  String get contractNoPlanned =>
+      'No planned operation: add the subscription in Forecast first.';
+
+  @override
+  String get contractAdd => 'Follow a contract';
+
+  @override
+  String contractEdit(String label) {
+    return 'Contract: $label';
+  }
+
+  @override
+  String get contractIntro =>
+      'The renewal date and the notice period: OwnCoffer works out the last day to cancel and lets you know a month before.';
+
+  @override
+  String get contractPlanned => 'Planned operation';
+
+  @override
+  String get contractRenewal => 'Renewal date';
+
+  @override
+  String get contractNotice => 'Notice (days)';
+
+  @override
+  String get contractsTitle => 'Contracts';
+
+  @override
+  String get contractsEmpty => 'No contract followed.';
+
+  @override
+  String contractPassed(String renewal) {
+    return 'Renewal of $renewal passed: enter the next one.';
+  }
+
+  @override
+  String contractDeadline(String deadline, int days, String renewal) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'in $days days',
+      one: 'tomorrow',
+      zero: 'today',
+    );
+    return 'Cancel by $deadline ($_temp0) · renewal on $renewal';
+  }
+
+  @override
+  String get contractEditMenu => 'Edit the dates';
+
+  @override
+  String get contractForget => 'Stop following';
+
+  @override
+  String get eventAdd => 'New event';
+
+  @override
+  String get eventEdit => 'Edit the event';
+
+  @override
+  String get eventIntro =>
+      'Wedding, holidays, a move… then attach the operations of the period.';
+
+  @override
+  String get eventName => 'Name';
+
+  @override
+  String get eventStart => 'Start';
+
+  @override
+  String get eventEnd => 'End';
+
+  @override
+  String get eventBudget => 'Budget';
+
+  @override
+  String get eventsTitle => 'Events';
+
+  @override
+  String get eventsEmpty => 'No event.';
+
+  @override
+  String eventLine(int count, String total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations',
+      one: '1 operation',
+      zero: 'No operation',
+    );
+    return '$_temp0 · $total';
+  }
+
+  @override
+  String eventLineBudget(int count, String total, String budget) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations',
+      one: '1 operation',
+      zero: 'No operation',
+    );
+    return '$_temp0 · $total of $budget';
+  }
+
+  @override
+  String get eventNoCandidates => 'No other operation in the event\'s period.';
+
+  @override
+  String get eventAttach => 'Attach operations';
+
+  @override
+  String eventAttachIntro(String from, String to) {
+    return 'Operations from $from to $to.';
+  }
+
+  @override
+  String get eventOperations => 'Operations';
+
+  @override
+  String get eventDetach => 'Detach';
+
+  @override
+  String get eventNoOperations => 'No operation attached.';
+
+  @override
+  String get reminderAdd => 'New reminder';
+
+  @override
+  String get reminderEdit => 'Edit the reminder';
+
+  @override
+  String get reminderIntro =>
+      'A notification will remind you on the day. Only you can see your reminders.';
+
+  @override
+  String get reminderText => 'Reminder';
+
+  @override
+  String get reminderDate => 'On';
+
+  @override
+  String get remindersTitle => 'Reminders';
+
+  @override
+  String get remindersEmpty => 'No reminder.';
+
+  @override
+  String get followUpTitle => 'Follow-up';
+
+  @override
+  String get followUpIntro =>
+      'Reminders, expected refunds, contracts to cancel in time, and events.';
+
+  @override
+  String notifRefundLateTitle(String label) {
+    return 'Late refund: $label';
+  }
+
+  @override
+  String notifRefundLateBody(String amount, String date) {
+    return '$amount due by $date.';
+  }
+
+  @override
+  String notifContractTitle(String label, String deadline) {
+    return '$label: cancel by $deadline';
+  }
+
+  @override
+  String notifContractBody(String renewal) {
+    return 'Otherwise the contract renews on $renewal.';
+  }
+
+  @override
+  String notifReminderBody(String date) {
+    return 'Reminder for $date.';
+  }
+
+  @override
+  String get error_month_closed =>
+      'This month is closed: reopen it in the group settings to change it.';
+
+  @override
+  String get error_closing_in_future => 'Only past months can be closed.';
+
+  @override
+  String get error_invalid_rate => 'This rate is not valid.';
+
+  @override
+  String get error_invalid_notice =>
+      'This notice period is not valid (0 to 365 days).';
+
+  @override
+  String get error_project_access_denied =>
+      'This project does not exist or is not available to you.';
+
+  @override
+  String get error_asset_access_denied =>
+      'This asset does not exist or is not available to you.';
+
+  @override
+  String get error_refund_access_denied =>
+      'This refund does not exist or is not available to you.';
+
+  @override
+  String get error_event_access_denied =>
+      'This event does not exist or is not available to you.';
+
+  @override
+  String get error_shared_access_denied =>
+      'This shared expense does not exist or is not available to you.';
+
+  @override
+  String get error_shared_not_member =>
+      'Everyone must be a member of the group.';
+
+  @override
+  String get error_shared_repayment_invalid =>
+      'A repayment goes from one member to another.';
+
+  @override
+  String get error_reminder_access_denied =>
+      'This reminder does not exist or is not available to you.';
+
+  @override
+  String get searchKwProjects =>
+      'projects, savings, goal, put aside, yearly expenses, spread, sinking fund';
+
+  @override
+  String get searchKwWealth =>
+      'net worth, assets, livret A, LDDS, LEP, interest, financial health, yearly review, taxes, tax return';
+
+  @override
+  String get searchKwTogether =>
+      'together, shared expenses, who owes whom, pay back, common pot, flatmates, couple';
+
+  @override
+  String get searchKwFollowUp =>
+      'follow-up, reminders, expected refunds, health insurance, contracts, cancel, notice, events, holidays';
+
+  @override
+  String get closingTitle => 'Month closing';
+
+  @override
+  String closingChip(String date) {
+    return 'Closed up to $date';
+  }
+
+  @override
+  String get closingIntro =>
+      'Operations up to this day (included) can no longer be changed by hand: your checked months stay as they are. Bank imports still work. Clear the date to open everything again.';
+
+  @override
+  String get closingUntil => 'Months checked up to';
+
+  @override
+  String get viewsTitle => 'Views';
+
+  @override
+  String get viewsSave => 'Save the current view';
+
+  @override
+  String get viewsSaveIntro =>
+      'The current search and filters, under a name, to get them back in one tap. Kept on this device.';
+
+  @override
+  String get viewsName => 'View name';
+
+  @override
+  String get viewsRemove => 'Remove views';
+
+  @override
+  String get homeCardProjects => 'Projects';
+
+  @override
+  String get homeCardProjectsHelp =>
+      'What to put aside each month for your projects and spread expenses, and how far your projects are.';
+
+  @override
+  String get homeCardNetWorth => 'Net worth';
+
+  @override
+  String get homeCardNetWorthHelp =>
+      'Your accounts and assets, less what is left to repay on your loans.';
+
+  @override
+  String get homeCardHealth => 'Financial health';
+
+  @override
+  String get homeCardHealthHelp =>
+      'A score out of 100 computed on your last full months: emergency savings, savings rate, debt, regularity.';
+
+  @override
+  String get homeTileProjectsLine => 'to put aside per month';
+
+  @override
+  String homeTileNetWorthLine(String accounts, String assets, String loans) {
+    return 'Accounts $accounts · assets $assets · loans $loans';
+  }
 }

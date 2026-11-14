@@ -1,0 +1,6 @@
+class: WealthAccount
+fields:
+  accountId: int
+  name: String
+  kind: AccountKind
+  balanceCents: int

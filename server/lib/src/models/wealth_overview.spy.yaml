@@ -1,0 +1,10 @@
+### Net worth: visible accounts and assets, less what is left to repay on
+### the visible loans (decision 0050).
+class: WealthOverview
+fields:
+  accounts: List<WealthAccount>
+  assets: List<Asset>
+  accountsCents: int
+  assetsCents: int
+  loansCents: int
+  netWorthCents: int

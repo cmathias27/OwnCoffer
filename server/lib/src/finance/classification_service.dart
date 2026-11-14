@@ -2,6 +2,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
 import '../core/dates.dart';
+import 'closing.dart';
 import '../generated/protocol.dart';
 
 /// Builds the deterministic classifier of a group: group rules, then
@@ -110,16 +111,23 @@ abstract final class ClassificationService {
       transaction: transaction,
     );
     final now = DateTime.now().toUtc();
+    // Closed months stay as checked (decision 0050).
+    final closedUntil = await Closing.closedUntil(
+      session,
+      rule.groupId,
+      transaction: transaction,
+    );
     final changed = [
       for (final x in candidates)
-        if (matcher.matches(
-          core.CleanedLabel(
-            x.cleanLabel,
-            core.normalizeForMatch('${x.rawLabel} ${x.memo ?? ''}'),
-            core.OperationKind.other,
-          ),
-          x.amountCents,
-        ))
+        if (!Closing.isClosed(closedUntil, x.date) &&
+            matcher.matches(
+              core.CleanedLabel(
+                x.cleanLabel,
+                core.normalizeForMatch('${x.rawLabel} ${x.memo ?? ''}'),
+                core.OperationKind.other,
+              ),
+              x.amountCents,
+            ))
           x.copyWith(
             categoryId: rule.categoryId,
             categorySource: CategorySource.groupRule,
@@ -174,25 +182,31 @@ abstract final class ClassificationService {
       transaction: transaction,
     );
     final now = DateTime.now().toUtc();
+    final closedUntil = await Closing.closedUntil(
+      session,
+      groupId,
+      transaction: transaction,
+    );
     final updated = [
       for (final t in classified)
-        () {
-          final c = classifier.classify(
-            core.CleanedLabel(
-              t.cleanLabel,
-              core.normalizeForMatch('${t.rawLabel} ${t.memo ?? ''}'),
-              core.OperationKind.values.asNameMap()[t.operationKind] ??
-                  core.OperationKind.other,
-            ),
-            t.amountCents,
-          );
-          return t.copyWith(
-            categoryId: c.categoryId,
-            categorySource: toDb(c.source),
-            categoryRuleRef: c.ruleId?.toString(),
-            updatedAt: now,
-          );
-        }(),
+        if (!Closing.isClosed(closedUntil, t.date))
+          () {
+            final c = classifier.classify(
+              core.CleanedLabel(
+                t.cleanLabel,
+                core.normalizeForMatch('${t.rawLabel} ${t.memo ?? ''}'),
+                core.OperationKind.values.asNameMap()[t.operationKind] ??
+                    core.OperationKind.other,
+              ),
+              t.amountCents,
+            );
+            return t.copyWith(
+              categoryId: c.categoryId,
+              categorySource: toDb(c.source),
+              categoryRuleRef: c.ruleId?.toString(),
+              updatedAt: now,
+            );
+          }(),
     ];
     await BankTransaction.db.update(
       session,

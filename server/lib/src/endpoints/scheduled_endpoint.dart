@@ -169,6 +169,73 @@ class ScheduledEndpoint extends Endpoint {
     return saved;
   }
 
+  /// A contract renewed every year (decision 0050): the renewal day and the
+  /// notice to cancel it, in days. A null [renewalDate] clears both.
+  Future<ScheduledTransaction> setContract(
+    Session session,
+    int scheduledId, {
+    DateTime? renewalDate,
+    int? noticeDays,
+  }) async {
+    final (current, account) = await _find(session, scheduledId);
+    if (noticeDays != null && (noticeDays < 0 || noticeDays > 365)) {
+      throw InvalidInputException(code: 'invalid_notice', field: 'noticeDays');
+    }
+    final saved = await ScheduledTransaction.db.updateRow(
+      session,
+      current.copyWith(
+        renewalDate: renewalDate == null ? null : _day(renewalDate),
+        noticeDays: renewalDate == null ? null : (noticeDays ?? 0),
+      ),
+    );
+    await Audit.log(
+      session,
+      groupId: account.groupId,
+      action: 'update',
+      entity: 'scheduled',
+      rowId: scheduledId,
+      before: current,
+      after: saved,
+    );
+    return saved;
+  }
+
+  /// Contracts of the visible accounts, the closest deadline first.
+  Future<List<ContractInfo>> contracts(Session session, int groupId) async {
+    final visible = await Access.visibleAccounts(session, groupId);
+    final Set<int> ids = {for (final a in visible) a.id!};
+    if (ids.isEmpty) return [];
+    final today = core.LocalDate.fromDateTime(DateTime.now().toUtc());
+    final rows = await ScheduledTransaction.db.find(
+      session,
+      where: (s) =>
+          s.accountId.inSet(ids) &
+          s.deletedAt.equals(null) &
+          s.renewalDate.notEquals(null),
+    );
+    final result = [
+      for (final s in rows)
+        () {
+          final c = core.contractDates(
+            renewal: s.renewalDate!.toLocalDate(),
+            noticeDays: s.noticeDays ?? 0,
+            today: today,
+          );
+          return ContractInfo(
+            scheduledId: s.id!,
+            accountId: s.accountId,
+            label: s.label,
+            amountCents: s.amountCents,
+            noticeDays: s.noticeDays ?? 0,
+            renewal: c.renewal.toDb(),
+            deadline: c.deadline.toDb(),
+            daysToDeadline: c.daysToDeadline,
+          );
+        }(),
+    ]..sort((a, b) => a.deadline.compareTo(b.deadline));
+    return result;
+  }
+
   /// Applies the scheduled price rise: replaces [amountCents] by
   /// [priceRiseAmountCents] and clears the upcoming rise fields.
   Future<ScheduledTransaction> applyPriceRise(

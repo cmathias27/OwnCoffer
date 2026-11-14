@@ -53,5 +53,6 @@ Une page par décision importante : le contexte, le choix fait et ses conséquen
 | [0047](0047-widget-repartition-des-depenses.md) | Le widget « Répartition des dépenses » : le camembert de Budget sur l'Accueil | Décidé |
 | [0048](0048-cout-et-volume-de-l-ia.md) | Coût et volume de l'IA par fonction : jetons annoncés par le fournisseur, prix saisis par l'administrateur, coût estimé | Décidé |
 | [0049](0049-bilan-comparaison-tendances.md) | Trois widgets d'Accueil : le mois écoulé, la comparaison aux trois mois précédents, les tendances sur six mois | Décidé |
+| [0050](0050-projets-patrimoine-suivi.md) | Projets d'épargne et dépenses lissées, patrimoine net, livrets, santé financière, bilan de l'année, dépenses à plusieurs, remboursements, contrats, événements, rappels, clôture des mois, vues enregistrées | Décidé |
 
 Modèle pour une nouvelle décision : copier une page existante, garder les rubriques Statut, Contexte, Décision, Conséquences.

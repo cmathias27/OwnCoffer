@@ -1,0 +1,8 @@
+### French regulated savings accounts (decision 0050).
+enum: RegulatedKind
+serialized: byName
+values:
+  - livretA
+  - ldds
+  - lep
+  - livretJeune

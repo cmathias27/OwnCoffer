@@ -11,5 +11,10 @@ fields:
   ### Day the budget month starts (1 to 28, e.g. pay day): budget, goals and
   ### spending ranking use months from this day.
   monthStartDay: int, default=1
+  ### Months checked up to this day included (decision 0050): their
+  ### operations can no longer be edited by hand; bank imports still go in.
+  closedUntil: DateTime?
+  ### Monthly common pot, split by income (decision 0050); 0 = none.
+  potMonthlyCents: int, default=0
   createdBy: UuidValue
   createdAt: DateTime, default=now

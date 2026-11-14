@@ -21,6 +21,10 @@ fields:
   ### An upcoming price rise: date and next amount (e.g. promo ending).
   priceRiseDate: DateTime?
   priceRiseAmountCents: int?
+  ### A contract renewed every year (decision 0050): a renewal day and the
+  ### notice needed to cancel it.
+  renewalDate: DateTime?
+  noticeDays: int?
   createdAt: DateTime, default=now
   deletedAt: DateTime?
 indexes:

@@ -19,7 +19,13 @@ class NotificationsScreen extends StatefulWidget {
   /// Opens the forecast of an account (overdraft alerts).
   final void Function(int accountId) onOpenForecast;
 
-  const NotificationsScreen({super.key, required this.onOpenForecast});
+  /// Opens the follow-up page (refunds, contracts, reminders).
+  final VoidCallback? onOpenFollowUp;
+  const NotificationsScreen({
+    super.key,
+    required this.onOpenForecast,
+    this.onOpenFollowUp,
+  });
 
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();
@@ -38,8 +44,12 @@ enum NotificationFamily { alerts, advice, system }
 NotificationFamily notificationFamily(String type) => switch (type) {
   'overdraft_forecast' ||
   'goal_warning' ||
-  'goal_over' => NotificationFamily.alerts,
-  'goal_forecast' || 'warranty_ending' => NotificationFamily.advice,
+  'goal_over' ||
+  'refund_late' ||
+  'contract_notice' => NotificationFamily.alerts,
+  'goal_forecast' ||
+  'warranty_ending' ||
+  'reminder_due' => NotificationFamily.advice,
   _ => NotificationFamily.system,
 };
 
@@ -78,6 +88,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }
   }
 
+  static const _followUpTypes = {
+    'refund_late',
+    'contract_notice',
+    'reminder_due',
+  };
+
   Future<void> _open(AppNotification n) async {
     try {
       if (n.readAt == null) await client.notification.markRead(n.id!);
@@ -93,6 +109,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     } else if (n.type == 'overdraft_forecast' && accountId != null) {
       Navigator.pop(context);
       widget.onOpenForecast(accountId);
+    } else if (_followUpTypes.contains(n.type) &&
+        widget.onOpenFollowUp != null) {
+      Navigator.pop(context);
+      widget.onOpenFollowUp!();
     } else {
       await _reload();
     }
@@ -233,6 +253,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 Icons.verified_user_outlined,
                 color: ChartColors.warning,
               ),
+              'refund_late' => const Icon(
+                Icons.hourglass_bottom,
+                color: ChartColors.warning,
+              ),
+              'contract_notice' => const Icon(
+                Icons.assignment_late_outlined,
+                color: ChartColors.warning,
+              ),
+              'reminder_due' => const Icon(Icons.task_alt),
               SessionAlert.type => Icon(
                 SessionAlert.of(n)?.unusualCountry ?? false
                     ? Icons.gpp_maybe
@@ -321,6 +350,28 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
           l.notifWarrantyBody,
         );
+      } on Object {
+        return (l.notifUnknown, null);
+      }
+    }
+    if (_followUpTypes.contains(n.type)) {
+      try {
+        final d = jsonDecode(n.data) as Map<String, dynamic>;
+        String day(String key) => context.day(DateTime.parse(d[key] as String));
+        return switch (n.type) {
+          'refund_late' => (
+            l.notifRefundLateTitle(d['label'] as String),
+            l.notifRefundLateBody(
+              context.money(d['amountCents'] as int),
+              day('dueBy'),
+            ),
+          ),
+          'contract_notice' => (
+            l.notifContractTitle(d['label'] as String, day('deadline')),
+            l.notifContractBody(day('renewal')),
+          ),
+          _ => (d['text'] as String, l.notifReminderBody(day('date'))),
+        };
       } on Object {
         return (l.notifUnknown, null);
       }

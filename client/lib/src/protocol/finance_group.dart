@@ -21,11 +21,14 @@ abstract class FinanceGroup
     bool? aiEnabled,
     int? standardCatalogVersion,
     int? monthStartDay,
+    this.closedUntil,
+    int? potMonthlyCents,
     required this.createdBy,
     DateTime? createdAt,
   }) : aiEnabled = aiEnabled ?? false,
        standardCatalogVersion = standardCatalogVersion ?? 1,
        monthStartDay = monthStartDay ?? 1,
+       potMonthlyCents = potMonthlyCents ?? 0,
        createdAt = createdAt ?? DateTime.now();
 
   factory FinanceGroup({
@@ -34,6 +37,8 @@ abstract class FinanceGroup
     bool? aiEnabled,
     int? standardCatalogVersion,
     int? monthStartDay,
+    DateTime? closedUntil,
+    int? potMonthlyCents,
     required _isc.UuidValue createdBy,
     DateTime? createdAt,
   }) = _FinanceGroupImpl;
@@ -48,6 +53,12 @@ abstract class FinanceGroup
       standardCatalogVersion:
           jsonSerialization['standardCatalogVersion'] as int?,
       monthStartDay: jsonSerialization['monthStartDay'] as int?,
+      closedUntil: jsonSerialization['closedUntil'] == null
+          ? null
+          : _isc.DateTimeJsonExtension.fromJson(
+              jsonSerialization['closedUntil'],
+            ),
+      potMonthlyCents: jsonSerialization['potMonthlyCents'] as int?,
       createdBy: _isc.UuidValueJsonExtension.fromJson(
         jsonSerialization['createdBy'],
       ),
@@ -75,6 +86,13 @@ abstract class FinanceGroup
   /// spending ranking use months from this day.
   int monthStartDay;
 
+  /// Months checked up to this day included (decision 0050): their
+  /// operations can no longer be edited by hand; bank imports still go in.
+  DateTime? closedUntil;
+
+  /// Monthly common pot, split by income (decision 0050); 0 = none.
+  int potMonthlyCents;
+
   _isc.UuidValue createdBy;
 
   DateTime createdAt;
@@ -88,6 +106,8 @@ abstract class FinanceGroup
     bool? aiEnabled,
     int? standardCatalogVersion,
     int? monthStartDay,
+    DateTime? closedUntil,
+    int? potMonthlyCents,
     _isc.UuidValue? createdBy,
     DateTime? createdAt,
   });
@@ -100,6 +120,8 @@ abstract class FinanceGroup
       'aiEnabled': aiEnabled,
       'standardCatalogVersion': standardCatalogVersion,
       'monthStartDay': monthStartDay,
+      if (closedUntil != null) 'closedUntil': closedUntil?.toJson(),
+      'potMonthlyCents': potMonthlyCents,
       'createdBy': createdBy.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -114,6 +136,8 @@ abstract class FinanceGroup
       'aiEnabled': aiEnabled,
       'standardCatalogVersion': standardCatalogVersion,
       'monthStartDay': monthStartDay,
+      if (closedUntil != null) 'closedUntil': closedUntil?.toJson(),
+      'potMonthlyCents': potMonthlyCents,
       'createdBy': createdBy.toJson(),
       'createdAt': createdAt.toJson(),
     };
@@ -134,6 +158,8 @@ class _FinanceGroupImpl extends FinanceGroup {
     bool? aiEnabled,
     int? standardCatalogVersion,
     int? monthStartDay,
+    DateTime? closedUntil,
+    int? potMonthlyCents,
     required _isc.UuidValue createdBy,
     DateTime? createdAt,
   }) : super._(
@@ -142,6 +168,8 @@ class _FinanceGroupImpl extends FinanceGroup {
          aiEnabled: aiEnabled,
          standardCatalogVersion: standardCatalogVersion,
          monthStartDay: monthStartDay,
+         closedUntil: closedUntil,
+         potMonthlyCents: potMonthlyCents,
          createdBy: createdBy,
          createdAt: createdAt,
        );
@@ -156,6 +184,8 @@ class _FinanceGroupImpl extends FinanceGroup {
     bool? aiEnabled,
     int? standardCatalogVersion,
     int? monthStartDay,
+    Object? closedUntil = _Undefined,
+    int? potMonthlyCents,
     _isc.UuidValue? createdBy,
     DateTime? createdAt,
   }) {
@@ -166,6 +196,8 @@ class _FinanceGroupImpl extends FinanceGroup {
       standardCatalogVersion:
           standardCatalogVersion ?? this.standardCatalogVersion,
       monthStartDay: monthStartDay ?? this.monthStartDay,
+      closedUntil: closedUntil is DateTime? ? closedUntil : this.closedUntil,
+      potMonthlyCents: potMonthlyCents ?? this.potMonthlyCents,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
     );

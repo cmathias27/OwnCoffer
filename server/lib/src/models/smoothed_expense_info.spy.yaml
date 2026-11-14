@@ -1,0 +1,14 @@
+### A planned expense less often than monthly, spread into a monthly
+### provision (core.smoothExpense).
+class: SmoothedExpenseInfo
+fields:
+  scheduledId: int
+  accountId: int
+  label: String
+  ### Size of one occurrence, positive.
+  amountCents: int
+  nextDue: DateTime
+  periodMonths: int
+  monthlyCents: int
+  setAsideCents: int
+  monthsUntil: int

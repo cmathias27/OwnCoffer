@@ -70,6 +70,12 @@ abstract final class ExportService {
           i,
     ];
     final user = member.authUserId;
+    final events = await LifeEvent.db.find(
+      session,
+      where: (e) => e.groupId.equals(groupId),
+      orderBy: (e) => e.id,
+    );
+    final Set<int> eventIds = {for (final e in events) e.id!};
 
     List<Map<String, dynamic>> rows(List<SerializableModel> list) => [
       for (final r in list) r.toJson(),
@@ -156,6 +162,64 @@ abstract final class ExportService {
               ),
       ),
       'invoices': rows(invoices),
+      // Planning and follow-up (decision 0050).
+      'savingsProjects': rows([
+        for (final p in await SavingsProject.db.find(
+          session,
+          where: (p) => p.groupId.equals(groupId),
+          orderBy: (p) => p.id,
+        ))
+          if (p.accountId == null || accountIds.contains(p.accountId)) p,
+      ]),
+      'assets': rows(
+        await Asset.db.find(
+          session,
+          where: (x) => x.groupId.equals(groupId),
+          orderBy: (x) => x.id,
+        ),
+      ),
+      'expectedRefunds': rows([
+        for (final r in await ExpectedRefund.db.find(
+          session,
+          where: (r) => r.groupId.equals(groupId),
+          orderBy: (r) => r.id,
+        ))
+          if ((r.accountId == null || accountIds.contains(r.accountId)) &&
+              (r.transactionId == null ||
+                  transactionIds.contains(r.transactionId)))
+            r,
+      ]),
+      'lifeEvents': rows(events),
+      'eventOperations': rows([
+        if (eventIds.isNotEmpty)
+          for (final o in await EventOperation.db.find(
+            session,
+            where: (o) => o.eventId.inSet(eventIds),
+            orderBy: (o) => o.id,
+          ))
+            if (transactionIds.contains(o.transactionId)) o,
+      ]),
+      'sharedExpenses': rows(
+        await SharedExpense.db.find(
+          session,
+          where: (x) => x.groupId.equals(groupId),
+          orderBy: (x) => x.id,
+        ),
+      ),
+      'potShares': rows(
+        await PotShare.db.find(
+          session,
+          where: (x) => x.groupId.equals(groupId),
+          orderBy: (x) => x.id,
+        ),
+      ),
+      'reminders': rows(
+        await Reminder.db.find(
+          session,
+          where: (r) => r.groupId.equals(groupId) & r.authUserId.equals(user),
+          orderBy: (r) => r.id,
+        ),
+      ),
       // The member's own assistant data in this group.
       'aiMemories': rows(
         await AiMemory.db.find(
