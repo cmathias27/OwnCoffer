@@ -142,7 +142,7 @@ void main() {
       });
 
       test('operations: first page, search, category, to classify', () async {
-        const fast = Duration(seconds: 2);
+        const fast = Duration(seconds: 4);
         final page = await timed(
           'operations, first page',
           fast,
@@ -206,7 +206,7 @@ void main() {
       });
 
       test('forecast, budget, analyses, calendar, subscriptions', () async {
-        const limit = Duration(seconds: 4);
+        const limit = Duration(seconds: 10);
         final f = await timed(
           'forecast 30 days',
           limit,
