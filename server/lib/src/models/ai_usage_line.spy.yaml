@@ -1,0 +1,17 @@
+### One line of the AI's use (decision 0048): a month, a provider and a
+### function, with the requests, the tokens and the estimated cost.
+class: AiUsageLine
+fields:
+  ### yyyymm.
+  month: int
+  providerId: int
+  providerName: String
+  ### chat, invoice or loan.
+  feature: String
+  requests: int
+  inputTokens: int
+  outputTokens: int
+  ### Estimated cost in cents; null when the provider has no price.
+  costCents: int?
+  ### How many users made these requests (server view only; 1 otherwise).
+  users: int

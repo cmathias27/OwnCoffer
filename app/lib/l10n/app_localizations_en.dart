@@ -4339,6 +4339,89 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminAiCapHelp => 'Number of requests; 0 for no cap.';
 
   @override
+  String get adminAiInputPrice => 'Price per million tokens sent';
+
+  @override
+  String get adminAiOutputPrice => 'Price per million tokens received';
+
+  @override
+  String get adminAiPriceHelp =>
+      'Optional, in the currency of the provider\'s invoice (0.075 for example, up to four decimals). Only used to estimate the cost, never to limit anything.';
+
+  @override
+  String get adminAiPriceInvalid =>
+      'Unreadable price: a positive number, up to four decimals.';
+
+  @override
+  String adminAiPricesValue(String input, String output) {
+    return '$input / $output per million tokens';
+  }
+
+  @override
+  String get aiUsageTitle => 'AI use';
+
+  @override
+  String get aiUsageHelp =>
+      'Your requests to the AI this month and last month, per function, with the tokens reported by the provider. The cost is estimated from the prices entered by the server administrator, not from the actual invoice.';
+
+  @override
+  String get aiUsageServerTitle => 'AI use on the server';
+
+  @override
+  String get aiUsageServerHelp =>
+      'The whole server over six months, per provider and function, with the number of users involved. Never the detail of one user. The cost is estimated from the prices entered for each provider.';
+
+  @override
+  String get aiUsageEmpty => 'No request to the AI over this period.';
+
+  @override
+  String aiUsageRequests(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count requests',
+      one: '1 request',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String aiUsageTokens(String input, String output) {
+    return '$input tokens sent, $output received';
+  }
+
+  @override
+  String get aiUsageTokensUnknown => 'tokens not reported';
+
+  @override
+  String aiUsageUsers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count users',
+      one: '1 user',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String aiUsageCost(String amount) {
+    return '≈ $amount';
+  }
+
+  @override
+  String get aiUsageNoPrice => 'no price set';
+
+  @override
+  String get aiFeatureChat => 'Conversation';
+
+  @override
+  String get aiFeatureInvoice => 'Receipts and invoices';
+
+  @override
+  String get aiFeatureLoan => 'Loan documents';
+
+  @override
   String get adminAiTools => 'Calling the engine\'s functions';
 
   @override

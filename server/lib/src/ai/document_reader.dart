@@ -126,6 +126,7 @@ abstract final class DocumentReader {
     final read = await AiGateway.readDocument(
       session,
       groupId,
+      feature: AiFunctions.invoice,
       bytes: pageImagesBase64 == null
           ? await _invoiceBytes(session, invoice.id!)
           : null,
@@ -287,6 +288,7 @@ abstract final class DocumentReader {
     final read = await AiGateway.readDocument(
       session,
       invoice.groupId,
+      feature: AiFunctions.invoice,
       bytes: pageImagesBase64 == null
           ? await _invoiceBytes(session, invoice.id!)
           : null,
@@ -365,6 +367,7 @@ abstract final class DocumentReader {
     final read = await AiGateway.readDocument(
       session,
       loan.groupId,
+      feature: AiFunctions.loan,
       bytes: blob?.content.buffer.asUint8List(
         blob.content.offsetInBytes,
         blob.content.lengthInBytes,

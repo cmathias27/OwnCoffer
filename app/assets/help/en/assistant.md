@@ -30,6 +30,12 @@ Once the assistant is on, a **bubble** shows at the bottom right of the screen. 
 - Each answer says which functions were consulted. With an online provider, what was sent to it is shown.
 - If the provider does not answer, it is said plainly: OwnCoffer never tries another one instead.
 
+## What it uses
+
+In the settings, **AI use** shows your requests this month and last month, per function: **Conversation**, **Receipts and invoices**, **Loan documents**. For each one: the number of requests, the **tokens** sent and received as the provider reports them ("not reported" when it does not) and, when the server administrator entered the provider's prices, an **estimated cost**. This cost is a guide, not the actual invoice; the limit stays the number of requests per month.
+
+The server administrator sees the use of the whole server, over six months, in **Server administration > AI**; never the detail of one user.
+
 ## From another assistant (MCP)
 
 You can also query OwnCoffer from an assistant you already use (Claude Desktop or any MCP client): create a **personal token** in this page. It acts with your rights, can be revoked at any time, and only makes proposals.

@@ -3279,6 +3279,66 @@
   "adminAiModelsHelp": "Séparés par des virgules, par exemple : llama3.1, mistral-small. Laissez vide pour demander la liste au fournisseur.",
   "adminAiCap": "Plafond mensuel par utilisateur",
   "adminAiCapHelp": "Nombre de demandes ; 0 pour aucun plafond.",
+  "adminAiInputPrice": "Prix d'un million de jetons envoyés",
+  "adminAiOutputPrice": "Prix d'un million de jetons reçus",
+  "adminAiPriceHelp": "Facultatifs, dans la monnaie de la facture du fournisseur (0,075 par exemple, jusqu'à quatre décimales). Ils servent seulement à estimer le coût, sans rien limiter.",
+  "adminAiPriceInvalid": "Prix illisible : un nombre positif, jusqu'à quatre décimales.",
+  "adminAiPricesValue": "{input} / {output} le million de jetons",
+  "@adminAiPricesValue": {
+    "placeholders": {
+      "input": {
+        "type": "String"
+      },
+      "output": {
+        "type": "String"
+      }
+    }
+  },
+  "aiUsageTitle": "Consommation de l'IA",
+  "aiUsageHelp": "Vos demandes à l'IA ce mois-ci et le mois précédent, par fonction, avec les jetons annoncés par le fournisseur. Le coût est estimé d'après les prix saisis par l'administrateur du serveur, pas d'après la facture réelle.",
+  "aiUsageServerTitle": "Consommation de l'IA sur le serveur",
+  "aiUsageServerHelp": "Tout le serveur sur six mois, par fournisseur et par fonction, avec le nombre d'utilisateurs concernés. Jamais le détail d'un utilisateur. Le coût est estimé d'après les prix saisis pour chaque fournisseur.",
+  "aiUsageEmpty": "Aucune demande à l'IA sur cette période.",
+  "aiUsageRequests": "{count, plural, =1{1 demande} other{{count} demandes}}",
+  "@aiUsageRequests": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiUsageTokens": "{input} jetons envoyés, {output} reçus",
+  "@aiUsageTokens": {
+    "placeholders": {
+      "input": {
+        "type": "String"
+      },
+      "output": {
+        "type": "String"
+      }
+    }
+  },
+  "aiUsageTokensUnknown": "jetons non communiqués",
+  "aiUsageUsers": "{count, plural, =1{1 utilisateur} other{{count} utilisateurs}}",
+  "@aiUsageUsers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiUsageCost": "≈ {amount}",
+  "@aiUsageCost": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "aiUsageNoPrice": "prix non saisi",
+  "aiFeatureChat": "Discussion",
+  "aiFeatureInvoice": "Tickets et factures",
+  "aiFeatureLoan": "Documents de crédit",
   "adminAiTools": "Appel des fonctions du moteur",
   "adminAiToolsHelp": "Le modèle sait appeler des fonctions : il lit vos chiffres et fait des propositions.",
   "adminAiVision": "Lecture d'images",

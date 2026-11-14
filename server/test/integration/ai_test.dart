@@ -753,6 +753,108 @@ void main() {
       );
     });
 
+    test('use and cost per function: the user sees their own, the server '
+        'administrator the whole server, never per user (0048)', () async {
+      final priced = local().copyWith(
+        inputPricePerMillion: 30000,
+        outputPricePerMillion: 150000,
+      );
+      await expectLater(
+        endpoints.ai.saveProvider(
+          as(admin),
+          priced.copyWith(inputPricePerMillion: 1000 * 10000 + 1),
+          null,
+        ),
+        code('amount_out_of_range'),
+      );
+      await expectLater(
+        endpoints.ai.saveProvider(
+          as(admin),
+          priced.copyWith(outputPricePerMillion: -1),
+          null,
+        ),
+        code('amount_out_of_range'),
+      );
+      final p = await endpoints.ai.saveProvider(as(admin), priced, null);
+      expect(p.inputPricePerMillion, 30000);
+      final model = _ScriptedModel([
+        {
+          'role': 'assistant',
+          'content': '',
+          'tool_calls': [
+            {
+              'id': 'c1',
+              'type': 'function',
+              'function': {'name': 'get_account_overview', 'arguments': '{}'},
+            },
+          ],
+          usageKey: {'input': 600000, 'output': 50000},
+        },
+        {
+          'role': 'assistant',
+          'content': 'Tout va bien.',
+          usageKey: {'input': 400000, 'output': 150000},
+        },
+        {'role': 'assistant', 'content': 'Sans jetons annoncés.'},
+      ]);
+      AiGateway.adapter = model;
+      await endpoints.ai.setPreference(as(bob), p.id, 'llama3.1', true);
+      final ask = AiMessage(role: 'user', content: 'Ça va ?');
+      await endpoints.ai.chat(as(bob), groupA, [], ask);
+      // The tokens never leave the server again.
+      expect(jsonEncode(model.received.last), isNot(contains(usageKey)));
+      await endpoints.ai.chat(as(bob), groupA, [], ask);
+      model.fail = true;
+      await expectLater(
+        endpoints.ai.chat(as(bob), groupA, [], ask),
+        code('ai_unavailable'),
+      );
+
+      final mine = await endpoints.ai.usage(as(bob));
+      expect(mine, hasLength(1));
+      final line = mine.single;
+      expect(line.feature, AiFunctions.chat);
+      expect(line.providerName, 'Ollama maison');
+      // Three requests, the failed one included; tokens of both rounds.
+      expect(line.requests, 3);
+      expect(line.inputTokens, 1000000);
+      expect(line.outputTokens, 200000);
+      // 1 M × 3 € + 0.2 M × 15 € = 6 €.
+      expect(line.costCents, 600);
+      expect(line.users, 1);
+
+      // Nobody else sees it; the server view is the administrator's.
+      expect(await endpoints.ai.usage(as(mallory)), isEmpty);
+      await expectLater(endpoints.ai.serverUsage(as(bob)), denied);
+      await expectLater(endpoints.ai.serverUsage(as(mallory)), denied);
+
+      // A second user: added up on the server, apart for each user.
+      model.fail = false;
+      model.answers.add({
+        'role': 'assistant',
+        'content': 'Bonjour.',
+        usageKey: {'input': 1000000, 'output': 0},
+      });
+      await endpoints.ai.setPreference(as(admin), p.id, 'llama3.1', true);
+      await endpoints.ai.chat(as(admin), groupA, [], ask);
+      expect((await endpoints.ai.usage(as(bob))).single.requests, 3);
+      final server = await endpoints.ai.serverUsage(as(admin));
+      expect(server, hasLength(1));
+      expect(server.single.requests, 4);
+      expect(server.single.users, 2);
+      expect(server.single.inputTokens, 2000000);
+      // Rounded once on the totals: 2 M × 3 € + 0.2 M × 15 € = 9 €.
+      expect(server.single.costCents, 900);
+
+      // Without a price, no cost is said.
+      await endpoints.ai.saveProvider(
+        as(admin),
+        priced.copyWith(id: p.id, outputPricePerMillion: null),
+        null,
+      );
+      expect((await endpoints.ai.usage(as(bob))).single.costCents, isNull);
+    });
+
     test(
       'server-wide AI autonomy levels (read-only to full internal control)',
       () async {
@@ -788,6 +890,7 @@ void main() {
             bytes: [1, 2, 3],
             mimeType: 'image/png',
             instructions: 'Read',
+            feature: AiFunctions.invoice,
             tool: {
               'type': 'function',
               'function': {'name': 'read_invoice'},

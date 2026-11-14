@@ -2,6 +2,12 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.33.0 (novembre 2026)
+### Coût et volume de l'IA par fonction (décision 0048)
+- **Assistant : réglages** montre votre **consommation de l'IA** ce mois-ci et le mois précédent, par fonction (Discussion, Tickets et factures, Documents de crédit) : demandes, jetons envoyés et reçus, et coût estimé.
+- **Administration > IA** : deux **prix facultatifs** par fournisseur (million de jetons envoyés, million de jetons reçus) et la **consommation de tout le serveur** sur six mois, par fournisseur et par fonction, avec le nombre d'utilisateurs ; jamais le détail d'un utilisateur.
+- Le coût est calculé par le serveur sur les totaux du mois, en entiers ; c'est un repère, le plafond reste compté en demandes. Les demandes en échec sont comptées aussi.
+
 ## 1.32.0 (novembre 2026)
 ### Widget « Répartition des dépenses » (décision 0047)
 - Nouveau widget de l'Accueil : le **camembert des dépenses du mois** par catégorie, comme la vue Camembert de Budget (petit : l'anneau ; moyen et grand : la légende avec les pourcentages).

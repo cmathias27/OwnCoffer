@@ -93,6 +93,39 @@ String? providerError(String body) {
   return m.length > 200 ? '${m.substring(0, 200)}…' : m;
 }
 
+/// The tokens of one answer as the provider reports them (decision 0048):
+/// `prompt_tokens`/`completion_tokens` for OpenAI's API and the compatible
+/// ones (Gemini, Ollama), `input_tokens`/`output_tokens` for Claude, whose
+/// cached input is input too. Zero when not reported. Kept as plain JSON
+/// (`{"input": …, "output": …}`) in the answer, under [usageKey].
+Map<String, int> tokensOf(Object? usage) {
+  if (usage is! Map) return const {'input': 0, 'output': 0};
+  int n(String key) => switch (usage[key]) {
+    final int v when v > 0 => v,
+    _ => 0,
+  };
+  return {
+    'input':
+        n('prompt_tokens') +
+        n('input_tokens') +
+        n('cache_creation_input_tokens') +
+        n('cache_read_input_tokens'),
+    'output': n('completion_tokens') + n('output_tokens'),
+  };
+}
+
+/// The tokens an adapter returned with [answer] (see [tokensOf]); zero for
+/// an adapter that does not report them.
+({int input, int output}) answerTokens(Map<String, Object?> answer) {
+  final u = answer[usageKey];
+  int n(String key) => u is Map && u[key] is int ? u[key] as int : 0;
+  return (input: n('input'), output: n('output'));
+}
+
+/// The key under which an adapter returns [tokensOf] with its answer; like
+/// every key starting with `_`, never sent to a provider.
+const usageKey = '_usage';
+
 /// Model ids as users pick them: Gemini lists `models/gemini-…`, and the big
 /// catalogues hold models that cannot chat (embeddings, images, speech…).
 List<String> chatModelIds(Iterable<String> ids) {
@@ -230,7 +263,7 @@ final class OpenAiCompatibleAdapter extends _JsonHttp implements AiAdapter {
     if (message is! Map<String, Object?>) {
       throw const AiUnavailable('no answer');
     }
-    return message;
+    return {...message, usageKey: tokensOf(json['usage'])};
   }
 
   @override
@@ -397,6 +430,7 @@ final class AnthropicAdapter extends _JsonHttp implements AiAdapter {
       'content': text,
       if (calls.isNotEmpty) 'tool_calls': calls,
       '_anthropic_content': blocks,
+      usageKey: tokensOf(json['usage']),
     };
   }
 

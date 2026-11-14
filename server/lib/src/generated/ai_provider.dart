@@ -27,6 +27,8 @@ abstract class AiProvider
     required this.toolCalling,
     required this.vision,
     required this.monthlyCap,
+    this.inputPricePerMillion,
+    this.outputPricePerMillion,
     required this.enabled,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
@@ -42,6 +44,8 @@ abstract class AiProvider
     required bool toolCalling,
     required bool vision,
     required int monthlyCap,
+    int? inputPricePerMillion,
+    int? outputPricePerMillion,
     required bool enabled,
     DateTime? createdAt,
   }) = _AiProviderImpl;
@@ -62,6 +66,8 @@ abstract class AiProvider
       ),
       vision: _is.BoolJsonExtension.fromJson(jsonSerialization['vision']),
       monthlyCap: jsonSerialization['monthlyCap'] as int,
+      inputPricePerMillion: jsonSerialization['inputPricePerMillion'] as int?,
+      outputPricePerMillion: jsonSerialization['outputPricePerMillion'] as int?,
       enabled: _is.BoolJsonExtension.fromJson(jsonSerialization['enabled']),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
@@ -103,6 +109,12 @@ abstract class AiProvider
   /// Requests per user and month; 0 means no limit.
   int monthlyCap;
 
+  /// Prices per million tokens sent and received (decision 0048), in
+  /// hundredths of a cent (0.075 € = 750); null when not known.
+  int? inputPricePerMillion;
+
+  int? outputPricePerMillion;
+
   bool enabled;
 
   DateTime createdAt;
@@ -124,6 +136,8 @@ abstract class AiProvider
     bool? toolCalling,
     bool? vision,
     int? monthlyCap,
+    int? inputPricePerMillion,
+    int? outputPricePerMillion,
     bool? enabled,
     DateTime? createdAt,
   });
@@ -141,6 +155,10 @@ abstract class AiProvider
       'toolCalling': toolCalling,
       'vision': vision,
       'monthlyCap': monthlyCap,
+      if (inputPricePerMillion != null)
+        'inputPricePerMillion': inputPricePerMillion,
+      if (outputPricePerMillion != null)
+        'outputPricePerMillion': outputPricePerMillion,
       'enabled': enabled,
       'createdAt': createdAt.toJson(),
     };
@@ -159,6 +177,10 @@ abstract class AiProvider
       'toolCalling': toolCalling,
       'vision': vision,
       'monthlyCap': monthlyCap,
+      if (inputPricePerMillion != null)
+        'inputPricePerMillion': inputPricePerMillion,
+      if (outputPricePerMillion != null)
+        'outputPricePerMillion': outputPricePerMillion,
       'enabled': enabled,
       'createdAt': createdAt.toJson(),
     };
@@ -206,6 +228,8 @@ class _AiProviderImpl extends AiProvider {
     required bool toolCalling,
     required bool vision,
     required int monthlyCap,
+    int? inputPricePerMillion,
+    int? outputPricePerMillion,
     required bool enabled,
     DateTime? createdAt,
   }) : super._(
@@ -219,6 +243,8 @@ class _AiProviderImpl extends AiProvider {
          toolCalling: toolCalling,
          vision: vision,
          monthlyCap: monthlyCap,
+         inputPricePerMillion: inputPricePerMillion,
+         outputPricePerMillion: outputPricePerMillion,
          enabled: enabled,
          createdAt: createdAt,
        );
@@ -238,6 +264,8 @@ class _AiProviderImpl extends AiProvider {
     bool? toolCalling,
     bool? vision,
     int? monthlyCap,
+    Object? inputPricePerMillion = _Undefined,
+    Object? outputPricePerMillion = _Undefined,
     bool? enabled,
     DateTime? createdAt,
   }) {
@@ -252,6 +280,12 @@ class _AiProviderImpl extends AiProvider {
       toolCalling: toolCalling ?? this.toolCalling,
       vision: vision ?? this.vision,
       monthlyCap: monthlyCap ?? this.monthlyCap,
+      inputPricePerMillion: inputPricePerMillion is int?
+          ? inputPricePerMillion
+          : this.inputPricePerMillion,
+      outputPricePerMillion: outputPricePerMillion is int?
+          ? outputPricePerMillion
+          : this.outputPricePerMillion,
       enabled: enabled ?? this.enabled,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -301,6 +335,17 @@ class AiProviderUpdateTable extends _is.UpdateTable<AiProviderTable> {
     value,
   );
 
+  _is.ColumnValue<int, int> inputPricePerMillion(int? value) => _is.ColumnValue(
+    table.inputPricePerMillion,
+    value,
+  );
+
+  _is.ColumnValue<int, int> outputPricePerMillion(int? value) =>
+      _is.ColumnValue(
+        table.outputPricePerMillion,
+        value,
+      );
+
   _is.ColumnValue<bool, bool> enabled(bool value) => _is.ColumnValue(
     table.enabled,
     value,
@@ -348,6 +393,14 @@ class AiProviderTable extends _is.Table<int?> {
       'monthlyCap',
       this,
     );
+    inputPricePerMillion = _is.ColumnInt(
+      'inputPricePerMillion',
+      this,
+    );
+    outputPricePerMillion = _is.ColumnInt(
+      'outputPricePerMillion',
+      this,
+    );
     enabled = _is.ColumnBool(
       'enabled',
       this,
@@ -385,6 +438,12 @@ class AiProviderTable extends _is.Table<int?> {
   /// Requests per user and month; 0 means no limit.
   late final _is.ColumnInt monthlyCap;
 
+  /// Prices per million tokens sent and received (decision 0048), in
+  /// hundredths of a cent (0.075 € = 750); null when not known.
+  late final _is.ColumnInt inputPricePerMillion;
+
+  late final _is.ColumnInt outputPricePerMillion;
+
   late final _is.ColumnBool enabled;
 
   late final _is.ColumnDateTime createdAt;
@@ -400,6 +459,8 @@ class AiProviderTable extends _is.Table<int?> {
     toolCalling,
     vision,
     monthlyCap,
+    inputPricePerMillion,
+    outputPricePerMillion,
     enabled,
     createdAt,
   ];

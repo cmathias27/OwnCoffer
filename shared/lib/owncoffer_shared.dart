@@ -8,6 +8,7 @@
 /// occurrence is not counted twice), then [computeForecast].
 library;
 
+export 'src/ai_cost.dart';
 export 'src/banks/caisse_epargne.dart';
 export 'src/budget/advice.dart';
 export 'src/budget/contract_switch.dart';

@@ -6964,6 +6964,120 @@ abstract class AppLocalizations {
   /// **'Nombre de demandes ; 0 pour aucun plafond.'**
   String get adminAiCapHelp;
 
+  /// No description provided for @adminAiInputPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix d\'un million de jetons envoyés'**
+  String get adminAiInputPrice;
+
+  /// No description provided for @adminAiOutputPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix d\'un million de jetons reçus'**
+  String get adminAiOutputPrice;
+
+  /// No description provided for @adminAiPriceHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultatifs, dans la monnaie de la facture du fournisseur (0,075 par exemple, jusqu\'à quatre décimales). Ils servent seulement à estimer le coût, sans rien limiter.'**
+  String get adminAiPriceHelp;
+
+  /// No description provided for @adminAiPriceInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix illisible : un nombre positif, jusqu\'à quatre décimales.'**
+  String get adminAiPriceInvalid;
+
+  /// No description provided for @adminAiPricesValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{input} / {output} le million de jetons'**
+  String adminAiPricesValue(String input, String output);
+
+  /// No description provided for @aiUsageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consommation de l\'IA'**
+  String get aiUsageTitle;
+
+  /// No description provided for @aiUsageHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos demandes à l\'IA ce mois-ci et le mois précédent, par fonction, avec les jetons annoncés par le fournisseur. Le coût est estimé d\'après les prix saisis par l\'administrateur du serveur, pas d\'après la facture réelle.'**
+  String get aiUsageHelp;
+
+  /// No description provided for @aiUsageServerTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consommation de l\'IA sur le serveur'**
+  String get aiUsageServerTitle;
+
+  /// No description provided for @aiUsageServerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout le serveur sur six mois, par fournisseur et par fonction, avec le nombre d\'utilisateurs concernés. Jamais le détail d\'un utilisateur. Le coût est estimé d\'après les prix saisis pour chaque fournisseur.'**
+  String get aiUsageServerHelp;
+
+  /// No description provided for @aiUsageEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune demande à l\'IA sur cette période.'**
+  String get aiUsageEmpty;
+
+  /// No description provided for @aiUsageRequests.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 demande} other{{count} demandes}}'**
+  String aiUsageRequests(int count);
+
+  /// No description provided for @aiUsageTokens.
+  ///
+  /// In fr, this message translates to:
+  /// **'{input} jetons envoyés, {output} reçus'**
+  String aiUsageTokens(String input, String output);
+
+  /// No description provided for @aiUsageTokensUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'jetons non communiqués'**
+  String get aiUsageTokensUnknown;
+
+  /// No description provided for @aiUsageUsers.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 utilisateur} other{{count} utilisateurs}}'**
+  String aiUsageUsers(int count);
+
+  /// No description provided for @aiUsageCost.
+  ///
+  /// In fr, this message translates to:
+  /// **'≈ {amount}'**
+  String aiUsageCost(String amount);
+
+  /// No description provided for @aiUsageNoPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'prix non saisi'**
+  String get aiUsageNoPrice;
+
+  /// No description provided for @aiFeatureChat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Discussion'**
+  String get aiFeatureChat;
+
+  /// No description provided for @aiFeatureInvoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets et factures'**
+  String get aiFeatureInvoice;
+
+  /// No description provided for @aiFeatureLoan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Documents de crédit'**
+  String get aiFeatureLoan;
+
   /// No description provided for @adminAiTools.
   ///
   /// In fr, this message translates to:

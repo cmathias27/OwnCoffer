@@ -30,6 +30,12 @@ Une fois l'assistant activé, une **bulle** apparaît en bas à droite de l'écr
 - Chaque réponse dit quelles fonctions ont été consultées. Avec un fournisseur en ligne, ce qui lui a été envoyé est signalé.
 - Si le fournisseur ne répond pas, c'est dit clairement : OwnCoffer n'en essaie jamais un autre à sa place.
 
+## Ce qu'il consomme
+
+Dans les réglages, **Consommation de l'IA** montre vos demandes de ce mois-ci et du mois précédent, séparées par fonction : **Discussion**, **Tickets et factures**, **Documents de crédit**. Pour chacune : le nombre de demandes, les **jetons** envoyés et reçus tels que le fournisseur les annonce (« non communiqués » s'il ne le fait pas) et, si l'administrateur du serveur a saisi les prix du fournisseur, un **coût estimé**. Ce coût est un repère, pas la facture réelle ; la limite reste le nombre de demandes par mois.
+
+L'administrateur du serveur voit la consommation de tout le serveur, sur six mois, dans **Administration > IA** ; jamais le détail d'un utilisateur.
+
 ## Depuis un autre assistant (MCP)
 
 Vous pouvez aussi interroger OwnCoffer depuis un assistant que vous utilisez déjà (Claude Desktop ou tout client MCP) : créez un **jeton personnel** dans cette page. Il agit avec vos droits, se révoque à tout moment, et ne fait que des propositions.

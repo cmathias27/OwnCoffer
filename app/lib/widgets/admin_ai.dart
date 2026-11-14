@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import 'ai_usage.dart';
 
 /// Administration > AI: the providers the users may choose (décision
 /// 0017). Keys are written once and never shown again.
@@ -226,6 +228,18 @@ class _AdminAiViewState extends State<AdminAiView> {
                     if (p.hasKey == true) l.adminAiKeySet,
                     if (!p.enabled) l.adminAiDisabled,
                     if (p.monthlyCap > 0) l.adminAiCapValue(p.monthlyCap),
+                    if (p.inputPricePerMillion != null &&
+                        p.outputPricePerMillion != null)
+                      l.adminAiPricesValue(
+                        core.formatAiPrice(
+                          p.inputPricePerMillion!,
+                          decimal: l.localeName == 'fr' ? ',' : '.',
+                        ),
+                        core.formatAiPrice(
+                          p.outputPricePerMillion!,
+                          decimal: l.localeName == 'fr' ? ',' : '.',
+                        ),
+                      ),
                   ].join(' · '),
                 ),
                 onTap: () => _edit(p),
@@ -245,6 +259,8 @@ class _AdminAiViewState extends State<AdminAiView> {
                 ),
               ),
             ),
+        const SizedBox(height: 16),
+        const AiUsageSection(server: true),
       ],
     );
   }
@@ -310,6 +326,12 @@ class _ProviderDialogState extends State<_ProviderDialog> {
   final _key = TextEditingController();
   late final _models = TextEditingController(text: p?.models ?? '');
   late final _cap = TextEditingController(text: '${p?.monthlyCap ?? 0}');
+  late final _inputPrice = TextEditingController(
+    text: _price(p?.inputPricePerMillion),
+  );
+  late final _outputPrice = TextEditingController(
+    text: _price(p?.outputPricePerMillion),
+  );
   late var _tools = p?.toolCalling ?? true;
   late var _vision = p?.vision ?? false;
   late var _enabled = p?.enabled ?? true;
@@ -318,14 +340,45 @@ class _ProviderDialogState extends State<_ProviderDialog> {
 
   @override
   void dispose() {
-    for (final c in [_name, _url, _key, _models, _cap]) {
+    for (final c in [
+      _name,
+      _url,
+      _key,
+      _models,
+      _cap,
+      _inputPrice,
+      _outputPrice,
+    ]) {
       c.dispose();
     }
     super.dispose();
   }
 
+  String _price(int? price) => price == null
+      ? ''
+      : core.formatAiPrice(
+          price,
+          decimal: Localizations.localeOf(context).languageCode == 'fr'
+              ? ','
+              : '.',
+        );
+
+  /// A price field: empty is no price; otherwise it must be readable.
+  (bool, int?) _readPrice(TextEditingController c) {
+    final t = c.text.trim();
+    if (t.isEmpty) return (true, null);
+    final v = core.parseAiPrice(t);
+    return (v != null, v);
+  }
+
   Future<void> _save() async {
     final l = AppLocalizations.of(context);
+    final (inOk, inputPrice) = _readPrice(_inputPrice);
+    final (outOk, outputPrice) = _readPrice(_outputPrice);
+    if (!inOk || !outOk) {
+      setState(() => _error = l.adminAiPriceInvalid);
+      return;
+    }
     setState(() => (_busy = true, _error = null));
     try {
       await client.ai.saveProvider(
@@ -338,6 +391,8 @@ class _ProviderDialogState extends State<_ProviderDialog> {
           toolCalling: _tools,
           vision: _vision,
           monthlyCap: int.tryParse(_cap.text.trim()) ?? 0,
+          inputPricePerMillion: inputPrice,
+          outputPricePerMillion: outputPrice,
           enabled: _enabled,
         ),
         // Null keeps the key already set.
@@ -451,6 +506,44 @@ class _ProviderDialogState extends State<_ProviderDialog> {
                 decoration: InputDecoration(
                   labelText: l.adminAiCap,
                   helperText: l.adminAiCapHelp,
+                ),
+              ),
+              gap,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      key: const ValueKey('inputPrice'),
+                      controller: _inputPrice,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: l.adminAiInputPrice,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextField(
+                      key: const ValueKey('outputPrice'),
+                      controller: _outputPrice,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: l.adminAiOutputPrice,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  l.adminAiPriceHelp,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
               SwitchListTile(

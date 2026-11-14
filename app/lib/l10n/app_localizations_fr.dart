@@ -4364,6 +4364,89 @@ class AppLocalizationsFr extends AppLocalizations {
   String get adminAiCapHelp => 'Nombre de demandes ; 0 pour aucun plafond.';
 
   @override
+  String get adminAiInputPrice => 'Prix d\'un million de jetons envoyés';
+
+  @override
+  String get adminAiOutputPrice => 'Prix d\'un million de jetons reçus';
+
+  @override
+  String get adminAiPriceHelp =>
+      'Facultatifs, dans la monnaie de la facture du fournisseur (0,075 par exemple, jusqu\'à quatre décimales). Ils servent seulement à estimer le coût, sans rien limiter.';
+
+  @override
+  String get adminAiPriceInvalid =>
+      'Prix illisible : un nombre positif, jusqu\'à quatre décimales.';
+
+  @override
+  String adminAiPricesValue(String input, String output) {
+    return '$input / $output le million de jetons';
+  }
+
+  @override
+  String get aiUsageTitle => 'Consommation de l\'IA';
+
+  @override
+  String get aiUsageHelp =>
+      'Vos demandes à l\'IA ce mois-ci et le mois précédent, par fonction, avec les jetons annoncés par le fournisseur. Le coût est estimé d\'après les prix saisis par l\'administrateur du serveur, pas d\'après la facture réelle.';
+
+  @override
+  String get aiUsageServerTitle => 'Consommation de l\'IA sur le serveur';
+
+  @override
+  String get aiUsageServerHelp =>
+      'Tout le serveur sur six mois, par fournisseur et par fonction, avec le nombre d\'utilisateurs concernés. Jamais le détail d\'un utilisateur. Le coût est estimé d\'après les prix saisis pour chaque fournisseur.';
+
+  @override
+  String get aiUsageEmpty => 'Aucune demande à l\'IA sur cette période.';
+
+  @override
+  String aiUsageRequests(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count demandes',
+      one: '1 demande',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String aiUsageTokens(String input, String output) {
+    return '$input jetons envoyés, $output reçus';
+  }
+
+  @override
+  String get aiUsageTokensUnknown => 'jetons non communiqués';
+
+  @override
+  String aiUsageUsers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count utilisateurs',
+      one: '1 utilisateur',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String aiUsageCost(String amount) {
+    return '≈ $amount';
+  }
+
+  @override
+  String get aiUsageNoPrice => 'prix non saisi';
+
+  @override
+  String get aiFeatureChat => 'Discussion';
+
+  @override
+  String get aiFeatureInvoice => 'Tickets et factures';
+
+  @override
+  String get aiFeatureLoan => 'Documents de crédit';
+
+  @override
   String get adminAiTools => 'Appel des fonctions du moteur';
 
   @override

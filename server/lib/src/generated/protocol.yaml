@@ -48,6 +48,8 @@ advisor:
   - undo:
 ai:
   - status:
+  - usage:
+  - serverUsage:
   - setAutonomyLevel:
   - saveProvider:
   - deleteProvider:
