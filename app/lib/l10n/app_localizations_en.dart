@@ -9622,4 +9622,35 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get searchKwFollowUp =>
       'follow-up, reminders, expected refunds, health insurance, contracts, cancel, notice, events, holidays';
+
+  @override
+  String get closingTitle => 'Month closing';
+
+  @override
+  String closingChip(String date) {
+    return 'Closed up to $date';
+  }
+
+  @override
+  String get closingIntro =>
+      'Operations up to this day (included) can no longer be changed by hand: your checked months stay as they are. Bank imports still work. Clear the date to open everything again.';
+
+  @override
+  String get closingUntil => 'Months checked up to';
+
+  @override
+  String get viewsTitle => 'Views';
+
+  @override
+  String get viewsSave => 'Save the current view';
+
+  @override
+  String get viewsSaveIntro =>
+      'The current search and filters, under a name, to get them back in one tap. Kept on this device.';
+
+  @override
+  String get viewsName => 'View name';
+
+  @override
+  String get viewsRemove => 'Remove views';
 }

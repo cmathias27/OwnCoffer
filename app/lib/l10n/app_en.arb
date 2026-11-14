@@ -3239,5 +3239,14 @@
   "searchKwProjects": "projects, savings, goal, put aside, yearly expenses, spread, sinking fund",
   "searchKwWealth": "net worth, assets, livret A, LDDS, LEP, interest, financial health, yearly review, taxes, tax return",
   "searchKwTogether": "together, shared expenses, who owes whom, pay back, common pot, flatmates, couple",
-  "searchKwFollowUp": "follow-up, reminders, expected refunds, health insurance, contracts, cancel, notice, events, holidays"
+  "searchKwFollowUp": "follow-up, reminders, expected refunds, health insurance, contracts, cancel, notice, events, holidays",
+  "closingTitle": "Month closing",
+  "closingChip": "Closed up to {date}",
+  "closingIntro": "Operations up to this day (included) can no longer be changed by hand: your checked months stay as they are. Bank imports still work. Clear the date to open everything again.",
+  "closingUntil": "Months checked up to",
+  "viewsTitle": "Views",
+  "viewsSave": "Save the current view",
+  "viewsSaveIntro": "The current search and filters, under a name, to get them back in one tap. Kept on this device.",
+  "viewsName": "View name",
+  "viewsRemove": "Remove views"
 }

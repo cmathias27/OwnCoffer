@@ -15102,6 +15102,60 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'suivi, rappels, remboursements attendus, mutuelle, contrats, résiliation, préavis, événements, vacances'**
   String get searchKwFollowUp;
+
+  /// No description provided for @closingTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clôture des mois'**
+  String get closingTitle;
+
+  /// No description provided for @closingChip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clôturé au {date}'**
+  String closingChip(String date);
+
+  /// No description provided for @closingIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations jusqu’à cette date (incluse) ne peuvent plus être modifiées à la main : vos mois vérifiés restent tels quels. Les imports bancaires restent possibles. Videz la date pour tout rouvrir.'**
+  String get closingIntro;
+
+  /// No description provided for @closingUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois vérifiés jusqu’au'**
+  String get closingUntil;
+
+  /// No description provided for @viewsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vues'**
+  String get viewsTitle;
+
+  /// No description provided for @viewsSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer la vue actuelle'**
+  String get viewsSave;
+
+  /// No description provided for @viewsSaveIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'La recherche et les filtres actuels, sous un nom, pour les retrouver d’un geste. Gardé sur cet appareil.'**
+  String get viewsSaveIntro;
+
+  /// No description provided for @viewsName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la vue'**
+  String get viewsName;
+
+  /// No description provided for @viewsRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer des vues'**
+  String get viewsRemove;
 }
 
 class _AppLocalizationsDelegate

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -22,6 +24,56 @@ class SecureUiStore implements LockStore {
       : _storage.write(key: 'ui.$key', value: value);
 }
 
+/// A named set of operation filters (decision 0050), kept on the device.
+/// [filters] is the same text as the remembered filters.
+@immutable
+class SavedView {
+  final String name;
+  final String search;
+  final String filters;
+  const SavedView({
+    required this.name,
+    required this.search,
+    required this.filters,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      other is SavedView &&
+      other.name == name &&
+      other.search == search &&
+      other.filters == filters;
+
+  @override
+  int get hashCode => Object.hash(name, search, filters);
+}
+
+/// At most this many saved views: a short menu, not a database.
+const maxSavedViews = 12;
+
+String encodeSavedViews(List<SavedView> views) => jsonEncode([
+  for (final v in views) {'n': v.name, 's': v.search, 'f': v.filters},
+]);
+
+/// The views kept as JSON; anything unreadable is dropped.
+List<SavedView> decodeSavedViews(String? text) {
+  if (text == null || text.isEmpty) return const [];
+  try {
+    final list = jsonDecode(text) as List<Object?>;
+    return [
+      for (final e in list)
+        if (e case {
+          'n': final String name,
+          's': final String search,
+          'f': final String filters,
+        })
+          SavedView(name: name, search: search, filters: filters),
+    ].take(maxSavedViews).toList();
+  } on Object {
+    return const [];
+  }
+}
+
 /// The period shared by the home, budget and analysis screens.
 enum SharedPeriod { thisMonth, lastMonth, thisYear }
 
@@ -37,6 +89,7 @@ class UiPrefs extends ChangeNotifier {
   int? _accountId;
   DateTime? _advisorSeenAt;
   String _operationFilters = '';
+  List<SavedView> _operationViews = const [];
   var _firstStepsHidden = false;
   String? _homeCards;
   final _homeBoards = <int, String?>{};
@@ -56,6 +109,9 @@ class UiPrefs extends ChangeNotifier {
 
   /// Last filters of the operations list (`key=value;…`, no search text).
   String get operationFilters => _operationFilters;
+
+  /// The named filter sets of the operations list (decision 0050).
+  List<SavedView> get operationViews => _operationViews;
 
   /// « Premiers pas » hidden from the home page.
   bool get firstStepsHidden => _firstStepsHidden;
@@ -95,6 +151,7 @@ class UiPrefs extends ChangeNotifier {
       _accountId = int.tryParse(await store.read('account') ?? '');
       _advisorSeenAt = DateTime.tryParse(await store.read('advisorSeen') ?? '');
       _operationFilters = await store.read('opFilters') ?? '';
+      _operationViews = decodeSavedViews(await store.read('opViews'));
       _firstStepsHidden = flag(await store.read('firstSteps'));
       _homeCards = await store.read('home');
       for (final columns in const [2, 4]) {
@@ -176,5 +233,25 @@ class UiPrefs extends ChangeNotifier {
     if (filters == _operationFilters) return Future.value();
     _operationFilters = filters;
     return _save('opFilters', filters);
+  }
+
+  /// Saves [view], replacing the one of the same name; the newest first.
+  Future<void> saveOperationView(SavedView view) {
+    _operationViews = [
+      view,
+      ..._operationViews.where((v) => v.name != view.name),
+    ].take(maxSavedViews).toList();
+    return _save('opViews', encodeSavedViews(_operationViews));
+  }
+
+  Future<void> removeOperationView(String name) {
+    _operationViews = [
+      for (final v in _operationViews)
+        if (v.name != name) v,
+    ];
+    return _save(
+      'opViews',
+      _operationViews.isEmpty ? null : encodeSavedViews(_operationViews),
+    );
   }
 }

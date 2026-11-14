@@ -5,6 +5,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
 import '../state/ui_prefs.dart';
+import '../widgets/entry_dialog.dart';
 import '../widgets/period_bar.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
@@ -127,6 +128,7 @@ class BudgetScreenState extends State<BudgetScreen> {
   String? _error;
   var _loading = false;
   late var _startDay = widget.membership.group.monthStartDay;
+  late DateTime? _closedUntil = widget.membership.group.closedUntil;
 
   int get _groupId => widget.membership.group.id!;
   bool get _canWrite => widget.membership.role != MemberRole.reader;
@@ -257,6 +259,35 @@ class BudgetScreenState extends State<BudgetScreen> {
           : client.goal.set(_groupId, c.id!, before).then((_) {}),
       after: reload,
     );
+  }
+
+  /// Month closing (decision 0050): operations up to a day can no longer
+  /// be changed by hand. Empty date: every month is open again.
+  Future<void> _closing() async {
+    final l = AppLocalizations.of(context);
+    final now = todayUtcMidnight();
+    final endOfLastMonth = DateTime.utc(now.year, now.month, 0);
+    final saved = await showEntryDialog(
+      context,
+      title: l.closingTitle,
+      intro: l.closingIntro,
+      fields: [
+        DateEntry(
+          'until',
+          l.closingUntil,
+          optional: true,
+          initial: _closedUntil ?? endOfLastMonth,
+        ),
+      ],
+      onSave: (v) async {
+        final g = await client.group.setClosedUntil(
+          _groupId,
+          v['until'] as DateTime?,
+        );
+        if (mounted) setState(() => _closedUntil = g.closedUntil);
+      },
+    );
+    if (saved != null) await reload();
   }
 
   Future<void> _settings() async {
@@ -636,6 +667,16 @@ class BudgetScreenState extends State<BudgetScreen> {
                 avatar: const Icon(Icons.event_repeat, size: 18),
                 label: Text(l.monthStartTitle),
                 onPressed: _settings,
+              ),
+            if (_isAdmin)
+              ActionChip(
+                avatar: const Icon(Icons.lock_clock_outlined, size: 18),
+                label: Text(
+                  _closedUntil == null
+                      ? l.closingTitle
+                      : l.closingChip(context.day(_closedUntil!)),
+                ),
+                onPressed: _closing,
               ),
           ],
         ),

@@ -6730,5 +6730,21 @@
   "searchKwProjects": "projets, épargne, objectif, mettre de côté, dépenses annuelles, lisser, provision",
   "searchKwWealth": "patrimoine, biens, livret A, LDDS, LEP, intérêts, santé financière, bilan annuel, impôts, déclaration",
   "searchKwTogether": "à plusieurs, dépenses partagées, qui doit quoi, rembourser, pot commun, colocation, couple",
-  "searchKwFollowUp": "suivi, rappels, remboursements attendus, mutuelle, contrats, résiliation, préavis, événements, vacances"
+  "searchKwFollowUp": "suivi, rappels, remboursements attendus, mutuelle, contrats, résiliation, préavis, événements, vacances",
+  "closingTitle": "Clôture des mois",
+  "closingChip": "Clôturé au {date}",
+  "closingIntro": "Les opérations jusqu’à cette date (incluse) ne peuvent plus être modifiées à la main : vos mois vérifiés restent tels quels. Les imports bancaires restent possibles. Videz la date pour tout rouvrir.",
+  "closingUntil": "Mois vérifiés jusqu’au",
+  "@closingChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "viewsTitle": "Vues",
+  "viewsSave": "Enregistrer la vue actuelle",
+  "viewsSaveIntro": "La recherche et les filtres actuels, sous un nom, pour les retrouver d’un geste. Gardé sur cet appareil.",
+  "viewsName": "Nom de la vue",
+  "viewsRemove": "Supprimer des vues"
 }

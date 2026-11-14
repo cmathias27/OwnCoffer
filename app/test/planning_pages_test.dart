@@ -7,6 +7,7 @@ import 'package:owncoffer_app/screens/follow_up_screen.dart';
 import 'package:owncoffer_app/screens/projects_screen.dart';
 import 'package:owncoffer_app/screens/together_screen.dart';
 import 'package:owncoffer_app/screens/wealth_screen.dart';
+import 'package:owncoffer_app/state/ui_prefs.dart';
 import 'package:owncoffer_app/widgets/entry_dialog.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
@@ -37,6 +38,31 @@ final _accounts = [
 
 void main() {
   setUpAll(() => client = Client('http://localhost:9/'));
+
+  group('saved views', () {
+    test('written and read back, in order', () {
+      const views = [
+        SavedView(name: 'Courses', search: 'carrefour', filters: '0,0,0,7'),
+        SavedView(name: 'À pointer', search: '', filters: '0,1,0,'),
+      ];
+      expect(decodeSavedViews(encodeSavedViews(views)), views);
+    });
+
+    test('nothing or something unreadable: no view', () {
+      expect(decodeSavedViews(null), isEmpty);
+      expect(decodeSavedViews(''), isEmpty);
+      expect(decodeSavedViews('{oops'), isEmpty);
+      expect(decodeSavedViews('[{"n": 1}]'), isEmpty);
+    });
+
+    test('at most $maxSavedViews', () {
+      final many = [
+        for (var i = 0; i < 20; i++)
+          SavedView(name: 'v$i', search: '', filters: ''),
+      ];
+      expect(decodeSavedViews(encodeSavedViews(many)), hasLength(12));
+    });
+  });
 
   testWidgets('entry dialog: a missing amount is said, cents come back', (
     tester,

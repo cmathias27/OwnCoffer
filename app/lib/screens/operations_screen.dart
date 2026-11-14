@@ -7,6 +7,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import '../client.dart';
 import '../state/ui_prefs.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/entry_dialog.dart';
 import '../widgets/soft.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
@@ -186,6 +187,66 @@ class _OperationsScreenState extends State<OperationsScreen> {
           onAction: _canWrite && account != null ? _add : null,
         );
 
+  String get _filtersText => encodeOperationFilters(
+    toClassify: _toClassify,
+    uncleared: _uncleared,
+    subscriptions: _subscriptionsOnly,
+    category: _categoryFilter,
+  );
+
+  /// A saved view picked, or the current filters saved under a name
+  /// (decision 0050). Views stay on this device.
+  Future<void> _onView(Object choice) async {
+    final l = AppLocalizations.of(context);
+    switch (choice) {
+      case SavedView(:final search, :final filters):
+        final f = decodeOperationFilters(filters);
+        _search.text = search;
+        setState(() {
+          _toClassify = f.toClassify;
+          _uncleared = f.uncleared;
+          _subscriptionsOnly = f.subscriptions;
+          _categoryFilter = f.toClassify ? null : f.category;
+        });
+        await _reload();
+      case 'save':
+        final v = await showEntryDialog(
+          context,
+          title: l.viewsSave,
+          intro: l.viewsSaveIntro,
+          fields: [TextEntry('name', l.viewsName, maxLength: 40)],
+        );
+        if (v == null) return;
+        await uiPrefs.saveOperationView(
+          SavedView(
+            name: v['name']! as String,
+            search: _search.text.trim(),
+            filters: _filtersText,
+          ),
+        );
+        if (mounted) setState(() {});
+      case 'remove':
+        final v = await showEntryDialog(
+          context,
+          title: l.viewsRemove,
+          fields: [
+            MultiEntry<String>(
+              'names',
+              l.viewsTitle,
+              options: [
+                for (final v in uiPrefs.operationViews) (v.name, v.name),
+              ],
+            ),
+          ],
+        );
+        if (v == null) return;
+        for (final name in (v['names']! as Set).cast<String>()) {
+          await uiPrefs.removeOperationView(name);
+        }
+        if (mounted) setState(() {});
+    }
+  }
+
   void _clearFilters() {
     _search.clear();
     setState(() {
@@ -199,14 +260,7 @@ class _OperationsScreenState extends State<OperationsScreen> {
 
   Future<void> _reload() async {
     unawaited(
-      uiPrefs.setOperationFilters(
-        encodeOperationFilters(
-          toClassify: _toClassify,
-          uncleared: _uncleared,
-          subscriptions: _subscriptionsOnly,
-          category: _categoryFilter,
-        ),
-      ),
+      uiPrefs.setOperationFilters(_filtersText),
     );
     _items.clear();
     _withInvoices.clear();
@@ -595,6 +649,40 @@ class _OperationsScreenState extends State<OperationsScreen> {
                     setState(() => _subscriptionsOnly = v);
                     _reload();
                   },
+                ),
+                PopupMenuButton<Object>(
+                  tooltip: l.viewsTitle,
+                  onSelected: _onView,
+                  itemBuilder: (_) => [
+                    for (final v in uiPrefs.operationViews)
+                      PopupMenuItem(value: v, child: Text(v.name)),
+                    if (uiPrefs.operationViews.isNotEmpty)
+                      const PopupMenuDivider(),
+                    PopupMenuItem(
+                      value: 'save',
+                      enabled: _filtered,
+                      child: Text(l.viewsSave),
+                    ),
+                    if (uiPrefs.operationViews.isNotEmpty)
+                      PopupMenuItem(
+                        value: 'remove',
+                        child: Text(l.viewsRemove),
+                      ),
+                  ],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 6,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.bookmarks_outlined, size: 18),
+                        const SizedBox(width: 6),
+                        Text(l.viewsTitle),
+                      ],
+                    ),
+                  ),
                 ),
                 TextButton.icon(
                   icon: const Icon(Icons.list_alt, size: 18),

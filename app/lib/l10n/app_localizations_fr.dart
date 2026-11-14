@@ -9693,4 +9693,35 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get searchKwFollowUp =>
       'suivi, rappels, remboursements attendus, mutuelle, contrats, résiliation, préavis, événements, vacances';
+
+  @override
+  String get closingTitle => 'Clôture des mois';
+
+  @override
+  String closingChip(String date) {
+    return 'Clôturé au $date';
+  }
+
+  @override
+  String get closingIntro =>
+      'Les opérations jusqu’à cette date (incluse) ne peuvent plus être modifiées à la main : vos mois vérifiés restent tels quels. Les imports bancaires restent possibles. Videz la date pour tout rouvrir.';
+
+  @override
+  String get closingUntil => 'Mois vérifiés jusqu’au';
+
+  @override
+  String get viewsTitle => 'Vues';
+
+  @override
+  String get viewsSave => 'Enregistrer la vue actuelle';
+
+  @override
+  String get viewsSaveIntro =>
+      'La recherche et les filtres actuels, sous un nom, pour les retrouver d’un geste. Gardé sur cet appareil.';
+
+  @override
+  String get viewsName => 'Nom de la vue';
+
+  @override
+  String get viewsRemove => 'Supprimer des vues';
 }
