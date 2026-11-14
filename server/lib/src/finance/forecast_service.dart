@@ -36,7 +36,10 @@ abstract final class ForecastService {
     amountTolerancePercent: s.amountTolerancePercent,
   );
 
-  static core.RealOperation realOf(BankTransaction t) => core.RealOperation(
+  static core.RealOperation realOf(
+    BankTransaction t, {
+    bool inBalance = true,
+  }) => core.RealOperation(
     id: t.id!,
     date: t.date.toLocalDate(),
     amountCents: t.amountCents,
@@ -46,6 +49,7 @@ abstract final class ForecastService {
       core.OperationKind.values.asNameMap()[t.operationKind] ??
           core.OperationKind.other,
     ),
+    inBalance: inBalance,
   );
 
   /// Links [transaction] to the occurrence [due] of [scheduled] and moves
@@ -154,6 +158,16 @@ abstract final class ForecastService {
       // 2. Balances.
       final balances = await balancesOf(session, account, today, tx: tx);
 
+      final categories = await Category.db.find(
+        session,
+        where: (c) =>
+            c.groupId.equals(account.groupId) & c.deletedAt.equals(null),
+        transaction: tx,
+      );
+      final categoryExcluded = {
+        for (final c in categories) c.id!: c.excludedFromBalance,
+      };
+
       // 3. Forecast (proposals not yet confirmed still count as expected).
       final f = _engine(
         account,
@@ -163,6 +177,7 @@ abstract final class ForecastService {
         byId.values,
         ops,
         estimate,
+        categoryExcluded: categoryExcluded,
         debits: debits,
       );
       final lowest = f.lowest;
@@ -244,6 +259,7 @@ abstract final class ForecastService {
 
   /// The balances of [account], summed by the database: the same as
   /// [core.computeBalances] over all its operations, without loading them.
+  /// Operations excluded from balance (decision 0051) do not count.
   static Future<core.AccountBalances> balancesOf(
     Session session,
     Account account,
@@ -251,15 +267,19 @@ abstract final class ForecastService {
     Transaction? tx,
   }) async {
     final rows = await session.db.unsafeQuery(
-      // Standard SQL, the same on PostgreSQL and SQLite.
+      // Standard SQL, the same on PostgreSQL and SQLite (decision 0051).
       'SELECT '
-      'CAST(COALESCE(SUM(CASE WHEN "cleared" THEN "amountCents" END), 0) '
+      'CAST(COALESCE(SUM(CASE WHEN t."cleared" THEN t."amountCents" END), 0) '
       'AS BIGINT), '
-      'CAST(COALESCE(SUM(CASE WHEN "date" <= @today THEN "amountCents" END), '
+      'CAST(COALESCE(SUM(CASE WHEN t."date" <= @today THEN t."amountCents" END), '
       '0) AS BIGINT), '
-      'CAST(COALESCE(SUM("amountCents"), 0) AS BIGINT) '
-      'FROM "transactions" '
-      'WHERE "accountId" = @account AND "deletedAt" IS NULL',
+      'CAST(COALESCE(SUM(t."amountCents"), 0) AS BIGINT) '
+      'FROM "transactions" t '
+      'LEFT JOIN "categories" c ON c."id" = t."categoryId" '
+      'WHERE t."accountId" = @account AND t."deletedAt" IS NULL '
+      'AND (t."balanceOverride" = TRUE OR '
+      '(t."balanceOverride" IS NULL AND '
+      '(c."excludedFromBalance" IS NULL OR c."excludedFromBalance" = FALSE)))',
       parameters: QueryParameters.named({
         'account': account.id!,
         'today': session.sqlTimestamp(today.toDb()),
@@ -285,6 +305,7 @@ abstract final class ForecastService {
     Iterable<ScheduledTransaction> scheduled,
     List<BankTransaction> ops,
     (core.VariableEstimate, core.Period)? estimate, {
+    Map<int, bool> categoryExcluded = const {},
     Map<int, Map<core.LocalDate, int>> debits = const {},
     List<core.ScheduledOperation> extra = const [],
   }) => core.computeForecast(
@@ -307,7 +328,15 @@ abstract final class ForecastService {
     ],
     futureOperations: [
       for (final t in ops)
-        if (t.date.toLocalDate() > today) realOf(t),
+        if (t.date.toLocalDate() > today)
+          realOf(
+            t,
+            inBalance: core.isEffectiveInBalance(
+              balanceOverride: t.balanceOverride,
+              categoryExcludedFromBalance:
+                  categoryExcluded[t.categoryId] ?? false,
+            ),
+          ),
     ],
   );
 
@@ -337,6 +366,14 @@ abstract final class ForecastService {
     final debits = await LoanTermsOf.debits(session, scheduled);
     final ops = await recentOperations(session, account, today);
     final balance = (await balancesOf(session, account, today)).currentCents;
+    final categories = await Category.db.find(
+      session,
+      where: (c) =>
+          c.groupId.equals(account.groupId) & c.deletedAt.equals(null),
+    );
+    final categoryExcluded = {
+      for (final c in categories) c.id!: c.excludedFromBalance,
+    };
     return core.simulatePurchase(
       amountCents: amountCents,
       date: date,
@@ -350,6 +387,7 @@ abstract final class ForecastService {
         scheduled,
         ops,
         estimate,
+        categoryExcluded: categoryExcluded,
         debits: debits,
         extra: extra,
       ),

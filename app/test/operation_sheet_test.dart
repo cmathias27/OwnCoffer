@@ -248,4 +248,89 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('a row: shows hors solde badge when excluded from balance', (
+    tester,
+  ) async {
+    final catNormal = Category(
+      id: 1,
+      groupId: 1,
+      name: 'Supermarché',
+      kind: CategoryKind.expense,
+      excludedFromBalance: false,
+    );
+    final catExcluded = Category(
+      id: 2,
+      groupId: 1,
+      name: 'Débit différé',
+      kind: CategoryKind.transfer,
+      excludedFromBalance: true,
+    );
+
+    // 1. Normal category, no override: in balance -> no badge
+    await tester.pumpWidget(
+      app(
+        OperationTile(
+          operation: op.copyWith(categoryId: catNormal.id),
+          category: catNormal,
+          subscription: false,
+          hasInvoice: false,
+          currency: 'EUR',
+          onTap: () {},
+        ),
+      ),
+    );
+    expect(find.textContaining('Hors solde'), findsNothing);
+
+    // 2. Excluded category, no override -> shows Hors solde badge
+    await tester.pumpWidget(
+      app(
+        OperationTile(
+          operation: op.copyWith(categoryId: catExcluded.id),
+          category: catExcluded,
+          subscription: false,
+          hasInvoice: false,
+          currency: 'EUR',
+          onTap: () {},
+        ),
+      ),
+    );
+    expect(find.textContaining('Hors solde'), findsOneWidget);
+
+    // 3. Normal category with balanceOverride = false -> shows Hors solde badge
+    await tester.pumpWidget(
+      app(
+        OperationTile(
+          operation: op.copyWith(
+            categoryId: catNormal.id,
+            balanceOverride: false,
+          ),
+          category: catNormal,
+          subscription: false,
+          hasInvoice: false,
+          currency: 'EUR',
+          onTap: () {},
+        ),
+      ),
+    );
+    expect(find.textContaining('Hors solde'), findsOneWidget);
+
+    // 4. Excluded category with balanceOverride = true -> in balance -> no badge
+    await tester.pumpWidget(
+      app(
+        OperationTile(
+          operation: op.copyWith(
+            categoryId: catExcluded.id,
+            balanceOverride: true,
+          ),
+          category: catExcluded,
+          subscription: false,
+          hasInvoice: false,
+          currency: 'EUR',
+          onTap: () {},
+        ),
+      ),
+    );
+    expect(find.textContaining('Hors solde'), findsNothing);
+  });
 }

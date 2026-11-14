@@ -1721,6 +1721,13 @@ class Protocol extends _is.DatabaseSerializationManager {
           columnDefault: 'false',
         ),
         _isp.ColumnDefinition(
+          name: 'excludedFromBalance',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'false',
+        ),
+        _isp.ColumnDefinition(
           name: 'createdAt',
           columnType: _isp.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
@@ -5206,6 +5213,12 @@ class Protocol extends _is.DatabaseSerializationManager {
           isNullable: false,
           dartType: 'bool',
           columnDefault: 'false',
+        ),
+        _isp.ColumnDefinition(
+          name: 'balanceOverride',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: true,
+          dartType: 'bool?',
         ),
         _isp.ColumnDefinition(
           name: 'scheduledId',

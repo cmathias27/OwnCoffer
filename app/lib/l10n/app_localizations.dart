@@ -15204,6 +15204,78 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Comptes {accounts} · biens {assets} · crédits {loans}'**
   String homeTileNetWorthLine(String accounts, String assets, String loans);
+
+  /// No description provided for @categoryExcludedFromBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exclure du solde des comptes'**
+  String get categoryExcludedFromBalance;
+
+  /// No description provided for @categoryExcludedFromBalanceHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations de cette catégorie ne seront pas déduites du solde de vos comptes (ex. débit différé de carte).'**
+  String get categoryExcludedFromBalanceHelp;
+
+  /// No description provided for @categoryExcludedFromBalanceBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors solde'**
+  String get categoryExcludedFromBalanceBadge;
+
+  /// No description provided for @balanceInclusionLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prise en compte dans le solde'**
+  String get balanceInclusionLabel;
+
+  /// No description provided for @balanceInclusionHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Définit si cette opération est déduite du solde du compte.'**
+  String get balanceInclusionHelp;
+
+  /// No description provided for @balanceAsCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comme la catégorie ({status})'**
+  String balanceAsCategory(String status);
+
+  /// No description provided for @balanceStatusIncluded.
+  ///
+  /// In fr, this message translates to:
+  /// **'incluse'**
+  String get balanceStatusIncluded;
+
+  /// No description provided for @balanceStatusExcluded.
+  ///
+  /// In fr, this message translates to:
+  /// **'hors solde'**
+  String get balanceStatusExcluded;
+
+  /// No description provided for @balanceForceIncluded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déduite du compte (incluse)'**
+  String get balanceForceIncluded;
+
+  /// No description provided for @balanceForceExcluded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors solde (non déduite)'**
+  String get balanceForceExcluded;
+
+  /// No description provided for @balanceOverrideUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prise en compte dans le solde modifiée'**
+  String get balanceOverrideUpdated;
+
+  /// No description provided for @operationExcludedFromBalanceBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors solde'**
+  String get operationExcludedFromBalanceBadge;
 }
 
 class _AppLocalizationsDelegate

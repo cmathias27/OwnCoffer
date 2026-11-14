@@ -179,10 +179,31 @@ class CategoriesScreenState extends State<CategoriesScreen> {
                 fontWeight: FontWeight.w700,
               ),
       ),
-      subtitle: c.name != null && c.standardCode != null
-          ? Text(
-              AppLocalizations.of(context).categoryStandardName(
-                context.standardName(c) ?? '',
+      subtitle:
+          (c.name != null && c.standardCode != null) || c.excludedFromBalance
+          ? Text.rich(
+              TextSpan(
+                children: [
+                  if (c.name != null && c.standardCode != null)
+                    TextSpan(
+                      text: AppLocalizations.of(context).categoryStandardName(
+                        context.standardName(c) ?? '',
+                      ),
+                    ),
+                  if (c.excludedFromBalance) ...[
+                    if (c.name != null && c.standardCode != null)
+                      const TextSpan(text: ' · '),
+                    TextSpan(
+                      text: AppLocalizations.of(
+                        context,
+                      ).categoryExcludedFromBalanceBadge,
+                      style: TextStyle(
+                        color: theme.colorScheme.secondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ],
               ),
               style: theme.textTheme.bodySmall,
             )
@@ -436,6 +457,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
   late final Category? _c = widget.category;
   late final _name = TextEditingController(text: _c?.name);
   late var _kind = _c?.kind ?? CategoryKind.expense;
+  late var _excludedFromBalance = _c?.excludedFromBalance ?? false;
   int? _parent;
   final _form = GlobalKey<FormState>();
   String? _error;
@@ -551,6 +573,14 @@ class _CategoryDialogState extends State<_CategoryDialog> {
                   onChanged: (v) => _parent = v,
                 ),
               ],
+              const SizedBox(height: 12),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l.categoryExcludedFromBalance),
+                subtitle: Text(l.categoryExcludedFromBalanceHelp),
+                value: _excludedFromBalance,
+                onChanged: (v) => setState(() => _excludedFromBalance = v),
+              ),
               if (_error != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
@@ -576,16 +606,30 @@ class _CategoryDialogState extends State<_CategoryDialog> {
             final name = _name.text.trim();
             _do(() async {
               if (c == null) {
-                await client.category.create(
+                final created = await client.category.create(
                   widget.groupId,
                   name,
                   _kind,
                   parentId: _parent,
                 );
-              } else if (name.isEmpty) {
-                await client.category.update(c.id!, resetName: true);
+                if (_excludedFromBalance) {
+                  await client.category.setExcludedFromBalance(
+                    created.id!,
+                    true,
+                  );
+                }
               } else {
-                await client.category.update(c.id!, name: name);
+                if (name.isEmpty) {
+                  await client.category.update(c.id!, resetName: true);
+                } else {
+                  await client.category.update(c.id!, name: name);
+                }
+                if (_excludedFromBalance != c.excludedFromBalance) {
+                  await client.category.setExcludedFromBalance(
+                    c.id!,
+                    _excludedFromBalance,
+                  );
+                }
               }
             });
           },

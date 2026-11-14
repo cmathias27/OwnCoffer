@@ -209,15 +209,38 @@ abstract final class ImportService {
           t.deletedAt.equals(null) &
           (t.date <= until),
     );
+    final categories = await Category.db.find(
+      session,
+      where: (c) =>
+          c.groupId.equals(account.groupId) & c.deletedAt.equals(null),
+    );
+    final categoryExcluded = {
+      for (final c in categories) c.id!: c.excludedFromBalance,
+    };
     return core
         .computeBalances(
           initialBalanceCents: account.initialBalanceCents,
           operations: [
             for (final t in existing)
-              core.BalanceInput(t.date.toLocalDate(), t.amountCents),
+              core.BalanceInput(
+                t.date.toLocalDate(),
+                t.amountCents,
+                inBalance: core.isEffectiveInBalance(
+                  balanceOverride: t.balanceOverride,
+                  categoryExcludedFromBalance:
+                      categoryExcluded[t.categoryId] ?? false,
+                ),
+              ),
             for (final l in a.lines)
               if (l.status == core.DuplicateStatus.isNew)
-                core.BalanceInput(l.parsed.date, l.parsed.amountCents),
+                core.BalanceInput(
+                  l.parsed.date,
+                  l.parsed.amountCents,
+                  inBalance:
+                      !(l.classification.categoryId != null &&
+                          (categoryExcluded[l.classification.categoryId] ??
+                              false)),
+                ),
           ],
           today: day,
         )

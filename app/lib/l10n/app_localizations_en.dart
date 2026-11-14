@@ -9682,4 +9682,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String homeTileNetWorthLine(String accounts, String assets, String loans) {
     return 'Accounts $accounts · assets $assets · loans $loans';
   }
+
+  @override
+  String get categoryExcludedFromBalance => 'Exclude from account balances';
+
+  @override
+  String get categoryExcludedFromBalanceHelp =>
+      'Operations in this category will not be deducted from your account balances (e.g. deferred card settlement).';
+
+  @override
+  String get categoryExcludedFromBalanceBadge => 'Excluded from balance';
+
+  @override
+  String get balanceInclusionLabel => 'Inclusion in balance';
+
+  @override
+  String get balanceInclusionHelp =>
+      'Defines whether this operation is deducted from the account balance.';
+
+  @override
+  String balanceAsCategory(String status) {
+    return 'Follows category ($status)';
+  }
+
+  @override
+  String get balanceStatusIncluded => 'included';
+
+  @override
+  String get balanceStatusExcluded => 'excluded';
+
+  @override
+  String get balanceForceIncluded => 'Deducted from account (included)';
+
+  @override
+  String get balanceForceExcluded => 'Excluded from balance (not deducted)';
+
+  @override
+  String get balanceOverrideUpdated => 'Balance inclusion updated';
+
+  @override
+  String get operationExcludedFromBalanceBadge => 'Excluded';
 }

@@ -115,6 +115,31 @@ class CategoryEndpoint extends Endpoint {
     return updated;
   }
 
+  /// Sets whether operations in this category are excluded from account balances
+  /// by default (decision 0051, e.g. deferred card settlement).
+  Future<Category> setExcludedFromBalance(
+    Session session,
+    int categoryId,
+    bool excludedFromBalance,
+  ) async {
+    final current = await _find(session, categoryId);
+    await Access.requireMember(session, current.groupId, min: MemberRole.user);
+    final updated = await Category.db.updateRow(
+      session,
+      current.copyWith(excludedFromBalance: excludedFromBalance),
+    );
+    await Audit.log(
+      session,
+      groupId: current.groupId,
+      action: 'update',
+      entity: 'category',
+      rowId: categoryId,
+      before: current,
+      after: updated,
+    );
+    return updated;
+  }
+
   /// Moves the category to the trash; its operations become "to classify"
   /// only if the user chooses so (they keep the link until purge).
   Future<void> archive(Session session, int categoryId) async {
@@ -187,6 +212,7 @@ Future<void> createDefaultCategories(
         kind: CategoryKind.values.byName(def.kind.name),
         standardCode: def.id,
         icon: def.icon,
+        excludedFromBalance: def.excludedFromBalance,
       ),
       transaction: transaction,
     );
@@ -204,6 +230,20 @@ Future<void> updateAllStandardCategories(Session session) async {
   for (final g in groups) {
     await session.db.transaction(
       (tx) => updateStandardCategories(session, g, transaction: tx),
+    );
+  }
+  // Ensure standard card settlement category is excluded from balance
+  // for all groups (decision 0051).
+  final settlements = await Category.db.find(
+    session,
+    where: (c) =>
+        c.standardCode.equals('transfers.card_settlement') &
+        c.excludedFromBalance.equals(false),
+  );
+  for (final s in settlements) {
+    await Category.db.updateRow(
+      session,
+      s.copyWith(excludedFromBalance: true),
     );
   }
 }
@@ -272,6 +312,7 @@ Future<void> updateStandardCategories(
           kind: CategoryKind.values.byName(def.kind.name),
           standardCode: def.id,
           icon: def.icon,
+          excludedFromBalance: def.excludedFromBalance,
         ),
         transaction: transaction,
       );

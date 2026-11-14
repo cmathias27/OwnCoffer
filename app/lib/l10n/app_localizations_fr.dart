@@ -9753,4 +9753,44 @@ class AppLocalizationsFr extends AppLocalizations {
   String homeTileNetWorthLine(String accounts, String assets, String loans) {
     return 'Comptes $accounts · biens $assets · crédits $loans';
   }
+
+  @override
+  String get categoryExcludedFromBalance => 'Exclure du solde des comptes';
+
+  @override
+  String get categoryExcludedFromBalanceHelp =>
+      'Les opérations de cette catégorie ne seront pas déduites du solde de vos comptes (ex. débit différé de carte).';
+
+  @override
+  String get categoryExcludedFromBalanceBadge => 'Hors solde';
+
+  @override
+  String get balanceInclusionLabel => 'Prise en compte dans le solde';
+
+  @override
+  String get balanceInclusionHelp =>
+      'Définit si cette opération est déduite du solde du compte.';
+
+  @override
+  String balanceAsCategory(String status) {
+    return 'Comme la catégorie ($status)';
+  }
+
+  @override
+  String get balanceStatusIncluded => 'incluse';
+
+  @override
+  String get balanceStatusExcluded => 'hors solde';
+
+  @override
+  String get balanceForceIncluded => 'Déduite du compte (incluse)';
+
+  @override
+  String get balanceForceExcluded => 'Hors solde (non déduite)';
+
+  @override
+  String get balanceOverrideUpdated => 'Prise en compte dans le solde modifiée';
+
+  @override
+  String get operationExcludedFromBalanceBadge => 'Hors solde';
 }

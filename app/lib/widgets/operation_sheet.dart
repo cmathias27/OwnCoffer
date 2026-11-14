@@ -803,6 +803,57 @@ class _OperationSheetState extends State<OperationSheet> {
               onSubmitted: (v) =>
                   _do(() => client.transaction.update(t.id!, note: v)),
             ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<bool?>(
+              initialValue: t.balanceOverride,
+              isExpanded: true,
+              decoration: InputDecoration(
+                labelText: l.balanceInclusionLabel,
+                helperText: l.balanceInclusionHelp,
+              ),
+              items: [
+                DropdownMenuItem<bool?>(
+                  value: null,
+                  child: Text(
+                    l.balanceAsCategory(
+                      (widget.categories[t.categoryId]?.excludedFromBalance ??
+                              false)
+                          ? l.balanceStatusExcluded
+                          : l.balanceStatusIncluded,
+                    ),
+                  ),
+                ),
+                DropdownMenuItem<bool?>(
+                  value: true,
+                  child: Text(l.balanceForceIncluded),
+                ),
+                DropdownMenuItem<bool?>(
+                  value: false,
+                  child: Text(l.balanceForceExcluded),
+                ),
+              ],
+              onChanged: widget.canWrite
+                  ? (v) async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      final prev = t.balanceOverride;
+                      await _do(
+                        () => client.transaction.setBalanceOverride(t.id!, v),
+                      );
+                      if (!mounted || _error != null) return;
+                      showUndo(
+                        messenger,
+                        l,
+                        l.balanceOverrideUpdated,
+                        () async {
+                          final back = await client.transaction
+                              .setBalanceOverride(t.id!, prev);
+                          widget.onChanged(back);
+                          if (mounted) setState(() => _t = back);
+                        },
+                      );
+                    }
+                  : null,
+            ),
             const SizedBox(height: 4),
           ],
         ),
