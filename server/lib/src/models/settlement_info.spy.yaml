@@ -1,0 +1,5 @@
+class: SettlementInfo
+fields:
+  fromUserId: UuidValue
+  toUserId: UuidValue
+  amountCents: int

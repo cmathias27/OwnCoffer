@@ -1,0 +1,19 @@
+### An expense paid by one member for several (split equally), or a
+### repayment between two members (decision 0050). Independent of the bank
+### operations: it records who owes whom.
+class: SharedExpense
+table: shared_expenses
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  label: String
+  date: DateTime
+  amountCents: int
+  paidBy: UuidValue
+  ### Members sharing it (user ids); a repayment has the one paid back.
+  participants: List<UuidValue>
+  repayment: bool, default=false
+  createdBy: UuidValue
+  createdAt: DateTime, default=now
+indexes:
+  shared_expenses_group_idx:
+    fields: groupId

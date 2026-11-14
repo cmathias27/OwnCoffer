@@ -26,9 +26,11 @@ abstract class Category
     this.standardCode,
     this.icon,
     this.color,
+    bool? taxRelevant,
     DateTime? createdAt,
     this.deletedAt,
-  }) : createdAt = createdAt ?? DateTime.now();
+  }) : taxRelevant = taxRelevant ?? false,
+       createdAt = createdAt ?? DateTime.now();
 
   factory Category({
     int? id,
@@ -39,6 +41,7 @@ abstract class Category
     String? standardCode,
     String? icon,
     String? color,
+    bool? taxRelevant,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _CategoryImpl;
@@ -55,6 +58,9 @@ abstract class Category
       standardCode: jsonSerialization['standardCode'] as String?,
       icon: jsonSerialization['icon'] as String?,
       color: jsonSerialization['color'] as String?,
+      taxRelevant: jsonSerialization['taxRelevant'] == null
+          ? null
+          : _is.BoolJsonExtension.fromJson(jsonSerialization['taxRelevant']),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _is.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -87,6 +93,9 @@ abstract class Category
 
   String? color;
 
+  /// Its operations are listed in the yearly review for the tax return.
+  bool taxRelevant;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -106,6 +115,7 @@ abstract class Category
     String? standardCode,
     String? icon,
     String? color,
+    bool? taxRelevant,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -121,6 +131,7 @@ abstract class Category
       if (standardCode != null) 'standardCode': standardCode,
       if (icon != null) 'icon': icon,
       if (color != null) 'color': color,
+      'taxRelevant': taxRelevant,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -138,6 +149,7 @@ abstract class Category
       if (standardCode != null) 'standardCode': standardCode,
       if (icon != null) 'icon': icon,
       if (color != null) 'color': color,
+      'taxRelevant': taxRelevant,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -183,6 +195,7 @@ class _CategoryImpl extends Category {
     String? standardCode,
     String? icon,
     String? color,
+    bool? taxRelevant,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -194,6 +207,7 @@ class _CategoryImpl extends Category {
          standardCode: standardCode,
          icon: icon,
          color: color,
+         taxRelevant: taxRelevant,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -211,6 +225,7 @@ class _CategoryImpl extends Category {
     Object? standardCode = _Undefined,
     Object? icon = _Undefined,
     Object? color = _Undefined,
+    bool? taxRelevant,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -223,6 +238,7 @@ class _CategoryImpl extends Category {
       standardCode: standardCode is String? ? standardCode : this.standardCode,
       icon: icon is String? ? icon : this.icon,
       color: color is String? ? color : this.color,
+      taxRelevant: taxRelevant ?? this.taxRelevant,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );
@@ -267,6 +283,11 @@ class CategoryUpdateTable extends _is.UpdateTable<CategoryTable> {
 
   _is.ColumnValue<String, String> color(String? value) => _is.ColumnValue(
     table.color,
+    value,
+  );
+
+  _is.ColumnValue<bool, bool> taxRelevant(bool value) => _is.ColumnValue(
+    table.taxRelevant,
     value,
   );
 
@@ -315,6 +336,11 @@ class CategoryTable extends _is.Table<int?> {
       'color',
       this,
     );
+    taxRelevant = _is.ColumnBool(
+      'taxRelevant',
+      this,
+      hasDefault: true,
+    );
     createdAt = _is.ColumnDateTime(
       'createdAt',
       this,
@@ -344,6 +370,9 @@ class CategoryTable extends _is.Table<int?> {
 
   late final _is.ColumnString color;
 
+  /// Its operations are listed in the yearly review for the tax return.
+  late final _is.ColumnBool taxRelevant;
+
   late final _is.ColumnDateTime createdAt;
 
   late final _is.ColumnDateTime deletedAt;
@@ -358,6 +387,7 @@ class CategoryTable extends _is.Table<int?> {
     standardCode,
     icon,
     color,
+    taxRelevant,
     createdAt,
     deletedAt,
   ];

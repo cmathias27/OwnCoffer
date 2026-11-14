@@ -34,6 +34,8 @@ abstract class ScheduledTransaction
     bool? subscription,
     this.priceRiseDate,
     this.priceRiseAmountCents,
+    this.renewalDate,
+    this.noticeDays,
     DateTime? createdAt,
     this.deletedAt,
   }) : interval = interval ?? 1,
@@ -61,6 +63,8 @@ abstract class ScheduledTransaction
     bool? subscription,
     DateTime? priceRiseDate,
     int? priceRiseAmountCents,
+    DateTime? renewalDate,
+    int? noticeDays,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _ScheduledTransactionImpl;
@@ -101,6 +105,12 @@ abstract class ScheduledTransaction
               jsonSerialization['priceRiseDate'],
             ),
       priceRiseAmountCents: jsonSerialization['priceRiseAmountCents'] as int?,
+      renewalDate: jsonSerialization['renewalDate'] == null
+          ? null
+          : _isc.DateTimeJsonExtension.fromJson(
+              jsonSerialization['renewalDate'],
+            ),
+      noticeDays: jsonSerialization['noticeDays'] as int?,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -150,6 +160,12 @@ abstract class ScheduledTransaction
 
   int? priceRiseAmountCents;
 
+  /// A contract renewed every year (decision 0050): a renewal day and the
+  /// notice needed to cancel it.
+  DateTime? renewalDate;
+
+  int? noticeDays;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -175,6 +191,8 @@ abstract class ScheduledTransaction
     bool? subscription,
     DateTime? priceRiseDate,
     int? priceRiseAmountCents,
+    DateTime? renewalDate,
+    int? noticeDays,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -200,6 +218,8 @@ abstract class ScheduledTransaction
       if (priceRiseDate != null) 'priceRiseDate': priceRiseDate?.toJson(),
       if (priceRiseAmountCents != null)
         'priceRiseAmountCents': priceRiseAmountCents,
+      if (renewalDate != null) 'renewalDate': renewalDate?.toJson(),
+      if (noticeDays != null) 'noticeDays': noticeDays,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -227,6 +247,8 @@ abstract class ScheduledTransaction
       if (priceRiseDate != null) 'priceRiseDate': priceRiseDate?.toJson(),
       if (priceRiseAmountCents != null)
         'priceRiseAmountCents': priceRiseAmountCents,
+      if (renewalDate != null) 'renewalDate': renewalDate?.toJson(),
+      if (noticeDays != null) 'noticeDays': noticeDays,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -259,6 +281,8 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
     bool? subscription,
     DateTime? priceRiseDate,
     int? priceRiseAmountCents,
+    DateTime? renewalDate,
+    int? noticeDays,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -279,6 +303,8 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
          subscription: subscription,
          priceRiseDate: priceRiseDate,
          priceRiseAmountCents: priceRiseAmountCents,
+         renewalDate: renewalDate,
+         noticeDays: noticeDays,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -305,6 +331,8 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
     bool? subscription,
     Object? priceRiseDate = _Undefined,
     Object? priceRiseAmountCents = _Undefined,
+    Object? renewalDate = _Undefined,
+    Object? noticeDays = _Undefined,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -333,6 +361,8 @@ class _ScheduledTransactionImpl extends ScheduledTransaction {
       priceRiseAmountCents: priceRiseAmountCents is int?
           ? priceRiseAmountCents
           : this.priceRiseAmountCents,
+      renewalDate: renewalDate is DateTime? ? renewalDate : this.renewalDate,
+      noticeDays: noticeDays is int? ? noticeDays : this.noticeDays,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );

@@ -1,0 +1,10 @@
+class: ProjectOverview
+fields:
+  projects: List<SavingsProjectInfo>
+  smoothed: List<SmoothedExpenseInfo>
+  ### Monthly provision of all the spread expenses.
+  smoothedMonthlyCents: int
+  ### What should be put aside already for them.
+  smoothedSetAsideCents: int
+  ### Monthly instalments of the projects with a date, not reached.
+  projectsMonthlyCents: int

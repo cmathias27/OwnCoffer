@@ -1,0 +1,6 @@
+class: MemberBalance
+fields:
+  userId: UuidValue
+  email: String?
+  ### Owed to the member (positive) or owed by them (negative).
+  balanceCents: int

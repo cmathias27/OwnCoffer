@@ -13,6 +13,7 @@
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'account_kind.dart' as _ifkquxga;
 import 'account_visibility.dart' as _ioxxcdxl;
+import 'regulated_kind.dart' as _ijnu36v8;
 
 /// A bank account. Amounts are integer cents.
 abstract class Account
@@ -29,6 +30,8 @@ abstract class Account
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
     this.color,
+    this.regulatedKind,
+    this.interestRateBp,
     DateTime? createdAt,
     this.deletedAt,
   }) : currency = currency ?? 'EUR',
@@ -49,6 +52,8 @@ abstract class Account
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
     String? color,
+    _ijnu36v8.RegulatedKind? regulatedKind,
+    int? interestRateBp,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _AccountImpl;
@@ -76,6 +81,12 @@ abstract class Account
               (jsonSerialization['visibility'] as String),
             ),
       color: jsonSerialization['color'] as String?,
+      regulatedKind: jsonSerialization['regulatedKind'] == null
+          ? null
+          : _ijnu36v8.RegulatedKind.fromJson(
+              (jsonSerialization['regulatedKind'] as String),
+            ),
+      interestRateBp: jsonSerialization['interestRateBp'] as int?,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -113,6 +124,12 @@ abstract class Account
 
   String? color;
 
+  /// A regulated savings account (decision 0050), with its yearly rate in
+  /// hundredths of a percent.
+  _ijnu36v8.RegulatedKind? regulatedKind;
+
+  int? interestRateBp;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -132,6 +149,8 @@ abstract class Account
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
     String? color,
+    _ijnu36v8.RegulatedKind? regulatedKind,
+    int? interestRateBp,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -151,6 +170,8 @@ abstract class Account
       'alertThresholdCents': alertThresholdCents,
       'visibility': visibility.toJson(),
       if (color != null) 'color': color,
+      if (regulatedKind != null) 'regulatedKind': regulatedKind?.toJson(),
+      if (interestRateBp != null) 'interestRateBp': interestRateBp,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -172,6 +193,8 @@ abstract class Account
       'alertThresholdCents': alertThresholdCents,
       'visibility': visibility.toJson(),
       if (color != null) 'color': color,
+      if (regulatedKind != null) 'regulatedKind': regulatedKind?.toJson(),
+      if (interestRateBp != null) 'interestRateBp': interestRateBp,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -198,6 +221,8 @@ class _AccountImpl extends Account {
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
     String? color,
+    _ijnu36v8.RegulatedKind? regulatedKind,
+    int? interestRateBp,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -212,6 +237,8 @@ class _AccountImpl extends Account {
          alertThresholdCents: alertThresholdCents,
          visibility: visibility,
          color: color,
+         regulatedKind: regulatedKind,
+         interestRateBp: interestRateBp,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -232,6 +259,8 @@ class _AccountImpl extends Account {
     int? alertThresholdCents,
     _ioxxcdxl.AccountVisibility? visibility,
     Object? color = _Undefined,
+    Object? regulatedKind = _Undefined,
+    Object? interestRateBp = _Undefined,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -249,6 +278,12 @@ class _AccountImpl extends Account {
       alertThresholdCents: alertThresholdCents ?? this.alertThresholdCents,
       visibility: visibility ?? this.visibility,
       color: color is String? ? color : this.color,
+      regulatedKind: regulatedKind is _ijnu36v8.RegulatedKind?
+          ? regulatedKind
+          : this.regulatedKind,
+      interestRateBp: interestRateBp is int?
+          ? interestRateBp
+          : this.interestRateBp,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );

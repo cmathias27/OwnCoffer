@@ -1,0 +1,22 @@
+### Money expected back (health insurance, deposit, refund of a purchase),
+### settled by the first credit of the same amount (decision 0050).
+class: ExpectedRefund
+table: expected_refunds
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  createdBy: UuidValue
+  label: String
+  amountCents: int
+  ### Credits from this day on may settle it.
+  since: DateTime
+  ### Late after this day.
+  dueBy: DateTime?
+  ### Account it should arrive on; null = any visible account.
+  accountId: int?, relation(parent=accounts, onDelete=SetNull)
+  ### The credit that settled it.
+  transactionId: int?, relation(parent=transactions, onDelete=SetNull)
+  receivedAt: DateTime?
+  createdAt: DateTime, default=now
+indexes:
+  expected_refunds_group_idx:
+    fields: groupId

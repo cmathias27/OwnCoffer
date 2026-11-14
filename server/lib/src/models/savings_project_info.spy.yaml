@@ -1,0 +1,10 @@
+### A savings project and where it stands (core.projectPlan).
+class: SavingsProjectInfo
+fields:
+  project: SavingsProject
+  remainingCents: int
+  monthsLeft: int?
+  monthlyCents: int?
+  progressPerMille: int
+  reached: bool
+  overdue: bool

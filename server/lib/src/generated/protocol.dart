@@ -31,6 +31,9 @@ import 'package:owncoffer_server/src/generated/balance_check.dart' as _i0mjy83n;
 import 'package:owncoffer_server/src/generated/bank_transaction.dart'
     as _ivm4hoam;
 import 'package:owncoffer_server/src/generated/category.dart' as _iemw1gpx;
+import 'package:owncoffer_server/src/generated/contract_info.dart' as _ittme02y;
+import 'package:owncoffer_server/src/generated/expected_refund.dart'
+    as _ijqknek3;
 import 'package:owncoffer_server/src/generated/feedback_info.dart' as _ig8hdxvd;
 import 'package:owncoffer_server/src/generated/goal.dart' as _ix7anf6k;
 import 'package:owncoffer_server/src/generated/group_membership.dart'
@@ -42,12 +45,17 @@ import 'package:owncoffer_server/src/generated/invitation_info.dart'
 import 'package:owncoffer_server/src/generated/invoice_info.dart' as _iq9lo0p4;
 import 'package:owncoffer_server/src/generated/invoice_match.dart' as _ifsyb1bj;
 import 'package:owncoffer_server/src/generated/ip_ban_info.dart' as _itqry2jn;
+import 'package:owncoffer_server/src/generated/life_event_info.dart'
+    as _iqdruzyp;
 import 'package:owncoffer_server/src/generated/loan_document.dart' as _ib7nzwu9;
 import 'package:owncoffer_server/src/generated/loan_installment.dart'
     as _ictm0roz;
 import 'package:owncoffer_server/src/generated/mcp_token.dart' as _iv5jjynk;
 import 'package:owncoffer_server/src/generated/member_info.dart' as _ipfe689d;
 import 'package:owncoffer_server/src/generated/notification.dart' as _ieap9unx;
+import 'package:owncoffer_server/src/generated/regulated_savings_info.dart'
+    as _i88zltai;
+import 'package:owncoffer_server/src/generated/reminder.dart' as _iq6fc8a3;
 import 'package:owncoffer_server/src/generated/rule.dart' as _inhqt802;
 import 'package:owncoffer_server/src/generated/scheduled_transaction.dart'
     as _inu9ydal;
@@ -87,6 +95,8 @@ import 'ai_server_settings.dart' as _i670pg82;
 import 'ai_status.dart' as _idsjcs1s;
 import 'ai_usage.dart' as _iojy8c5d;
 import 'ai_usage_line.dart' as _io8mmtm5;
+import 'asset.dart' as _if0dnshd;
+import 'asset_kind.dart' as _ibuqfn3k;
 import 'audit_entry.dart' as _i1613bfs;
 import 'backup_code.dart' as _i0b7vj86;
 import 'backup_info.dart' as _i73uehc4;
@@ -101,9 +111,12 @@ import 'category_flow.dart' as _i8msyna2;
 import 'category_kind.dart' as _i7kso3nf;
 import 'category_source.dart' as _idpjit5g;
 import 'community_rule.dart' as _igloa2c5;
+import 'contract_info.dart' as _icq5ciz8;
 import 'csv_columns.dart' as _iq9wp9wq;
 import 'due_calendar.dart' as _ic7yhr4p;
 import 'early_repayment.dart' as _ind4b83h;
+import 'event_operation.dart' as _ig3srb4b;
+import 'expected_refund.dart' as _ip26zpxf;
 import 'fee_line.dart' as _ip53xvp1;
 import 'feedback_info.dart' as _i4v92iun;
 import 'finance_group.dart' as _iqh5irlt;
@@ -115,6 +128,9 @@ import 'global_search_result.dart' as _i9m2w48w;
 import 'goal.dart' as _ibqaulxu;
 import 'group_member.dart' as _igiek2ee;
 import 'group_membership.dart' as _i54nduyh;
+import 'health_grade.dart' as _ifqi9prv;
+import 'health_indicator_info.dart' as _ir2o1qbt;
+import 'health_report.dart' as _in7t17t7;
 import 'import_issue_info.dart' as _iso7nf03;
 import 'import_preview.dart' as _im8lwq6n;
 import 'import_preview_line.dart' as _i4e8elxc;
@@ -132,6 +148,8 @@ import 'invoice_match.dart' as _ixgqo4yu;
 import 'ip_ban.dart' as _i88cvd1d;
 import 'ip_ban_info.dart' as _ijfl1fdm;
 import 'left_to_live_report.dart' as _ibb3lpoc;
+import 'life_event.dart' as _i2n6mb1r;
+import 'life_event_info.dart' as _io74wf7v;
 import 'loan.dart' as _i7jednjp;
 import 'loan_change_simulation.dart' as _inp2quao;
 import 'loan_check_line.dart' as _implde5j;
@@ -147,6 +165,7 @@ import 'loan_kind.dart' as _i1700pxx;
 import 'loan_overview.dart' as _itnp0u8s;
 import 'mcp_token.dart' as _ibm9fvwa;
 import 'mcp_token_created.dart' as _iqv371vc;
+import 'member_balance.dart' as _iqlvsnfo;
 import 'member_info.dart' as _i2slp771;
 import 'member_role.dart' as _insyygng;
 import 'missed_occurrence_info.dart' as _ifjtpr6l;
@@ -167,23 +186,36 @@ import 'pepite_tip_seen.dart' as _inog9jm1;
 import 'pepite_tips.dart' as _i3b60tzc;
 import 'pepite_year.dart' as _ieheie2d;
 import 'period_totals.dart' as _imctw77w;
+import 'pot_overview.dart' as _isc6vbil;
+import 'pot_share.dart' as _iqlf4n1p;
+import 'pot_share_info.dart' as _ierr65lw;
+import 'project_overview.dart' as _iy1z8w9e;
 import 'provider_history.dart' as _irsxtgs7;
 import 'purchase_option.dart' as _i46nnn14;
 import 'purchase_payment_info.dart' as _i60c7zzl;
 import 'purchase_scenario_info.dart' as _irvruma2;
 import 'purchase_simulation.dart' as _idtt2l34;
 import 'reconciliation_proposal.dart' as _i7qmkh8w;
+import 'regulated_kind.dart' as _ijnu36v8;
+import 'regulated_savings_info.dart' as _ibbxqm7d;
 import 'release_notes.dart' as _idndmjo8;
+import 'reminder.dart' as _ic7cmrsw;
 import 'restore_test_info.dart' as _ir5r6xs5;
 import 'rule.dart' as _ivw87pdb;
 import 'rule_application.dart' as _ie66uvh9;
 import 'rule_direction.dart' as _i13yq1r7;
 import 'rule_match_type.dart' as _ibgrh3pe;
 import 'rule_test_result.dart' as _ipgrn6yw;
+import 'savings_project.dart' as _infuthxz;
+import 'savings_project_info.dart' as _ihvqz8p6;
 import 'scheduled_transaction.dart' as _ifol8nrg;
 import 'session_device.dart' as _i0nxlf3w;
 import 'session_info.dart' as _ifkdo6on;
+import 'settlement_info.dart' as _iwe8qrap;
 import 'setup_status.dart' as _iw7q1xsb;
+import 'shared_expense.dart' as _ikg9hqha;
+import 'shared_overview.dart' as _itdh2lm9;
+import 'smoothed_expense_info.dart' as _iz4y239i;
 import 'spending_report.dart' as _ixcwyj5v;
 import 'statement_import.dart' as _ia7wudj2;
 import 'subscription_change.dart' as _ilnyaemj;
@@ -199,6 +231,10 @@ import 'update_overview.dart' as _iv5yf7x0;
 import 'user_feedback.dart' as _iv6k6stc;
 import 'variable_category_info.dart' as _ic7yx6at;
 import 'variable_estimate_info.dart' as _in08zzvs;
+import 'wealth_account.dart' as _ihwcdzv0;
+import 'wealth_overview.dart' as _ipsmihhz;
+import 'year_category_line.dart' as _iotroukk;
+import 'year_review.dart' as _im7how52;
 export 'access_denied_exception.dart';
 export 'account.dart';
 export 'account_access.dart';
@@ -223,6 +259,8 @@ export 'ai_server_settings.dart';
 export 'ai_status.dart';
 export 'ai_usage.dart';
 export 'ai_usage_line.dart';
+export 'asset.dart';
+export 'asset_kind.dart';
 export 'audit_entry.dart';
 export 'backup_code.dart';
 export 'backup_info.dart';
@@ -237,9 +275,12 @@ export 'category_flow.dart';
 export 'category_kind.dart';
 export 'category_source.dart';
 export 'community_rule.dart';
+export 'contract_info.dart';
 export 'csv_columns.dart';
 export 'due_calendar.dart';
 export 'early_repayment.dart';
+export 'event_operation.dart';
+export 'expected_refund.dart';
 export 'fee_line.dart';
 export 'feedback_info.dart';
 export 'finance_group.dart';
@@ -251,6 +292,9 @@ export 'global_search_result.dart';
 export 'goal.dart';
 export 'group_member.dart';
 export 'group_membership.dart';
+export 'health_grade.dart';
+export 'health_indicator_info.dart';
+export 'health_report.dart';
 export 'import_issue_info.dart';
 export 'import_preview.dart';
 export 'import_preview_line.dart';
@@ -268,6 +312,8 @@ export 'invoice_match.dart';
 export 'ip_ban.dart';
 export 'ip_ban_info.dart';
 export 'left_to_live_report.dart';
+export 'life_event.dart';
+export 'life_event_info.dart';
 export 'loan.dart';
 export 'loan_change_simulation.dart';
 export 'loan_check_line.dart';
@@ -283,6 +329,7 @@ export 'loan_kind.dart';
 export 'loan_overview.dart';
 export 'mcp_token.dart';
 export 'mcp_token_created.dart';
+export 'member_balance.dart';
 export 'member_info.dart';
 export 'member_role.dart';
 export 'missed_occurrence_info.dart';
@@ -303,23 +350,36 @@ export 'pepite_tip_seen.dart';
 export 'pepite_tips.dart';
 export 'pepite_year.dart';
 export 'period_totals.dart';
+export 'pot_overview.dart';
+export 'pot_share.dart';
+export 'pot_share_info.dart';
+export 'project_overview.dart';
 export 'provider_history.dart';
 export 'purchase_option.dart';
 export 'purchase_payment_info.dart';
 export 'purchase_scenario_info.dart';
 export 'purchase_simulation.dart';
 export 'reconciliation_proposal.dart';
+export 'regulated_kind.dart';
+export 'regulated_savings_info.dart';
 export 'release_notes.dart';
+export 'reminder.dart';
 export 'restore_test_info.dart';
 export 'rule.dart';
 export 'rule_application.dart';
 export 'rule_direction.dart';
 export 'rule_match_type.dart';
 export 'rule_test_result.dart';
+export 'savings_project.dart';
+export 'savings_project_info.dart';
 export 'scheduled_transaction.dart';
 export 'session_device.dart';
 export 'session_info.dart';
+export 'settlement_info.dart';
 export 'setup_status.dart';
+export 'shared_expense.dart';
+export 'shared_overview.dart';
+export 'smoothed_expense_info.dart';
 export 'spending_report.dart';
 export 'statement_import.dart';
 export 'subscription_change.dart';
@@ -335,6 +395,10 @@ export 'update_overview.dart';
 export 'user_feedback.dart';
 export 'variable_category_info.dart';
 export 'variable_estimate_info.dart';
+export 'wealth_account.dart';
+export 'wealth_overview.dart';
+export 'year_category_line.dart';
+export 'year_review.dart';
 
 class Protocol extends _is.DatabaseSerializationManager {
   Protocol._();
@@ -495,6 +559,18 @@ class Protocol extends _is.DatabaseSerializationManager {
           columnType: _isp.ColumnType.text,
           isNullable: true,
           dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'regulatedKind',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'protocol:RegulatedKind?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'interestRateBp',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
         ),
         _isp.ColumnDefinition(
           name: 'createdAt',
@@ -1316,6 +1392,86 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'assets',
+      dartName: 'Asset',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'name',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'kind',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:AssetKind',
+        ),
+        _isp.ColumnDefinition(
+          name: 'valueCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'valuedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'assets_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'assets_group_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'audit_log',
       dartName: 'AuditEntry',
       schema: 'public',
@@ -1558,6 +1714,13 @@ class Protocol extends _is.DatabaseSerializationManager {
           dartType: 'String?',
         ),
         _isp.ColumnDefinition(
+          name: 'taxRelevant',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'false',
+        ),
+        _isp.ColumnDefinition(
           name: 'createdAt',
           columnType: _isp.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
@@ -1688,6 +1851,212 @@ class Protocol extends _is.DatabaseSerializationManager {
           ],
           type: 'btree',
           isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'event_operations',
+      dartName: 'EventOperation',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'eventId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'transactionId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'event_operations_fk_0',
+          columns: ['eventId'],
+          referenceTable: 'life_events',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'event_operations_fk_1',
+          columns: ['transactionId'],
+          referenceTable: 'transactions',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'event_operations_pair_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'eventId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'transactionId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'event_operations_transaction_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'transactionId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'expected_refunds',
+      dartName: 'ExpectedRefund',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdBy',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'label',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'amountCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'since',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'dueBy',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'accountId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'transactionId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'receivedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'expected_refunds_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'expected_refunds_fk_1',
+          columns: ['accountId'],
+          referenceTable: 'accounts',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.setNull,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'expected_refunds_fk_2',
+          columns: ['transactionId'],
+          referenceTable: 'transactions',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.setNull,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'expected_refunds_group_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
           isPrimary: false,
         ),
       ],
@@ -1925,6 +2294,19 @@ class Protocol extends _is.DatabaseSerializationManager {
           isNullable: false,
           dartType: 'int',
           columnDefault: '1',
+        ),
+        _isp.ColumnDefinition(
+          name: 'closedUntil',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'potMonthlyCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+          columnDefault: '0',
         ),
         _isp.ColumnDefinition(
           name: 'createdBy',
@@ -2465,6 +2847,86 @@ class Protocol extends _is.DatabaseSerializationManager {
           ],
           type: 'btree',
           isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'life_events',
+      dartName: 'LifeEvent',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'name',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'startDate',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'endDate',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'budgetCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'life_events_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'life_events_group_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
           isPrimary: false,
         ),
       ],
@@ -3622,6 +4084,155 @@ class Protocol extends _is.DatabaseSerializationManager {
       managed: true,
     ),
     _isp.TableDefinition(
+      name: 'pot_shares',
+      dartName: 'PotShare',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'incomeCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'pot_shares_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'pot_shares_member_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'reminders',
+      dartName: 'Reminder',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'text',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'dueDate',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'doneAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'reminders_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'reminders_group_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
       name: 'rules',
       dartName: 'Rule',
       schema: 'public',
@@ -3730,6 +4341,109 @@ class Protocol extends _is.DatabaseSerializationManager {
       indexes: [
         _isp.IndexDefinition(
           indexName: 'rules_group_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'savings_projects',
+      dartName: 'SavingsProject',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'name',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'targetCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'savedCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+          columnDefault: '0',
+        ),
+        _isp.ColumnDefinition(
+          name: 'targetDate',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'accountId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+        _isp.ColumnDefinition(
+          name: 'archivedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'savings_projects_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'savings_projects_fk_1',
+          columns: ['accountId'],
+          referenceTable: 'accounts',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.setNull,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'savings_projects_group_idx',
           tableSpace: null,
           elements: [
             _isp.IndexElementDefinition(
@@ -3854,6 +4568,18 @@ class Protocol extends _is.DatabaseSerializationManager {
         ),
         _isp.ColumnDefinition(
           name: 'priceRiseAmountCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'renewalDate',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'noticeDays',
           columnType: _isp.ColumnType.bigint,
           isNullable: true,
           dartType: 'int?',
@@ -4024,6 +4750,105 @@ class Protocol extends _is.DatabaseSerializationManager {
             _isp.IndexElementDefinition(
               type: _isp.IndexElementDefinitionType.column,
               definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'shared_expenses',
+      dartName: 'SharedExpense',
+      schema: 'public',
+      module: 'owncoffer',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'groupId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'label',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'date',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'amountCents',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'paidBy',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'participants',
+          columnType: _isp.ColumnType.json,
+          isNullable: false,
+          dartType: 'List<UuidValue>',
+        ),
+        _isp.ColumnDefinition(
+          name: 'repayment',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'false',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdBy',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'shared_expenses_fk_0',
+          columns: ['groupId'],
+          referenceTable: 'groups',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'shared_expenses_group_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'groupId',
             ),
           ],
           type: 'btree',
@@ -4746,6 +5571,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _io8mmtm5.AiUsageLine) {
       return _io8mmtm5.AiUsageLine.fromJson(data) as T;
     }
+    if (t == _if0dnshd.Asset) {
+      return _if0dnshd.Asset.fromJson(data) as T;
+    }
+    if (t == _ibuqfn3k.AssetKind) {
+      return _ibuqfn3k.AssetKind.fromJson(data) as T;
+    }
     if (t == _i1613bfs.AuditEntry) {
       return _i1613bfs.AuditEntry.fromJson(data) as T;
     }
@@ -4788,6 +5619,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _igloa2c5.CommunityRule) {
       return _igloa2c5.CommunityRule.fromJson(data) as T;
     }
+    if (t == _icq5ciz8.ContractInfo) {
+      return _icq5ciz8.ContractInfo.fromJson(data) as T;
+    }
     if (t == _iq9wp9wq.CsvColumns) {
       return _iq9wp9wq.CsvColumns.fromJson(data) as T;
     }
@@ -4796,6 +5630,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _ind4b83h.EarlyRepayment) {
       return _ind4b83h.EarlyRepayment.fromJson(data) as T;
+    }
+    if (t == _ig3srb4b.EventOperation) {
+      return _ig3srb4b.EventOperation.fromJson(data) as T;
+    }
+    if (t == _ip26zpxf.ExpectedRefund) {
+      return _ip26zpxf.ExpectedRefund.fromJson(data) as T;
     }
     if (t == _ip53xvp1.FeeLine) {
       return _ip53xvp1.FeeLine.fromJson(data) as T;
@@ -4829,6 +5669,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _i54nduyh.GroupMembership) {
       return _i54nduyh.GroupMembership.fromJson(data) as T;
+    }
+    if (t == _ifqi9prv.HealthGrade) {
+      return _ifqi9prv.HealthGrade.fromJson(data) as T;
+    }
+    if (t == _ir2o1qbt.HealthIndicatorInfo) {
+      return _ir2o1qbt.HealthIndicatorInfo.fromJson(data) as T;
+    }
+    if (t == _in7t17t7.HealthReport) {
+      return _in7t17t7.HealthReport.fromJson(data) as T;
     }
     if (t == _iso7nf03.ImportIssueInfo) {
       return _iso7nf03.ImportIssueInfo.fromJson(data) as T;
@@ -4881,6 +5730,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ibb3lpoc.LeftToLiveReport) {
       return _ibb3lpoc.LeftToLiveReport.fromJson(data) as T;
     }
+    if (t == _i2n6mb1r.LifeEvent) {
+      return _i2n6mb1r.LifeEvent.fromJson(data) as T;
+    }
+    if (t == _io74wf7v.LifeEventInfo) {
+      return _io74wf7v.LifeEventInfo.fromJson(data) as T;
+    }
     if (t == _i7jednjp.Loan) {
       return _i7jednjp.Loan.fromJson(data) as T;
     }
@@ -4925,6 +5780,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _iqv371vc.McpTokenCreated) {
       return _iqv371vc.McpTokenCreated.fromJson(data) as T;
+    }
+    if (t == _iqlvsnfo.MemberBalance) {
+      return _iqlvsnfo.MemberBalance.fromJson(data) as T;
     }
     if (t == _i2slp771.MemberInfo) {
       return _i2slp771.MemberInfo.fromJson(data) as T;
@@ -4986,6 +5844,18 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _imctw77w.PeriodTotals) {
       return _imctw77w.PeriodTotals.fromJson(data) as T;
     }
+    if (t == _isc6vbil.PotOverview) {
+      return _isc6vbil.PotOverview.fromJson(data) as T;
+    }
+    if (t == _iqlf4n1p.PotShare) {
+      return _iqlf4n1p.PotShare.fromJson(data) as T;
+    }
+    if (t == _ierr65lw.PotShareInfo) {
+      return _ierr65lw.PotShareInfo.fromJson(data) as T;
+    }
+    if (t == _iy1z8w9e.ProjectOverview) {
+      return _iy1z8w9e.ProjectOverview.fromJson(data) as T;
+    }
     if (t == _irsxtgs7.ProviderHistory) {
       return _irsxtgs7.ProviderHistory.fromJson(data) as T;
     }
@@ -5004,8 +5874,17 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i7qmkh8w.ReconciliationProposal) {
       return _i7qmkh8w.ReconciliationProposal.fromJson(data) as T;
     }
+    if (t == _ijnu36v8.RegulatedKind) {
+      return _ijnu36v8.RegulatedKind.fromJson(data) as T;
+    }
+    if (t == _ibbxqm7d.RegulatedSavingsInfo) {
+      return _ibbxqm7d.RegulatedSavingsInfo.fromJson(data) as T;
+    }
     if (t == _idndmjo8.ReleaseNotes) {
       return _idndmjo8.ReleaseNotes.fromJson(data) as T;
+    }
+    if (t == _ic7cmrsw.Reminder) {
+      return _ic7cmrsw.Reminder.fromJson(data) as T;
     }
     if (t == _ir5r6xs5.RestoreTestInfo) {
       return _ir5r6xs5.RestoreTestInfo.fromJson(data) as T;
@@ -5025,6 +5904,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ipgrn6yw.RuleTestResult) {
       return _ipgrn6yw.RuleTestResult.fromJson(data) as T;
     }
+    if (t == _infuthxz.SavingsProject) {
+      return _infuthxz.SavingsProject.fromJson(data) as T;
+    }
+    if (t == _ihvqz8p6.SavingsProjectInfo) {
+      return _ihvqz8p6.SavingsProjectInfo.fromJson(data) as T;
+    }
     if (t == _ifol8nrg.ScheduledTransaction) {
       return _ifol8nrg.ScheduledTransaction.fromJson(data) as T;
     }
@@ -5034,8 +5919,20 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ifkdo6on.SessionInfo) {
       return _ifkdo6on.SessionInfo.fromJson(data) as T;
     }
+    if (t == _iwe8qrap.SettlementInfo) {
+      return _iwe8qrap.SettlementInfo.fromJson(data) as T;
+    }
     if (t == _iw7q1xsb.SetupStatus) {
       return _iw7q1xsb.SetupStatus.fromJson(data) as T;
+    }
+    if (t == _ikg9hqha.SharedExpense) {
+      return _ikg9hqha.SharedExpense.fromJson(data) as T;
+    }
+    if (t == _itdh2lm9.SharedOverview) {
+      return _itdh2lm9.SharedOverview.fromJson(data) as T;
+    }
+    if (t == _iz4y239i.SmoothedExpenseInfo) {
+      return _iz4y239i.SmoothedExpenseInfo.fromJson(data) as T;
     }
     if (t == _ixcwyj5v.SpendingReport) {
       return _ixcwyj5v.SpendingReport.fromJson(data) as T;
@@ -5081,6 +5978,18 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _in08zzvs.VariableEstimateInfo) {
       return _in08zzvs.VariableEstimateInfo.fromJson(data) as T;
+    }
+    if (t == _ihwcdzv0.WealthAccount) {
+      return _ihwcdzv0.WealthAccount.fromJson(data) as T;
+    }
+    if (t == _ipsmihhz.WealthOverview) {
+      return _ipsmihhz.WealthOverview.fromJson(data) as T;
+    }
+    if (t == _iotroukk.YearCategoryLine) {
+      return _iotroukk.YearCategoryLine.fromJson(data) as T;
+    }
+    if (t == _im7how52.YearReview) {
+      return _im7how52.YearReview.fromJson(data) as T;
     }
     if (t == _is.getType<_i8te4v3o.AccessDeniedException?>()) {
       return (data != null
@@ -5172,6 +6081,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_io8mmtm5.AiUsageLine?>()) {
       return (data != null ? _io8mmtm5.AiUsageLine.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_if0dnshd.Asset?>()) {
+      return (data != null ? _if0dnshd.Asset.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ibuqfn3k.AssetKind?>()) {
+      return (data != null ? _ibuqfn3k.AssetKind.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_i1613bfs.AuditEntry?>()) {
       return (data != null ? _i1613bfs.AuditEntry.fromJson(data) : null) as T;
     }
@@ -5219,6 +6134,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _igloa2c5.CommunityRule.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_icq5ciz8.ContractInfo?>()) {
+      return (data != null ? _icq5ciz8.ContractInfo.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_iq9wp9wq.CsvColumns?>()) {
       return (data != null ? _iq9wp9wq.CsvColumns.fromJson(data) : null) as T;
     }
@@ -5227,6 +6145,14 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_ind4b83h.EarlyRepayment?>()) {
       return (data != null ? _ind4b83h.EarlyRepayment.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ig3srb4b.EventOperation?>()) {
+      return (data != null ? _ig3srb4b.EventOperation.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ip26zpxf.ExpectedRefund?>()) {
+      return (data != null ? _ip26zpxf.ExpectedRefund.fromJson(data) : null)
           as T;
     }
     if (t == _is.getType<_ip53xvp1.FeeLine?>()) {
@@ -5266,6 +6192,18 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_i54nduyh.GroupMembership?>()) {
       return (data != null ? _i54nduyh.GroupMembership.fromJson(data) : null)
           as T;
+    }
+    if (t == _is.getType<_ifqi9prv.HealthGrade?>()) {
+      return (data != null ? _ifqi9prv.HealthGrade.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ir2o1qbt.HealthIndicatorInfo?>()) {
+      return (data != null
+              ? _ir2o1qbt.HealthIndicatorInfo.fromJson(data)
+              : null)
+          as T;
+    }
+    if (t == _is.getType<_in7t17t7.HealthReport?>()) {
+      return (data != null ? _in7t17t7.HealthReport.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_iso7nf03.ImportIssueInfo?>()) {
       return (data != null ? _iso7nf03.ImportIssueInfo.fromJson(data) : null)
@@ -5330,6 +6268,13 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _ibb3lpoc.LeftToLiveReport.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_i2n6mb1r.LifeEvent?>()) {
+      return (data != null ? _i2n6mb1r.LifeEvent.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_io74wf7v.LifeEventInfo?>()) {
+      return (data != null ? _io74wf7v.LifeEventInfo.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_i7jednjp.Loan?>()) {
       return (data != null ? _i7jednjp.Loan.fromJson(data) : null) as T;
     }
@@ -5383,6 +6328,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_iqv371vc.McpTokenCreated?>()) {
       return (data != null ? _iqv371vc.McpTokenCreated.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_iqlvsnfo.MemberBalance?>()) {
+      return (data != null ? _iqlvsnfo.MemberBalance.fromJson(data) : null)
           as T;
     }
     if (t == _is.getType<_i2slp771.MemberInfo?>()) {
@@ -5459,6 +6408,19 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_imctw77w.PeriodTotals?>()) {
       return (data != null ? _imctw77w.PeriodTotals.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_isc6vbil.PotOverview?>()) {
+      return (data != null ? _isc6vbil.PotOverview.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iqlf4n1p.PotShare?>()) {
+      return (data != null ? _iqlf4n1p.PotShare.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ierr65lw.PotShareInfo?>()) {
+      return (data != null ? _ierr65lw.PotShareInfo.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iy1z8w9e.ProjectOverview?>()) {
+      return (data != null ? _iy1z8w9e.ProjectOverview.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_irsxtgs7.ProviderHistory?>()) {
       return (data != null ? _irsxtgs7.ProviderHistory.fromJson(data) : null)
           as T;
@@ -5489,8 +6451,21 @@ class Protocol extends _is.DatabaseSerializationManager {
               : null)
           as T;
     }
+    if (t == _is.getType<_ijnu36v8.RegulatedKind?>()) {
+      return (data != null ? _ijnu36v8.RegulatedKind.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ibbxqm7d.RegulatedSavingsInfo?>()) {
+      return (data != null
+              ? _ibbxqm7d.RegulatedSavingsInfo.fromJson(data)
+              : null)
+          as T;
+    }
     if (t == _is.getType<_idndmjo8.ReleaseNotes?>()) {
       return (data != null ? _idndmjo8.ReleaseNotes.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ic7cmrsw.Reminder?>()) {
+      return (data != null ? _ic7cmrsw.Reminder.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_ir5r6xs5.RestoreTestInfo?>()) {
       return (data != null ? _ir5r6xs5.RestoreTestInfo.fromJson(data) : null)
@@ -5515,6 +6490,14 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data != null ? _ipgrn6yw.RuleTestResult.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_infuthxz.SavingsProject?>()) {
+      return (data != null ? _infuthxz.SavingsProject.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ihvqz8p6.SavingsProjectInfo?>()) {
+      return (data != null ? _ihvqz8p6.SavingsProjectInfo.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_ifol8nrg.ScheduledTransaction?>()) {
       return (data != null
               ? _ifol8nrg.ScheduledTransaction.fromJson(data)
@@ -5528,8 +6511,26 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_ifkdo6on.SessionInfo?>()) {
       return (data != null ? _ifkdo6on.SessionInfo.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_iwe8qrap.SettlementInfo?>()) {
+      return (data != null ? _iwe8qrap.SettlementInfo.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_iw7q1xsb.SetupStatus?>()) {
       return (data != null ? _iw7q1xsb.SetupStatus.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ikg9hqha.SharedExpense?>()) {
+      return (data != null ? _ikg9hqha.SharedExpense.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_itdh2lm9.SharedOverview?>()) {
+      return (data != null ? _itdh2lm9.SharedOverview.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_iz4y239i.SmoothedExpenseInfo?>()) {
+      return (data != null
+              ? _iz4y239i.SmoothedExpenseInfo.fromJson(data)
+              : null)
+          as T;
     }
     if (t == _is.getType<_ixcwyj5v.SpendingReport?>()) {
       return (data != null ? _ixcwyj5v.SpendingReport.fromJson(data) : null)
@@ -5593,6 +6594,21 @@ class Protocol extends _is.DatabaseSerializationManager {
               ? _in08zzvs.VariableEstimateInfo.fromJson(data)
               : null)
           as T;
+    }
+    if (t == _is.getType<_ihwcdzv0.WealthAccount?>()) {
+      return (data != null ? _ihwcdzv0.WealthAccount.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ipsmihhz.WealthOverview?>()) {
+      return (data != null ? _ipsmihhz.WealthOverview.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_iotroukk.YearCategoryLine?>()) {
+      return (data != null ? _iotroukk.YearCategoryLine.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_im7how52.YearReview?>()) {
+      return (data != null ? _im7how52.YearReview.fromJson(data) : null) as T;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
@@ -5667,6 +6683,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_im7mm4oj.InvoiceInfo>) {
       return (data as List)
               .map((e) => deserialize<_im7mm4oj.InvoiceInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ir2o1qbt.HealthIndicatorInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_ir2o1qbt.HealthIndicatorInfo>(e))
               .toList()
           as T;
     }
@@ -5771,6 +6793,24 @@ class Protocol extends _is.DatabaseSerializationManager {
               : null)
           as T;
     }
+    if (t == List<_ierr65lw.PotShareInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_ierr65lw.PotShareInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ihvqz8p6.SavingsProjectInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_ihvqz8p6.SavingsProjectInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iz4y239i.SmoothedExpenseInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iz4y239i.SmoothedExpenseInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_i60c7zzl.PurchasePaymentInfo>) {
       return (data as List)
               .map((e) => deserialize<_i60c7zzl.PurchasePaymentInfo>(e))
@@ -5780,6 +6820,28 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_irvruma2.PurchaseScenarioInfo>) {
       return (data as List)
               .map((e) => deserialize<_irvruma2.PurchaseScenarioInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_is.UuidValue>) {
+      return (data as List).map((e) => deserialize<_is.UuidValue>(e)).toList()
+          as T;
+    }
+    if (t == List<_ikg9hqha.SharedExpense>) {
+      return (data as List)
+              .map((e) => deserialize<_ikg9hqha.SharedExpense>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iqlvsnfo.MemberBalance>) {
+      return (data as List)
+              .map((e) => deserialize<_iqlvsnfo.MemberBalance>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iwe8qrap.SettlementInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iwe8qrap.SettlementInfo>(e))
               .toList()
           as T;
     }
@@ -5804,6 +6866,22 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_ic7yx6at.VariableCategoryInfo>) {
       return (data as List)
               .map((e) => deserialize<_ic7yx6at.VariableCategoryInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ihwcdzv0.WealthAccount>) {
+      return (data as List)
+              .map((e) => deserialize<_ihwcdzv0.WealthAccount>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_if0dnshd.Asset>) {
+      return (data as List).map((e) => deserialize<_if0dnshd.Asset>(e)).toList()
+          as T;
+    }
+    if (t == List<_iotroukk.YearCategoryLine>) {
+      return (data as List)
+              .map((e) => deserialize<_iotroukk.YearCategoryLine>(e))
               .toList()
           as T;
     }
@@ -5906,6 +6984,15 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_iqdruzyp.LifeEventInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_iqdruzyp.LifeEventInfo>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    }
     if (t == List<_izsddv95.UserFeedback>) {
       return (data as List)
               .map((e) => deserialize<_izsddv95.UserFeedback>(e))
@@ -5933,9 +7020,6 @@ class Protocol extends _is.DatabaseSerializationManager {
               .map((e) => deserialize<_ipfe689d.MemberInfo>(e))
               .toList()
           as T;
-    }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
     }
     if (t == _is.getType<List<int>?>()) {
       return (data != null
@@ -5997,6 +7081,18 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ijqknek3.ExpectedRefund>) {
+      return (data as List)
+              .map((e) => deserialize<_ijqknek3.ExpectedRefund>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iq6fc8a3.Reminder>) {
+      return (data as List)
+              .map((e) => deserialize<_iq6fc8a3.Reminder>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_inhqt802.Rule>) {
       return (data as List).map((e) => deserialize<_inhqt802.Rule>(e)).toList()
           as T;
@@ -6007,9 +7103,21 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ittme02y.ContractInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_ittme02y.ContractInfo>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_i84rsuuz.TransactionSplit>) {
       return (data as List)
               .map((e) => deserialize<_i84rsuuz.TransactionSplit>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i88zltai.RegulatedSavingsInfo>) {
+      return (data as List)
+              .map((e) => deserialize<_i88zltai.RegulatedSavingsInfo>(e))
               .toList()
           as T;
     }
@@ -6051,6 +7159,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _idsjcs1s.AiStatus => 'AiStatus',
       _iojy8c5d.AiUsage => 'AiUsage',
       _io8mmtm5.AiUsageLine => 'AiUsageLine',
+      _if0dnshd.Asset => 'Asset',
+      _ibuqfn3k.AssetKind => 'AssetKind',
       _i1613bfs.AuditEntry => 'AuditEntry',
       _i0b7vj86.BackupCode => 'BackupCode',
       _i73uehc4.BackupInfo => 'BackupInfo',
@@ -6065,9 +7175,12 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i7kso3nf.CategoryKind => 'CategoryKind',
       _idpjit5g.CategorySource => 'CategorySource',
       _igloa2c5.CommunityRule => 'CommunityRule',
+      _icq5ciz8.ContractInfo => 'ContractInfo',
       _iq9wp9wq.CsvColumns => 'CsvColumns',
       _ic7yhr4p.DueCalendar => 'DueCalendar',
       _ind4b83h.EarlyRepayment => 'EarlyRepayment',
+      _ig3srb4b.EventOperation => 'EventOperation',
+      _ip26zpxf.ExpectedRefund => 'ExpectedRefund',
       _ip53xvp1.FeeLine => 'FeeLine',
       _i4v92iun.FeedbackInfo => 'FeedbackInfo',
       _iqh5irlt.FinanceGroup => 'FinanceGroup',
@@ -6079,6 +7192,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ibqaulxu.Goal => 'Goal',
       _igiek2ee.GroupMember => 'GroupMember',
       _i54nduyh.GroupMembership => 'GroupMembership',
+      _ifqi9prv.HealthGrade => 'HealthGrade',
+      _ir2o1qbt.HealthIndicatorInfo => 'HealthIndicatorInfo',
+      _in7t17t7.HealthReport => 'HealthReport',
       _iso7nf03.ImportIssueInfo => 'ImportIssueInfo',
       _im8lwq6n.ImportPreview => 'ImportPreview',
       _i4e8elxc.ImportPreviewLine => 'ImportPreviewLine',
@@ -6096,6 +7212,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i88cvd1d.IpBan => 'IpBan',
       _ijfl1fdm.IpBanInfo => 'IpBanInfo',
       _ibb3lpoc.LeftToLiveReport => 'LeftToLiveReport',
+      _i2n6mb1r.LifeEvent => 'LifeEvent',
+      _io74wf7v.LifeEventInfo => 'LifeEventInfo',
       _i7jednjp.Loan => 'Loan',
       _inp2quao.LoanChangeSimulation => 'LoanChangeSimulation',
       _implde5j.LoanCheckLine => 'LoanCheckLine',
@@ -6111,6 +7229,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _itnp0u8s.LoanOverview => 'LoanOverview',
       _ibm9fvwa.McpToken => 'McpToken',
       _iqv371vc.McpTokenCreated => 'McpTokenCreated',
+      _iqlvsnfo.MemberBalance => 'MemberBalance',
       _i2slp771.MemberInfo => 'MemberInfo',
       _insyygng.MemberRole => 'MemberRole',
       _ifjtpr6l.MissedOccurrenceInfo => 'MissedOccurrenceInfo',
@@ -6131,23 +7250,36 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i3b60tzc.PepiteTips => 'PepiteTips',
       _ieheie2d.PepiteYear => 'PepiteYear',
       _imctw77w.PeriodTotals => 'PeriodTotals',
+      _isc6vbil.PotOverview => 'PotOverview',
+      _iqlf4n1p.PotShare => 'PotShare',
+      _ierr65lw.PotShareInfo => 'PotShareInfo',
+      _iy1z8w9e.ProjectOverview => 'ProjectOverview',
       _irsxtgs7.ProviderHistory => 'ProviderHistory',
       _i46nnn14.PurchaseOption => 'PurchaseOption',
       _i60c7zzl.PurchasePaymentInfo => 'PurchasePaymentInfo',
       _irvruma2.PurchaseScenarioInfo => 'PurchaseScenarioInfo',
       _idtt2l34.PurchaseSimulation => 'PurchaseSimulation',
       _i7qmkh8w.ReconciliationProposal => 'ReconciliationProposal',
+      _ijnu36v8.RegulatedKind => 'RegulatedKind',
+      _ibbxqm7d.RegulatedSavingsInfo => 'RegulatedSavingsInfo',
       _idndmjo8.ReleaseNotes => 'ReleaseNotes',
+      _ic7cmrsw.Reminder => 'Reminder',
       _ir5r6xs5.RestoreTestInfo => 'RestoreTestInfo',
       _ivw87pdb.Rule => 'Rule',
       _ie66uvh9.RuleApplication => 'RuleApplication',
       _i13yq1r7.RuleDirection => 'RuleDirection',
       _ibgrh3pe.RuleMatchType => 'RuleMatchType',
       _ipgrn6yw.RuleTestResult => 'RuleTestResult',
+      _infuthxz.SavingsProject => 'SavingsProject',
+      _ihvqz8p6.SavingsProjectInfo => 'SavingsProjectInfo',
       _ifol8nrg.ScheduledTransaction => 'ScheduledTransaction',
       _i0nxlf3w.SessionDevice => 'SessionDevice',
       _ifkdo6on.SessionInfo => 'SessionInfo',
+      _iwe8qrap.SettlementInfo => 'SettlementInfo',
       _iw7q1xsb.SetupStatus => 'SetupStatus',
+      _ikg9hqha.SharedExpense => 'SharedExpense',
+      _itdh2lm9.SharedOverview => 'SharedOverview',
+      _iz4y239i.SmoothedExpenseInfo => 'SmoothedExpenseInfo',
       _ixcwyj5v.SpendingReport => 'SpendingReport',
       _ia7wudj2.StatementImport => 'StatementImport',
       _ilnyaemj.SubscriptionChange => 'SubscriptionChange',
@@ -6163,6 +7295,10 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iv6k6stc.UserFeedback => 'UserFeedback',
       _ic7yx6at.VariableCategoryInfo => 'VariableCategoryInfo',
       _in08zzvs.VariableEstimateInfo => 'VariableEstimateInfo',
+      _ihwcdzv0.WealthAccount => 'WealthAccount',
+      _ipsmihhz.WealthOverview => 'WealthOverview',
+      _iotroukk.YearCategoryLine => 'YearCategoryLine',
+      _im7how52.YearReview => 'YearReview',
       _ => null,
     };
   }
@@ -6225,6 +7361,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'AiUsage';
       case _io8mmtm5.AiUsageLine():
         return 'AiUsageLine';
+      case _if0dnshd.Asset():
+        return 'Asset';
+      case _ibuqfn3k.AssetKind():
+        return 'AssetKind';
       case _i1613bfs.AuditEntry():
         return 'AuditEntry';
       case _i0b7vj86.BackupCode():
@@ -6253,12 +7393,18 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'CategorySource';
       case _igloa2c5.CommunityRule():
         return 'CommunityRule';
+      case _icq5ciz8.ContractInfo():
+        return 'ContractInfo';
       case _iq9wp9wq.CsvColumns():
         return 'CsvColumns';
       case _ic7yhr4p.DueCalendar():
         return 'DueCalendar';
       case _ind4b83h.EarlyRepayment():
         return 'EarlyRepayment';
+      case _ig3srb4b.EventOperation():
+        return 'EventOperation';
+      case _ip26zpxf.ExpectedRefund():
+        return 'ExpectedRefund';
       case _ip53xvp1.FeeLine():
         return 'FeeLine';
       case _i4v92iun.FeedbackInfo():
@@ -6281,6 +7427,12 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'GroupMember';
       case _i54nduyh.GroupMembership():
         return 'GroupMembership';
+      case _ifqi9prv.HealthGrade():
+        return 'HealthGrade';
+      case _ir2o1qbt.HealthIndicatorInfo():
+        return 'HealthIndicatorInfo';
+      case _in7t17t7.HealthReport():
+        return 'HealthReport';
       case _iso7nf03.ImportIssueInfo():
         return 'ImportIssueInfo';
       case _im8lwq6n.ImportPreview():
@@ -6315,6 +7467,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'IpBanInfo';
       case _ibb3lpoc.LeftToLiveReport():
         return 'LeftToLiveReport';
+      case _i2n6mb1r.LifeEvent():
+        return 'LifeEvent';
+      case _io74wf7v.LifeEventInfo():
+        return 'LifeEventInfo';
       case _i7jednjp.Loan():
         return 'Loan';
       case _inp2quao.LoanChangeSimulation():
@@ -6345,6 +7501,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'McpToken';
       case _iqv371vc.McpTokenCreated():
         return 'McpTokenCreated';
+      case _iqlvsnfo.MemberBalance():
+        return 'MemberBalance';
       case _i2slp771.MemberInfo():
         return 'MemberInfo';
       case _insyygng.MemberRole():
@@ -6385,6 +7543,14 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'PepiteYear';
       case _imctw77w.PeriodTotals():
         return 'PeriodTotals';
+      case _isc6vbil.PotOverview():
+        return 'PotOverview';
+      case _iqlf4n1p.PotShare():
+        return 'PotShare';
+      case _ierr65lw.PotShareInfo():
+        return 'PotShareInfo';
+      case _iy1z8w9e.ProjectOverview():
+        return 'ProjectOverview';
       case _irsxtgs7.ProviderHistory():
         return 'ProviderHistory';
       case _i46nnn14.PurchaseOption():
@@ -6397,8 +7563,14 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'PurchaseSimulation';
       case _i7qmkh8w.ReconciliationProposal():
         return 'ReconciliationProposal';
+      case _ijnu36v8.RegulatedKind():
+        return 'RegulatedKind';
+      case _ibbxqm7d.RegulatedSavingsInfo():
+        return 'RegulatedSavingsInfo';
       case _idndmjo8.ReleaseNotes():
         return 'ReleaseNotes';
+      case _ic7cmrsw.Reminder():
+        return 'Reminder';
       case _ir5r6xs5.RestoreTestInfo():
         return 'RestoreTestInfo';
       case _ivw87pdb.Rule():
@@ -6411,14 +7583,26 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'RuleMatchType';
       case _ipgrn6yw.RuleTestResult():
         return 'RuleTestResult';
+      case _infuthxz.SavingsProject():
+        return 'SavingsProject';
+      case _ihvqz8p6.SavingsProjectInfo():
+        return 'SavingsProjectInfo';
       case _ifol8nrg.ScheduledTransaction():
         return 'ScheduledTransaction';
       case _i0nxlf3w.SessionDevice():
         return 'SessionDevice';
       case _ifkdo6on.SessionInfo():
         return 'SessionInfo';
+      case _iwe8qrap.SettlementInfo():
+        return 'SettlementInfo';
       case _iw7q1xsb.SetupStatus():
         return 'SetupStatus';
+      case _ikg9hqha.SharedExpense():
+        return 'SharedExpense';
+      case _itdh2lm9.SharedOverview():
+        return 'SharedOverview';
+      case _iz4y239i.SmoothedExpenseInfo():
+        return 'SmoothedExpenseInfo';
       case _ixcwyj5v.SpendingReport():
         return 'SpendingReport';
       case _ia7wudj2.StatementImport():
@@ -6449,6 +7633,14 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'VariableCategoryInfo';
       case _in08zzvs.VariableEstimateInfo():
         return 'VariableEstimateInfo';
+      case _ihwcdzv0.WealthAccount():
+        return 'WealthAccount';
+      case _ipsmihhz.WealthOverview():
+        return 'WealthOverview';
+      case _iotroukk.YearCategoryLine():
+        return 'YearCategoryLine';
+      case _im7how52.YearReview():
+        return 'YearReview';
     }
     className = _iais.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -6547,6 +7739,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'AiUsageLine') {
       return deserialize<_io8mmtm5.AiUsageLine>(data['data']);
     }
+    if (dataClassName == 'Asset') {
+      return deserialize<_if0dnshd.Asset>(data['data']);
+    }
+    if (dataClassName == 'AssetKind') {
+      return deserialize<_ibuqfn3k.AssetKind>(data['data']);
+    }
     if (dataClassName == 'AuditEntry') {
       return deserialize<_i1613bfs.AuditEntry>(data['data']);
     }
@@ -6589,6 +7787,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'CommunityRule') {
       return deserialize<_igloa2c5.CommunityRule>(data['data']);
     }
+    if (dataClassName == 'ContractInfo') {
+      return deserialize<_icq5ciz8.ContractInfo>(data['data']);
+    }
     if (dataClassName == 'CsvColumns') {
       return deserialize<_iq9wp9wq.CsvColumns>(data['data']);
     }
@@ -6597,6 +7798,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'EarlyRepayment') {
       return deserialize<_ind4b83h.EarlyRepayment>(data['data']);
+    }
+    if (dataClassName == 'EventOperation') {
+      return deserialize<_ig3srb4b.EventOperation>(data['data']);
+    }
+    if (dataClassName == 'ExpectedRefund') {
+      return deserialize<_ip26zpxf.ExpectedRefund>(data['data']);
     }
     if (dataClassName == 'FeeLine') {
       return deserialize<_ip53xvp1.FeeLine>(data['data']);
@@ -6630,6 +7837,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'GroupMembership') {
       return deserialize<_i54nduyh.GroupMembership>(data['data']);
+    }
+    if (dataClassName == 'HealthGrade') {
+      return deserialize<_ifqi9prv.HealthGrade>(data['data']);
+    }
+    if (dataClassName == 'HealthIndicatorInfo') {
+      return deserialize<_ir2o1qbt.HealthIndicatorInfo>(data['data']);
+    }
+    if (dataClassName == 'HealthReport') {
+      return deserialize<_in7t17t7.HealthReport>(data['data']);
     }
     if (dataClassName == 'ImportIssueInfo') {
       return deserialize<_iso7nf03.ImportIssueInfo>(data['data']);
@@ -6682,6 +7898,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'LeftToLiveReport') {
       return deserialize<_ibb3lpoc.LeftToLiveReport>(data['data']);
     }
+    if (dataClassName == 'LifeEvent') {
+      return deserialize<_i2n6mb1r.LifeEvent>(data['data']);
+    }
+    if (dataClassName == 'LifeEventInfo') {
+      return deserialize<_io74wf7v.LifeEventInfo>(data['data']);
+    }
     if (dataClassName == 'Loan') {
       return deserialize<_i7jednjp.Loan>(data['data']);
     }
@@ -6726,6 +7948,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'McpTokenCreated') {
       return deserialize<_iqv371vc.McpTokenCreated>(data['data']);
+    }
+    if (dataClassName == 'MemberBalance') {
+      return deserialize<_iqlvsnfo.MemberBalance>(data['data']);
     }
     if (dataClassName == 'MemberInfo') {
       return deserialize<_i2slp771.MemberInfo>(data['data']);
@@ -6787,6 +8012,18 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'PeriodTotals') {
       return deserialize<_imctw77w.PeriodTotals>(data['data']);
     }
+    if (dataClassName == 'PotOverview') {
+      return deserialize<_isc6vbil.PotOverview>(data['data']);
+    }
+    if (dataClassName == 'PotShare') {
+      return deserialize<_iqlf4n1p.PotShare>(data['data']);
+    }
+    if (dataClassName == 'PotShareInfo') {
+      return deserialize<_ierr65lw.PotShareInfo>(data['data']);
+    }
+    if (dataClassName == 'ProjectOverview') {
+      return deserialize<_iy1z8w9e.ProjectOverview>(data['data']);
+    }
     if (dataClassName == 'ProviderHistory') {
       return deserialize<_irsxtgs7.ProviderHistory>(data['data']);
     }
@@ -6805,8 +8042,17 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'ReconciliationProposal') {
       return deserialize<_i7qmkh8w.ReconciliationProposal>(data['data']);
     }
+    if (dataClassName == 'RegulatedKind') {
+      return deserialize<_ijnu36v8.RegulatedKind>(data['data']);
+    }
+    if (dataClassName == 'RegulatedSavingsInfo') {
+      return deserialize<_ibbxqm7d.RegulatedSavingsInfo>(data['data']);
+    }
     if (dataClassName == 'ReleaseNotes') {
       return deserialize<_idndmjo8.ReleaseNotes>(data['data']);
+    }
+    if (dataClassName == 'Reminder') {
+      return deserialize<_ic7cmrsw.Reminder>(data['data']);
     }
     if (dataClassName == 'RestoreTestInfo') {
       return deserialize<_ir5r6xs5.RestoreTestInfo>(data['data']);
@@ -6826,6 +8072,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'RuleTestResult') {
       return deserialize<_ipgrn6yw.RuleTestResult>(data['data']);
     }
+    if (dataClassName == 'SavingsProject') {
+      return deserialize<_infuthxz.SavingsProject>(data['data']);
+    }
+    if (dataClassName == 'SavingsProjectInfo') {
+      return deserialize<_ihvqz8p6.SavingsProjectInfo>(data['data']);
+    }
     if (dataClassName == 'ScheduledTransaction') {
       return deserialize<_ifol8nrg.ScheduledTransaction>(data['data']);
     }
@@ -6835,8 +8087,20 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'SessionInfo') {
       return deserialize<_ifkdo6on.SessionInfo>(data['data']);
     }
+    if (dataClassName == 'SettlementInfo') {
+      return deserialize<_iwe8qrap.SettlementInfo>(data['data']);
+    }
     if (dataClassName == 'SetupStatus') {
       return deserialize<_iw7q1xsb.SetupStatus>(data['data']);
+    }
+    if (dataClassName == 'SharedExpense') {
+      return deserialize<_ikg9hqha.SharedExpense>(data['data']);
+    }
+    if (dataClassName == 'SharedOverview') {
+      return deserialize<_itdh2lm9.SharedOverview>(data['data']);
+    }
+    if (dataClassName == 'SmoothedExpenseInfo') {
+      return deserialize<_iz4y239i.SmoothedExpenseInfo>(data['data']);
     }
     if (dataClassName == 'SpendingReport') {
       return deserialize<_ixcwyj5v.SpendingReport>(data['data']);
@@ -6882,6 +8146,18 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'VariableEstimateInfo') {
       return deserialize<_in08zzvs.VariableEstimateInfo>(data['data']);
+    }
+    if (dataClassName == 'WealthAccount') {
+      return deserialize<_ihwcdzv0.WealthAccount>(data['data']);
+    }
+    if (dataClassName == 'WealthOverview') {
+      return deserialize<_ipsmihhz.WealthOverview>(data['data']);
+    }
+    if (dataClassName == 'YearCategoryLine') {
+      return deserialize<_iotroukk.YearCategoryLine>(data['data']);
+    }
+    if (dataClassName == 'YearReview') {
+      return deserialize<_im7how52.YearReview>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       data['className'] = dataClassName.substring(19);
@@ -6944,6 +8220,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _i670pg82.AiServerSettings.t;
       case _iojy8c5d.AiUsage:
         return _iojy8c5d.AiUsage.t;
+      case _if0dnshd.Asset:
+        return _if0dnshd.Asset.t;
       case _i1613bfs.AuditEntry:
         return _i1613bfs.AuditEntry.t;
       case _i0b7vj86.BackupCode:
@@ -6956,6 +8234,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _issw2w8j.Category.t;
       case _igloa2c5.CommunityRule:
         return _igloa2c5.CommunityRule.t;
+      case _ig3srb4b.EventOperation:
+        return _ig3srb4b.EventOperation.t;
+      case _ip26zpxf.ExpectedRefund:
+        return _ip26zpxf.ExpectedRefund.t;
       case _iqh5irlt.FinanceGroup:
         return _iqh5irlt.FinanceGroup.t;
       case _ibqaulxu.Goal:
@@ -6970,6 +8252,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _i0mnzbub.InvoiceBlob.t;
       case _i88cvd1d.IpBan:
         return _i88cvd1d.IpBan.t;
+      case _i2n6mb1r.LifeEvent:
+        return _i2n6mb1r.LifeEvent.t;
       case _i7jednjp.Loan:
         return _i7jednjp.Loan.t;
       case _ixhwb2ta.LoanDocument:
@@ -6994,12 +8278,20 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _iw5d0qdy.PepiteProgress.t;
       case _inog9jm1.PepiteTipSeen:
         return _inog9jm1.PepiteTipSeen.t;
+      case _iqlf4n1p.PotShare:
+        return _iqlf4n1p.PotShare.t;
+      case _ic7cmrsw.Reminder:
+        return _ic7cmrsw.Reminder.t;
       case _ivw87pdb.Rule:
         return _ivw87pdb.Rule.t;
+      case _infuthxz.SavingsProject:
+        return _infuthxz.SavingsProject.t;
       case _ifol8nrg.ScheduledTransaction:
         return _ifol8nrg.ScheduledTransaction.t;
       case _i0nxlf3w.SessionDevice:
         return _i0nxlf3w.SessionDevice.t;
+      case _ikg9hqha.SharedExpense:
+        return _ikg9hqha.SharedExpense.t;
       case _ia7wudj2.StatementImport:
         return _ia7wudj2.StatementImport.t;
       case _iac9sbwj.TotpSecret:

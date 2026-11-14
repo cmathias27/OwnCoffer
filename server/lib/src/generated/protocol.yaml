@@ -13,6 +13,7 @@ account:
   - list:
   - create:
   - update:
+  - setSavingsTerms:
   - archive:
   - setAccess:
   - checkBalance:
@@ -77,7 +78,15 @@ category:
   - list:
   - create:
   - update:
+  - setTaxRelevant:
   - archive:
+event:
+  - list:
+  - save:
+  - remove:
+  - operations:
+  - attach:
+  - detach:
 export:
   - groupJson:
   - transactionsCsv:
@@ -95,6 +104,7 @@ group:
   - create:
   - rename:
   - setMonthStartDay:
+  - setClosedUntil:
   - members:
   - audit:
   - setRole:
@@ -174,6 +184,22 @@ presence:
   - rename:
   - close:
   - closeOthers:
+project:
+  - overview:
+  - save:
+  - addSaved:
+  - setArchived:
+  - remove:
+refund:
+  - list:
+  - save:
+  - setReceived:
+  - remove:
+reminder:
+  - list:
+  - save:
+  - setDone:
+  - remove:
 rule:
   - list:
   - create:
@@ -186,6 +212,8 @@ scheduled:
   - create:
   - update:
   - setPriceRise:
+  - setContract:
+  - contracts:
   - applyPriceRise:
   - delete:
   - subscriptions:
@@ -200,6 +228,13 @@ search:
 setup:
   - status:
   - start:
+shared:
+  - overview:
+  - add:
+  - remove:
+  - pot:
+  - setPot:
+  - setIncome:
 transaction:
   - list:
   - create:
@@ -229,3 +264,10 @@ twoFactor:
   - verify:
   - renewBackupCodes:
   - disable:
+wealth:
+  - overview:
+  - savings:
+  - health:
+  - year:
+  - saveAsset:
+  - removeAsset:

@@ -132,6 +132,43 @@ class GroupEndpoint extends Endpoint {
     return updated;
   }
 
+  /// Month closing (decision 0050): operations up to [until] included can no
+  /// longer be changed by hand; null opens every month again. Admins only.
+  Future<FinanceGroup> setClosedUntil(
+    Session session,
+    int groupId,
+    DateTime? until,
+  ) async {
+    await Access.requireMember(session, groupId, min: MemberRole.admin);
+    final day = until == null
+        ? null
+        : DateTime.utc(
+            until.toUtc().year,
+            until.toUtc().month,
+            until.toUtc().day,
+          );
+    final now = DateTime.now().toUtc();
+    if (day != null &&
+        day.isAfter(DateTime.utc(now.year, now.month, now.day))) {
+      throw InvalidInputException(code: 'closing_in_future', field: 'until');
+    }
+    final group = (await FinanceGroup.db.findById(session, groupId))!;
+    final updated = await FinanceGroup.db.updateRow(
+      session,
+      group.copyWith(closedUntil: day),
+    );
+    await Audit.log(
+      session,
+      groupId: groupId,
+      action: 'close_months',
+      entity: 'group',
+      rowId: groupId,
+      before: group,
+      after: updated,
+    );
+    return updated;
+  }
+
   /// Members of the group (any member may see who else is in it).
   Future<List<MemberInfo>> members(Session session, int groupId) async {
     await Access.requireMember(session, groupId);

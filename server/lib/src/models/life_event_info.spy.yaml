@@ -1,0 +1,6 @@
+class: LifeEventInfo
+fields:
+  event: LifeEvent
+  ### Sum of its operations (visible accounts), negative when spent.
+  totalCents: int
+  count: int

@@ -1,0 +1,5 @@
+### The common pot split by income (core.prorata).
+class: PotOverview
+fields:
+  totalCents: int
+  shares: List<PotShareInfo>

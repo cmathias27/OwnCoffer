@@ -1,0 +1,14 @@
+### A life event (wedding, move, holiday) gathering its operations, with an
+### optional budget (decision 0050).
+class: LifeEvent
+table: life_events
+fields:
+  groupId: int, relation(parent=groups, onDelete=Cascade)
+  name: String
+  startDate: DateTime
+  endDate: DateTime?
+  budgetCents: int?
+  createdAt: DateTime, default=now
+indexes:
+  life_events_group_idx:
+    fields: groupId

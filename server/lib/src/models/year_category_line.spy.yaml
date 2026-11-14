@@ -1,0 +1,5 @@
+class: YearCategoryLine
+fields:
+  categoryId: int
+  amountCents: int
+  count: int

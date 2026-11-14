@@ -1,0 +1,13 @@
+### Financial health score with its indicators and the figures behind them
+### (decision 0050).
+class: HealthReport
+fields:
+  ### Out of 100; null when nothing is known.
+  score: int?
+  indicators: List<HealthIndicatorInfo>
+  savingsCents: int
+  monthlyIncomeCents: int
+  monthlyExpenseCents: int
+  monthlyLoanCents: int
+  ### Months counted for the regularity.
+  months: int

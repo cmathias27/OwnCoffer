@@ -37,6 +37,7 @@ import 'package:owncoffer_client/src/protocol/ai_provider.dart' as _iupqajx2;
 import 'package:owncoffer_client/src/protocol/ai_reply.dart' as _i6gcixlb;
 import 'package:owncoffer_client/src/protocol/ai_status.dart' as _if0b0k6p;
 import 'package:owncoffer_client/src/protocol/ai_usage_line.dart' as _irb5u3dk;
+import 'package:owncoffer_client/src/protocol/asset.dart' as _ilbjx4rx;
 import 'package:owncoffer_client/src/protocol/backup_overview.dart'
     as _il220tje;
 import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
@@ -47,10 +48,13 @@ import 'package:owncoffer_client/src/protocol/category.dart' as _i37qqsjr;
 import 'package:owncoffer_client/src/protocol/category_kind.dart' as _ig2tt18e;
 import 'package:owncoffer_client/src/protocol/category_source.dart'
     as _i8y5k73o;
+import 'package:owncoffer_client/src/protocol/contract_info.dart' as _in3333cp;
 import 'package:owncoffer_client/src/protocol/csv_columns.dart' as _irbioy6y;
 import 'package:owncoffer_client/src/protocol/due_calendar.dart' as _i25nl2kq;
 import 'package:owncoffer_client/src/protocol/early_repayment.dart'
     as _i0heeame;
+import 'package:owncoffer_client/src/protocol/expected_refund.dart'
+    as _irytijsz;
 import 'package:owncoffer_client/src/protocol/feedback_info.dart' as _i6glypql;
 import 'package:owncoffer_client/src/protocol/finance_group.dart' as _izr9v441;
 import 'package:owncoffer_client/src/protocol/forecast_result.dart'
@@ -62,6 +66,7 @@ import 'package:owncoffer_client/src/protocol/goal.dart' as _ita8uvsc;
 import 'package:owncoffer_client/src/protocol/group_member.dart' as _il25bams;
 import 'package:owncoffer_client/src/protocol/group_membership.dart'
     as _itelwlzo;
+import 'package:owncoffer_client/src/protocol/health_report.dart' as _i5cly9lp;
 import 'package:owncoffer_client/src/protocol/import_preview.dart' as _ikjuebnd;
 import 'package:owncoffer_client/src/protocol/import_result.dart' as _i4a7ax0k;
 import 'package:owncoffer_client/src/protocol/insights.dart' as _iocgvawp;
@@ -74,6 +79,9 @@ import 'package:owncoffer_client/src/protocol/invoice_match.dart' as _ikyjg3a9;
 import 'package:owncoffer_client/src/protocol/ip_ban_info.dart' as _ivw6xhv3;
 import 'package:owncoffer_client/src/protocol/left_to_live_report.dart'
     as _iqfjeddm;
+import 'package:owncoffer_client/src/protocol/life_event.dart' as _ig4xtlwy;
+import 'package:owncoffer_client/src/protocol/life_event_info.dart'
+    as _i9w5b3vz;
 import 'package:owncoffer_client/src/protocol/loan.dart' as _ig538h6x;
 import 'package:owncoffer_client/src/protocol/loan_change_simulation.dart'
     as _in49arm1;
@@ -101,10 +109,17 @@ import 'package:owncoffer_client/src/protocol/pepite_start.dart' as _irc9osb1;
 import 'package:owncoffer_client/src/protocol/pepite_status.dart' as _igi0vxn8;
 import 'package:owncoffer_client/src/protocol/pepite_tips.dart' as _i6216eaq;
 import 'package:owncoffer_client/src/protocol/pepite_year.dart' as _ira80t5l;
+import 'package:owncoffer_client/src/protocol/pot_overview.dart' as _i8kk6qr2;
+import 'package:owncoffer_client/src/protocol/project_overview.dart'
+    as _i13uv0l4;
 import 'package:owncoffer_client/src/protocol/provider_history.dart'
     as _i26z4phw;
 import 'package:owncoffer_client/src/protocol/purchase_simulation.dart'
     as _is7p90bk;
+import 'package:owncoffer_client/src/protocol/regulated_kind.dart' as _ivfmejoo;
+import 'package:owncoffer_client/src/protocol/regulated_savings_info.dart'
+    as _icy6995i;
+import 'package:owncoffer_client/src/protocol/reminder.dart' as _iasxowmn;
 import 'package:owncoffer_client/src/protocol/rule.dart' as _i0jtaw5e;
 import 'package:owncoffer_client/src/protocol/rule_application.dart'
     as _i0d2e7ql;
@@ -113,10 +128,17 @@ import 'package:owncoffer_client/src/protocol/rule_match_type.dart'
     as _iko98d6o;
 import 'package:owncoffer_client/src/protocol/rule_test_result.dart'
     as _ilhr3r4a;
+import 'package:owncoffer_client/src/protocol/savings_project.dart'
+    as _i4qt7kca;
+import 'package:owncoffer_client/src/protocol/savings_project_info.dart'
+    as _in28qrh1;
 import 'package:owncoffer_client/src/protocol/scheduled_transaction.dart'
     as _ibpr6881;
 import 'package:owncoffer_client/src/protocol/session_info.dart' as _ihsx4k2i;
 import 'package:owncoffer_client/src/protocol/setup_status.dart' as _iayy8tg9;
+import 'package:owncoffer_client/src/protocol/shared_expense.dart' as _i8i2f8zc;
+import 'package:owncoffer_client/src/protocol/shared_overview.dart'
+    as _irchog6i;
 import 'package:owncoffer_client/src/protocol/spending_report.dart'
     as _isyymxi6;
 import 'package:owncoffer_client/src/protocol/statement_import.dart'
@@ -134,6 +156,9 @@ import 'package:owncoffer_client/src/protocol/two_factor_status.dart'
 import 'package:owncoffer_client/src/protocol/update_overview.dart'
     as _ighiaz9s;
 import 'package:owncoffer_client/src/protocol/user_feedback.dart' as _i081ti63;
+import 'package:owncoffer_client/src/protocol/wealth_overview.dart'
+    as _i87mvffs;
+import 'package:owncoffer_client/src/protocol/year_review.dart' as _i6hta64g;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
@@ -373,6 +398,22 @@ class EndpointAccount extends _isc.EndpointRef {
       'alertThresholdCents': alertThresholdCents,
       'visibility': visibility,
       'color': color,
+    },
+  );
+
+  /// A regulated savings account (decision 0050): its kind (null = none)
+  /// and its yearly rate in hundredths of a percent (null = unknown).
+  _ida.Future<_i4motmly.Account> setSavingsTerms(
+    int accountId,
+    _ivfmejoo.RegulatedKind? kind,
+    int? interestRateBp,
+  ) => caller.callServerEndpoint<_i4motmly.Account>(
+    'account',
+    'setSavingsTerms',
+    {
+      'accountId': accountId,
+      'kind': kind,
+      'interestRateBp': interestRateBp,
     },
   );
 
@@ -1063,12 +1104,97 @@ class EndpointCategory extends _isc.EndpointRef {
     },
   );
 
+  /// Marks the category for the tax return (decision 0050): its operations
+  /// are listed in the yearly review.
+  _ida.Future<_i37qqsjr.Category> setTaxRelevant(
+    int categoryId,
+    bool taxRelevant,
+  ) => caller.callServerEndpoint<_i37qqsjr.Category>(
+    'category',
+    'setTaxRelevant',
+    {
+      'categoryId': categoryId,
+      'taxRelevant': taxRelevant,
+    },
+  );
+
   /// Moves the category to the trash; its operations become "to classify"
   /// only if the user chooses so (they keep the link until purge).
   _ida.Future<void> archive(int categoryId) => caller.callServerEndpoint<void>(
     'category',
     'archive',
     {'categoryId': categoryId},
+  );
+}
+
+/// Life events (wedding, move, holiday) gathering their operations, with an
+/// optional budget (decision 0050). Totals count the visible accounts only.
+/// {@category Endpoint}
+class EndpointEvent extends _isc.EndpointRef {
+  EndpointEvent(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'event';
+
+  /// The events, the latest first, with the total of their operations.
+  _ida.Future<List<_i9w5b3vz.LifeEventInfo>> list(int groupId) =>
+      caller.callServerEndpoint<List<_i9w5b3vz.LifeEventInfo>>(
+        'event',
+        'list',
+        {'groupId': groupId},
+      );
+
+  /// Creates ([event] without id) or changes an event.
+  _ida.Future<_ig4xtlwy.LifeEvent> save(
+    int groupId,
+    _ig4xtlwy.LifeEvent event,
+  ) => caller.callServerEndpoint<_ig4xtlwy.LifeEvent>(
+    'event',
+    'save',
+    {
+      'groupId': groupId,
+      'event': event,
+    },
+  );
+
+  _ida.Future<void> remove(int eventId) => caller.callServerEndpoint<void>(
+    'event',
+    'remove',
+    {'eventId': eventId},
+  );
+
+  /// Operations of the event on the visible accounts, by date.
+  _ida.Future<List<_ivksw0b3.BankTransaction>> operations(int eventId) =>
+      caller.callServerEndpoint<List<_ivksw0b3.BankTransaction>>(
+        'event',
+        'operations',
+        {'eventId': eventId},
+      );
+
+  /// Adds operations of visible accounts of the group to the event; those
+  /// already in are left alone. Returns how many were added.
+  _ida.Future<int> attach(
+    int eventId,
+    List<int> transactionIds,
+  ) => caller.callServerEndpoint<int>(
+    'event',
+    'attach',
+    {
+      'eventId': eventId,
+      'transactionIds': transactionIds,
+    },
+  );
+
+  _ida.Future<void> detach(
+    int eventId,
+    int transactionId,
+  ) => caller.callServerEndpoint<void>(
+    'event',
+    'detach',
+    {
+      'eventId': eventId,
+      'transactionId': transactionId,
+    },
   );
 }
 
@@ -1248,6 +1374,20 @@ class EndpointGroup extends _isc.EndpointRef {
     {
       'groupId': groupId,
       'day': day,
+    },
+  );
+
+  /// Month closing (decision 0050): operations up to [until] included can no
+  /// longer be changed by hand; null opens every month again. Admins only.
+  _ida.Future<_izr9v441.FinanceGroup> setClosedUntil(
+    int groupId,
+    DateTime? until,
+  ) => caller.callServerEndpoint<_izr9v441.FinanceGroup>(
+    'group',
+    'setClosedUntil',
+    {
+      'groupId': groupId,
+      'until': until,
     },
   );
 
@@ -2168,6 +2308,171 @@ class EndpointPresence extends _isc.EndpointRef {
   );
 }
 
+/// Savings projects and the expenses spread over the year (decision 0050).
+/// {@category Endpoint}
+class EndpointProject extends _isc.EndpointRef {
+  EndpointProject(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'project';
+
+  /// The projects (archived ones last) and the planned expenses of the
+  /// visible accounts that come less often than monthly, as monthly
+  /// provisions.
+  _ida.Future<_i13uv0l4.ProjectOverview> overview(int groupId) =>
+      caller.callServerEndpoint<_i13uv0l4.ProjectOverview>(
+        'project',
+        'overview',
+        {'groupId': groupId},
+      );
+
+  /// Creates ([project] without id) or changes a project.
+  _ida.Future<_in28qrh1.SavingsProjectInfo> save(
+    int groupId,
+    _i4qt7kca.SavingsProject project,
+  ) => caller.callServerEndpoint<_in28qrh1.SavingsProjectInfo>(
+    'project',
+    'save',
+    {
+      'groupId': groupId,
+      'project': project,
+    },
+  );
+
+  /// Puts aside [amountCents] more (negative to take some back).
+  _ida.Future<_in28qrh1.SavingsProjectInfo> addSaved(
+    int projectId,
+    int amountCents,
+  ) => caller.callServerEndpoint<_in28qrh1.SavingsProjectInfo>(
+    'project',
+    'addSaved',
+    {
+      'projectId': projectId,
+      'amountCents': amountCents,
+    },
+  );
+
+  /// Archives (done or given up) or brings back a project.
+  _ida.Future<_in28qrh1.SavingsProjectInfo> setArchived(
+    int projectId,
+    bool archived,
+  ) => caller.callServerEndpoint<_in28qrh1.SavingsProjectInfo>(
+    'project',
+    'setArchived',
+    {
+      'projectId': projectId,
+      'archived': archived,
+    },
+  );
+
+  _ida.Future<void> remove(int projectId) => caller.callServerEndpoint<void>(
+    'project',
+    'remove',
+    {'projectId': projectId},
+  );
+}
+
+/// Money expected back (decision 0050): settled by the first credit of the
+/// same amount, late after its day.
+/// {@category Endpoint}
+class EndpointRefund extends _isc.EndpointRef {
+  EndpointRefund(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'refund';
+
+  /// The refunds of the group, open ones first; matches new credits of the
+  /// visible accounts first.
+  _ida.Future<List<_irytijsz.ExpectedRefund>> list(int groupId) =>
+      caller.callServerEndpoint<List<_irytijsz.ExpectedRefund>>(
+        'refund',
+        'list',
+        {'groupId': groupId},
+      );
+
+  /// Creates ([refund] without id) or changes an expected refund.
+  _ida.Future<_irytijsz.ExpectedRefund> save(
+    int groupId,
+    _irytijsz.ExpectedRefund refund,
+  ) => caller.callServerEndpoint<_irytijsz.ExpectedRefund>(
+    'refund',
+    'save',
+    {
+      'groupId': groupId,
+      'refund': refund,
+    },
+  );
+
+  /// Received by other means (cash, cheque not imported yet), or open again.
+  _ida.Future<_irytijsz.ExpectedRefund> setReceived(
+    int refundId,
+    bool received,
+  ) => caller.callServerEndpoint<_irytijsz.ExpectedRefund>(
+    'refund',
+    'setReceived',
+    {
+      'refundId': refundId,
+      'received': received,
+    },
+  );
+
+  _ida.Future<void> remove(int refundId) => caller.callServerEndpoint<void>(
+    'refund',
+    'remove',
+    {'refundId': refundId},
+  );
+}
+
+/// Free reminders of a member, notified on their day (decision 0050). Each
+/// member sees only their own.
+/// {@category Endpoint}
+class EndpointReminder extends _isc.EndpointRef {
+  EndpointReminder(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'reminder';
+
+  /// The user's reminders in the group: to do by date, then those done in
+  /// the last 30 days.
+  _ida.Future<List<_iasxowmn.Reminder>> list(int groupId) =>
+      caller.callServerEndpoint<List<_iasxowmn.Reminder>>(
+        'reminder',
+        'list',
+        {'groupId': groupId},
+      );
+
+  /// Creates ([reminder] without id) or changes one of the user's.
+  _ida.Future<_iasxowmn.Reminder> save(
+    int groupId,
+    _iasxowmn.Reminder reminder,
+  ) => caller.callServerEndpoint<_iasxowmn.Reminder>(
+    'reminder',
+    'save',
+    {
+      'groupId': groupId,
+      'reminder': reminder,
+    },
+  );
+
+  _ida.Future<_iasxowmn.Reminder> setDone(
+    int reminderId,
+    bool done,
+  ) => caller.callServerEndpoint<_iasxowmn.Reminder>(
+    'reminder',
+    'setDone',
+    {
+      'reminderId': reminderId,
+      'done': done,
+    },
+  );
+
+  _ida.Future<void> remove(int reminderId) => caller.callServerEndpoint<void>(
+    'reminder',
+    'remove',
+    {'reminderId': reminderId},
+  );
+}
+
 /// Classification rules of a group (cahier des charges, Classement).
 /// {@category Endpoint}
 class EndpointRule extends _isc.EndpointRef {
@@ -2358,6 +2663,30 @@ class EndpointScheduled extends _isc.EndpointRef {
     },
   );
 
+  /// A contract renewed every year (decision 0050): the renewal day and the
+  /// notice to cancel it, in days. A null [renewalDate] clears both.
+  _ida.Future<_ibpr6881.ScheduledTransaction> setContract(
+    int scheduledId, {
+    DateTime? renewalDate,
+    int? noticeDays,
+  }) => caller.callServerEndpoint<_ibpr6881.ScheduledTransaction>(
+    'scheduled',
+    'setContract',
+    {
+      'scheduledId': scheduledId,
+      'renewalDate': renewalDate,
+      'noticeDays': noticeDays,
+    },
+  );
+
+  /// Contracts of the visible accounts, the closest deadline first.
+  _ida.Future<List<_in3333cp.ContractInfo>> contracts(int groupId) =>
+      caller.callServerEndpoint<List<_in3333cp.ContractInfo>>(
+        'scheduled',
+        'contracts',
+        {'groupId': groupId},
+      );
+
   /// Applies the scheduled price rise: replaces [amountCents] by
   /// [priceRiseAmountCents] and clears the upcoming rise fields.
   _ida.Future<_ibpr6881.ScheduledTransaction> applyPriceRise(int scheduledId) =>
@@ -2533,6 +2862,80 @@ class EndpointSetup extends _isc.EndpointRef {
     {
       'setupCode': setupCode,
       'email': email,
+    },
+  );
+}
+
+/// Expenses shared between the members of a group and the common pot split
+/// by income (decision 0050). Who owes whom is computed by the engine.
+/// {@category Endpoint}
+class EndpointShared extends _isc.EndpointRef {
+  EndpointShared(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'shared';
+
+  _ida.Future<_irchog6i.SharedOverview> overview(int groupId) =>
+      caller.callServerEndpoint<_irchog6i.SharedOverview>(
+        'shared',
+        'overview',
+        {'groupId': groupId},
+      );
+
+  /// Records an expense paid by a member for some members, or a repayment
+  /// ([SharedExpense.repayment], one participant other than the payer).
+  _ida.Future<_i8i2f8zc.SharedExpense> add(
+    int groupId,
+    _i8i2f8zc.SharedExpense expense,
+  ) => caller.callServerEndpoint<_i8i2f8zc.SharedExpense>(
+    'shared',
+    'add',
+    {
+      'groupId': groupId,
+      'expense': expense,
+    },
+  );
+
+  _ida.Future<void> remove(int expenseId) => caller.callServerEndpoint<void>(
+    'shared',
+    'remove',
+    {'expenseId': expenseId},
+  );
+
+  /// The common pot of each month split in proportion to the incomes the
+  /// members declared (equally while none is known).
+  _ida.Future<_i8kk6qr2.PotOverview> pot(int groupId) =>
+      caller.callServerEndpoint<_i8kk6qr2.PotOverview>(
+        'shared',
+        'pot',
+        {'groupId': groupId},
+      );
+
+  /// The monthly pot (0 = none).
+  _ida.Future<_i8kk6qr2.PotOverview> setPot(
+    int groupId,
+    int totalCents,
+  ) => caller.callServerEndpoint<_i8kk6qr2.PotOverview>(
+    'shared',
+    'setPot',
+    {
+      'groupId': groupId,
+      'totalCents': totalCents,
+    },
+  );
+
+  /// The monthly income of a member, for their share of the pot.
+  _ida.Future<_i8kk6qr2.PotOverview> setIncome(
+    int groupId,
+    _isc.UuidValue userId,
+    int incomeCents,
+  ) => caller.callServerEndpoint<_i8kk6qr2.PotOverview>(
+    'shared',
+    'setIncome',
+    {
+      'groupId': groupId,
+      'userId': userId,
+      'incomeCents': incomeCents,
     },
   );
 }
@@ -2902,6 +3305,68 @@ class EndpointTwoFactor extends _isc.EndpointRef {
   );
 }
 
+/// Net worth and assets, regulated savings, financial health and the
+/// yearly review (decision 0050).
+/// {@category Endpoint}
+class EndpointWealth extends _isc.EndpointRef {
+  EndpointWealth(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'wealth';
+
+  _ida.Future<_i87mvffs.WealthOverview> overview(int groupId) =>
+      caller.callServerEndpoint<_i87mvffs.WealthOverview>(
+        'wealth',
+        'overview',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<List<_icy6995i.RegulatedSavingsInfo>> savings(int groupId) =>
+      caller.callServerEndpoint<List<_icy6995i.RegulatedSavingsInfo>>(
+        'wealth',
+        'savings',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<_i5cly9lp.HealthReport> health(int groupId) =>
+      caller.callServerEndpoint<_i5cly9lp.HealthReport>(
+        'wealth',
+        'health',
+        {'groupId': groupId},
+      );
+
+  _ida.Future<_i6hta64g.YearReview> year(
+    int groupId,
+    int year,
+  ) => caller.callServerEndpoint<_i6hta64g.YearReview>(
+    'wealth',
+    'year',
+    {
+      'groupId': groupId,
+      'year': year,
+    },
+  );
+
+  /// Creates ([asset] without id) or changes an asset.
+  _ida.Future<_ilbjx4rx.Asset> saveAsset(
+    int groupId,
+    _ilbjx4rx.Asset asset,
+  ) => caller.callServerEndpoint<_ilbjx4rx.Asset>(
+    'wealth',
+    'saveAsset',
+    {
+      'groupId': groupId,
+      'asset': asset,
+    },
+  );
+
+  _ida.Future<void> removeAsset(int assetId) => caller.callServerEndpoint<void>(
+    'wealth',
+    'removeAsset',
+    {'assetId': assetId},
+  );
+}
+
 class Modules {
   Modules(Client client) {
     serverpod_auth_idp = _iaic.Caller(client);
@@ -2949,6 +3414,7 @@ class Client extends _isc.ServerpodClientShared {
     analysis = EndpointAnalysis(this);
     appLock = EndpointAppLock(this);
     category = EndpointCategory(this);
+    event = EndpointEvent(this);
     export = EndpointExport(this);
     feedback = EndpointFeedback(this);
     goal = EndpointGoal(this);
@@ -2962,13 +3428,18 @@ class Client extends _isc.ServerpodClientShared {
     pepiteAdvice = EndpointPepiteAdvice(this);
     pepite = EndpointPepite(this);
     presence = EndpointPresence(this);
+    project = EndpointProject(this);
+    refund = EndpointRefund(this);
+    reminder = EndpointReminder(this);
     rule = EndpointRule(this);
     scheduled = EndpointScheduled(this);
     search = EndpointSearch(this);
     setup = EndpointSetup(this);
+    shared = EndpointShared(this);
     transaction = EndpointTransaction(this);
     transfer = EndpointTransfer(this);
     twoFactor = EndpointTwoFactor(this);
+    wealth = EndpointWealth(this);
     modules = Modules(this);
   }
 
@@ -2989,6 +3460,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointAppLock appLock;
 
   late final EndpointCategory category;
+
+  late final EndpointEvent event;
 
   late final EndpointExport export;
 
@@ -3016,6 +3489,12 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointPresence presence;
 
+  late final EndpointProject project;
+
+  late final EndpointRefund refund;
+
+  late final EndpointReminder reminder;
+
   late final EndpointRule rule;
 
   late final EndpointScheduled scheduled;
@@ -3024,11 +3503,15 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointSetup setup;
 
+  late final EndpointShared shared;
+
   late final EndpointTransaction transaction;
 
   late final EndpointTransfer transfer;
 
   late final EndpointTwoFactor twoFactor;
+
+  late final EndpointWealth wealth;
 
   late final Modules modules;
 
@@ -3043,6 +3526,7 @@ class Client extends _isc.ServerpodClientShared {
     'analysis': analysis,
     'appLock': appLock,
     'category': category,
+    'event': event,
     'export': export,
     'feedback': feedback,
     'goal': goal,
@@ -3056,13 +3540,18 @@ class Client extends _isc.ServerpodClientShared {
     'pepiteAdvice': pepiteAdvice,
     'pepite': pepite,
     'presence': presence,
+    'project': project,
+    'refund': refund,
+    'reminder': reminder,
     'rule': rule,
     'scheduled': scheduled,
     'search': search,
     'setup': setup,
+    'shared': shared,
     'transaction': transaction,
     'transfer': transfer,
     'twoFactor': twoFactor,
+    'wealth': wealth,
   };
 
   @override

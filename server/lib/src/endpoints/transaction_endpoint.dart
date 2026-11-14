@@ -4,6 +4,7 @@ import 'package:serverpod/serverpod.dart';
 import '../core/dates.dart';
 import '../finance/alert_service.dart';
 import '../finance/classification_service.dart';
+import '../finance/closing.dart';
 import '../finance/goal_alert_service.dart';
 import '../finance/spending_service.dart';
 import '../generated/protocol.dart';
@@ -165,6 +166,7 @@ class TransactionEndpoint extends Endpoint {
         ? null
         : await _byClientRef(session, accountId, clientRef);
     if (known != null) return known;
+    await Closing.check(session, account.groupId, [_day(date)]);
     final text = _label(label);
     _amount(amountCents);
     if (categoryId != null) {
@@ -241,6 +243,13 @@ class TransactionEndpoint extends Endpoint {
     if (imported && (date != null || amountCents != null || label != null)) {
       throw InvalidInputException(code: 'imported_operation_locked');
     }
+    // The note stays free in a closed month (decision 0050).
+    if (date != null || amountCents != null || label != null) {
+      await Closing.check(session, account.groupId, [
+        t.date,
+        if (date != null) _day(date),
+      ]);
+    }
     if (amountCents != null) {
       _amount(amountCents);
       if (amountCents != t.amountCents) await _dropSplits(session, t.id!);
@@ -272,6 +281,7 @@ class TransactionEndpoint extends Endpoint {
     int? categoryId,
   ) async {
     final (t, account) = await _find(session, transactionId);
+    await Closing.check(session, account.groupId, [t.date]);
     if (categoryId != null) {
       await _ownCategory(session, account.groupId, categoryId);
     }
@@ -311,6 +321,7 @@ class TransactionEndpoint extends Endpoint {
     List<TransactionSplit> splits,
   ) async {
     final (t, account) = await _find(session, transactionId);
+    await Closing.check(session, account.groupId, [t.date]);
     if (categoryId != null) {
       await _ownCategory(session, account.groupId, categoryId);
     }
@@ -438,6 +449,7 @@ class TransactionEndpoint extends Endpoint {
     List<TransactionSplit> parts,
   ) async {
     final (t, account) = await _find(session, transactionId);
+    await Closing.check(session, account.groupId, [t.date]);
     if (parts.isEmpty) {
       await _dropSplits(session, t.id!);
       await _audit(session, account, 'unsplit', t.id, before: t, after: t);
@@ -600,6 +612,7 @@ class TransactionEndpoint extends Endpoint {
   /// Moves the operation to the trash (kept 30 days).
   Future<void> trash(Session session, int transactionId) async {
     final (t, account) = await _find(session, transactionId);
+    await Closing.check(session, account.groupId, [t.date]);
     final now = DateTime.now().toUtc();
     await BankTransaction.db.updateRow(
       session,
@@ -619,6 +632,7 @@ class TransactionEndpoint extends Endpoint {
       throw AccessDeniedException(code: 'transaction_access_denied');
     }
     final account = await _account(session, t, write: true);
+    await Closing.check(session, account.groupId, [t.date]);
     final fp = t.trashedFingerprint;
     if (fp != null &&
         await BankTransaction.db.count(
@@ -653,6 +667,7 @@ class TransactionEndpoint extends Endpoint {
     RuleMatchType? matchType,
   }) async {
     final (t, account) = await _find(session, transactionId);
+    await Closing.check(session, account.groupId, [t.date]);
     await _ownCategory(session, account.groupId, categoryId);
     final pattern = core.normalizeForMatch(t.cleanLabel);
     if (pattern.isEmpty) {

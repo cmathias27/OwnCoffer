@@ -1,0 +1,15 @@
+### Review of a calendar year, with the operations of the categories marked
+### for the tax return (decision 0050).
+class: YearReview
+fields:
+  year: int
+  incomeCents: int
+  expenseCents: int
+  savingsCents: int
+  ### Expense categories, biggest first.
+  topExpenses: List<YearCategoryLine>
+  ### Categories marked for the tax return.
+  taxCategories: List<YearCategoryLine>
+  taxOperations: List<BankTransaction>
+  ### Interest of the regulated savings accounts with a rate (estimate).
+  interestCents: int

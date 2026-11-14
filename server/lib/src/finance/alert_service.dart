@@ -11,6 +11,7 @@ import '../generated/protocol.dart';
 import '../i18n/messages.dart';
 import '../mail/mail_service.dart';
 import 'forecast_service.dart';
+import 'follow_up_alert_service.dart';
 import 'goal_alert_service.dart';
 import 'warranty_alert_service.dart';
 import 'notification_settings_service.dart';
@@ -206,6 +207,11 @@ abstract final class AlertService {
           core.LocalDate.fromDateTime(DateTime.now().toUtc()),
         );
         if (w > 0) session.log('[alert] $w warranty notification(s)');
+        final f = await FollowUpAlertService.checkAll(
+          session,
+          core.LocalDate.fromDateTime(DateTime.now().toUtc()),
+        );
+        if (f > 0) session.log('[alert] $f follow-up notification(s)');
         lastRunOk = true;
       } finally {
         await session.close();

@@ -12,6 +12,8 @@ fields:
   standardCode: String?
   icon: String?
   color: String?
+  ### Its operations are listed in the yearly review for the tax return.
+  taxRelevant: bool, default=false
   createdAt: DateTime, default=now
   deletedAt: DateTime?
 indexes:
