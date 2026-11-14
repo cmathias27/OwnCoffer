@@ -77,6 +77,8 @@ abstract final class ImportService {
           monthStartDay: source?.monthStartDay ?? 1,
           standardCatalogVersion:
               source?.standardCatalogVersion ?? core.standardCatalogVersion,
+          closedUntil: source?.closedUntil,
+          potMonthlyCents: source?.potMonthlyCents ?? 0,
         ),
         transaction: tx,
       );
@@ -349,6 +351,75 @@ abstract final class ImportService {
           ),
         );
       }
+
+      // Planning and follow-up (decision 0050). Shared expenses and pot
+      // shares name members, who are not imported: left out.
+      int? a(int? id) => id == null ? null : acc[id];
+      int? t(int? id) => id == null ? null : txs[id];
+      await insertAll<SavingsProject>(
+        [
+          for (final p in [
+            for (final r in rows('savingsProjects')) SavingsProject.fromJson(r),
+          ])
+            p.copyWith(id: null, groupId: g, accountId: a(p.accountId)),
+        ],
+        (p) => SavingsProject.db.insert(session, p, transaction: tx),
+      );
+      await insertAll<Asset>(
+        [
+          for (final r in rows('assets'))
+            Asset.fromJson(r).copyWith(id: null, groupId: g),
+        ],
+        (p) => Asset.db.insert(session, p, transaction: tx),
+      );
+      await insertAll<ExpectedRefund>(
+        [
+          for (final x in [
+            for (final r in rows('expectedRefunds')) ExpectedRefund.fromJson(r),
+          ])
+            x.copyWith(
+              id: null,
+              groupId: g,
+              createdBy: owner,
+              accountId: a(x.accountId),
+              transactionId: t(x.transactionId),
+            ),
+        ],
+        (p) => ExpectedRefund.db.insert(session, p, transaction: tx),
+      );
+      final lifeEvents = [
+        for (final r in rows('lifeEvents')) LifeEvent.fromJson(r),
+      ];
+      final ev = ids(
+        [for (final e in lifeEvents) e.id],
+        await insertAll<LifeEvent>(
+          [for (final e in lifeEvents) e.copyWith(id: null, groupId: g)],
+          (p) => LifeEvent.db.insert(session, p, transaction: tx),
+        ),
+      );
+      await insertAll<EventOperation>(
+        [
+          for (final o in [
+            for (final r in rows('eventOperations')) EventOperation.fromJson(r),
+          ])
+            if (ev.containsKey(o.eventId) && txs.containsKey(o.transactionId))
+              o.copyWith(
+                id: null,
+                eventId: ev[o.eventId]!,
+                transactionId: txs[o.transactionId]!,
+              ),
+        ],
+        (p) => EventOperation.db.insert(session, p, transaction: tx),
+      );
+      await insertAll<Reminder>(
+        [
+          for (final r in rows('reminders'))
+            Reminder.fromJson(
+              r,
+            ).copyWith(id: null, groupId: g, authUserId: owner),
+        ],
+        (p) => Reminder.db.insert(session, p, transaction: tx),
+      );
 
       await insertAll<AiMemory>(
         [

@@ -27,6 +27,12 @@ class ExportSummary {
     'invoices',
     'aiMemories',
     'aiConversations',
+    'savingsProjects',
+    'assets',
+    'expectedRefunds',
+    'lifeEvents',
+    'eventOperations',
+    'reminders',
   ];
 
   factory ExportSummary.of(Map<String, dynamic> doc) {
@@ -58,6 +64,10 @@ class ExportSummary {
       'invoices.linked':
           '${count('invoices', (r) => r['transactionId'] != null)}',
       'loanDocuments.bytes': '${sum('loanDocuments', 'sizeBytes')}',
+      'savingsProjects.target': '${sum('savingsProjects', 'targetCents')}',
+      'savingsProjects.saved': '${sum('savingsProjects', 'savedCents')}',
+      'assets.value': '${sum('assets', 'valueCents')}',
+      'expectedRefunds.amount': '${sum('expectedRefunds', 'amountCents')}',
       'categories.children':
           '${count('categories', (r) => r['parentId'] != null)}',
     };
