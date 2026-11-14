@@ -21,6 +21,7 @@ class AiEndpoint extends Endpoint {
   Set<Scope> get requiredScopes => {accessScope};
 
   static const _kinds = {'openai', 'ollama', 'anthropic'};
+  static const _maxPrice = 1000 * 10000;
 
   static const _maxModels = 40;
 
@@ -59,6 +60,18 @@ class AiEndpoint extends Endpoint {
       canConfigure: admin,
       autonomyLevel: await AiGateway.autonomyLevel(session),
     );
+  }
+
+  /// The user's own use of the AI, this month and the previous one, per
+  /// provider and function, with its estimated cost (decision 0048).
+  Future<List<AiUsageLine>> usage(Session session) =>
+      AiGateway.usage(session, user: Access.userId(session));
+
+  /// The use of the AI on the whole server over six months, per provider
+  /// and function, never per named user: server administrator only.
+  Future<List<AiUsageLine>> serverUsage(Session session) async {
+    await _requireAdmin(session);
+    return AiGateway.usage(session, months: 6);
   }
 
   /// Sets the server-wide AI autonomy level (1-5):
@@ -121,6 +134,15 @@ class AiEndpoint extends Endpoint {
     }
     if (provider.monthlyCap < 0 || provider.monthlyCap > 100000) {
       throw InvalidInputException(code: 'amount_out_of_range');
+    }
+    // Prices per million tokens, at most 1 000 (decision 0048).
+    for (final price in [
+      provider.inputPricePerMillion,
+      provider.outputPricePerMillion,
+    ]) {
+      if (price != null && (price < 0 || price > _maxPrice)) {
+        throw InvalidInputException(code: 'amount_out_of_range');
+      }
     }
     final current = provider.id == null
         ? null

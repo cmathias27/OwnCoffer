@@ -21,5 +21,9 @@ fields:
   vision: bool
   ### Requests per user and month; 0 means no limit.
   monthlyCap: int
+  ### Prices per million tokens sent and received (decision 0048), in
+  ### hundredths of a cent (0.075 € = 750); null when not known.
+  inputPricePerMillion: int?
+  outputPricePerMillion: int?
   enabled: bool
   createdAt: DateTime, default=now

@@ -36,6 +36,7 @@ import 'package:owncoffer_client/src/protocol/ai_message.dart' as _iarsdlqt;
 import 'package:owncoffer_client/src/protocol/ai_provider.dart' as _iupqajx2;
 import 'package:owncoffer_client/src/protocol/ai_reply.dart' as _i6gcixlb;
 import 'package:owncoffer_client/src/protocol/ai_status.dart' as _if0b0k6p;
+import 'package:owncoffer_client/src/protocol/ai_usage_line.dart' as _irb5u3dk;
 import 'package:owncoffer_client/src/protocol/backup_overview.dart'
     as _il220tje;
 import 'package:owncoffer_client/src/protocol/balance_check.dart' as _ifxnt0qj;
@@ -693,6 +694,24 @@ class EndpointAi extends _isc.EndpointRef {
       caller.callServerEndpoint<_if0b0k6p.AiStatus>(
         'ai',
         'status',
+        {},
+      );
+
+  /// The user's own use of the AI, this month and the previous one, per
+  /// provider and function, with its estimated cost (decision 0048).
+  _ida.Future<List<_irb5u3dk.AiUsageLine>> usage() =>
+      caller.callServerEndpoint<List<_irb5u3dk.AiUsageLine>>(
+        'ai',
+        'usage',
+        {},
+      );
+
+  /// The use of the AI on the whole server over six months, per provider
+  /// and function, never per named user: server administrator only.
+  _ida.Future<List<_irb5u3dk.AiUsageLine>> serverUsage() =>
+      caller.callServerEndpoint<List<_irb5u3dk.AiUsageLine>>(
+        'ai',
+        'serverUsage',
         {},
       );
 

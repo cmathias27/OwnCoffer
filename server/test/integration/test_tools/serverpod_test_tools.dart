@@ -37,6 +37,7 @@ import 'package:owncoffer_server/src/generated/ai_message.dart' as _ijy47dz3;
 import 'package:owncoffer_server/src/generated/ai_provider.dart' as _iptn367l;
 import 'package:owncoffer_server/src/generated/ai_reply.dart' as _iggzqc7o;
 import 'package:owncoffer_server/src/generated/ai_status.dart' as _i2x2xeqe;
+import 'package:owncoffer_server/src/generated/ai_usage_line.dart' as _iplt7fct;
 import 'package:owncoffer_server/src/generated/backup_overview.dart'
     as _iitccyew;
 import 'package:owncoffer_server/src/generated/balance_check.dart' as _i0mjy83n;
@@ -1945,6 +1946,66 @@ class _AiEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_i2x2xeqe.AiStatus>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_iplt7fct.AiUsageLine>> usage(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'usage',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'usage',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iplt7fct.AiUsageLine>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_iplt7fct.AiUsageLine>> serverUsage(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'ai',
+            method: 'serverUsage',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'ai',
+          methodName: 'serverUsage',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iplt7fct.AiUsageLine>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

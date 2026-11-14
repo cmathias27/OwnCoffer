@@ -7,6 +7,7 @@ import '../help/help.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../widgets/ai_memories.dart';
+import '../widgets/ai_usage.dart';
 import '../widgets/mcp_tokens.dart';
 import '../widgets/soft.dart';
 
@@ -110,6 +111,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
                                 )
                               : const SizedBox.shrink(),
                         ),
+                        if (s.providers.isNotEmpty) const AiUsageSection(),
                         AiMemoriesSection(membership: widget.membership),
                         McpTokensSection(membership: widget.membership),
                       ],

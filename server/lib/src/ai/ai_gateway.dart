@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
@@ -9,6 +10,20 @@ import '../security/audit.dart';
 import '../security/secret_box.dart';
 import 'ai_adapter.dart';
 import 'ai_context.dart';
+
+/// The functions of the AI whose use is counted apart (decision 0048).
+abstract final class AiFunctions {
+  /// The assistant and Mon conseiller, categories proposed included.
+  static const chat = 'chat';
+
+  /// A receipt or an invoice read.
+  static const invoice = 'invoice';
+
+  /// A loan offer or schedule read.
+  static const loan = 'loan';
+
+  static const all = [chat, invoice, loan];
+}
 
 /// The only way to an AI (décision 0008): the user's chosen provider and
 /// model, never another one; the monthly cap; the engine's functions as
@@ -96,6 +111,124 @@ abstract final class AiGateway {
         row.copyWith(requests: row.requests + 1),
       );
     }
+  }
+
+  /// Adds to what a function of the AI cost this month (decision 0048).
+  static Future<void> _record(
+    Session session,
+    UuidValue user,
+    int providerId,
+    String feature, {
+    int requests = 0,
+    int inputTokens = 0,
+    int outputTokens = 0,
+  }) async {
+    final month = _month(DateTime.now().toUtc());
+    final row = await AiFunctionUsage.db.findFirstRow(
+      session,
+      where: (u) =>
+          u.authUserId.equals(user) &
+          u.providerId.equals(providerId) &
+          u.month.equals(month) &
+          u.feature.equals(feature),
+    );
+    if (row == null) {
+      await AiFunctionUsage.db.insertRow(
+        session,
+        AiFunctionUsage(
+          authUserId: user,
+          providerId: providerId,
+          month: month,
+          feature: feature,
+          requests: requests,
+          inputTokens: inputTokens,
+          outputTokens: outputTokens,
+        ),
+      );
+    } else {
+      await AiFunctionUsage.db.updateRow(
+        session,
+        row.copyWith(
+          requests: row.requests + requests,
+          inputTokens: row.inputTokens + inputTokens,
+          outputTokens: row.outputTokens + outputTokens,
+        ),
+      );
+    }
+  }
+
+  /// The use of the AI over the last [months] months (this one included),
+  /// per month, provider and function, newest first: the user's own, or
+  /// the whole server's when [user] is null (decision 0048). The cost is
+  /// computed on the month's totals, from the provider's prices.
+  static Future<List<AiUsageLine>> usage(
+    Session session, {
+    UuidValue? user,
+    int months = 2,
+  }) async {
+    final now = DateTime.now().toUtc();
+    final from = _month(DateTime.utc(now.year, now.month - months + 1));
+    final rows = await AiFunctionUsage.db.find(
+      session,
+      where: (u) => user == null
+          ? u.month >= from
+          : u.authUserId.equals(user) & (u.month >= from),
+    );
+    final providers = {
+      for (final p in await AiProvider.db.find(session)) p.id!: p,
+    };
+    final lines = <(int, int, String), AiUsageLine>{};
+    final users = <(int, int, String), Set<UuidValue>>{};
+    for (final r in rows) {
+      final k = (r.month, r.providerId, r.feature);
+      final l = lines[k];
+      (users[k] ??= {}).add(r.authUserId);
+      lines[k] = l == null
+          ? AiUsageLine(
+              month: r.month,
+              providerId: r.providerId,
+              providerName: providers[r.providerId]?.name ?? '?',
+              feature: r.feature,
+              requests: r.requests,
+              inputTokens: r.inputTokens,
+              outputTokens: r.outputTokens,
+              users: 1,
+            )
+          : l.copyWith(
+              requests: l.requests + r.requests,
+              inputTokens: l.inputTokens + r.inputTokens,
+              outputTokens: l.outputTokens + r.outputTokens,
+            );
+    }
+    int order(String f) => switch (AiFunctions.all.indexOf(f)) {
+      -1 => AiFunctions.all.length,
+      final i => i,
+    };
+    return [
+      for (final MapEntry(:key, value: l) in lines.entries)
+        l.copyWith(
+          users: users[key]!.length,
+          costCents: switch (providers[l.providerId]) {
+            AiProvider(
+              inputPricePerMillion: final int i,
+              outputPricePerMillion: final int o,
+            ) =>
+              core.aiCostCents(
+                inputTokens: l.inputTokens,
+                outputTokens: l.outputTokens,
+                inputPrice: i,
+                outputPrice: o,
+              ),
+            _ => null,
+          },
+        ),
+    ]..sort(
+      (a, b) => b.month != a.month
+          ? b.month.compareTo(a.month)
+          : a.providerName != b.providerName
+          ? a.providerName.compareTo(b.providerName)
+          : order(a.feature).compareTo(order(b.feature)),
+    );
   }
 
   /// The user's provider and model, or why there is none.
@@ -222,6 +355,43 @@ abstract final class AiGateway {
     );
     final used = <String>[];
     final key = _key(provider);
+    var inputTokens = 0;
+    var outputTokens = 0;
+    try {
+      return await _rounds(
+        provider,
+        model,
+        key,
+        level,
+        context,
+        messages,
+        used,
+        (t) => (inputTokens += t.input, outputTokens += t.output),
+      );
+    } finally {
+      // Counted even when the provider fails half-way (decision 0048).
+      await _record(
+        session,
+        user,
+        provider.id!,
+        AiFunctions.chat,
+        requests: 1,
+        inputTokens: inputTokens,
+        outputTokens: outputTokens,
+      );
+    }
+  }
+
+  static Future<AiReply> _rounds(
+    AiProvider provider,
+    String model,
+    String? key,
+    int level,
+    AiContext context,
+    List<Map<String, Object?>> messages,
+    List<String> used,
+    void Function(({int input, int output})) spent,
+  ) async {
     for (var round = 0; round < _maxRounds; round++) {
       final answer = await adapterFor(provider).chat(
         baseUrl: provider.baseUrl,
@@ -230,6 +400,7 @@ abstract final class AiGateway {
         messages: messages,
         tools: provider.toolCalling ? AiContext.toolsFor(level) : null,
       );
+      spent(answerTokens(answer));
       final calls = answer['tool_calls'];
       if (calls is! List || calls.isEmpty) {
         return AiReply(
@@ -335,6 +506,7 @@ abstract final class AiGateway {
     List<String>? pageImagesBase64,
     required String instructions,
     required Map<String, Object?> tool,
+    required String feature,
   }) async {
     await Access.requireMember(session, groupId, min: MemberRole.user);
     final (provider, model) = await _choice(session);
@@ -403,26 +575,41 @@ abstract final class AiGateway {
       rowId: provider.id,
     );
     final name = (tool['function'] as Map)['name'] as String;
-    final answer = await adapterFor(provider).chat(
-      baseUrl: provider.baseUrl,
-      apiKey: _key(provider),
-      model: model,
-      messages: [
-        {
-          'role': 'system',
-          'content':
-              'You read documents for OwnCoffer, a personal finance app. '
-              'Report only what is written in the document, by calling the '
-              'function $name once. Never compute, estimate or invent a '
-              'value: leave out what you cannot read. Amounts in cents.',
-        },
-        {
-          'role': 'user',
-          'content': contentBlocks,
-        },
-      ],
-      tools: [tool],
-    );
+    var tokens = (input: 0, output: 0);
+    final Map<String, Object?> answer;
+    try {
+      answer = await adapterFor(provider).chat(
+        baseUrl: provider.baseUrl,
+        apiKey: _key(provider),
+        model: model,
+        messages: [
+          {
+            'role': 'system',
+            'content':
+                'You read documents for OwnCoffer, a personal finance app. '
+                'Report only what is written in the document, by calling the '
+                'function $name once. Never compute, estimate or invent a '
+                'value: leave out what you cannot read. Amounts in cents.',
+          },
+          {
+            'role': 'user',
+            'content': contentBlocks,
+          },
+        ],
+        tools: [tool],
+      );
+      tokens = answerTokens(answer);
+    } finally {
+      await _record(
+        session,
+        user,
+        provider.id!,
+        feature,
+        requests: 1,
+        inputTokens: tokens.input,
+        outputTokens: tokens.output,
+      );
+    }
     final calls = answer['tool_calls'];
     final call = calls is List
         ? calls

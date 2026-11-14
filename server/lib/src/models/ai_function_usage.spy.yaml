@@ -1,0 +1,18 @@
+### What a user's AI requests cost, per provider, month (yyyymm) and
+### function (decision 0048): requests and tokens as the provider reports
+### them. Nothing of the content is kept.
+class: AiFunctionUsage
+table: ai_function_usage
+fields:
+  authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
+  providerId: int, relation(parent=ai_providers, onDelete=Cascade)
+  month: int
+  ### chat, invoice or loan.
+  feature: String
+  requests: int
+  inputTokens: int
+  outputTokens: int
+indexes:
+  ai_function_usage_idx:
+    fields: authUserId, providerId, month, feature
+    unique: true

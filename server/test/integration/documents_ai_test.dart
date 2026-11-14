@@ -196,6 +196,10 @@ void main() {
       );
       final sentJpeg = model.received.single.toString();
       expect(sentJpeg, contains('data:image/jpeg;base64,'));
+      // Counted apart from the conversation (0048).
+      final used = await endpoints.ai.usage(as(bob));
+      expect(used.map((l) => l.feature), contains(AiFunctions.invoice));
+      expect(used.map((l) => l.feature), isNot(contains(AiFunctions.chat)));
       await expectLater(
         endpoints.ai.readInvoice(
           as(bob),
