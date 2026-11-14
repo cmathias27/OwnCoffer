@@ -6087,5 +6087,648 @@
       }
     }
   },
-  "whyForecastText": "Le moteur part du solde d'aujourd'hui, ajoute jour par jour les opérations prévues (salaires, prélèvements, abonnements, échéances de crédit), puis l'estimation des dépenses courantes tirée de vos derniers mois. Aucune IA n'intervient dans ce calcul."
+  "whyForecastText": "Le moteur part du solde d'aujourd'hui, ajoute jour par jour les opérations prévues (salaires, prélèvements, abonnements, échéances de crédit), puis l'estimation des dépenses courantes tirée de vos derniers mois. Aucune IA n'intervient dans ce calcul.",
+  "entryInvalid": "Vérifiez le champ « {label} ».",
+  "@entryInvalid": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "entryOptional": "{label} (facultatif)",
+  "@entryOptional": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "entryPickDate": "Choisir la date",
+  "entryClear": "Effacer",
+  "entryRemoveTitle": "Supprimer ?",
+  "entryRemoveText": "Supprimer « {name} » ? Cette action est définitive.",
+  "@entryRemoveText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "entryRemove": "Supprimer",
+  "navProjects": "Projets",
+  "navWealth": "Patrimoine",
+  "navTogether": "À plusieurs",
+  "navFollowUp": "Suivi",
+  "projectAdd": "Nouveau projet",
+  "projectEdit": "Modifier le projet",
+  "projectName": "Nom du projet",
+  "projectTarget": "Somme à atteindre",
+  "projectSaved": "Déjà de côté",
+  "projectDate": "Pour quand",
+  "projectAccount": "Compte où l’argent est rangé",
+  "projectAddSaved": "Mettre de côté",
+  "projectAddSavedIntro": "Ce que vous venez de mettre de côté pour ce projet. Un montant négatif le retire.",
+  "projectAmount": "Montant",
+  "projectsTitle": "Projets",
+  "projectsIntro": "Vos projets d’épargne et les grosses dépenses de l’année, lissées sur les mois.",
+  "projectsMonthly": "À mettre de côté : {amount} par mois",
+  "@projectsMonthly": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "projectsMonthlyDetail": "{projects} pour vos projets, {smoothed} pour les dépenses lissées",
+  "@projectsMonthlyDetail": {
+    "placeholders": {
+      "projects": {
+        "type": "String"
+      },
+      "smoothed": {
+        "type": "String"
+      }
+    }
+  },
+  "projectsList": "Projets d’épargne",
+  "projectsEmpty": "Aucun projet pour l’instant : vacances, voiture, apport… ajoutez le premier.",
+  "smoothedTitle": "Dépenses lissées",
+  "smoothedIntro": "Les opérations prévues qui reviennent moins d’une fois par mois, ramenées à une mensualité.",
+  "smoothedEmpty": "Aucune opération prévue annuelle, semestrielle ou trimestrielle.",
+  "smoothedTotals": "{monthly} par mois · {setAside} devraient déjà être de côté",
+  "@smoothedTotals": {
+    "placeholders": {
+      "monthly": {
+        "type": "String"
+      },
+      "setAside": {
+        "type": "String"
+      }
+    }
+  },
+  "smoothedLine": "{amount} tous les {months} mois · prochaine le {next} · déjà de côté : {setAside}",
+  "@smoothedLine": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "months": {
+        "type": "int"
+      },
+      "next": {
+        "type": "String"
+      },
+      "setAside": {
+        "type": "String"
+      }
+    }
+  },
+  "perMonth": "{amount}/mois",
+  "@perMonth": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "projectReached": "Objectif atteint",
+  "projectOverdue": "Date passée, il manque {remaining}",
+  "@projectOverdue": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "projectPlan": "{monthly} par mois pendant {months} mois",
+  "@projectPlan": {
+    "placeholders": {
+      "monthly": {
+        "type": "String"
+      },
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "projectRemaining": "Il reste {remaining}",
+  "@projectRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "projectArchived": "Archivé",
+  "projectUnarchive": "Désarchiver",
+  "projectArchive": "Archiver",
+  "projectProgress": "{saved} sur {target} ({percent} %)",
+  "@projectProgress": {
+    "placeholders": {
+      "saved": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "projectBy": "pour le {date}",
+  "@projectBy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "assetProperty": "Logement",
+  "assetVehicle": "Véhicule",
+  "assetInvestment": "Placement",
+  "assetValuables": "Objet de valeur",
+  "assetOther": "Autre",
+  "assetAdd": "Ajouter un bien",
+  "assetEdit": "Modifier le bien",
+  "assetIntro": "Une estimation suffit ; mettez-la à jour de temps en temps.",
+  "assetName": "Nom",
+  "assetKind": "Type",
+  "assetValue": "Valeur estimée",
+  "assetValuedAt": "Date de l’estimation",
+  "assetsTitle": "Biens",
+  "assetsEmpty": "Aucun bien déclaré.",
+  "assetValuedOn": "estimé le {date}",
+  "@assetValuedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "regulatedLivretA": "Livret A",
+  "regulatedLdds": "LDDS",
+  "regulatedLep": "LEP",
+  "regulatedLivretJeune": "Livret jeune",
+  "regulatedNoSavings": "Aucun compte épargne : créez-en un dans Comptes.",
+  "regulatedSet": "Livrets réglementés",
+  "regulatedSetIntro": "Choisissez un compte épargne, le livret qu’il est et son taux. Sans type, le compte redevient un compte épargne ordinaire.",
+  "regulatedAccount": "Compte épargne",
+  "regulatedKind": "Livret",
+  "regulatedRate": "Taux annuel",
+  "regulatedTitle": "Livrets réglementés",
+  "regulatedIntro": "Plafond et intérêts estimés selon la règle des quinzaines. Seule votre banque fait foi.",
+  "regulatedEmpty": "Aucun livret réglementé indiqué.",
+  "regulatedRoom": "{balance} sur {ceiling} · encore {room} possibles",
+  "@regulatedRoom": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "ceiling": {
+        "type": "String"
+      },
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "regulatedNoRate": "Taux non indiqué : intérêts non estimés.",
+  "regulatedInterest": "Taux {rate} % · intérêts acquis {soFar} · sur l’année {year}",
+  "@regulatedInterest": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      },
+      "soFar": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "taxCategoriesTitle": "Catégories pour les impôts",
+  "taxCategoriesIntro": "Cochez les catégories dont les opérations comptent pour la déclaration de revenus (dons, garde d’enfants, emploi à domicile…).",
+  "taxCategoriesField": "Catégories",
+  "wealthTitle": "Patrimoine",
+  "wealthIntro": "Ce que vous possédez, vos livrets, la santé de vos finances et le bilan de l’année.",
+  "netWorthAccounts": "Comptes",
+  "netWorthAssets": "Biens",
+  "netWorthLoans": "Crédits restant dus",
+  "netWorthTotal": "Patrimoine net",
+  "healthGood": "Bien",
+  "healthFair": "Moyen",
+  "healthWeak": "Fragile",
+  "healthUnknown": "Inconnu",
+  "healthEmergencyUnknown": "Épargne de précaution : pas assez de données",
+  "healthEmergency": "Épargne de précaution : {value} mois de dépenses",
+  "@healthEmergency": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "healthSavingsRateUnknown": "Taux d’épargne : pas assez de données",
+  "healthSavingsRate": "Taux d’épargne : {rate} %",
+  "@healthSavingsRate": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "healthDebtUnknown": "Endettement : pas de revenus connus",
+  "healthDebt": "Endettement : {rate} % des revenus",
+  "@healthDebt": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "healthRegularityUnknown": "Régularité : pas encore de mois complet",
+  "healthRegularity": "Régularité : {good} mois sur {months} sans dépenser plus que gagné",
+  "@healthRegularity": {
+    "placeholders": {
+      "good": {
+        "type": "int"
+      },
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "healthTitle": "Santé financière",
+  "healthNoScore": "Pas encore de note",
+  "healthScore": "{score} / 100",
+  "@healthScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "healthBasis": "Par mois : revenus {income}, dépenses {expense} · épargne {savings}",
+  "@healthBasis": {
+    "placeholders": {
+      "income": {
+        "type": "String"
+      },
+      "expense": {
+        "type": "String"
+      },
+      "savings": {
+        "type": "String"
+      }
+    }
+  },
+  "healthHow": "Moyenne des indicateurs connus, calculés sur vos derniers mois complets. Repères : 3 mois de précaution, 10 % d’épargne, endettement sous 30 %.",
+  "yearReviewTitle": "Bilan de l’année",
+  "yearIncome": "Revenus",
+  "yearExpense": "Dépenses",
+  "yearSavings": "Épargne",
+  "yearInterest": "Intérêts estimés des livrets",
+  "yearTopExpenses": "Plus grosses dépenses",
+  "yearCategoryLine": "{name} · {count, plural, =1{1 opération} other{{count} opérations}}",
+  "@yearCategoryLine": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yearTaxTitle": "Déclaration de revenus",
+  "yearTaxIntro": "Les opérations des catégories marquées pour les impôts. OwnCoffer ne calcule pas l’impôt : vérifiez ces montants.",
+  "yearTaxNone": "Aucune catégorie marquée, ou aucune opération cette année.",
+  "yearTaxOperations": "{count, plural, =1{1 opération} other{{count} opérations}}",
+  "@yearTaxOperations": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "togetherMe": "Moi",
+  "togetherMember": "Membre",
+  "togetherFormerMember": "Ancien membre",
+  "togetherTitle": "À plusieurs",
+  "togetherIntro": "Les dépenses partagées entre les membres et le pot commun réparti selon les revenus.",
+  "togetherAlone": "Invitez au moins un autre membre pour partager des dépenses.",
+  "sharedRepay": "Remboursement",
+  "sharedAdd": "Dépense partagée",
+  "sharedRepayIntro": "L’argent rendu d’un membre à un autre.",
+  "sharedLabel": "Libellé",
+  "sharedAmount": "Montant",
+  "sharedDate": "Date",
+  "sharedRepayFrom": "Qui rembourse",
+  "sharedPaidBy": "Payé par",
+  "sharedRepayTo": "À qui",
+  "sharedFor": "Pour qui",
+  "sharedRepayLabel": "Remboursement",
+  "sharedTitle": "Dépenses partagées",
+  "sharedEmpty": "Aucune dépense partagée.",
+  "sharedSettled": "Tout le monde est quitte.",
+  "sharedToSettle": "Pour être quittes",
+  "sharedOwes": "{from} → {to} : {amount}",
+  "@sharedOwes": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedHistory": "Historique ({count})",
+  "@sharedHistory": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sharedRepayLine": "{date} · {from} → {to}",
+  "@sharedRepayLine": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedLine": "{date} · payé par {payer} pour {participants}",
+  "@sharedLine": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "payer": {
+        "type": "String"
+      },
+      "participants": {
+        "type": "String"
+      }
+    }
+  },
+  "potSet": "Montant du pot",
+  "potSetIntro": "La somme à verser chaque mois sur le compte commun. 0 pour ne pas utiliser de pot.",
+  "potTotal": "Par mois",
+  "potIncomeOf": "Revenu de {name}",
+  "@potIncomeOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "potIncomeIntro": "Revenu mensuel net, utilisé seulement pour répartir le pot.",
+  "potIncome": "Revenu mensuel",
+  "potTitle": "Pot commun",
+  "potIntro": "Chacun verse en proportion de son revenu ; à parts égales tant qu’aucun revenu n’est connu.",
+  "potNone": "Aucun pot commun défini.",
+  "potTotalLine": "{amount} par mois à verser",
+  "@potTotalLine": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "potIncomeUnknown": "Revenu non indiqué",
+  "potIncomeLine": "Revenu : {amount}/mois",
+  "@potIncomeLine": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "refundAdd": "Remboursement attendu",
+  "refundEdit": "Modifier",
+  "refundIntro": "Dès qu’un crédit du même montant arrive après la date de départ, il est marqué reçu tout seul.",
+  "refundLabel": "Quoi",
+  "refundAmount": "Montant",
+  "refundSince": "Attendu depuis le",
+  "refundDueBy": "Au plus tard le",
+  "refundAccount": "Compte où il arrivera",
+  "refundsTitle": "Remboursements attendus",
+  "refundsEmpty": "Aucun remboursement attendu.",
+  "refundReceivedBy": "Reçu le {date}",
+  "@refundReceivedBy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "refundMatched": "Reçu le {date}, retrouvé dans vos opérations",
+  "@refundMatched": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "refundLate": "En retard : attendu au plus tard le {date}",
+  "@refundLate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "refundAwaitedBy": "Attendu d’ici le {date}",
+  "@refundAwaitedBy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "refundAwaited": "Attendu depuis le {date}",
+  "@refundAwaited": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "refundMarkReceived": "Marquer reçu",
+  "refundReopen": "Attendre à nouveau",
+  "contractNoPlanned": "Aucune opération prévue : ajoutez d’abord l’abonnement dans Prévisions.",
+  "contractAdd": "Suivre un contrat",
+  "contractEdit": "Contrat : {label}",
+  "@contractEdit": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "contractIntro": "La date de renouvellement et le préavis : OwnCoffer calcule le dernier jour pour résilier et vous prévient un mois avant.",
+  "contractPlanned": "Opération prévue",
+  "contractRenewal": "Date de renouvellement",
+  "contractNotice": "Préavis (jours)",
+  "contractsTitle": "Contrats",
+  "contractsEmpty": "Aucun contrat suivi.",
+  "contractPassed": "Renouvellement du {renewal} passé : indiquez le prochain.",
+  "@contractPassed": {
+    "placeholders": {
+      "renewal": {
+        "type": "String"
+      }
+    }
+  },
+  "contractDeadline": "Résilier avant le {deadline} ({days, plural, =0{aujourd’hui} =1{demain} other{dans {days} jours}}) · renouvellement le {renewal}",
+  "@contractDeadline": {
+    "placeholders": {
+      "deadline": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      },
+      "renewal": {
+        "type": "String"
+      }
+    }
+  },
+  "contractEditMenu": "Modifier les dates",
+  "contractForget": "Ne plus suivre",
+  "eventAdd": "Nouvel événement",
+  "eventEdit": "Modifier l’événement",
+  "eventIntro": "Mariage, vacances, déménagement… rattachez-y ensuite les opérations de la période.",
+  "eventName": "Nom",
+  "eventStart": "Début",
+  "eventEnd": "Fin",
+  "eventBudget": "Budget",
+  "eventsTitle": "Événements",
+  "eventsEmpty": "Aucun événement.",
+  "eventLine": "{count, plural, =0{Aucune opération} =1{1 opération} other{{count} opérations}} · {total}",
+  "@eventLine": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "eventLineBudget": "{count, plural, =0{Aucune opération} =1{1 opération} other{{count} opérations}} · {total} sur {budget}",
+  "@eventLineBudget": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "String"
+      },
+      "budget": {
+        "type": "String"
+      }
+    }
+  },
+  "eventNoCandidates": "Aucune autre opération dans la période de l’événement.",
+  "eventAttach": "Rattacher des opérations",
+  "eventAttachIntro": "Opérations du {from} au {to}.",
+  "@eventAttachIntro": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "eventOperations": "Opérations",
+  "eventDetach": "Détacher",
+  "eventNoOperations": "Aucune opération rattachée.",
+  "reminderAdd": "Nouveau rappel",
+  "reminderEdit": "Modifier le rappel",
+  "reminderIntro": "Une notification vous le rappellera le jour venu. Vos rappels ne sont visibles que par vous.",
+  "reminderText": "Rappel",
+  "reminderDate": "Le",
+  "remindersTitle": "Rappels",
+  "remindersEmpty": "Aucun rappel.",
+  "followUpTitle": "Suivi",
+  "followUpIntro": "Rappels, remboursements attendus, contrats à résilier à temps et événements.",
+  "notifRefundLateTitle": "Remboursement en retard : {label}",
+  "@notifRefundLateTitle": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "notifRefundLateBody": "{amount} attendus au plus tard le {date}.",
+  "@notifRefundLateBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "notifContractTitle": "{label} : résilier avant le {deadline}",
+  "@notifContractTitle": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "deadline": {
+        "type": "String"
+      }
+    }
+  },
+  "notifContractBody": "Sinon le contrat est renouvelé le {renewal}.",
+  "@notifContractBody": {
+    "placeholders": {
+      "renewal": {
+        "type": "String"
+      }
+    }
+  },
+  "notifReminderBody": "Rappel du {date}.",
+  "@notifReminderBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "error_month_closed": "Ce mois est clôturé : rouvrez-le dans les réglages du groupe pour le modifier.",
+  "error_closing_in_future": "On ne peut clôturer que des mois passés.",
+  "error_invalid_rate": "Ce taux n’est pas valable.",
+  "error_invalid_notice": "Ce préavis n’est pas valable (0 à 365 jours).",
+  "error_project_access_denied": "Ce projet n’existe pas ou ne vous est pas accessible.",
+  "error_asset_access_denied": "Ce bien n’existe pas ou ne vous est pas accessible.",
+  "error_refund_access_denied": "Ce remboursement n’existe pas ou ne vous est pas accessible.",
+  "error_event_access_denied": "Cet événement n’existe pas ou ne vous est pas accessible.",
+  "error_shared_access_denied": "Cette dépense partagée n’existe pas ou ne vous est pas accessible.",
+  "error_shared_not_member": "Chaque personne doit être membre du groupe.",
+  "error_shared_repayment_invalid": "Un remboursement va d’un membre vers un autre membre.",
+  "error_reminder_access_denied": "Ce rappel n’existe pas ou ne vous est pas accessible.",
+  "searchKwProjects": "projets, épargne, objectif, mettre de côté, dépenses annuelles, lisser, provision",
+  "searchKwWealth": "patrimoine, biens, livret A, LDDS, LEP, intérêts, santé financière, bilan annuel, impôts, déclaration",
+  "searchKwTogether": "à plusieurs, dépenses partagées, qui doit quoi, rembourser, pot commun, colocation, couple",
+  "searchKwFollowUp": "suivi, rappels, remboursements attendus, mutuelle, contrats, résiliation, préavis, événements, vacances"
 }

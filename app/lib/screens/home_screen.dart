@@ -42,6 +42,10 @@ import 'loans_screen.dart';
 import 'members_screen.dart';
 import 'month_summary_screen.dart';
 import 'notifications_screen.dart';
+import 'projects_screen.dart';
+import 'wealth_screen.dart';
+import 'together_screen.dart';
+import 'follow_up_screen.dart';
 import 'operations_screen.dart';
 import 'pepite_screen.dart';
 import 'security_screen.dart';
@@ -86,6 +90,10 @@ class _HomeScreenState extends State<HomeScreen> {
   final _dashboardKey = GlobalKey<DashboardScreenState>();
   final _invoicesKey = GlobalKey<InvoicesScreenState>();
   final _advisorKey = GlobalKey<AdvisorScreenState>();
+  final _projectsKey = GlobalKey<ProjectsScreenState>();
+  final _wealthKey = GlobalKey<WealthScreenState>();
+  final _togetherKey = GlobalKey<TogetherScreenState>();
+  final _followUpKey = GlobalKey<FollowUpScreenState>();
   final _shortcutsFocus = FocusNode(debugLabel: 'shortcuts');
 
   @override
@@ -182,6 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectPage(AppPage.forecast);
             _forecastKey.currentState?.showAccount(accountId);
           },
+          onOpenFollowUp: () => _selectPage(AppPage.followUp),
         ),
       ),
     );
@@ -284,6 +293,14 @@ class _HomeScreenState extends State<HomeScreen> {
         unawaited(uiPrefs.markAdvisorSeen(DateTime.now()));
         setState(() => _newAdvices = 0);
         _advisorKey.currentState?.reload();
+      case AppPage.projects:
+        _projectsKey.currentState?.reload();
+      case AppPage.wealth:
+        _wealthKey.currentState?.reload();
+      case AppPage.together:
+        _togetherKey.currentState?.reload();
+      case AppPage.followUp:
+        _followUpKey.currentState?.reload();
       default:
     }
     _loadAccounts();
@@ -452,6 +469,14 @@ class _HomeScreenState extends State<HomeScreen> {
         _selectPage(AppPage.budget);
       case AppFunction.loans:
         _selectPage(AppPage.loans);
+      case AppFunction.projects:
+        _selectPage(AppPage.projects);
+      case AppFunction.wealth:
+        _selectPage(AppPage.wealth);
+      case AppFunction.together:
+        _selectPage(AppPage.together);
+      case AppFunction.followUp:
+        _selectPage(AppPage.followUp);
       case AppFunction.invoices:
         _selectPage(AppPage.invoices);
       case AppFunction.imports:
@@ -727,6 +752,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 membership: current,
                 embedded: true,
                 onLoaded: _advicesLoaded,
+              ),
+              ProjectsScreen(
+                key: _projectsKey,
+                membership: current,
+                accounts: _accounts,
+              ),
+              WealthScreen(
+                key: _wealthKey,
+                membership: current,
+                accounts: _accounts,
+              ),
+              TogetherScreen(key: _togetherKey, membership: current),
+              FollowUpScreen(
+                key: _followUpKey,
+                membership: current,
+                accounts: _accounts,
               ),
             ],
           );

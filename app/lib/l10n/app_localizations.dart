@@ -13758,6 +13758,1350 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le moteur part du solde d\'aujourd\'hui, ajoute jour par jour les opérations prévues (salaires, prélèvements, abonnements, échéances de crédit), puis l\'estimation des dépenses courantes tirée de vos derniers mois. Aucune IA n\'intervient dans ce calcul.'**
   String get whyForecastText;
+
+  /// No description provided for @entryInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifiez le champ « {label} ».'**
+  String entryInvalid(String label);
+
+  /// No description provided for @entryOptional.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} (facultatif)'**
+  String entryOptional(String label);
+
+  /// No description provided for @entryPickDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir la date'**
+  String get entryPickDate;
+
+  /// No description provided for @entryClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer'**
+  String get entryClear;
+
+  /// No description provided for @entryRemoveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer ?'**
+  String get entryRemoveTitle;
+
+  /// No description provided for @entryRemoveText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer « {name} » ? Cette action est définitive.'**
+  String entryRemoveText(String name);
+
+  /// No description provided for @entryRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get entryRemove;
+
+  /// No description provided for @navProjects.
+  ///
+  /// In fr, this message translates to:
+  /// **'Projets'**
+  String get navProjects;
+
+  /// No description provided for @navWealth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Patrimoine'**
+  String get navWealth;
+
+  /// No description provided for @navTogether.
+  ///
+  /// In fr, this message translates to:
+  /// **'À plusieurs'**
+  String get navTogether;
+
+  /// No description provided for @navFollowUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivi'**
+  String get navFollowUp;
+
+  /// No description provided for @projectAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau projet'**
+  String get projectAdd;
+
+  /// No description provided for @projectEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le projet'**
+  String get projectEdit;
+
+  /// No description provided for @projectName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom du projet'**
+  String get projectName;
+
+  /// No description provided for @projectTarget.
+  ///
+  /// In fr, this message translates to:
+  /// **'Somme à atteindre'**
+  String get projectTarget;
+
+  /// No description provided for @projectSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà de côté'**
+  String get projectSaved;
+
+  /// No description provided for @projectDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour quand'**
+  String get projectDate;
+
+  /// No description provided for @projectAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte où l’argent est rangé'**
+  String get projectAccount;
+
+  /// No description provided for @projectAddSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre de côté'**
+  String get projectAddSaved;
+
+  /// No description provided for @projectAddSavedIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que vous venez de mettre de côté pour ce projet. Un montant négatif le retire.'**
+  String get projectAddSavedIntro;
+
+  /// No description provided for @projectAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant'**
+  String get projectAmount;
+
+  /// No description provided for @projectsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Projets'**
+  String get projectsTitle;
+
+  /// No description provided for @projectsIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos projets d’épargne et les grosses dépenses de l’année, lissées sur les mois.'**
+  String get projectsIntro;
+
+  /// No description provided for @projectsMonthly.
+  ///
+  /// In fr, this message translates to:
+  /// **'À mettre de côté : {amount} par mois'**
+  String projectsMonthly(String amount);
+
+  /// No description provided for @projectsMonthlyDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'{projects} pour vos projets, {smoothed} pour les dépenses lissées'**
+  String projectsMonthlyDetail(String projects, String smoothed);
+
+  /// No description provided for @projectsList.
+  ///
+  /// In fr, this message translates to:
+  /// **'Projets d’épargne'**
+  String get projectsList;
+
+  /// No description provided for @projectsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun projet pour l’instant : vacances, voiture, apport… ajoutez le premier.'**
+  String get projectsEmpty;
+
+  /// No description provided for @smoothedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses lissées'**
+  String get smoothedTitle;
+
+  /// No description provided for @smoothedIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations prévues qui reviennent moins d’une fois par mois, ramenées à une mensualité.'**
+  String get smoothedIntro;
+
+  /// No description provided for @smoothedEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération prévue annuelle, semestrielle ou trimestrielle.'**
+  String get smoothedEmpty;
+
+  /// No description provided for @smoothedTotals.
+  ///
+  /// In fr, this message translates to:
+  /// **'{monthly} par mois · {setAside} devraient déjà être de côté'**
+  String smoothedTotals(String monthly, String setAside);
+
+  /// No description provided for @smoothedLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} tous les {months} mois · prochaine le {next} · déjà de côté : {setAside}'**
+  String smoothedLine(String amount, int months, String next, String setAside);
+
+  /// No description provided for @perMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount}/mois'**
+  String perMonth(String amount);
+
+  /// No description provided for @projectReached.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif atteint'**
+  String get projectReached;
+
+  /// No description provided for @projectOverdue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date passée, il manque {remaining}'**
+  String projectOverdue(String remaining);
+
+  /// No description provided for @projectPlan.
+  ///
+  /// In fr, this message translates to:
+  /// **'{monthly} par mois pendant {months} mois'**
+  String projectPlan(String monthly, int months);
+
+  /// No description provided for @projectRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il reste {remaining}'**
+  String projectRemaining(String remaining);
+
+  /// No description provided for @projectArchived.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archivé'**
+  String get projectArchived;
+
+  /// No description provided for @projectUnarchive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désarchiver'**
+  String get projectUnarchive;
+
+  /// No description provided for @projectArchive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archiver'**
+  String get projectArchive;
+
+  /// No description provided for @projectProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{saved} sur {target} ({percent} %)'**
+  String projectProgress(String saved, String target, int percent);
+
+  /// No description provided for @projectBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'pour le {date}'**
+  String projectBy(String date);
+
+  /// No description provided for @assetProperty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Logement'**
+  String get assetProperty;
+
+  /// No description provided for @assetVehicle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Véhicule'**
+  String get assetVehicle;
+
+  /// No description provided for @assetInvestment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Placement'**
+  String get assetInvestment;
+
+  /// No description provided for @assetValuables.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objet de valeur'**
+  String get assetValuables;
+
+  /// No description provided for @assetOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autre'**
+  String get assetOther;
+
+  /// No description provided for @assetAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un bien'**
+  String get assetAdd;
+
+  /// No description provided for @assetEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le bien'**
+  String get assetEdit;
+
+  /// No description provided for @assetIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une estimation suffit ; mettez-la à jour de temps en temps.'**
+  String get assetIntro;
+
+  /// No description provided for @assetName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get assetName;
+
+  /// No description provided for @assetKind.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type'**
+  String get assetKind;
+
+  /// No description provided for @assetValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur estimée'**
+  String get assetValue;
+
+  /// No description provided for @assetValuedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de l’estimation'**
+  String get assetValuedAt;
+
+  /// No description provided for @assetsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Biens'**
+  String get assetsTitle;
+
+  /// No description provided for @assetsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun bien déclaré.'**
+  String get assetsEmpty;
+
+  /// No description provided for @assetValuedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'estimé le {date}'**
+  String assetValuedOn(String date);
+
+  /// No description provided for @regulatedLivretA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Livret A'**
+  String get regulatedLivretA;
+
+  /// No description provided for @regulatedLdds.
+  ///
+  /// In fr, this message translates to:
+  /// **'LDDS'**
+  String get regulatedLdds;
+
+  /// No description provided for @regulatedLep.
+  ///
+  /// In fr, this message translates to:
+  /// **'LEP'**
+  String get regulatedLep;
+
+  /// No description provided for @regulatedLivretJeune.
+  ///
+  /// In fr, this message translates to:
+  /// **'Livret jeune'**
+  String get regulatedLivretJeune;
+
+  /// No description provided for @regulatedNoSavings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun compte épargne : créez-en un dans Comptes.'**
+  String get regulatedNoSavings;
+
+  /// No description provided for @regulatedSet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Livrets réglementés'**
+  String get regulatedSet;
+
+  /// No description provided for @regulatedSetIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez un compte épargne, le livret qu’il est et son taux. Sans type, le compte redevient un compte épargne ordinaire.'**
+  String get regulatedSetIntro;
+
+  /// No description provided for @regulatedAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte épargne'**
+  String get regulatedAccount;
+
+  /// No description provided for @regulatedKind.
+  ///
+  /// In fr, this message translates to:
+  /// **'Livret'**
+  String get regulatedKind;
+
+  /// No description provided for @regulatedRate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux annuel'**
+  String get regulatedRate;
+
+  /// No description provided for @regulatedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Livrets réglementés'**
+  String get regulatedTitle;
+
+  /// No description provided for @regulatedIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plafond et intérêts estimés selon la règle des quinzaines. Seule votre banque fait foi.'**
+  String get regulatedIntro;
+
+  /// No description provided for @regulatedEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun livret réglementé indiqué.'**
+  String get regulatedEmpty;
+
+  /// No description provided for @regulatedRoom.
+  ///
+  /// In fr, this message translates to:
+  /// **'{balance} sur {ceiling} · encore {room} possibles'**
+  String regulatedRoom(String balance, String ceiling, String room);
+
+  /// No description provided for @regulatedNoRate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux non indiqué : intérêts non estimés.'**
+  String get regulatedNoRate;
+
+  /// No description provided for @regulatedInterest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux {rate} % · intérêts acquis {soFar} · sur l’année {year}'**
+  String regulatedInterest(String rate, String soFar, String year);
+
+  /// No description provided for @taxCategoriesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories pour les impôts'**
+  String get taxCategoriesTitle;
+
+  /// No description provided for @taxCategoriesIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cochez les catégories dont les opérations comptent pour la déclaration de revenus (dons, garde d’enfants, emploi à domicile…).'**
+  String get taxCategoriesIntro;
+
+  /// No description provided for @taxCategoriesField.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories'**
+  String get taxCategoriesField;
+
+  /// No description provided for @wealthTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Patrimoine'**
+  String get wealthTitle;
+
+  /// No description provided for @wealthIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que vous possédez, vos livrets, la santé de vos finances et le bilan de l’année.'**
+  String get wealthIntro;
+
+  /// No description provided for @netWorthAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes'**
+  String get netWorthAccounts;
+
+  /// No description provided for @netWorthAssets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Biens'**
+  String get netWorthAssets;
+
+  /// No description provided for @netWorthLoans.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédits restant dus'**
+  String get netWorthLoans;
+
+  /// No description provided for @netWorthTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Patrimoine net'**
+  String get netWorthTotal;
+
+  /// No description provided for @healthGood.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bien'**
+  String get healthGood;
+
+  /// No description provided for @healthFair.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyen'**
+  String get healthFair;
+
+  /// No description provided for @healthWeak.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fragile'**
+  String get healthWeak;
+
+  /// No description provided for @healthUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inconnu'**
+  String get healthUnknown;
+
+  /// No description provided for @healthEmergencyUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Épargne de précaution : pas assez de données'**
+  String get healthEmergencyUnknown;
+
+  /// No description provided for @healthEmergency.
+  ///
+  /// In fr, this message translates to:
+  /// **'Épargne de précaution : {value} mois de dépenses'**
+  String healthEmergency(String value);
+
+  /// No description provided for @healthSavingsRateUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux d’épargne : pas assez de données'**
+  String get healthSavingsRateUnknown;
+
+  /// No description provided for @healthSavingsRate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux d’épargne : {rate} %'**
+  String healthSavingsRate(String rate);
+
+  /// No description provided for @healthDebtUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Endettement : pas de revenus connus'**
+  String get healthDebtUnknown;
+
+  /// No description provided for @healthDebt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Endettement : {rate} % des revenus'**
+  String healthDebt(String rate);
+
+  /// No description provided for @healthRegularityUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Régularité : pas encore de mois complet'**
+  String get healthRegularityUnknown;
+
+  /// No description provided for @healthRegularity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Régularité : {good} mois sur {months} sans dépenser plus que gagné'**
+  String healthRegularity(int good, int months);
+
+  /// No description provided for @healthTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Santé financière'**
+  String get healthTitle;
+
+  /// No description provided for @healthNoScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas encore de note'**
+  String get healthNoScore;
+
+  /// No description provided for @healthScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'{score} / 100'**
+  String healthScore(int score);
+
+  /// No description provided for @healthBasis.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par mois : revenus {income}, dépenses {expense} · épargne {savings}'**
+  String healthBasis(String income, String expense, String savings);
+
+  /// No description provided for @healthHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyenne des indicateurs connus, calculés sur vos derniers mois complets. Repères : 3 mois de précaution, 10 % d’épargne, endettement sous 30 %.'**
+  String get healthHow;
+
+  /// No description provided for @yearReviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan de l’année'**
+  String get yearReviewTitle;
+
+  /// No description provided for @yearIncome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenus'**
+  String get yearIncome;
+
+  /// No description provided for @yearExpense.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses'**
+  String get yearExpense;
+
+  /// No description provided for @yearSavings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Épargne'**
+  String get yearSavings;
+
+  /// No description provided for @yearInterest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Intérêts estimés des livrets'**
+  String get yearInterest;
+
+  /// No description provided for @yearTopExpenses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus grosses dépenses'**
+  String get yearTopExpenses;
+
+  /// No description provided for @yearCategoryLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} · {count, plural, =1{1 opération} other{{count} opérations}}'**
+  String yearCategoryLine(String name, int count);
+
+  /// No description provided for @yearTaxTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déclaration de revenus'**
+  String get yearTaxTitle;
+
+  /// No description provided for @yearTaxIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les opérations des catégories marquées pour les impôts. OwnCoffer ne calcule pas l’impôt : vérifiez ces montants.'**
+  String get yearTaxIntro;
+
+  /// No description provided for @yearTaxNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune catégorie marquée, ou aucune opération cette année.'**
+  String get yearTaxNone;
+
+  /// No description provided for @yearTaxOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 opération} other{{count} opérations}}'**
+  String yearTaxOperations(int count);
+
+  /// No description provided for @togetherMe.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moi'**
+  String get togetherMe;
+
+  /// No description provided for @togetherMember.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre'**
+  String get togetherMember;
+
+  /// No description provided for @togetherFormerMember.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ancien membre'**
+  String get togetherFormerMember;
+
+  /// No description provided for @togetherTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'À plusieurs'**
+  String get togetherTitle;
+
+  /// No description provided for @togetherIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les dépenses partagées entre les membres et le pot commun réparti selon les revenus.'**
+  String get togetherIntro;
+
+  /// No description provided for @togetherAlone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitez au moins un autre membre pour partager des dépenses.'**
+  String get togetherAlone;
+
+  /// No description provided for @sharedRepay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remboursement'**
+  String get sharedRepay;
+
+  /// No description provided for @sharedAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépense partagée'**
+  String get sharedAdd;
+
+  /// No description provided for @sharedRepayIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'L’argent rendu d’un membre à un autre.'**
+  String get sharedRepayIntro;
+
+  /// No description provided for @sharedLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libellé'**
+  String get sharedLabel;
+
+  /// No description provided for @sharedAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant'**
+  String get sharedAmount;
+
+  /// No description provided for @sharedDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date'**
+  String get sharedDate;
+
+  /// No description provided for @sharedRepayFrom.
+  ///
+  /// In fr, this message translates to:
+  /// **'Qui rembourse'**
+  String get sharedRepayFrom;
+
+  /// No description provided for @sharedPaidBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Payé par'**
+  String get sharedPaidBy;
+
+  /// No description provided for @sharedRepayTo.
+  ///
+  /// In fr, this message translates to:
+  /// **'À qui'**
+  String get sharedRepayTo;
+
+  /// No description provided for @sharedFor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour qui'**
+  String get sharedFor;
+
+  /// No description provided for @sharedRepayLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remboursement'**
+  String get sharedRepayLabel;
+
+  /// No description provided for @sharedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépenses partagées'**
+  String get sharedTitle;
+
+  /// No description provided for @sharedEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune dépense partagée.'**
+  String get sharedEmpty;
+
+  /// No description provided for @sharedSettled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout le monde est quitte.'**
+  String get sharedSettled;
+
+  /// No description provided for @sharedToSettle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour être quittes'**
+  String get sharedToSettle;
+
+  /// No description provided for @sharedOwes.
+  ///
+  /// In fr, this message translates to:
+  /// **'{from} → {to} : {amount}'**
+  String sharedOwes(String from, String to, String amount);
+
+  /// No description provided for @sharedHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique ({count})'**
+  String sharedHistory(int count);
+
+  /// No description provided for @sharedRepayLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{date} · {from} → {to}'**
+  String sharedRepayLine(String date, String from, String to);
+
+  /// No description provided for @sharedLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{date} · payé par {payer} pour {participants}'**
+  String sharedLine(String date, String payer, String participants);
+
+  /// No description provided for @potSet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant du pot'**
+  String get potSet;
+
+  /// No description provided for @potSetIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'La somme à verser chaque mois sur le compte commun. 0 pour ne pas utiliser de pot.'**
+  String get potSetIntro;
+
+  /// No description provided for @potTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par mois'**
+  String get potTotal;
+
+  /// No description provided for @potIncomeOf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenu de {name}'**
+  String potIncomeOf(String name);
+
+  /// No description provided for @potIncomeIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenu mensuel net, utilisé seulement pour répartir le pot.'**
+  String get potIncomeIntro;
+
+  /// No description provided for @potIncome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenu mensuel'**
+  String get potIncome;
+
+  /// No description provided for @potTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pot commun'**
+  String get potTitle;
+
+  /// No description provided for @potIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chacun verse en proportion de son revenu ; à parts égales tant qu’aucun revenu n’est connu.'**
+  String get potIntro;
+
+  /// No description provided for @potNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun pot commun défini.'**
+  String get potNone;
+
+  /// No description provided for @potTotalLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} par mois à verser'**
+  String potTotalLine(String amount);
+
+  /// No description provided for @potIncomeUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenu non indiqué'**
+  String get potIncomeUnknown;
+
+  /// No description provided for @potIncomeLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenu : {amount}/mois'**
+  String potIncomeLine(String amount);
+
+  /// No description provided for @refundAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remboursement attendu'**
+  String get refundAdd;
+
+  /// No description provided for @refundEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get refundEdit;
+
+  /// No description provided for @refundIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dès qu’un crédit du même montant arrive après la date de départ, il est marqué reçu tout seul.'**
+  String get refundIntro;
+
+  /// No description provided for @refundLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quoi'**
+  String get refundLabel;
+
+  /// No description provided for @refundAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant'**
+  String get refundAmount;
+
+  /// No description provided for @refundSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'Attendu depuis le'**
+  String get refundSince;
+
+  /// No description provided for @refundDueBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au plus tard le'**
+  String get refundDueBy;
+
+  /// No description provided for @refundAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte où il arrivera'**
+  String get refundAccount;
+
+  /// No description provided for @refundsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remboursements attendus'**
+  String get refundsTitle;
+
+  /// No description provided for @refundsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun remboursement attendu.'**
+  String get refundsEmpty;
+
+  /// No description provided for @refundReceivedBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reçu le {date}'**
+  String refundReceivedBy(String date);
+
+  /// No description provided for @refundMatched.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reçu le {date}, retrouvé dans vos opérations'**
+  String refundMatched(String date);
+
+  /// No description provided for @refundLate.
+  ///
+  /// In fr, this message translates to:
+  /// **'En retard : attendu au plus tard le {date}'**
+  String refundLate(String date);
+
+  /// No description provided for @refundAwaitedBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Attendu d’ici le {date}'**
+  String refundAwaitedBy(String date);
+
+  /// No description provided for @refundAwaited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Attendu depuis le {date}'**
+  String refundAwaited(String date);
+
+  /// No description provided for @refundMarkReceived.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marquer reçu'**
+  String get refundMarkReceived;
+
+  /// No description provided for @refundReopen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Attendre à nouveau'**
+  String get refundReopen;
+
+  /// No description provided for @contractNoPlanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération prévue : ajoutez d’abord l’abonnement dans Prévisions.'**
+  String get contractNoPlanned;
+
+  /// No description provided for @contractAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivre un contrat'**
+  String get contractAdd;
+
+  /// No description provided for @contractEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrat : {label}'**
+  String contractEdit(String label);
+
+  /// No description provided for @contractIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'La date de renouvellement et le préavis : OwnCoffer calcule le dernier jour pour résilier et vous prévient un mois avant.'**
+  String get contractIntro;
+
+  /// No description provided for @contractPlanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opération prévue'**
+  String get contractPlanned;
+
+  /// No description provided for @contractRenewal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date de renouvellement'**
+  String get contractRenewal;
+
+  /// No description provided for @contractNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préavis (jours)'**
+  String get contractNotice;
+
+  /// No description provided for @contractsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrats'**
+  String get contractsTitle;
+
+  /// No description provided for @contractsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun contrat suivi.'**
+  String get contractsEmpty;
+
+  /// No description provided for @contractPassed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renouvellement du {renewal} passé : indiquez le prochain.'**
+  String contractPassed(String renewal);
+
+  /// No description provided for @contractDeadline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résilier avant le {deadline} ({days, plural, =0{aujourd’hui} =1{demain} other{dans {days} jours}}) · renouvellement le {renewal}'**
+  String contractDeadline(String deadline, int days, String renewal);
+
+  /// No description provided for @contractEditMenu.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier les dates'**
+  String get contractEditMenu;
+
+  /// No description provided for @contractForget.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ne plus suivre'**
+  String get contractForget;
+
+  /// No description provided for @eventAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel événement'**
+  String get eventAdd;
+
+  /// No description provided for @eventEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier l’événement'**
+  String get eventEdit;
+
+  /// No description provided for @eventIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mariage, vacances, déménagement… rattachez-y ensuite les opérations de la période.'**
+  String get eventIntro;
+
+  /// No description provided for @eventName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get eventName;
+
+  /// No description provided for @eventStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début'**
+  String get eventStart;
+
+  /// No description provided for @eventEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin'**
+  String get eventEnd;
+
+  /// No description provided for @eventBudget.
+  ///
+  /// In fr, this message translates to:
+  /// **'Budget'**
+  String get eventBudget;
+
+  /// No description provided for @eventsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements'**
+  String get eventsTitle;
+
+  /// No description provided for @eventsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement.'**
+  String get eventsEmpty;
+
+  /// No description provided for @eventLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune opération} =1{1 opération} other{{count} opérations}} · {total}'**
+  String eventLine(int count, String total);
+
+  /// No description provided for @eventLineBudget.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune opération} =1{1 opération} other{{count} opérations}} · {total} sur {budget}'**
+  String eventLineBudget(int count, String total, String budget);
+
+  /// No description provided for @eventNoCandidates.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune autre opération dans la période de l’événement.'**
+  String get eventNoCandidates;
+
+  /// No description provided for @eventAttach.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rattacher des opérations'**
+  String get eventAttach;
+
+  /// No description provided for @eventAttachIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations du {from} au {to}.'**
+  String eventAttachIntro(String from, String to);
+
+  /// No description provided for @eventOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Opérations'**
+  String get eventOperations;
+
+  /// No description provided for @eventDetach.
+  ///
+  /// In fr, this message translates to:
+  /// **'Détacher'**
+  String get eventDetach;
+
+  /// No description provided for @eventNoOperations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune opération rattachée.'**
+  String get eventNoOperations;
+
+  /// No description provided for @reminderAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau rappel'**
+  String get reminderAdd;
+
+  /// No description provided for @reminderEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le rappel'**
+  String get reminderEdit;
+
+  /// No description provided for @reminderIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une notification vous le rappellera le jour venu. Vos rappels ne sont visibles que par vous.'**
+  String get reminderIntro;
+
+  /// No description provided for @reminderText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel'**
+  String get reminderText;
+
+  /// No description provided for @reminderDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le'**
+  String get reminderDate;
+
+  /// No description provided for @remindersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappels'**
+  String get remindersTitle;
+
+  /// No description provided for @remindersEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun rappel.'**
+  String get remindersEmpty;
+
+  /// No description provided for @followUpTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivi'**
+  String get followUpTitle;
+
+  /// No description provided for @followUpIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappels, remboursements attendus, contrats à résilier à temps et événements.'**
+  String get followUpIntro;
+
+  /// No description provided for @notifRefundLateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remboursement en retard : {label}'**
+  String notifRefundLateTitle(String label);
+
+  /// No description provided for @notifRefundLateBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} attendus au plus tard le {date}.'**
+  String notifRefundLateBody(String amount, String date);
+
+  /// No description provided for @notifContractTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} : résilier avant le {deadline}'**
+  String notifContractTitle(String label, String deadline);
+
+  /// No description provided for @notifContractBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sinon le contrat est renouvelé le {renewal}.'**
+  String notifContractBody(String renewal);
+
+  /// No description provided for @notifReminderBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel du {date}.'**
+  String notifReminderBody(String date);
+
+  /// No description provided for @error_month_closed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois est clôturé : rouvrez-le dans les réglages du groupe pour le modifier.'**
+  String get error_month_closed;
+
+  /// No description provided for @error_closing_in_future.
+  ///
+  /// In fr, this message translates to:
+  /// **'On ne peut clôturer que des mois passés.'**
+  String get error_closing_in_future;
+
+  /// No description provided for @error_invalid_rate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce taux n’est pas valable.'**
+  String get error_invalid_rate;
+
+  /// No description provided for @error_invalid_notice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce préavis n’est pas valable (0 à 365 jours).'**
+  String get error_invalid_notice;
+
+  /// No description provided for @error_project_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce projet n’existe pas ou ne vous est pas accessible.'**
+  String get error_project_access_denied;
+
+  /// No description provided for @error_asset_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce bien n’existe pas ou ne vous est pas accessible.'**
+  String get error_asset_access_denied;
+
+  /// No description provided for @error_refund_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce remboursement n’existe pas ou ne vous est pas accessible.'**
+  String get error_refund_access_denied;
+
+  /// No description provided for @error_event_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet événement n’existe pas ou ne vous est pas accessible.'**
+  String get error_event_access_denied;
+
+  /// No description provided for @error_shared_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette dépense partagée n’existe pas ou ne vous est pas accessible.'**
+  String get error_shared_access_denied;
+
+  /// No description provided for @error_shared_not_member.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque personne doit être membre du groupe.'**
+  String get error_shared_not_member;
+
+  /// No description provided for @error_shared_repayment_invalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un remboursement va d’un membre vers un autre membre.'**
+  String get error_shared_repayment_invalid;
+
+  /// No description provided for @error_reminder_access_denied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce rappel n’existe pas ou ne vous est pas accessible.'**
+  String get error_reminder_access_denied;
+
+  /// No description provided for @searchKwProjects.
+  ///
+  /// In fr, this message translates to:
+  /// **'projets, épargne, objectif, mettre de côté, dépenses annuelles, lisser, provision'**
+  String get searchKwProjects;
+
+  /// No description provided for @searchKwWealth.
+  ///
+  /// In fr, this message translates to:
+  /// **'patrimoine, biens, livret A, LDDS, LEP, intérêts, santé financière, bilan annuel, impôts, déclaration'**
+  String get searchKwWealth;
+
+  /// No description provided for @searchKwTogether.
+  ///
+  /// In fr, this message translates to:
+  /// **'à plusieurs, dépenses partagées, qui doit quoi, rembourser, pot commun, colocation, couple'**
+  String get searchKwTogether;
+
+  /// No description provided for @searchKwFollowUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'suivi, rappels, remboursements attendus, mutuelle, contrats, résiliation, préavis, événements, vacances'**
+  String get searchKwFollowUp;
 }
 
 class _AppLocalizationsDelegate
