@@ -5677,6 +5677,85 @@
   "homeCardSplit": "Répartition des dépenses",
   "homeCardSplitHelp": "Le camembert des dépenses du mois par catégorie, comme dans Budget",
   "homeTileSplitNone": "Aucune dépense classée ce mois-ci.",
+  "homeCardReview": "Mois écoulé",
+  "homeCardReviewHelp": "Le bilan du dernier mois terminé, comme dans Bilan du mois : ce qui est resté, le mois d'avant, les objectifs dépassés, les frais bancaires et les plus fortes hausses",
+  "homeCardComparison": "Comparaison",
+  "homeCardComparisonHelp": "Ce mois-ci face à la moyenne des trois mois précédents : les catégories en hausse et en baisse relevées par le moteur",
+  "homeCardTrends": "Tendances",
+  "homeCardTrendsHelp": "Revenus et dépenses des six derniers mois, le mois en cours plus clair, avec les moyennes des mois terminés",
+  "homeTileReviewBefore": "{month} · mois d'avant : {previous}",
+  "@homeTileReviewBefore": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "previous": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileReviewGoalsOver": "{count, plural, =1{1 objectif dépassé} other{{count} objectifs dépassés}}",
+  "@homeTileReviewGoalsOver": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTileReviewFees": "{amount} de frais bancaires",
+  "@homeTileReviewFees": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileReviewClean": "Aucun objectif dépassé, aucun frais bancaire.",
+  "homeTileReviewBiggest": "Plus grosse dépense : {label}",
+  "@homeTileReviewBiggest": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileVsAverage": "{average} en moyenne",
+  "@homeTileVsAverage": {
+    "placeholders": {
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileComparisonUp": "{category} : plus que d'habitude",
+  "@homeTileComparisonUp": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileComparisonDown": "{category} : moins que d'habitude",
+  "@homeTileComparisonDown": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileComparisonNone": "Rien d'inhabituel ce mois-ci par rapport aux trois mois précédents.",
+  "homeTileTrendsSpent": "dépensés par mois en moyenne",
+  "homeTileTrendsSpentValue": "{amount} dépensés par mois en moyenne",
+  "@homeTileTrendsSpentValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTileTrendsIncome": "Revenus par mois en moyenne",
+  "homeTileTrendsExpense": "Dépenses par mois en moyenne",
+  "homeTileTrendsNone": "Pas encore assez d'historique : il faut au moins un mois terminé.",
   "homeCardMonthSummary": "Récapitulatif",
   "homeCardMonthSummaryHelp": "Les 30 prochains jours en bref : point bas, notifications et conseils",
   "homeCardSearchHelp": "Chercher une opération, un crédit, une facture ou une fonction",

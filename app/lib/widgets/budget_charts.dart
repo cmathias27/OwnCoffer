@@ -1097,3 +1097,67 @@ class _LinesPainter extends CustomPainter {
       old.labels != labels ||
       old.highlight != highlight;
 }
+
+/// Small bars for a widget of the home page (decision 0049): one bar per
+/// series and period, side by side, scaled on the highest; the last period
+/// lighter when it is not over ([lastPartial]). Amounts are integer cents.
+class MiniBars extends StatelessWidget {
+  /// One list per series, all of the same length, oldest first.
+  final List<List<int>> series;
+  final List<Color> colors;
+  final bool lastPartial;
+
+  const MiniBars({
+    super.key,
+    required this.series,
+    required this.colors,
+    this.lastPartial = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final periods = series.isEmpty ? 0 : series.first.length;
+    final top = math.max(
+      1,
+      [
+        for (final s in series) ...s,
+      ].fold<int>(0, math.max),
+    );
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < periods; i++)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (final (k, s) in series.indexed)
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FractionallySizedBox(
+                          heightFactor: math.max(0, s[i]) / top,
+                          widthFactor: 1,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: lastPartial && i == periods - 1
+                                  ? colors[k].withValues(alpha: 0.4)
+                                  : colors[k],
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(3),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
