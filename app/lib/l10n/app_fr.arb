@@ -6746,5 +6746,26 @@
   "viewsSave": "Enregistrer la vue actuelle",
   "viewsSaveIntro": "La recherche et les filtres actuels, sous un nom, pour les retrouver d’un geste. Gardé sur cet appareil.",
   "viewsName": "Nom de la vue",
-  "viewsRemove": "Supprimer des vues"
+  "viewsRemove": "Supprimer des vues",
+  "homeCardProjects": "Projets",
+  "homeCardProjectsHelp": "Ce qu’il faut mettre de côté chaque mois pour vos projets et vos dépenses lissées, et où en sont vos projets.",
+  "homeCardNetWorth": "Patrimoine",
+  "homeCardNetWorthHelp": "Vos comptes et vos biens, moins ce qui reste à rembourser sur vos crédits.",
+  "homeCardHealth": "Santé financière",
+  "homeCardHealthHelp": "Une note sur 100 calculée sur vos derniers mois complets : épargne de précaution, taux d’épargne, endettement, régularité.",
+  "homeTileProjectsLine": "à mettre de côté par mois",
+  "homeTileNetWorthLine": "Comptes {accounts} · biens {assets} · crédits {loans}",
+  "@homeTileNetWorthLine": {
+    "placeholders": {
+      "accounts": {
+        "type": "String"
+      },
+      "assets": {
+        "type": "String"
+      },
+      "loans": {
+        "type": "String"
+      }
+    }
+  }
 }

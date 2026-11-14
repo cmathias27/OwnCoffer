@@ -688,6 +688,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   DashboardTarget.loans => _selectPage(AppPage.loans),
                   DashboardTarget.advisor => _selectPage(AppPage.advisor),
                   DashboardTarget.invoices => _selectPage(AppPage.invoices),
+                  DashboardTarget.projects => _selectPage(AppPage.projects),
+                  DashboardTarget.wealth => _selectPage(AppPage.wealth),
                 },
               ),
               AccountsScreen(

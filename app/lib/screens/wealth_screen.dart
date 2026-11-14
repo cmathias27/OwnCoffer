@@ -435,42 +435,6 @@ class WealthScreenState extends State<WealthScreen> {
     return '${bp ~/ 100}$sep${(bp % 100).toString().padLeft(2, '0')}';
   }
 
-  String _gradeName(AppLocalizations l, HealthGrade g) => switch (g) {
-    HealthGrade.good => l.healthGood,
-    HealthGrade.fair => l.healthFair,
-    HealthGrade.weak => l.healthWeak,
-    HealthGrade.unknown => l.healthUnknown,
-  };
-
-  Color _gradeColor(ThemeData theme, HealthGrade g) => switch (g) {
-    HealthGrade.good => Colors.green.shade700,
-    HealthGrade.fair => Colors.orange.shade800,
-    HealthGrade.weak => theme.colorScheme.error,
-    HealthGrade.unknown => theme.colorScheme.onSurfaceVariant,
-  };
-
-  /// The indicator's figure in words: months, percent or count.
-  String _indicatorText(AppLocalizations l, HealthIndicatorInfo i, int months) {
-    final v = i.value;
-    return switch (i.key) {
-      'emergency' =>
-        v == null
-            ? l.healthEmergencyUnknown
-            : l.healthEmergency('${v ~/ 10}${_decimalSep()}${v % 10}'),
-      'savingsRate' =>
-        v == null
-            ? l.healthSavingsRateUnknown
-            : l.healthSavingsRate('${v ~/ 10}'),
-      'debt' => v == null ? l.healthDebtUnknown : l.healthDebt('${v ~/ 10}'),
-      'regularity' =>
-        v == null ? l.healthRegularityUnknown : l.healthRegularity(v, months),
-      _ => i.key,
-    };
-  }
-
-  String _decimalSep() =>
-      Localizations.localeOf(context).languageCode == 'fr' ? ',' : '.';
-
   Widget _healthCard(BuildContext context, HealthReport h) {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
@@ -502,12 +466,12 @@ class WealthScreenState extends State<WealthScreen> {
                 leading: Icon(
                   Icons.circle,
                   size: 14,
-                  color: _gradeColor(theme, i.grade),
+                  color: healthGradeColor(theme, i.grade),
                 ),
-                title: Text(_indicatorText(l, i, h.months)),
+                title: Text(healthIndicatorText(context, i, h.months)),
                 trailing: Text(
-                  _gradeName(l, i.grade),
-                  style: TextStyle(color: _gradeColor(theme, i.grade)),
+                  healthGradeName(l, i.grade),
+                  style: TextStyle(color: healthGradeColor(theme, i.grade)),
                 ),
               ),
             Text(l.healthHow, style: theme.textTheme.bodySmall),
@@ -620,4 +584,44 @@ class WealthScreenState extends State<WealthScreen> {
       ],
     );
   }
+}
+
+/// A health grade in words (decision 0050).
+String healthGradeName(AppLocalizations l, HealthGrade g) => switch (g) {
+  HealthGrade.good => l.healthGood,
+  HealthGrade.fair => l.healthFair,
+  HealthGrade.weak => l.healthWeak,
+  HealthGrade.unknown => l.healthUnknown,
+};
+
+Color healthGradeColor(ThemeData theme, HealthGrade g) => switch (g) {
+  HealthGrade.good => Colors.green.shade700,
+  HealthGrade.fair => Colors.orange.shade800,
+  HealthGrade.weak => theme.colorScheme.error,
+  HealthGrade.unknown => theme.colorScheme.onSurfaceVariant,
+};
+
+/// A health indicator's figure in words: months, percent or count.
+String healthIndicatorText(
+  BuildContext context,
+  HealthIndicatorInfo i,
+  int months,
+) {
+  final l = AppLocalizations.of(context);
+  final sep = Localizations.localeOf(context).languageCode == 'fr' ? ',' : '.';
+  final v = i.value;
+  return switch (i.key) {
+    'emergency' =>
+      v == null
+          ? l.healthEmergencyUnknown
+          : l.healthEmergency('${v ~/ 10}$sep${v % 10}'),
+    'savingsRate' =>
+      v == null
+          ? l.healthSavingsRateUnknown
+          : l.healthSavingsRate('${v ~/ 10}'),
+    'debt' => v == null ? l.healthDebtUnknown : l.healthDebt('${v ~/ 10}'),
+    'regularity' =>
+      v == null ? l.healthRegularityUnknown : l.healthRegularity(v, months),
+    _ => i.key,
+  };
 }

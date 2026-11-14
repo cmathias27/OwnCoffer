@@ -15156,6 +15156,54 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Supprimer des vues'**
   String get viewsRemove;
+
+  /// No description provided for @homeCardProjects.
+  ///
+  /// In fr, this message translates to:
+  /// **'Projets'**
+  String get homeCardProjects;
+
+  /// No description provided for @homeCardProjectsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qu’il faut mettre de côté chaque mois pour vos projets et vos dépenses lissées, et où en sont vos projets.'**
+  String get homeCardProjectsHelp;
+
+  /// No description provided for @homeCardNetWorth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Patrimoine'**
+  String get homeCardNetWorth;
+
+  /// No description provided for @homeCardNetWorthHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos comptes et vos biens, moins ce qui reste à rembourser sur vos crédits.'**
+  String get homeCardNetWorthHelp;
+
+  /// No description provided for @homeCardHealth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Santé financière'**
+  String get homeCardHealth;
+
+  /// No description provided for @homeCardHealthHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une note sur 100 calculée sur vos derniers mois complets : épargne de précaution, taux d’épargne, endettement, régularité.'**
+  String get homeCardHealthHelp;
+
+  /// No description provided for @homeTileProjectsLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'à mettre de côté par mois'**
+  String get homeTileProjectsLine;
+
+  /// No description provided for @homeTileNetWorthLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes {accounts} · biens {assets} · crédits {loans}'**
+  String homeTileNetWorthLine(String accounts, String assets, String loans);
 }
 
 class _AppLocalizationsDelegate

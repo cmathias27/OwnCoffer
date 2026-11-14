@@ -9653,4 +9653,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewsRemove => 'Remove views';
+
+  @override
+  String get homeCardProjects => 'Projects';
+
+  @override
+  String get homeCardProjectsHelp =>
+      'What to put aside each month for your projects and spread expenses, and how far your projects are.';
+
+  @override
+  String get homeCardNetWorth => 'Net worth';
+
+  @override
+  String get homeCardNetWorthHelp =>
+      'Your accounts and assets, less what is left to repay on your loans.';
+
+  @override
+  String get homeCardHealth => 'Financial health';
+
+  @override
+  String get homeCardHealthHelp =>
+      'A score out of 100 computed on your last full months: emergency savings, savings rate, debt, regularity.';
+
+  @override
+  String get homeTileProjectsLine => 'to put aside per month';
+
+  @override
+  String homeTileNetWorthLine(String accounts, String assets, String loans) {
+    return 'Accounts $accounts · assets $assets · loans $loans';
+  }
 }

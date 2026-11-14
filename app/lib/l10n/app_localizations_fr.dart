@@ -9724,4 +9724,33 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get viewsRemove => 'Supprimer des vues';
+
+  @override
+  String get homeCardProjects => 'Projets';
+
+  @override
+  String get homeCardProjectsHelp =>
+      'Ce qu’il faut mettre de côté chaque mois pour vos projets et vos dépenses lissées, et où en sont vos projets.';
+
+  @override
+  String get homeCardNetWorth => 'Patrimoine';
+
+  @override
+  String get homeCardNetWorthHelp =>
+      'Vos comptes et vos biens, moins ce qui reste à rembourser sur vos crédits.';
+
+  @override
+  String get homeCardHealth => 'Santé financière';
+
+  @override
+  String get homeCardHealthHelp =>
+      'Une note sur 100 calculée sur vos derniers mois complets : épargne de précaution, taux d’épargne, endettement, régularité.';
+
+  @override
+  String get homeTileProjectsLine => 'à mettre de côté par mois';
+
+  @override
+  String homeTileNetWorthLine(String accounts, String assets, String loans) {
+    return 'Comptes $accounts · biens $assets · crédits $loans';
+  }
 }

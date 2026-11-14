@@ -3248,5 +3248,13 @@
   "viewsSave": "Save the current view",
   "viewsSaveIntro": "The current search and filters, under a name, to get them back in one tap. Kept on this device.",
   "viewsName": "View name",
-  "viewsRemove": "Remove views"
+  "viewsRemove": "Remove views",
+  "homeCardProjects": "Projects",
+  "homeCardProjectsHelp": "What to put aside each month for your projects and spread expenses, and how far your projects are.",
+  "homeCardNetWorth": "Net worth",
+  "homeCardNetWorthHelp": "Your accounts and assets, less what is left to repay on your loans.",
+  "homeCardHealth": "Financial health",
+  "homeCardHealthHelp": "A score out of 100 computed on your last full months: emergency savings, savings rate, debt, regularity.",
+  "homeTileProjectsLine": "to put aside per month",
+  "homeTileNetWorthLine": "Accounts {accounts} · assets {assets} · loans {loans}"
 }
