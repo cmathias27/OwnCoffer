@@ -109,11 +109,10 @@ class ScheduledEndpoint extends Endpoint {
     final DateTime? effectiveEndDate = clearEndDate == true
         ? null
         : (endDate != null ? _day(endDate) : current.endDate);
-    final String? effectivePattern = matchPattern == null
+    // An empty pattern clears it (amount and date only).
+    final effectivePattern = matchPattern == null
         ? current.matchPattern
-        : (matchPattern.trim().isEmpty
-              ? null
-              : core.normalizeForMatch(matchPattern));
+        : core.normalizeForMatch(matchPattern);
 
     final next = _validated(
       current.copyWith(

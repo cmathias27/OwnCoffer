@@ -752,9 +752,11 @@ void main() {
           s.id!,
           clearCategory: true,
           clearEndDate: true,
+          matchPattern: '',
         );
         expect(cleared.categoryId, isNull);
         expect(cleared.endDate, isNull);
+        expect(cleared.matchPattern, '', reason: 'empty pattern clears it');
       },
     );
   });
