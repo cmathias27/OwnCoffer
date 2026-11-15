@@ -703,5 +703,59 @@ void main() {
       await endpoints.group.setClosedUntil(as(alice), groupA, null);
       await endpoints.transaction.setCategory(as(bob), old.id!, cat.id);
     });
+
+    test(
+      'scheduled.update preserves category and endDate when omitted, clears when asked',
+      () async {
+        final cat = await endpoints.category.create(
+          as(alice),
+          groupA,
+          'Abonnements',
+          CategoryKind.expense,
+        );
+        final end = DateTime.utc(now.year + 1, now.month, 1);
+        final start = DateTime.utc(now.year, now.month, 1);
+
+        final s = await endpoints.scheduled.create(
+          as(alice),
+          shared.id!,
+          -1000,
+          'Streaming',
+          ScheduleFrequency.monthly,
+          start,
+          categoryId: cat.id,
+          endDate: end,
+          matchPattern: 'STREAM',
+        );
+        expect(s.categoryId, cat.id);
+        expect(s.endDate, end);
+        expect(s.matchPattern, 'STREAM');
+
+        // Partial update: amountCents only (e.g. from operation sheet)
+        final updatedAmount = await endpoints.scheduled.update(
+          as(alice),
+          s.id!,
+          amountCents: -1200,
+        );
+        expect(updatedAmount.amountCents, -1200);
+        expect(updatedAmount.categoryId, cat.id, reason: 'category preserved');
+        expect(updatedAmount.endDate, end, reason: 'endDate preserved');
+        expect(
+          updatedAmount.matchPattern,
+          'STREAM',
+          reason: 'pattern preserved',
+        );
+
+        // Explicit clear
+        final cleared = await endpoints.scheduled.update(
+          as(alice),
+          s.id!,
+          clearCategory: true,
+          clearEndDate: true,
+        );
+        expect(cleared.categoryId, isNull);
+        expect(cleared.endDate, isNull);
+      },
+    );
   });
 }

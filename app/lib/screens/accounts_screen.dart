@@ -315,6 +315,7 @@ class _AccountDialogState extends State<AccountDialog> {
           a.id!,
           name: _name.text,
           bank: _bank.text,
+          clearBank: _bank.text.trim().isEmpty,
           initialBalanceCents: initial,
           alertThresholdCents: threshold,
           visibility: visibility,

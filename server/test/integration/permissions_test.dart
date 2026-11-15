@@ -300,5 +300,55 @@ void main() {
       expect(b!.name, 'Compte B');
       expect(b.groupId, groupB);
     });
+
+    test(
+      'account.update preserves optional fields when omitted, clears when asked',
+      () async {
+        final initDate = DateTime.utc(2026, 1, 1);
+        final acc = await Account.db.insertRow(
+          db,
+          Account(
+            groupId: groupA,
+            name: 'Compte Couleurs',
+            kind: AccountKind.checking,
+            currency: 'EUR',
+            initialBalanceCents: 10000,
+            initialBalanceDate: initDate,
+            color: '#123456',
+            bank: 'Ma Banque',
+            alertThresholdCents: 0,
+            visibility: AccountVisibility.shared,
+            createdAt: DateTime.now().toUtc(),
+          ),
+        );
+
+        // Update name and bank only (like accounts_screen form)
+        final updated = await endpoints.account.update(
+          as(alice),
+          acc.id!,
+          name: 'Nouveau Nom',
+        );
+        expect(updated.name, 'Nouveau Nom');
+        expect(updated.color, '#123456', reason: 'color preserved');
+        expect(
+          updated.initialBalanceDate,
+          initDate,
+          reason: 'init date preserved',
+        );
+        expect(updated.bank, 'Ma Banque', reason: 'bank preserved');
+
+        // Explicit clears
+        final cleared = await endpoints.account.update(
+          as(alice),
+          acc.id!,
+          clearColor: true,
+          clearBank: true,
+          clearInitialBalanceDate: true,
+        );
+        expect(cleared.color, isNull);
+        expect(cleared.bank, isNull);
+        expect(cleared.initialBalanceDate, isNull);
+      },
+    );
   });
 }

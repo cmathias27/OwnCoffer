@@ -232,20 +232,6 @@ Future<void> updateAllStandardCategories(Session session) async {
       (tx) => updateStandardCategories(session, g, transaction: tx),
     );
   }
-  // Ensure standard card settlement category is excluded from balance
-  // for all groups (decision 0051).
-  final settlements = await Category.db.find(
-    session,
-    where: (c) =>
-        c.standardCode.equals('transfers.card_settlement') &
-        c.excludedFromBalance.equals(false),
-  );
-  for (final s in settlements) {
-    await Category.db.updateRow(
-      session,
-      s.copyWith(excludedFromBalance: true),
-    );
-  }
 }
 
 /// Adds to [group] the standard categories introduced after its catalogue

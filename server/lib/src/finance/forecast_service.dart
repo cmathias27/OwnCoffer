@@ -24,6 +24,7 @@ abstract final class ForecastService {
   static core.ScheduledOperation operationOf(
     ScheduledTransaction s, {
     Map<core.LocalDate, int> amountsByDue = const {},
+    bool inBalance = true,
   }) => core.ScheduledOperation(
     id: s.id!,
     amountsByDue: amountsByDue,
@@ -34,6 +35,7 @@ abstract final class ForecastService {
     matchPattern: s.matchPattern,
     dateToleranceDays: s.dateToleranceDays,
     amountTolerancePercent: s.amountTolerancePercent,
+    inBalance: inBalance,
   );
 
   static core.RealOperation realOf(
@@ -160,8 +162,7 @@ abstract final class ForecastService {
 
       final categories = await Category.db.find(
         session,
-        where: (c) =>
-            c.groupId.equals(account.groupId) & c.deletedAt.equals(null),
+        where: (c) => c.groupId.equals(account.groupId),
         transaction: tx,
       );
       final categoryExcluded = {
@@ -323,7 +324,11 @@ abstract final class ForecastService {
     alertThresholdCents: account.alertThresholdCents,
     scheduled: [
       for (final s in scheduled)
-        operationOf(s, amountsByDue: debits[s.id] ?? const {}),
+        operationOf(
+          s,
+          amountsByDue: debits[s.id] ?? const {},
+          inBalance: !(categoryExcluded[s.categoryId] ?? false),
+        ),
       ...extra,
     ],
     futureOperations: [
@@ -368,8 +373,7 @@ abstract final class ForecastService {
     final balance = (await balancesOf(session, account, today)).currentCents;
     final categories = await Category.db.find(
       session,
-      where: (c) =>
-          c.groupId.equals(account.groupId) & c.deletedAt.equals(null),
+      where: (c) => c.groupId.equals(account.groupId),
     );
     final categoryExcluded = {
       for (final c in categories) c.id!: c.excludedFromBalance,

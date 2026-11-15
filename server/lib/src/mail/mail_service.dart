@@ -81,9 +81,7 @@ class MailService {
       ));
       if (_recording) return;
       session.log(
-        '[mail] SMTP not configured — email to $to\n'
-        'Subject: $subject\n$body'
-        '${attachments.isEmpty ? '' : '\n(${attachments.length} attachment(s), not written)'}',
+        '[mail] SMTP not configured — email not sent (subject: $subject)',
         level: LogLevel.warning,
       );
       return;
