@@ -73,10 +73,10 @@ Objectif : tout décider et tout organiser avant la première ligne de code.
 
 **Données et maquettes**
 
-- [ ] Exports anonymisés Caisse d'Épargne (QIF, OFX et CSV si disponibles), sur un à trois mois, noms de fichiers neutres
+- [x] Exports anonymisés Caisse d'Épargne (QIF, OFX et CSV si disponibles), sur un à trois mois, noms de fichiers neutres — *remplacés par des relevés entièrement inventés reproduisant la structure observée sur de vrais exports QIF et OFX ([fixtures](../shared/test/fixtures/README.md)) ; aucun vrai relevé conservé*
 - [x] Maquettes web : connexion, assistant de premier lancement, opérations, import, catégories et règles, réglages IA, administration ([MAQUETTES.md](MAQUETTES.md))
 - [x] Catalogue des catégories standard : 17 catégories, 73 sous-catégories, FR et EN ([CATEGORIES_STANDARD.md](CATEGORIES_STANDARD.md))
-- [ ] Avis recueillis grâce à la présentation du projet, cahier des charges ajusté
+- [ ] Avis recueillis grâce à la présentation du projet, cahier des charges ajusté ([#8](https://github.com/cmathias27/OwnCoffer/issues/8))
 
 **Validation** : toutes les décisions prises et écrites, dépôt prêt, relevés de test disponibles.
 
@@ -89,7 +89,7 @@ Objectif : un serveur vide mais complet, qui se lance en une commande et se test
 - [x] Base de données v1 avec migrations : utilisateurs, sessions, groupes, membres, comptes, opérations, catégories, catégories standard, règles, imports, journal d'audit
 - [x] Montants en centimes (entiers) partout, dates d'opération sans fuseau
 - [x] Intégration continue GitHub Actions : analyse, formatage, tests, image Docker `ghcr.io/cmathias27/owncoffer:edge`
-- [ ] Sécurité automatique : Dependabot, CodeQL, vérification des licences des dépendances — *Dependabot (pub, actions, Docker) et OSV-Scanner dans la CI ; CodeQL ne lit pas le Dart ; reste la vérification automatique des licences (#14)*
+- [ ] Sécurité automatique : Dependabot, CodeQL, vérification des licences des dépendances — *Dependabot (pub, actions, Docker) et OSV-Scanner dans la CI ; CodeQL ne lit pas le Dart ; reste la vérification automatique des licences ([#14](https://github.com/cmathias27/OwnCoffer/issues/14))*
 - [x] Page d'état minimale : version, connexion à la base, espace disque — *Administration > Santé et chiffres, 0.3.7 et 0.3.20*
 - [x] Bilingue dès le départ : textes de l'interface dans des fichiers de traduction FR et EN
 - [x] Application web installable (PWA) : manifeste, icônes, écran d'accueil Android ; aucune donnée financière mise en cache sur l'appareil (décision 0011)
@@ -160,8 +160,8 @@ Objectif : voir l'avenir de ses comptes, être prévenu à temps, et brancher l'
 - [x] Catégorisation d'appoint par l'IA, avec la règle suggérée — *catégories proposées dans la 0.3.25 ; règle suggérée, vérifiée et comptée par le moteur, dans la 0.3.28*
 - [x] Lecture de documents : tickets (sans IA : saisie assistée ; avec IA : ventilation ligne par ligne), offres de prêt et tableaux d'amortissement (avec IA), factures — *0.3.31 : tickets, factures et documents de crédit gardés dans OwnCoffer lus par l'IA de l'utilisateur, propositions validées dans Mon conseiller ; sans IA, la ventilation à la main reste disponible*
 - [x] Assistant IA (en option) : interroge le moteur, explique, pose les scénarios en langage naturel ; mémoire des préférences, historique des conseils, sources affichées, analyse contestable — *0.3.25 ; bulle de discussion (0.3.32) ; mémoire et historique des conversations (0.3.33) ; fonctions consultées affichées, propositions refusables*
-- [ ] Licence Serverpod clarifiée avant d'ouvrir la bêta à d'autres personnes (décision 0001) — *AGPL-3.0 + exception pour Serverpod (décision 0024) ; reste la confirmation écrite de l'équipe Serverpod*
-- [ ] Row Level Security PostgreSQL réévaluée avant d'ouvrir la bêta (décision 0016)
+- [ ] Licence Serverpod clarifiée avant d'ouvrir la bêta à d'autres personnes (décision 0001) — *AGPL-3.0 + exception pour Serverpod (décision 0024) ; reste la confirmation écrite de l'équipe Serverpod ([#19](https://github.com/cmathias27/OwnCoffer/issues/19))*
+- [ ] Row Level Security PostgreSQL réévaluée avant d'ouvrir la bêta (décision 0016, [#38](https://github.com/cmathias27/OwnCoffer/issues/38))
 
 **Validation** : un mois complet géré dans OwnCoffer par deux ou trois testeurs, dont au moins un **sans IA** ; les prévisions à 30 jours restent proches du solde réel.
 
@@ -176,7 +176,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] Traductions FR et EN complètes, accessibilité (tests des règles Flutter, texte à 200 %), rapidité avec 100 000 opérations (test mesuré à chaque pull request)
 - [x] Documentation : [installation](INSTALLATION.md), [utilisation](UTILISATION.md), [FAQ](FAQ.md), aide dans l'application (une page par écran, FR et EN)
 - [x] Publication signée (Sigstore), notes de version, liste des composants (SBOM) — décision 0021, [PUBLICATION.md](PUBLICATION.md)
-- [ ] Audit de sécurité externe si possible — *préparé : périmètre, modèle de menace, revue interne et points ouverts dans [AUDIT_SECURITE.md](AUDIT_SECURITE.md) ; reste à trouver l'auditeur*
+- [ ] Audit de sécurité externe si possible — *préparé : périmètre, modèle de menace, revue interne et points ouverts dans [AUDIT_SECURITE.md](AUDIT_SECURITE.md) ; reste à trouver l'auditeur ([#209](https://github.com/cmathias27/OwnCoffer/issues/209))*
 
 **Validation** : une personne extérieure installe OwnCoffer seule en moins de 30 minutes ; une mise à jour et une restauration réussissent sans intervention.
 
@@ -187,7 +187,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] Même code Flutter connecté au serveur : adresse du serveur au premier lancement, fichiers, enregistrement et liens natifs
 - [x] Compilées par la CI, jointes à chaque version : Windows (zip, non signé) et Android (APK hors Play Store) — [APPLICATIONS.md](APPLICATIONS.md)
 - [x] Clé Android stable (secrets GitHub) — *1.1.1, la même clé pour toutes les versions*
-- [ ] Certificat de signature Windows
+- [ ] Certificat de signature Windows ([#208](https://github.com/cmathias27/OwnCoffer/issues/208))
 - [x] Hors-ligne et synchronisation
   - [x] consultation sans réseau : dernières données lues gardées chiffrées sur l'appareil, bandeau « lecture seule », effacées à la déconnexion — décision 0037, *1.22.0*
   - [x] saisie sans réseau : créations mises en file et envoyées au retour de la connexion, refus visibles, sans conflit possible — décision [0038](decisions/0038-hors-ligne-saisie.md), *1.23.0*
@@ -221,7 +221,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 
 - [x] **Degrés d'autonomie et champ d'action de l'IA configurés par l'administrateur** : échelle graduée de 1 à 5 (lecture seule, consultation de documents, propositions avec validation, automatisation limitée, contrôle total interne strictement borné hors opérations bancaires réelles) — *1.3.0 (décision 0017, PR #134)*
 - [x] **Lisibilité de la conversation avec l'IA** (remontée le 2 novembre 2026) : les réponses sont affichées en texte brut, donc le gras, les titres, les listes et les tableaux de l'IA apparaissent avec leurs signes (`**`, `###`, `-`) ; mise en forme des réponses (petit rendu Markdown maison, sans dépendance, comme l'aide), largeur des bulles adaptée à la fenêtre, consigne de mise en forme dans la passerelle IA, test avec le texte à 200 % — *1.2.0*
-- [ ] **Latence de l'IA** (remontée le 1er novembre 2026) : mesurer où part le temps (passerelle externe, modèle ou OwnCoffer), afficher la réponse au fur et à mesure et l'étape en cours (« lecture du document… »), modèle plus rapide pour les tâches simples (classement)
+- [ ] **Latence de l'IA** (remontée le 1er novembre 2026) : mesurer où part le temps (passerelle externe, modèle ou OwnCoffer), afficher la réponse au fur et à mesure et l'étape en cours (« lecture du document… »), modèle plus rapide pour les tâches simples (classement) — [#206](https://github.com/cmathias27/OwnCoffer/issues/206)
 - [x] **Crédit rapproché des prélèvements réels** : mensualité manquante, en double ou d'un autre montant signalée par le moteur, sans IA — décision 0040, *1.25.0*
 - [x] **Refonte de l'interface** (remontée le 12 novembre 2026) : cinq rubriques, recherche globale, Mon conseiller en avant, Accueil « tout va bien ? », « Pourquoi ce chiffre ? », mode simple — décision 0041, *1.26.0*
 - [x] Tableau d'amortissement lu en entier (changement de taux ou pause d'échéances en cours de crédit) — l'IA recopie les lignes, le moteur en déduit les changements ; pause d'échéances saisie à la main — décision 0042, *1.27.0*
@@ -240,7 +240,7 @@ Objectif : un serveur qu'on installe, sauvegarde et met à jour sans y penser. F
 - [x] **Lecture des documents enregistrés depuis l'assistant** : permettre à l'utilisateur de demander au chat d'analyser un justificatif ou document de crédit déjà stocké, avec sélection explicite du document, contrôles d'accès groupe/compte et confirmation avant tout envoi à un fournisseur externe ; le document et ses métadonnées ne sont accessibles qu'à travers des outils de contexte contrôlés par le serveur. — *1.4.0 (issue #136, PR #137)*
 - [x] **Lecture des PDF par l'IA depuis les boutons de documents** : supprimer le blocage actuel qui réserve les PDF à Anthropic. Ajouter une voie compatible avec les fournisseurs vision configurés : conversion serveur de pages PDF en images (limite de pages, taille et mémoire) ou extraction locale du texte, puis envoi selon les capacités réelles du fournisseur ; préserver la lecture PDF native Anthropic. Tester billets PDF avec OpenAI-compatible/Ollama et Anthropic, signaler clairement les limites de modèle, taille et document. — *1.4.0 (issue #136, PR #137)*
 - [x] `check.sh` : message clair quand `server/config/passwords.yaml` manque (« lancez `./tool/setup_dev.sh` »), et rappel quand les tests du serveur échouent (base de test)
-- [ ] Jeu de documents factices (tableau d'amortissement, ticket, facture et PDF) pour tester la lecture
+- [ ] Jeu de documents factices (tableau d'amortissement, ticket, facture et PDF) pour tester la lecture ([#207](https://github.com/cmathias27/OwnCoffer/issues/207))
 - [x] Avant le scan des tickets : courte décision sur la bibliothèque de lecture du texte sur l'appareil (licence compatible AGPL, aucune télémétrie, fonctionne hors ligne) — [0023](decisions/0023-lecture-du-texte-sur-l-appareil.md)
 
 Les autres fonctionnalités du cahier des charges marquées « Après 1.0 » s'ajouteront une par une, selon les avis des utilisateurs.
