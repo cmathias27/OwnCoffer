@@ -51,6 +51,9 @@ class ForecastScreenState extends State<ForecastScreen> {
   var _variable = true;
   ForecastResult? _forecast;
   List<ScheduledTransaction> _scheduled = [];
+
+  /// The pay found in the history and not planned yet (writers only).
+  PaydaySuggestion? _payday;
   Map<int, Category> _categories = {};
   String? _error;
 
@@ -97,6 +100,7 @@ class ForecastScreenState extends State<ForecastScreen> {
       _account = account;
       _forecast = null;
       _scheduled = [];
+      _payday = null;
     });
     _reload();
   }
@@ -112,10 +116,19 @@ class ForecastScreenState extends State<ForecastScreen> {
         includeVariable: _variable,
       );
       final scheduled = await client.scheduled.list(account.id!);
+      PaydaySuggestion? payday;
+      if (_canWrite) {
+        try {
+          payday = await client.scheduled.paydaySuggestion(account.id!);
+        } on Object {
+          // Offline or an older server: no proposal.
+        }
+      }
       if (!mounted || _account?.id != account.id) return;
       setState(() {
         _forecast = forecast;
         _scheduled = scheduled;
+        _payday = payday;
         _error = null;
       });
     } on Object catch (e) {
@@ -151,6 +164,110 @@ class ForecastScreenState extends State<ForecastScreen> {
       widget.onChanged();
       await _reload();
     }
+  }
+
+  /// Opens the planned-operation form filled with the pay found: the user
+  /// checks it, then saves it.
+  Future<void> _addPayday(PaydaySuggestion p) async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final saved = await showDialog<bool>(
+      context: context,
+      builder: (_) => _ScheduledDialog(
+        accountId: p.accountId,
+        scheduled: ScheduledTransaction(
+          accountId: p.accountId,
+          amountCents: p.amountCents,
+          label: p.label,
+          categoryId: _categories.containsKey(p.categoryId)
+              ? p.categoryId
+              : null,
+          frequency: ScheduleFrequency.monthly,
+          startDate: p.nextDate,
+          matchPattern: p.label,
+          amountTolerancePercent: p.tolerancePercent,
+        ),
+        categories: _categories,
+      ),
+    );
+    if (saved != true) return;
+    messenger.showSnackBar(SnackBar(content: Text(l.paydayAdded)));
+    widget.onChanged();
+    await _reload();
+  }
+
+  Future<void> _dismissPayday(PaydaySuggestion p) async {
+    setState(() => _payday = null);
+    await uiPrefs.dismissPayday(p.accountId, p.label);
+  }
+
+  /// The month ends among [days]: the last day of the calendar month, or
+  /// of the budget month (the day before the group's month start day), as
+  /// chosen on this device.
+  List<DateTime> _monthEnds(List<ForecastDay> days) {
+    final start = uiPrefs.monthEndCalendar
+        ? 1
+        : widget.membership.group.monthStartDay;
+    return [
+      for (final d in days)
+        if (DateTime.utc(d.date.year, d.date.month, d.date.day + 1).day ==
+            start)
+          d.date,
+    ];
+  }
+
+  Widget _paydayCard(
+    AppLocalizations l,
+    PaydaySuggestion p,
+    String Function(int) money,
+  ) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.payments_outlined),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    l.paydayFoundTitle,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l.paydayFoundText(
+                p.label,
+                money(p.amountCents),
+                p.dayOfMonth,
+                p.months,
+              ),
+            ),
+            Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: Wrap(
+                spacing: 8,
+                children: [
+                  TextButton(
+                    onPressed: () => _dismissPayday(p),
+                    child: Text(l.paydayDismiss),
+                  ),
+                  FilledButton.tonal(
+                    onPressed: () => _addPayday(p),
+                    child: Text(l.paydayAdd),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// How the engine goes from today's balance to the last day (decision
@@ -200,6 +317,11 @@ class ForecastScreenState extends State<ForecastScreen> {
     final balanceOn = {
       for (final d in f?.days ?? <ForecastDay>[]) d.date: d.balanceCents,
     };
+    final monthEnds = _monthEnds(f?.days ?? const []);
+    final payday = _payday;
+    final showPayday =
+        payday != null &&
+        !uiPrefs.paydayDismissed(payday.accountId, payday.label);
     Widget section(String title) => Padding(
       padding: const EdgeInsets.fromLTRB(0, 24, 0, 8),
       child: Text(title, style: theme.textTheme.titleMedium),
@@ -237,6 +359,7 @@ class ForecastScreenState extends State<ForecastScreen> {
                         );
                         _forecast = null;
                         _scheduled = [];
+                        _payday = null;
                       });
                       unawaited(uiPrefs.setAccountId(id));
                       _reload();
@@ -330,6 +453,13 @@ class ForecastScreenState extends State<ForecastScreen> {
                             money(f.days.last.balanceCents),
                           ),
                         ),
+                        if (monthEnds.firstOrNull case final end?)
+                          Text(
+                            l.forecastMonthEnd(
+                              context.day(end),
+                              money(balanceOn[end]!),
+                            ),
+                          ),
                         _why(l, f),
                       ],
                       if (f.firstBelowThresholdDate != null)
@@ -364,11 +494,49 @@ class ForecastScreenState extends State<ForecastScreen> {
                           money(f.alertThresholdCents),
                         ),
                         lowestLabel: l.forecastLowestMark,
+                        markers: monthEnds,
+                        markerLabel: l.forecastMonthEndMark,
                         semanticLabel: l.forecastChartLabel,
                         money: money,
                         axisMoney: (c) => money(c - c.remainder(100)),
                         day: context.shortDay,
                       ),
+                      if (widget.membership.group.monthStartDay != 1)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 4,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Tooltip(
+                                message: l.forecastMonthEndHelp,
+                                child: Text(l.forecastMonthEndChoice),
+                              ),
+                              SegmentedButton<bool>(
+                                segments: [
+                                  ButtonSegment(
+                                    value: false,
+                                    label: Text(l.forecastMonthEndBudget),
+                                  ),
+                                  ButtonSegment(
+                                    value: true,
+                                    label: Text(l.forecastMonthEndCalendar),
+                                  ),
+                                ],
+                                selected: {uiPrefs.monthEndCalendar},
+                                onSelectionChanged: (v) {
+                                  // The choice applies at once; it is
+                                  // saved on the device in the background.
+                                  unawaited(
+                                    uiPrefs.setMonthEndCalendar(v.first),
+                                  );
+                                  setState(() {});
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
                       if (f.variable case final v?)
                         VariableEstimateCard(
                           estimate: v,
@@ -387,6 +555,10 @@ class ForecastScreenState extends State<ForecastScreen> {
                   ),
                 ),
               ),
+              if (showPayday && _canWrite) ...[
+                const SizedBox(height: 12),
+                _paydayCard(l, payday, money),
+              ],
               if (f.proposals.isNotEmpty) ...[
                 section(l.forecastProposals),
                 for (final p in f.proposals)
@@ -555,7 +727,9 @@ class _ScheduledDialogState extends State<_ScheduledDialog> {
   var _busy = false;
   String? _error;
 
-  bool get _editing => _s != null;
+  /// A planned operation without id is a proposal to create (the pay
+  /// found in the history).
+  bool get _editing => _s?.id != null;
 
   @override
   void dispose() {
@@ -599,7 +773,7 @@ class _ScheduledDialogState extends State<_ScheduledDialog> {
     setState(() => (_busy = true, _error = null));
     try {
       final s = _s;
-      if (s == null) {
+      if (s == null || s.id == null) {
         await client.scheduled.create(
           widget.accountId,
           amount,

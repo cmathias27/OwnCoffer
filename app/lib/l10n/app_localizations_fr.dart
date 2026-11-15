@@ -1058,6 +1058,44 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String forecastMonthEnd(String date, String amount) {
+    return 'Fin de mois, le $date : $amount';
+  }
+
+  @override
+  String get forecastMonthEndMark => 'Fin de mois';
+
+  @override
+  String get forecastMonthEndChoice => 'Repère de fin de mois';
+
+  @override
+  String get forecastMonthEndBudget => 'Mois de budget';
+
+  @override
+  String get forecastMonthEndCalendar => 'Mois civil';
+
+  @override
+  String get forecastMonthEndHelp =>
+      'Mois de budget : la veille du jour où commence le mois du foyer (réglé dans le groupe, souvent le jour de la paie). Mois civil : le dernier jour du mois.';
+
+  @override
+  String get paydayFoundTitle => 'Paie repérée';
+
+  @override
+  String paydayFoundText(String label, String amount, int day, int months) {
+    return '« $label » : environ $amount vers le $day de chaque mois, $months mois de suite. Elle n\'est pas encore dans le solde prévu.';
+  }
+
+  @override
+  String get paydayAdd => 'Ajouter à la prévision';
+
+  @override
+  String get paydayDismiss => 'Ignorer';
+
+  @override
+  String get paydayAdded => 'Paie ajoutée au solde prévu.';
+
+  @override
   String get forecastUpcoming => 'À venir';
 
   @override

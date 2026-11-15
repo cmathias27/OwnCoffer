@@ -486,8 +486,53 @@ void main() {
       );
     });
 
+    test('the pay is found, then no longer proposed once planned', () async {
+      for (final offset in [-76, -46, -16]) {
+        await op(offset, 195000, 'VIR SALAIRE ACME REF $offset');
+      }
+      await op(-20, 3000, 'REMBOURSEMENT');
+      final s = (await endpoints.scheduled.paydaySuggestion(
+        as(alice),
+        account.id!,
+      ))!;
+      expect(s.label, 'VIR SALAIRE ACME REF');
+      expect(s.amountCents, 195000);
+      expect(s.months, 3);
+      expect(s.lastDate, day(-16));
+      expect(s.nextDate.isAfter(s.lastDate), isTrue);
+      expect(s.tolerancePercent, 5);
+      await endpoints.scheduled.create(
+        as(alice),
+        account.id!,
+        s.amountCents,
+        s.label,
+        ScheduleFrequency.monthly,
+        s.nextDate,
+        matchPattern: s.label,
+        amountTolerancePercent: s.tolerancePercent,
+      );
+      expect(
+        await endpoints.scheduled.paydaySuggestion(as(alice), account.id!),
+        isNull,
+      );
+    });
+
     group('isolation (decision 0016)', () {
       final denied = throwsA(isA<AccessDeniedException>());
+
+      test('another group cannot read the pay found', () async {
+        for (final offset in [-76, -46, -16]) {
+          await op(offset, 195000, 'VIR SALAIRE ACME');
+        }
+        await expectLater(
+          endpoints.scheduled.paydaySuggestion(as(mallory), account.id!),
+          denied,
+        );
+        expect(
+          await endpoints.scheduled.paydaySuggestion(as(reader), account.id!),
+          isNotNull,
+        );
+      });
 
       test('another group cannot see, plan, change or forecast', () async {
         final s = await endpoints.scheduled.create(

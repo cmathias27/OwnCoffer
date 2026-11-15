@@ -26,7 +26,7 @@ L'écran s'adapte : barre d'onglets en bas sur téléphone, menu à gauche sur g
 ## Voir et prévoir
 
 - **Accueil** : soldes du jour, reste à vivre jusqu'à la prochaine paie, ce qui arrive, alertes.
-- **Prévisions** : la courbe du solde jour par jour sur 30 jours, 90 jours ou un an, le point bas et la date d'un éventuel découvert. Le **simulateur d'achat** montre l'effet d'un achat payé comptant ou en plusieurs fois.
+- **Prévisions** : la courbe du solde jour par jour sur 30 jours, 90 jours ou un an, le point bas et la date d'un éventuel découvert, la fin de mois marquée (mois de budget ou mois civil, au choix) ; la paie qui revient chaque mois est repérée et proposée comme opération prévue. Le **simulateur d'achat** montre l'effet d'un achat payé comptant ou en plusieurs fois.
 - **Budget et analyses** : dépenses par catégorie et par période, comparaison avec les périodes précédentes, bilan du mois, fiabilité des prévisions, opérations inhabituelles, frais bancaires.
 - **Crédits** : tableau d'amortissement, reste à rembourser, taux d'endettement, simulation d'un remboursement anticipé ou d'une renégociation.
 - **Abonnements** : la liste de ce qui est prélevé régulièrement, les hausses de prix, la comparaison avec une autre offre.

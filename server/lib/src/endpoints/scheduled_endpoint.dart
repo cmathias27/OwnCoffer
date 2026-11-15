@@ -571,6 +571,77 @@ class ScheduledEndpoint extends Endpoint {
     );
   }
 
+  /// The pay found in the account's last six months and not planned yet
+  /// (core.detectPayday), or null. Credits already linked to a planned
+  /// operation are left out, and so is a pay close to a monthly credit
+  /// already planned. Nothing is saved: the user checks the proposal, then
+  /// [create] plans it.
+  Future<PaydaySuggestion?> paydaySuggestion(
+    Session session,
+    int accountId,
+  ) async {
+    final account = await Access.requireAccount(session, accountId);
+    final today = core.LocalDate.fromDateTime(DateTime.now().toUtc());
+    final categories = await Category.db.find(
+      session,
+      where: (c) =>
+          c.groupId.equals(account.groupId) & c.deletedAt.equals(null),
+    );
+    final salary = <int>{
+      for (final c in categories)
+        if (c.standardCode == 'income.salary')
+          ...descendantsOf(c.id!, categories),
+    };
+    final rows = await BankTransaction.db.find(
+      session,
+      where: (t) =>
+          t.accountId.equals(accountId) &
+          t.deletedAt.equals(null) &
+          t.scheduledId.equals(null) &
+          (t.amountCents > 0) &
+          (t.date >= today.addMonths(-6).toDb()),
+    );
+    final planned = await ScheduledTransaction.db.find(
+      session,
+      where: (s) =>
+          s.accountId.equals(accountId) &
+          s.deletedAt.equals(null) &
+          (s.amountCents > 0) &
+          s.frequency.equals(ScheduleFrequency.monthly),
+    );
+    final byId = {for (final t in rows) t.id!: t};
+    final pay = core.detectPayday(
+      [
+        for (final t in rows)
+          (
+            id: t.id!,
+            date: t.date.toLocalDate(),
+            amountCents: t.amountCents,
+            label: t.cleanLabel,
+            salary: salary.contains(t.categoryId),
+          ),
+      ],
+      today: today,
+      plannedCredits: [
+        for (final s in planned)
+          if (s.endDate == null || !s.endDate!.toLocalDate().isBefore(today))
+            s.amountCents,
+      ],
+    );
+    if (pay == null) return null;
+    return PaydaySuggestion(
+      accountId: accountId,
+      label: pay.label,
+      amountCents: pay.amountCents,
+      dayOfMonth: pay.dayOfMonth,
+      months: pay.months,
+      lastDate: pay.last.toDb(),
+      nextDate: pay.next.toDb(),
+      tolerancePercent: pay.tolerancePercent,
+      categoryId: byId[pay.credits.last.id]!.categoryId,
+    );
+  }
+
   /// Purchase simulator: the balance on [target], the low point and the
   /// overdraft risk if [amountCents] is spent on [date] in cash, in 3 or 4
   /// instalments, or a month later, next to not buying. [categoryId] adds

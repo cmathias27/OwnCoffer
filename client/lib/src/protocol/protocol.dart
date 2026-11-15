@@ -169,6 +169,7 @@ import 'month_summary.dart' as _ijuhpops;
 import 'notification.dart' as _irt10kca;
 import 'notification_settings.dart' as _iwwkm5c2;
 import 'occurrence_status.dart' as _it10dx4m;
+import 'payday_suggestion.dart' as _ig6mtnp5;
 import 'pepite_challenge_state.dart' as _ipoc75em;
 import 'pepite_start.dart' as _iyfl3qkr;
 import 'pepite_status.dart' as _iltzik8s;
@@ -321,6 +322,7 @@ export 'month_summary.dart';
 export 'notification.dart';
 export 'notification_settings.dart';
 export 'occurrence_status.dart';
+export 'payday_suggestion.dart';
 export 'pepite_challenge_state.dart';
 export 'pepite_start.dart';
 export 'pepite_status.dart';
@@ -706,6 +708,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _it10dx4m.OccurrenceStatus) {
       return _it10dx4m.OccurrenceStatus.fromJson(data) as T;
+    }
+    if (t == _ig6mtnp5.PaydaySuggestion) {
+      return _ig6mtnp5.PaydaySuggestion.fromJson(data) as T;
     }
     if (t == _ipoc75em.PepiteChallengeState) {
       return _ipoc75em.PepiteChallengeState.fromJson(data) as T;
@@ -1227,6 +1232,10 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_it10dx4m.OccurrenceStatus?>()) {
       return (data != null ? _it10dx4m.OccurrenceStatus.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ig6mtnp5.PaydaySuggestion?>()) {
+      return (data != null ? _ig6mtnp5.PaydaySuggestion.fromJson(data) : null)
           as T;
     }
     if (t == _isc.getType<_ipoc75em.PepiteChallengeState?>()) {
@@ -2066,6 +2075,7 @@ class Protocol extends _isc.SerializationManager {
       _irt10kca.AppNotification => 'AppNotification',
       _iwwkm5c2.NotificationSettings => 'NotificationSettings',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
+      _ig6mtnp5.PaydaySuggestion => 'PaydaySuggestion',
       _ipoc75em.PepiteChallengeState => 'PepiteChallengeState',
       _iyfl3qkr.PepiteStart => 'PepiteStart',
       _iltzik8s.PepiteStatus => 'PepiteStatus',
@@ -2331,6 +2341,8 @@ class Protocol extends _isc.SerializationManager {
         return 'NotificationSettings';
       case _it10dx4m.OccurrenceStatus():
         return 'OccurrenceStatus';
+      case _ig6mtnp5.PaydaySuggestion():
+        return 'PaydaySuggestion';
       case _ipoc75em.PepiteChallengeState():
         return 'PepiteChallengeState';
       case _iyfl3qkr.PepiteStart():
@@ -2755,6 +2767,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'OccurrenceStatus') {
       return deserialize<_it10dx4m.OccurrenceStatus>(data['data']);
+    }
+    if (dataClassName == 'PaydaySuggestion') {
+      return deserialize<_ig6mtnp5.PaydaySuggestion>(data['data']);
     }
     if (dataClassName == 'PepiteChallengeState') {
       return deserialize<_ipoc75em.PepiteChallengeState>(data['data']);

@@ -2,13 +2,13 @@
 
 **Vos comptes bancaires, chez vous.** Application libre et gratuite de gestion de comptes bancaires, auto-hébergée, pour une personne, un couple ou une famille.
 
-> **Statut : version 1.37** — serveur et application web stables depuis la 1.0, applications Windows et Android connectées au serveur ou **autonomes** (sans serveur). Installation : [docs/INSTALLATION.md](docs/INSTALLATION.md) ; applications : [docs/APPLICATIONS.md](docs/APPLICATIONS.md) ; utilisation : [docs/UTILISATION.md](docs/UTILISATION.md) ; questions : [docs/FAQ.md](docs/FAQ.md) ; nouveautés : [CHANGELOG.md](CHANGELOG.md) ; suite : [roadbook](docs/ROADBOOK.md).
+> **Statut : version 1.38** — serveur et application web stables depuis la 1.0, applications Windows et Android connectées au serveur ou **autonomes** (sans serveur). Installation : [docs/INSTALLATION.md](docs/INSTALLATION.md) ; applications : [docs/APPLICATIONS.md](docs/APPLICATIONS.md) ; utilisation : [docs/UTILISATION.md](docs/UTILISATION.md) ; questions : [docs/FAQ.md](docs/FAQ.md) ; nouveautés : [CHANGELOG.md](CHANGELOG.md) ; suite : [roadbook](docs/ROADBOOK.md).
 
 ## Ce que fait OwnCoffer
 
 - **Importer** les relevés téléchargés sur le site de sa banque (QIF, OFX, CSV), sans doublons, avec aperçu et annulation.
 - **Classer** les opérations automatiquement : vos règles, puis une base de règles partagée par la communauté, puis l'historique ; l'IA (en option) ne vient qu'en dernier et propose, vous validez.
-- **Prévoir** le solde à venir, le reste à vivre jusqu'à la prochaine paie, et simuler un achat avant de le faire ; récapitulatif mensuel et clôture des mois.
+- **Prévoir** le solde à venir, le reste à vivre jusqu'à la prochaine paie, et simuler un achat avant de le faire ; la paie qui revient chaque mois est repérée et la fin de mois marquée sur la courbe ; récapitulatif mensuel et clôture des mois.
 - **Piloter** avec des objectifs par catégorie, des alertes avant dépassement ou découvert, des graphiques (répartition, comparaison, tendances) et un **accueil en widgets** placés librement.
 - **Suivre** ses crédits (tableau d'amortissement lu en entier, pause d'échéances, remboursement anticipé avec indemnité), ses paiements en plusieurs fois, ses abonnements et leurs hausses de prix, et les cartes à débit différé.
 - **Épargner et voir loin** : projets d'épargne, dépenses lissées, patrimoine net, livrets réglementés, bilan de l'année.

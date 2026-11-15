@@ -32,6 +32,7 @@ export 'src/documents/scan.dart';
 export 'src/documents/zip.dart';
 export 'src/export_summary.dart';
 export 'src/forecast/forecast.dart';
+export 'src/forecast/payday.dart';
 export 'src/forecast/purchase.dart';
 export 'src/forecast/recurrence.dart';
 export 'src/import/csv_parser.dart';

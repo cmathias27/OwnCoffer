@@ -632,6 +632,43 @@
       }
     }
   },
+  "forecastMonthEnd": "Fin de mois, le {date} : {amount}",
+  "@forecastMonthEnd": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastMonthEndMark": "Fin de mois",
+  "forecastMonthEndChoice": "Repère de fin de mois",
+  "forecastMonthEndBudget": "Mois de budget",
+  "forecastMonthEndCalendar": "Mois civil",
+  "forecastMonthEndHelp": "Mois de budget : la veille du jour où commence le mois du foyer (réglé dans le groupe, souvent le jour de la paie). Mois civil : le dernier jour du mois.",
+  "paydayFoundTitle": "Paie repérée",
+  "paydayFoundText": "« {label} » : environ {amount} vers le {day} de chaque mois, {months} mois de suite. Elle n'est pas encore dans le solde prévu.",
+  "@paydayFoundText": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "paydayAdd": "Ajouter à la prévision",
+  "paydayDismiss": "Ignorer",
+  "paydayAdded": "Paie ajoutée au solde prévu.",
   "forecastUpcoming": "À venir",
   "forecastNoUpcoming": "Aucune opération prévue sur cette période.",
   "forecastLate": "en retard, prévue le {date}",

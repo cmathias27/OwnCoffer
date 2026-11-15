@@ -174,6 +174,7 @@ import 'month_summary.dart' as _ijuhpops;
 import 'notification.dart' as _irt10kca;
 import 'notification_settings.dart' as _iwwkm5c2;
 import 'occurrence_status.dart' as _it10dx4m;
+import 'payday_suggestion.dart' as _ig6mtnp5;
 import 'pepite_badge.dart' as _i76ytswg;
 import 'pepite_challenge_row.dart' as _iffukjxf;
 import 'pepite_challenge_state.dart' as _ipoc75em;
@@ -338,6 +339,7 @@ export 'month_summary.dart';
 export 'notification.dart';
 export 'notification_settings.dart';
 export 'occurrence_status.dart';
+export 'payday_suggestion.dart';
 export 'pepite_badge.dart';
 export 'pepite_challenge_row.dart';
 export 'pepite_challenge_state.dart';
@@ -5821,6 +5823,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _it10dx4m.OccurrenceStatus) {
       return _it10dx4m.OccurrenceStatus.fromJson(data) as T;
     }
+    if (t == _ig6mtnp5.PaydaySuggestion) {
+      return _ig6mtnp5.PaydaySuggestion.fromJson(data) as T;
+    }
     if (t == _i76ytswg.PepiteBadge) {
       return _i76ytswg.PepiteBadge.fromJson(data) as T;
     }
@@ -6377,6 +6382,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_it10dx4m.OccurrenceStatus?>()) {
       return (data != null ? _it10dx4m.OccurrenceStatus.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ig6mtnp5.PaydaySuggestion?>()) {
+      return (data != null ? _ig6mtnp5.PaydaySuggestion.fromJson(data) : null)
           as T;
     }
     if (t == _is.getType<_i76ytswg.PepiteBadge?>()) {
@@ -7251,6 +7260,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _irt10kca.AppNotification => 'AppNotification',
       _iwwkm5c2.NotificationSettings => 'NotificationSettings',
       _it10dx4m.OccurrenceStatus => 'OccurrenceStatus',
+      _ig6mtnp5.PaydaySuggestion => 'PaydaySuggestion',
       _i76ytswg.PepiteBadge => 'PepiteBadge',
       _iffukjxf.PepiteChallengeRow => 'PepiteChallengeRow',
       _ipoc75em.PepiteChallengeState => 'PepiteChallengeState',
@@ -7532,6 +7542,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'NotificationSettings';
       case _it10dx4m.OccurrenceStatus():
         return 'OccurrenceStatus';
+      case _ig6mtnp5.PaydaySuggestion():
+        return 'PaydaySuggestion';
       case _i76ytswg.PepiteBadge():
         return 'PepiteBadge';
       case _iffukjxf.PepiteChallengeRow():
@@ -7988,6 +8000,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'OccurrenceStatus') {
       return deserialize<_it10dx4m.OccurrenceStatus>(data['data']);
+    }
+    if (dataClassName == 'PaydaySuggestion') {
+      return deserialize<_ig6mtnp5.PaydaySuggestion>(data['data']);
     }
     if (dataClassName == 'PepiteBadge') {
       return deserialize<_i76ytswg.PepiteBadge>(data['data']);

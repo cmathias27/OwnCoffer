@@ -2,6 +2,11 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.38.0 (novembre 2026)
+### Solde prévu : paie repérée et fin de mois
+- **Paie repérée** : quand la paie arrive chaque mois sur le compte (même libellé, montant proche, vers le même jour, au moins trois mois de suite) sans être une opération prévue, le solde prévu la propose. « Ajouter à la prévision » ouvre le formulaire pré-rempli à vérifier ; « Ignorer » ne la propose plus sur cet appareil. Repérage fait par le moteur, sans IA.
+- **Repère de fin de mois** : trait pointillé sur la courbe à chaque fin de mois, nommé dans l'info-bulle, et solde prévu à la prochaine fin de mois sous le solde de fin. Au choix sur l'appareil : fin du **mois de budget** (veille du jour de début du mois du foyer) ou du **mois civil**.
+
 ## 1.37.0 (novembre 2026)
 ### Audit de cohésion, sécurité et robustesse
 - **Résilience de l'interface** : fiabilisation des actions asynchrones dans l'application Flutter avec vérification du montage des composants, gestion explicite des erreurs réseau sur la configuration 2FA, et affichage systématique des erreurs utilisateur lors des mutations.

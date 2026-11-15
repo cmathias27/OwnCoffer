@@ -107,6 +107,8 @@ import 'package:owncoffer_server/src/generated/month_summary.dart' as _i9ltumt5;
 import 'package:owncoffer_server/src/generated/notification.dart' as _ieap9unx;
 import 'package:owncoffer_server/src/generated/notification_settings.dart'
     as _id4w1v6o;
+import 'package:owncoffer_server/src/generated/payday_suggestion.dart'
+    as _ia0479g7;
 import 'package:owncoffer_server/src/generated/pepite_start.dart' as _i0lfydk1;
 import 'package:owncoffer_server/src/generated/pepite_status.dart' as _iqopjt2h;
 import 'package:owncoffer_server/src/generated/pepite_tips.dart' as _if02v5mp;
@@ -7435,6 +7437,37 @@ class _ScheduledEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_isjvyxsm.ForecastResult>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ia0479g7.PaydaySuggestion?> paydaySuggestion(
+    _ist.TestSessionBuilder sessionBuilder,
+    int accountId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'scheduled',
+            method: 'paydaySuggestion',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'scheduled',
+          methodName: 'paydaySuggestion',
+          parameters: _ist.testObjectToJson({'accountId': accountId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ia0479g7.PaydaySuggestion?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

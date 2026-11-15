@@ -5106,6 +5106,25 @@ class Endpoints extends _is.EndpointDispatch {
                     includeVariable: params['includeVariable'],
                   ),
         ),
+        'paydaySuggestion': _is.MethodConnector(
+          name: 'paydaySuggestion',
+          params: {
+            'accountId': _is.ParameterDescription(
+              name: 'accountId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['scheduled'] as _ip6habnq.ScheduledEndpoint)
+                  .paydaySuggestion(
+                    session,
+                    params['accountId'],
+                  ),
+        ),
         'simulatePurchase': _is.MethodConnector(
           name: 'simulatePurchase',
           params: {

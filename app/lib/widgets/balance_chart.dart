@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:owncoffer_client/owncoffer_client.dart';
 
@@ -13,6 +14,11 @@ class BalanceChart extends StatefulWidget {
   final String thresholdLabel;
   final String lowestLabel;
   final String semanticLabel;
+
+  /// Days marked by a dashed vertical line (the month ends), named in the
+  /// tooltip and, when there is room, above the line.
+  final List<DateTime> markers;
+  final String markerLabel;
 
   /// Exact amount, for the tooltip.
   final String Function(int cents) money;
@@ -28,6 +34,8 @@ class BalanceChart extends StatefulWidget {
     required this.thresholdLabel,
     required this.lowestLabel,
     required this.semanticLabel,
+    this.markers = const [],
+    this.markerLabel = '',
     required this.money,
     required this.axisMoney,
     required this.day,
@@ -70,6 +78,11 @@ class _BalanceChartState extends State<BalanceChart> {
                   threshold: widget.thresholdCents,
                   thresholdLabel: widget.thresholdLabel,
                   lowestLabel: widget.lowestLabel,
+                  markers: {
+                    for (var i = 0; i < widget.days.length; i++)
+                      if (widget.markers.contains(widget.days[i].date)) i,
+                  },
+                  markerLabel: widget.markerLabel,
                   money: widget.money,
                   axisMoney: widget.axisMoney,
                   day: widget.day,
@@ -103,6 +116,8 @@ class _ChartPainter extends CustomPainter {
   final int threshold;
   final String thresholdLabel;
   final String lowestLabel;
+  final Set<int> markers;
+  final String markerLabel;
   final String Function(int) money;
   final String Function(int) axisMoney;
   final String Function(DateTime) day;
@@ -114,6 +129,8 @@ class _ChartPainter extends CustomPainter {
     required this.threshold,
     required this.thresholdLabel,
     required this.lowestLabel,
+    required this.markers,
+    required this.markerLabel,
     required this.money,
     required this.axisMoney,
     required this.day,
@@ -184,6 +201,28 @@ class _ChartPainter extends CustomPainter {
       ..close();
     canvas.drawPath(area, Paint()..color = line.withValues(alpha: 0.10));
 
+    // Month ends: dashed vertical lines, named above when there is room.
+    final dash = Paint()
+      ..color = muted
+      ..strokeWidth = 1;
+    double? labelEnd;
+    for (final i in markers.toList()..sort()) {
+      final mx = x(i);
+      for (var yy = plot.top; yy < plot.bottom; yy += 6) {
+        canvas.drawLine(
+          Offset(mx, yy),
+          Offset(mx, math.min(yy + 3, plot.bottom)),
+          dash,
+        );
+      }
+      final t = _text(markerLabel, muted);
+      final left = (mx + 4).clamp(plot.left, plot.right - t.width);
+      if (labelEnd == null || left > labelEnd + 8) {
+        t.paint(canvas, Offset(left, plot.top));
+        labelEnd = left + t.width;
+      }
+    }
+
     // Alert threshold, labelled (never colour alone).
     final ty = y(threshold);
     canvas.drawLine(
@@ -233,7 +272,12 @@ class _ChartPainter extends CustomPainter {
       final hp = Offset(hx, y(days[h].balanceCents));
       canvas.drawCircle(hp, 6, Paint()..color = surface);
       canvas.drawCircle(hp, 4, Paint()..color = line);
-      final a = _text(day(days[h].date), tooltipInk);
+      final a = _text(
+        markers.contains(h)
+            ? '${day(days[h].date)} · $markerLabel'
+            : day(days[h].date),
+        tooltipInk,
+      );
       final b = _text(money(days[h].balanceCents), tooltipInk, size: 13);
       final w = math.max(a.width, b.width) + 16;
       final ht = a.height + b.height + 12;
@@ -254,5 +298,8 @@ class _ChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_ChartPainter old) =>
-      old.days != days || old.hover != hover || old.threshold != threshold;
+      old.days != days ||
+      old.hover != hover ||
+      old.threshold != threshold ||
+      !setEquals(old.markers, markers);
 }

@@ -105,6 +105,8 @@ import 'package:owncoffer_client/src/protocol/month_summary.dart' as _iccoybcj;
 import 'package:owncoffer_client/src/protocol/notification.dart' as _igwx4n0s;
 import 'package:owncoffer_client/src/protocol/notification_settings.dart'
     as _inuj1ggb;
+import 'package:owncoffer_client/src/protocol/payday_suggestion.dart'
+    as _ifdseg2z;
 import 'package:owncoffer_client/src/protocol/pepite_start.dart' as _irc9osb1;
 import 'package:owncoffer_client/src/protocol/pepite_status.dart' as _igi0vxn8;
 import 'package:owncoffer_client/src/protocol/pepite_tips.dart' as _i6216eaq;
@@ -2794,6 +2796,18 @@ class EndpointScheduled extends _isc.EndpointRef {
       'includeVariable': includeVariable,
     },
   );
+
+  /// The pay found in the account's last six months and not planned yet
+  /// (core.detectPayday), or null. Credits already linked to a planned
+  /// operation are left out, and so is a pay close to a monthly credit
+  /// already planned. Nothing is saved: the user checks the proposal, then
+  /// [create] plans it.
+  _ida.Future<_ifdseg2z.PaydaySuggestion?> paydaySuggestion(int accountId) =>
+      caller.callServerEndpoint<_ifdseg2z.PaydaySuggestion?>(
+        'scheduled',
+        'paydaySuggestion',
+        {'accountId': accountId},
+      );
 
   /// Purchase simulator: the balance on [target], the low point and the
   /// overdraft risk if [amountCents] is spent on [date] in cash, in 3 or 4

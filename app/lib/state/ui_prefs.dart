@@ -91,6 +91,8 @@ class UiPrefs extends ChangeNotifier {
   String _operationFilters = '';
   List<SavedView> _operationViews = const [];
   var _firstStepsHidden = false;
+  var _monthEndCalendar = false;
+  var _paydayDismissed = <String>{};
   String? _homeCards;
   final _homeBoards = <int, String?>{};
 
@@ -115,6 +117,16 @@ class UiPrefs extends ChangeNotifier {
 
   /// « Premiers pas » hidden from the home page.
   bool get firstStepsHidden => _firstStepsHidden;
+
+  /// The month-end marker of the forecast curve: the last day of the
+  /// calendar month rather than of the budget month (the day before the
+  /// month start day of the group).
+  bool get monthEndCalendar => _monthEndCalendar;
+
+  /// Whether the pay found with [label] on [accountId] was dismissed: it is
+  /// not proposed again on this device.
+  bool paydayDismissed(int accountId, String label) =>
+      _paydayDismissed.contains('$accountId:$label');
 
   /// The widgets of the home page for a grid of [columns] (decision
   /// 0045): the board saved for it, else the one saved for the other grid,
@@ -153,6 +165,11 @@ class UiPrefs extends ChangeNotifier {
       _operationFilters = await store.read('opFilters') ?? '';
       _operationViews = decodeSavedViews(await store.read('opViews'));
       _firstStepsHidden = flag(await store.read('firstSteps'));
+      _monthEndCalendar = await store.read('monthEnd') == 'calendar';
+      _paydayDismissed = {
+        for (final k in (await store.read('paydayDismissed') ?? '').split(';'))
+          if (k.isNotEmpty) k,
+      };
       _homeCards = await store.read('home');
       for (final columns in const [2, 4]) {
         _homeBoards[columns] = await store.read('home.$columns');
@@ -200,6 +217,16 @@ class UiPrefs extends ChangeNotifier {
     if (id == _accountId) return Future.value();
     _accountId = id;
     return _save('account', id?.toString());
+  }
+
+  Future<void> setMonthEndCalendar(bool on) {
+    _monthEndCalendar = on;
+    return _save('monthEnd', on ? 'calendar' : 'budget');
+  }
+
+  Future<void> dismissPayday(int accountId, String label) {
+    _paydayDismissed = {..._paydayDismissed, '$accountId:$label'};
+    return _save('paydayDismissed', _paydayDismissed.join(';'));
   }
 
   Future<void> markAdvisorSeen(DateTime at) {

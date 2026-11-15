@@ -1,0 +1,20 @@
+### The pay found in an account's history and not planned yet, proposed
+### for the forecast (core.detectPayday). The user checks it before it is
+### saved as a planned operation.
+class: PaydaySuggestion
+fields:
+  accountId: int
+  ### Label without dates or references, also the match pattern.
+  label: String
+  ### Median of the credits read as the pay.
+  amountCents: int
+  dayOfMonth: int
+  ### Number of months seen.
+  months: int
+  lastDate: DateTime
+  ### First pay to plan.
+  nextDate: DateTime
+  ### Proposed amount tolerance for reconciliation, in percent.
+  tolerancePercent: int
+  ### Category of the last credit, if any.
+  categoryId: int?

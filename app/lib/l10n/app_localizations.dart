@@ -1753,6 +1753,72 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 opération reliée automatiquement à son échéance prévue.} other{{count} opérations reliées automatiquement à leur échéance prévue.}}'**
   String forecastAutoReconciled(int count);
 
+  /// No description provided for @forecastMonthEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin de mois, le {date} : {amount}'**
+  String forecastMonthEnd(String date, String amount);
+
+  /// No description provided for @forecastMonthEndMark.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin de mois'**
+  String get forecastMonthEndMark;
+
+  /// No description provided for @forecastMonthEndChoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Repère de fin de mois'**
+  String get forecastMonthEndChoice;
+
+  /// No description provided for @forecastMonthEndBudget.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois de budget'**
+  String get forecastMonthEndBudget;
+
+  /// No description provided for @forecastMonthEndCalendar.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois civil'**
+  String get forecastMonthEndCalendar;
+
+  /// No description provided for @forecastMonthEndHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mois de budget : la veille du jour où commence le mois du foyer (réglé dans le groupe, souvent le jour de la paie). Mois civil : le dernier jour du mois.'**
+  String get forecastMonthEndHelp;
+
+  /// No description provided for @paydayFoundTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paie repérée'**
+  String get paydayFoundTitle;
+
+  /// No description provided for @paydayFoundText.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {label} » : environ {amount} vers le {day} de chaque mois, {months} mois de suite. Elle n\'est pas encore dans le solde prévu.'**
+  String paydayFoundText(String label, String amount, int day, int months);
+
+  /// No description provided for @paydayAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter à la prévision'**
+  String get paydayAdd;
+
+  /// No description provided for @paydayDismiss.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ignorer'**
+  String get paydayDismiss;
+
+  /// No description provided for @paydayAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paie ajoutée au solde prévu.'**
+  String get paydayAdded;
+
   /// No description provided for @forecastUpcoming.
   ///
   /// In fr, this message translates to:

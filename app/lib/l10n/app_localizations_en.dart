@@ -1051,6 +1051,44 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String forecastMonthEnd(String date, String amount) {
+    return 'Month end, $date: $amount';
+  }
+
+  @override
+  String get forecastMonthEndMark => 'Month end';
+
+  @override
+  String get forecastMonthEndChoice => 'Month-end marker';
+
+  @override
+  String get forecastMonthEndBudget => 'Budget month';
+
+  @override
+  String get forecastMonthEndCalendar => 'Calendar month';
+
+  @override
+  String get forecastMonthEndHelp =>
+      'Budget month: the day before your household\'s month starts (set in the group, often payday). Calendar month: the last day of the month.';
+
+  @override
+  String get paydayFoundTitle => 'Pay found';
+
+  @override
+  String paydayFoundText(String label, String amount, int day, int months) {
+    return '“$label”: about $amount around day $day of each month, $months months in a row. It is not in the forecast balance yet.';
+  }
+
+  @override
+  String get paydayAdd => 'Add to the forecast';
+
+  @override
+  String get paydayDismiss => 'Dismiss';
+
+  @override
+  String get paydayAdded => 'Pay added to the forecast balance.';
+
+  @override
   String get forecastUpcoming => 'Upcoming';
 
   @override
