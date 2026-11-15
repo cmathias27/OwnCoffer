@@ -63,28 +63,45 @@ class AccountEndpoint extends Endpoint {
     int accountId, {
     String? name,
     String? bank,
+    bool? clearBank,
     int? initialBalanceCents,
     DateTime? initialBalanceDate,
+    bool? clearInitialBalanceDate,
     int? alertThresholdCents,
     AccountVisibility? visibility,
     String? color,
+    bool? clearColor,
   }) async {
     final current = await Access.requireAccount(session, accountId);
     await Access.requireMember(session, current.groupId, min: MemberRole.admin);
+    final String? effectiveBank = clearBank == true
+        ? null
+        : (bank != null
+              ? (bank.trim().isEmpty ? null : bank.trim())
+              : current.bank);
+    final DateTime? effectiveInitialDate = clearInitialBalanceDate == true
+        ? null
+        : (initialBalanceDate ?? current.initialBalanceDate);
+    final String? effectiveColor = clearColor == true
+        ? null
+        : (color != null
+              ? (color.trim().isEmpty ? null : color.trim())
+              : current.color);
+
     final updated = await Account.db.updateRow(
       session,
       current.copyWith(
-        name: name == null ? null : _name(name),
-        bank: bank?.trim(),
+        name: name == null ? current.name : _name(name),
+        bank: effectiveBank,
         initialBalanceCents: initialBalanceCents == null
-            ? null
+            ? current.initialBalanceCents
             : _cents(initialBalanceCents),
-        initialBalanceDate: initialBalanceDate,
+        initialBalanceDate: effectiveInitialDate,
         alertThresholdCents: alertThresholdCents == null
-            ? null
+            ? current.alertThresholdCents
             : _cents(alertThresholdCents),
-        visibility: visibility,
-        color: color,
+        visibility: visibility ?? current.visibility,
+        color: effectiveColor,
       ),
     );
     await Audit.log(

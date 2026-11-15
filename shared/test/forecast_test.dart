@@ -427,5 +427,45 @@ void main() {
       expect(f.balanceOn(d(2026, 11, 5)), 380000);
       expect(f.balanceOn(d(2026, 12, 5)), 280000);
     });
+
+    test(
+      'ignores scheduled operations marked out of balance (decision 0051)',
+      () {
+        final deferredCard = ScheduledOperation(
+          id: 'card_settlement',
+          amountCents: -50000,
+          label: 'Prélèvement carte différée',
+          recurrence: Recurrence(
+            frequency: Frequency.monthly,
+            start: d(2026, 11, 1),
+          ),
+          nextDue: d(2026, 11, 30),
+          inBalance: false,
+        );
+        final rent = ScheduledOperation(
+          id: 'rent',
+          amountCents: -80000,
+          label: 'Loyer',
+          recurrence: Recurrence(
+            frequency: Frequency.monthly,
+            start: d(2026, 11, 5),
+          ),
+          nextDue: d(2026, 11, 5),
+        );
+        final f = computeForecast(
+          currentBalanceCents: 200000,
+          today: d(2026, 11, 1),
+          horizonDays: 35,
+          scheduled: [deferredCard, rent],
+        );
+        expect(
+          f.events.any((e) => e.scheduledId == 'card_settlement'),
+          isFalse,
+        );
+        expect(f.events.any((e) => e.scheduledId == 'rent'), isTrue);
+        // Only rent affects balance: 200 000 - 80 000 = 120 000
+        expect(f.balanceOn(d(2026, 11, 30)), 120000);
+      },
+    );
   });
 }

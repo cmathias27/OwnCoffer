@@ -91,7 +91,9 @@ class ScheduledEndpoint extends Endpoint {
     int? amountCents,
     String? label,
     int? categoryId,
+    bool? clearCategory,
     DateTime? endDate,
+    bool? clearEndDate,
     String? matchPattern,
     int? dateToleranceDays,
     int? amountTolerancePercent,
@@ -101,18 +103,28 @@ class ScheduledEndpoint extends Endpoint {
     if (categoryId != null) {
       await _ownCategory(session, account.groupId, categoryId);
     }
+    final int? effectiveCategory = clearCategory == true
+        ? null
+        : (categoryId ?? current.categoryId);
+    final DateTime? effectiveEndDate = clearEndDate == true
+        ? null
+        : (endDate != null ? _day(endDate) : current.endDate);
+    // An empty pattern clears it (amount and date only).
+    final effectivePattern = matchPattern == null
+        ? current.matchPattern
+        : core.normalizeForMatch(matchPattern);
+
     final next = _validated(
       current.copyWith(
-        amountCents: amountCents,
-        label: label?.trim(),
-        categoryId: categoryId,
-        endDate: endDate == null ? null : _day(endDate),
-        matchPattern: matchPattern == null
-            ? null
-            : core.normalizeForMatch(matchPattern),
-        dateToleranceDays: dateToleranceDays,
-        amountTolerancePercent: amountTolerancePercent,
-        subscription: subscription,
+        amountCents: amountCents ?? current.amountCents,
+        label: label != null ? label.trim() : current.label,
+        categoryId: effectiveCategory,
+        endDate: effectiveEndDate,
+        matchPattern: effectivePattern,
+        dateToleranceDays: dateToleranceDays ?? current.dateToleranceDays,
+        amountTolerancePercent:
+            amountTolerancePercent ?? current.amountTolerancePercent,
+        subscription: subscription ?? current.subscription,
       ),
     );
     final saved = await ScheduledTransaction.db.updateRow(session, next);

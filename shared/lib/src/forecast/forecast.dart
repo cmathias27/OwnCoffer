@@ -32,6 +32,10 @@ class ScheduledOperation {
   /// after a change of rate), by due date.
   final Map<LocalDate, int> amountsByDue;
 
+  /// Whether occurrences of this planned operation affect the account balance.
+  /// False for operations in a category excluded from balance (decision 0051).
+  final bool inBalance;
+
   ScheduledOperation({
     required this.id,
     required this.amountCents,
@@ -42,6 +46,7 @@ class ScheduledOperation {
     this.dateToleranceDays = 5,
     this.amountTolerancePercent = 0,
     this.amountsByDue = const {},
+    this.inBalance = true,
   }) : matchPattern = normalizeForMatch(matchPattern) {
     if (amountCents == 0) throw ArgumentError('Scheduled amount is zero');
   }
@@ -198,6 +203,7 @@ Forecast computeForecast({
   final missed = <MissedOccurrence>[];
 
   for (final s in scheduled) {
+    if (!s.inBalance) continue;
     for (final due in s.pendingUntil(until)) {
       if (due >= today) {
         events.add(

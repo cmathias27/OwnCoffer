@@ -80,10 +80,10 @@ class MailService {
         attachments: attachments,
       ));
       if (_recording) return;
+      // Never log the recipient, subject or body: they may hold codes,
+      // links, account or group names.
       session.log(
-        '[mail] SMTP not configured — email to $to\n'
-        'Subject: $subject\n$body'
-        '${attachments.isEmpty ? '' : '\n(${attachments.length} attachment(s), not written)'}',
+        '[mail] SMTP not configured — email not sent',
         level: LogLevel.warning,
       );
       return;
@@ -104,9 +104,9 @@ class MailService {
     try {
       await mailer.send(message, smtp);
     } on Object catch (e) {
-      // Never log the body: it holds codes and links.
+      // Never log the recipient or body: they hold codes and links.
       session.log(
-        '[mail] sending to $to failed: ${e.runtimeType}',
+        '[mail] sending failed: ${e.runtimeType}',
         level: LogLevel.error,
       );
       rethrow;

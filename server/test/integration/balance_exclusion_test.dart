@@ -1,4 +1,5 @@
 import 'package:owncoffer_server/src/core/dates.dart';
+import 'package:owncoffer_server/src/endpoints/category_endpoint.dart';
 import 'package:owncoffer_server/src/finance/forecast_service.dart';
 import 'package:owncoffer_server/src/generated/protocol.dart';
 import 'package:owncoffer_server/src/security/scopes.dart';
@@ -362,5 +363,58 @@ void main() {
         expect(day.balanceCents, equals(100000));
       }
     });
+
+    test(
+      'forecast ignores scheduled operations in category excluded from balance',
+      () async {
+        final t = today.toLocalDate();
+        final futureDate = day(3);
+
+        await endpoints.scheduled.create(
+          as(alice),
+          accountA.id!,
+          -15000,
+          'Prélèvement CB différé prévu',
+          ScheduleFrequency.monthly,
+          futureDate,
+          categoryId: cardSettlementCategory.id,
+        );
+
+        final f = await ForecastService.compute(
+          db,
+          accountA,
+          t,
+          horizonDays: 10,
+        );
+
+        // Initial balance is 100000 cents.
+        // Scheduled card settlement is in excluded category -> should not deduct!
+        for (final day in f.days) {
+          expect(day.balanceCents, equals(100000));
+        }
+      },
+    );
+
+    test(
+      'updateAllStandardCategories preserves user choice on excludedFromBalance',
+      () async {
+        // Alice enables card settlement in balance
+        await endpoints.category.setExcludedFromBalance(
+          as(alice),
+          cardSettlementCategory.id!,
+          false,
+        );
+
+        var cat = await Category.db.findById(db, cardSettlementCategory.id!);
+        expect(cat!.excludedFromBalance, isFalse);
+
+        // Server restarts and runs updateAllStandardCategories
+        await updateAllStandardCategories(db);
+
+        // User's choice must NOT be reverted to true
+        cat = await Category.db.findById(db, cardSettlementCategory.id!);
+        expect(cat!.excludedFromBalance, isFalse);
+      },
+    );
   });
 }

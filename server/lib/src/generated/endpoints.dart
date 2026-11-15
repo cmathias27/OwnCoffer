@@ -609,6 +609,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<String?>(),
               nullable: true,
             ),
+            'clearBank': _is.ParameterDescription(
+              name: 'clearBank',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
             'initialBalanceCents': _is.ParameterDescription(
               name: 'initialBalanceCents',
               type: _is.getType<int?>(),
@@ -617,6 +622,11 @@ class Endpoints extends _is.EndpointDispatch {
             'initialBalanceDate': _is.ParameterDescription(
               name: 'initialBalanceDate',
               type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'clearInitialBalanceDate': _is.ParameterDescription(
+              name: 'clearInitialBalanceDate',
+              type: _is.getType<bool?>(),
               nullable: true,
             ),
             'alertThresholdCents': _is.ParameterDescription(
@@ -634,6 +644,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<String?>(),
               nullable: true,
             ),
+            'clearColor': _is.ParameterDescription(
+              name: 'clearColor',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -645,11 +660,14 @@ class Endpoints extends _is.EndpointDispatch {
                     params['accountId'],
                     name: params['name'],
                     bank: params['bank'],
+                    clearBank: params['clearBank'],
                     initialBalanceCents: params['initialBalanceCents'],
                     initialBalanceDate: params['initialBalanceDate'],
+                    clearInitialBalanceDate: params['clearInitialBalanceDate'],
                     alertThresholdCents: params['alertThresholdCents'],
                     visibility: params['visibility'],
                     color: params['color'],
+                    clearColor: params['clearColor'],
                   ),
         ),
         'setSavingsTerms': _is.MethodConnector(
@@ -4782,9 +4800,19 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'clearCategory': _is.ParameterDescription(
+              name: 'clearCategory',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
             'endDate': _is.ParameterDescription(
               name: 'endDate',
               type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+            'clearEndDate': _is.ParameterDescription(
+              name: 'clearEndDate',
+              type: _is.getType<bool?>(),
               nullable: true,
             ),
             'matchPattern': _is.ParameterDescription(
@@ -4819,7 +4847,9 @@ class Endpoints extends _is.EndpointDispatch {
                     amountCents: params['amountCents'],
                     label: params['label'],
                     categoryId: params['categoryId'],
+                    clearCategory: params['clearCategory'],
                     endDate: params['endDate'],
+                    clearEndDate: params['clearEndDate'],
                     matchPattern: params['matchPattern'],
                     dateToleranceDays: params['dateToleranceDays'],
                     amountTolerancePercent: params['amountTolerancePercent'],
