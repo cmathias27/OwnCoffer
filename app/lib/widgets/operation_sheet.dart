@@ -8,6 +8,7 @@ import '../screens/loans_screen.dart';
 import '../util/format.dart';
 import '../util/web_search.dart';
 import 'category_field.dart';
+import 'entry_dialog.dart';
 import 'invoices.dart';
 import 'price_rise_dialog.dart';
 import 'soft.dart';
@@ -248,6 +249,7 @@ class _OperationSheetState extends State<OperationSheet> {
     );
     if (t == null || !mounted) return;
     final parts = await client.transaction.splits(t.id!);
+    if (!mounted) return;
     widget.onChanged(t);
     setState(() => (_t = t, _splits = parts));
     if (mounted) {
@@ -264,9 +266,11 @@ class _OperationSheetState extends State<OperationSheet> {
   Future<void> _do(Future<BankTransaction> Function() call) async {
     try {
       final t = await call();
+      if (!mounted) return;
       setState(() => (_t = t, _error = null));
       widget.onChanged(t);
     } on Object catch (e) {
+      if (!mounted) return;
       setState(() => _error = errorText(AppLocalizations.of(context), e));
     }
   }
@@ -602,7 +606,7 @@ class _OperationSheetState extends State<OperationSheet> {
                           after: widget.onUndone,
                         );
                       } on Object catch (e) {
-                        setState(() => _error = errorText(l, e));
+                        if (mounted) setState(() => _error = errorText(l, e));
                       }
                     },
                   ),
@@ -637,7 +641,7 @@ class _OperationSheetState extends State<OperationSheet> {
                           after: widget.onUndone,
                         );
                       } on Object catch (e) {
-                        setState(() => _error = errorText(l, e));
+                        if (mounted) setState(() => _error = errorText(l, e));
                       }
                     },
                   ),
@@ -898,11 +902,15 @@ class _OperationSheetState extends State<OperationSheet> {
                 icon: const Icon(Icons.delete_outline),
                 label: Text(l.trash),
                 onPressed: () async {
-                  await client.transaction.trash(t.id!);
-                  if (!context.mounted) return;
+                  final messenger = widget.messenger;
+                  final ok = await runShowingError(
+                    context,
+                    () => client.transaction.trash(t.id!),
+                  );
+                  if (!ok || !context.mounted) return;
                   Navigator.of(context).pop(true);
                   showUndo(
-                    widget.messenger,
+                    messenger,
                     l,
                     l.trashed,
                     () => client.transaction.restore(t.id!).then((_) {}),

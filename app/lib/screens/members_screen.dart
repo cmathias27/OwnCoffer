@@ -6,6 +6,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../help/help.dart';
+import '../widgets/entry_dialog.dart';
 import 'group_audit_screen.dart';
 
 /// Members of the group; invitations for administrators.
@@ -130,8 +131,10 @@ class _MembersScreenState extends State<MembersScreen> {
                     ),
                     trailing: TextButton(
                       onPressed: () async {
-                        await client.invitation.revoke(i.id);
-                        await _load();
+                        await runShowingError(context, () async {
+                          await client.invitation.revoke(i.id);
+                          await _load();
+                        });
                       },
                       child: Text(l.revoke),
                     ),

@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/app_versions.dart';
 import '../util/format.dart';
+import '../widgets/entry_dialog.dart';
 
 /// A remark for the server administrator: a bug, an idea, a question. It
 /// stays on the server; no bank data is joined.
@@ -214,8 +215,10 @@ class _AdminFeedbackViewState extends State<AdminFeedbackView> {
             contentPadding: EdgeInsets.zero,
             value: i.feedback.status == 'done',
             onChanged: (v) async {
-              await client.feedback.setDone(i.feedback.id!, v ?? false);
-              await _load();
+              await runShowingError(context, () async {
+                await client.feedback.setDone(i.feedback.id!, v ?? false);
+                await _load();
+              });
             },
             title: Text(i.feedback.text),
             subtitle: Text(

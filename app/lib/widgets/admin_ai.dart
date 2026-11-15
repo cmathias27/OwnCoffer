@@ -6,6 +6,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import 'ai_usage.dart';
+import 'entry_dialog.dart';
 
 /// Administration > AI: the providers the users may choose (décision
 /// 0017). Keys are written once and never shown again.
@@ -111,8 +112,11 @@ class _AdminAiViewState extends State<AdminAiView> {
       ),
     );
     if (ok != true) return;
-    await client.ai.deleteProvider(p.id!);
-    await _load();
+    if (!mounted) return;
+    await runShowingError(context, () async {
+      await client.ai.deleteProvider(p.id!);
+      await _load();
+    });
   }
 
   @override

@@ -29,6 +29,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
   List<String>? _backupCodes;
   final _code = TextEditingController();
   String? _error;
+  String? _loadError;
   var _busy = false;
 
   @override
@@ -44,8 +45,14 @@ class _SecurityScreenState extends State<SecurityScreen> {
   }
 
   Future<void> _load() async {
-    final s = await client.twoFactor.status();
-    if (mounted) setState(() => _status = s);
+    try {
+      final s = await client.twoFactor.status();
+      if (mounted) setState(() => (_status = s, _loadError = null));
+    } on Object catch (e) {
+      if (mounted) {
+        setState(() => _loadError = errorText(AppLocalizations.of(context), e));
+      }
+    }
   }
 
   Future<void> _run(Future<void> Function() call) async {
@@ -55,7 +62,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
       await call();
       _code.clear();
     } on Object catch (e) {
-      setState(() => _error = errorText(l, e));
+      if (mounted) setState(() => _error = errorText(l, e));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -67,7 +74,24 @@ class _SecurityScreenState extends State<SecurityScreen> {
     final theme = Theme.of(context);
     final status = _status;
     final Widget body = status == null
-        ? const Center(child: CircularProgressIndicator())
+        ? Center(
+            child: _loadError != null
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _loadError!,
+                        style: TextStyle(color: theme.colorScheme.error),
+                      ),
+                      const SizedBox(height: 12),
+                      OutlinedButton(
+                        onPressed: _load,
+                        child: Text(l.helpRetry),
+                      ),
+                    ],
+                  )
+                : const CircularProgressIndicator(),
+          )
         : ListView(
             padding: const EdgeInsets.all(24),
             children: [
@@ -91,7 +115,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
                         ? null
                         : () => _run(() async {
                             final e = await client.twoFactor.begin();
-                            setState(() => _enrollment = e);
+                            if (mounted) setState(() => _enrollment = e);
                           }),
                     child: Text(l.twoFactorEnable),
                   ),
@@ -151,7 +175,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
     final e = _enrollment!;
     void confirm() => _run(() async {
       final codes = await client.twoFactor.confirm(_code.text.trim());
-      setState(() => (_enrollment = null, _backupCodes = codes));
+      if (mounted) setState(() => (_enrollment = null, _backupCodes = codes));
     });
     return [
       Text(l.twoFactorScan),
@@ -228,7 +252,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
                   final codes = await client.twoFactor.renewBackupCodes(
                     _code.text.trim(),
                   );
-                  setState(() => _backupCodes = codes);
+                  if (mounted) setState(() => _backupCodes = codes);
                 }),
           child: Text(l.twoFactorRenew),
         ),

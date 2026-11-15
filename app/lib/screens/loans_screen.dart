@@ -2294,7 +2294,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                           firstDate: DateTime(1970),
                           lastDate: DateTime(2100),
                         );
-                        if (picked != null) {
+                        if (picked != null && mounted) {
                           setState(
                             () => _firstDue = DateTime.utc(
                               picked.year,
@@ -2337,7 +2337,7 @@ class _LoanFormScreenState extends State<LoanFormScreen> {
                             firstDate: DateTime(1970),
                             lastDate: _firstDue,
                           );
-                          if (picked != null) {
+                          if (picked != null && mounted) {
                             setState(
                               () => _disbursement = DateTime.utc(
                                 picked.year,
@@ -2738,7 +2738,7 @@ class _LoanEventDialogState extends State<_LoanEventDialog> {
                     firstDate: DateTime(1970),
                     lastDate: DateTime(2100),
                   );
-                  if (picked != null) {
+                  if (picked != null && mounted) {
                     setState(
                       () => _date = DateTime.utc(
                         picked.year,

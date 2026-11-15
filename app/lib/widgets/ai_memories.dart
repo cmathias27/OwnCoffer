@@ -4,6 +4,7 @@ import 'package:owncoffer_client/owncoffer_client.dart';
 import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
+import 'entry_dialog.dart';
 import 'soft.dart';
 
 /// What the user asks the assistant to keep in mind: written by them only,
@@ -53,9 +54,9 @@ class _AiMemoriesSectionState extends State<AiMemoriesSection> {
     try {
       await client.ai.addMemory(_groupId, text);
       _text.clear();
-      setState(() => _error = null);
+      if (mounted) setState(() => _error = null);
     } on Object catch (e) {
-      setState(() => _error = errorText(l, e));
+      if (mounted) setState(() => _error = errorText(l, e));
     }
     await _load();
   }
@@ -79,8 +80,10 @@ class _AiMemoriesSectionState extends State<AiMemoriesSection> {
               tooltip: l.aiMemoriesDelete,
               icon: const Icon(Icons.close),
               onPressed: () async {
-                await client.ai.deleteMemory(m.id!);
-                await _load();
+                await runShowingError(context, () async {
+                  await client.ai.deleteMemory(m.id!);
+                  await _load();
+                });
               },
             ),
           ),

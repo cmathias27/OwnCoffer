@@ -30,6 +30,17 @@ class ContractSimulation extends StatefulWidget {
     this.onApplied,
   });
 
+  /// The new monthly price as the amount of one debit of the subscription.
+  @visibleForTesting
+  static int perDebit(ScheduledTransaction s, int monthly) {
+    final interval = s.interval < 1 ? 1 : s.interval;
+    return switch (s.frequency) {
+      ScheduleFrequency.yearly => monthly * 12 * interval,
+      ScheduleFrequency.weekly => (monthly * 12 * interval + 26) ~/ 52,
+      _ => monthly * interval,
+    };
+  }
+
   @override
   State<ContractSimulation> createState() => _ContractSimulationState();
 }
@@ -206,19 +217,11 @@ class _ContractSimulationState extends State<ContractSimulation> {
     return s.frequency == ScheduleFrequency.once ? null : s;
   }
 
-  /// The new monthly price as the amount of one debit of the subscription.
-  static int _perDebit(ScheduledTransaction s, int monthly) =>
-      switch (s.frequency) {
-        ScheduleFrequency.yearly => monthly * 12,
-        ScheduleFrequency.weekly => (monthly * 12 + 26) ~/ 52,
-        _ => monthly,
-      };
-
   Widget _apply(BuildContext context, AppLocalizations l) {
     final s = _applicable!;
     final monthly = parseUserAmount(_next.text);
     if (monthly == null || monthly <= 0) return const SizedBox.shrink();
-    final amount = -_perDebit(s, monthly);
+    final amount = -ContractSimulation.perDebit(s, monthly);
     return Padding(
       padding: const EdgeInsets.only(top: 12),
       child: Column(

@@ -68,10 +68,14 @@ class AsyncAction {
     try {
       return await call();
     } on Object catch (e) {
-      setState(() => error = errorText(l, e));
+      if (context.mounted) {
+        setState(() => error = errorText(l, e));
+      }
       return null;
     } finally {
-      setState(() => busy = false);
+      if (context.mounted) {
+        setState(() => busy = false);
+      }
     }
   }
 }

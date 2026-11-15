@@ -6,6 +6,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import 'entry_dialog.dart';
 import 'soft.dart';
 
 /// "Use OwnCoffer from another assistant" (MCP, décision 0018): the user's
@@ -154,8 +155,10 @@ class _McpTokensSectionState extends State<McpTokensSection> {
             ),
             trailing: TextButton(
               onPressed: () async {
-                await client.mcp.revoke(t.id!);
-                await _load();
+                await runShowingError(context, () async {
+                  await client.mcp.revoke(t.id!);
+                  await _load();
+                });
               },
               child: Text(l.mcpRevoke),
             ),

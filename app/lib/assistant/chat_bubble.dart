@@ -11,6 +11,7 @@ import '../state/pepite.dart';
 import '../state/pepite_advice.dart';
 import '../state/pepite_messages.dart';
 import '../util/file_pick.dart';
+import '../widgets/entry_dialog.dart';
 import '../widgets/pepite.dart';
 import 'chat_controller.dart';
 import 'chat_markdown.dart';
@@ -660,9 +661,11 @@ class _ChatPanelState extends State<ChatPanel> {
               tooltip: l.chatHistoryDelete,
               icon: const Icon(Icons.delete_outline),
               onPressed: () async {
-                await client.ai.deleteConversation(c.id!);
-                if (c.id == chat.conversationId) chat.conversationId = null;
-                await _showHistory();
+                await runShowingError(context, () async {
+                  await client.ai.deleteConversation(c.id!);
+                  if (c.id == chat.conversationId) chat.conversationId = null;
+                  await _showHistory();
+                });
               },
             ),
           ),
