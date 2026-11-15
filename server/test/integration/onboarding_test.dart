@@ -177,6 +177,16 @@ void main() {
         );
         await endpoints.invitation.revoke(as(admin), inv.id);
         expect(await Onboarding.mayRegister(db, 'frank@example.org'), isFalse);
+        await expectLater(
+          endpoints.invitation.revoke(as(admin), inv.id),
+          throwsA(
+            isA<InvalidInputException>().having(
+              (e) => e.code,
+              'code',
+              'invitation_not_pending',
+            ),
+          ),
+        );
 
         await endpoints.invitation.create(
           as(admin),
@@ -200,7 +210,7 @@ void main() {
       });
 
       test('only group admins invite, list and revoke', () async {
-        await endpoints.invitation.create(
+        final inv = await endpoints.invitation.create(
           as(admin),
           groupId,
           'henri@example.org',
@@ -220,6 +230,21 @@ void main() {
           endpoints.invitation.list(as(henri), groupId),
           throwsA(isA<AccessDeniedException>()),
         );
+        await expectLater(
+          endpoints.invitation.revoke(as(henri), inv.id),
+          throwsA(isA<AccessDeniedException>()),
+        );
+        final outsider = await register('outsider@example.org');
+        await expectLater(
+          endpoints.invitation.revoke(as(outsider), inv.id),
+          throwsA(isA<AccessDeniedException>()),
+        );
+        await expectLater(
+          endpoints.invitation.revoke(as(outsider), 999999),
+          throwsA(isA<AccessDeniedException>()),
+        );
+        final row = await Invitation.db.findById(db, inv.id);
+        expect(row!.revokedAt, isNull);
       });
 
       test('the token is never stored in clear', () async {

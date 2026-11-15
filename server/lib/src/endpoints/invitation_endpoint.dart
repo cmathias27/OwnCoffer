@@ -74,6 +74,9 @@ class InvitationEndpoint extends Endpoint {
       invitation.groupId!,
       min: MemberRole.admin,
     );
+    if (invitation.acceptedAt != null || invitation.revokedAt != null) {
+      throw InvalidInputException(code: 'invitation_not_pending');
+    }
     await Invitation.db.updateRow(
       session,
       invitation.copyWith(revokedAt: DateTime.now().toUtc()),

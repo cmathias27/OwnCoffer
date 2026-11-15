@@ -578,7 +578,46 @@ void main() {
             denied,
           );
           await expectLater(
+            endpoints.transaction.setBalanceOverride(
+              as(mallory),
+              t.id!,
+              true,
+            ),
+            denied,
+          );
+          await expectLater(
+            endpoints.transaction.restoreClassification(
+              as(mallory),
+              t.id!,
+              null,
+              CategorySource.manual,
+              null,
+              const [],
+            ),
+            denied,
+          );
+          await expectLater(
+            endpoints.transaction.splits(as(mallory), t.id!),
+            denied,
+          );
+          await expectLater(
+            endpoints.transaction.setSplits(as(mallory), t.id!, []),
+            denied,
+          );
+          await expectLater(
             endpoints.transaction.trash(as(mallory), t.id!),
+            denied,
+          );
+          await expectLater(
+            endpoints.transaction.purge(as(mallory), t.id!),
+            denied,
+          );
+          await expectLater(
+            endpoints.transaction.emptyTrash(as(mallory), groupA),
+            denied,
+          );
+          await expectLater(
+            endpoints.transaction.trashed(as(mallory), groupA),
             denied,
           );
           await expectLater(
