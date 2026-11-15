@@ -20,6 +20,16 @@ step "Code généré à jour (serverpod generate)"
 git diff --exit-code --stat -- server client \
   || { echo "Le code généré a changé : committez-le."; exit 1; }
 
+step "Migrations SQLite à jour (version autonome)"
+./tool/standalone.sh migrations >/dev/null
+git diff --exit-code --stat -- server/standalone server/lib/src/standalone \
+  || { echo "Migrations SQLite à régénérer : ./tool/standalone.sh migrations, puis commit." >&2; exit 1; }
+
+step "Localisation à jour (flutter gen-l10n)"
+(cd app && flutter gen-l10n >/dev/null)
+git diff --exit-code --stat -- app/lib/l10n/app_localizations* \
+  || { echo "Traductions générées non committées : committez-les." >&2; exit 1; }
+
 step "Formatage"
 dart format --output=none --set-exit-if-changed shared server/lib server/test server/bin app/lib app/test
 
