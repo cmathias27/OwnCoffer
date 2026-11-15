@@ -86,7 +86,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
                       const SizedBox(height: 12),
                       OutlinedButton(
                         onPressed: _load,
-                        child: Text(l.helpRetry),
+                        child: Text(l.retry),
                       ),
                     ],
                   )
