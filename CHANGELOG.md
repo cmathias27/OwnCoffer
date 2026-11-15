@@ -2,6 +2,14 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.37.0 (novembre 2026)
+### Audit de cohésion, sécurité et robustesse
+- **Résilience de l'interface** : fiabilisation des actions asynchrones dans l'application Flutter avec vérification du montage des composants, gestion explicite des erreurs réseau sur la configuration 2FA, et affichage systématique des erreurs utilisateur lors des mutations.
+- **Sécurité et intégrité serveur** : suppression des fuites potentielles de mots de passe ou tokens dans les journaux de session, validation stricte de l'état des invitations lors de la révocation, et transmission exacte des erreurs d'authentification double facteur.
+- **Précision financière** : fiabilisation des calculs d'opérations planifiées et du montant périodique dans la simulation de contrats à intervalles espacés.
+- **Isolation renforcée** : couverture complète des tests d'isolation (décision 0016) sur l'ensemble des points d'accès des opérations et invitations.
+- **Outillage** : alignement des vérifications locales pré-push (`tool/check.sh`) avec la CI (contrôle des migrations SQLite autonomes et traductions).
+
 ## 1.36.0 (novembre 2026)
 ### Opérations et catégories hors solde — débit différé (décision 0051)
 - **Débit différé sans doublon** : le total mensuel prélevé en fin de mois pour régler une carte à débit différé n'est plus déduit du solde du compte par défaut, évitant le double débit avec les paiements carte individuels.
