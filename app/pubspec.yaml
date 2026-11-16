@@ -55,7 +55,7 @@ dependencies:
   flutter_secure_storage: ^10.0.0
   # Offline copy of what was read (decision 0037), same SQLite3 Multiple
   # Ciphers build as the standalone database (MIT).
-  sqlite3: ^3.8.0
+  sqlite3: ^3.9.1
   image_picker: ^1.2.4
   # Locally render bounded PDF pages for vision providers; MIT licensed.
   pdfx: ^2.11.0
