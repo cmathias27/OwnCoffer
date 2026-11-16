@@ -5,6 +5,7 @@ import 'package:owncoffer_shared/owncoffer_shared.dart' as core;
 
 import '../client.dart';
 import '../state/ui_prefs.dart';
+import '../widgets/account_filter_chip.dart';
 import '../widgets/entry_dialog.dart';
 import '../widgets/period_bar.dart';
 import '../l10n/app_localizations.dart';
@@ -107,7 +108,11 @@ class BudgetScreenState extends State<BudgetScreen> {
   late SharedPeriod? _shared = uiPrefs.period;
   late var _period = sharedPeriodRange(uiPrefs.period, todayUtcMidnight()).$1;
   late var _date = sharedPeriodRange(uiPrefs.period, todayUtcMidnight()).$2;
-  int? _accountId;
+  Set<int> _accountIds = {};
+  List<int>? get _effectiveAccountIds =>
+      _accountIds.isEmpty ? null : _accountIds.toList();
+  int? get _singleAccountId =>
+      _accountIds.length == 1 ? _accountIds.first : null;
   SpendingReport? _report;
   LeftToLiveReport? _left;
   Map<int, Category> _categories = {};
@@ -148,11 +153,16 @@ class BudgetScreenState extends State<BudgetScreen> {
           _groupId,
           _period,
           _date,
-          accountId: _accountId,
+          accountId: _singleAccountId,
+          accountIds: _effectiveAccountIds,
           periods: _periods,
         ),
         client.category.list(_groupId),
-        client.analysis.leftToLive(_groupId, accountId: _accountId),
+        client.analysis.leftToLive(
+          _groupId,
+          accountId: _singleAccountId,
+          accountIds: _effectiveAccountIds,
+        ),
       ]);
       if (!mounted) return;
       setState(() {
@@ -222,7 +232,8 @@ class BudgetScreenState extends State<BudgetScreen> {
           r.start,
           categoryId: categoryId,
           unclassified: categoryId == null,
-          accountId: _accountId,
+          accountId: _singleAccountId,
+          accountIds: _effectiveAccountIds,
         ),
         membership: widget.membership,
         categories: _categories,
@@ -582,15 +593,11 @@ class BudgetScreenState extends State<BudgetScreen> {
               ],
             ),
             if (widget.accounts.length > 1)
-              DropdownButton<int?>(
-                value: _accountId,
-                items: [
-                  DropdownMenuItem(value: null, child: Text(l.allAccounts)),
-                  for (final a in widget.accounts)
-                    DropdownMenuItem(value: a.id, child: Text(a.name)),
-                ],
-                onChanged: (v) {
-                  setState(() => _accountId = v);
+              AccountFilterChip(
+                accounts: widget.accounts,
+                selectedIds: _accountIds,
+                onChanged: (ids) {
+                  setState(() => _accountIds = ids);
                   reload();
                 },
               ),
@@ -608,7 +615,8 @@ class BudgetScreenState extends State<BudgetScreen> {
               onPressed: () => open(
                 ReviewScreen(
                   membership: widget.membership,
-                  accountId: _accountId,
+                  accountId: _singleAccountId,
+                  accountIds: _effectiveAccountIds,
                   date: _period == BudgetPeriod.month
                       ? _date
                       : todayUtcMidnight(),
@@ -637,7 +645,8 @@ class BudgetScreenState extends State<BudgetScreen> {
                   categories: _categories,
                   period: _period,
                   date: _report?.start ?? _date,
-                  accountId: _accountId,
+                  accountId: _singleAccountId,
+                  accountIds: _effectiveAccountIds,
                 ),
               ),
             ),
@@ -648,7 +657,7 @@ class BudgetScreenState extends State<BudgetScreen> {
                 CalendarScreen(
                   membership: widget.membership,
                   accounts: widget.accounts,
-                  accountId: _accountId,
+                  accountId: _singleAccountId,
                 ),
               ),
             ),

@@ -18,3 +18,12 @@ Pour chaque compte : le **solde actuel**, le **solde pointé** (seulement les op
 **« Contrôler le solde »** : saisissez le solde affiché par la banque à une date. OwnCoffer le compare au solde calculé et, en cas d'écart, montre ce qui peut l'expliquer : opérations saisies à la main et non pointées, ou relevé manquant.
 
 Si le solde est faux depuis le début, corrigez le **solde de départ** du compte.
+
+## Carte à débit différé
+
+Pour une carte bancaire dont les paiements sont débités en une fois à date fixe (ex. prélevés le 4 du mois suivant pour les achats arrêtés le 28) :
+- Créez un compte de type **« Carte à débit différé »**.
+- Indiquez le **jour d'arrêté** (ex. 28) et le **jour de prélèvement** (ex. 4).
+- Sélectionnez le compte courant débité.
+
+Le solde affiche l'**en-cours de la période active**. Entre l'arrêté et le prélèvement, le montant prélevé prochainement est indiqué séparément en attente.

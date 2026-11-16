@@ -18,3 +18,12 @@ For each account: the **current balance**, the **cleared balance** (only the ope
 **"Check the balance"**: enter the balance shown by the bank on a date. OwnCoffer compares it with the calculated balance and, if they differ, shows what may explain it: operations entered by hand and not cleared, or a missing statement.
 
 If the balance has been wrong from the start, correct the account's **opening balance**.
+
+## Deferred debit card
+
+For a debit card whose payments are charged in a lump sum on a fixed settlement date (e.g. debited on the 4th of next month for purchases cut off on the 28th):
+- Create an account of kind **"Deferred debit card"**.
+- Specify the **cutoff day** (e.g. 28) and the **settlement debit day** (e.g. 4).
+- Select the linked checking account.
+
+The balance displays the **current cycle outstanding amount**. Between cutoff and settlement, the upcoming debit is shown separately as pending.

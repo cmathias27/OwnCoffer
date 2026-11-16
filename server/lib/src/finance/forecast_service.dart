@@ -160,6 +160,26 @@ abstract final class ForecastService {
       // 2. Balances.
       final balances = await balancesOf(session, account, today, tx: tx);
 
+      core.DeferredCardCycle? deferredCycle;
+      int? pendingDebitCents;
+      if (account.kind == AccountKind.deferredCard &&
+          account.statementCutoffDay != null) {
+        deferredCycle = core.deferredCardCycle(
+          today,
+          cutoffDay: account.statementCutoffDay!,
+          debitDay: account.statementDebitDay,
+        );
+        if (deferredCycle.hasPendingDebit) {
+          pendingDebitCents = await pendingDebitOf(
+            session,
+            account,
+            deferredCycle.pendingDebitStart!,
+            deferredCycle.pendingDebitEnd!,
+            tx: tx,
+          );
+        }
+      }
+
       final categories = await Category.db.find(
         session,
         where: (c) => c.groupId.equals(account.groupId),
@@ -234,6 +254,10 @@ abstract final class ForecastService {
                     ),
                 ],
               ),
+        deferredCutoffDate: deferredCycle?.end.toDb(),
+        deferredDebitDate: deferredCycle?.debitDate.toDb(),
+        deferredPendingDebitCents: pendingDebitCents,
+        deferredPendingDebitDate: deferredCycle?.pendingDebitDate?.toDb(),
       );
     });
   }
@@ -258,33 +282,87 @@ abstract final class ForecastService {
     transaction: tx,
   );
 
+  /// The pending debit of a closed deferred debit card cycle (decision 0052).
+  static Future<int> pendingDebitOf(
+    Session session,
+    Account account,
+    core.LocalDate start,
+    core.LocalDate end, {
+    Transaction? tx,
+  }) async {
+    final rows = await session.db.unsafeQuery(
+      'SELECT CAST(COALESCE(SUM(t."amountCents"), 0) AS BIGINT) '
+      'FROM "transactions" t '
+      'LEFT JOIN "categories" c ON c."id" = t."categoryId" '
+      'WHERE t."accountId" = @account AND t."deletedAt" IS NULL '
+      'AND t."date" >= @start AND t."date" <= @end '
+      'AND (t."balanceOverride" = TRUE OR '
+      '(t."balanceOverride" IS NULL AND '
+      '(c."excludedFromBalance" IS NULL OR c."excludedFromBalance" = FALSE)))',
+      parameters: QueryParameters.named({
+        'account': account.id!,
+        'start': session.sqlTimestamp(start.toDb()),
+        'end': session.sqlTimestamp(end.toDb()),
+      }),
+      transaction: tx,
+    );
+    return rows.first[0] as int;
+  }
+
   /// The balances of [account], summed by the database: the same as
   /// [core.computeBalances] over all its operations, without loading them.
   /// Operations excluded from balance (decision 0051) do not count.
+  /// For deferred debit cards with a configured cutoff day (decision 0052),
+  /// the balance represents the outstanding amount ("en-cours") of the active cycle.
   static Future<core.AccountBalances> balancesOf(
     Session session,
     Account account,
     core.LocalDate today, {
     Transaction? tx,
   }) async {
+    final isDeferred =
+        account.kind == AccountKind.deferredCard &&
+        account.statementCutoffDay != null;
+    final cycle = isDeferred
+        ? core.deferredCardCycle(
+            today,
+            cutoffDay: account.statementCutoffDay!,
+            debitDay: account.statementDebitDay,
+          )
+        : null;
+
+    final dateFilter = isDeferred
+        ? 'AND t."date" >= @cycleStart AND t."date" <= @cycleEnd '
+        : '';
+    final curDateFilter = isDeferred
+        ? 't."date" >= @cycleStart AND t."date" <= @today'
+        : 't."date" <= @today';
+
+    final params = <String, dynamic>{
+      'account': account.id!,
+      'today': session.sqlTimestamp(today.toDb()),
+    };
+    if (cycle != null) {
+      params['cycleStart'] = session.sqlTimestamp(cycle.start.toDb());
+      params['cycleEnd'] = session.sqlTimestamp(cycle.end.toDb());
+    }
+
     final rows = await session.db.unsafeQuery(
       // Standard SQL, the same on PostgreSQL and SQLite (decision 0051).
       'SELECT '
       'CAST(COALESCE(SUM(CASE WHEN t."cleared" THEN t."amountCents" END), 0) '
       'AS BIGINT), '
-      'CAST(COALESCE(SUM(CASE WHEN t."date" <= @today THEN t."amountCents" END), '
+      'CAST(COALESCE(SUM(CASE WHEN $curDateFilter THEN t."amountCents" END), '
       '0) AS BIGINT), '
       'CAST(COALESCE(SUM(t."amountCents"), 0) AS BIGINT) '
       'FROM "transactions" t '
       'LEFT JOIN "categories" c ON c."id" = t."categoryId" '
       'WHERE t."accountId" = @account AND t."deletedAt" IS NULL '
+      '$dateFilter'
       'AND (t."balanceOverride" = TRUE OR '
       '(t."balanceOverride" IS NULL AND '
       '(c."excludedFromBalance" IS NULL OR c."excludedFromBalance" = FALSE)))',
-      parameters: QueryParameters.named({
-        'account': account.id!,
-        'today': session.sqlTimestamp(today.toDb()),
-      }),
+      parameters: QueryParameters.named(params),
       transaction: tx,
     );
     final r = rows.first;

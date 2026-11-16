@@ -38,6 +38,10 @@ abstract class ForecastResult
     required this.proposals,
     required this.autoReconciledCount,
     this.variable,
+    this.deferredCutoffDate,
+    this.deferredDebitDate,
+    this.deferredPendingDebitCents,
+    this.deferredPendingDebitDate,
   });
 
   factory ForecastResult({
@@ -56,6 +60,10 @@ abstract class ForecastResult
     required List<_i7qmkh8w.ReconciliationProposal> proposals,
     required int autoReconciledCount,
     _in08zzvs.VariableEstimateInfo? variable,
+    DateTime? deferredCutoffDate,
+    DateTime? deferredDebitDate,
+    int? deferredPendingDebitCents,
+    DateTime? deferredPendingDebitDate,
   }) = _ForecastResultImpl;
 
   factory ForecastResult.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -97,6 +105,24 @@ abstract class ForecastResult
           : _itdod8fx.Protocol().deserialize<_in08zzvs.VariableEstimateInfo>(
               jsonSerialization['variable'],
             ),
+      deferredCutoffDate: jsonSerialization['deferredCutoffDate'] == null
+          ? null
+          : _is.DateTimeJsonExtension.fromJson(
+              jsonSerialization['deferredCutoffDate'],
+            ),
+      deferredDebitDate: jsonSerialization['deferredDebitDate'] == null
+          ? null
+          : _is.DateTimeJsonExtension.fromJson(
+              jsonSerialization['deferredDebitDate'],
+            ),
+      deferredPendingDebitCents:
+          jsonSerialization['deferredPendingDebitCents'] as int?,
+      deferredPendingDebitDate:
+          jsonSerialization['deferredPendingDebitDate'] == null
+          ? null
+          : _is.DateTimeJsonExtension.fromJson(
+              jsonSerialization['deferredPendingDebitDate'],
+            ),
     );
   }
 
@@ -135,6 +161,16 @@ abstract class ForecastResult
   /// Estimated variable spending, when asked for (already in `days`).
   _in08zzvs.VariableEstimateInfo? variable;
 
+  /// Active billing cycle cutoff and debit dates (deferred debit card, decision 0052).
+  DateTime? deferredCutoffDate;
+
+  DateTime? deferredDebitDate;
+
+  /// Previous billing cycle pending debit (between cutoff and debit day).
+  int? deferredPendingDebitCents;
+
+  DateTime? deferredPendingDebitDate;
+
   /// Returns a shallow copy of this [ForecastResult]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -154,6 +190,10 @@ abstract class ForecastResult
     List<_i7qmkh8w.ReconciliationProposal>? proposals,
     int? autoReconciledCount,
     _in08zzvs.VariableEstimateInfo? variable,
+    DateTime? deferredCutoffDate,
+    DateTime? deferredDebitDate,
+    int? deferredPendingDebitCents,
+    DateTime? deferredPendingDebitDate,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -175,6 +215,14 @@ abstract class ForecastResult
       'proposals': proposals.toJson(valueToJson: (v) => v.toJson()),
       'autoReconciledCount': autoReconciledCount,
       if (variable != null) 'variable': variable?.toJson(),
+      if (deferredCutoffDate != null)
+        'deferredCutoffDate': deferredCutoffDate?.toJson(),
+      if (deferredDebitDate != null)
+        'deferredDebitDate': deferredDebitDate?.toJson(),
+      if (deferredPendingDebitCents != null)
+        'deferredPendingDebitCents': deferredPendingDebitCents,
+      if (deferredPendingDebitDate != null)
+        'deferredPendingDebitDate': deferredPendingDebitDate?.toJson(),
     };
   }
 
@@ -198,6 +246,14 @@ abstract class ForecastResult
       'proposals': proposals.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'autoReconciledCount': autoReconciledCount,
       if (variable != null) 'variable': variable?.toJsonForProtocol(),
+      if (deferredCutoffDate != null)
+        'deferredCutoffDate': deferredCutoffDate?.toJson(),
+      if (deferredDebitDate != null)
+        'deferredDebitDate': deferredDebitDate?.toJson(),
+      if (deferredPendingDebitCents != null)
+        'deferredPendingDebitCents': deferredPendingDebitCents,
+      if (deferredPendingDebitDate != null)
+        'deferredPendingDebitDate': deferredPendingDebitDate?.toJson(),
     };
   }
 
@@ -226,6 +282,10 @@ class _ForecastResultImpl extends ForecastResult {
     required List<_i7qmkh8w.ReconciliationProposal> proposals,
     required int autoReconciledCount,
     _in08zzvs.VariableEstimateInfo? variable,
+    DateTime? deferredCutoffDate,
+    DateTime? deferredDebitDate,
+    int? deferredPendingDebitCents,
+    DateTime? deferredPendingDebitDate,
   }) : super._(
          accountId: accountId,
          today: today,
@@ -242,6 +302,10 @@ class _ForecastResultImpl extends ForecastResult {
          proposals: proposals,
          autoReconciledCount: autoReconciledCount,
          variable: variable,
+         deferredCutoffDate: deferredCutoffDate,
+         deferredDebitDate: deferredDebitDate,
+         deferredPendingDebitCents: deferredPendingDebitCents,
+         deferredPendingDebitDate: deferredPendingDebitDate,
        );
 
   /// Returns a shallow copy of this [ForecastResult]
@@ -264,6 +328,10 @@ class _ForecastResultImpl extends ForecastResult {
     List<_i7qmkh8w.ReconciliationProposal>? proposals,
     int? autoReconciledCount,
     Object? variable = _Undefined,
+    Object? deferredCutoffDate = _Undefined,
+    Object? deferredDebitDate = _Undefined,
+    Object? deferredPendingDebitCents = _Undefined,
+    Object? deferredPendingDebitDate = _Undefined,
   }) {
     return ForecastResult(
       accountId: accountId ?? this.accountId,
@@ -286,6 +354,18 @@ class _ForecastResultImpl extends ForecastResult {
       variable: variable is _in08zzvs.VariableEstimateInfo?
           ? variable
           : this.variable?.copyWith(),
+      deferredCutoffDate: deferredCutoffDate is DateTime?
+          ? deferredCutoffDate
+          : this.deferredCutoffDate,
+      deferredDebitDate: deferredDebitDate is DateTime?
+          ? deferredDebitDate
+          : this.deferredDebitDate,
+      deferredPendingDebitCents: deferredPendingDebitCents is int?
+          ? deferredPendingDebitCents
+          : this.deferredPendingDebitCents,
+      deferredPendingDebitDate: deferredPendingDebitDate is DateTime?
+          ? deferredPendingDebitDate
+          : this.deferredPendingDebitDate,
     );
   }
 }

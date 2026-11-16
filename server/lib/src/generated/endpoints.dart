@@ -573,6 +573,21 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<_ioa13f9g.AccountVisibility?>(),
               nullable: true,
             ),
+            'statementCutoffDay': _is.ParameterDescription(
+              name: 'statementCutoffDay',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'statementDebitDay': _is.ParameterDescription(
+              name: 'statementDebitDay',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'linkedAccountId': _is.ParameterDescription(
+              name: 'linkedAccountId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -589,6 +604,9 @@ class Endpoints extends _is.EndpointDispatch {
                     initialBalanceDate: params['initialBalanceDate'],
                     alertThresholdCents: params['alertThresholdCents'],
                     visibility: params['visibility'],
+                    statementCutoffDay: params['statementCutoffDay'],
+                    statementDebitDay: params['statementDebitDay'],
+                    linkedAccountId: params['linkedAccountId'],
                   ),
         ),
         'update': _is.MethodConnector(
@@ -649,6 +667,36 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<bool?>(),
               nullable: true,
             ),
+            'statementCutoffDay': _is.ParameterDescription(
+              name: 'statementCutoffDay',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'clearStatementCutoffDay': _is.ParameterDescription(
+              name: 'clearStatementCutoffDay',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+            'statementDebitDay': _is.ParameterDescription(
+              name: 'statementDebitDay',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'clearStatementDebitDay': _is.ParameterDescription(
+              name: 'clearStatementDebitDay',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+            'linkedAccountId': _is.ParameterDescription(
+              name: 'linkedAccountId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'clearLinkedAccountId': _is.ParameterDescription(
+              name: 'clearLinkedAccountId',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -668,6 +716,12 @@ class Endpoints extends _is.EndpointDispatch {
                     visibility: params['visibility'],
                     color: params['color'],
                     clearColor: params['clearColor'],
+                    statementCutoffDay: params['statementCutoffDay'],
+                    clearStatementCutoffDay: params['clearStatementCutoffDay'],
+                    statementDebitDay: params['statementDebitDay'],
+                    clearStatementDebitDay: params['clearStatementDebitDay'],
+                    linkedAccountId: params['linkedAccountId'],
+                    clearLinkedAccountId: params['clearLinkedAccountId'],
                   ),
         ),
         'setSavingsTerms': _is.MethodConnector(
@@ -1626,6 +1680,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'accountIds': _is.ParameterDescription(
+              name: 'accountIds',
+              type: _is.getType<List<int>?>(),
+              nullable: true,
+            ),
             'periods': _is.ParameterDescription(
               name: 'periods',
               type: _is.getType<int?>(),
@@ -1643,6 +1702,7 @@ class Endpoints extends _is.EndpointDispatch {
                     params['period'],
                     params['date'],
                     accountId: params['accountId'],
+                    accountIds: params['accountIds'],
                     periods: params['periods'],
                   ),
         ),
@@ -1679,6 +1739,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'accountIds': _is.ParameterDescription(
+              name: 'accountIds',
+              type: _is.getType<List<int>?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -1693,6 +1758,7 @@ class Endpoints extends _is.EndpointDispatch {
                     categoryId: params['categoryId'],
                     unclassified: params['unclassified'],
                     accountId: params['accountId'],
+                    accountIds: params['accountIds'],
                   ),
         ),
         'leftToLive': _is.MethodConnector(
@@ -1708,6 +1774,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'accountIds': _is.ParameterDescription(
+              name: 'accountIds',
+              type: _is.getType<List<int>?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -1718,6 +1789,7 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['groupId'],
                     accountId: params['accountId'],
+                    accountIds: params['accountIds'],
                   ),
         ),
         'summary': _is.MethodConnector(
@@ -1782,6 +1854,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int?>(),
               nullable: true,
             ),
+            'accountIds': _is.ParameterDescription(
+              name: 'accountIds',
+              type: _is.getType<List<int>?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -1793,6 +1870,7 @@ class Endpoints extends _is.EndpointDispatch {
                     params['groupId'],
                     params['date'],
                     accountId: params['accountId'],
+                    accountIds: params['accountIds'],
                   ),
         ),
       },

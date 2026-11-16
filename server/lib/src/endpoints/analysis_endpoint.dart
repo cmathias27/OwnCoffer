@@ -34,10 +34,16 @@ class AnalysisEndpoint extends Endpoint {
     BudgetPeriod period,
     DateTime date, {
     int? accountId,
+    List<int>? accountIds,
     int? periods,
   }) async {
     final count = (periods ?? _history).clamp(4, _maxHistory);
-    final ids = await SpendingService.accounts(session, groupId, accountId);
+    final ids = await SpendingService.accounts(
+      session,
+      groupId,
+      accountId,
+      accountIds: accountIds,
+    );
     final current = await SpendingService.period(
       session,
       groupId,
@@ -132,8 +138,14 @@ class AnalysisEndpoint extends Endpoint {
     int? categoryId,
     bool? unclassified,
     int? accountId,
+    List<int>? accountIds,
   }) async {
-    final ids = await SpendingService.accounts(session, groupId, accountId);
+    final ids = await SpendingService.accounts(
+      session,
+      groupId,
+      accountId,
+      accountIds: accountIds,
+    );
     final p = await SpendingService.period(
       session,
       groupId,
@@ -192,9 +204,18 @@ class AnalysisEndpoint extends Endpoint {
     Session session,
     int groupId, {
     int? accountId,
+    List<int>? accountIds,
   }) async {
     final List<Account> accounts;
-    if (accountId != null) {
+    if (accountIds != null && accountIds.isNotEmpty) {
+      final visible = await Access.visibleAccounts(session, groupId);
+      final byId = {for (final a in visible) a.id!: a};
+      final requested = accountIds.toSet();
+      if (!requested.every(byId.containsKey)) {
+        throw AccessDeniedException(code: 'account_access_denied');
+      }
+      accounts = [for (final id in accountIds) byId[id]!];
+    } else if (accountId != null) {
       final a = await Access.requireAccount(session, accountId);
       if (a.groupId != groupId) {
         throw AccessDeniedException(code: 'account_access_denied');
@@ -395,8 +416,14 @@ class AnalysisEndpoint extends Endpoint {
     int groupId,
     DateTime date, {
     int? accountId,
+    List<int>? accountIds,
   }) async {
-    final ids = await SpendingService.accounts(session, groupId, accountId);
+    final ids = await SpendingService.accounts(
+      session,
+      groupId,
+      accountId,
+      accountIds: accountIds,
+    );
     final month = await SpendingService.period(
       session,
       groupId,

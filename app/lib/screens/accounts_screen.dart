@@ -71,6 +71,7 @@ class AccountsScreenState extends State<AccountsScreen> {
       builder: (_) => AccountDialog(
         groupId: widget.membership.group.id!,
         account: account,
+        existingAccounts: _rows?.map((r) => r.$1).toList(),
       ),
     );
     if (saved == true) await reload();
@@ -189,53 +190,113 @@ class _AccountCard extends StatelessWidget {
                   style: TextStyle(color: theme.colorScheme.error),
                 ),
               if (f != null) ...[
-                Text(
-                  context.money(
-                    f.currentBalanceCents,
-                    currency: account.currency,
+                if (account.kind == AccountKind.deferredCard) ...[
+                  Text(
+                    l.deferredCardOutstanding,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    color: f.currentBalanceCents < 0
-                        ? theme.colorScheme.error
-                        : null,
-                  ),
-                ),
-                Text(
-                  l.clearedBalanceValue(
+                  Text(
                     context.money(
-                      f.clearedBalanceCents,
+                      f.currentBalanceCents,
                       currency: account.currency,
                     ),
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      color: f.currentBalanceCents < 0
+                          ? theme.colorScheme.error
+                          : null,
+                    ),
                   ),
-                  style: theme.textTheme.bodySmall,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  l.forecastLowest(
+                  if (f.deferredCutoffDate != null &&
+                      f.deferredDebitDate != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        l.deferredCardCycleInfo(
+                          context.shortDay(f.deferredCutoffDate!),
+                          context.shortDay(f.deferredDebitDate!),
+                        ),
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ),
+                  if (f.deferredPendingDebitCents != null &&
+                      f.deferredPendingDebitDate != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.secondaryContainer,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          l.deferredCardPendingDebit(
+                            context.shortDay(f.deferredPendingDebitDate!),
+                            context.money(
+                              f.deferredPendingDebitCents!,
+                              currency: account.currency,
+                            ),
+                          ),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSecondaryContainer,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                ] else ...[
+                  Text(
                     context.money(
-                      f.lowestBalanceCents,
+                      f.currentBalanceCents,
                       currency: account.currency,
                     ),
-                    context.shortDay(f.lowestDate),
-                  ),
-                ),
-                if (overdraft != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.warning_amber,
-                          color: theme.colorScheme.error,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          l.overdraftExpected(context.day(overdraft)),
-                          style: TextStyle(color: theme.colorScheme.error),
-                        ),
-                      ],
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      color: f.currentBalanceCents < 0
+                          ? theme.colorScheme.error
+                          : null,
                     ),
                   ),
+                  Text(
+                    l.clearedBalanceValue(
+                      context.money(
+                        f.clearedBalanceCents,
+                        currency: account.currency,
+                      ),
+                    ),
+                    style: theme.textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l.forecastLowest(
+                      context.money(
+                        f.lowestBalanceCents,
+                        currency: account.currency,
+                      ),
+                      context.shortDay(f.lowestDate),
+                    ),
+                  ),
+                  if (overdraft != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.warning_amber,
+                            color: theme.colorScheme.error,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            l.overdraftExpected(context.day(overdraft)),
+                            style: TextStyle(color: theme.colorScheme.error),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               ],
             ],
           ),
@@ -249,7 +310,14 @@ class _AccountCard extends StatelessWidget {
 class AccountDialog extends StatefulWidget {
   final int groupId;
   final Account? account;
-  const AccountDialog({super.key, required this.groupId, this.account});
+  final List<Account>? existingAccounts;
+
+  const AccountDialog({
+    super.key,
+    required this.groupId,
+    this.account,
+    this.existingAccounts,
+  });
 
   @override
   State<AccountDialog> createState() => _AccountDialogState();
@@ -266,6 +334,13 @@ class _AccountDialogState extends State<AccountDialog> {
   late final _threshold = TextEditingController(
     text: _plain(widget.account?.alertThresholdCents ?? 0),
   );
+  late final _cutoffDay = TextEditingController(
+    text: widget.account?.statementCutoffDay?.toString() ?? '',
+  );
+  late final _debitDay = TextEditingController(
+    text: widget.account?.statementDebitDay?.toString() ?? '',
+  );
+  late int? _linkedAccountId = widget.account?.linkedAccountId;
   late var _kind = widget.account?.kind ?? AccountKind.checking;
   late var _restricted =
       widget.account?.visibility == AccountVisibility.restricted;
@@ -280,7 +355,14 @@ class _AccountDialogState extends State<AccountDialog> {
 
   @override
   void dispose() {
-    for (final c in [_name, _bank, _initial, _threshold]) {
+    for (final c in [
+      _name,
+      _bank,
+      _initial,
+      _threshold,
+      _cutoffDay,
+      _debitDay,
+    ]) {
       c.dispose();
     }
     super.dispose();
@@ -293,6 +375,24 @@ class _AccountDialogState extends State<AccountDialog> {
     if (initial == null || threshold == null) {
       setState(() => _error = l.amountInvalid);
       return;
+    }
+    int? cutoff;
+    int? debit;
+    if (_kind == AccountKind.deferredCard) {
+      if (_cutoffDay.text.trim().isNotEmpty) {
+        cutoff = int.tryParse(_cutoffDay.text.trim());
+        if (cutoff == null || cutoff < 1 || cutoff > 31) {
+          setState(() => _error = l.amountInvalid);
+          return;
+        }
+      }
+      if (_debitDay.text.trim().isNotEmpty) {
+        debit = int.tryParse(_debitDay.text.trim());
+        if (debit == null || debit < 1 || debit > 31) {
+          setState(() => _error = l.amountInvalid);
+          return;
+        }
+      }
     }
     setState(() => (_busy = true, _error = null));
     try {
@@ -309,6 +409,9 @@ class _AccountDialogState extends State<AccountDialog> {
           initialBalanceCents: initial,
           alertThresholdCents: threshold,
           visibility: visibility,
+          statementCutoffDay: cutoff,
+          statementDebitDay: debit,
+          linkedAccountId: _linkedAccountId,
         );
       } else {
         await client.account.update(
@@ -319,6 +422,12 @@ class _AccountDialogState extends State<AccountDialog> {
           initialBalanceCents: initial,
           alertThresholdCents: threshold,
           visibility: visibility,
+          statementCutoffDay: cutoff,
+          clearStatementCutoffDay: cutoff == null,
+          statementDebitDay: debit,
+          clearStatementDebitDay: debit == null,
+          linkedAccountId: _linkedAccountId,
+          clearLinkedAccountId: _linkedAccountId == null,
         );
       }
       if (mounted) Navigator.of(context).pop(true);
@@ -361,6 +470,60 @@ class _AccountDialogState extends State<AccountDialog> {
                   ],
                   onChanged: (k) => setState(() => _kind = k ?? _kind),
                 ),
+              if (_kind == AccountKind.deferredCard) ...[
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _cutoffDay,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: l.deferredCardCutoffDay,
+                          helperText: l.deferredCardCutoffDayHelp,
+                          helperMaxLines: 2,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: TextField(
+                        controller: _debitDay,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: l.deferredCardDebitDay,
+                          helperText: l.deferredCardDebitDayHelp,
+                          helperMaxLines: 2,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                if (widget.existingAccounts != null &&
+                    widget.existingAccounts!.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<int?>(
+                    isExpanded: true,
+                    initialValue: _linkedAccountId,
+                    decoration: InputDecoration(
+                      labelText: l.deferredCardLinkedAccount,
+                    ),
+                    items: [
+                      DropdownMenuItem<int?>(
+                        value: null,
+                        child: Text(l.deferredCardNoLinkedAccount),
+                      ),
+                      for (final a in widget.existingAccounts!)
+                        if (a.id != widget.account?.id)
+                          DropdownMenuItem<int?>(
+                            value: a.id,
+                            child: Text(a.name),
+                          ),
+                    ],
+                    onChanged: (id) => setState(() => _linkedAccountId = id),
+                  ),
+                ],
+              ],
               TextField(
                 controller: _bank,
                 decoration: InputDecoration(labelText: l.accountBank),

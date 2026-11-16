@@ -22,3 +22,9 @@ fields:
   autoReconciledCount: int
   ### Estimated variable spending, when asked for (already in `days`).
   variable: VariableEstimateInfo?
+  ### Active billing cycle cutoff and debit dates (deferred debit card, decision 0052).
+  deferredCutoffDate: DateTime?
+  deferredDebitDate: DateTime?
+  ### Previous billing cycle pending debit (between cutoff and debit day).
+  deferredPendingDebitCents: int?
+  deferredPendingDebitDate: DateTime?

@@ -127,6 +127,8 @@ String serverErrorText(AppLocalizations l, String code) => switch (code) {
   'invalid_ai_autonomy_level' => l.error_invalid_ai_autonomy_level,
   'mcp_token_access_denied' => l.error_mcp_token_access_denied,
   'invalid_month_start_day' => l.error_invalid_month_start_day,
+  'invalid_cutoff_day' => l.error_invalid_cutoff_day,
+  'invalid_debit_day' => l.error_invalid_debit_day,
   // File format errors of shared/ come prefixed with `import_`.
   _ when code.startsWith('import_') => importFormatText(l, code.substring(7)),
   _ => l.error_generic,

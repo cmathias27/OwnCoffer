@@ -6823,5 +6823,49 @@
   "balanceForceIncluded": "Déduite du compte (incluse)",
   "balanceForceExcluded": "Hors solde (non déduite)",
   "balanceOverrideUpdated": "Prise en compte dans le solde modifiée",
-  "operationExcludedFromBalanceBadge": "Hors solde"
+  "operationExcludedFromBalanceBadge": "Hors solde",
+  "deferredCardCutoffDay": "Jour d'arrêté mensuel (1-31)",
+  "deferredCardCutoffDayHelp": "Dernier jour pris en compte dans le relevé du mois (ex. 28)",
+  "deferredCardDebitDay": "Jour de prélèvement (1-31)",
+  "deferredCardDebitDayHelp": "Jour où l'en-cours est prélevé sur le compte courant (ex. 4)",
+  "deferredCardLinkedAccount": "Compte courant prélevé",
+  "deferredCardNoLinkedAccount": "Aucun compte associé",
+  "deferredCardOutstanding": "En-cours carte",
+  "deferredCardCycleInfo": "Arrêté le {cutoff} • Débit prévu le {debit}",
+  "@deferredCardCycleInfo": {
+    "placeholders": {
+      "cutoff": {
+        "type": "String"
+      },
+      "debit": {
+        "type": "String"
+      }
+    }
+  },
+  "deferredCardPendingDebit": "À prélever le {date} : {amount}",
+  "@deferredCardPendingDebit": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "accountFilterAll": "Tous les comptes",
+  "accountFilterMultiple": "{count, plural, =1{1 compte sélectionné} other{{count} comptes sélectionnés}}",
+  "@accountFilterMultiple": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountFilterDialogTitle": "Comptes pris en compte",
+  "accountFilterSelectAll": "Tout cocher",
+  "accountFilterSelectNone": "Tout décocher",
+  "accountFilterApply": "Appliquer",
+  "error_invalid_cutoff_day": "Le jour d'arrêté doit être compris entre 1 et 31.",
+  "error_invalid_debit_day": "Le jour de prélèvement doit être compris entre 1 et 31."
 }

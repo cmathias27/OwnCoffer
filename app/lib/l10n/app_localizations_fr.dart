@@ -9831,4 +9831,71 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get operationExcludedFromBalanceBadge => 'Hors solde';
+
+  @override
+  String get deferredCardCutoffDay => 'Jour d\'arrêté mensuel (1-31)';
+
+  @override
+  String get deferredCardCutoffDayHelp =>
+      'Dernier jour pris en compte dans le relevé du mois (ex. 28)';
+
+  @override
+  String get deferredCardDebitDay => 'Jour de prélèvement (1-31)';
+
+  @override
+  String get deferredCardDebitDayHelp =>
+      'Jour où l\'en-cours est prélevé sur le compte courant (ex. 4)';
+
+  @override
+  String get deferredCardLinkedAccount => 'Compte courant prélevé';
+
+  @override
+  String get deferredCardNoLinkedAccount => 'Aucun compte associé';
+
+  @override
+  String get deferredCardOutstanding => 'En-cours carte';
+
+  @override
+  String deferredCardCycleInfo(String cutoff, String debit) {
+    return 'Arrêté le $cutoff • Débit prévu le $debit';
+  }
+
+  @override
+  String deferredCardPendingDebit(String date, String amount) {
+    return 'À prélever le $date : $amount';
+  }
+
+  @override
+  String get accountFilterAll => 'Tous les comptes';
+
+  @override
+  String accountFilterMultiple(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count comptes sélectionnés',
+      one: '1 compte sélectionné',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accountFilterDialogTitle => 'Comptes pris en compte';
+
+  @override
+  String get accountFilterSelectAll => 'Tout cocher';
+
+  @override
+  String get accountFilterSelectNone => 'Tout décocher';
+
+  @override
+  String get accountFilterApply => 'Appliquer';
+
+  @override
+  String get error_invalid_cutoff_day =>
+      'Le jour d\'arrêté doit être compris entre 1 et 31.';
+
+  @override
+  String get error_invalid_debit_day =>
+      'Le jour de prélèvement doit être compris entre 1 et 31.';
 }

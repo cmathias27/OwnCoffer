@@ -4,7 +4,7 @@ Le Budget montre où va l'argent sur une période : semaine, mois, trimestre ou 
 
 ## La page, de haut en bas
 
-En tête, la **barre de période** : ce mois, le mois précédent ou cette année, gardée sur cet appareil ; le menu à côté donne aussi la semaine et le trimestre. La vue du mois vient d'abord ; **« Voir le détail »** ouvre l'analyse (vues, classements, historique). **« Pourquoi ce chiffre ? »** montre le calcul du bilan et du reste à vivre.
+En tête, la **barre de période** : ce mois, le mois précédent ou cette année, gardée sur cet appareil ; le menu à côté donne aussi la semaine et le trimestre. Le **filtre de comptes** permet de choisir tous les comptes, un compte précis ou une combinaison personnalisée (ex. compte courant et carte à débit différé). La vue du mois vient d'abord ; **« Voir le détail »** ouvre l'analyse (vues, classements, historique). **« Pourquoi ce chiffre ? »** montre le calcul du bilan et du reste à vivre.
 
 - **Bilan** : revenus, dépenses, épargne et ce qu'il reste, comparés à la période précédente.
 - **Reste à vivre** jusqu'à la prochaine paie, et par jour.
