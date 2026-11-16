@@ -364,6 +364,9 @@ class EndpointAccount extends _isc.EndpointRef {
     DateTime? initialBalanceDate,
     int? alertThresholdCents,
     _i33sijhq.AccountVisibility? visibility,
+    int? statementCutoffDay,
+    int? statementDebitDay,
+    int? linkedAccountId,
   }) => caller.callServerEndpoint<_i4motmly.Account>(
     'account',
     'create',
@@ -376,6 +379,9 @@ class EndpointAccount extends _isc.EndpointRef {
       'initialBalanceDate': initialBalanceDate,
       'alertThresholdCents': alertThresholdCents,
       'visibility': visibility,
+      'statementCutoffDay': statementCutoffDay,
+      'statementDebitDay': statementDebitDay,
+      'linkedAccountId': linkedAccountId,
     },
   );
 
@@ -391,6 +397,12 @@ class EndpointAccount extends _isc.EndpointRef {
     _i33sijhq.AccountVisibility? visibility,
     String? color,
     bool? clearColor,
+    int? statementCutoffDay,
+    bool? clearStatementCutoffDay,
+    int? statementDebitDay,
+    bool? clearStatementDebitDay,
+    int? linkedAccountId,
+    bool? clearLinkedAccountId,
   }) => caller.callServerEndpoint<_i4motmly.Account>(
     'account',
     'update',
@@ -406,6 +418,12 @@ class EndpointAccount extends _isc.EndpointRef {
       'visibility': visibility,
       'color': color,
       'clearColor': clearColor,
+      'statementCutoffDay': statementCutoffDay,
+      'clearStatementCutoffDay': clearStatementCutoffDay,
+      'statementDebitDay': statementDebitDay,
+      'clearStatementDebitDay': clearStatementDebitDay,
+      'linkedAccountId': linkedAccountId,
+      'clearLinkedAccountId': clearLinkedAccountId,
     },
   );
 
@@ -943,6 +961,7 @@ class EndpointAnalysis extends _isc.EndpointRef {
     _iff4p9sd.BudgetPeriod period,
     DateTime date, {
     int? accountId,
+    List<int>? accountIds,
     int? periods,
   }) => caller.callServerEndpoint<_isyymxi6.SpendingReport>(
     'analysis',
@@ -952,6 +971,7 @@ class EndpointAnalysis extends _isc.EndpointRef {
       'period': period,
       'date': date,
       'accountId': accountId,
+      'accountIds': accountIds,
       'periods': periods,
     },
   );
@@ -965,6 +985,7 @@ class EndpointAnalysis extends _isc.EndpointRef {
     int? categoryId,
     bool? unclassified,
     int? accountId,
+    List<int>? accountIds,
   }) => caller.callServerEndpoint<List<_ivksw0b3.BankTransaction>>(
     'analysis',
     'operations',
@@ -975,6 +996,7 @@ class EndpointAnalysis extends _isc.EndpointRef {
       'categoryId': categoryId,
       'unclassified': unclassified,
       'accountId': accountId,
+      'accountIds': accountIds,
     },
   );
 
@@ -984,12 +1006,14 @@ class EndpointAnalysis extends _isc.EndpointRef {
   _ida.Future<_iqfjeddm.LeftToLiveReport> leftToLive(
     int groupId, {
     int? accountId,
+    List<int>? accountIds,
   }) => caller.callServerEndpoint<_iqfjeddm.LeftToLiveReport>(
     'analysis',
     'leftToLive',
     {
       'groupId': groupId,
       'accountId': accountId,
+      'accountIds': accountIds,
     },
   );
 
@@ -1027,6 +1051,7 @@ class EndpointAnalysis extends _isc.EndpointRef {
     int groupId,
     DateTime date, {
     int? accountId,
+    List<int>? accountIds,
   }) => caller.callServerEndpoint<_ilg6npsn.MonthReview>(
     'analysis',
     'review',
@@ -1034,6 +1059,7 @@ class EndpointAnalysis extends _isc.EndpointRef {
       'groupId': groupId,
       'date': date,
       'accountId': accountId,
+      'accountIds': accountIds,
     },
   );
 }

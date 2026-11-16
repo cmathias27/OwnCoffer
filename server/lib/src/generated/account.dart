@@ -33,6 +33,9 @@ abstract class Account
     this.color,
     this.regulatedKind,
     this.interestRateBp,
+    this.statementCutoffDay,
+    this.statementDebitDay,
+    this.linkedAccountId,
     DateTime? createdAt,
     this.deletedAt,
   }) : currency = currency ?? 'EUR',
@@ -56,6 +59,9 @@ abstract class Account
     String? color,
     _ijnu36v8.RegulatedKind? regulatedKind,
     int? interestRateBp,
+    int? statementCutoffDay,
+    int? statementDebitDay,
+    int? linkedAccountId,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _AccountImpl;
@@ -90,6 +96,9 @@ abstract class Account
               (jsonSerialization['regulatedKind'] as String),
             ),
       interestRateBp: jsonSerialization['interestRateBp'] as int?,
+      statementCutoffDay: jsonSerialization['statementCutoffDay'] as int?,
+      statementDebitDay: jsonSerialization['statementDebitDay'] as int?,
+      linkedAccountId: jsonSerialization['linkedAccountId'] as int?,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _is.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -140,6 +149,13 @@ abstract class Account
 
   int? interestRateBp;
 
+  /// Deferred debit card parameters (decision 0052).
+  int? statementCutoffDay;
+
+  int? statementDebitDay;
+
+  int? linkedAccountId;
+
   DateTime createdAt;
 
   DateTime? deletedAt;
@@ -165,6 +181,9 @@ abstract class Account
     String? color,
     _ijnu36v8.RegulatedKind? regulatedKind,
     int? interestRateBp,
+    int? statementCutoffDay,
+    int? statementDebitDay,
+    int? linkedAccountId,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -187,6 +206,9 @@ abstract class Account
       if (color != null) 'color': color,
       if (regulatedKind != null) 'regulatedKind': regulatedKind?.toJson(),
       if (interestRateBp != null) 'interestRateBp': interestRateBp,
+      if (statementCutoffDay != null) 'statementCutoffDay': statementCutoffDay,
+      if (statementDebitDay != null) 'statementDebitDay': statementDebitDay,
+      if (linkedAccountId != null) 'linkedAccountId': linkedAccountId,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -210,6 +232,9 @@ abstract class Account
       if (color != null) 'color': color,
       if (regulatedKind != null) 'regulatedKind': regulatedKind?.toJson(),
       if (interestRateBp != null) 'interestRateBp': interestRateBp,
+      if (statementCutoffDay != null) 'statementCutoffDay': statementCutoffDay,
+      if (statementDebitDay != null) 'statementDebitDay': statementDebitDay,
+      if (linkedAccountId != null) 'linkedAccountId': linkedAccountId,
       'createdAt': createdAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
     };
@@ -261,6 +286,9 @@ class _AccountImpl extends Account {
     String? color,
     _ijnu36v8.RegulatedKind? regulatedKind,
     int? interestRateBp,
+    int? statementCutoffDay,
+    int? statementDebitDay,
+    int? linkedAccountId,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -278,6 +306,9 @@ class _AccountImpl extends Account {
          color: color,
          regulatedKind: regulatedKind,
          interestRateBp: interestRateBp,
+         statementCutoffDay: statementCutoffDay,
+         statementDebitDay: statementDebitDay,
+         linkedAccountId: linkedAccountId,
          createdAt: createdAt,
          deletedAt: deletedAt,
        );
@@ -301,6 +332,9 @@ class _AccountImpl extends Account {
     Object? color = _Undefined,
     Object? regulatedKind = _Undefined,
     Object? interestRateBp = _Undefined,
+    Object? statementCutoffDay = _Undefined,
+    Object? statementDebitDay = _Undefined,
+    Object? linkedAccountId = _Undefined,
     DateTime? createdAt,
     Object? deletedAt = _Undefined,
   }) {
@@ -327,6 +361,15 @@ class _AccountImpl extends Account {
       interestRateBp: interestRateBp is int?
           ? interestRateBp
           : this.interestRateBp,
+      statementCutoffDay: statementCutoffDay is int?
+          ? statementCutoffDay
+          : this.statementCutoffDay,
+      statementDebitDay: statementDebitDay is int?
+          ? statementDebitDay
+          : this.statementDebitDay,
+      linkedAccountId: linkedAccountId is int?
+          ? linkedAccountId
+          : this.linkedAccountId,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
     );
@@ -407,6 +450,21 @@ class AccountUpdateTable extends _is.UpdateTable<AccountTable> {
     value,
   );
 
+  _is.ColumnValue<int, int> statementCutoffDay(int? value) => _is.ColumnValue(
+    table.statementCutoffDay,
+    value,
+  );
+
+  _is.ColumnValue<int, int> statementDebitDay(int? value) => _is.ColumnValue(
+    table.statementDebitDay,
+    value,
+  );
+
+  _is.ColumnValue<int, int> linkedAccountId(int? value) => _is.ColumnValue(
+    table.linkedAccountId,
+    value,
+  );
+
   _is.ColumnValue<DateTime, DateTime> createdAt(DateTime value) =>
       _is.ColumnValue(
         table.createdAt,
@@ -482,6 +540,18 @@ class AccountTable extends _is.Table<int?> {
       'interestRateBp',
       this,
     );
+    statementCutoffDay = _is.ColumnInt(
+      'statementCutoffDay',
+      this,
+    );
+    statementDebitDay = _is.ColumnInt(
+      'statementDebitDay',
+      this,
+    );
+    linkedAccountId = _is.ColumnInt(
+      'linkedAccountId',
+      this,
+    );
     createdAt = _is.ColumnDateTime(
       'createdAt',
       this,
@@ -529,6 +599,13 @@ class AccountTable extends _is.Table<int?> {
 
   late final _is.ColumnInt interestRateBp;
 
+  /// Deferred debit card parameters (decision 0052).
+  late final _is.ColumnInt statementCutoffDay;
+
+  late final _is.ColumnInt statementDebitDay;
+
+  late final _is.ColumnInt linkedAccountId;
+
   late final _is.ColumnDateTime createdAt;
 
   late final _is.ColumnDateTime deletedAt;
@@ -549,6 +626,9 @@ class AccountTable extends _is.Table<int?> {
     color,
     regulatedKind,
     interestRateBp,
+    statementCutoffDay,
+    statementDebitDay,
+    linkedAccountId,
     createdAt,
     deletedAt,
   ];

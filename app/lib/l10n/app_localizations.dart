@@ -15342,6 +15342,108 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Hors solde'**
   String get operationExcludedFromBalanceBadge;
+
+  /// No description provided for @deferredCardCutoffDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jour d\'arrêté mensuel (1-31)'**
+  String get deferredCardCutoffDay;
+
+  /// No description provided for @deferredCardCutoffDayHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernier jour pris en compte dans le relevé du mois (ex. 28)'**
+  String get deferredCardCutoffDayHelp;
+
+  /// No description provided for @deferredCardDebitDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jour de prélèvement (1-31)'**
+  String get deferredCardDebitDay;
+
+  /// No description provided for @deferredCardDebitDayHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jour où l\'en-cours est prélevé sur le compte courant (ex. 4)'**
+  String get deferredCardDebitDayHelp;
+
+  /// No description provided for @deferredCardLinkedAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte courant prélevé'**
+  String get deferredCardLinkedAccount;
+
+  /// No description provided for @deferredCardNoLinkedAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun compte associé'**
+  String get deferredCardNoLinkedAccount;
+
+  /// No description provided for @deferredCardOutstanding.
+  ///
+  /// In fr, this message translates to:
+  /// **'En-cours carte'**
+  String get deferredCardOutstanding;
+
+  /// No description provided for @deferredCardCycleInfo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêté le {cutoff} • Débit prévu le {debit}'**
+  String deferredCardCycleInfo(String cutoff, String debit);
+
+  /// No description provided for @deferredCardPendingDebit.
+  ///
+  /// In fr, this message translates to:
+  /// **'À prélever le {date} : {amount}'**
+  String deferredCardPendingDebit(String date, String amount);
+
+  /// No description provided for @accountFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les comptes'**
+  String get accountFilterAll;
+
+  /// No description provided for @accountFilterMultiple.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 compte sélectionné} other{{count} comptes sélectionnés}}'**
+  String accountFilterMultiple(int count);
+
+  /// No description provided for @accountFilterDialogTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes pris en compte'**
+  String get accountFilterDialogTitle;
+
+  /// No description provided for @accountFilterSelectAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout cocher'**
+  String get accountFilterSelectAll;
+
+  /// No description provided for @accountFilterSelectNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout décocher'**
+  String get accountFilterSelectNone;
+
+  /// No description provided for @accountFilterApply.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appliquer'**
+  String get accountFilterApply;
+
+  /// No description provided for @error_invalid_cutoff_day.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le jour d\'arrêté doit être compris entre 1 et 31.'**
+  String get error_invalid_cutoff_day;
+
+  /// No description provided for @error_invalid_debit_day.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le jour de prélèvement doit être compris entre 1 et 31.'**
+  String get error_invalid_debit_day;
 }
 
 class _AppLocalizationsDelegate

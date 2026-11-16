@@ -575,6 +575,24 @@ class Protocol extends _is.DatabaseSerializationManager {
           dartType: 'int?',
         ),
         _isp.ColumnDefinition(
+          name: 'statementCutoffDay',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'statementDebitDay',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'linkedAccountId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
           name: 'createdAt',
           columnType: _isp.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
@@ -597,6 +615,16 @@ class Protocol extends _is.DatabaseSerializationManager {
           referenceColumns: ['id'],
           onUpdate: _isp.ForeignKeyAction.noAction,
           onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'accounts_fk_1',
+          columns: ['linkedAccountId'],
+          referenceTable: 'accounts',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.setNull,
           matchType: null,
         ),
       ],
@@ -6994,6 +7022,15 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    }
+    if (t == _is.getType<List<int>?>()) {
+      return (data != null
+              ? (data as List).map((e) => deserialize<int>(e)).toList()
+              : null)
+          as T;
+    }
     if (t == List<_ivm4hoam.BankTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ivm4hoam.BankTransaction>(e))
@@ -7011,9 +7048,6 @@ class Protocol extends _is.DatabaseSerializationManager {
               .map((e) => deserialize<_iqdruzyp.LifeEventInfo>(e))
               .toList()
           as T;
-    }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
     }
     if (t == List<_izsddv95.UserFeedback>) {
       return (data as List)
@@ -7041,12 +7075,6 @@ class Protocol extends _is.DatabaseSerializationManager {
       return (data as List)
               .map((e) => deserialize<_ipfe689d.MemberInfo>(e))
               .toList()
-          as T;
-    }
-    if (t == _is.getType<List<int>?>()) {
-      return (data != null
-              ? (data as List).map((e) => deserialize<int>(e)).toList()
-              : null)
           as T;
     }
     if (t == List<_igipv995.StatementImport>) {

@@ -3286,5 +3286,49 @@
   "balanceForceIncluded": "Deducted from account (included)",
   "balanceForceExcluded": "Excluded from balance (not deducted)",
   "balanceOverrideUpdated": "Balance inclusion updated",
-  "operationExcludedFromBalanceBadge": "Excluded"
+  "operationExcludedFromBalanceBadge": "Excluded",
+  "deferredCardCutoffDay": "Monthly cutoff day (1-31)",
+  "deferredCardCutoffDayHelp": "Last day included in the monthly statement (e.g. 28)",
+  "deferredCardDebitDay": "Settlement debit day (1-31)",
+  "deferredCardDebitDayHelp": "Day when outstanding balance is debited from checking (e.g. 4)",
+  "deferredCardLinkedAccount": "Debited checking account",
+  "deferredCardNoLinkedAccount": "No linked account",
+  "deferredCardOutstanding": "Card outstanding balance",
+  "deferredCardCycleInfo": "Cutoff on {cutoff} • Settlement on {debit}",
+  "@deferredCardCycleInfo": {
+    "placeholders": {
+      "cutoff": {
+        "type": "String"
+      },
+      "debit": {
+        "type": "String"
+      }
+    }
+  },
+  "deferredCardPendingDebit": "Settlement on {date}: {amount}",
+  "@deferredCardPendingDebit": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "accountFilterAll": "All accounts",
+  "accountFilterMultiple": "{count, plural, =1{1 account selected} other{{count} accounts selected}}",
+  "@accountFilterMultiple": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountFilterDialogTitle": "Selected accounts",
+  "accountFilterSelectAll": "Select all",
+  "accountFilterSelectNone": "Deselect all",
+  "accountFilterApply": "Apply",
+  "error_invalid_cutoff_day": "The cutoff day must be between 1 and 31.",
+  "error_invalid_debit_day": "The debit day must be between 1 and 31."
 }

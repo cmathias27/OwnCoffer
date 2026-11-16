@@ -9,12 +9,22 @@ import 'loan_terms.dart';
 
 /// Data of the spending engine, read on the accounts the user may see.
 abstract final class SpendingService {
-  /// The visible accounts of the group, or the one asked for.
+  /// The visible accounts of the group, or the ones asked for (decision 0052).
   static Future<Set<int>> accounts(
     Session session,
     int groupId,
-    int? accountId,
-  ) async {
+    int? accountId, {
+    List<int>? accountIds,
+  }) async {
+    if (accountIds != null && accountIds.isNotEmpty) {
+      final visible = await Access.visibleAccounts(session, groupId);
+      final visibleIds = {for (final a in visible) a.id!};
+      final requested = accountIds.toSet();
+      if (!visibleIds.containsAll(requested)) {
+        throw AccessDeniedException(code: 'account_access_denied');
+      }
+      return requested;
+    }
     if (accountId != null) {
       final a = await Access.requireAccount(session, accountId);
       if (a.groupId != groupId) {

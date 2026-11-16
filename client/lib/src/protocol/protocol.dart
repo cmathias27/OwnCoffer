@@ -1816,6 +1816,15 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    }
+    if (t == _isc.getType<List<int>?>()) {
+      return (data != null
+              ? (data as List).map((e) => deserialize<int>(e)).toList()
+              : null)
+          as T;
+    }
     if (t == List<_ivksw0b3.BankTransaction>) {
       return (data as List)
               .map((e) => deserialize<_ivksw0b3.BankTransaction>(e))
@@ -1833,9 +1842,6 @@ class Protocol extends _isc.SerializationManager {
               .map((e) => deserialize<_i9w5b3vz.LifeEventInfo>(e))
               .toList()
           as T;
-    }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
     }
     if (t == List<_i081ti63.UserFeedback>) {
       return (data as List)
@@ -1863,12 +1869,6 @@ class Protocol extends _isc.SerializationManager {
       return (data as List)
               .map((e) => deserialize<_igteyn7f.MemberInfo>(e))
               .toList()
-          as T;
-    }
-    if (t == _isc.getType<List<int>?>()) {
-      return (data != null
-              ? (data as List).map((e) => deserialize<int>(e)).toList()
-              : null)
           as T;
     }
     if (t == List<_i5x9swls.StatementImport>) {

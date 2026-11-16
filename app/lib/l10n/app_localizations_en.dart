@@ -9760,4 +9760,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get operationExcludedFromBalanceBadge => 'Excluded';
+
+  @override
+  String get deferredCardCutoffDay => 'Monthly cutoff day (1-31)';
+
+  @override
+  String get deferredCardCutoffDayHelp =>
+      'Last day included in the monthly statement (e.g. 28)';
+
+  @override
+  String get deferredCardDebitDay => 'Settlement debit day (1-31)';
+
+  @override
+  String get deferredCardDebitDayHelp =>
+      'Day when outstanding balance is debited from checking (e.g. 4)';
+
+  @override
+  String get deferredCardLinkedAccount => 'Debited checking account';
+
+  @override
+  String get deferredCardNoLinkedAccount => 'No linked account';
+
+  @override
+  String get deferredCardOutstanding => 'Card outstanding balance';
+
+  @override
+  String deferredCardCycleInfo(String cutoff, String debit) {
+    return 'Cutoff on $cutoff • Settlement on $debit';
+  }
+
+  @override
+  String deferredCardPendingDebit(String date, String amount) {
+    return 'Settlement on $date: $amount';
+  }
+
+  @override
+  String get accountFilterAll => 'All accounts';
+
+  @override
+  String accountFilterMultiple(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count accounts selected',
+      one: '1 account selected',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accountFilterDialogTitle => 'Selected accounts';
+
+  @override
+  String get accountFilterSelectAll => 'Select all';
+
+  @override
+  String get accountFilterSelectNone => 'Deselect all';
+
+  @override
+  String get accountFilterApply => 'Apply';
+
+  @override
+  String get error_invalid_cutoff_day =>
+      'The cutoff day must be between 1 and 31.';
+
+  @override
+  String get error_invalid_debit_day =>
+      'The debit day must be between 1 and 31.';
 }

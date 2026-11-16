@@ -893,6 +893,9 @@ class _AccountEndpoint {
     DateTime? initialBalanceDate,
     int? alertThresholdCents,
     _ioa13f9g.AccountVisibility? visibility,
+    int? statementCutoffDay,
+    int? statementDebitDay,
+    int? linkedAccountId,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -914,6 +917,9 @@ class _AccountEndpoint {
             'initialBalanceDate': initialBalanceDate,
             'alertThresholdCents': alertThresholdCents,
             'visibility': visibility,
+            'statementCutoffDay': statementCutoffDay,
+            'statementDebitDay': statementDebitDay,
+            'linkedAccountId': linkedAccountId,
           }),
           serializationManager: _serializationManager,
         );
@@ -943,6 +949,12 @@ class _AccountEndpoint {
     _ioa13f9g.AccountVisibility? visibility,
     String? color,
     bool? clearColor,
+    int? statementCutoffDay,
+    bool? clearStatementCutoffDay,
+    int? statementDebitDay,
+    bool? clearStatementDebitDay,
+    int? linkedAccountId,
+    bool? clearLinkedAccountId,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -967,6 +979,12 @@ class _AccountEndpoint {
             'visibility': visibility,
             'color': color,
             'clearColor': clearColor,
+            'statementCutoffDay': statementCutoffDay,
+            'clearStatementCutoffDay': clearStatementCutoffDay,
+            'statementDebitDay': statementDebitDay,
+            'clearStatementDebitDay': clearStatementDebitDay,
+            'linkedAccountId': linkedAccountId,
+            'clearLinkedAccountId': clearLinkedAccountId,
           }),
           serializationManager: _serializationManager,
         );
@@ -2606,6 +2624,7 @@ class _AnalysisEndpoint {
     _imscipj7.BudgetPeriod period,
     DateTime date, {
     int? accountId,
+    List<int>? accountIds,
     int? periods,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
@@ -2624,6 +2643,7 @@ class _AnalysisEndpoint {
             'period': period,
             'date': date,
             'accountId': accountId,
+            'accountIds': accountIds,
             'periods': periods,
           }),
           serializationManager: _serializationManager,
@@ -2649,6 +2669,7 @@ class _AnalysisEndpoint {
     int? categoryId,
     bool? unclassified,
     int? accountId,
+    List<int>? accountIds,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -2668,6 +2689,7 @@ class _AnalysisEndpoint {
             'categoryId': categoryId,
             'unclassified': unclassified,
             'accountId': accountId,
+            'accountIds': accountIds,
           }),
           serializationManager: _serializationManager,
         );
@@ -2688,6 +2710,7 @@ class _AnalysisEndpoint {
     _ist.TestSessionBuilder sessionBuilder,
     int groupId, {
     int? accountId,
+    List<int>? accountIds,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -2703,6 +2726,7 @@ class _AnalysisEndpoint {
           parameters: _ist.testObjectToJson({
             'groupId': groupId,
             'accountId': accountId,
+            'accountIds': accountIds,
           }),
           serializationManager: _serializationManager,
         );
@@ -2790,6 +2814,7 @@ class _AnalysisEndpoint {
     int groupId,
     DateTime date, {
     int? accountId,
+    List<int>? accountIds,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -2806,6 +2831,7 @@ class _AnalysisEndpoint {
             'groupId': groupId,
             'date': date,
             'accountId': accountId,
+            'accountIds': accountIds,
           }),
           serializationManager: _serializationManager,
         );

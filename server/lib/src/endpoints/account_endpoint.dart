@@ -32,8 +32,31 @@ class AccountEndpoint extends Endpoint {
     DateTime? initialBalanceDate,
     int? alertThresholdCents,
     AccountVisibility? visibility,
+    int? statementCutoffDay,
+    int? statementDebitDay,
+    int? linkedAccountId,
   }) async {
     await Access.requireMember(session, groupId, min: MemberRole.admin);
+    if (statementCutoffDay != null &&
+        (statementCutoffDay < 1 || statementCutoffDay > 31)) {
+      throw InvalidInputException(
+        code: 'invalid_cutoff_day',
+        field: 'statementCutoffDay',
+      );
+    }
+    if (statementDebitDay != null &&
+        (statementDebitDay < 1 || statementDebitDay > 31)) {
+      throw InvalidInputException(
+        code: 'invalid_debit_day',
+        field: 'statementDebitDay',
+      );
+    }
+    if (linkedAccountId != null) {
+      final linked = await Access.requireAccount(session, linkedAccountId);
+      if (linked.groupId != groupId) {
+        throw AccessDeniedException(code: 'account_access_denied');
+      }
+    }
     final account = await Account.db.insertRow(
       session,
       Account(
@@ -45,6 +68,9 @@ class AccountEndpoint extends Endpoint {
         initialBalanceDate: initialBalanceDate,
         alertThresholdCents: _cents(alertThresholdCents ?? 0),
         visibility: visibility ?? AccountVisibility.shared,
+        statementCutoffDay: statementCutoffDay,
+        statementDebitDay: statementDebitDay,
+        linkedAccountId: linkedAccountId,
       ),
     );
     await Audit.log(
@@ -71,9 +97,35 @@ class AccountEndpoint extends Endpoint {
     AccountVisibility? visibility,
     String? color,
     bool? clearColor,
+    int? statementCutoffDay,
+    bool? clearStatementCutoffDay,
+    int? statementDebitDay,
+    bool? clearStatementDebitDay,
+    int? linkedAccountId,
+    bool? clearLinkedAccountId,
   }) async {
     final current = await Access.requireAccount(session, accountId);
     await Access.requireMember(session, current.groupId, min: MemberRole.admin);
+    if (statementCutoffDay != null &&
+        (statementCutoffDay < 1 || statementCutoffDay > 31)) {
+      throw InvalidInputException(
+        code: 'invalid_cutoff_day',
+        field: 'statementCutoffDay',
+      );
+    }
+    if (statementDebitDay != null &&
+        (statementDebitDay < 1 || statementDebitDay > 31)) {
+      throw InvalidInputException(
+        code: 'invalid_debit_day',
+        field: 'statementDebitDay',
+      );
+    }
+    if (linkedAccountId != null) {
+      final linked = await Access.requireAccount(session, linkedAccountId);
+      if (linked.groupId != current.groupId) {
+        throw AccessDeniedException(code: 'account_access_denied');
+      }
+    }
     final String? effectiveBank = clearBank == true
         ? null
         : (bank != null
@@ -87,6 +139,15 @@ class AccountEndpoint extends Endpoint {
         : (color != null
               ? (color.trim().isEmpty ? null : color.trim())
               : current.color);
+    final int? effectiveCutoffDay = clearStatementCutoffDay == true
+        ? null
+        : (statementCutoffDay ?? current.statementCutoffDay);
+    final int? effectiveDebitDay = clearStatementDebitDay == true
+        ? null
+        : (statementDebitDay ?? current.statementDebitDay);
+    final int? effectiveLinkedId = clearLinkedAccountId == true
+        ? null
+        : (linkedAccountId ?? current.linkedAccountId);
 
     final updated = await Account.db.updateRow(
       session,
@@ -102,6 +163,9 @@ class AccountEndpoint extends Endpoint {
             : _cents(alertThresholdCents),
         visibility: visibility ?? current.visibility,
         color: effectiveColor,
+        statementCutoffDay: effectiveCutoffDay,
+        statementDebitDay: effectiveDebitDay,
+        linkedAccountId: effectiveLinkedId,
       ),
     );
     await Audit.log(

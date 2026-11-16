@@ -5,6 +5,7 @@ import '../client.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/error_messages.dart';
 import '../util/format.dart';
+import '../widgets/account_filter_chip.dart';
 import '../widgets/budget_charts.dart';
 import '../widgets/category_field.dart';
 import '../widgets/contract_simulation.dart';
@@ -26,6 +27,7 @@ class CompareScreen extends StatefulWidget {
   final BudgetPeriod period;
   final DateTime date;
   final int? accountId;
+  final List<int>? accountIds;
 
   const CompareScreen({
     super.key,
@@ -35,6 +37,7 @@ class CompareScreen extends StatefulWidget {
     required this.period,
     required this.date,
     this.accountId,
+    this.accountIds,
   });
 
   @override
@@ -51,7 +54,12 @@ class _CompareScreenState extends State<CompareScreen> {
   late var _period = widget.period;
   var _kind = CategoryKind.expense;
   var _periods = 12;
-  late int? _accountId = widget.accountId;
+  late Set<int> _selectedAccountIds = widget.accountIds != null
+      ? widget.accountIds!.toSet()
+      : (widget.accountId != null ? {widget.accountId!} : {});
+
+  List<int>? get _effectiveAccountIds =>
+      _selectedAccountIds.isEmpty ? null : _selectedAccountIds.toList();
 
   /// Categories compared over time.
   final List<int> _picked = [];
@@ -108,7 +116,7 @@ class _CompareScreenState extends State<CompareScreen> {
             _groupId,
             _period,
             widget.date,
-            accountId: _accountId,
+            accountIds: _effectiveAccountIds,
             periods: _periods,
           );
           columns = [(name: '', report: r)];
@@ -120,7 +128,7 @@ class _CompareScreenState extends State<CompareScreen> {
                 _groupId,
                 _period,
                 d,
-                accountId: _accountId,
+                accountIds: _effectiveAccountIds,
               ),
           ]);
           if (!mounted) return;
@@ -370,15 +378,11 @@ class _CompareScreenState extends State<CompareScreen> {
                   },
                 ),
               if (_mode != CompareMode.accounts && widget.accounts.length > 1)
-                DropdownButton<int?>(
-                  value: _accountId,
-                  items: [
-                    DropdownMenuItem(value: null, child: Text(l.allAccounts)),
-                    for (final a in widget.accounts)
-                      DropdownMenuItem(value: a.id, child: Text(a.name)),
-                  ],
-                  onChanged: (v) {
-                    setState(() => _accountId = v);
+                AccountFilterChip(
+                  accounts: widget.accounts,
+                  selectedIds: _selectedAccountIds,
+                  onChanged: (ids) {
+                    setState(() => _selectedAccountIds = ids);
                     _load();
                   },
                 ),

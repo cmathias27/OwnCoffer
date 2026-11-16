@@ -23,6 +23,10 @@ fields:
   ### hundredths of a percent.
   regulatedKind: RegulatedKind?
   interestRateBp: int?
+  ### Deferred debit card parameters (decision 0052).
+  statementCutoffDay: int?
+  statementDebitDay: int?
+  linkedAccountId: int?, relation(parent=accounts, onDelete=SetNull)
   createdAt: DateTime, default=now
   deletedAt: DateTime?
 indexes:

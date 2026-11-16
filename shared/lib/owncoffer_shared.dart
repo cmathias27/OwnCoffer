@@ -25,6 +25,7 @@ export 'src/categories.dart';
 export 'src/classification/classifier.dart';
 export 'src/data/community_rules.dart';
 export 'src/data/standard_categories.dart';
+export 'src/deferred_card/deferred_card.dart';
 export 'src/documents/invoice_match.dart';
 export 'src/documents/invoice_name.dart';
 export 'src/documents/receipt_text.dart';

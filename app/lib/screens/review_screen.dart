@@ -13,6 +13,7 @@ import '../widgets/month_nav.dart';
 class ReviewScreen extends StatefulWidget {
   final GroupMembership membership;
   final int? accountId;
+  final List<int>? accountIds;
 
   /// A day of the month to review.
   final DateTime date;
@@ -22,6 +23,7 @@ class ReviewScreen extends StatefulWidget {
     required this.membership,
     required this.date,
     this.accountId,
+    this.accountIds,
   });
 
   @override
@@ -53,6 +55,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
         _groupId,
         _date,
         accountId: widget.accountId,
+        accountIds: widget.accountIds,
       );
       if (mounted) setState(() => (_data = d, _error = null));
     } on Object catch (e) {

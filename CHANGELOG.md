@@ -2,6 +2,12 @@
 
 Les versions suivent le [versionnage sémantique](https://semver.org/lang/fr/). L'image Docker de chaque version est `ghcr.io/cmathias27/owncoffer:<version>` ; l'installation et la mise à jour sont décrites dans [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
+## 1.39.0 (novembre 2026)
+### Débit différé configuré et sélection multi-comptes dans le budget (décision 0052)
+- **Cycle de débit différé et en-cours** : configuration du jour d'arrêté (ex. 28) et du jour de prélèvement (ex. 4) sur les comptes de type carte à débit différé. Le solde du compte n'affiche que l'en-cours de la période active en cours.
+- **Prélèvement en attente** : entre la date d'arrêté et la date de prélèvement, affichage distinct du prélèvement du cycle précédent en attente de débit sur le compte courant lié.
+- **Sélection multi-comptes dans le budget** : possibilité de filtrer simultanément sur plusieurs comptes (ex. compte courant + carte débit différé) dans les écrans Budget, Comparaison, Bilan et leurs points d'accès.
+
 ## 1.38.0 (novembre 2026)
 ### Solde prévu : paie repérée et fin de mois
 - **Paie repérée** : quand la paie arrive chaque mois sur le compte (même libellé, montant proche, vers le même jour, au moins trois mois de suite) sans être une opération prévue, le solde prévu la propose. « Ajouter à la prévision » ouvre le formulaire pré-rempli à vérifier ; « Ignorer » ne la propose plus sur cet appareil. Repérage fait par le moteur, sans IA.
